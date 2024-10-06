@@ -6,7 +6,7 @@
 //
 import Foundation
 
-class User {
+class User: Decodable{
     var id: Int
     var firstName: String
     var lastname: String
@@ -17,9 +17,6 @@ class User {
     var streetName: String
     var houseNumber: Int
     var city: String
-    
-    var travels: [Travel]
-    var draftTravels: [Travel]
     
     init(id: Int, firstName: String, lastname: String, birthDate: Date, gender: String, firebaseUID: Int, zipCode: Int, streetName: String, houseNumber: Int, city: String) {
         self.id = id
@@ -32,8 +29,6 @@ class User {
         self.streetName = streetName
         self.houseNumber = houseNumber
         self.city = city
-        self.travels = []
-        self.draftTravels = []
     }
     
 }
