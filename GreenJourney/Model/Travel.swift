@@ -1,9 +1,3 @@
-//
-//  Travel.swift
-//  GreenJourney
-//
-//  Created by matteo volpari on 05/10/24.
-//
 import Foundation //to use Date type
 
 class Travel {
