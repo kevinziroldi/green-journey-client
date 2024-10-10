@@ -1,6 +1,6 @@
 import Foundation //to use Date type
 
-class Travel {
+class Travel: Decodable {
     var travelID: Int
     var departure: String
     var destination: String
