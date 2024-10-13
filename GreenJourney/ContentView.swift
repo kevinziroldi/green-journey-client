@@ -23,7 +23,10 @@ struct ContentView: View {
     var economy = 4.5945
     var internet_access = 2.9760000000000004
     var outdoors = 7.477
-    
+    @State private var homeViewModel = HomeViewModel()
+    @State var datepicked = Date.now
+    @State var departure: String = ""
+    @State var destination: String = ""
     var body: some View {
         NavigationStack {
             VStack {
@@ -32,6 +35,15 @@ struct ContentView: View {
             .navigationTitle("GreenJourney")
             .toolbar {
                 Button("Calculate", action: computeCity)
+            }
+            VStack{
+                
+                TextField("insert a departure", text: $departure)
+                TextField("insert a destination", text: $destination)
+                DatePicker("select a date",selection: $datepicked)
+                Button ("compute"){
+                    homeViewModel.computeRoutes(from:departure, to:destination, on:datepicked)
+                }
             }
         }
     }

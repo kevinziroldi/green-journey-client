@@ -6,6 +6,7 @@ class HomeViewModel: ObservableObject {
     
     @Published var departure: String
     @Published var destination: String
+    @Published var datePicked: Date
     
     @Published var flightOption: Travel?
     @Published var busOption: Travel?
