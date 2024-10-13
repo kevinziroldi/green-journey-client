@@ -55,26 +55,34 @@ class HomeViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegate 
     }
     
     func updateSearchResults(for query: String) {
-            if query.isEmpty {
-                // if the query string is empty those clean the suggestions list
-                self.suggestions = []
-            } else {
-                // update with the new input
-                self.completer.queryFragment = query
-            }
+        if query.isEmpty {
+            // if the query string is empty those clean the suggestions list
+            self.suggestions = []
+        } else {
+            // update with the new input
+            self.completer.queryFragment = query
         }
+    }
     
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
-            // result update
-        print("Results updated: \(completer.results.count)")// Debug: mostra quanti risultati ci sono
-        print(suggestions)
+        // result update
+        var seenCities: Set<String> = []
+        self.suggestions = completer.results.compactMap { result in
+            let isCity = result.subtitle.isEmpty || result.subtitle.contains("City")
+            if isCity && !seenCities.contains(result.title) {
+                seenCities.insert(result.title) // Aggiunge la città all'insieme
+                return result // Restituisce il risultato solo se è una città e non è duplicato
+            }
+            return nil // Restituisce nil se non è una città o è duplicato
+        }
+        
         self.suggestions = completer.results
     }
         
-        func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
-            // error handling
-            print("Errore durante il completamento della ricerca: \(error)")
-        }
+    func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
+        // error handling
+        print("Errore durante il completamento della ricerca: \(error)")
+    }
     
     init(userId: Int, flightOption: [Segment]? = nil, busOption: [Segment]? = nil, trainOption: [Segment]? = nil, carOption: [Segment]? = nil, bikeOption: [Segment]? = nil) {
         self.userId = userId
