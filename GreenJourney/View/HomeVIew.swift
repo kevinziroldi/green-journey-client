@@ -9,7 +9,7 @@ import SwiftUI
 import MapKit
 
 struct HomeView: View {
-    @State private var homeViewModel = HomeViewModel(userId:1)
+    @StateObject var homeViewModel = HomeViewModel(userId:1)
     
 
     var body: some View {
@@ -26,6 +26,7 @@ struct HomeView: View {
                 }
                 .onTapGesture {
                     homeViewModel.departure = suggestion.title
+                    
                 }
             }
             
@@ -48,6 +49,10 @@ struct HomeView: View {
                 homeViewModel.computeRoutes(from: homeViewModel.departure, to: homeViewModel.destination, on:homeViewModel.datePicked)
             }
             
+            
         }
     }
+}
+#Preview {
+    HomeView()
 }

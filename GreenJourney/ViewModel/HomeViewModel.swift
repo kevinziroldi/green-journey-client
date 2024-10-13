@@ -66,8 +66,10 @@ class HomeViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegate 
     
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
             // result update
-            self.suggestions = completer.results
-        }
+        print("Results updated: \(completer.results.count)")// Debug: mostra quanti risultati ci sono
+        print(suggestions)
+        self.suggestions = completer.results
+    }
         
         func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
             // error handling
@@ -80,7 +82,7 @@ class HomeViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegate 
         //initialization of nsobject
         super.init()
         self.completer.delegate = self
-        self.completer.resultTypes = [.address, .pointOfInterest]
+        self.completer.resultTypes = [.address]
         self.datePicked = datePicked
         self.flightOption = flightOption
         self.busOption = busOption
