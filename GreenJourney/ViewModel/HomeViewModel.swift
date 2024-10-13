@@ -67,16 +67,17 @@ class HomeViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegate 
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
         // result update
         var seenCities: Set<String> = []
-        self.suggestions = completer.results.compactMap { result in
-            let isCity = result.subtitle.isEmpty || result.subtitle.contains("City")
-            if isCity && !seenCities.contains(result.title) {
-                seenCities.insert(result.title) // Aggiunge la città all'insieme
-                return result // Restituisce il risultato solo se è una città e non è duplicato
-            }
-            return nil // Restituisce nil se non è una città o è duplicato
-        }
-        
         self.suggestions = completer.results
+            .filter { result in
+                if !seenCities.contains(result.title) {
+                    seenCities.insert(result.title)
+                    return true
+                }
+                return false
+            }
+            .prefix(4) // max 4 results
+            .map { $0 } // remove duplicates
+        print(suggestions)
     }
         
     func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
