@@ -1,12 +1,23 @@
 import Foundation
+import MapKit
 
-
-class HomeViewModel: ObservableObject {
+class HomeViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegate {
     private var userId: Int
     
-    @Published var departure: String?
-    @Published var destination: String?
-    @Published var datePicked: Date?
+    @Published var departure: String = "" {
+        didSet {
+            updateSearchResults(for: departure)
+        }
+    }
+    @Published var destination: String = "" {
+        didSet {
+            updateSearchResults(for: destination)
+        }
+    }
+    
+    @Published var suggestions: [MKLocalSearchCompletion] = []
+    private var completer: MKLocalSearchCompleter
+    @Published var datePicked: Date = Date.now
     
     @Published var flightOption: [Segment]?
     @Published var busOption: [Segment]?
@@ -42,10 +53,34 @@ class HomeViewModel: ObservableObject {
         }
         task.resume()
     }
-    init(userId: Int, departure: String? = nil, destination: String? = nil, datePicked: Date? = nil, flightOption: [Segment]? = nil, busOption: [Segment]? = nil, trainOption: [Segment]? = nil, carOption: [Segment]? = nil, bikeOption: [Segment]? = nil) {
+    
+    func updateSearchResults(for query: String) {
+            if query.isEmpty {
+                // if the query string is empty those clean the suggestions list
+                self.suggestions = []
+            } else {
+                // update with the new input
+                self.completer.queryFragment = query
+            }
+        }
+    
+    func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
+            // result update
+            self.suggestions = completer.results
+        }
+        
+        func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
+            // error handling
+            print("Errore durante il completamento della ricerca: \(error)")
+        }
+    
+    init(userId: Int, flightOption: [Segment]? = nil, busOption: [Segment]? = nil, trainOption: [Segment]? = nil, carOption: [Segment]? = nil, bikeOption: [Segment]? = nil) {
         self.userId = userId
-        self.departure = departure
-        self.destination = destination
+        self.completer = MKLocalSearchCompleter()
+        //initialization of nsobject
+        super.init()
+        self.completer.delegate = self
+        self.completer.resultTypes = [.address, .pointOfInterest]
         self.datePicked = datePicked
         self.flightOption = flightOption
         self.busOption = busOption
@@ -54,4 +89,5 @@ class HomeViewModel: ObservableObject {
         self.bikeOption = bikeOption
     }
     
+            
 }
