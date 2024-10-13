@@ -4,15 +4,15 @@ import Foundation
 class HomeViewModel: ObservableObject {
     private var userId: Int
     
-    @Published var departure: String
-    @Published var destination: String
-    @Published var datePicked: Date
+    @Published var departure: String?
+    @Published var destination: String?
+    @Published var datePicked: Date?
     
-    @Published var flightOption: Travel?
-    @Published var busOption: Travel?
-    @Published var trainOption: Travel?
-    @Published var carOption: Travel?
-    @Published var bikeOption: Travel?
+    @Published var flightOption: [Segment]?
+    @Published var busOption: [Segment]?
+    @Published var trainOption: [Segment]?
+    @Published var carOption: [Segment]?
+    @Published var bikeOption: [Segment]?
     
     
     func computeRoutes (from departure: String, to destination: String, on date: Date) {
@@ -24,6 +24,7 @@ class HomeViewModel: ObservableObject {
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
             if let error = error {
                 //error occurred
+                return
             }
             
             guard let data = data else {
@@ -41,13 +42,16 @@ class HomeViewModel: ObservableObject {
         }
         task.resume()
     }
-    
-    
-    //TODO
-    init() {
-        self.userId = 1
-        self.departure = ""
-        self.destination = ""
+    init(userId: Int, departure: String? = nil, destination: String? = nil, datePicked: Date? = nil, flightOption: [Segment]? = nil, busOption: [Segment]? = nil, trainOption: [Segment]? = nil, carOption: [Segment]? = nil, bikeOption: [Segment]? = nil) {
+        self.userId = userId
+        self.departure = departure
+        self.destination = destination
+        self.datePicked = datePicked
+        self.flightOption = flightOption
+        self.busOption = busOption
+        self.trainOption = trainOption
+        self.carOption = carOption
+        self.bikeOption = bikeOption
     }
     
 }

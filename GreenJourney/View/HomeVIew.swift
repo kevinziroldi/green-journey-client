@@ -19,6 +19,7 @@ struct HomeView: View {
             Button ("compute"){
                 homeViewModel.computeRoutes(from: homeViewModel.departure, to: homeViewModel.destination, on:homeViewModel.datePicked)
             }
+            
         }
     }
 }
