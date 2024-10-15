@@ -17,9 +17,10 @@ class Segment: Decodable {
     var price: Float64
     var co2Emitted: Float64
     var numSegment: Int
-    var travelID: Int
+    var isOutBound: Bool
+    var travelID: Int?
     
-    init(segmentID: Int, departure: String, destination: String, dateTime: Date, duration: Duration, vehicle: Vehicle, description: String, price: Float64, co2Emitted: Float64, numSegment: Int, travelID: Int) {
+    init(segmentID: Int, departure: String, destination: String, dateTime: Date, duration: Duration, vehicle: Vehicle, description: String, price: Float64, co2Emitted: Float64, numSegment: Int, isOutBound: Bool, travelID: Int? = nil) {
         self.segmentID = segmentID
         self.departure = departure
         self.destination = destination
@@ -30,6 +31,7 @@ class Segment: Decodable {
         self.price = price
         self.co2Emitted = co2Emitted
         self.numSegment = numSegment
+        self.isOutBound = isOutBound
         self.travelID = travelID
     }
 }

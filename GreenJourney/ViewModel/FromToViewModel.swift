@@ -1,7 +1,7 @@
 import Foundation
 import MapKit
 
-class HomeViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegate {
+class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegate {
     private var userId: Int
     
     @Published var departure: String = "" {
@@ -19,11 +19,11 @@ class HomeViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegate 
     private var completer: MKLocalSearchCompleter
     @Published var datePicked: Date = Date.now
     
-    @Published var flightOption: [Segment]?
-    @Published var busOption: [Segment]?
-    @Published var trainOption: [Segment]?
-    @Published var carOption: [Segment]?
-    @Published var bikeOption: [Segment]?
+    @Published var flightOption: [TravelDetails]
+    @Published var busOption: [TravelDetails]
+    @Published var trainOption: [TravelDetails]
+    @Published var carOption: TravelDetails?
+    @Published var bikeOption: TravelDetails?
     
     
     func computeRoutes (from departure: String, to destination: String, on date: Date) {
@@ -42,15 +42,40 @@ class HomeViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegate 
                 //no data received
                 return
             }
-            
-            do {
-                let travels = try JSONDecoder().decode(Travel.self, from: data)
-                print(travels)
-            } catch {
-                //error in decoding data
-                print("an error occurred decoding the JSON file!")
-            }
-        }
+            let decoder = JSONDecoder()
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"   // date format
+                    decoder.dateDecodingStrategy = .formatted(dateFormatter)
+
+                    do {
+                        let travels = try decoder.decode([TravelDetails].self, from: data)
+                        for travelDetail in travels {
+                            if !travelDetail.segments.isEmpty {
+                                if let vehicle = travelDetail.segments.first?.vehicle {
+                                    switch vehicle {
+                                    case Vehicle.car:
+                                        self.carOption = travelDetail
+                                    case Vehicle.bike:
+                                        self.bikeOption = travelDetail
+                                    case Vehicle.plane:
+                                        self.flightOption.append(travelDetail)
+                                    case Vehicle.bus:
+                                        self.busOption.append(travelDetail)
+                                    case Vehicle.train:
+                                        self.trainOption.append(travelDetail)
+                                    }
+                                } else {
+                                    continue
+                                }
+                            }
+                        }
+                        
+                            
+                        print(travels)
+                    } catch {
+                        print("Error decoding JSON: \(error.localizedDescription)")
+                    }
+                }
         task.resume()
     }
     
@@ -85,20 +110,19 @@ class HomeViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegate 
         print("Errore durante il completamento della ricerca: \(error)")
     }
     
-    init(userId: Int, flightOption: [Segment]? = nil, busOption: [Segment]? = nil, trainOption: [Segment]? = nil, carOption: [Segment]? = nil, bikeOption: [Segment]? = nil) {
+    init(userId: Int) {
         self.userId = userId
+        self.flightOption = []
+        self.busOption = []
+        self.trainOption = []
+        self.carOption = nil
+        self.bikeOption = nil
         self.completer = MKLocalSearchCompleter()
         //initialization of nsobject
         super.init()
         self.completer.delegate = self
         self.completer.resultTypes = [.address]
-        self.datePicked = datePicked
-        self.flightOption = flightOption
-        self.busOption = busOption
-        self.trainOption = trainOption
-        self.carOption = carOption
-        self.bikeOption = bikeOption
+        
     }
-    
             
 }
