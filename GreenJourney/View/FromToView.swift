@@ -95,10 +95,10 @@ struct FromToView: View {
                         }
                         .foregroundColor(viewModel.oneWay ? Color.secondary : Color.red)
                     }
-                    DatePicker("andata",selection: $viewModel.datePicked)
+                    DatePicker("outward",selection: $viewModel.datePicked)
                         .padding(15)
                     if (!viewModel.oneWay) {
-                        DatePicker("ritorno",selection: $viewModel.dateReturnPicked)
+                        DatePicker("return",selection: $viewModel.dateReturnPicked)
                             .padding(15)
                     }
                     Spacer()

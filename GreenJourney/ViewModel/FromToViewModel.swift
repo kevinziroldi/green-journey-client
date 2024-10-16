@@ -21,11 +21,9 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
     @Published var dateReturnPicked : Date = Date.now.addingTimeInterval(7 * 24 * 60 * 60) //seven days in ms
     @Published var oneWay: Bool = true
     
-    @Published var flightOption: [TravelDetails]
-    @Published var busOption: [TravelDetails]
-    @Published var trainOption: [TravelDetails]
-    @Published var carOption: TravelDetails?
-    @Published var bikeOption: TravelDetails?
+    @Published var outwardOptions: TravelOptions?
+    @Published var returnOptions: TravelOptions?
+    @Published var selectedOption: TravelDetails?
     
     
     
@@ -55,9 +53,8 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
                 //no data received
                 return
             }
-            print("json:")
             print(String(data: data, encoding: .utf8))
-            /*let decoder = JSONDecoder()
+            let decoder = JSONDecoder()
                     let dateFormatter = DateFormatter()
                     dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"   // date format
                     decoder.dateDecodingStrategy = .formatted(dateFormatter)
@@ -89,7 +86,7 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
                         print(travels)
                     } catch {
                         print("Error decoding JSON: \(error.localizedDescription)")
-                    }*/
+                    }
                 }
         task.resume()
     }
@@ -127,11 +124,8 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
     
     init(userId: Int) {
         self.userId = userId
-        self.flightOption = []
-        self.busOption = []
-        self.trainOption = []
-        self.carOption = nil
-        self.bikeOption = nil
+        self.outwardOptions = nil
+        self.returnOptions = nil
         self.completer = MKLocalSearchCompleter()
         //initialization of nsobject
         super.init()
@@ -139,5 +133,11 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
         self.completer.resultTypes = [.address]
         
     }
-            
+    struct TravelOptions {
+        var flightOption: [TravelDetails]
+        var busOption: [TravelDetails]
+        var trainOption: [TravelDetails]
+        var carOption: TravelDetails?
+        var bikeOption: TravelDetails?
+    }
 }
