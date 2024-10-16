@@ -6,7 +6,8 @@
 //
 import Foundation
 
-class Segment: Decodable {
+class Segment: Decodable, Identifiable {
+    var id = UUID()
     var segmentID: Int
     var departure: String
     var destination: String

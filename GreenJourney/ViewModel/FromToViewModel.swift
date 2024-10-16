@@ -18,6 +18,8 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
     @Published var suggestions: [MKLocalSearchCompletion] = []
     private var completer: MKLocalSearchCompleter
     @Published var datePicked: Date = Date.now
+    @Published var dateReturnPicked : Date = Date.now.addingTimeInterval(7 * 24 * 60 * 60) //seven days in ms
+    @Published var oneWay: Bool = true
     
     @Published var flightOption: [TravelDetails]
     @Published var busOption: [TravelDetails]
@@ -26,8 +28,19 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
     @Published var bikeOption: TravelDetails?
     
     
+    
     func computeRoutes (from departure: String, to destination: String, on date: Date) {
-        guard let url = URL(string:"http://localhost:8080//travels/fromto?from=\(departure)&to=\(destination)&date=\(date)")
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+
+        let formattedDate = dateFormatter.string(from: date)
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "HH:mm"
+    
+
+        let formattedTime = timeFormatter.string(from: date)
+        print(formattedTime)
+        guard let url = URL(string:"http://192.168.89.25:8080//travels/fromto?from=\(departure)&to=\(destination)&date=\(formattedDate)&time=\(formattedTime)&round_trip=\(oneWay)")
         else {
             //invalid url
             return
@@ -42,7 +55,9 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
                 //no data received
                 return
             }
-            let decoder = JSONDecoder()
+            print("json:")
+            print(String(data: data, encoding: .utf8))
+            /*let decoder = JSONDecoder()
                     let dateFormatter = DateFormatter()
                     dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"   // date format
                     decoder.dateDecodingStrategy = .formatted(dateFormatter)
@@ -74,7 +89,7 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
                         print(travels)
                     } catch {
                         print("Error decoding JSON: \(error.localizedDescription)")
-                    }
+                    }*/
                 }
         task.resume()
     }
