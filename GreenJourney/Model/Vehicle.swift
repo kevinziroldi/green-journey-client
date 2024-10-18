@@ -5,10 +5,12 @@
 //  Created by matteo volpari on 13/10/24.
 //
 
-enum Vehicle: Decodable {
-    case car
-    case bus
-    case train
-    case plane
-    case bike
+enum Vehicle: String, Decodable {
+    case car = "car"
+    case bus = "bus"
+    case train = "train"
+    case plane = "plane"
+    case bike = "bike"
+    
+    
 }

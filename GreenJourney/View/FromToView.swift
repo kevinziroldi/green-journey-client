@@ -108,7 +108,7 @@ struct FromToView: View {
                     Spacer()
                     Spacer()
                     Button ("compute"){
-                        viewModel.computeRoutes(from: viewModel.departure, to: viewModel.destination, on: viewModel.datePicked)
+                        viewModel.computeRoutes(from: viewModel.departure, to: viewModel.destination, on: viewModel.datePicked, return: viewModel.dateReturnPicked, oneWay: viewModel.oneWay)
                         isNavigationActive = true
                     }
                     .navigationDestination(isPresented: $isNavigationActive) {

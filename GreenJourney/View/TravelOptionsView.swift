@@ -13,68 +13,19 @@ struct TravelOptionsView: View {
     var body: some View {
         VStack{
             if let outwardOptions = viewModel.outwardOptions {
-                VStack {
-                    List (outwardOptions.trainOption) { option in
-                        Text("TRAIN")
-                        HStack {
-                            List (option.segments) { segment in
-                                VStack{
-                                    Text(segment.departure)
-                                    Text(segment.destination)
-                                    Text(segment.duration.formatted())
-                                }
-                            }
+                List {
+                    ForEach(outwardOptions.indices, id: \.self) { option in
+                        if let vehicle = outwardOptions[option].first?.vehicle {
+                            Text(vehicle.rawValue)
+                        } else {
+                            Text("no vehicle!")
                         }
-                    }
-                }
-                VStack {
-                    List (outwardOptions.busOption) { option in
-                        Text("BUS")
                         HStack {
-                            List (option.segments) { segment in
+                            ForEach(outwardOptions[option], id: \.id) { segment in
                                 VStack {
                                     Text(segment.departure)
                                     Text(segment.destination)
-                                    Text(segment.duration.formatted())
-                                }
-                            }
-                        }
-                    }
-                }
-                HStack {
-                    Text("CAR")
-                    if let carOption = outwardOptions.carOption {
-                        List(carOption.segments) { segment in
-                            VStack {
-                                Text(segment.departure)
-                                Text(segment.destination)
-                                Text(segment.duration.formatted())
-                            }
-                        }
-                    } else {
-                        Text("No options for car")
-                    }
-                }
-                HStack {
-                    Text("BIKE")
-                    if let bikeOption = outwardOptions.bikeOption {
-                        List (bikeOption.segments) { segment in
-                            VStack {
-                                Text(segment.departure)
-                                Text(segment.destination)
-                                Text(segment.duration.formatted())
-                            }
-                        }
-                    }
-                }
-                VStack {
-                    List (outwardOptions.flightOption) { option in
-                        Text("PLANE")
-                        HStack {
-                            List (option.segments) { segment in
-                                VStack{
-                                    Text(segment.departure)
-                                    Text(segment.destination)
+                                    Text(segment.co2Emitted.formatted())
                                     Text(segment.duration.formatted())
                                 }
                             }
@@ -83,19 +34,7 @@ struct TravelOptionsView: View {
                 }
             }
             else {
-                Text("no options")
-            }
-            Button ("Proceed") {
-                if viewModel.oneWay {
-                    //salva nel db il viaggio selezionato
-                    //vai nella pagina viaggi
-                }
-                else {
-                    isNavigationActive = true
-                }
-            }
-            .navigationDestination(isPresented: $isNavigationActive) {
-                //TravelOptionsReturnView(viewModel: viewModel)
+                Text("No options")
             }
         }
     }
