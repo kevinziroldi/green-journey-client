@@ -293,6 +293,8 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
                 do {
                     let travelOptions = try decoder.decode(TravelOptions.self, from: data)
                     print(travelOptions)
+                    self.outwardOptions = travelOptions.outwardOptions
+                    self.returnOptions = travelOptions.returnOptions
                 } catch let DecodingError.keyNotFound(key, context) {
                     print("Chiave '\(key)' mancante:", context.debugDescription)
                 } catch let DecodingError.typeMismatch(type, context) {
@@ -339,6 +341,58 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
             .prefix(4) // max 4 results
             .map { $0 } // remove duplicates
         print(suggestions)
+    }
+    
+    func computeCo2Emitted(_ travelOption: [Segment]) -> Float64 {
+        var co2Emitted: Float64 = 0.0
+        for segment in travelOption {
+            co2Emitted += segment.co2Emitted
+        }
+        return co2Emitted
+    }
+    
+    func computeTotalPrice (_ travelOption: [Segment]) -> Float64 {
+        var price: Float64 = 0.0
+        for segment in travelOption {
+            price += segment.price
+        }
+        return price
+    }
+    
+    func computeTotalDuration (_ travelOption: [Segment]) -> String {
+        var hours: Int = 0
+        var minutes: Int = 0
+        for segment in travelOption {
+            hours += durationToHoursAndMinutes(duration: segment.duration).hours
+            minutes += durationToHoursAndMinutes(duration: segment.duration).minutes
+        }
+        return "\(hours) h, \(minutes) min"
+    }
+    
+    func durationToHoursAndMinutes(duration: Int) -> (hours: Int, minutes: Int) {
+        let hours = duration / (3600 * 1000000000)       // 1 ora = 3600 secondi
+        let remainingSeconds = duration % (3600)
+        let minutes = remainingSeconds / 60  // 1 minuto = 60 secondi
+        
+        return (hours, minutes)
+    }
+    
+    func getOptionDeparture (_ travelOption: [Segment]) -> String {
+        if let firstSegment = travelOption.first {
+            return firstSegment.departure
+        }
+        else {
+            return ""
+        }
+    }
+    
+    func getOptionDestination (_ travelOption: [Segment]) -> String {
+        if let lastSegment = travelOption.last {
+            return lastSegment.destination
+        }
+        else {
+            return ""
+        }
     }
         
     func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
