@@ -371,7 +371,7 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
     
     func durationToHoursAndMinutes(duration: Int) -> (hours: Int, minutes: Int) {
         let hours = duration / (3600 * 1000000000)       // 1 ora = 3600 secondi
-        let remainingSeconds = duration % (3600)
+        let remainingSeconds = (duration / 1000000000) % (3600)
         let minutes = remainingSeconds / 60  // 1 minuto = 60 secondi
         
         return (hours, minutes)
