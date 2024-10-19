@@ -253,7 +253,24 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
                   }
                 ]
               ],
-              "returnOptions": []
+              "returnOptions": [
+            [
+                  {
+                    "segment_id": -1,
+                    "departure": "Milan, Metropolitan City of Milan, Italy",
+                    "destination": "Rome, Metropolitan City of Rome Capital, Italy",
+                    "date": "2024-10-16T00:00:00Z",
+                    "duration": 132832000000000,
+                    "vehicle": "bike",
+                    "description": "",
+                    "price": 0,
+                    "co2_emitted": 0,
+                    "distance": 672,
+                    "num_segment": 1,
+                    "is_outbound": true,
+                    "travel_id": -1
+                  }
+                ]]
             }
 
             """
@@ -292,9 +309,9 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
                 let travelOptions = try decoder.decode(TravelOptions.self, from: data)*/
                 do {
                     let travelOptions = try decoder.decode(TravelOptions.self, from: data)
-                    print(travelOptions)
                     self.outwardOptions = travelOptions.outwardOptions
                     self.returnOptions = travelOptions.returnOptions
+                    print(returnOptions!)
                 } catch let DecodingError.keyNotFound(key, context) {
                     print("Chiave '\(key)' mancante:", context.debugDescription)
                 } catch let DecodingError.typeMismatch(type, context) {
