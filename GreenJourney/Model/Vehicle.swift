@@ -11,6 +11,6 @@ enum Vehicle: String, Decodable {
     case train = "train"
     case plane = "plane"
     case bike = "bike"
-    
+    case walk = "walk"
     
 }
