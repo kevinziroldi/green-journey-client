@@ -109,8 +109,6 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
                     let travelOptions = try decoder.decode(TravelOptions.self, from: data)
                     self.outwardOptions = travelOptions.outwardOptions
                     self.returnOptions = travelOptions.returnOptions
-                    print(outwardOptions)
-                    print(returnOptions)
                 } catch let DecodingError.keyNotFound(key, context) {
                     print("Chiave '\(key)' mancante:", context.debugDescription)
                 } catch let DecodingError.typeMismatch(type, context) {
