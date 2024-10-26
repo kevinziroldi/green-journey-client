@@ -6,7 +6,7 @@
 //
 import Foundation
 
-class Segment: Decodable, Identifiable {
+class Segment: Codable, Identifiable {
     let segmentID: Int
     let departure: String
     let destination: String

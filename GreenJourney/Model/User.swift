@@ -1,6 +1,6 @@
 import Foundation
 
-class User: Decodable{
+class User: Codable {
     var id: Int?
     var firstName: String?
     var lastname: String?

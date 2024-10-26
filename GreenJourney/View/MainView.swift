@@ -17,7 +17,7 @@ struct MainView: View {
                 }
                 .tag(1)
             
-            MyTravelsView()
+            TravelsView()
                 .tabItem {
                     Label("My travels", systemImage: "airplane")
                 }
