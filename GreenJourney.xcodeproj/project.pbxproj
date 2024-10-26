@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		428DEFB62CCB95220054AB9C /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 428DEFB52CCB95220054AB9C /* FirebaseAnalytics */; };
+		42EA5EAD2CCBF7540080B8F8 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 42EA5EAC2CCBF7540080B8F8 /* FirebaseAuth */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				428DEFB62CCB95220054AB9C /* FirebaseAnalytics in Frameworks */,
+				42EA5EAD2CCBF7540080B8F8 /* FirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,6 +73,7 @@
 			name = GreenJourney;
 			packageProductDependencies = (
 				428DEFB52CCB95220054AB9C /* FirebaseAnalytics */,
+				42EA5EAC2CCBF7540080B8F8 /* FirebaseAuth */,
 			);
 			productName = GreenJourney;
 			productReference = 0A1576802CA459AC00EE99BC /* GreenJourney.app */;
@@ -350,6 +353,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 428DEFB42CCB95220054AB9C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAnalytics;
+		};
+		42EA5EAC2CCBF7540080B8F8 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 428DEFB42CCB95220054AB9C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
