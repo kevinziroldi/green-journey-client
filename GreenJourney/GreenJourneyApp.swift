@@ -27,7 +27,7 @@ struct GreenJourneyApp: App {
     var body: some Scene {
         WindowGroup {
             if isLoggedIn {
-                FromToView() // Schermata principale
+                MainView() // Schermata principale
             } else {
                 LoginView() // Schermata di login
             }

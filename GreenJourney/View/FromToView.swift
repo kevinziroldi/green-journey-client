@@ -114,6 +114,8 @@ struct FromToView: View {
                     .navigationDestination(isPresented: $isNavigationActive) {
                         TravelOptionsView(viewModel: viewModel)
                     }
+                    Spacer()
+                    Spacer()
                 }
             }
         }
