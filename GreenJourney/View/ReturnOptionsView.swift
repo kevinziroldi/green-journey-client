@@ -14,39 +14,33 @@ struct ReturnOptionsView: View {
             Text("\(viewModel.destination) -> \(viewModel.departure) on: \(viewModel.dateReturnPicked.formatted(date: .numeric, time: .shortened))")
         }
         NavigationStack {
-            if let travelOptions = viewModel.travelOptions {
-                let returnOptions = travelOptions.returnOptions
-                List (returnOptions.indices, id: \.self) { option in
+            List (viewModel.travelOptions.returnOptions.indices, id: \.self) { option in
                     VStack{
-                        NavigationLink ("expand", destination: OptionDetailsView(segments: returnOptions[option], viewModel: viewModel))
-                        if let vehicle = returnOptions[option].first?.vehicle {
+                        NavigationLink ("expand", destination: OptionDetailsView(segments: viewModel.travelOptions.returnOptions[option], viewModel: viewModel))
+                        if let vehicle = viewModel.travelOptions.returnOptions[option].first?.vehicle {
                             Text(vehicle.rawValue)
                         } else {
                             Text("no vehicle!")
                         }
-                        Text(viewModel.getOptionDeparture(returnOptions[option]))
-                        if (returnOptions[option].count > 1){
-                            if (returnOptions[option].count == 2){
-                                Text("\(returnOptions[option].count) change")
+                        Text(viewModel.getOptionDeparture(viewModel.travelOptions.returnOptions[option]))
+                        if (viewModel.travelOptions.returnOptions[option].count > 1){
+                            if (viewModel.travelOptions.returnOptions[option].count == 2){
+                                Text("\(viewModel.travelOptions.returnOptions[option].count) change")
                                     .foregroundStyle(.blue)
                             }
                             else {
-                                Text("\(returnOptions[option].count) changes")
+                                Text("\(viewModel.travelOptions.returnOptions[option].count) changes")
                                     .foregroundStyle(.blue)
                             }
                         }
-                        Text("price: " + String(format: "%.2f", viewModel.computeTotalPrice(returnOptions[option])) + "€")
+                        Text("price: " + String(format: "%.2f", viewModel.computeTotalPrice(viewModel.travelOptions.returnOptions[option])) + "€")
                             .foregroundStyle(.green)
-                        Text("duration: " + viewModel.computeTotalDuration(returnOptions[option]))
-                        Text("co2: " + String(format: "%.2f", viewModel.computeCo2Emitted(returnOptions[option])))
+                        Text("duration: " + viewModel.computeTotalDuration(viewModel.travelOptions.returnOptions[option]))
+                        Text("co2: " + String(format: "%.2f", viewModel.computeCo2Emitted(viewModel.travelOptions.returnOptions[option])))
                             .foregroundStyle(.red)
-                        Text(viewModel.getOptionDestination(returnOptions[option]))
+                        Text(viewModel.getOptionDestination(viewModel.travelOptions.returnOptions[option]))
                     }
                 }
-            }
-            else {
-                Text("No options")
-            }
         }
     }
 }

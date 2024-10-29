@@ -3,7 +3,7 @@ import Combine
 
 class NetworkManager {
     static let shared = NetworkManager()
-    private let baseURL = "http://192.168.1.43:8080"
+    private let baseURL = "http://192.168.5.11:8080"
     
     private init() {}
     

@@ -22,7 +22,7 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
     @Published var dateReturnPicked : Date = Date.now.addingTimeInterval(7 * 24 * 60 * 60) //seven days in ms
     @Published var oneWay: Bool = true
     
-    @Published var travelOptions: TravelOptions?
+    @Published var travelOptions: TravelOptions = TravelOptions(outwardOptions: [], returnOptions: [])
     
     @Published var selectedOption: [Segment] = []
     private var cancellables = Set<AnyCancellable>()
@@ -200,7 +200,6 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
     
     init(userId: Int) {
         self.userId = userId
-        self.travelOptions = nil
         self.completer = MKLocalSearchCompleter()
         //initialization of nsobject
         super.init()
