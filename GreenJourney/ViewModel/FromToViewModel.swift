@@ -48,11 +48,12 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
         let formattedTime = timeFormatter.string(from: date)
         let formattedTimeReturn = timeFormatter.string(from: returnDate)
         var url: URL?
+        let baseURL = NetworkManager.shared.getBaseURL()
         if (oneway) {
-            url = URL(string:"http://192.168.89.25:8080//travels/fromto?from=\(departure)&to=\(destination)&dateOutward=\(formattedDate)&timeOutward=\(formattedTime)&round_trip=\(!oneWay)")
+            url = URL(string:"\(baseURL)/travels/fromto?from=\(departure)&to=\(destination)&dateOutward=\(formattedDate)&timeOutward=\(formattedTime)&round_trip=\(!oneWay)")
         }
         else {
-            url = URL(string:"http://192.168.89.25:8080//travels/fromto?from=\(departure)&to=\(destination)&dateOutward=\(formattedDate)&timeOutward=\(formattedTime)&round_trip=\(!oneWay)&dateReturn=\(formattedDateReturn)&timeReturn=\(formattedTimeReturn)")
+            url = URL(string:"\(baseURL)/travels/fromto?from=\(departure)&to=\(destination)&dateOutward=\(formattedDate)&timeOutward=\(formattedTime)&round_trip=\(!oneWay)&dateReturn=\(formattedDateReturn)&timeReturn=\(formattedTimeReturn)")
         }
         guard let validUrl = url else {
             //invalid url

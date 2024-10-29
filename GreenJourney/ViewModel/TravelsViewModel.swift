@@ -6,10 +6,8 @@ class TravelsViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     
     func fetchTravels(for userId: Int) {
-        
-        // TODO IP e porta non qua
-        
-        guard let url = URL(string:"http://192.168.1.41:8080//travels/user?id=\(userId)") else {
+        let baseURL = NetworkManager.shared.getBaseURL()
+        guard let url = URL(string:"\(baseURL)/travels/user?id=\(userId)") else {
             print("Invalid URL used to retrieve travels from DB")
             return
         }
