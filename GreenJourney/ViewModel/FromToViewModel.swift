@@ -56,7 +56,7 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
             url = URL(string:"\(baseURL)/travels/fromto?from=\(departure)&to=\(destination)&dateOutward=\(formattedDate)&timeOutward=\(formattedTime)&round_trip=\(!oneWay)&dateReturn=\(formattedDateReturn)&timeReturn=\(formattedTimeReturn)")
         }
         guard let validUrl = url else {
-            //invalid url
+            print("Invalid URL from to")
             return
         }
         let decoder = JSONDecoder()
@@ -88,39 +88,6 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
                self?.travelOptions = travelOptions
            })
            .store(in: &cancellables)
-        
-        /*let task = URLSession.shared.dataTask(with: validUrl) { data, response, error in
-            if let error = error {
-                //error occurred
-                return
-            }
-            
-            guard let data = data else {
-                //no data received
-                return
-            }
-            let decoder = JSONDecoder()
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"   // date format
-            decoder.dateDecodingStrategy = .formatted(dateFormatter)
-            do {
-                let travelOptions = try decoder.decode(TravelOptions.self, from: data)
-                self.outwardOptions = travelOptions.outwardOptions
-                self.returnOptions = travelOptions.returnOptions
-            } catch let DecodingError.keyNotFound(key, context) {
-                print("Chiave '\(key)' mancante:", context.debugDescription)
-            } catch let DecodingError.typeMismatch(type, context) {
-                print("Tipo non corrispondente per tipo \(type):", context.debugDescription)
-            } catch let DecodingError.valueNotFound(value, context) {
-                print("Valore mancante per \(value):", context.debugDescription)
-            } catch let DecodingError.dataCorrupted(context) {
-                print("Dati corrotti:", context.debugDescription)
-            } catch {
-                print("Errore: \(error.localizedDescription)")
-            }
-        }
-        //}
-        task.resume() //REAL INTERACTION*/
     }
          
         
