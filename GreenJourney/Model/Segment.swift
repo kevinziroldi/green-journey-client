@@ -18,7 +18,7 @@ class Segment: Codable, Identifiable {
     let co2Emitted: Float64
     let distance: Float64
     let numSegment: Int
-    let isOutbound: Bool
+    let isOutward: Bool
     let travelID: Int
     
     var id: UUID = UUID()
@@ -35,11 +35,11 @@ class Segment: Codable, Identifiable {
         case co2Emitted = "co2_emitted"
         case distance = "distance"
         case numSegment = "num_segment"
-        case isOutbound = "is_outbound"
+        case isOutward = "is_outward"
         case travelID = "travel_id"
        }
     
-    init(segmentID: Int, departure: String, destination: String, date: Date, duration: Int, vehicle: Vehicle, description: String, price: Float64, co2Emitted: Float64, distance: Float64, numSegment: Int, isOutbound: Bool, travelID: Int) {
+    init(segmentID: Int, departure: String, destination: String, date: Date, duration: Int, vehicle: Vehicle, description: String, price: Float64, co2Emitted: Float64, distance: Float64, numSegment: Int, isOutward: Bool, travelID: Int) {
         self.segmentID = segmentID
         self.departure = departure
         self.destination = destination
@@ -51,7 +51,7 @@ class Segment: Codable, Identifiable {
         self.co2Emitted = co2Emitted
         self.distance = distance
         self.numSegment = numSegment
-        self.isOutbound = isOutbound
+        self.isOutward = isOutward
         self.travelID = travelID
         self.id = UUID()
     }
