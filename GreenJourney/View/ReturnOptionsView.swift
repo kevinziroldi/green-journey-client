@@ -14,7 +14,8 @@ struct ReturnOptionsView: View {
             Text("\(viewModel.destination) -> \(viewModel.departure) on: \(viewModel.dateReturnPicked.formatted(date: .numeric, time: .shortened))")
         }
         NavigationStack {
-            if let returnOptions = viewModel.returnOptions {
+            if let travelOptions = viewModel.travelOptions {
+                let returnOptions = travelOptions.returnOptions
                 List (returnOptions.indices, id: \.self) { option in
                     VStack{
                         NavigationLink ("expand", destination: OptionDetailsView(segments: returnOptions[option], viewModel: viewModel))

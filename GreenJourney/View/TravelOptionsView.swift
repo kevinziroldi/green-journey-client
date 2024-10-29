@@ -14,7 +14,8 @@ struct TravelOptionsView: View {
             Text("\(viewModel.departure) -> \(viewModel.destination) on: \(viewModel.datePicked.formatted(date: .numeric, time: .shortened))")
         }
         NavigationStack {
-            if let outwardOptions = viewModel.outwardOptions {
+            if let travelOptions = viewModel.travelOptions {
+               let outwardOptions = travelOptions.outwardOptions
                 List (outwardOptions.indices, id: \.self) { option in
                     VStack{
                         NavigationLink ("expand", destination: OptionDetailsView(segments: outwardOptions[option], viewModel: viewModel))
