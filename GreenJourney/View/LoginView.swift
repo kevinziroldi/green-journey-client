@@ -34,6 +34,10 @@ struct LoginView: View {
                     .foregroundColor(.red)
                     .font(.caption)
             }
+            Button("reset password") {
+                viewModel.resetPassword()
+            }
+            
             
             Button(action: {
                 viewModel.login()

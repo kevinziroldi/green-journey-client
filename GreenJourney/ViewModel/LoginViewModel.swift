@@ -12,8 +12,6 @@ class LoginViewModel: ObservableObject {
     @Published var email: String = ""
     @Published var password: String = ""
     @Published var errorMessage: String?
-    @AppStorage("isLoggedIn") var isLoggedIn = false
-    var loggedUser: User?
     
     func login() {
         // input chack and validation
@@ -26,13 +24,18 @@ class LoginViewModel: ObservableObject {
             guard let strongSelf = self else { return }
             if let error = error {
                 strongSelf.errorMessage = error.localizedDescription
-            } else { if let result = result {
+            } else {
+                if let result = result {
                     // if login is ok, update isLogged
-                    strongSelf.loggedUser = User(firebaseUID: result.user.uid)
-                    strongSelf.isLoggedIn = true
                     strongSelf.errorMessage = nil
                 }
             }
+        }
+    }
+    
+    func resetPassword() {
+        Auth.auth().sendPasswordReset(withEmail: email) { error in
+            print("error in sending email for password recovery")
         }
     }
 }

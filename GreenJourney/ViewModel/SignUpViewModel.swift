@@ -12,9 +12,9 @@ class SignUpViewModel: ObservableObject {
     @Published var email: String = ""
     @Published var password: String = ""
     @Published var repeatPassword: String = ""
+    @Published var firstName: String = ""
+    @Published var lastName: String = ""
     @Published var errorMessage: String?
-    @AppStorage("isLoggedIn") var isLoggedIn = false
-    var loggedUser: User?
     
     func signUp() {
         guard !email.isEmpty, !password.isEmpty, !repeatPassword.isEmpty else {
@@ -31,10 +31,11 @@ class SignUpViewModel: ObservableObject {
                 if let error = error {
                     self.errorMessage = error.localizedDescription
                 } else { if let result = result {
-                        // if login is ok, update isLogged
-                        self.loggedUser = User(firebaseUID: result.user.uid)
-                        self.isLoggedIn = true
+                        // if login is ok
                         self.errorMessage = nil
+                    }
+                    Auth.auth().currentUser?.sendEmailVerification { error in
+                      print("error while sending email verification")
                     }
                 }
             }

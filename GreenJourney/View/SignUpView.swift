@@ -32,6 +32,15 @@ struct SignUpView: View {
                 .background(Color.gray.opacity(0.2))
                 .cornerRadius(8)
             
+            TextField("First name", text: $viewModel.firstName)
+                .padding()
+                .background(Color.gray.opacity(0.2))
+                .cornerRadius(8)
+            
+            TextField("Last name", text: $viewModel.lastName)
+                .padding()
+                .background(Color.gray.opacity(0.2))
+                .cornerRadius(8)
             // error message
             if let errorMessage = viewModel.errorMessage {
                 Text(errorMessage)

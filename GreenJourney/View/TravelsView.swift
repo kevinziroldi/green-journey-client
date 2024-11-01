@@ -2,6 +2,7 @@ import SwiftUI
 
 struct TravelsView: View {
     @ObservedObject var viewModel = TravelsViewModel()
+    @AppStorage("loggedUserUID") var loggedUserUID: String?
     
     var body: some View {
             List(viewModel.travelDetails) { travelDetail in

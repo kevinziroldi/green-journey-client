@@ -121,6 +121,3 @@ struct FromToView: View {
         }
     }
 }
-#Preview {
-    FromToView()
-}
