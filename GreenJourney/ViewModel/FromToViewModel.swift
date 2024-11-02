@@ -210,7 +210,11 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
     
     struct TravelOptions: Decodable {
         var outwardOptions: [[Segment]]
-        var returnOptions: [[Segment]]
+        var returnOptions: [[Segment]]?
+        enum CodingKeys: String, CodingKey {
+            case outwardOptions = "outward_options"
+            case returnOptions = "return_options"
+        }
     }
     
 }

@@ -14,7 +14,7 @@ struct TravelOptionsView: View {
             Text("\(viewModel.departure) -> \(viewModel.destination) on: \(viewModel.datePicked.formatted(date: .numeric, time: .shortened))")
         }
         NavigationStack {
-            if (viewModel.travelOptions.outwardOptions.isEmpty || (!viewModel.oneWay && viewModel.travelOptions.returnOptions.isEmpty)){
+            if (viewModel.travelOptions.outwardOptions.isEmpty || (!viewModel.oneWay && viewModel.travelOptions.returnOptions!.isEmpty)){
                 Text("NO OPTION")
             }
             else{
