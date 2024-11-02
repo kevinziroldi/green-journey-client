@@ -28,21 +28,26 @@ struct LoginView: View {
                 .background(Color.gray.opacity(0.2))
                 .cornerRadius(8)
             
+            HStack {
+                if let resendMessage = viewModel.resendEmail {
+                    Text(resendMessage)
+                }
+                Button("reset password") {
+                    viewModel.resetPassword()
+                }
+            }
             // error message
             if let errorMessage = viewModel.errorMessage {
                 Text(errorMessage)
                     .foregroundColor(.red)
                     .font(.caption)
             }
-            Button("reset password") {
-                viewModel.resetPassword()
-            }
             
             
             Button(action: {
                 viewModel.login()
             }) {
-                Text("Accedi")
+                Text("Login")
                     .foregroundColor(.white)
                     .padding()
                     .frame(maxWidth: .infinity)
