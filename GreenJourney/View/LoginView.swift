@@ -59,9 +59,9 @@ struct LoginView: View {
             }
         }
         .padding()
-        /*.fullScreenCover(isPresented: $viewModel.isLoggedIn) {
+        .fullScreenCover(isPresented: $viewModel.isLogged) {
             FromToView()
-        }*/
+        }
         .navigationBarHidden(true)
     }
 }

@@ -12,6 +12,8 @@ class LoginViewModel: ObservableObject {
     @Published var email: String = ""
     @Published var password: String = ""
     @Published var errorMessage: String?
+    @Published var isLogged: Bool = false
+    @Published var userId: Int?
     
     func login() {
         // input chack and validation
@@ -29,6 +31,7 @@ class LoginViewModel: ObservableObject {
                     // if login is ok, update isLogged
                     strongSelf.errorMessage = nil
                 }
+                strongSelf.isLogged = true
             }
         }
     }

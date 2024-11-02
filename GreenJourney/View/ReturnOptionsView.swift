@@ -7,7 +7,7 @@
 import SwiftUI
 
 struct ReturnOptionsView: View {
-    let viewModel: FromToViewModel
+    @ObservedObject var viewModel: FromToViewModel
     
     var body: some View {
         HStack {

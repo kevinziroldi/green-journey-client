@@ -8,7 +8,7 @@ import SwiftUI
 
 struct OptionDetailsView: View {
     let segments: [Segment]
-    let viewModel: FromToViewModel
+    @ObservedObject var viewModel: FromToViewModel
     @State var isReturnOptionsViewPresented = false
     @State var isFromToViewPresented = false
 

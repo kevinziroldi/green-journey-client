@@ -9,7 +9,8 @@ import SwiftUI
 
 struct SignUpView: View {
     @ObservedObject private var viewModel = SignUpViewModel()
-    @State private var isNavigationActive = false
+    @State private var isNavigationLoginActive = false
+    @State private var isEmailVerificationActive = false
     var body: some View {
         VStack {
             Text("Sign Up")
@@ -50,6 +51,7 @@ struct SignUpView: View {
             
             Button(action: {
                 viewModel.signUp()
+                isEmailVerificationActive = true
             }) {
                 Text("Create account")
                     .foregroundColor(.white)
@@ -58,12 +60,15 @@ struct SignUpView: View {
                     .background(Color.blue)
                     .cornerRadius(8)
             }
+            .fullScreenCover(isPresented: $isEmailVerificationActive) {
+                EmailVerificationView(viewModel: viewModel)
+            }
             
             Spacer()
             Button ("Login") {
-                isNavigationActive = true
+                isNavigationLoginActive = true
             }
-            .fullScreenCover(isPresented: $isNavigationActive) {
+            .fullScreenCover(isPresented: $isNavigationLoginActive) {
                 LoginView()
             }
         }

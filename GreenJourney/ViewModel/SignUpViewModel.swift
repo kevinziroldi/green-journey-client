@@ -15,6 +15,7 @@ class SignUpViewModel: ObservableObject {
     @Published var firstName: String = ""
     @Published var lastName: String = ""
     @Published var errorMessage: String?
+    @Published var emailVerified: Bool = false
     
     func signUp() {
         guard !email.isEmpty, !password.isEmpty, !repeatPassword.isEmpty else {
@@ -30,15 +31,34 @@ class SignUpViewModel: ObservableObject {
             Auth.auth().createUser(withEmail: email, password: password) { result, error in
                 if let error = error {
                     self.errorMessage = error.localizedDescription
-                } else { if let result = result {
+                } else {
+                    if let result = result {
                         // if login is ok
+                        Auth.auth().currentUser?.sendEmailVerification { error in
+                            if let error = error {
+                                print("error while sending email verification")
+                            }
+                        }
                         self.errorMessage = nil
-                    }
-                    Auth.auth().currentUser?.sendEmailVerification { error in
-                      print("error while sending email verification")
                     }
                 }
             }
         }
+    }
+    func verifyEmail() {
+        Auth.auth().currentUser?.reload(completion: { (error) in
+                if let error = error {
+                    print("Errore nel ricaricare l'utente: \(error.localizedDescription)")
+                    return
+                }
+                if Auth.auth().currentUser?.isEmailVerified == true {
+                    print("Email verified")
+                    self.errorMessage = nil
+                    self.emailVerified = true
+                } else {
+                    self.errorMessage = "email has not yet been verified"
+                    print("Email not verified.")
+                }
+            })
     }
 }

@@ -20,17 +20,12 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
 @main
 struct GreenJourneyApp: App {
-    @AppStorage("isLoggedIn") private var isLoggedIn = false
     // register app delegate for Firebase setup
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
     var body: some Scene {
         WindowGroup {
-            if isLoggedIn {
-                MainView() // Schermata principale
-            } else {
-                LoginView() // Schermata di login
-            }
+            LoginView() // Schermata di login
         }
     }
 }
