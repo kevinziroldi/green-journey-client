@@ -9,6 +9,13 @@ struct Config {
         else { return nil }
         return config["ServerIP"] as? String
     }
+    static var serverPort: String? {
+        guard let url = Bundle.main.url(forResource: "Config", withExtension: "plist"),
+              let data = try? Data(contentsOf: url),
+              let config = try? PropertyListSerialization.propertyList(from: data, options: [], format: nil) as? [String: Any]
+        else { return nil }
+        return config["ServerPort"] as? String
+    }
 }
 
 class NetworkManager {
@@ -17,7 +24,11 @@ class NetworkManager {
     
     private init() {
         if let serverIP = Config.serverIP {
-            baseURL = "http://" + serverIP + ":80"
+            if let serverPort = Config.serverPort {
+                baseURL = "http://" + serverIP + ":" + serverPort
+            }else {
+                print("Error loading server port from Config")
+            }
         }else {
             print("Error loading server IP from Config")
         }
