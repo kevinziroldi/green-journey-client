@@ -1,10 +1,3 @@
-//
-//  EmailVerificationView.swift
-//  GreenJourney
-//
-//  Created by matteo volpari on 02/11/24.
-//
-
 import SwiftUI
 
 struct EmailVerificationView: View {

@@ -1,10 +1,3 @@
-//
-//  LoginViewModel.swift
-//  GreenJourney
-//
-//  Created by matteo volpari on 25/10/24.
-//
-
 import FirebaseAuth
 import SwiftUI
 

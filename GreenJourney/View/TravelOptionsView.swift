@@ -1,9 +1,3 @@
-//
-//  TravelOptionsView.swift
-//  GreenJourney
-//
-//  Created by matteo volpari on 15/10/24.
-//
 import SwiftUI
 
 struct TravelOptionsView: View {

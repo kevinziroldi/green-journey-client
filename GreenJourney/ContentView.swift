@@ -1,10 +1,3 @@
-//
-//  ContentView.swift
-//  GreenJourney
-//
-//  Created by Kevin Ziroldi on 25/09/24.
-//
-
 import CoreML
 import SwiftUI
 

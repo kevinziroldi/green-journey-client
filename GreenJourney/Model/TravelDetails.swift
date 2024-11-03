@@ -1,9 +1,3 @@
-//
-//  TravelRequest.swift
-//  GreenJourney
-//
-//  Created by matteo volpari on 13/10/24.
-//
 import Foundation
 
 class TravelDetails: Codable, Identifiable {

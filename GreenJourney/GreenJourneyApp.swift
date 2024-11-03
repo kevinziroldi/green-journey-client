@@ -1,10 +1,3 @@
-//
-//  GreenJourneyApp.swift
-//  GreenJourney
-//
-//  Created by Kevin Ziroldi on 25/09/24.
-//
-
 import SwiftUI
 import FirebaseCore
 import FirebaseAuth

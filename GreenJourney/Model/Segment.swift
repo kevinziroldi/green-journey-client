@@ -1,13 +1,9 @@
-//
-//  Segment.swift
-//  GreenJourney
-//
-//  Created by matteo volpari on 13/10/24.
-//
 import Foundation
 
 class Segment: Codable, Identifiable {
     let segmentID: Int
+    let departureID: Int
+    let destinationID: Int
     let departure: String
     let destination: String
     let date: Date
@@ -25,6 +21,8 @@ class Segment: Codable, Identifiable {
    
     enum CodingKeys: String, CodingKey {
         case segmentID = "segment_id"
+        case departureID = "departure_id"
+        case destinationID = "destination_id"
         case departure = "departure"
         case destination = "destination"
         case date = "date"
@@ -39,8 +37,10 @@ class Segment: Codable, Identifiable {
         case travelID = "travel_id"
        }
     
-    init(segmentID: Int, departure: String, destination: String, date: Date, duration: Int, vehicle: Vehicle, description: String, price: Float64, co2Emitted: Float64, distance: Float64, numSegment: Int, isOutward: Bool, travelID: Int) {
+    init(segmentID: Int, departureID: Int, destinationID: Int, departure: String, destination: String, date: Date, duration: Int, vehicle: Vehicle, description: String, price: Float64, co2Emitted: Float64, distance: Float64, numSegment: Int, isOutward: Bool, travelID: Int) {
         self.segmentID = segmentID
+        self.departureID = departureID
+        self.destinationID = destinationID
         self.departure = departure
         self.destination = destination
         self.date = date

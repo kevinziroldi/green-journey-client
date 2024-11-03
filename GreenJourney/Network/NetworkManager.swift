@@ -17,7 +17,7 @@ class NetworkManager {
     
     private init() {
         if let serverIP = Config.serverIP {
-            baseURL = "http://" + serverIP + ":8888"
+            baseURL = "http://" + serverIP + ":80"
         }else {
             print("Error loading server IP from Config")
         }

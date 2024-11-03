@@ -1,9 +1,3 @@
-//
-//  ReturnOptionsView.swift
-//  GreenJourney
-//
-//  Created by matteo volpari on 19/10/24.
-//
 import SwiftUI
 
 struct ReturnOptionsView: View {

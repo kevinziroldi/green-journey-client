@@ -1,4 +1,4 @@
-import Foundation //to use Date type
+import Foundation
 
 class Travel: Codable {
     var travelID: Int
@@ -7,8 +7,8 @@ class Travel: Codable {
  
     
     enum CodingKeys: String, CodingKey {
-            case travelID = "travel_id"
-            case CO2Compensated = "co2_compensated"
-            case userID = "user_id"
-        }
+        case travelID = "travel_id"
+        case CO2Compensated = "co2_compensated"
+        case userID = "user_id"
+    }
 }

@@ -1,10 +1,3 @@
-//
-//  LoginView.swift
-//  GreenJourney
-//
-//  Created by matteo volpari on 26/10/24.
-//
-
 import SwiftUI
 
 struct LoginView: View {
@@ -65,7 +58,7 @@ struct LoginView: View {
         }
         .padding()
         .fullScreenCover(isPresented: $viewModel.isLogged) {
-            FromToView()
+            MainView()
         }
         .navigationBarHidden(true)
     }

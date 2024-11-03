@@ -1,10 +1,3 @@
-//
-//  SignUpView.swift
-//  GreenJourney
-//
-//  Created by matteo volpari on 26/10/24.
-//
-
 import SwiftUI
 
 struct SignUpView: View {

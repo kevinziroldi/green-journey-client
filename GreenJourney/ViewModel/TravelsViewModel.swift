@@ -5,7 +5,11 @@ class TravelsViewModel: ObservableObject {
     @Published var travelDetails: [TravelDetails] = []
     private var cancellables = Set<AnyCancellable>()
     
+    @Published var showCompleted = true
+    
     func fetchTravels(for userId: Int) {
+        print("MAKE CALL")
+        
         let baseURL = NetworkManager.shared.getBaseURL()
         guard let url = URL(string:"\(baseURL)/travels/user?id=\(userId)") else {
             print("Invalid URL used to retrieve travels from DB")
@@ -39,5 +43,11 @@ class TravelsViewModel: ObservableObject {
                 self?.travelDetails = travelDetails
             })
             .store(in: &cancellables)
+        
+        print("SIZE TRAVELDETAILS: " + String(travelDetails.count))
+        if travelDetails.count > 0 {
+            print("\(travelDetails[0].segments.first?.departure ?? "Unknown")")
+            print("\(travelDetails[0].segments.last?.destination ?? "Unknown")")
+        }
     }
 }
