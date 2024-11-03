@@ -29,7 +29,6 @@ struct TravelsView: View {
                 .pickerStyle(SegmentedPickerStyle())
                 .padding()
                 
-                /*
                 Button(action: {
                     showSortOptions.toggle()
                 }) {
@@ -38,14 +37,15 @@ struct TravelsView: View {
                 .padding()
                 .actionSheet(isPresented: $showSortOptions) {
                     ActionSheet(title: Text("Order by"), buttons: [
-                        .default(Text("Departure Date")) { viewModel.sortTravels(by: .departureDate) },
-                        .default(Text("Price")) { viewModel.sortTravels(by: .price) },
+                        .default(Text("Departure date")) {viewModel.sortOption = .departureDate},
+                        .default(Text("CO2 emitted")) {viewModel.sortOption = .co2Emitted},
+                        .default(Text("CO2 compensation rate")) {viewModel.sortOption = .co2CompensationRate},
+                        .default(Text("Price")) {viewModel.sortOption = .price},
                         .cancel()
                     ])
                 }
-                */
                 
-                List(viewModel.travelDetails) { travelDetails in
+                List(viewModel.filteredTravelDetails) { travelDetails in
                     TravelRow(travelDetails: travelDetails)
                 }
             }
@@ -95,11 +95,6 @@ struct TravelRow: View {
         }
         .padding()
     }
-}
-
-enum SortOption {
-    case departureDate
-    case price
 }
 
 let dateFormatter: DateFormatter = {
