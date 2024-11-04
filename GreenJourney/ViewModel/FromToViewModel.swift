@@ -127,24 +127,108 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
     
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
         // result update
-        var seenCities: Set<String> = []
+        /*var seenCordinates: [CLLocationCoordinate2D] = []
         self.suggestions = completer.results
-            .filter { result in
-                if !seenCities.contains(result.title) {
-                    seenCities.insert(result.title)
-                    return true
-                }
-                return false
-            }
             .filter {result in
-                if (!result.subtitle.contains(",") && !result.subtitle.isEmpty) {
-                    return true
+                if !(!result.subtitle.contains(",") && (!result.subtitle.isEmpty || result.title.contains(","))) {
+                    return false
                 }
-                return false
+                var unique: Bool = true
+                getCoordinates(for: result.title) { coordinate, error in
+                    if let error = error {
+                        print(error)
+                        return
+                    }
+                    else if let coordinate = coordinate {
+                        print("COORDINATE")
+                        print (coordinate)
+                        let isDuplicate = seenCordinates.contains { $0.latitude == coordinate.latitude && $0.longitude == coordinate.longitude }
+                        if isDuplicate {
+                            print("la coordinata c'è già!!!")
+                            unique = false
+                            return
+                        }
+                        else {
+                            print("la coordinata è nuova")
+                            seenCordinates.append(coordinate)
+                            unique = true
+                            return
+                        }
+                    }
+                }
+                print("seen coordinates")
+                print(seenCordinates)
+                print("unique:  \(unique) ")
+                return unique
+                
             }
             .prefix(4) // max 4 results
-            .map { $0 } // remove duplicates
-        print(suggestions)
+            .map { $0 }*/ // remove duplicates
+        
+        var seenCoordinates: [CLLocationCoordinate2D] = []
+            var uniqueResults: [MKLocalSearchCompletion] = []
+            let group = DispatchGroup() // Per gestire la sincronizzazione delle richieste asincrone
+        let restrictedResults = completer.results.prefix(4)
+        for result in restrictedResults {
+                // Filtra preliminarmente per i criteri desiderati
+                guard (!result.subtitle.contains(",") && (!result.subtitle.isEmpty || result.title.contains(","))) else {
+                    continue
+                }
+
+                // Aggiungi la richiesta asincrona al gruppo
+                group.enter()
+
+                // Esegui la ricerca per ottenere le coordinate
+                getCoordinates(for: result.title) { coordinate, error in
+                    defer { group.leave() } // Lascia il gruppo una volta completata la ricerca
+
+                    if let error = error {
+                        print(error)
+                        return
+                    }
+
+                    if let coordinate = coordinate {
+                        let isDuplicate = seenCoordinates.contains { $0.latitude == coordinate.latitude && $0.longitude == coordinate.longitude }
+                        if !isDuplicate {
+                            // Aggiungi la nuova coordinata e il risultato univoco
+                            seenCoordinates.append(coordinate)
+                            uniqueResults.append(result)
+                        }
+                    }
+                }
+            }
+
+            // Quando tutte le richieste sono complete, aggiorna suggestions
+            group.notify(queue: .main) {
+                self.suggestions = Array(uniqueResults.prefix(4)) // Limita i risultati a 4
+                print("Suggerimenti aggiornati: \(self.suggestions)")
+            }
+    }
+    
+    func getCoordinates(for city: String, completion: @escaping (CLLocationCoordinate2D?, Error?) -> Void) {
+        // Crea una richiesta di ricerca usando la stringa fornita
+        let request = MKLocalSearch.Request()
+        request.naturalLanguageQuery = city
+        
+        // Inizializza il motore di ricerca
+        let search = MKLocalSearch(request: request)
+        
+        // Esegui la ricerca
+        search.start { response, error in
+            if let error = error {
+                completion(nil, error) // In caso di errore, restituisci l'errore
+                return
+            }
+            
+            // Verifica che ci sia almeno un risultato
+            guard let coordinate = response?.mapItems.first?.placemark.coordinate else {
+                completion(nil, NSError(domain: "NoResults", code: 404, userInfo: [NSLocalizedDescriptionKey: "Nessun risultato trovato per il luogo indicato"]))
+                return
+            }
+            
+            // Restituisci le coordinate
+            completion(coordinate, nil)
+        }
     }
     
     func computeCo2Emitted(_ travelOption: [Segment]) -> Float64 {
@@ -212,11 +296,10 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
         self.completer.delegate = self
         self.completer.resultTypes = .address
         let englishRegion = MKCoordinateRegion(
-            center: CLLocationCoordinate2D(latitude: 51.509865, longitude: -0.118092), // Coordinate di Londra
+            center: CLLocationCoordinate2D(latitude: 51.509865, longitude: -0.118092), // London coordinates
             span: MKCoordinateSpan(latitudeDelta: 10, longitudeDelta: 10)
         )
         self.completer.region = englishRegion
-        
     }
     
     struct TravelOptions: Decodable {
@@ -227,5 +310,4 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
             case returnOptions = "return_options"
         }
     }
-    
 }

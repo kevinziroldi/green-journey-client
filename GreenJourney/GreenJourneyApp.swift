@@ -18,7 +18,7 @@ struct GreenJourneyApp: App {
     
     var body: some Scene {
         WindowGroup {
-            LoginView() // Schermata di login
+            FromToView() // Schermata di login
         }
     }
 }
