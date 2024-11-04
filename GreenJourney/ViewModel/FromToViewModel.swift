@@ -136,6 +136,12 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
                 }
                 return false
             }
+            .filter {result in
+                if (!result.subtitle.contains(",") && !result.subtitle.isEmpty) {
+                    return true
+                }
+                return false
+            }
             .prefix(4) // max 4 results
             .map { $0 } // remove duplicates
         print(suggestions)
@@ -204,7 +210,12 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
         //initialization of nsobject
         super.init()
         self.completer.delegate = self
-        self.completer.resultTypes = [.address]
+        self.completer.resultTypes = .address
+        let englishRegion = MKCoordinateRegion(
+            center: CLLocationCoordinate2D(latitude: 51.509865, longitude: -0.118092), // Coordinate di Londra
+            span: MKCoordinateSpan(latitudeDelta: 10, longitudeDelta: 10)
+        )
+        self.completer.region = englishRegion
         
     }
     
