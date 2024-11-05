@@ -16,6 +16,9 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
         }
     }
     
+    private var departureCoordinates: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
+    private var destinationCoordinates: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
+    
     @Published var suggestions: [MKLocalSearchCompletion] = []
     private var completer: MKLocalSearchCompleter
     @Published var datePicked: Date = Date.now
@@ -126,71 +129,29 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
     }
     
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
-        // result update
-        /*var seenCordinates: [CLLocationCoordinate2D] = []
-        self.suggestions = completer.results
-            .filter {result in
-                if !(!result.subtitle.contains(",") && (!result.subtitle.isEmpty || result.title.contains(","))) {
-                    return false
-                }
-                var unique: Bool = true
-                getCoordinates(for: result.title) { coordinate, error in
-                    if let error = error {
-                        print(error)
-                        return
-                    }
-                    else if let coordinate = coordinate {
-                        print("COORDINATE")
-                        print (coordinate)
-                        let isDuplicate = seenCordinates.contains { $0.latitude == coordinate.latitude && $0.longitude == coordinate.longitude }
-                        if isDuplicate {
-                            print("la coordinata c'è già!!!")
-                            unique = false
-                            return
-                        }
-                        else {
-                            print("la coordinata è nuova")
-                            seenCordinates.append(coordinate)
-                            unique = true
-                            return
-                        }
-                    }
-                }
-                print("seen coordinates")
-                print(seenCordinates)
-                print("unique:  \(unique) ")
-                return unique
-                
-            }
-            .prefix(4) // max 4 results
-            .map { $0 }*/ // remove duplicates
-        
         var seenCoordinates: [CLLocationCoordinate2D] = []
             var uniqueResults: [MKLocalSearchCompletion] = []
-            let group = DispatchGroup() // Per gestire la sincronizzazione delle richieste asincrone
+            let group = DispatchGroup() // to handle asyncronous requests
         let restrictedResults = completer.results.prefix(4)
         for result in restrictedResults {
-                // Filtra preliminarmente per i criteri desiderati
+                // filter to obtain only cities
                 guard (!result.subtitle.contains(",") && (!result.subtitle.isEmpty || result.title.contains(","))) else {
                     continue
                 }
-
-                // Aggiungi la richiesta asincrona al gruppo
+                // add the asyncronus request to the group
                 group.enter()
-
-                // Esegui la ricerca per ottenere le coordinate
+                // get coordinates for each unique result
                 getCoordinates(for: result.title) { coordinate, error in
-                    defer { group.leave() } // Lascia il gruppo una volta completata la ricerca
+                    defer { group.leave() } // leave the group when it's ended
 
                     if let error = error {
                         print(error)
                         return
                     }
-
                     if let coordinate = coordinate {
                         let isDuplicate = seenCoordinates.contains { $0.latitude == coordinate.latitude && $0.longitude == coordinate.longitude }
                         if !isDuplicate {
-                            // Aggiungi la nuova coordinata e il risultato univoco
+                            // add coordinate to seenCoordinates
                             seenCoordinates.append(coordinate)
                             uniqueResults.append(result)
                         }
@@ -198,36 +159,52 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
                 }
             }
 
-            // Quando tutte le richieste sono complete, aggiorna suggestions
+            // Update suggestions
             group.notify(queue: .main) {
-                self.suggestions = Array(uniqueResults.prefix(4)) // Limita i risultati a 4
-                print("Suggerimenti aggiornati: \(self.suggestions)")
+                self.suggestions = uniqueResults
             }
     }
     
-    func getCoordinates(for city: String, completion: @escaping (CLLocationCoordinate2D?, Error?) -> Void) {
-        // Crea una richiesta di ricerca usando la stringa fornita
+    private func getCoordinates(for city: String, completion: @escaping (CLLocationCoordinate2D?, Error?) -> Void) {
         let request = MKLocalSearch.Request()
         request.naturalLanguageQuery = city
-        
-        // Inizializza il motore di ricerca
         let search = MKLocalSearch(request: request)
         
-        // Esegui la ricerca
         search.start { response, error in
             if let error = error {
-                completion(nil, error) // In caso di errore, restituisci l'errore
+                completion(nil, error) // return the error
                 return
             }
             
-            // Verifica che ci sia almeno un risultato
+            // verify that there is at least one result
             guard let coordinate = response?.mapItems.first?.placemark.coordinate else {
-                completion(nil, NSError(domain: "NoResults", code: 404, userInfo: [NSLocalizedDescriptionKey: "Nessun risultato trovato per il luogo indicato"]))
+                completion(nil, NSError(domain: "NoResults", code: 404, userInfo: [NSLocalizedDescriptionKey: "No results for this location"]))
                 return
             }
             
-            // Restituisci le coordinate
+            // return coordinate
             completion(coordinate, nil)
+        }
+    }
+    
+    func insertCoordinates () {
+        getCoordinates(for: self.departure) { coordinate, error in
+            if let error = error {
+                print(error)
+                return
+            }
+            else if let coordinate = coordinate {
+                self.departureCoordinates = coordinate
+            }
+        }
+        getCoordinates(for: self.destination) { coordinate, error in
+            if let error = error {
+                print(error)
+                return
+            }
+            else if let coordinate = coordinate {
+                self.destinationCoordinates = coordinate
+            }
         }
     }
     
@@ -258,9 +235,9 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
     }
     
     func durationToHoursAndMinutes(duration: Int) -> (hours: Int, minutes: Int) {
-        let hours = duration / (3600 * 1000000000)       // 1 ora = 3600 secondi
+        let hours = duration / (3600 * 1000000000)       // 1 hour = 3600 secsecondsondi
         let remainingSeconds = (duration / 1000000000) % (3600)
-        let minutes = remainingSeconds / 60  // 1 minuto = 60 secondi
+        let minutes = remainingSeconds / 60  // 1 minute = 60 seconds
         
         return (hours, minutes)
     }
@@ -285,7 +262,7 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
     
     func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
         // error handling
-        print("Errore durante il completamento della ricerca: \(error)")
+        print("error during completer search: \(error)")
     }
     
     init(userId: Int) {

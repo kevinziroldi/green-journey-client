@@ -6,45 +6,41 @@ struct SignUpView: View {
     @State private var isEmailVerificationActive = false
     var body: some View {
         VStack {
-            Form{
-                Text("Sign Up")
-                    .font(.largeTitle)
-                    .padding(.bottom, 32)
-                
-                TextField("Email", text: $viewModel.email)
-                    .autocapitalization(.none)
-                    .keyboardType(.emailAddress)
-                    .padding()
-                    .background(Color.gray.opacity(0.2))
-                    .cornerRadius(8)
-                
-                SecureField("Password", text: $viewModel.password)
-                    .padding()
-                    .background(Color.gray.opacity(0.2))
-                    .cornerRadius(8)
-                SecureField("Repeat Password", text: $viewModel.repeatPassword)
-                    .padding()
-                    .background(Color.gray.opacity(0.2))
-                    .cornerRadius(8)
-                
-                TextField("First name", text: $viewModel.firstName)
-                    .padding()
-                    .background(Color.gray.opacity(0.2))
-                    .cornerRadius(8)
-                
-                TextField("Last name", text: $viewModel.lastName)
-                    .padding()
-                    .background(Color.gray.opacity(0.2))
-                    .cornerRadius(8)
-                // error message
-                if let errorMessage = viewModel.errorMessage {
-                    Text(errorMessage)
-                        .foregroundColor(.red)
-                        .font(.caption)
-                }
-            }
-            .scrollDismissesKeyboard(.interactively)
+            Text("Sign Up")
+                .font(.largeTitle)
+                .padding(.bottom, 32)
             
+            TextField("Email", text: $viewModel.email)
+                .autocapitalization(.none)
+                .keyboardType(.emailAddress)
+                .padding()
+                .background(Color.gray.opacity(0.2))
+                .cornerRadius(8)
+            
+            SecureField("Password", text: $viewModel.password)
+                .padding()
+                .background(Color.gray.opacity(0.2))
+                .cornerRadius(8)
+            SecureField("Repeat Password", text: $viewModel.repeatPassword)
+                .padding()
+                .background(Color.gray.opacity(0.2))
+                .cornerRadius(8)
+            
+            TextField("First name", text: $viewModel.firstName)
+                .padding()
+                .background(Color.gray.opacity(0.2))
+                .cornerRadius(8)
+            
+            TextField("Last name", text: $viewModel.lastName)
+                .padding()
+                .background(Color.gray.opacity(0.2))
+                .cornerRadius(8)
+            // error message
+            if let errorMessage = viewModel.errorMessage {
+                Text(errorMessage)
+                    .foregroundColor(.red)
+                    .font(.caption)
+            }
             Button(action: {
                 viewModel.signUp()
                 isEmailVerificationActive = true

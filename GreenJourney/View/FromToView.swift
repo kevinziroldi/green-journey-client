@@ -19,6 +19,7 @@ struct FromToView: View {
                             .onTapGesture {
                                 isDepartureFocused = true
                             }
+                            .scrollDismissesKeyboard(.interactively)
                         if isDepartureFocused && !viewModel.suggestions.isEmpty {
                             List(viewModel.suggestions, id: \.self) { suggestion in
                                 VStack(alignment: .leading) {
@@ -51,6 +52,7 @@ struct FromToView: View {
                             .onTapGesture {
                                 isDestinationFocused = true
                             }
+                            .scrollDismissesKeyboard(.interactively)
                         if isDestinationFocused && !viewModel.suggestions.isEmpty {
                             List(viewModel.suggestions, id: \.self) { suggestion in
                                 VStack(alignment: .leading) {
@@ -101,6 +103,7 @@ struct FromToView: View {
                     Spacer()
                     Spacer()
                     Button ("compute"){
+                        viewModel.insertCoordinates()   //compute coordinates for departure and destination
                         viewModel.computeRoutes(from: viewModel.departure, to: viewModel.destination, on: viewModel.datePicked, return: viewModel.dateReturnPicked, oneWay: viewModel.oneWay)
                         isNavigationActive = true
                     }

@@ -1,5 +1,8 @@
 import FirebaseAuth
 import SwiftUI
+import FirebaseCore
+import GoogleSignIn
+import AuthenticationServices
 
 class LoginViewModel: ObservableObject {
     @Published var email: String = ""
@@ -46,6 +49,42 @@ class LoginViewModel: ObservableObject {
                 print("email for password reset sent")
                 self.resendEmail = "email sent"
             }
+        }
+    }
+    
+    func signInWithGoogle() {
+        guard let clientID = FirebaseApp.app()?.options.clientID else { return }
+
+        // Create Google Sign In configuration object.
+        let config = GIDConfiguration(clientID: clientID)
+        GIDSignIn.sharedInstance.configuration = config
+
+        // Start the sign in flow!
+        GIDSignIn.sharedInstance.signIn(withPresenting: self) { [unowned self] result, error in
+          guard error == nil else {
+            print (error)
+          }
+
+          guard let user = result?.user,
+            let idToken = user.idToken?.tokenString
+          else {
+            // ...
+          }
+
+          let credential = GoogleAuthProvider.credential(withIDToken: idToken,
+                                                         accessToken: user.accessToken.tokenString)
+
+          // ...
+        }
+        }
+        
+        func signInWithApple() {
+            let request = ASAuthorizationAppleIDProvider().createRequest()
+            request.requestedScopes = [.fullName, .email]
+            
+            let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+            authorizationController.delegate = self
+            authorizationController.performRequests()
         }
     }
 }
