@@ -51,10 +51,6 @@ struct LoginView: View {
                 Text("Sign in with Google")
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
-                    .background(alignment: .leading) {
-                        Image("Google")
-                            .frame(width: 30, alignment: .center)
-                    }
             }
             .buttonStyle(.bordered)
             
