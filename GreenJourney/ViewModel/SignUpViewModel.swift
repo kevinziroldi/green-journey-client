@@ -55,3 +55,5 @@ class SignUpViewModel: ObservableObject {
             })
     }
 }
+
+

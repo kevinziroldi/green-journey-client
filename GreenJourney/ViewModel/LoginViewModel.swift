@@ -2,6 +2,7 @@ import FirebaseAuth
 import SwiftUI
 import FirebaseCore
 import GoogleSignIn
+import GoogleSignInSwift
 import AuthenticationServices
 
 class LoginViewModel: ObservableObject {
@@ -51,40 +52,44 @@ class LoginViewModel: ObservableObject {
             }
         }
     }
-    
-    func signInWithGoogle() {
-        guard let clientID = FirebaseApp.app()?.options.clientID else { return }
+}
 
-        // Create Google Sign In configuration object.
+
+extension LoginViewModel {
+    func signInWithGoogle() async -> Bool {
+        guard let clientID = FirebaseApp.app()?.options.clientID else {
+            fatalError("no client ID found in Firebase")
+        }
         let config = GIDConfiguration(clientID: clientID)
         GIDSignIn.sharedInstance.configuration = config
-
-        // Start the sign in flow!
-        GIDSignIn.sharedInstance.signIn(withPresenting: self) { [unowned self] result, error in
-          guard error == nil else {
-            print (error)
-          }
-
-          guard let user = result?.user,
-            let idToken = user.idToken?.tokenString
-          else {
-            // ...
-          }
-
-          let credential = GoogleAuthProvider.credential(withIDToken: idToken,
-                                                         accessToken: user.accessToken.tokenString)
-
-          // ...
-        }
-        }
         
-        func signInWithApple() {
-            let request = ASAuthorizationAppleIDProvider().createRequest()
-            request.requestedScopes = [.fullName, .email]
+        guard let windowScene = await UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let window = await windowScene.windows.first,
+              let rootViewController = await window.rootViewController else {
+            print("there is no root view controller")
+            return false
+        }
+        do {
+            let userAuthentication = try await GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController)
+            let user = userAuthentication.user
+            guard let idToken = user.idToken else {
+                print("ID token Missing")
+                return false
+            }
+            let accessToken = user.accessToken
+            let credential = GoogleAuthProvider.credential(withIDToken: idToken.tokenString, accessToken: accessToken.tokenString)
             
-            let authorizationController = ASAuthorizationController(authorizationRequests: [request])
-            authorizationController.delegate = self
-            authorizationController.performRequests()
+            let result = try await Auth.auth().signIn(with: credential)
+            let firebaseUser = result.user
+            //TODO do something with this user
+            DispatchQueue.main.async {
+                self.isLogged = true
+            }
+            return true
+        }
+        catch {
+            print(error.localizedDescription)
+            return false
         }
     }
 }

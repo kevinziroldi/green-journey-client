@@ -47,6 +47,17 @@ struct LoginView: View {
                     .cornerRadius(8)
             }
             
+            Button (action: {Task{await viewModel.signInWithGoogle()}}){
+                Text("Sign in with Google")
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .background(alignment: .leading) {
+                        Image("Google")
+                            .frame(width: 30, alignment: .center)
+                    }
+            }
+            .buttonStyle(.bordered)
+            
             Spacer()
             Button ("Sign up") {
                 isNavigationActive = true
@@ -61,4 +72,8 @@ struct LoginView: View {
         }
         .navigationBarHidden(true)
     }
+}
+
+#Preview {
+    LoginView()
 }
