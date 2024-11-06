@@ -5,5 +5,4 @@ enum Vehicle: String, Codable {
     case plane = "plane"
     case bike = "bike"
     case walk = "walk"
-    
 }
