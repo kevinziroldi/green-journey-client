@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct SignUpView: View {
-    @ObservedObject private var viewModel = SignUpViewModel()
+    @ObservedObject var viewModel: AuthenticationViewModel
     @State private var isNavigationLoginActive = false
     @State private var isEmailVerificationActive = false
     var body: some View {

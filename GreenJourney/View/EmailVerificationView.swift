@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct EmailVerificationView: View {
-    @ObservedObject var viewModel: SignUpViewModel
+    @ObservedObject var viewModel: AuthenticationViewModel
     var body: some View {
         VStack {
             Spacer()
@@ -11,7 +11,7 @@ struct EmailVerificationView: View {
                 viewModel.verifyEmail()
                 }
             .fullScreenCover(isPresented: $viewModel.emailVerified) {
-                FromToView()
+                MainView()
             }
             if let errorMessage = viewModel.errorMessage {
                 Text(errorMessage)

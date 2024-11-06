@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct LoginView: View {
-    @ObservedObject private var viewModel = LoginViewModel()
+    @ObservedObject private var viewModel = AuthenticationViewModel()
     @State private var isNavigationActive = false
     var body: some View {
         VStack {
@@ -59,7 +59,7 @@ struct LoginView: View {
                 isNavigationActive = true
             }
             .fullScreenCover(isPresented: $isNavigationActive) {
-                SignUpView()
+                SignUpView(viewModel: viewModel)
             }
         }
         .padding()
