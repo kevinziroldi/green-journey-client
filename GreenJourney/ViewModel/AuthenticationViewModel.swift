@@ -33,11 +33,15 @@ class AuthenticationViewModel: ObservableObject {
         if let existingUser = user {
             self.userID = existingUser.userID
             self.isLogged = true
+            // TODO basta a caricare MainView
         }else {
             self.isLogged = false
         }
     }
     
+    // TODO, at the moment called only from login(), bust
+    // it must be called by every function that logs the user in
+    // e.g. with Google, signup, ...
     private func saveUserToSwiftData(firebaseUID: String) {
         // get user by firebaseUID from the server
         // TODO
@@ -57,6 +61,7 @@ class AuthenticationViewModel: ObservableObject {
             return
         }
         // Firebase call
+        // old - no SwiftData
         /*
         Auth.auth().signIn(withEmail: email, password: password) { [weak self] result, error in
             guard let strongSelf = self else { return }
@@ -71,6 +76,7 @@ class AuthenticationViewModel: ObservableObject {
             }
         }
         */
+        // new - with SwiftData
         Auth.auth().signIn(withEmail: email, password: password) { [weak self] result, error in
             guard let strongSelf = self else { return }
             if let error = error {
