@@ -24,8 +24,8 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
     @Published var datePicked: Date = Date.now
     @Published var dateReturnPicked : Date = Date.now.addingTimeInterval(7 * 24 * 60 * 60) //seven days in ms
     @Published var oneWay: Bool = true
-    
-    @Published var travelOptions: TravelOptions = TravelOptions(outwardOptions: [], returnOptions: [])
+    @Published var outwardOptions: [Segment] = []
+    @Published var returnOptions: [Segment] = []
     
     @Published var selectedOption: [Segment] = []
     private var cancellables = Set<AnyCancellable>()
@@ -50,22 +50,14 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
         timeFormatter.dateFormat = "HH:mm"
         let formattedTime = timeFormatter.string(from: date)
         let formattedTimeReturn = timeFormatter.string(from: returnDate)
-        var url: URL?
         let baseURL = NetworkManager.shared.getBaseURL()
-        if (oneway) {
-            url = URL(string:"\(baseURL)/travels/fromto?from=\(departure)&to=\(destination)&dateOutward=\(formattedDate)&timeOutward=\(formattedTime)&round_trip=\(!oneWay)")
-        }
-        else {
-            url = URL(string:"\(baseURL)/travels/fromto?from=\(departure)&to=\(destination)&dateOutward=\(formattedDate)&timeOutward=\(formattedTime)&round_trip=\(!oneWay)&dateReturn=\(formattedDateReturn)&timeReturn=\(formattedTimeReturn)")
-        }
-        guard let validUrl = url else {
-            print("Invalid URL from to")
+        guard var url = URL(string:"\(baseURL)/travels/fromto?from=\(departure)&to=\(destination)&dateOutward=\(formattedDate)&timeOutward=\(formattedTime)") else {
             return
         }
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         
-        URLSession.shared.dataTaskPublisher(for: validUrl)
+        URLSession.shared.dataTaskPublisher(for: url)
            .tryMap {
                result -> Data in
                guard let httpResponse = result.response as? HTTPURLResponse,
@@ -77,7 +69,7 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
                
                return result.data
            }
-           .decode(type: TravelOptions.self, decoder: decoder)
+           .decode(type: [Segment].self, decoder: decoder)
            .receive(on: DispatchQueue.main)
            .sink(receiveCompletion: {
                completion in
@@ -85,12 +77,44 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
                case .finished:
                    break
                case .failure(let error):
-                   print("Error fetching travels: \(error.localizedDescription)")
+                   print("Error fetching options: \(error.localizedDescription)")
                }
-           }, receiveValue: { [weak self] travelOptions in
-               self?.travelOptions = travelOptions
+           }, receiveValue: { [weak self] outwardOptions in
+               self?.outwardOptions = outwardOptions
            })
            .store(in: &cancellables)
+        if (!oneway) {
+            guard let returnUrl = URL(string:"\(baseURL)/travels/fromto?from=\(destination)&to=\(departure)&dateOutward=\(formattedDateReturn)&timeOutward=\(formattedTimeReturn)") else {
+                return
+            }
+            URLSession.shared.dataTaskPublisher(for: returnUrl)
+               .tryMap {
+                   result -> Data in
+                   guard let httpResponse = result.response as? HTTPURLResponse,
+                         (200...299).contains(httpResponse.statusCode) else {
+                       throw URLError(.badServerResponse)
+                   }
+                   
+                   print(String(data: result.data, encoding: .utf8) ?? "No data")
+                   
+                   return result.data
+               }
+               .decode(type: [Segment].self, decoder: decoder)
+               .receive(on: DispatchQueue.main)
+               .sink(receiveCompletion: {
+                   completion in
+                   switch completion {
+                   case .finished:
+                       break
+                   case .failure(let error):
+                       print("Error fetching options: \(error.localizedDescription)")
+                   }
+               }, receiveValue: { [weak self] returnOptions in
+                   self?.returnOptions = returnOptions
+               })
+               .store(in: &cancellables)
+        }
+        
     }
          
         
@@ -277,14 +301,5 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
             span: MKCoordinateSpan(latitudeDelta: 10, longitudeDelta: 10)
         )
         self.completer.region = englishRegion
-    }
-    
-    struct TravelOptions: Decodable {
-        var outwardOptions: [[Segment]]
-        var returnOptions: [[Segment]]?
-        enum CodingKeys: String, CodingKey {
-            case outwardOptions = "outward_options"
-            case returnOptions = "return_options"
-        }
     }
 }
