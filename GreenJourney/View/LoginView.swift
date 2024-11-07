@@ -1,8 +1,11 @@
 import SwiftUI
+import SwiftData
 
 struct LoginView: View {
-    @ObservedObject private var viewModel = AuthenticationViewModel()
     @State private var isNavigationActive = false
+    @Environment(\.modelContext) private var modelContext
+    @StateObject private var viewModel: AuthenticationViewModel
+    
     var body: some View {
         VStack {
             Text("Login")
@@ -24,7 +27,7 @@ struct LoginView: View {
                 if let resendMessage = viewModel.resendEmail {
                     Text(resendMessage)
                 }
-                Button("reset password") {
+                Button("Reset password") {
                     viewModel.resetPassword()
                 }
             }
@@ -67,9 +70,12 @@ struct LoginView: View {
             MainView()
         }
         .navigationBarHidden(true)
+        .onAppear {
+            viewModel.checkUserLogged()
+        }
     }
-}
-
-#Preview {
-    LoginView()
+    
+    init(modelContext: ModelContext) {
+        _viewModel = StateObject(wrappedValue: AuthenticationViewModel(modelContext: modelContext))
+    }
 }
