@@ -8,7 +8,14 @@ struct ReturnOptionsView: View {
             Text("\(viewModel.destination) -> \(viewModel.departure) on: \(viewModel.dateReturnPicked.formatted(date: .numeric, time: .shortened))")
         }
         NavigationStack {
-            List (viewModel.returnOptions.indices, id: \.self) { option in
+            if (viewModel.returnOptions.isEmpty){
+                ProgressView() // show loading symbol
+                    .progressViewStyle(CircularProgressViewStyle())
+                    .scaleEffect(1.5)
+                    .padding()
+            }
+            else{
+                List (viewModel.returnOptions.indices, id: \.self) { option in
                     VStack{
                         NavigationLink ("expand", destination: OptionDetailsView(segments: viewModel.returnOptions[option], viewModel: viewModel))
                         if let vehicle = viewModel.returnOptions[option].first?.vehicle {
@@ -35,6 +42,7 @@ struct ReturnOptionsView: View {
                         Text(viewModel.getOptionDestination(viewModel.returnOptions[option]))
                     }
                 }
+            }
         }
     }
 }

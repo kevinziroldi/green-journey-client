@@ -51,7 +51,7 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
         let formattedTime = timeFormatter.string(from: date)
         let formattedTimeReturn = timeFormatter.string(from: returnDate)
         let baseURL = NetworkManager.shared.getBaseURL()
-        guard var url = URL(string:"\(baseURL)/travels/fromto?from=\(departure)&to=\(destination)&date=\(formattedDate)&time=\(formattedTime)") else {
+        guard let url = URL(string:"\(baseURL)/travels/fromto?from=\(departure)&to=\(destination)&date=\(formattedDate)&time=\(formattedTime)") else {
             return
         }
         let decoder = JSONDecoder()

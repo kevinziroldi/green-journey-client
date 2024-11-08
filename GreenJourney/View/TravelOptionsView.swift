@@ -8,7 +8,7 @@ struct TravelOptionsView: View {
             Text("\(viewModel.departure) -> \(viewModel.destination) on: \(viewModel.datePicked.formatted(date: .numeric, time: .shortened))")
         }
         NavigationStack {
-            if (viewModel.outwardOptions.isEmpty || (!viewModel.oneWay && viewModel.returnOptions.isEmpty)){
+            if (viewModel.outwardOptions.isEmpty){
                 ProgressView() // show loading symbol
                         .progressViewStyle(CircularProgressViewStyle())
                         .scaleEffect(1.5)
