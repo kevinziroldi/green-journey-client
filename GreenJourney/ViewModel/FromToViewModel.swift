@@ -24,8 +24,8 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
     @Published var datePicked: Date = Date.now
     @Published var dateReturnPicked : Date = Date.now.addingTimeInterval(7 * 24 * 60 * 60) //seven days in ms
     @Published var oneWay: Bool = true
-    @Published var outwardOptions: [Segment] = []
-    @Published var returnOptions: [Segment] = []
+    @Published var outwardOptions: [[Segment]] = []
+    @Published var returnOptions: [[Segment]] = []
     
     @Published var selectedOption: [Segment] = []
     private var cancellables = Set<AnyCancellable>()
@@ -51,7 +51,7 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
         let formattedTime = timeFormatter.string(from: date)
         let formattedTimeReturn = timeFormatter.string(from: returnDate)
         let baseURL = NetworkManager.shared.getBaseURL()
-        guard var url = URL(string:"\(baseURL)/travels/fromto?from=\(departure)&to=\(destination)&dateOutward=\(formattedDate)&timeOutward=\(formattedTime)") else {
+        guard let url = URL(string:"\(baseURL)/travels/fromto?from=\(departure)&to=\(destination)&dateOutward=\(formattedDate)&timeOutward=\(formattedTime)") else {
             return
         }
         let decoder = JSONDecoder()
@@ -69,7 +69,7 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
                
                return result.data
            }
-           .decode(type: [Segment].self, decoder: decoder)
+           .decode(type: [[Segment]].self, decoder: decoder)
            .receive(on: DispatchQueue.main)
            .sink(receiveCompletion: {
                completion in
@@ -99,7 +99,7 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
                    
                    return result.data
                }
-               .decode(type: [Segment].self, decoder: decoder)
+               .decode(type: [[Segment]].self, decoder: decoder)
                .receive(on: DispatchQueue.main)
                .sink(receiveCompletion: {
                    completion in

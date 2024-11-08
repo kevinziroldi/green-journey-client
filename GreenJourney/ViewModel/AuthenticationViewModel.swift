@@ -118,13 +118,12 @@ class AuthenticationViewModel: ObservableObject {
             return
         }
         
-        // creation of JSON body
-        let body: [String: Any] = [
-            "FirstName": self.firstName,
-            "LastName": self.lastName,
-            "FirebaseUID": uid
-        ]
-        
+        var user = User(firstName: self.firstName, lastName: self.lastName, firebaseUID: uid)
+        guard let body = try? JSONEncoder().encode(user) else {
+            print("error in encoding user data")
+            return
+        }
+        print("body: \(body)")
         // JSON encoding
         guard let jsonData = try? JSONSerialization.data(withJSONObject: body) else {
             print("Error serializing JSON")

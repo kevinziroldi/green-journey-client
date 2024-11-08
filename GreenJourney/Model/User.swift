@@ -4,8 +4,8 @@ import SwiftData
 @Model
 class User: Codable {
     var userID: Int?
-    var firstName: String?
-    var lastName: String?
+    var firstName: String
+    var lastName: String
     var birthDate: Date.FormatStyle.DateStyle?
     var gender: String?
     var firebaseUID: String
@@ -14,17 +14,10 @@ class User: Codable {
     var houseNumber: Int?
     var city: String?
     
-    init(userID: Int, firstName: String, lastName: String, birthDate: Date.FormatStyle.DateStyle, gender: String, firebaseUID: String, zipCode: Int, streetName: String, houseNumber: Int, city: String) {
-        self.userID = userID
+    init(userID: Int? = nil, firstName: String, lastName: String, birthDate: Date.FormatStyle.DateStyle? = nil, gender: String? = nil, firebaseUID: String, zipCode: Int? = nil, streetName: String? = nil, houseNumber: Int? = nil, city: String? = nil) {
+        self.firebaseUID = firebaseUID
         self.firstName = firstName
         self.lastName = lastName
-        self.birthDate = birthDate
-        self.gender = gender
-        self.firebaseUID = firebaseUID
-        self.zipCode = zipCode
-        self.streetName = streetName
-        self.houseNumber = houseNumber
-        self.city = city
     }
     
     enum CodingKeys: String, CodingKey {

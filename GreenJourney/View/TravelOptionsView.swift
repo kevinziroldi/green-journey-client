@@ -8,36 +8,39 @@ struct TravelOptionsView: View {
             Text("\(viewModel.departure) -> \(viewModel.destination) on: \(viewModel.datePicked.formatted(date: .numeric, time: .shortened))")
         }
         NavigationStack {
-            if (viewModel.travelOptions.outwardOptions.isEmpty || (!viewModel.oneWay && viewModel.travelOptions.returnOptions!.isEmpty)){
-                Text("NO OPTION")
+            if (viewModel.outwardOptions.isEmpty || (!viewModel.oneWay && viewModel.returnOptions.isEmpty)){
+                ProgressView() // show loading symbol
+                        .progressViewStyle(CircularProgressViewStyle())
+                        .scaleEffect(1.5)
+                        .padding()
             }
             else{
-                List (viewModel.travelOptions.outwardOptions.indices, id: \.self) { option in
+                List (viewModel.outwardOptions.indices, id: \.self) { option in
                     VStack{
-                        NavigationLink ("expand", destination: OptionDetailsView(segments: viewModel.travelOptions.outwardOptions[option], viewModel: viewModel))
-                        if let vehicle = viewModel.travelOptions.outwardOptions[option].first?.vehicle {
+                        NavigationLink ("expand", destination: OptionDetailsView(segments: viewModel.outwardOptions[option], viewModel: viewModel))
+                        if let vehicle = viewModel.outwardOptions[option].first?.vehicle {
                             Text(vehicle.rawValue)
                         } else {
                             Text("no vehicle!")
                         }
                         
-                        Text(viewModel.getOptionDeparture(viewModel.travelOptions.outwardOptions[option]))
-                        if (viewModel.travelOptions.outwardOptions[option].count > 1){
-                            if (viewModel.travelOptions.outwardOptions[option].count == 2){
-                                Text("\(viewModel.travelOptions.outwardOptions[option].count) change")
+                        Text(viewModel.getOptionDeparture(viewModel.outwardOptions[option]))
+                        if (viewModel.outwardOptions[option].count > 1){
+                            if (viewModel.outwardOptions[option].count == 2){
+                                Text("\(viewModel.outwardOptions[option].count) change")
                                     .foregroundStyle(.blue)
                             }
                             else {
-                                Text("\(viewModel.travelOptions.outwardOptions[option].count) changes")
+                                Text("\(viewModel.outwardOptions[option].count) changes")
                                     .foregroundStyle(.blue)
                             }
                         }
-                        Text("price: " + String(format: "%.2f", viewModel.computeTotalPrice(viewModel.travelOptions.outwardOptions[option])) + "€")
+                        Text("price: " + String(format: "%.2f", viewModel.computeTotalPrice(viewModel.outwardOptions[option])) + "€")
                             .foregroundStyle(.green)
-                        Text("duration: " + viewModel.computeTotalDuration(viewModel.travelOptions.outwardOptions[option]))
-                        Text("co2: " + String(format: "%.2f", viewModel.computeCo2Emitted(viewModel.travelOptions.outwardOptions[option])))
+                        Text("duration: " + viewModel.computeTotalDuration(viewModel.outwardOptions[option]))
+                        Text("co2: " + String(format: "%.2f", viewModel.computeCo2Emitted(viewModel.outwardOptions[option])))
                             .foregroundStyle(.red)
-                        Text(viewModel.getOptionDestination(viewModel.travelOptions.outwardOptions[option]))
+                        Text(viewModel.getOptionDestination(viewModel.outwardOptions[option]))
                     }
                 }
             }
