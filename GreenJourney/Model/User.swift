@@ -6,7 +6,7 @@ class User: Codable {
     var userID: Int?
     var firstName: String
     var lastName: String
-    var birthDate: Date.FormatStyle.DateStyle?
+    var birthDate: Date?
     var gender: String?
     var firebaseUID: String
     var zipCode: Int?
@@ -14,7 +14,7 @@ class User: Codable {
     var houseNumber: Int?
     var city: String?
     
-    init(userID: Int? = nil, firstName: String, lastName: String, birthDate: Date.FormatStyle.DateStyle? = nil, gender: String? = nil, firebaseUID: String, zipCode: Int? = nil, streetName: String? = nil, houseNumber: Int? = nil, city: String? = nil) {
+    init(userID: Int? = nil, firstName: String, lastName: String, birthDate: Date? = nil, gender: String? = nil, firebaseUID: String, zipCode: Int? = nil, streetName: String? = nil, houseNumber: Int? = nil, city: String? = nil) {
         self.firebaseUID = firebaseUID
         self.firstName = firstName
         self.lastName = lastName
@@ -38,7 +38,7 @@ class User: Codable {
         self.userID = try container.decode(Int.self, forKey: .userID)
         self.firstName = try container.decode(String.self, forKey: .firstName)
         self.lastName = try container.decode(String.self, forKey: .lastName)
-        self.birthDate = try container.decode(Date.FormatStyle.DateStyle.self, forKey: .birthDate)
+        self.birthDate = try container.decode(Date.self, forKey: .birthDate)
         self.gender = try container.decode(String.self, forKey: .gender)
         self.firebaseUID = try container.decode(String.self, forKey: .firebaseUID)
         self.zipCode = try container.decode(Int.self, forKey: .zipCode)

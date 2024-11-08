@@ -18,31 +18,11 @@ class AuthenticationViewModel: ObservableObject {
     @Published var userID: Int?
     @Published var emailVerified: Bool = false
     private var cancellables = Set<AnyCancellable>()
-    //swift data
+    //swift data model context
     var modelContext: ModelContext
     
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
-    }
-    
-    // TODO, at the moment called only from login(), but
-    // it must be called by every function that logs the user in
-    // e.g. with Google, signup, ...
-    private func saveUserToSwiftData(firebaseUID: String) {
-        // get user by firebaseUID from the server
-        // TODO
-        // remove fake user created here
-        
-        modelContext.insert( User(firstName: "Pippo", lastName: "Paperino", firebaseUID: "123"))
-        
-        print("saving user with firebaseuid " + firebaseUID + "in swift data")
-        
-        // save user in SwiftData
-        do {
-            try modelContext.save()
-        } catch {
-            print("Error while saving user to SwiftData: \(error)")
-        }
     }
     
     func login() {
@@ -51,23 +31,7 @@ class AuthenticationViewModel: ObservableObject {
             errorMessage = "Insert email and password."
             return
         }
-        // Firebase call
-        // old - no SwiftData
-        /*
-        Auth.auth().signIn(withEmail: email, password: password) { [weak self] result, error in
-            guard let strongSelf = self else { return }
-            if let error = error {
-                strongSelf.errorMessage = error.localizedDescription
-            } else {
-                if let result = result {
-                    // if login is ok, update isLogged
-                    strongSelf.errorMessage = nil
-                }
-                strongSelf.isLogged = true
-            }
-        }
-        */
-        // new - with SwiftData
+        
         Auth.auth().signIn(withEmail: email, password: password) { [weak self] result, error in
             guard let strongSelf = self else { return }
             if let error = error {
@@ -75,7 +39,7 @@ class AuthenticationViewModel: ObservableObject {
             } else {
                 if let firebaseUser = result?.user {
                     // Login riuscito, salva l'utente in SwiftData
-                    strongSelf.saveUserToSwiftData(firebaseUID: firebaseUser.uid)
+                    strongSelf.getUserFromServer(firebaseUID: firebaseUser.uid)
                     strongSelf.isLogged = true
                 }
                 strongSelf.errorMessage = nil
@@ -123,7 +87,7 @@ class AuthenticationViewModel: ObservableObject {
                 } else {
                     if let result = result {
                         // if login is ok
-                        self.addUser(uid: result.user.uid)
+                        self.saveUserToServer(uid: result.user.uid)
                         Auth.auth().currentUser?.sendEmailVerification { error in
                             if let error = error {
                                 print("error while sending email verification: " + error.localizedDescription)
@@ -153,14 +117,14 @@ class AuthenticationViewModel: ObservableObject {
             })
     }
     
-    private func addUser(uid: String) {
+    private func saveUserToServer(uid: String) {
         let baseURL = NetworkManager.shared.getBaseURL()
         guard let url = URL(string: "\(baseURL)/users") else {
             print("Invalid URL for posting user data to DB")
             return
         }
         
-        var user = User(firstName: self.firstName, lastName: self.lastName, firebaseUID: uid)
+        let user = User(firstName: self.firstName, lastName: self.lastName, firebaseUID: uid)
         guard let body = try? JSONEncoder().encode(user) else {
             print("error in encoding user data")
             return
@@ -201,6 +165,60 @@ class AuthenticationViewModel: ObservableObject {
             })
             .store(in: &cancellables)
     }
+    
+    private func getUserFromServer(firebaseUID: String) {
+        print(firebaseUID)
+        
+        let baseURL = NetworkManager.shared.getBaseURL()
+        guard let url = URL(string:"\(baseURL)/users?uid=\(firebaseUID)") else {
+            print("Invalid URL used to retrieve user from DB")
+            return
+        }
+        
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        
+        URLSession.shared.dataTaskPublisher(for: url)
+            .retry(2)
+            .tryMap {
+                result -> Data in
+                guard let httpResponse = result.response as? HTTPURLResponse,
+                      (200...299).contains(httpResponse.statusCode) else {
+                    throw URLError(.badServerResponse)
+                }
+                return result.data
+            }
+            .decode(type: User.self, decoder: decoder)
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: {
+                completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    print("Error fetching user: \(error.localizedDescription)")
+                }
+            }, receiveValue: { [weak self] user in
+                guard let strongSelf = self else { return }
+                strongSelf.saveUserToSwiftData(serverUser: user)
+            })
+            .store(in: &cancellables)
+    }
+    
+    private func saveUserToSwiftData(serverUser: User?) {
+        if let user = serverUser {
+            // add user to context
+            modelContext.insert(user)
+            
+            // save user in SwiftData
+            do {
+                try modelContext.save()
+                print("Saved user with firebaseuid " + user.firebaseUID + "in swift data")
+            } catch {
+                print("Error while saving user to SwiftData: \(error)")
+            }
+        }
+    }
 }
 
 
@@ -236,13 +254,14 @@ extension AuthenticationViewModel {
                     let parts = fullName?.components(separatedBy: " ")
                     self.firstName = parts![0]
                     self.lastName = parts![1]
-                    addUser(uid: firebaseUser.uid)
+                    saveUserToServer(uid: firebaseUser.uid)
                 }
             }
             
             
             //TODO do something with this user
             DispatchQueue.main.async {
+                self.getUserFromServer(firebaseUID: firebaseUser.uid)
                 self.isLogged = true
             }
             return true
