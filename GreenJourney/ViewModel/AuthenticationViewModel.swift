@@ -1,9 +1,10 @@
-import FirebaseAuth
-import SwiftUI
+import Combine
 import FirebaseCore
+import FirebaseAuth
 import GoogleSignIn
 import GoogleSignInSwift
-import Combine
+import SwiftData
+import SwiftUI
 
 class AuthenticationViewModel: ObservableObject {
     @Published var email: String = ""
@@ -14,11 +15,44 @@ class AuthenticationViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var resendEmail: String?
     @Published var isLogged: Bool = false
-    @Published var userId: Int?
+    @Published var userID: Int?
     @Published var emailVerified: Bool = false
     private var cancellables = Set<AnyCancellable>()
-
-
+    
+    //swift data
+    @Query var user: User?
+    var modelContext: ModelContext
+    
+    init(modelContext: ModelContext) {
+        self.modelContext = modelContext
+    }
+    
+    func checkUserLogged() {
+        // TODO ok? devi salvare altro?
+        
+        if let existingUser = user {
+            self.userID = existingUser.userID
+            self.isLogged = true
+            // TODO basta a caricare MainView
+        }else {
+            self.isLogged = false
+        }
+    }
+    
+    // TODO, at the moment called only from login(), bust
+    // it must be called by every function that logs the user in
+    // e.g. with Google, signup, ...
+    private func saveUserToSwiftData(firebaseUID: String) {
+        // get user by firebaseUID from the server
+        // TODO
+        
+        // save user in SwiftData
+        do {
+            try modelContext.save()
+        } catch {
+            print("Error while saving user to SwiftData: \(error)")
+        }
+    }
     
     func login() {
         // input check and validation
@@ -27,6 +61,8 @@ class AuthenticationViewModel: ObservableObject {
             return
         }
         // Firebase call
+        // old - no SwiftData
+        /*
         Auth.auth().signIn(withEmail: email, password: password) { [weak self] result, error in
             guard let strongSelf = self else { return }
             if let error = error {
@@ -37,6 +73,21 @@ class AuthenticationViewModel: ObservableObject {
                     strongSelf.errorMessage = nil
                 }
                 strongSelf.isLogged = true
+            }
+        }
+        */
+        // new - with SwiftData
+        Auth.auth().signIn(withEmail: email, password: password) { [weak self] result, error in
+            guard let strongSelf = self else { return }
+            if let error = error {
+                strongSelf.errorMessage = error.localizedDescription
+            } else {
+                if let firebaseUser = result?.user {
+                    // Login riuscito, salva l'utente in SwiftData
+                    strongSelf.saveUserToSwiftData(firebaseUID: firebaseUser.uid)
+                    strongSelf.isLogged = true
+                }
+                strongSelf.errorMessage = nil
             }
         }
     }

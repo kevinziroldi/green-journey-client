@@ -51,7 +51,7 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
         let formattedTime = timeFormatter.string(from: date)
         let formattedTimeReturn = timeFormatter.string(from: returnDate)
         let baseURL = NetworkManager.shared.getBaseURL()
-        guard let url = URL(string:"\(baseURL)/travels/fromto?from=\(departure)&to=\(destination)&dateOutward=\(formattedDate)&timeOutward=\(formattedTime)") else {
+        guard var url = URL(string:"\(baseURL)/travels/fromto?from=\(departure)&to=\(destination)&date=\(formattedDate)&time=\(formattedTime)") else {
             return
         }
         let decoder = JSONDecoder()
@@ -84,7 +84,7 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
            })
            .store(in: &cancellables)
         if (!oneway) {
-            guard let returnUrl = URL(string:"\(baseURL)/travels/fromto?from=\(destination)&to=\(departure)&dateOutward=\(formattedDateReturn)&timeOutward=\(formattedTimeReturn)") else {
+            guard let returnUrl = URL(string:"\(baseURL)/travels/fromto?from=\(destination)&to=\(departure)&date=\(formattedDateReturn)&time=\(formattedTimeReturn)") else {
                 return
             }
             URLSession.shared.dataTaskPublisher(for: returnUrl)
