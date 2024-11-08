@@ -17,7 +17,7 @@ struct TravelOptionsView: View {
             else{
                 List (viewModel.outwardOptions.indices, id: \.self) { option in
                     VStack{
-                        NavigationLink ("expand", destination: OptionDetailsView(segments: $viewModel.outwardOptions[option], viewModel: viewModel))
+                        NavigationLink ("expand", destination: OptionDetailsView(segments: viewModel.outwardOptions[option], viewModel: viewModel))
                         if let vehicle = viewModel.outwardOptions[option].first?.vehicle {
                             Text(vehicle.rawValue)
                         } else {

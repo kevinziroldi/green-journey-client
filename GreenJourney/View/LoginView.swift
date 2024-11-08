@@ -69,14 +69,9 @@ struct LoginView: View {
             MainView()
         }
         .navigationBarHidden(true)
-        .onAppear {
-            viewModel.checkUserLogged()
-        }
     }
     
     init(modelContext: ModelContext) {
-        // build the ViewModel
-        let viewModel = AuthenticationViewModel(modelContext: modelContext)
         // set @StateObject attribute
         _viewModel = StateObject(wrappedValue: AuthenticationViewModel(modelContext: modelContext))
     }

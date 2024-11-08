@@ -18,25 +18,11 @@ class AuthenticationViewModel: ObservableObject {
     @Published var userID: Int?
     @Published var emailVerified: Bool = false
     private var cancellables = Set<AnyCancellable>()
-    
     //swift data
     var modelContext: ModelContext
-    @Query var users: [User]
     
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
-    }
-    
-    func checkUserLogged() {
-        // TODO ok? devi salvare altro?
-        
-        if let user = users.first {
-            // TODO basta a caricare MainView?
-            print(user)
-            self.isLogged = true
-        }else {
-            self.isLogged = false
-        }
     }
     
     // TODO, at the moment called only from login(), but
@@ -46,7 +32,10 @@ class AuthenticationViewModel: ObservableObject {
         // get user by firebaseUID from the server
         // TODO
         // remove fake user created here
-        var user = User(firstName: "Pippo", lastName: "Paperino", firebaseUID: "123")
+        
+        modelContext.insert( User(firstName: "Pippo", lastName: "Paperino", firebaseUID: "123"))
+        
+        print("saving user with firebaseuid " + firebaseUID + "in swift data")
         
         // save user in SwiftData
         do {

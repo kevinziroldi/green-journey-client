@@ -1,6 +1,7 @@
-import SwiftUI
-import FirebaseCore
 import FirebaseAuth
+import FirebaseCore
+import SwiftData
+import SwiftUI
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication,
@@ -19,9 +20,11 @@ struct GreenJourneyApp: App {
     
     var body: some Scene {
         WindowGroup {
-            LoginView(modelContext: persistenceController.container.mainContext)
+            MainView()
         }
         .modelContainer(persistenceController.container)    // TODO serve?
         // make persistence controller available to all views
     }
 }
+
+
