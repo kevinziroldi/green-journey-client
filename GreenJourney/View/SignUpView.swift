@@ -4,6 +4,9 @@ struct SignUpView: View {
     @ObservedObject var viewModel: AuthenticationViewModel
     @State private var isNavigationLoginActive = false
     @State private var isEmailVerificationActive = false
+    
+    @Environment(\.modelContext) private var modelContext
+    
     var body: some View {
         VStack {
             Text("Sign Up")
@@ -61,7 +64,7 @@ struct SignUpView: View {
                 isNavigationLoginActive = true
             }
             .fullScreenCover(isPresented: $isNavigationLoginActive) {
-                LoginView()
+                LoginView(modelContext: modelContext)
             }
         }
         .padding()

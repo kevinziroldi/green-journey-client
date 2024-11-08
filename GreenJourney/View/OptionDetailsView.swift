@@ -14,6 +14,7 @@ struct OptionDetailsView: View {
             else {
                 Text("no vehicle detected")
             }
+            /*
             List {
                 ForEach (segments) { segment in
                     VStack {
@@ -31,6 +32,7 @@ struct OptionDetailsView: View {
                     }
                 }
             }
+            */
             if (!viewModel.oneWay) {
                 if (viewModel.selectedOption.isEmpty) {
                     Button ("proceed"){

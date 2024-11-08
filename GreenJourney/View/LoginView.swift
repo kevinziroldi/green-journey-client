@@ -2,9 +2,8 @@ import SwiftUI
 import SwiftData
 
 struct LoginView: View {
-    @State private var isNavigationActive = false
-    @Environment(\.modelContext) private var modelContext
     @StateObject private var viewModel: AuthenticationViewModel
+    @State private var isNavigationActive = false
     
     var body: some View {
         VStack {
@@ -76,6 +75,9 @@ struct LoginView: View {
     }
     
     init(modelContext: ModelContext) {
+        // build the ViewModel
+        let viewModel = AuthenticationViewModel(modelContext: modelContext)
+        // set @StateObject attribute
         _viewModel = StateObject(wrappedValue: AuthenticationViewModel(modelContext: modelContext))
     }
 }

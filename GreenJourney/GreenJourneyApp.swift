@@ -19,9 +19,9 @@ struct GreenJourneyApp: App {
     
     var body: some Scene {
         WindowGroup {
-            LoginView()
+            LoginView(modelContext: persistenceController.container.mainContext)
         }
-        .modelContainer(persistenceController.container)
+        .modelContainer(persistenceController.container)    // TODO serve?
         // make persistence controller available to all views
     }
 }

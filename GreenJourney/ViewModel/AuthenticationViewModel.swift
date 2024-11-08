@@ -20,8 +20,8 @@ class AuthenticationViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     
     //swift data
-    @Query var user: User?
     var modelContext: ModelContext
+    @Query var users: [User]
     
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
@@ -30,21 +30,23 @@ class AuthenticationViewModel: ObservableObject {
     func checkUserLogged() {
         // TODO ok? devi salvare altro?
         
-        if let existingUser = user {
-            self.userID = existingUser.userID
+        if let user = users.first {
+            // TODO basta a caricare MainView?
+            print(user)
             self.isLogged = true
-            // TODO basta a caricare MainView
         }else {
             self.isLogged = false
         }
     }
     
-    // TODO, at the moment called only from login(), bust
+    // TODO, at the moment called only from login(), but
     // it must be called by every function that logs the user in
     // e.g. with Google, signup, ...
     private func saveUserToSwiftData(firebaseUID: String) {
         // get user by firebaseUID from the server
         // TODO
+        // remove fake user created here
+        var user = User(firstName: "Pippo", lastName: "Paperino", firebaseUID: "123")
         
         // save user in SwiftData
         do {

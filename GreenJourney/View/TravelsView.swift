@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct TravelsView: View {
-    @ObservedObject var viewModel = TravelsViewModel()
+    @StateObject var viewModel = TravelsViewModel()
     @State private var selectedSortOption: SortOption = .departureDate
     @State private var showSortOptions = false
     
