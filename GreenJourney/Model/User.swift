@@ -38,13 +38,13 @@ class User: Codable {
         self.userID = try container.decode(Int.self, forKey: .userID)
         self.firstName = try container.decode(String.self, forKey: .firstName)
         self.lastName = try container.decode(String.self, forKey: .lastName)
-        self.birthDate = try container.decode(Date.self, forKey: .birthDate)
-        self.gender = try container.decode(String.self, forKey: .gender)
         self.firebaseUID = try container.decode(String.self, forKey: .firebaseUID)
-        self.zipCode = try container.decode(Int.self, forKey: .zipCode)
-        self.streetName = try container.decode(String.self, forKey: .streetName)
-        self.houseNumber = try container.decode(Int.self, forKey: .houseNumber)
-        self.city = try container.decode(String.self, forKey: .city)
+        self.birthDate = try container.decodeIfPresent(Date.self, forKey: .birthDate)
+        self.gender = try container.decodeIfPresent(String.self, forKey: .gender)
+        self.zipCode = try container.decodeIfPresent(Int.self, forKey: .zipCode)
+        self.streetName = try container.decodeIfPresent(String.self, forKey: .streetName)
+        self.houseNumber = try container.decodeIfPresent(Int.self, forKey: .houseNumber)
+        self.city = try container.decodeIfPresent(String.self, forKey: .city)
     }
     
     func encode(to encoder: Encoder) throws {

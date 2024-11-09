@@ -155,6 +155,7 @@ class AuthenticationViewModel: ObservableObject {
                 switch completion {
                 case .finished:
                     print("User data posted successfully.")
+                    self.saveUserToSwiftData(serverUser: user)
                 case .failure(let error):
                     print("Error posting user data: \(error.localizedDescription)")
                 }
