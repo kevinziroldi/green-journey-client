@@ -4,6 +4,11 @@ import SwiftData
 struct LoginView: View {
     @StateObject private var viewModel: AuthenticationViewModel
     @State private var isNavigationActive = false
+    @Environment(\.modelContext) private var modelContext
+    
+    init(modelContext: ModelContext) {
+        _viewModel = StateObject(wrappedValue: AuthenticationViewModel(modelContext: modelContext))
+    }
     
     var body: some View {
         VStack {
@@ -66,13 +71,8 @@ struct LoginView: View {
         }
         .padding()
         .fullScreenCover(isPresented: $viewModel.isLogged) {
-            MainView()
+            MainView(modelContext: modelContext)
         }
         .navigationBarHidden(true)
-    }
-    
-    init(modelContext: ModelContext) {
-        // set @StateObject attribute
-        _viewModel = StateObject(wrappedValue: AuthenticationViewModel(modelContext: modelContext))
     }
 }

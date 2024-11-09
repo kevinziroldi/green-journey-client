@@ -1,5 +1,6 @@
-import Foundation
 import Combine
+import Foundation
+import SwiftData
 
 enum SortOption {
     case departureDate
@@ -9,63 +10,64 @@ enum SortOption {
 }
 
 class TravelsViewModel: ObservableObject {
-    var travelDetails: [TravelDetails] = [] {
-        didSet {
-            filterTravelDetails()
-        }
-    }
-    @Published var filteredTravelDetails: [TravelDetails] = []
+    private var modelContext: ModelContext
+    var travelDetailsList: [TravelDetails] = []
+    @Published var filteredTravelDetailsList: [TravelDetails] = []
     @Published var showCompleted = true {
         didSet {
+            // already sorted
+            // filter according to new filter
             filterTravelDetails()
         }
     }
-    private var cancellables = Set<AnyCancellable>()
     @Published var sortOption = SortOption.departureDate {
         didSet {
-            sortTravels(by: sortOption)
+            // sort according to new sort option
+            sortTravels()
+            // same filter, but call to show
+            filterTravelDetails()
         }
-    }
-        
-    func fetchTravels(for userId: Int) {
-        let baseURL = NetworkManager.shared.getBaseURL()
-        guard let url = URL(string:"\(baseURL)/travels/user?id=\(userId)") else {
-            print("Invalid URL used to retrieve travels from DB")
-            return
-        }
-        
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
-        
-        URLSession.shared.dataTaskPublisher(for: url)
-            .retry(2)
-            .tryMap {
-                result -> Data in
-                guard let httpResponse = result.response as? HTTPURLResponse,
-                      (200...299).contains(httpResponse.statusCode) else {
-                    throw URLError(.badServerResponse)
-                }
-                return result.data
-            }
-            .decode(type: [TravelDetails].self, decoder: decoder)
-            .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: {
-                completion in
-                switch completion {
-                case .finished:
-                    break
-                case .failure(let error):
-                    print("Error fetching travels: \(error.localizedDescription)")
-                }
-            }, receiveValue: { [weak self] travelDetails in
-                self?.travelDetails = travelDetails
-            })
-            .store(in: &cancellables)
     }
     
+    init(modelContext: ModelContext) {
+        self.modelContext = modelContext
+    }
+    
+    func getUserTravels() {
+        do {
+            let travels = try modelContext.fetch(FetchDescriptor<Travel>())
+            let segments = try modelContext.fetch(FetchDescriptor<Segment>())
+            
+            let segmentsByTravelID = Dictionary(grouping: segments, by: { $0.travelID })
+        
+            travelDetailsList = travels.compactMap { travel in
+                if let travelSegments = segmentsByTravelID[travel.travelID] {
+                    return TravelDetails(travel: travel, segments: travelSegments)
+                } else {
+                    return TravelDetails(travel: travel, segments: [])
+                }
+            }
+            
+            // sort the new list according to current sort option
+            sortTravels()
+            // filter according to current filter
+            filterTravelDetails()
+        }catch {
+            
+            
+            
+            // TODO: gestire
+            
+            
+            
+            print("Error getting user's travels from SwiftData")
+        }
+    }
+    
+    // filters travel details list, selecting only past of future travels
     private func filterTravelDetails() {
         let currentDate = Date()
-        filteredTravelDetails = travelDetails.filter { travel in
+        filteredTravelDetailsList = travelDetailsList.filter { travel in
             let durationSeconds = Double((travel.segments.last?.duration ?? 0) / 1_000_000_000)
             let departureDateLastSegment = travel.segments.last?.date
             let arrivalDate = departureDateLastSegment?.addingTimeInterval(durationSeconds)
@@ -79,18 +81,19 @@ class TravelsViewModel: ObservableObject {
         }
     }
     
-    private func sortTravels(by sortOption: SortOption) {
-        switch sortOption {
+    // sort travel details list according to some sort option
+    private func sortTravels() {
+        switch self.sortOption {
         case .departureDate:
             // decreasing departure date
-            filteredTravelDetails.sort {
+            travelDetailsList.sort {
                 let date1 = $0.segments.first?.date ?? Date.distantPast
                 let date2 = $1.segments.first?.date ?? Date.distantPast
                 return date1 > date2
             }
         case .co2Emitted:
             // decreasing co2 emitted
-            filteredTravelDetails.sort {
+            travelDetailsList.sort {
                 var co2Emitted1 = 0.0
                 for segment in $0.segments {
                     co2Emitted1 += segment.co2Emitted
@@ -103,7 +106,7 @@ class TravelsViewModel: ObservableObject {
             }
         case .co2CompensationRate:
             // increasing co2 compensated / co2 emitted
-            filteredTravelDetails.sort {
+            travelDetailsList.sort {
                 var co2Emitted1 = 0.0
                 for segment in $0.segments {
                     co2Emitted1 += segment.co2Emitted
@@ -118,7 +121,7 @@ class TravelsViewModel: ObservableObject {
             }
         case .price:
             // decreasing price
-            filteredTravelDetails.sort {
+            travelDetailsList.sort {
                 var price1 = 0.0
                 for segment in $0.segments {
                     price1 += segment.price

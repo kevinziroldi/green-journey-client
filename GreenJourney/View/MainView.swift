@@ -2,12 +2,16 @@ import SwiftData
 import SwiftUI
 
 struct MainView: View {
-    @State private var selectedTab = 1
+    @StateObject private var viewModel: MainViewModel
     @Environment(\.modelContext) private var modelContext
-    @Query var users: [User]
+    @State private var selectedTab = 1
+    
+    init(modelContext: ModelContext) {
+        _viewModel = StateObject(wrappedValue: MainViewModel(modelContext: modelContext))
+    }
     
     var body: some View {
-        if checkUserLogged() {
+        if viewModel.checkUserLogged() {
             TabView(selection: $selectedTab) {
                 RankingView()
                     .tabItem {
@@ -21,24 +25,17 @@ struct MainView: View {
                     }
                     .tag(1)
                 
-                TravelsView()
+                TravelsView(modelContext: modelContext)
                     .tabItem {
                         Label("My travels", systemImage: "airplane")
                     }
                     .tag(2)
+            }.onAppear {
+                // refresh travels data
+                viewModel.fetchTravels()
             }
         }else {
             LoginView(modelContext: modelContext)
-        }
-    }
-    
-    func checkUserLogged() -> Bool {
-        if users.first != nil {
-            print("user IS logged")
-            return true
-        }else {
-            print("user IS NOT logged")
-            return false
         }
     }
 }

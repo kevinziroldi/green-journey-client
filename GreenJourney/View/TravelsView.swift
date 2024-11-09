@@ -1,9 +1,14 @@
+import SwiftData
 import SwiftUI
 
 struct TravelsView: View {
-    @StateObject var viewModel = TravelsViewModel()
+    @StateObject var viewModel: TravelsViewModel
     @State private var selectedSortOption: SortOption = .departureDate
     @State private var showSortOptions = false
+    
+    init(modelContext: ModelContext) {
+        _viewModel = StateObject(wrappedValue: TravelsViewModel(modelContext: modelContext))
+    }
     
     var body: some View {
         NavigationStack {
@@ -45,12 +50,12 @@ struct TravelsView: View {
                     ])
                 }
                 
-                List(viewModel.filteredTravelDetails) { travelDetails in
+                List(viewModel.filteredTravelDetailsList) { travelDetails in
                     TravelRow(travelDetails: travelDetails)
                 }
             }
             .onAppear {
-                viewModel.fetchTravels(for: 2)  // TODO scegliere dinamicamente!!!
+                viewModel.getUserTravels()
             }
         }
     }
@@ -103,7 +108,3 @@ let dateFormatter: DateFormatter = {
     return formatter
 }()
 
-
-#Preview {
-    TravelsView()
-}

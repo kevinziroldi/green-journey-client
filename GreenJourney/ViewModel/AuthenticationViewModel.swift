@@ -40,7 +40,6 @@ class AuthenticationViewModel: ObservableObject {
                 if let firebaseUser = result?.user {
                     // Login riuscito, salva l'utente in SwiftData
                     strongSelf.getUserFromServer(firebaseUID: firebaseUser.uid)
-                    strongSelf.isLogged = true
                 }
                 strongSelf.errorMessage = nil
             }
@@ -199,6 +198,7 @@ class AuthenticationViewModel: ObservableObject {
             }, receiveValue: { [weak self] user in
                 guard let strongSelf = self else { return }
                 strongSelf.saveUserToSwiftData(serverUser: user)
+                strongSelf.isLogged = true
             })
             .store(in: &cancellables)
     }
