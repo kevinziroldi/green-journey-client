@@ -3,8 +3,6 @@ import MapKit
 import Combine
 
 class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegate {
-    private var userId: Int
-    
     @Published var departure: String = "" {
         didSet {
             updateSearchResults(for: departure)
@@ -289,8 +287,7 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
         print("error during completer search: \(error)")
     }
     
-    init(userId: Int) {
-        self.userId = userId
+    override init() {
         self.completer = MKLocalSearchCompleter()
         //initialization of nsobject
         super.init()

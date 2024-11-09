@@ -125,22 +125,19 @@ class AuthenticationViewModel: ObservableObject {
         }
         
         let user = User(firstName: self.firstName, lastName: self.lastName, firebaseUID: uid)
+        // JSON encoding
         guard let body = try? JSONEncoder().encode(user) else {
             print("error in encoding user data")
             return
         }
-        print("body: \(body)")
-        // JSON encoding
-        guard let jsonData = try? JSONSerialization.data(withJSONObject: body) else {
-            print("Error serializing JSON")
-            return
-        }
+        print("body: " , String(data: body, encoding: .utf8)!)
+        
         
         // POST request
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = jsonData
+        request.httpBody = body
         
  
         URLSession.shared.dataTaskPublisher(for: request)

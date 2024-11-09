@@ -2,7 +2,7 @@ import SwiftUI
 import MapKit
 
 struct FromToView: View {
-    @StateObject private var viewModel = FromToViewModel(userId:1)
+    @StateObject private var viewModel = FromToViewModel()
     @FocusState private var isDepartureFocused: Bool
     @FocusState private var isDestinationFocused: Bool
     @State private var isNavigationActive: Bool = false
