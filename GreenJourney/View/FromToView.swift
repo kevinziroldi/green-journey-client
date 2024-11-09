@@ -12,6 +12,20 @@ struct FromToView: View {
             ZStack {
                 VStack{
                     VStack{
+                        HStack {
+                            Text("Next journey")
+                                .font(.title)
+                                .padding()
+                            
+                            Spacer()
+                            
+                            NavigationLink(destination: UserPreferencesView()) {
+                                Image(systemName: "person")
+                                    .font(.title)
+                            }
+                            .padding()
+                        }
+                        
                         TextField("insert a departure", text: $viewModel.departure)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .focused($isDepartureFocused)

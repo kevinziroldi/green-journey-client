@@ -18,8 +18,6 @@ struct TravelsView: View {
                         .font(.title)
                         .padding()
                     Spacer()
-                    
-                    
                     NavigationLink(destination: UserPreferencesView()) {
                         Image(systemName: "person")
                             .font(.title)
