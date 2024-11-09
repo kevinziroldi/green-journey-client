@@ -18,6 +18,14 @@ class User: Codable {
         self.firebaseUID = firebaseUID
         self.firstName = firstName
         self.lastName = lastName
+        self.birthDate = birthDate
+        self.gender = gender
+        self.firebaseUID = firebaseUID
+        self.zipCode = zipCode
+        self.streetName = streetName
+        self.houseNumber = houseNumber
+        self.city = city
+        self.userID = userID
     }
     
     enum CodingKeys: String, CodingKey {

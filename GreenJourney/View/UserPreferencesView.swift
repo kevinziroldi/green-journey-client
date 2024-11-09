@@ -179,17 +179,6 @@ struct UserPreferencesView : View {
                 houseNumber: houseNumberInt,
                 city: cityField
             )
-         
-            print(modifiedUser.userID ?? -1)
-            print(modifiedUser.firstName)
-            print(modifiedUser.lastName)
-            print(modifiedUser.birthDate ?? "Nothing")
-            print(modifiedUser.gender ?? "Nothing")
-            print(modifiedUser.firebaseUID)
-            print(modifiedUser.zipCode ?? "Nothing")
-            print(modifiedUser.streetName ?? "Nothing")
-            print(modifiedUser.houseNumber ?? "Nothing")
-            print(modifiedUser.city ?? "Nothing")
             
             
             // JSON encoding
