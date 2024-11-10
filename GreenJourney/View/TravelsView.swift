@@ -5,6 +5,7 @@ struct TravelsView: View {
     @StateObject var viewModel: TravelsViewModel
     @State private var selectedSortOption: SortOption = .departureDate
     @State private var showSortOptions = false
+    @Environment(\.modelContext) private var modelContext
     
     init(modelContext: ModelContext) {
         _viewModel = StateObject(wrappedValue: TravelsViewModel(modelContext: modelContext))
@@ -18,7 +19,7 @@ struct TravelsView: View {
                         .font(.title)
                         .padding()
                     Spacer()
-                    NavigationLink(destination: UserPreferencesView()) {
+                    NavigationLink(destination: UserPreferencesView(modelContext: modelContext)) {
                         Image(systemName: "person")
                             .font(.title)
                     }

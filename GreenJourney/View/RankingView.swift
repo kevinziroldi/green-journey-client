@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct RankingView: View {
+    @Environment(\.modelContext) private var modelContext
+    
     var body: some View {
         NavigationStack {
             VStack {
@@ -11,7 +13,7 @@ struct RankingView: View {
                     
                     Spacer()
                     
-                    NavigationLink(destination: UserPreferencesView()) {
+                    NavigationLink(destination: UserPreferencesView(modelContext: modelContext)) {
                         Image(systemName: "person")
                             .font(.title)
                     }

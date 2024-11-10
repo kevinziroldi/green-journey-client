@@ -6,6 +6,7 @@ struct FromToView: View {
     @FocusState private var isDepartureFocused: Bool
     @FocusState private var isDestinationFocused: Bool
     @State private var isNavigationActive: Bool = false
+    @Environment(\.modelContext) private var modelContext
     
     var body: some View {
         NavigationStack {
@@ -19,7 +20,7 @@ struct FromToView: View {
                             
                             Spacer()
                             
-                            NavigationLink(destination: UserPreferencesView()) {
+                            NavigationLink(destination: UserPreferencesView(modelContext: modelContext)) {
                                 Image(systemName: "person")
                                     .font(.title)
                             }
