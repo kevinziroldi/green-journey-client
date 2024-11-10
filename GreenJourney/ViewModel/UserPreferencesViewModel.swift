@@ -39,10 +39,14 @@ class UserPreferencesViewModel: ObservableObject {
     @Published var houseNumberField: Int?
     @Published var zipCodeField: Int?
     @Published var hasModified: Bool = false
-    
-    
+    @Published var initializationPhase: Bool = true
+        
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
+        
+        // must be done before view load
+        // in order not to show the submit button
+        getUserData()
     }
     
     func getUserData() {
@@ -57,8 +61,9 @@ class UserPreferencesViewModel: ObservableObject {
                 streetNameField = user.streetName
                 houseNumberField = user.houseNumber
                 zipCodeField = user.zipCode
-            }else {
-                LoginView(modelContext: modelContext)
+                
+                initializationPhase = false
+                hasModified = false
             }
         }catch {
             // TODO
@@ -66,12 +71,13 @@ class UserPreferencesViewModel: ObservableObject {
     }
     
     func saveModifications() {
-        
         do {
             let users = try modelContext.fetch(FetchDescriptor<User>())
-        
-        
+            
+            // hide sumbit button
             hasModified = false
+            
+            // save to server and SwiftData
             if let user = users.first {
                 let userID = user.userID!
                 
@@ -109,7 +115,6 @@ class UserPreferencesViewModel: ObservableObject {
                     print("Error encoding user data for PUT")
                     return
                 }
-                print(String(data: body, encoding: .utf8)!)  // Stampa il JSON generato
 
                 
                 // PUT request
@@ -129,7 +134,6 @@ class UserPreferencesViewModel: ObservableObject {
                               (200...299).contains(httpResponse.statusCode) else {
                             throw URLError(.badServerResponse)
                         }
-                        print(httpResponse.statusCode)
                         return result.data
                     }
                     .decode(type: User.self, decoder: decoder)

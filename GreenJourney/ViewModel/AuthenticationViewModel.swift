@@ -164,7 +164,6 @@ class AuthenticationViewModel: ObservableObject {
     }
     
     private func getUserFromServer(firebaseUID: String) {
-        print(firebaseUID)
         
         let baseURL = NetworkManager.shared.getBaseURL()
         guard let url = URL(string:"\(baseURL)/users?uid=\(firebaseUID)") else {

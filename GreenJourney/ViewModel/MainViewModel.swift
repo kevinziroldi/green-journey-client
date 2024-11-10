@@ -59,9 +59,6 @@ class MainViewModel: ObservableObject {
     }
     
     private func removeExistingTravels() {
-        
-        print("DELETE TRAVELS")
-        
         do {
             self.travels = try modelContext.fetch(FetchDescriptor<Travel>())
             self.segments = try modelContext.fetch(FetchDescriptor<Segment>())
@@ -85,15 +82,11 @@ class MainViewModel: ObservableObject {
     }
     
     private func addNewTravels(_ travelDetailsList: [TravelDetails]) {
-        
-        print("ADD TRAVELS")
-        
         for travelDetails in travelDetailsList {
             modelContext.insert(travelDetails.travel)
             print(travelDetails.travel.travelID)
             for segment in travelDetails.segments {
                 modelContext.insert(segment)
-                print(segment.departure + " " + segment.destination)
             }
         }
         do {
@@ -110,10 +103,8 @@ class MainViewModel: ObservableObject {
     
     func checkUserLogged() -> Bool {
         if users.first != nil {
-            print("User IS logged")
             return true
         }else {
-            print("User IS NOT logged")
             return false
         }
     }

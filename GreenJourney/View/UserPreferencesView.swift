@@ -95,7 +95,7 @@ struct UserPreferencesView : View {
                 .frame(maxWidth: .infinity)
                 .padding(.horizontal)
                 
-                if viewModel.hasModified {
+                if !viewModel.initializationPhase && viewModel.hasModified {
                     Button(action: viewModel.saveModifications) {
                         Text("Save Modifications")
                     }
@@ -108,10 +108,6 @@ struct UserPreferencesView : View {
             }
             .frame(maxWidth: .infinity)
             .padding()
-            .onAppear() {
-                viewModel.getUserData()
-                viewModel.hasModified = false
-            }
         } else {
             LoginView(modelContext: modelContext)
         }
