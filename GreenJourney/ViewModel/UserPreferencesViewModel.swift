@@ -189,4 +189,8 @@ class UserPreferencesViewModel: ObservableObject {
             print("Error while saving context after logout: \(error)")
         }
     }
+    
+    func cancelModifications() {
+        getUserData()
+    }
 }

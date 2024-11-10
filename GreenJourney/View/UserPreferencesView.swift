@@ -58,7 +58,6 @@ struct UserPreferencesView : View {
                         .onChange(of: viewModel.birthDateField) {
                             viewModel.hasModified = true
                         }
-                    
                     Picker("Gender", selection: $viewModel.genderField) {
                         ForEach(Gender.allCases, id: \.self) { gender in
                             Text(gender.rawValue).tag(gender)
@@ -68,7 +67,6 @@ struct UserPreferencesView : View {
                     .onChange(of: viewModel.genderField) {
                         viewModel.hasModified = true
                     }
-                    
                     TextField("City", text: $viewModel.cityField.toNonOptional())
                         .onChange(of: viewModel.cityField) {
                             viewModel.hasModified = true
@@ -97,8 +95,13 @@ struct UserPreferencesView : View {
                 
                 if !viewModel.initializationPhase && viewModel.hasModified {
                     Button(action: viewModel.saveModifications) {
-                        Text("Save Modifications")
+                        Text("Save modifications")
                     }
+                   
+                    Button(action: viewModel.cancelModifications) {
+                        Text("Cancel modifications")
+                    }
+                    
                 }
 
                 // logout button
@@ -137,7 +140,7 @@ extension Binding where Value == Int? {
 }
 
 extension Binding where Value == Date? {
-    func toNonOptional(defaultValue: Date = Date.distantPast) -> Binding<Date> {
+    func toNonOptional(defaultValue: Date = Date.now) -> Binding<Date> {
         Binding<Date>(
             get: { self.wrappedValue ?? defaultValue },
             set: { newValue in
