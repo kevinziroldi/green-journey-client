@@ -9,12 +9,14 @@ struct FromToView: View {
     @FocusState private var isDestinationFocused: Bool
     @State private var isNavigationActive: Bool = false
     
+    @State var navigationPath = NavigationPath()
+    
     init(modelContext: ModelContext) {
         _viewModel = StateObject(wrappedValue: FromToViewModel(modelContext: modelContext))
     }
     
     var body: some View {
-        NavigationStack {
+        NavigationStack (path: $navigationPath){
             ZStack {
                 VStack{
                     VStack{
@@ -134,6 +136,9 @@ struct FromToView: View {
                     Spacer()
                 }
             }
+        }
+        .onAppear {
+            navigationPath = NavigationPath()
         }
     }
 }
