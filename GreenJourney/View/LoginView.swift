@@ -9,8 +9,9 @@ struct LoginView: View {
     init(modelContext: ModelContext) {
         _viewModel = StateObject(wrappedValue: AuthenticationViewModel(modelContext: modelContext))
     }
-    
+
     var body: some View {
+        
         VStack {
             Text("Login")
                 .font(.largeTitle)
@@ -22,14 +23,17 @@ struct LoginView: View {
             Spacer()
             
             TextField("Email", text: $viewModel.email)
+                .textInputAutocapitalization(.never)
                 .autocapitalization(.none)
                 .keyboardType(.emailAddress)
                 .padding()
+                .frame(maxWidth: 300)
                 .background(Color.gray.opacity(0.2))
                 .cornerRadius(8)
             
             SecureField("Password", text: $viewModel.password)
                 .padding()
+                .frame(maxWidth: 300)
                 .background(Color.gray.opacity(0.2))
                 .cornerRadius(8)
             HStack {

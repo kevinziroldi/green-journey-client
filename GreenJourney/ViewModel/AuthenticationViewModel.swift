@@ -180,13 +180,11 @@ class AuthenticationViewModel: ObservableObject {
     }
     
     private func getUserFromServer(firebaseUID: String) {
-        
         let baseURL = NetworkManager.shared.getBaseURL()
         guard let url = URL(string:"\(baseURL)/users?uid=\(firebaseUID)") else {
             print("Invalid URL used to retrieve user from DB")
             return
         }
-        
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         
