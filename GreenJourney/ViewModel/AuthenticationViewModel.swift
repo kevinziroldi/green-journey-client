@@ -138,27 +138,33 @@ class AuthenticationViewModel: ObservableObject {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = body
         
- 
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        
         URLSession.shared.dataTaskPublisher(for: request)
             .retry(2)
-            .tryMap { result -> Void in
+            .tryMap {
+                result -> Data in
                 // check status of response
                 guard let httpResponse = result.response as? HTTPURLResponse,
                       (200...299).contains(httpResponse.statusCode) else {
                     throw URLError(.badServerResponse)
                 }
-                return
+                return result.data
             }
+            .decode(type: User.self, decoder: decoder)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
                     print("User data posted successfully.")
-                    self.saveUserToSwiftData(serverUser: user)
                 case .failure(let error):
                     print("Error posting user data: \(error.localizedDescription)")
                 }
-            }, receiveValue: { _ in
+            }, receiveValue: {  [weak self] user in
+                guard let strongSelf = self else { return }
+                strongSelf.saveUserToSwiftData(serverUser: user)
+                strongSelf.isLogged = true
             })
             .store(in: &cancellables)
     }
@@ -218,7 +224,6 @@ class AuthenticationViewModel: ObservableObject {
     }
 }
 
-
 extension AuthenticationViewModel {
     func signInWithGoogle() async -> Bool {
         guard let clientID = FirebaseApp.app()?.options.clientID else {
@@ -242,25 +247,23 @@ extension AuthenticationViewModel {
             }
             let accessToken = user.accessToken
             let credential = GoogleAuthProvider.credential(withIDToken: idToken.tokenString, accessToken: accessToken.tokenString)
-            
+        
             let result = try await Auth.auth().signIn(with: credential)
             let firebaseUser = result.user
             if let additionalUserInfo = result.additionalUserInfo {
-                if (additionalUserInfo.isNewUser) {
-                    let fullName = firebaseUser.displayName
-                    let parts = fullName?.components(separatedBy: " ")
-                    self.firstName = parts![0]
-                    self.lastName = parts![1]
-                    saveUserToServer(uid: firebaseUser.uid)
+                DispatchQueue.main.async {
+                    if (additionalUserInfo.isNewUser) {
+                        let fullName = firebaseUser.displayName
+                        let parts = fullName?.components(separatedBy: " ")
+                        self.firstName = parts![0]
+                        self.lastName = parts![1]
+                        self.saveUserToServer(uid: firebaseUser.uid)
+                    }else {
+                        self.getUserFromServer(firebaseUID: firebaseUser.uid)
+                    }
                 }
             }
             
-            
-            //TODO do something with this user
-            DispatchQueue.main.async {
-                self.getUserFromServer(firebaseUID: firebaseUser.uid)
-                self.isLogged = true
-            }
             return true
         }
         catch {

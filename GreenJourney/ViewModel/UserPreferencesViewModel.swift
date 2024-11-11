@@ -115,7 +115,6 @@ class UserPreferencesViewModel: ObservableObject {
                     print("Error encoding user data for PUT")
                     return
                 }
-
                 
                 // PUT request
                 var request = URLRequest(url: url)

@@ -47,7 +47,6 @@ class User: Codable {
         self.firstName = try container.decode(String.self, forKey: .firstName)
         self.lastName = try container.decode(String.self, forKey: .lastName)
         self.firebaseUID = try container.decode(String.self, forKey: .firebaseUID)
-        
         if let dateString = try container.decodeIfPresent(String.self, forKey: .birthDate) {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -55,9 +54,6 @@ class User: Codable {
         } else {
             self.birthDate = nil
         }
-        //self.birthDate = try container.decodeIfPresent(Date.self, forKey: .birthDate)
-        
-        
         self.gender = try container.decodeIfPresent(String.self, forKey: .gender)
         self.zipCode = try container.decodeIfPresent(Int.self, forKey: .zipCode)
         self.streetName = try container.decodeIfPresent(String.self, forKey: .streetName)
