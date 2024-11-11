@@ -1,8 +1,10 @@
 import Foundation
+import SwiftData
 import MapKit
 import Combine
 
 class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegate {
+    var modelContext: ModelContext
     @Published var departure: String = "" {
         didSet {
             updateSearchResults(for: departure)
@@ -13,6 +15,7 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
             updateSearchResults(for: destination)
         }
     }
+    var users: [User] = []
     
     private var departureCoordinates: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
     private var destinationCoordinates: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
@@ -30,13 +33,10 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
     
     
     func computeRoutes (from departure: String, to destination: String, on date: Date, return returnDate: Date, oneWay oneway: Bool) {
-        //MOCK INTERACTION
-        /*let jsonString = """
-         {"outwardOptions":[[{"segment_id":-1,"departure":"Milan, Metropolitan City of Milan, Italy","destination":"Paris, France","date":"2024-10-21T00:00:00Z","time":"0000-01-01T15:00:00Z","duration":165205000000000,"vehicle":"bike","description":"","price":0,"co2_emitted":0,"distance":864,"num_segment":1,"is_outbound":true,"travel_id":-1}],[{"segment_id":-1,"departure":"Milan, Metropolitan City of Milan, Italy","destination":"Paris, France","date":"2024-10-21T00:00:00Z","time":"0000-01-01T15:00:00Z","duration":33503000000000,"vehicle":"car","description":"","price":159.32,"co2_emitted":182.20000000000002,"distance":911.075,"num_segment":1,"is_outbound":true,"travel_id":-1}],[{"segment_id":0,"departure":"Milano Centrale Railway Station","destination":"Lausanne","date":"2024-10-21T19:20:00+02:00","time":"2024-10-21T19:20:00+02:00","duration":13800000000000,"vehicle":"train","description":"EC, Eurocity","price":100,"co2_emitted":10.045000000000002,"distance":287.735,"num_segment":1,"is_outbound":true,"travel_id":0},{"segment_id":0,"departure":"","destination":"","date":"1970-01-01T01:00:00+01:00","time":"1970-01-01T01:00:00+01:00","duration":17000000000,"vehicle":"walk","description":"","price":0,"co2_emitted":0,"distance":16,"num_segment":2,"is_outbound":true,"travel_id":0},{"segment_id":0,"departure":"Lausanne","destination":"Delemonte","date":"2024-10-21T23:14:00+02:00","time":"2024-10-21T23:14:00+02:00","duration":5640000000000,"vehicle":"train","description":"IC, ","price":100,"co2_emitted":5.040000000000001,"distance":144.808,"num_segment":3,"is_outbound":true,"travel_id":0},{"segment_id":0,"departure":"","destination":"","date":"1970-01-01T01:00:00+01:00","time":"1970-01-01T01:00:00+01:00","duration":122000000000,"vehicle":"walk","description":"","price":0,"co2_emitted":0,"distance":122,"num_segment":4,"is_outbound":true,"travel_id":0},{"segment_id":0,"departure":"Delemonte","destination":"Belfort - Montbéliard","date":"2024-10-22T04:49:00+02:00","time":"2024-10-22T04:49:00+02:00","duration":4020000000000,"vehicle":"train","description":"TER, Belfort - Delle","price":100,"co2_emitted":1.8900000000000001,"distance":54.595,"num_segment":5,"is_outbound":true,"travel_id":0},{"segment_id":0,"departure":"Belfort - MontbÃ©️liard","destination":"Gare de Lyon","date":"2024-10-22T06:11:00+02:00","time":"2024-10-22T06:11:00+02:00","duration":9300000000000,"vehicle":"train","description":"TGV INOUI, Paris - Mulhouse Via Besanon TGV","price":100,"co2_emitted":15.505,"distance":443.097,"num_segment":6,"is_outbound":true,"travel_id":0}],[{"segment_id":0,"departure":"Milan Lampugnano","destination":"Paris City Centre - Bercy Seine","date":"2024-10-21T17:30:00+02:00","time":"2024-10-21T17:30:00+02:00","duration":45600000000000,"vehicle":"bus","description":"BlaBlaCar Bus, Paris City Centre - Bercy Seine > Geneva - Bus station > Milan","price":100,"co2_emitted":19.5,"distance":650.799,"num_segment":1,"is_outbound":true,"travel_id":0}],[{"segment_id":0,"departure":"MILAN","destination":"PARIS","date":"2024-10-21T20:10:00Z","time":"0001-01-01T00:00:00Z","duration":5700000000000,"vehicle":"plane","description":"VY 8431","price":122.23,"co2_emitted":148.7058823529412,"distance":590.791143770483,"num_segment":1,"is_outbound":true,"travel_id":0}],[{"segment_id":0,"departure":"MILAN","destination":"PARIS","date":"2024-10-21T20:10:00Z","time":"0001-01-01T00:00:00Z","duration":5700000000000,"vehicle":"plane","description":"IB 5777","price":134.23,"co2_emitted":148.7058823529412,"distance":590.791143770483,"num_segment":1,"is_outbound":true,"travel_id":0}]],"returnOptions":null}
-         
-         """*/
         //REAL INTERACTION
-        
+        self.outwardOptions = []
+        self.returnOptions = []
+        self.selectedOption = []
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -112,33 +112,75 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
                })
                .store(in: &cancellables)
         }
-        
     }
-         
-        
-        //MOCK INTERACTION
-        /*let decoder = JSONDecoder()
-        if let data = jsonString.data(using: .utf8){
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"   // date format
-            decoder.dateDecodingStrategy = .formatted(dateFormatter)
-                do {
-                    let travelOptions = try decoder.decode(TravelOptions.self, from: data)
-                    self.outwardOptions = travelOptions.outwardOptions
-                    self.returnOptions = travelOptions.returnOptions
-                } catch let DecodingError.keyNotFound(key, context) {
-                    print("Chiave '\(key)' mancante:", context.debugDescription)
-                } catch let DecodingError.typeMismatch(type, context) {
-                    print("Tipo non corrispondente per tipo \(type):", context.debugDescription)
-                } catch let DecodingError.valueNotFound(value, context) {
-                    print("Valore mancante per \(value):", context.debugDescription)
-                } catch let DecodingError.dataCorrupted(context) {
-                    print("Dati corrotti:", context.debugDescription)
-                } catch {
-                    print("Errore: \(error.localizedDescription)")
-                }
+    
+    func saveTravel() {
+        // save travel on server
+        let baseURL = NetworkManager.shared.getBaseURL()
+        guard let url = URL(string: "\(baseURL)/travels/user") else {
+            print("Invalid URL for posting user data to DB")
+            return
         }
-    }*/
+        let travel = Travel(userID: users.first!.userID!)
+        var travelDetails = TravelDetails(travel: travel, segments: selectedOption)
+        // JSON encoding
+        guard let body = try? JSONEncoder().encode(travelDetails) else {
+            print("error in encoding travel data")
+            return
+        }
+        print("body: " , String(data: body, encoding: .utf8)!)
+        
+        
+        // POST request
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = body
+        
+        
+        URLSession.shared.dataTaskPublisher(for: request)
+            .retry(2)
+            .tryMap {
+                result -> Void in
+                // check status of response
+                guard let httpResponse = result.response as? HTTPURLResponse,
+                      (200...299).contains(httpResponse.statusCode) else {
+                    throw URLError(.badServerResponse)
+                }
+                return
+            }
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    print("Travel data posted successfully.")
+                case .failure(let error):
+                    print("Error posting travel data: \(error.localizedDescription)")
+                    return
+                }
+            }, receiveValue: { response in
+                travelDetails = response
+            })
+            .store(in: &cancellables)
+        
+        // save travel in SwiftData
+        modelContext.insert(travelDetails.travel)
+        for segment in travelDetails.segments {
+            modelContext.insert(segment)
+        }
+        do {
+            try modelContext.save()
+        } catch {
+            
+            
+            // TODO gestione
+            
+            
+            print("Error saving new travel: \(error.localizedDescription)")
+            return
+        }
+        print("travel added to SwiftData")
+    }
         
     func updateSearchResults(for query: String) {
         if query.isEmpty {
@@ -287,7 +329,11 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
         print("error during completer search: \(error)")
     }
     
-    override init() {
+    init(modelContext: ModelContext) {
+        self.modelContext = modelContext
+        do {
+            users = try modelContext.fetch(FetchDescriptor<User>())
+        }catch {}
         self.completer = MKLocalSearchCompleter()
         //initialization of nsobject
         super.init()

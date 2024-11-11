@@ -3,14 +3,13 @@ import SwiftData
 
 @Model
 class Travel: Codable {
-    var travelID: Int
-    var CO2Compensated: Float64
+    var travelID: Int?
+    var CO2Compensated: Float64 = 0
     var userID: Int
  
-    init(travelID: Int, CO2Compensated: Float64, userID: Int) {
-        self.travelID = travelID
-        self.CO2Compensated = CO2Compensated
+    init (travelID: Int? = nil, userID: Int) {
         self.userID = userID
+        self.travelID = travelID
     }
     
     enum CodingKeys: String, CodingKey {

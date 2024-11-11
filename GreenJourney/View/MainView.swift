@@ -19,7 +19,7 @@ struct MainView: View {
                     }
                     .tag(0)
                 
-                FromToView()
+                FromToView(modelContext: modelContext)
                     .tabItem {
                         Label("From-To", systemImage: "location")
                     }

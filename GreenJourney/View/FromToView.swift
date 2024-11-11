@@ -1,12 +1,17 @@
 import SwiftUI
+import SwiftData
 import MapKit
 
 struct FromToView: View {
-    @StateObject private var viewModel = FromToViewModel()
+    @Environment(\.modelContext) private var modelContext
+    @StateObject private var viewModel: FromToViewModel
     @FocusState private var isDepartureFocused: Bool
     @FocusState private var isDestinationFocused: Bool
     @State private var isNavigationActive: Bool = false
-    @Environment(\.modelContext) private var modelContext
+    
+    init(modelContext: ModelContext) {
+        _viewModel = StateObject(wrappedValue: FromToViewModel(modelContext: modelContext))
+    }
     
     var body: some View {
         NavigationStack {

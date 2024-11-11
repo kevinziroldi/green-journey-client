@@ -5,6 +5,7 @@ struct OptionDetailsView: View {
     @ObservedObject var viewModel: FromToViewModel
     @State var isReturnOptionsViewPresented = false
     @State var isFromToViewPresented = false
+    @Environment(\.modelContext) private var modelContext
 
     var body: some View {
         NavigationStack {
@@ -46,11 +47,11 @@ struct OptionDetailsView: View {
                 else {
                     Button ("save travel") {
                         viewModel.selectedOption.append(contentsOf: segments)
-                        //viewModel.saveTravel      todo
+                        viewModel.saveTravel()
                         isFromToViewPresented = true
                     }
                     .navigationDestination(isPresented: $isFromToViewPresented) {
-                        FromToView()
+                        FromToView(modelContext: modelContext)
                     }
                     .navigationTitle("Details")
                 }
@@ -59,10 +60,10 @@ struct OptionDetailsView: View {
                 Button ("save travel") {
                     viewModel.selectedOption.append(contentsOf: segments)
                     isFromToViewPresented = true
-                    //viewModel.saveTravel()        todo
+                    viewModel.saveTravel()
                 }
                 .navigationDestination(isPresented: $isFromToViewPresented) {
-                    FromToView()
+                    FromToView(modelContext: modelContext)
                 }
                 .navigationTitle("Details")
             }

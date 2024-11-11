@@ -41,7 +41,7 @@ class TravelsViewModel: ObservableObject {
             let segmentsByTravelID = Dictionary(grouping: segments, by: { $0.travelID })
         
             travelDetailsList = travels.compactMap { travel in
-                if let travelSegments = segmentsByTravelID[travel.travelID] {
+                if let travelSegments = segmentsByTravelID[travel.travelID!] {
                     return TravelDetails(travel: travel, segments: travelSegments)
                 } else {
                     return TravelDetails(travel: travel, segments: [])
