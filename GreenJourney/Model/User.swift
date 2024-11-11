@@ -43,7 +43,7 @@ class User: Codable {
     
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.userID = try container.decode(Int.self, forKey: .userID)
+        self.userID = try container.decodeIfPresent(Int.self, forKey: .userID)
         self.firstName = try container.decode(String.self, forKey: .firstName)
         self.lastName = try container.decode(String.self, forKey: .lastName)
         self.firebaseUID = try container.decode(String.self, forKey: .firebaseUID)
