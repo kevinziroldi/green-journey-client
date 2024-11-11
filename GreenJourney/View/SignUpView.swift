@@ -13,6 +13,11 @@ struct SignUpView: View {
                 .font(.largeTitle)
                 .padding(.bottom, 32)
             
+            Image("prova2")
+                .resizable()
+                .padding()
+                .aspectRatio(contentMode: .fit)
+            
             TextField("Email", text: $viewModel.email)
                 .autocapitalization(.none)
                 .keyboardType(.emailAddress)
@@ -44,27 +49,57 @@ struct SignUpView: View {
                     .foregroundColor(.red)
                     .font(.caption)
             }
-            Button(action: {
-                viewModel.signUp()
-                isEmailVerificationActive = true
-            }) {
-                Text("Create account")
-                    .foregroundColor(.white)
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(Color.blue)
-                    .cornerRadius(8)
-            }
-            .fullScreenCover(isPresented: $isEmailVerificationActive) {
-                EmailVerificationView(viewModel: viewModel)
-            }
             
-            Spacer()
-            Button ("Login") {
-                isNavigationLoginActive = true
-            }
-            .fullScreenCover(isPresented: $isNavigationLoginActive) {
-                LoginView(modelContext: modelContext)
+            VStack (spacing: 20) {
+                Button(action: {
+                    viewModel.signUp()
+                    isEmailVerificationActive = true
+                }) {
+                    Text("Create account")
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.blue)
+                        .cornerRadius(8)
+                }
+                .fullScreenCover(isPresented: $isEmailVerificationActive) {
+                    EmailVerificationView(viewModel: viewModel)
+                }
+                
+                HStack {
+                    Rectangle()
+                        .frame(height: 1)
+                        .foregroundColor(.gray)
+                    
+                    Text("OR")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                    
+                    Rectangle()
+                        .frame(height: 1)
+                        .foregroundColor(.gray)
+                }
+                .padding(.horizontal, 16)
+                
+                Button (action: {Task{await viewModel.signInWithGoogle()}}){
+                    Image("googleLogo")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 40)
+                        .padding(.trailing, 8)
+                    Text("Sign in with Google")
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.bordered)
+                
+                Spacer()
+                Button ("Login") {
+                    isNavigationLoginActive = true
+                }
+                .fullScreenCover(isPresented: $isNavigationLoginActive) {
+                    LoginView(modelContext: modelContext)
+                }
             }
         }
         .padding()

@@ -15,6 +15,11 @@ struct LoginView: View {
             Text("Login")
                 .font(.largeTitle)
                 .padding(.bottom, 32)
+            Image("prova2")
+                .resizable()
+                .padding()
+                .aspectRatio(contentMode: .fit)
+            Spacer()
             
             TextField("Email", text: $viewModel.email)
                 .autocapitalization(.none)
@@ -42,31 +47,52 @@ struct LoginView: View {
                     .font(.caption)
             }
             
-            
-            Button(action: {
-                viewModel.login()
-            }) {
-                Text("Login")
-                    .foregroundColor(.white)
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(Color.blue)
-                    .cornerRadius(8)
-            }
-            
-            Button (action: {Task{await viewModel.signInWithGoogle()}}){
-                Text("Sign in with Google")
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-            }
-            .buttonStyle(.bordered)
-            
-            Spacer()
-            Button ("Sign up") {
-                isNavigationActive = true
-            }
-            .fullScreenCover(isPresented: $isNavigationActive) {
-                SignUpView(viewModel: viewModel)
+            VStack(spacing: 20) {
+                Button(action: {
+                    viewModel.login()
+                }) {
+                    Text("Login")
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.blue)
+                        .cornerRadius(8)
+                }
+                
+                HStack {
+                    Rectangle()
+                        .frame(height: 1)
+                        .foregroundColor(.gray)
+                    
+                    Text("OR")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                    
+                    Rectangle()
+                        .frame(height: 1)
+                        .foregroundColor(.gray)
+                }
+                .padding(.horizontal, 16)
+
+                Button (action: {Task{await viewModel.signInWithGoogle()}}){
+                    Image("googleLogo")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 40)
+                        .padding(.trailing, 8)
+                    Text("Sign in with Google")
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.bordered)
+                
+                Spacer()
+                Button ("Sign up") {
+                    isNavigationActive = true
+                }
+                .fullScreenCover(isPresented: $isNavigationActive) {
+                    SignUpView(viewModel: viewModel)
+                }
             }
         }
         .padding()
