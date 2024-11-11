@@ -124,8 +124,10 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
         let travel = Travel(userID: users.first!.userID!)
         var travelDetails = TravelDetails(travel: travel, segments: selectedOption)
         // JSON encoding
-        guard let body = try? JSONEncoder().encode(travelDetails) else {
-            print("error in encoding travel data")
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        guard let body = try? encoder.encode(travelDetails) else {
+            print("Error encoding travel data")
             return
         }
         print("body: " , String(data: body, encoding: .utf8)!)
@@ -137,19 +139,21 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = body
         
-        
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
         URLSession.shared.dataTaskPublisher(for: request)
             .retry(2)
             .tryMap {
-                result -> Void in
+                result -> Data in
                 // check status of response
                 guard let httpResponse = result.response as? HTTPURLResponse,
                       (200...299).contains(httpResponse.statusCode) else {
                     throw URLError(.badServerResponse)
                 }
-                return
+                return result.data
             }
             .receive(on: DispatchQueue.main)
+            .decode(type: TravelDetails.self, decoder: decoder)
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
