@@ -101,19 +101,28 @@ class AuthenticationViewModel: ObservableObject {
     
     func verifyEmail() {
         Auth.auth().currentUser?.reload(completion: { (error) in
-                if let error = error {
-                    print("Errore nel ricaricare l'utente: \(error.localizedDescription)")
+            if let error = error {
+                print("Errore nel ricaricare l'utente: \(error.localizedDescription)")
+                return
+            }
+            if Auth.auth().currentUser?.isEmailVerified == true {
+                print("Email verified")
+                self.errorMessage = nil
+                
+                // save user to swift data
+                if let firebaseUID = Auth.auth().currentUser?.uid {
+                    self.getUserFromServer(firebaseUID: firebaseUID)
+                }else {
+                    print("Missing firebase uid")
                     return
                 }
-                if Auth.auth().currentUser?.isEmailVerified == true {
-                    print("Email verified")
-                    self.errorMessage = nil
-                    self.emailVerified = true
-                } else {
-                    self.errorMessage = "email has not yet been verified"
-                    print("Email not verified.")
-                }
-            })
+                
+                self.emailVerified = true
+            } else {
+                self.errorMessage = "email has not yet been verified"
+                print("Email not verified.")
+            }
+        })
     }
     
     private func saveUserToServer(uid: String) {
@@ -138,21 +147,18 @@ class AuthenticationViewModel: ObservableObject {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = body
         
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
-        
+       
         URLSession.shared.dataTaskPublisher(for: request)
             .retry(2)
             .tryMap {
-                result -> Data in
+                result -> Void in
                 // check status of response
                 guard let httpResponse = result.response as? HTTPURLResponse,
                       (200...299).contains(httpResponse.statusCode) else {
                     throw URLError(.badServerResponse)
                 }
-                return result.data
+                return
             }
-            .decode(type: User.self, decoder: decoder)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
                 switch completion {
@@ -161,10 +167,7 @@ class AuthenticationViewModel: ObservableObject {
                 case .failure(let error):
                     print("Error posting user data: \(error.localizedDescription)")
                 }
-            }, receiveValue: {  [weak self] user in
-                guard let strongSelf = self else { return }
-                strongSelf.saveUserToSwiftData(serverUser: user)
-                strongSelf.isLogged = true
+            }, receiveValue: { _ in
             })
             .store(in: &cancellables)
     }
@@ -258,9 +261,9 @@ extension AuthenticationViewModel {
                         self.firstName = parts![0]
                         self.lastName = parts![1]
                         self.saveUserToServer(uid: firebaseUser.uid)
-                    }else {
-                        self.getUserFromServer(firebaseUID: firebaseUser.uid)
                     }
+                    // in any case, save to swift data
+                    self.getUserFromServer(firebaseUID: firebaseUser.uid)
                 }
             }
             
