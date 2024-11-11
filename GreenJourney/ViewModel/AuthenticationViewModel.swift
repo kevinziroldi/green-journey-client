@@ -17,6 +17,7 @@ class AuthenticationViewModel: ObservableObject {
     @Published var isLogged: Bool = false
     @Published var userID: Int?
     @Published var emailVerified: Bool = false
+    @Published var isEmailVerificationActive: Bool = false
     private var cancellables = Set<AnyCancellable>()
     //swift data model context
     var modelContext: ModelContext
@@ -38,8 +39,13 @@ class AuthenticationViewModel: ObservableObject {
                 strongSelf.errorMessage = error.localizedDescription
             } else {
                 if let firebaseUser = result?.user {
-                    // Login riuscito, salva l'utente in SwiftData
-                    strongSelf.getUserFromServer(firebaseUID: firebaseUser.uid)
+                    if firebaseUser.isEmailVerified == true {
+                        // Login riuscito, salva l'utente in SwiftData
+                        strongSelf.getUserFromServer(firebaseUID: firebaseUser.uid)
+                    }
+                    else {
+                        strongSelf.isEmailVerificationActive = true
+                    }
                 }
                 strongSelf.errorMessage = nil
             }
@@ -86,6 +92,7 @@ class AuthenticationViewModel: ObservableObject {
                 } else {
                     if let result = result {
                         // if login is ok
+                        self.isEmailVerificationActive = true
                         self.saveUserToServer(uid: result.user.uid)
                         Auth.auth().currentUser?.sendEmailVerification { error in
                             if let error = error {

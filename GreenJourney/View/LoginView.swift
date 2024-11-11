@@ -58,6 +58,9 @@ struct LoginView: View {
                         .background(Color.blue)
                         .cornerRadius(8)
                 }
+                .fullScreenCover(isPresented: $viewModel.isEmailVerificationActive) {
+                    EmailVerificationView(viewModel: viewModel)
+                }
                 
                 HStack {
                     Rectangle()
