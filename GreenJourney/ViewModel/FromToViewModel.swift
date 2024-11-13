@@ -32,7 +32,7 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
     private var cancellables = Set<AnyCancellable>()
     
     
-    func computeRoutes (from departure: String, to destination: String, on date: Date, return returnDate: Date, oneWay oneway: Bool) {
+    func computeRoutes () {
         //REAL INTERACTION
         self.outwardOptions = []
         self.returnOptions = []
@@ -41,15 +41,15 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         
-        let formattedDate = dateFormatter.string(from: date)
-        let formattedDateReturn = dateFormatter.string(from: returnDate)
+        let formattedDate = dateFormatter.string(from: datePicked)
+        let formattedDateReturn = dateFormatter.string(from: dateReturnPicked)
         
         let timeFormatter = DateFormatter()
         timeFormatter.dateFormat = "HH:mm"
-        let formattedTime = timeFormatter.string(from: date)
-        let formattedTimeReturn = timeFormatter.string(from: returnDate)
+        let formattedTime = timeFormatter.string(from: datePicked)
+        let formattedTimeReturn = timeFormatter.string(from: dateReturnPicked)
         let baseURL = NetworkManager.shared.getBaseURL()
-        guard let url = URL(string:"\(baseURL)/travels/fromto?from=\(departure)&to=\(destination)&from_latitude=\(departureCoordinates.latitude)&from_longitude=\(departureCoordinates.longitude)&to_latitude=\(destinationCoordinates.latitude)&to_longitude=\(destinationCoordinates.longitude)&date=\(formattedDate)&time=\(formattedTime)&is_outward=\(oneway)") else {
+        guard let url = URL(string:"\(baseURL)/travels/fromto?from=\(departure)&to=\(destination)&from_latitude=\(departureCoordinates.latitude)&from_longitude=\(departureCoordinates.longitude)&to_latitude=\(destinationCoordinates.latitude)&to_longitude=\(destinationCoordinates.longitude)&date=\(formattedDate)&time=\(formattedTime)&is_outward=\(self.oneWay)") else {
             return
         }
         let decoder = JSONDecoder()
@@ -81,8 +81,8 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
                self?.outwardOptions = response.options
            })
            .store(in: &cancellables)
-        if (!oneway) {
-            guard let returnUrl = URL(string:"\(baseURL)/travels/fromto?from=\(destination)&to=\(departure)&from_latitude=\(destinationCoordinates.latitude)&from_longitude=\(destinationCoordinates.longitude)&to_latitude=\(departureCoordinates.latitude)&to_longitude=\(departureCoordinates.longitude)&date=\(formattedDateReturn)&time=\(formattedTimeReturn)&is_outward=\(oneway)") else {
+        if (!oneWay) {
+            guard let returnUrl = URL(string:"\(baseURL)/travels/fromto?from=\(destination)&to=\(departure)&from_latitude=\(destinationCoordinates.latitude)&from_longitude=\(destinationCoordinates.longitude)&to_latitude=\(departureCoordinates.latitude)&to_longitude=\(departureCoordinates.longitude)&date=\(formattedDateReturn)&time=\(formattedTimeReturn)&is_outward=\(oneWay)") else {
                 return
             }
             URLSession.shared.dataTaskPublisher(for: returnUrl)

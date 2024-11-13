@@ -6,6 +6,7 @@ struct OptionDetailsView: View {
     @State var isReturnOptionsViewPresented = false
     @State var isFromToViewPresented = false
     @Environment(\.modelContext) private var modelContext
+    @Binding var navigationPath: NavigationPath
 
     var body: some View {
         NavigationStack {
@@ -15,8 +16,8 @@ struct OptionDetailsView: View {
             else {
                 Text("no vehicle detected")
             }
-            /*
-            List {
+            
+            /*List {
                 ForEach (segments) { segment in
                     VStack {
                         Text("from: " + segment.departure)
@@ -32,8 +33,8 @@ struct OptionDetailsView: View {
                         Text("distance: " + String(format: "%.2f", segment.distance) + "km")
                     }
                 }
-            }
-            */
+            }*/
+            
             if (!viewModel.oneWay) {
                 if (viewModel.selectedOption.isEmpty) {
                     Button ("proceed"){
@@ -41,7 +42,7 @@ struct OptionDetailsView: View {
                         isReturnOptionsViewPresented = true
                     }
                     .navigationDestination(isPresented: $isReturnOptionsViewPresented) {
-                        ReturnOptionsView(viewModel: viewModel)
+                        ReturnOptionsView(viewModel: viewModel, navigationPath: $navigationPath)
                     }
                 }
                 else {
@@ -49,11 +50,8 @@ struct OptionDetailsView: View {
                         viewModel.selectedOption.append(contentsOf: segments)
                         viewModel.saveTravel()
                         isFromToViewPresented = true
+                        navigationPath.removeLast(navigationPath.count)
                     }
-                    .navigationDestination(isPresented: $isFromToViewPresented) {
-                        FromToView(modelContext: modelContext)
-                    }
-                    .navigationTitle("Details")
                 }
             }
             else {
@@ -61,12 +59,12 @@ struct OptionDetailsView: View {
                     viewModel.selectedOption.append(contentsOf: segments)
                     isFromToViewPresented = true
                     viewModel.saveTravel()
+                    navigationPath.removeLast(navigationPath.count)
                 }
-                .navigationDestination(isPresented: $isFromToViewPresented) {
-                    FromToView(modelContext: modelContext)
-                }
-                .navigationTitle("Details")
             }
         }
+        .navigationDestination(isPresented: $isFromToViewPresented) {
+                FromToView(modelContext: modelContext)
+            }
     }
 }
