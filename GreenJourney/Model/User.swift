@@ -80,4 +80,3 @@ class User: Codable {
         try container.encode(city, forKey: .city)
     }
 }
-
