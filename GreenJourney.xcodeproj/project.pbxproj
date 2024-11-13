@@ -21,7 +21,6 @@
 		422A00902CD188B200EF280D /* Exceptions for "GreenJourney" folder in "GreenJourney" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Config.plist,
 				Info.plist,
 			);
 			target = 0A15767F2CA459AC00EE99BC /* GreenJourney */;
