@@ -55,6 +55,17 @@ class TravelsViewModel: ObservableObject {
             sortTravels()
             // filter according to current filter
             filterTravelDetails()
+            
+            for travelDetail in travelDetailsList {
+                print("\n")
+                print("\n")
+                print(travelDetail.travel.id)
+                for segment in travelDetail.segments {
+                    print(segment.departure)
+                    print(segment.destination)
+                }
+            }
+            
         }catch {
             
             

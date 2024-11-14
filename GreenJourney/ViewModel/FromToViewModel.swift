@@ -3,6 +3,10 @@ import SwiftData
 import MapKit
 import Combine
 
+struct OptionsResponse: Decodable {
+    let options: [[Segment]]
+}
+
 class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegate {
     var modelContext: ModelContext
     @Published var departure: String = "" {
@@ -31,6 +35,22 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
     @Published var selectedOption: [Segment] = []
     private var cancellables = Set<AnyCancellable>()
     
+    init(modelContext: ModelContext) {
+        self.modelContext = modelContext
+        do {
+            users = try modelContext.fetch(FetchDescriptor<User>())
+        }catch {}
+        self.completer = MKLocalSearchCompleter()
+        //initialization of nsobject
+        super.init()
+        self.completer.delegate = self
+        self.completer.resultTypes = .address
+        let englishRegion = MKCoordinateRegion(
+            center: CLLocationCoordinate2D(latitude: 51.509865, longitude: -0.118092), // London coordinates
+            span: MKCoordinateSpan(latitudeDelta: 10, longitudeDelta: 10)
+        )
+        self.completer.region = englishRegion
+    }
     
     func computeRoutes () {
         //REAL INTERACTION
@@ -333,23 +353,29 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
         print("error during completer search: \(error)")
     }
     
-    init(modelContext: ModelContext) {
-        self.modelContext = modelContext
+    func getRecommendation() {
         do {
-            users = try modelContext.fetch(FetchDescriptor<User>())
-        }catch {}
-        self.completer = MKLocalSearchCompleter()
-        //initialization of nsobject
-        super.init()
-        self.completer.delegate = self
-        self.completer.resultTypes = .address
-        let englishRegion = MKCoordinateRegion(
-            center: CLLocationCoordinate2D(latitude: 51.509865, longitude: -0.118092), // London coordinates
-            span: MKCoordinateSpan(latitudeDelta: 10, longitudeDelta: 10)
-        )
-        self.completer.region = englishRegion
+            // fetch data from SwiftData
+            let travels = try modelContext.fetch(FetchDescriptor<Travel>())
+            let segments = try modelContext.fetch(FetchDescriptor<Segment>())
+            let citiesDataser = try modelContext.fetch(FetchDescriptor<CityDataset>())
+            
+            // get cities names for visited cities (destination)
+            
+            
+            // search them in SwiftData
+            
+            // compute needed values
+            
+            // use model to make a prediction
+            
+            
+        }catch {
+            
+            // TODO
+            
+            print("Error interacting with SwiftData")
+            
+        }
     }
-}
-struct OptionsResponse: Decodable {
-    let options: [[Segment]]
 }

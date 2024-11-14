@@ -37,6 +37,8 @@ struct MainView: View {
                 }.onAppear {
                     // refresh travels data
                     viewModel.fetchTravels()
+                    // load cities from dataset (if needed)
+                    viewModel.loadCityDataset()
                 }
             }
             .onAppear {

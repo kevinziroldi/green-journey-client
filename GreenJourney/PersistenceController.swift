@@ -7,7 +7,7 @@ class PersistenceController {
 
     init() {
         // specify the model types you want to persist
-        container = try! ModelContainer(for: User.self, Travel.self, Segment.self)
+        container = try! ModelContainer(for: User.self, Travel.self, Segment.self, CityDataset.self)
     }
 }
 

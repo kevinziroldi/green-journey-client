@@ -62,29 +62,37 @@ class MainViewModel: ObservableObject {
         do {
             self.travels = try modelContext.fetch(FetchDescriptor<Travel>())
             self.segments = try modelContext.fetch(FetchDescriptor<Segment>())
-        }catch {}
-        do {
-            for travel in travels {
-                modelContext.delete(travel)
+            
+            do {
+                for travel in travels {
+                    modelContext.delete(travel)
+                }
+                for segment in segments {
+                    modelContext.delete(segment)
+                }
+                try modelContext.save()
+            } catch {
+                
+                
+                // TODO gestione
+             
+                
+                print("Error deleting travel data from SwiftData")
             }
-            for segment in segments {
-                modelContext.delete(segment)
-            }
-            try modelContext.save()
-        } catch {
+        }catch {
+            
+            print("Error getting travel data from SwiftData")
+        
+            
+            // TODO gestire
             
             
-            // TODO gestione
-         
-            
-            print("Error deleting travel data from SwiftData")
         }
     }
     
     private func addNewTravels(_ travelDetailsList: [TravelDetails]) {
         for travelDetails in travelDetailsList {
             modelContext.insert(travelDetails.travel)
-            print(travelDetails.travel.travelID)
             for segment in travelDetails.segments {
                 modelContext.insert(segment)
             }
@@ -107,5 +115,112 @@ class MainViewModel: ObservableObject {
         }else {
             return false
         }
+    }
+    
+    func loadCityDataset() {
+        do {
+            // check if there are no entries in SwiftData
+            let citiesDataset = try modelContext.fetch(FetchDescriptor<CityDataset>())
+            if !citiesDataset.isEmpty {
+                // cities already loaded
+                print("Cities are already loaded in SwiftData")
+                return
+            }
+            
+            // else, load them
+            print("Loading cities")
+            
+            if let filePath = Bundle.main.path(forResource: "city_ds", ofType: "csv") {
+                do {
+                    let fileContents = try String(contentsOfFile: filePath, encoding: .utf8)
+                    let rows = fileContents.components(separatedBy: "\n")
+                    
+                    var citiesDataset: [CityDataset] = []
+                    
+                    // first row contains column names
+                    for (index, row) in rows.enumerated() where index > 0 && !row.isEmpty {
+                        let rowValues = row.components(separatedBy: ",")
+                        
+                        // extracr row values
+                        guard rowValues.count == 14,
+                              let population = Double(rowValues[2]),
+                              let averageTemperature = Double(rowValues[4]),
+                              let livingCost = Double(rowValues[6]),
+                              let travelConnectivity = Double(rowValues[7]),
+                              let safety = Double(rowValues[8]),
+                              let healthcare = Double(rowValues[9]),
+                              let education = Double(rowValues[10]),
+                              let economy = Double(rowValues[11]),
+                              let internetAccess = Double(rowValues[12]),
+                              let outdoors = Double(rowValues[13]) else {
+                            print("Error parsing row \(rowValues[0])")
+                            continue
+                        }
+                        let city = rowValues[0]
+                        let country = rowValues[1]
+                        let capital = Bool(Int(rowValues[3]) ?? 0)
+                        let continent = rowValues[5]
+
+                        // create cityDataset object
+                        let cityDataset = CityDataset(
+                            city: city,
+                            country: country,
+                            population: population,
+                            capital: capital,
+                            averageTemperature: averageTemperature,
+                            continent: continent,
+                            livingCost: livingCost,
+                            travelConnectivity: travelConnectivity,
+                            safety: safety,
+                            healthcare: healthcare,
+                            education: education,
+                            economy: economy,
+                            internetAccess: internetAccess,
+                            outdoors: outdoors
+                        )
+
+                        citiesDataset.append(cityDataset)
+                    }
+                    
+                    print("Number of cities: \(citiesDataset.count)")
+                    for cityDataset in citiesDataset {
+                        modelContext.insert(cityDataset)
+                        print(cityDataset.city)
+                    }
+                    do {
+                        try modelContext.save()
+                        print("Cities loaded correctly to SwiftData")
+                    } catch {
+                        
+                        // TODO 
+                        
+                        print ("Error saving cities to dataset")
+                    }
+                    
+                } catch {
+                    print("Errore while reading CSV file: \(error)")
+                }
+            } else {
+                
+                print("CSV file not found")
+                
+            }
+            
+        }catch {
+            
+            print("Error interacting with SwiftData")
+            
+            // TODO gestire
+            
+        }
+    }
+}
+
+extension Bool {
+    init(_ int: Int) {
+        if int == 1{
+            self = true
+        }
+        self = false
     }
 }
