@@ -167,20 +167,22 @@ struct FromToView: View {
                     .padding()
                     
                     Spacer()
-                    
                     Button(action: {
-                        viewModel.insertCoordinates()   //compute coordinates for departure and destination
+                        viewModel.insertCoordinates()   // compute coordinates for departure and destination
                         viewModel.computeRoutes()
-                        isNavigationActive = true
-                    }){
+                        
+                        // Naviga manualmente alla destinazione
+                        navigationPath.append("searchOptions")
+                    }) {
                         Text("Search")
                             .font(.title3)
                             .foregroundStyle(.white)
-                    
                     }
                     .buttonStyle(.borderedProminent)
-                    .navigationDestination(isPresented: $isNavigationActive) {
-                        TravelOptionsView(viewModel: viewModel, navigationPath: $navigationPath)
+                    .navigationDestination(for: String.self) { view in
+                        if view == "searchOptions" {
+                            TravelOptionsView(viewModel: viewModel, navigationPath: $navigationPath)
+                        }
                     }
                     
                     Spacer()
@@ -245,10 +247,8 @@ struct FromToView: View {
             }
             .animation(.easeInOut, value: dateTapped || dateReturnTapped)
         }
-        .onAppear {
-            navigationPath = NavigationPath()
-        }
     }
+    
     private func getColorDest () -> Color {
         if viewModel.destination == "" {
             return .secondary

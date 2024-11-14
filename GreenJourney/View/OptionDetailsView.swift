@@ -7,9 +7,9 @@ struct OptionDetailsView: View {
     @State var isFromToViewPresented = false
     @Environment(\.modelContext) private var modelContext
     @Binding var navigationPath: NavigationPath
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
-        NavigationStack {
             if let vehicle = segments.first?.vehicle {
                 Text(vehicle.rawValue)
             }
@@ -49,22 +49,18 @@ struct OptionDetailsView: View {
                     Button ("save travel") {
                         viewModel.selectedOption.append(contentsOf: segments)
                         viewModel.saveTravel()
-                        isFromToViewPresented = true
-                        navigationPath.removeLast(navigationPath.count)
+                        //viewModel.resetParameters()
+                        navigationPath = NavigationPath()
                     }
                 }
             }
             else {
                 Button ("save travel") {
                     viewModel.selectedOption.append(contentsOf: segments)
-                    isFromToViewPresented = true
                     viewModel.saveTravel()
-                    navigationPath.removeLast(navigationPath.count)
+                    //viewModel.resetParameters()
+                    navigationPath = NavigationPath()
                 }
-            }
-        }
-        .navigationDestination(isPresented: $isFromToViewPresented) {
-                FromToView(modelContext: modelContext)
             }
     }
 }

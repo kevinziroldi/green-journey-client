@@ -7,7 +7,7 @@ struct TravelOptionsView: View {
         HStack {
             Text("\(viewModel.departure) -> \(viewModel.destination) on: \(viewModel.datePicked.formatted(date: .numeric, time: .shortened))")
         }
-        NavigationStack {
+        //NavigationStack {
             if (viewModel.outwardOptions.isEmpty){
                 ProgressView() // show loading symbol
                         .progressViewStyle(CircularProgressViewStyle())
@@ -44,7 +44,7 @@ struct TravelOptionsView: View {
                     }
                 }
             }
-        }
+        //}
     }
 }
 
