@@ -150,7 +150,7 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
             print("Error encoding travel data")
             return
         }
-        print("body: " , String(data: body, encoding: .utf8)!)
+        //print("body: " , String(data: body, encoding: .utf8)!)
         
         
         // POST request

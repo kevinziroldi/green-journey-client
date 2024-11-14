@@ -51,6 +51,8 @@ class TravelsViewModel: ObservableObject {
                 return nil
             }
             
+            // sort segments for every travel
+            sortSegments()
             // sort the new list according to current sort option
             sortTravels()
             // filter according to current filter
@@ -59,10 +61,11 @@ class TravelsViewModel: ObservableObject {
             for travelDetail in travelDetailsList {
                 print("\n")
                 print("\n")
-                print(travelDetail.travel.id)
                 for segment in travelDetail.segments {
+                    print("\n")
                     print(segment.departure)
                     print(segment.destination)
+                    print(segment.numSegment)
                 }
             }
             
@@ -78,21 +81,64 @@ class TravelsViewModel: ObservableObject {
         }
     }
     
+    // sort segments for all travels
+    private func sortSegments() {
+        for td in travelDetailsList {
+            td.segments.sort {
+                let numSegment1 = $0.numSegment
+                let numSegment2 = $1.numSegment
+                return numSegment1 < numSegment2
+            }
+        }
+    }
+    
     // filters travel details list, selecting only past of future travels
     private func filterTravelDetails() {
         let currentDate = Date()
         filteredTravelDetailsList = travelDetailsList.filter { travel in
-            let durationSeconds = Double((travel.segments.last?.duration ?? 0) / 1_000_000_000)
-            let departureDateLastSegment = travel.segments.last?.date
-            let arrivalDate = departureDateLastSegment?.addingTimeInterval(durationSeconds)
-            if showCompleted {
-                // select only completed travels
-                return (arrivalDate ?? currentDate) <= currentDate
-            } else {
-                // select only non completed travels
-                return (arrivalDate ?? currentDate) > currentDate
+            let lastSegment = getLastSegment(travelDetails: travel)
+            if let lastSegment = lastSegment {
+                let durationSeconds = Double(lastSegment.duration) / 1_000_000_000
+                let departureDateLastSegment = lastSegment.date
+                let arrivalDate = departureDateLastSegment.addingTimeInterval(durationSeconds)
+                
+                if showCompleted {
+                    // select only completed travels
+                    return arrivalDate <= currentDate
+                } else {
+                    // select only non completed travels
+                    return arrivalDate > currentDate
+                }
             }
+            // nothing to sort
+            return false
         }
+    }
+    
+    private func getFirstSegment(travelDetails: TravelDetails) -> Segment? {
+        if let firstListSegment = travelDetails.segments.first {
+            var firstSegment = firstListSegment
+            for segment in travelDetails.segments {
+                if segment.numSegment < firstSegment.numSegment {
+                    firstSegment = segment
+                }
+            }
+            return firstSegment
+        }
+        return nil
+    }
+    
+    private func getLastSegment(travelDetails: TravelDetails) -> Segment? {
+        if let firstListSegment = travelDetails.segments.first {
+            var lastSegment = firstListSegment
+            for segment in travelDetails.segments {
+                if segment.numSegment > lastSegment.numSegment {
+                    lastSegment = segment
+                }
+            }
+            return lastSegment
+        }
+        return nil
     }
     
     // sort travel details list according to some sort option
@@ -101,9 +147,14 @@ class TravelsViewModel: ObservableObject {
         case .departureDate:
             // decreasing departure date
             travelDetailsList.sort {
-                let date1 = $0.segments.first?.date ?? Date.distantPast
-                let date2 = $1.segments.first?.date ?? Date.distantPast
-                return date1 > date2
+                if let firstSegment1 = getFirstSegment(travelDetails: $0) {
+                    if let firstSegment2 = getFirstSegment(travelDetails: $1) {
+                        let date1 = firstSegment1.date
+                        let date2 = firstSegment2.date
+                        return date1 > date2
+                    }
+                }
+                return false
             }
         case .co2Emitted:
             // decreasing co2 emitted
