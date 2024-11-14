@@ -4,6 +4,7 @@ import MapKit
 
 struct FromToView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.colorScheme) var colorScheme
     @StateObject private var viewModel: FromToViewModel
     @State private var isNavigationActive: Bool = false
     @State private var departureTapped: Bool = false
@@ -72,18 +73,23 @@ struct FromToView: View {
                                     .padding(EdgeInsets(top: 10, leading: 50, bottom: 0, trailing: 50))
                                     .frame(alignment: .top)
                                     .font(.title)
-                                
-                                Button(action: {
-                                    departureTapped = true
-                                }) {
-                                    Text(viewModel.departure == "" ? "Insert departure" : viewModel.departure)
-                                        .foregroundColor(viewModel.departure == "" ? .secondary : .blue)
-                                        .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 0))
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                        .font(.title2)
-                                        .fontWeight(viewModel.departure == "" ? .light : .semibold)
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 3)
+                                        .frame(height: 50)
+                                    
+                                    Button(action: {
+                                        departureTapped = true
+                                    }) {
+                                        Text(viewModel.departure == "" ? "Insert departure" : viewModel.departure)
+                                            .foregroundColor(viewModel.departure == "" ? .secondary : .blue)
+                                            .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 0))
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .font(.title2)
+                                            .fontWeight(viewModel.departure == "" ? .light : .semibold)
+                                    }
                                 }
-                                .background(Color.white)
+                                .background(colorScheme == .dark ? Color(red: 48/255, green: 48/255, blue: 48/255) : Color.white)
                                 .cornerRadius(10)
                                 .shadow(radius: 5)
                                 .padding(EdgeInsets(top: 0, leading: 50, bottom: 20, trailing: 50))
@@ -108,7 +114,11 @@ struct FromToView: View {
                                     .padding(EdgeInsets(top: 10, leading: 50, bottom: 0, trailing: 50))
                                     .frame(alignment: .top)
                                     .font(.title)
-                                
+                                ZStack{
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0), lineWidth: 3)
+                                                .frame(height: 50)
+                                    
                                     Button(action: {
                                         destinationTapped = true
                                     }) {
@@ -119,10 +129,11 @@ struct FromToView: View {
                                             .font(.title2)
                                             .fontWeight(viewModel.destination == "" ? .light : .semibold)
                                     }
-                                    .background(triggerAI ? LinearGradient(gradient: Gradient(colors: [.green, .cyan, .blue, .cyan, .green]), startPoint: .bottomLeading, endPoint: .topTrailing) : LinearGradient(gradient: Gradient(colors: [.white]), startPoint: .bottomLeading, endPoint: .topTrailing))
-                                    .cornerRadius(10)
-                                    .shadow(radius: 5)
-                                    .padding(EdgeInsets(top: 0, leading: 50, bottom: 20, trailing: 50))
+                                }
+                                .background(triggerAI ? LinearGradient(gradient: Gradient(colors: [.green, .cyan, .blue, .cyan, .green]), startPoint: .bottomLeading, endPoint: .topTrailing) : LinearGradient(gradient: Gradient(colors: [colorScheme == .dark ? Color(red: 48/255, green: 48/255, blue: 48/255) : Color.white]), startPoint: .bottomLeading, endPoint: .topTrailing))
+                                .cornerRadius(10)
+                                .shadow(radius: 5)
+                                .padding(EdgeInsets(top: 0, leading: 50, bottom: 20, trailing: 50))
                             }
                             .fullScreenCover(isPresented: $destinationTapped ) {
                                 TextFieldSearchModalView(
@@ -145,11 +156,12 @@ struct FromToView: View {
                         VStack {
                             Button("Outward date") {
                                 dateTapped = true
+                                
                             }
                             .buttonStyle(.bordered)
-                            
                             Text(viewModel.datePicked.formatted(date: .numeric, time: .shortened))
                                 .font(.subheadline)
+                            
                         }
                         Spacer()
                         VStack {
@@ -208,6 +220,7 @@ struct FromToView: View {
                             .foregroundStyle(.linearGradient(Gradient(colors: [.blue, .pink]), startPoint: .bottomLeading, endPoint: .topTrailing))
                             
                     }
+                    .cornerRadius(10)
                     .border(.gray, width: 1)
                     .padding()
                     
@@ -245,7 +258,7 @@ struct FromToView: View {
                     )
                 }
             }
-            .animation(.easeInOut, value: dateTapped || dateReturnTapped)
+            .animation(.default, value: dateTapped || dateReturnTapped)
         }
     }
     
@@ -265,38 +278,46 @@ struct FromToView: View {
 struct DatePickerModalView: View {
     var title: String
     @Binding var date: Date
+    @Environment(\.colorScheme) var colorScheme
     var onConfirm: () -> Void
     var onReset: () -> Void
     
     var body: some View {
-        VStack(spacing: 20) {
-            Text(title)
-                .font(.headline)
+        ZStack {
+            RoundedRectangle(cornerRadius: 12)
+                        .stroke(colorScheme == .dark ? Color.white.opacity(0.4) : Color.black.opacity(0.4), lineWidth: 2)
             
-            DatePicker("", selection: $date, in: Date()...Date.distantFuture)
-                .datePickerStyle(.graphical)
-                .labelsHidden()
-            
-            HStack {
-                Button("Reset") {
-                    onReset()
-                }
-                .buttonStyle(.bordered)
+            VStack(spacing: 20) {
+                Text(title)
+                    .font(.headline)
                 
-                Spacer()
+                DatePicker("", selection: $date, in: Date()...Date.distantFuture)
+                    .datePickerStyle(.graphical)
+                    .labelsHidden()
                 
-                Button("Confirm") {
-                    onConfirm()
+                HStack {
+                    Button("Reset") {
+                        onReset()
+                    }
+                    .buttonStyle(.bordered)
+                    
+                    Spacer()
+                    
+                    Button("Confirm") {
+                        onConfirm()
+                    }
+                    .buttonStyle(.borderedProminent)
                 }
-                .buttonStyle(.borderedProminent)
+                .padding(.horizontal)
             }
-            .padding(.horizontal)
+            .padding()
+            .cornerRadius(12)
+            
         }
-        .padding()
-        .background(Color.white)
-        .cornerRadius(12)
+        .background(colorScheme == .dark ? Color.black : Color.white)
         .shadow(radius: 10)
-        .frame(width: 330)
+        .frame(width: 330, height: 500)
+        .cornerRadius(12)
     }
 }
 
@@ -304,6 +325,7 @@ struct DatePickerModalView: View {
 struct TextFieldSearchModalView: View {
     @Binding var testo: String
     @ObservedObject var viewModel: FromToViewModel
+    @Environment(\.colorScheme) var colorScheme
     @FocusState var textfieldOpen: Bool
     var onBack: () -> Void
     var onClick: (String) -> Void
@@ -333,7 +355,6 @@ struct TextFieldSearchModalView: View {
                 }
             }
             .listStyle(PlainListStyle())
-            //.frame(maxHeight: 250)
             .cornerRadius(10)
             .padding([.leading, .trailing], 16)
             
@@ -347,7 +368,7 @@ struct TextFieldSearchModalView: View {
         }
         .ignoresSafeArea()
         .padding()
-        .background(Color.white)
+        .background(colorScheme == .dark ? Color.black : Color.white)
         .cornerRadius(12)
         .shadow(radius: 10)
         .onAppear(){

@@ -113,6 +113,7 @@ struct UserPreferencesView : View {
             .padding()
         } else {
             LoginView(modelContext: modelContext)
+                .transition(.opacity.animation(.easeInOut(duration: 0.2)))
         }
     }
 }
