@@ -8,6 +8,11 @@ struct OptionsResponse: Decodable {
     let options: [[Segment]]
 }
 
+struct CityCountry: Hashable {
+    let city: String
+    let country: String
+}
+
 class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegate {
     var modelContext: ModelContext
     @Published var departure: String = "" {
@@ -361,6 +366,7 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
             let segments = try modelContext.fetch(FetchDescriptor<Segment>())
             let citiesDS = try modelContext.fetch(FetchDescriptor<CityDataset>())
             
+            // build travel details list
             let segmentsByTravelID = Dictionary(grouping: segments, by: { $0.travelID })
             let travelDetailsList = travels.compactMap { travel in
                 if let travelID = travel.travelID {
@@ -371,6 +377,14 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
                     }
                 }
                 return nil
+            }
+
+            // get visited cities
+            var visitedCities = Set<CityCountry>()
+            for travelDetails in travelDetailsList {
+                if let lastSegment = getLastSegment(travelDetails: travelDetails) {
+                    visitedCities.insert(CityCountry(city: lastSegment.destinationCity, country: lastSegment.destinationCountry))
+                }
             }
             
             // feature values
@@ -388,24 +402,22 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
             var outdoorsValues: [Double] = []
             
             // get cities in the dataset for visited cities (destination)
-            for travelDetails in travelDetailsList {
+            for cityCountry in visitedCities {
                 for cityDS in citiesDS {
-                    if let lastSegment = getLastSegment(travelDetails: travelDetails) {
-                        if lastSegment.destinationCity == cityDS.city &&
-                            lastSegment.destinationCountry == cityDS.country {
-                            populationValues.append(cityDS.population)
-                            capitalValues.append(cityDS.capital)
-                            averageTemperatureValues.append(cityDS.averageTemperature)
-                            continentValues.append(cityDS.continent)
-                            livingCostValues.append(cityDS.livingCost)
-                            travelConnectivityValues.append(cityDS.travelConnectivity)
-                            safetyValues.append(cityDS.safety)
-                            healthcareValues.append(cityDS.healthcare)
-                            educationValues.append(cityDS.education)
-                            economyValues.append(cityDS.economy)
-                            internetAccessValues.append(cityDS.internetAccess)
-                            outdoorsValues.append(cityDS.outdoors)
-                        }
+                    if cityCountry.city == cityDS.city &&
+                        cityCountry.country == cityDS.country {
+                        populationValues.append(cityDS.population)
+                        capitalValues.append(cityDS.capital)
+                        averageTemperatureValues.append(cityDS.averageTemperature)
+                        continentValues.append(cityDS.continent)
+                        livingCostValues.append(cityDS.livingCost)
+                        travelConnectivityValues.append(cityDS.travelConnectivity)
+                        safetyValues.append(cityDS.safety)
+                        healthcareValues.append(cityDS.healthcare)
+                        educationValues.append(cityDS.education)
+                        economyValues.append(cityDS.economy)
+                        internetAccessValues.append(cityDS.internetAccess)
+                        outdoorsValues.append(cityDS.outdoors)
                     }
                 }
             }
@@ -446,11 +458,40 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
             let outdoors = calculateMedian(outdoorsValues)
             
             // use model to make a prediction
-            // TODO also country !!!
-            let (predictedCity, predictedCountry) = predictCity(population: population, capital: capital, averageTemperature: averageTemperature, continent: continent, livingCost: livingCost, travelConnectivity: travelConnectivity, safety: safety, healthcare: healthcare, education: education, economy: economy, internetAccess: internetAccess, outdoors: outdoors)
+            let citiesIds = predictCity(population: population, capital: capital, averageTemperature: averageTemperature, continent: continent, livingCost: livingCost, travelConnectivity: travelConnectivity, safety: safety, healthcare: healthcare, education: education, economy: economy, internetAccess: internetAccess, outdoors: outdoors)
             
-            self.destination = predictedCity
-            // TODO also country !!!
+            // check which is the first non visited city
+            // if all visited, return the first visited one (in time)
+            for cityId in citiesIds {
+                if let cityDS = citiesDS.first(where: { $0.id == cityId }) {
+                    let cityCountrySearch = CityCountry(city: cityDS.city, country: cityDS.country)
+                    if !visitedCities.contains(cityCountrySearch) {
+                        self.destination = cityCountrySearch.city
+                        
+                        
+                        // TODO set also country !!!
+                        
+                        
+                        return
+                    }
+                }
+            }
+            
+            // else return the first one
+            if let cityId = citiesIds.first {
+                if let firstCity = citiesDS.first(where: { $0.id == cityId }) {
+                    self.destination = firstCity.city
+                    
+                    // TODO set also country !!!
+                    
+                    return
+                }
+            }
+            
+            // if not present, return a default
+            self.destination = "Paris"
+            // TODO set also country !!!
+            
             
         }catch {
             
@@ -474,11 +515,20 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
         return nil
     }
     
-    private func predictCity(population: Double, capital: Bool, averageTemperature: Double, continent: String, livingCost: Double, travelConnectivity: Double, safety: Double, healthcare: Double, education: Double, economy: Double, internetAccess: Double, outdoors: Double) -> (String, String) {
+    private func calculateMedian(_ values: [Double]) -> Double {
+        let sortedValues = values.sorted()
+        if sortedValues.count % 2 == 0 {
+            return (sortedValues[sortedValues.count / 2 - 1] + sortedValues[sortedValues.count / 2]) / 2
+        } else {
+            return sortedValues[sortedValues.count / 2]
+        }
+    }
+    
+    private func predictCity(population: Double, capital: Bool, averageTemperature: Double, continent: String, livingCost: Double, travelConnectivity: Double, safety: Double, healthcare: Double, education: Double, economy: Double, internetAccess: Double, outdoors: Double) -> [Int64] {
         
         do {
             let config = MLModelConfiguration()
-            let model = try GreenJourneyClassifier_v2(configuration: config)
+            let model = try GreenJourneyMLModel(configuration: config)
             let prediction = try model.prediction(
                 population: population,
                 capital: Int64(capital),
@@ -494,27 +544,18 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
                 outdoors:outdoors
             )
             
-            print("HERE:")
-            for (city, probability) in prediction.cityProbability {
-                print("\(city)-\(probability)")
+            let maxDepth = 30
+            let cityProbabilities = prediction.idProbability
+            let sortedProbabilities = cityProbabilities.sorted(by: { $0.value > $1.value })
+            let topProbabilities = sortedProbabilities.prefix(maxDepth)
+            var citiesId: [Int64] = []
+            for probability in topProbabilities {
+                citiesId.append(probability.key)
             }
             
-            
-            // get first non visited city among top xxxx ones
-            
-            
-            return (prediction.city, "error")   // TODO anche country!!!
+            return citiesId
         }catch{
-            return ("error", "error")
-        }
-    }
-    
-    private func calculateMedian(_ values: [Double]) -> Double {
-        let sortedValues = values.sorted()
-        if sortedValues.count % 2 == 0 {
-            return (sortedValues[sortedValues.count / 2 - 1] + sortedValues[sortedValues.count / 2]) / 2
-        } else {
-            return sortedValues[sortedValues.count / 2]
+            return ([])
         }
     }
 }
