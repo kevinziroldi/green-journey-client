@@ -414,16 +414,16 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
             // TODO var because I possibly need to make more predictions
             var population = 0.0 // TODO
             var capital = true // TODO
-            var averageTemperature = 0.0
-            var continent = "continent"
-            var livingCost = 0.0
-            var travelConnectivity = 0.0
-            var safety = 0.0
-            var healthcare = 0.0
-            var education = 0.0
-            var economy = 0.0
-            var internetAccess = 0.0
-            var outdoors = 0.0
+            var averageTemperature = 0.0 // TODO
+            var continent = "continent" // TODO
+            var livingCost = 0.0 // TODO
+            var travelConnectivity = 0.0 // TODO
+            var safety = 0.0 // TODO
+            var healthcare = 0.0 // TODO
+            var education = 0.0 // TODO
+            var economy = 0.0 // TODO
+            var internetAccess = 0.0 // TODO
+            var outdoors = 0.0 // TODO
             
             // use model to make a prediction
             let (predictedCity, predictedCountry) = predictCity(population: population, capital: capital, averageTemperature: averageTemperature, continent: continent, livingCost: livingCost, travelConnectivity: travelConnectivity, safety: safety, healthcare: healthcare, education: education, economy: economy, internetAccess: internetAccess, outdoors: outdoors)
