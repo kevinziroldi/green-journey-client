@@ -17,7 +17,7 @@ struct ReturnOptionsView: View {
         else{
             List (viewModel.returnOptions.indices, id: \.self) { option in
                 VStack{
-                    NavigationLink ("expand", destination: OptionDetailsView(segments: viewModel.returnOptions[option], viewModel: viewModel, navigationPath: $navigationPath))
+                    NavigationLink ("expand", destination: OptionDetailsView(segments: $viewModel.returnOptions[option], viewModel: viewModel, navigationPath: $navigationPath))
                     if let vehicle = viewModel.returnOptions[option].first?.vehicle {
                         Text(vehicle.rawValue)
                     } else {

@@ -63,7 +63,7 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
         self.outwardOptions = []
         self.returnOptions = []
         self.selectedOption = []
-        
+        let isOutward = true
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         
@@ -75,7 +75,7 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
         let formattedTime = timeFormatter.string(from: datePicked)
         let formattedTimeReturn = timeFormatter.string(from: dateReturnPicked)
         let baseURL = NetworkManager.shared.getBaseURL()
-        guard let url = URL(string:"\(baseURL)/travels/fromto?from=\(departure)&to=\(destination)&from_latitude=\(departureCoordinates.latitude)&from_longitude=\(departureCoordinates.longitude)&to_latitude=\(destinationCoordinates.latitude)&to_longitude=\(destinationCoordinates.longitude)&date=\(formattedDate)&time=\(formattedTime)&is_outward=\(self.oneWay)") else {
+        guard let url = URL(string:"\(baseURL)/travels/fromto?from=\(departure)&to=\(destination)&from_latitude=\(departureCoordinates.latitude)&from_longitude=\(departureCoordinates.longitude)&to_latitude=\(destinationCoordinates.latitude)&to_longitude=\(destinationCoordinates.longitude)&date=\(formattedDate)&time=\(formattedTime)&is_outward=\(isOutward)") else {
             return
         }
         let decoder = JSONDecoder()
@@ -108,7 +108,7 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
            })
            .store(in: &cancellables)
         if (!oneWay) {
-            guard let returnUrl = URL(string:"\(baseURL)/travels/fromto?from=\(destination)&to=\(departure)&from_latitude=\(destinationCoordinates.latitude)&from_longitude=\(destinationCoordinates.longitude)&to_latitude=\(departureCoordinates.latitude)&to_longitude=\(departureCoordinates.longitude)&date=\(formattedDateReturn)&time=\(formattedTimeReturn)&is_outward=\(oneWay)") else {
+            guard let returnUrl = URL(string:"\(baseURL)/travels/fromto?from=\(destination)&to=\(departure)&from_latitude=\(destinationCoordinates.latitude)&from_longitude=\(destinationCoordinates.longitude)&to_latitude=\(departureCoordinates.latitude)&to_longitude=\(departureCoordinates.longitude)&date=\(formattedDateReturn)&time=\(formattedTimeReturn)&is_outward=\(!isOutward)") else {
                 return
             }
             URLSession.shared.dataTaskPublisher(for: returnUrl)

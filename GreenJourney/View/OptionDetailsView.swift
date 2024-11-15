@@ -1,12 +1,10 @@
 import SwiftUI
 
 struct OptionDetailsView: View {
-    let segments: [Segment]
+    @Binding var segments: [Segment]
     @ObservedObject var viewModel: FromToViewModel
-    @State var isReturnOptionsViewPresented = false
     @Environment(\.modelContext) private var modelContext
     @Binding var navigationPath: NavigationPath
-    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
             if let vehicle = segments.first?.vehicle {
@@ -16,23 +14,23 @@ struct OptionDetailsView: View {
                 Text("no vehicle detected")
             }
             
-            /*List {
-                ForEach (segments) { segment in
+        List ($segments, id: \.self) { segment in
                     VStack {
-                        Text("from: " + segment.departure)
+                        Text("from: \(segment.departureCity.wrappedValue)" )
                         Spacer()
-                        Text("to: " + segment.destination)
+                        Text("to: \(segment.destinationCity.wrappedValue)")
                         Spacer()
-                        Text("departure: " + segment.date.formatted(date: .numeric, time: .shortened))
-                        let arrival = segment.date.addingTimeInterval(TimeInterval(segment.duration / 1000000000))
-                        Text("arrival: " + arrival.formatted(date: .numeric, time: .shortened))
+                        
+                        Text("departure: \(segment.date.wrappedValue.formatted(date: .numeric, time: .shortened))")
+                        let arrival = segment.date.wrappedValue.addingTimeInterval(TimeInterval(segment.duration.wrappedValue / 1000000000))
+                        Text("arrival: \(arrival.formatted(date: .numeric, time: .shortened))")
+                        Text("vehicle: \(segment.vehicle.wrappedValue.rawValue)")
                         Spacer()
-                        Text("info: " + segment.description)
-                        Text("cost: " + String(format: "%.2f", segment.price) + "€")
-                        Text("distance: " + String(format: "%.2f", segment.distance) + "km")
-                    }
+                        Text("info: \(segment.segmentDescription.wrappedValue)")
+                        Text("cost: " + String(format: "%.2f", segment.price.wrappedValue) + "€")
+                        Text("distance: " + String(format: "%.2f", segment.distance.wrappedValue) + "km")
                 }
-            }*/
+            }
             
             if (!viewModel.oneWay) {
                 if (viewModel.selectedOption.isEmpty) {
