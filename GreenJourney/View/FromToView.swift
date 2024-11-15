@@ -203,7 +203,8 @@ struct FromToView: View {
                         viewModel.destination = " "
                         withAnimation(.snappy(duration: 4)) {
                             //TODO change
-                            viewModel.destination = "Milan"
+                            viewModel.getRecommendation()
+                            //viewModel.destination = "Milan"
                             triggerAI = true
                         }
                     }){

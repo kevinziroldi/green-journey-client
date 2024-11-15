@@ -411,27 +411,46 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
             }
             
             // compute feature values
-            // TODO var because I possibly need to make more predictions
-            var population = 0.0 // TODO
-            var capital = true // TODO
-            var averageTemperature = 0.0 // TODO
-            var continent = "continent" // TODO
-            var livingCost = 0.0 // TODO
-            var travelConnectivity = 0.0 // TODO
-            var safety = 0.0 // TODO
-            var healthcare = 0.0 // TODO
-            var education = 0.0 // TODO
-            var economy = 0.0 // TODO
-            var internetAccess = 0.0 // TODO
-            var outdoors = 0.0 // TODO
+            // var because I possibly need to make more predictions
+            let population = calculateMedian(populationValues)
+            
+            var capital = false
+            var numCapital = 0
+            var numNotCapital = 0
+            for capitalValue in capitalValues {
+                if capitalValue {
+                    numCapital += 1
+                }else {
+                    numNotCapital += 1
+                }
+            }
+            if numCapital >= numNotCapital {
+                capital = true
+            }
+            
+            let averageTemperature = calculateMedian(averageTemperatureValues)
+            
+            var continentFrequency: [String: Int] = [:]
+            for continent in continentValues {
+                continentFrequency[continent, default: 0] += 1
+            }
+            let continent = continentFrequency.max(by: { $0.value < $1.value })?.key ?? "Europe"
+
+            let livingCost = calculateMedian(livingCostValues)
+            let travelConnectivity = calculateMedian(travelConnectivityValues)
+            let safety = calculateMedian(safetyValues)
+            let healthcare = calculateMedian(healthcareValues)
+            let education = calculateMedian(educationValues)
+            let economy = calculateMedian(economyValues)
+            let internetAccess = calculateMedian(internetAccessValues)
+            let outdoors = calculateMedian(outdoorsValues)
             
             // use model to make a prediction
+            // TODO also country !!!
             let (predictedCity, predictedCountry) = predictCity(population: population, capital: capital, averageTemperature: averageTemperature, continent: continent, livingCost: livingCost, travelConnectivity: travelConnectivity, safety: safety, healthcare: healthcare, education: education, economy: economy, internetAccess: internetAccess, outdoors: outdoors)
             
-            
-            // TODO 
-            // check if already visited
-            // possibly make other prediction modifying values
+            self.destination = predictedCity
+            // TODO also country !!!
             
         }catch {
             
@@ -475,16 +494,27 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
                 outdoors:outdoors
             )
             
-            return (prediction.city, "error")   // TODO anche country!!!
-            
-            
-            // TODO provare se ritorna più valori!!!
-            /*
+            print("HERE:")
             for (city, probability) in prediction.cityProbability {
+                print("\(city)-\(probability)")
+            }
             
-            }*/
+            
+            // get first non visited city among top xxxx ones
+            
+            
+            return (prediction.city, "error")   // TODO anche country!!!
         }catch{
             return ("error", "error")
+        }
+    }
+    
+    private func calculateMedian(_ values: [Double]) -> Double {
+        let sortedValues = values.sorted()
+        if sortedValues.count % 2 == 0 {
+            return (sortedValues[sortedValues.count / 2 - 1] + sortedValues[sortedValues.count / 2]) / 2
+        } else {
+            return sortedValues[sortedValues.count / 2]
         }
     }
 }
