@@ -190,26 +190,25 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
                 }
             }, receiveValue: { response in
                 travelDetails = response
+                // save travel in SwiftData
+                self.modelContext.insert(travelDetails.travel)
+                for segment in travelDetails.segments {
+                    self.modelContext.insert(segment)
+                }
+                do {
+                    try self.modelContext.save()
+                } catch {
+                    
+                    // gestione
+                    
+                    print("Error saving new travel: \(error.localizedDescription)")
+                    return
+                }
+                print("travel added to SwiftData")
             })
             .store(in: &cancellables)
         
-        // save travel in SwiftData
-        modelContext.insert(travelDetails.travel)
-        for segment in travelDetails.segments {
-            modelContext.insert(segment)
-        }
-        do {
-            try modelContext.save()
-        } catch {
-            
-            
-            // TODO gestione
-            
-            
-            print("Error saving new travel: \(error.localizedDescription)")
-            return
-        }
-        print("travel added to SwiftData")
+        
     }
         
     func updateSearchResults(for query: String) {

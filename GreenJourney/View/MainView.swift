@@ -49,7 +49,7 @@ struct MainView: View {
                         UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath)
                     case "searchOptions":
                         TravelOptionsView(viewModel: fromToViewModel, navigationPath: $navigationPath)
-                    case "ReturnOptionsView":
+                    case "ReturnOptionView":
                         ReturnOptionsView(viewModel: fromToViewModel, navigationPath: $navigationPath)
                     case "LoginView":
                         LoginView(modelContext: modelContext)
