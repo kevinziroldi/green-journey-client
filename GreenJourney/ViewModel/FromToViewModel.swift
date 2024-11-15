@@ -156,7 +156,7 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
             print("Error encoding travel data")
             return
         }
-        //print("body: " , String(data: body, encoding: .utf8)!)
+        print("body: " , String(data: body, encoding: .utf8)!)
         
         
         // POST request
@@ -199,7 +199,7 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
                     try self.modelContext.save()
                 } catch {
                     
-                    // gestione
+                    // TODO gestione
                     
                     print("Error saving new travel: \(error.localizedDescription)")
                     return
