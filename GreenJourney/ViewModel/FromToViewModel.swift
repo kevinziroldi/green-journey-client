@@ -190,6 +190,7 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
                 }
             }, receiveValue: { response in
                 travelDetails = response
+                
                 // save travel in SwiftData
                 self.modelContext.insert(travelDetails.travel)
                 for segment in travelDetails.segments {
