@@ -55,10 +55,7 @@ struct MainView: View {
                         Text("unknown destination")
                     }
                 }
-                
-                
             }
-            
         }else {
             LoginView(modelContext: modelContext)
         }

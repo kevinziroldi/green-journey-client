@@ -22,8 +22,8 @@ struct FromToView: View {
     }*/
     
     var body: some View {
-        //if users.first != nil {
-            NavigationStack {
+        if users.first != nil {
+            //NavigationStack {
                 ZStack {
                     VStack {
                         HStack {
@@ -261,12 +261,12 @@ struct FromToView: View {
                     }
                 }
                 .animation(.default, value: dateTapped || dateReturnTapped)
-            }
-        /*}
+            //}
+        }
         else {
             LoginView(modelContext: modelContext)
                 .transition(.opacity.animation(.easeInOut(duration: 0.2)))
-        }*/
+        }
     }
     
     private func getColorDest () -> Color {

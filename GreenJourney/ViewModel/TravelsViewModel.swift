@@ -57,17 +57,6 @@ class TravelsViewModel: ObservableObject {
             // filter according to current filter
             filterTravelDetails()
             
-            for travelDetail in travelDetailsList {
-                print("\n")
-                print("\n")
-                for segment in travelDetail.segments {
-                    print("\n")
-                    print(segment.departureCity)
-                    print(segment.destinationCity)
-                    print(segment.numSegment)
-                }
-            }
-            
         }catch {
             
             

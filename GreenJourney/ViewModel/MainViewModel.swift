@@ -184,7 +184,6 @@ class MainViewModel: ObservableObject {
                         citiesDataset.append(cityDataset)
                     }
                     
-                    print("Number of cities: \(citiesDataset.count)")
                     for cityDataset in citiesDataset {
                         modelContext.insert(cityDataset)
                         print(cityDataset.city)
