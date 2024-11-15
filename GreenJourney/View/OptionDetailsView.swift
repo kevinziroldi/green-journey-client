@@ -4,7 +4,6 @@ struct OptionDetailsView: View {
     let segments: [Segment]
     @ObservedObject var viewModel: FromToViewModel
     @State var isReturnOptionsViewPresented = false
-    @State var isFromToViewPresented = false
     @Environment(\.modelContext) private var modelContext
     @Binding var navigationPath: NavigationPath
     @Environment(\.dismiss) private var dismiss
@@ -39,10 +38,7 @@ struct OptionDetailsView: View {
                 if (viewModel.selectedOption.isEmpty) {
                     Button ("proceed"){
                         viewModel.selectedOption.append(contentsOf: segments)
-                        isReturnOptionsViewPresented = true
-                    }
-                    .navigationDestination(isPresented: $isReturnOptionsViewPresented) {
-                        ReturnOptionsView(viewModel: viewModel, navigationPath: $navigationPath)
+                        navigationPath.append("ReturnOptionView")
                     }
                 }
                 else {

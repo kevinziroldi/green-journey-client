@@ -8,9 +8,11 @@ struct UserPreferencesView : View {
     @Query var users: [User]
     let email: String = Auth.auth().currentUser?.email ?? ""
     @StateObject private var viewModel: UserPreferencesViewModel
+    @Binding var navigationPath: NavigationPath
     
-    init(modelContext: ModelContext) {
+    init(modelContext: ModelContext, navigationPath: Binding<NavigationPath>) {
         _viewModel = StateObject(wrappedValue: UserPreferencesViewModel(modelContext: modelContext))
+        _navigationPath = navigationPath
     }
     
     var body: some View {
@@ -106,11 +108,17 @@ struct UserPreferencesView : View {
 
                 // logout button
                 Button("Logout") {
+                    navigationPath = NavigationPath()
                     viewModel.logout(user: user)
                 }
             }
             .frame(maxWidth: .infinity)
             .padding()
+            .onDisappear(){
+                if !navigationPath.isEmpty {
+                    navigationPath.removeLast()
+                }
+            }
         } else {
             LoginView(modelContext: modelContext)
                 .transition(.opacity.animation(.easeInOut(duration: 0.2)))

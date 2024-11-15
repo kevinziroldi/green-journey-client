@@ -5,25 +5,29 @@ struct TravelsView: View {
     @StateObject var viewModel: TravelsViewModel
     @State private var selectedSortOption: SortOption = .departureDate
     @State private var showSortOptions = false
+    @Binding var navigationPath: NavigationPath
     @Environment(\.modelContext) private var modelContext
     
-    init(modelContext: ModelContext) {
+    init(modelContext: ModelContext, navigationPath: Binding<NavigationPath>) {
         _viewModel = StateObject(wrappedValue: TravelsViewModel(modelContext: modelContext))
+        _navigationPath = navigationPath
     }
     
     var body: some View {
-        NavigationStack {
+        //NavigationStack {
             VStack {
                 HStack {
                     Text("My Travels")
                         .font(.title)
                         .padding()
                     Spacer()
-                    NavigationLink(destination: UserPreferencesView(modelContext: modelContext)) {
+                    
+                    Button(action: {
+                        navigationPath.append("UserPreferencesView")
+                    }) {
                         Image(systemName: "person")
                             .font(.title)
                     }
-                    .padding()
                 }
                 
                 Picker("", selection: $viewModel.showCompleted) {
@@ -56,7 +60,7 @@ struct TravelsView: View {
             .onAppear {
                 viewModel.getUserTravels()
             }
-        }
+        //}
     }
 }
 

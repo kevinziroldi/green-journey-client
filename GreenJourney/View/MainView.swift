@@ -3,6 +3,7 @@ import SwiftUI
 
 struct MainView: View {
     @StateObject private var viewModel: MainViewModel
+    @StateObject var fromToViewModel: FromToViewModel
     @Environment(\.modelContext) private var modelContext
     @State private var selectedTab = 1
     
@@ -10,6 +11,7 @@ struct MainView: View {
     
     init(modelContext: ModelContext) {
         _viewModel = StateObject(wrappedValue: MainViewModel(modelContext: modelContext))
+        _fromToViewModel = StateObject(wrappedValue: FromToViewModel(modelContext: modelContext))
         navigationPath = NavigationPath()
     }
     
@@ -17,19 +19,20 @@ struct MainView: View {
         if viewModel.checkUserLogged() {
             NavigationStack (path: $navigationPath) {
                 TabView(selection: $selectedTab) {
-                    RankingView()
+                    RankingView(navigationPath: $navigationPath)
                         .tabItem {
                             Label("Ranking", systemImage: "star")
                         }
                         .tag(0)
                     
-                    FromToView(modelContext: modelContext)
+                    FromToView(navigationPath: $navigationPath)
+                        .environmentObject(fromToViewModel)
                         .tabItem {
                             Label("From-To", systemImage: "location")
                         }
                         .tag(1)
                     
-                    TravelsView(modelContext: modelContext)
+                    TravelsView(modelContext: modelContext, navigationPath: $navigationPath)
                         .tabItem {
                             Label("My travels", systemImage: "airplane")
                         }
@@ -40,10 +43,22 @@ struct MainView: View {
                     // load cities from dataset (if needed)
                     viewModel.loadCityDataset()
                 }
+                .navigationDestination(for: String.self) { destination in
+                    switch destination {
+                    case "UserPreferencesView":
+                        UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath)
+                    case "searchOptions":
+                        TravelOptionsView(viewModel: fromToViewModel, navigationPath: $navigationPath)
+                    case "ReturnOptionsView":
+                        ReturnOptionsView(viewModel: fromToViewModel, navigationPath: $navigationPath)
+                    default:
+                        Text("unknown destination")
+                    }
+                }
+                
+                
             }
-            .onAppear {
-                navigationPath = NavigationPath()
-            }
+            
         }else {
             LoginView(modelContext: modelContext)
         }
