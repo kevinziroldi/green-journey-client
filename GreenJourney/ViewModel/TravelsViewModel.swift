@@ -39,7 +39,6 @@ class TravelsViewModel: ObservableObject {
             let segments = try modelContext.fetch(FetchDescriptor<Segment>())
             
             let segmentsByTravelID = Dictionary(grouping: segments, by: { $0.travelID })
-        
             travelDetailsList = travels.compactMap { travel in
                 if let travelID = travel.travelID {
                     if let travelSegments = segmentsByTravelID[travelID] {
@@ -63,8 +62,8 @@ class TravelsViewModel: ObservableObject {
                 print("\n")
                 for segment in travelDetail.segments {
                     print("\n")
-                    print(segment.departure)
-                    print(segment.destination)
+                    print(segment.departureCity)
+                    print(segment.destinationCity)
                     print(segment.numSegment)
                 }
             }

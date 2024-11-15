@@ -142,17 +142,18 @@ class MainViewModel: ObservableObject {
                         let rowValues = row.components(separatedBy: ",")
                         
                         // extracr row values
-                        guard rowValues.count == 14,
-                              let population = Double(rowValues[2]),
-                              let averageTemperature = Double(rowValues[4]),
-                              let livingCost = Double(rowValues[6]),
-                              let travelConnectivity = Double(rowValues[7]),
-                              let safety = Double(rowValues[8]),
-                              let healthcare = Double(rowValues[9]),
-                              let education = Double(rowValues[10]),
-                              let economy = Double(rowValues[11]),
-                              let internetAccess = Double(rowValues[12]),
-                              let outdoors = Double(rowValues[13]) else {
+                        guard rowValues.count == 15,
+                            let population = Double(rowValues[2]),
+                            let averageTemperature = Double(rowValues[4]),
+                            let livingCost = Double(rowValues[6]),
+                            let travelConnectivity = Double(rowValues[7]),
+                            let safety = Double(rowValues[8]),
+                            let healthcare = Double(rowValues[9]),
+                            let education = Double(rowValues[10]),
+                            let economy = Double(rowValues[11]),
+                            let internetAccess = Double(rowValues[12]),
+                            let outdoors = Double(rowValues[13]),
+                            let id = Int64(rowValues[14]) else {
                             print("Error parsing row \(rowValues[0])")
                             continue
                         }
@@ -163,6 +164,7 @@ class MainViewModel: ObservableObject {
 
                         // create cityDataset object
                         let cityDataset = CityDataset(
+                            id: id,
                             city: city,
                             country: country,
                             population: population,

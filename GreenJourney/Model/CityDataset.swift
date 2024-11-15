@@ -3,6 +3,7 @@ import SwiftData
 
 @Model
 class CityDataset {
+    var id: Int64
     var city: String
     var country: String
     var population: Double
@@ -18,7 +19,8 @@ class CityDataset {
     var internetAccess: Double
     var outdoors: Double
     
-    init(city: String, country: String, population: Double, capital: Bool, averageTemperature: Double, continent: String, livingCost: Double, travelConnectivity: Double, safety: Double, healthcare: Double, education: Double, economy: Double, internetAccess: Double, outdoors: Double) {
+    init(id: Int64, city: String, country: String, population: Double, capital: Bool, averageTemperature: Double, continent: String, livingCost: Double, travelConnectivity: Double, safety: Double, healthcare: Double, education: Double, economy: Double, internetAccess: Double, outdoors: Double) {
+        self.id = id
         self.city = city
         self.country = country
         self.population = population
