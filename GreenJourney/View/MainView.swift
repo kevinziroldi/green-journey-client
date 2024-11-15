@@ -51,6 +51,9 @@ struct MainView: View {
                         TravelOptionsView(viewModel: fromToViewModel, navigationPath: $navigationPath)
                     case "ReturnOptionsView":
                         ReturnOptionsView(viewModel: fromToViewModel, navigationPath: $navigationPath)
+                    case "LoginView":
+                        LoginView(modelContext: modelContext)
+                            .transition(.opacity.animation(.easeInOut(duration: 0.2)))
                     default:
                         Text("unknown destination")
                     }

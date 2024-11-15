@@ -110,12 +110,13 @@ struct UserPreferencesView : View {
                 Button("Logout") {
                     navigationPath = NavigationPath()
                     viewModel.logout(user: user)
+                    navigationPath.append("LoginView")
                 }
             }
             .frame(maxWidth: .infinity)
             .padding()
             .onDisappear(){
-                if !navigationPath.isEmpty {
+                if !navigationPath.isEmpty && users.first != nil {
                     navigationPath.removeLast()
                 }
             }
