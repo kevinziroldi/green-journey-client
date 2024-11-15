@@ -16,7 +16,7 @@ struct TravelsView: View {
     }
     
     var body: some View {
-        if users.first != nil {
+        //if users.first != nil {
             VStack {
                 HStack {
                     Text("My Travels")
@@ -62,10 +62,11 @@ struct TravelsView: View {
             .onAppear {
                 viewModel.getUserTravels()
             }
+        /*
         }else {
             LoginView(modelContext: modelContext)
                 .transition(.opacity.animation(.easeInOut(duration: 0.2)))
-        }
+        }*/
     }
 }
 
