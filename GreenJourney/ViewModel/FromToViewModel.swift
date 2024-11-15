@@ -1,7 +1,8 @@
-import Foundation
-import SwiftData
-import MapKit
 import Combine
+import CoreML
+import Foundation
+import MapKit
+import SwiftData
 
 struct OptionsResponse: Decodable {
     let options: [[Segment]]
@@ -332,7 +333,7 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
     
     func getOptionDeparture (_ travelOption: [Segment]) -> String {
         if let firstSegment = travelOption.first {
-            return firstSegment.departure
+            return firstSegment.departureCity
         }
         else {
             return ""
@@ -341,7 +342,7 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
     
     func getOptionDestination (_ travelOption: [Segment]) -> String {
         if let lastSegment = travelOption.last {
-            return lastSegment.destination
+            return lastSegment.destinationCity
         }
         else {
             return ""
@@ -358,17 +359,79 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
             // fetch data from SwiftData
             let travels = try modelContext.fetch(FetchDescriptor<Travel>())
             let segments = try modelContext.fetch(FetchDescriptor<Segment>())
-            let citiesDataser = try modelContext.fetch(FetchDescriptor<CityDataset>())
+            let citiesDS = try modelContext.fetch(FetchDescriptor<CityDataset>())
             
-            // get cities names for visited cities (destination)
+            let segmentsByTravelID = Dictionary(grouping: segments, by: { $0.travelID })
+            let travelDetailsList = travels.compactMap { travel in
+                if let travelID = travel.travelID {
+                    if let travelSegments = segmentsByTravelID[travelID] {
+                        return TravelDetails(travel: travel, segments: travelSegments)
+                    } else {
+                        return TravelDetails(travel: travel, segments: [])
+                    }
+                }
+                return nil
+            }
             
+            // feature values
+            var populationValues: [Double] = []
+            var capitalValues: [Bool] = []
+            var averageTemperatureValues: [Double] = []
+            var continentValues: [String] = []
+            var livingCostValues: [Double] = []
+            var travelConnectivityValues: [Double] = []
+            var safetyValues: [Double] = []
+            var healthcareValues: [Double] = []
+            var educationValues: [Double] = []
+            var economyValues: [Double] = []
+            var internetAccessValues: [Double] = []
+            var outdoorsValues: [Double] = []
             
-            // search them in SwiftData
+            // get cities in the dataset for visited cities (destination)
+            for travelDetails in travelDetailsList {
+                for cityDS in citiesDS {
+                    if let lastSegment = getLastSegment(travelDetails: travelDetails) {
+                        if lastSegment.destinationCity == cityDS.city &&
+                            lastSegment.destinationCountry == cityDS.country {
+                            populationValues.append(cityDS.population)
+                            capitalValues.append(cityDS.capital)
+                            averageTemperatureValues.append(cityDS.averageTemperature)
+                            continentValues.append(cityDS.continent)
+                            livingCostValues.append(cityDS.livingCost)
+                            travelConnectivityValues.append(cityDS.travelConnectivity)
+                            safetyValues.append(cityDS.safety)
+                            healthcareValues.append(cityDS.healthcare)
+                            educationValues.append(cityDS.education)
+                            economyValues.append(cityDS.economy)
+                            internetAccessValues.append(cityDS.internetAccess)
+                            outdoorsValues.append(cityDS.outdoors)
+                        }
+                    }
+                }
+            }
             
-            // compute needed values
+            // compute feature values
+            // TODO var because I possibly need to make more predictions
+            var population = 0.0 // TODO
+            var capital = true // TODO
+            var averageTemperature = 0.0
+            var continent = "continent"
+            var livingCost = 0.0
+            var travelConnectivity = 0.0
+            var safety = 0.0
+            var healthcare = 0.0
+            var education = 0.0
+            var economy = 0.0
+            var internetAccess = 0.0
+            var outdoors = 0.0
             
             // use model to make a prediction
+            let (predictedCity, predictedCountry) = predictCity(population: population, capital: capital, averageTemperature: averageTemperature, continent: continent, livingCost: livingCost, travelConnectivity: travelConnectivity, safety: safety, healthcare: healthcare, education: education, economy: economy, internetAccess: internetAccess, outdoors: outdoors)
             
+            
+            // TODO 
+            // check if already visited
+            // possibly make other prediction modifying values
             
         }catch {
             
@@ -377,5 +440,60 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
             print("Error interacting with SwiftData")
             
         }
+    }
+    
+    private func getLastSegment(travelDetails: TravelDetails) -> Segment? {
+        if let firstListSegment = travelDetails.segments.first {
+            var lastSegment = firstListSegment
+            for segment in travelDetails.segments {
+                if segment.numSegment > lastSegment.numSegment {
+                    lastSegment = segment
+                }
+            }
+            return lastSegment
+        }
+        return nil
+    }
+    
+    private func predictCity(population: Double, capital: Bool, averageTemperature: Double, continent: String, livingCost: Double, travelConnectivity: Double, safety: Double, healthcare: Double, education: Double, economy: Double, internetAccess: Double, outdoors: Double) -> (String, String) {
+        
+        do {
+            let config = MLModelConfiguration()
+            let model = try GreenJourneyClassifier_v2(configuration: config)
+            let prediction = try model.prediction(
+                population: population,
+                capital: Int64(capital),
+                average_temperature:averageTemperature,
+                continent:continent,
+                living_cost:livingCost,
+                travel_connectivity:travelConnectivity,
+                safety:safety,
+                healthcare:healthcare,
+                education:education,
+                economy:economy,
+                internet_access:internetAccess,
+                outdoors:outdoors
+            )
+            
+            return (prediction.city, "error")   // TODO anche country!!!
+            
+            
+            // TODO provare se ritorna più valori!!!
+            /*
+            for (city, probability) in prediction.cityProbability {
+            
+            }*/
+        }catch{
+            return ("error", "error")
+        }
+    }
+}
+
+extension Int64 {
+    init(_ bool: Bool) {
+        if bool {
+            self = 1
+        }
+        self = 0
     }
 }
