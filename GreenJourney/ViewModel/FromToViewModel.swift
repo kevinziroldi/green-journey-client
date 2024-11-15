@@ -382,7 +382,7 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
             // get visited cities
             var visitedCities = Set<CityCountry>()
             for travelDetails in travelDetailsList {
-                if let lastSegment = getLastSegment(travelDetails: travelDetails) {
+                if let lastSegment = travelDetails.getLastSegment() {
                     visitedCities.insert(CityCountry(city: lastSegment.destinationCity, country: lastSegment.destinationCountry))
                 }
             }
@@ -502,6 +502,7 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
         }
     }
     
+    /*
     private func getLastSegment(travelDetails: TravelDetails) -> Segment? {
         if let firstListSegment = travelDetails.segments.first {
             var lastSegment = firstListSegment
@@ -514,6 +515,7 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
         }
         return nil
     }
+     */
     
     private func calculateMedian(_ values: [Double]) -> Double {
         let sortedValues = values.sorted()

@@ -84,7 +84,7 @@ class TravelsViewModel: ObservableObject {
     private func filterTravelDetails() {
         let currentDate = Date()
         filteredTravelDetailsList = travelDetailsList.filter { travel in
-            let lastSegment = getLastSegment(travelDetails: travel)
+            let lastSegment = travel.getLastSegment()
             if let lastSegment = lastSegment {
                 let durationSeconds = Double(lastSegment.duration) / 1_000_000_000
                 let departureDateLastSegment = lastSegment.date
@@ -102,7 +102,8 @@ class TravelsViewModel: ObservableObject {
             return false
         }
     }
-    
+   
+    /*
     private func getFirstSegment(travelDetails: TravelDetails) -> Segment? {
         if let firstListSegment = travelDetails.segments.first {
             var firstSegment = firstListSegment
@@ -115,7 +116,8 @@ class TravelsViewModel: ObservableObject {
         }
         return nil
     }
-    
+    */
+    /*
     private func getLastSegment(travelDetails: TravelDetails) -> Segment? {
         if let firstListSegment = travelDetails.segments.first {
             var lastSegment = firstListSegment
@@ -128,6 +130,7 @@ class TravelsViewModel: ObservableObject {
         }
         return nil
     }
+    */
     
     // sort travel details list according to some sort option
     private func sortTravels() {
@@ -135,8 +138,8 @@ class TravelsViewModel: ObservableObject {
         case .departureDate:
             // decreasing departure date
             travelDetailsList.sort {
-                if let firstSegment1 = getFirstSegment(travelDetails: $0) {
-                    if let firstSegment2 = getFirstSegment(travelDetails: $1) {
+                if let firstSegment1 = $0.getFirstSegment() {
+                    if let firstSegment2 = $1.getFirstSegment() {
                         let date1 = firstSegment1.date
                         let date2 = firstSegment2.date
                         return date1 > date2
