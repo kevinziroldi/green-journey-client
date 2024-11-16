@@ -34,7 +34,7 @@ struct FromToView: View {
                             Spacer()
                             
                             Button(action: {
-                                navigationPath.append("UserPreferencesView")
+                                navigationPath.append(NavigationDestination.UserPreferencesView)
                                 print(navigationPath)
                             }) {
                                 Image(systemName: "person")
@@ -189,7 +189,7 @@ struct FromToView: View {
                             viewModel.computeRoutes()
                             
                             // Naviga manualmente alla destinazione
-                            navigationPath.append("searchOptions")
+                            navigationPath.append(NavigationDestination.TravelOptionsView)
                         }) {
                             Text("Search")
                                 .font(.title3)

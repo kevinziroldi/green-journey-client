@@ -14,7 +14,7 @@ struct RankingView: View {
                 Spacer()
                 
                 Button(action: {
-                    navigationPath.append("UserPreferencesView")
+                    navigationPath.append(NavigationDestination.UserPreferencesView)
                 }) {
                     Image(systemName: "person")
                         .font(.title)

@@ -43,15 +43,15 @@ struct MainView: View {
                     // load cities from dataset (if needed)
                     viewModel.loadCityDataset()
                 }
-                .navigationDestination(for: String.self) { destination in
+                .navigationDestination(for: NavigationDestination.self) { destination in
                     switch destination {
-                    case "UserPreferencesView":
+                    case .UserPreferencesView:
                         UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath)
-                    case "searchOptions":
+                    case .TravelOptionsView:
                         TravelOptionsView(viewModel: fromToViewModel, navigationPath: $navigationPath)
-                    case "ReturnOptionView":
+                    case .ReturnOptionsView:
                         ReturnOptionsView(viewModel: fromToViewModel, navigationPath: $navigationPath)
-                    case "LoginView":
+                    case .LoginView:
                         LoginView(modelContext: modelContext)
                             .transition(.opacity.animation(.easeInOut(duration: 0.2)))
                     default:

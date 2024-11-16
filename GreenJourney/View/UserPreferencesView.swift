@@ -110,7 +110,7 @@ struct UserPreferencesView : View {
                 Button("Logout") {
                     navigationPath = NavigationPath()
                     viewModel.logout(user: user)
-                    navigationPath.append("LoginView")
+                    navigationPath.append(NavigationDestination.LoginView)
                 }
             }
             .frame(maxWidth: .infinity)

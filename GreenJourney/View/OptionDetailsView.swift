@@ -36,7 +36,7 @@ struct OptionDetailsView: View {
                 if (viewModel.selectedOption.isEmpty) {
                     Button ("proceed"){
                         viewModel.selectedOption.append(contentsOf: segments)
-                        navigationPath.append("ReturnOptionView")
+                        navigationPath.append(NavigationDestination.ReturnOptionsView)
                     }
                 }
                 else {
