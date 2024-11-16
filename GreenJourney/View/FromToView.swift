@@ -121,7 +121,7 @@ struct FromToView: View {
                                         .font(.title)
                                     ZStack{
                                         RoundedRectangle(cornerRadius: 10)
-                                            .stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0), lineWidth: 3)
+                                            .stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 3)
                                             .frame(height: 50)
                                         
                                         Button(action: {
@@ -338,16 +338,32 @@ struct TextFieldSearchModalView: View {
     var onClick: (String) -> Void
     var body: some View {
         VStack(spacing: 20) {
-            
-            TextField("insert destination", text: $testo)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .font(.title3)
-                .padding(EdgeInsets(top: 0, leading: 50, bottom: 0, trailing: 50))
-                .focused($textfieldOpen)
-                .onSubmit {
-                    onClick(testo)
+            ZStack {
+                RoundedRectangle(cornerRadius: 20)
+                    .stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 2)
+                    .frame(height: 50)
+                
+                HStack {
+                    Button(action: {
+                        onBack()
+                    }) {
+                        Image(systemName: "chevron.backward")
+                            .font(.title2)
+                            .foregroundStyle(.gray)
+                    }
+                    TextField("insert", text: $testo)
+                        .background(colorScheme == .dark ? Color(red: 48/255, green: 48/255, blue: 48/255) : Color.white)
+                        .font(.title2)
+                        .focused($textfieldOpen)
+                        .onSubmit {
+                            onClick(testo)
+                        }
                 }
+                .padding()
+            }
+            .padding(EdgeInsets(top: 80, leading: 10, bottom: 0, trailing: 10))
             
+                
             List(viewModel.suggestions, id: \.self) { suggestion in
                 VStack(alignment: .leading) {
                     Text(suggestion.title)
