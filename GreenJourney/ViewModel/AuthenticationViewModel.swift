@@ -173,6 +173,16 @@ class AuthenticationViewModel: ObservableObject {
                     print("User data posted successfully.")
                 case .failure(let error):
                     print("Error posting user data: \(error.localizedDescription)")
+                    let user = Auth.auth().currentUser
+                    user?.delete { error in
+                      if let error = error {
+                        // An error happened.
+                          print("Error deleting user from Firebase")
+                      } else {
+                        // Account deleted.
+                          print("User deleted from firebase")
+                      }
+                    }
                 }
             }, receiveValue: { _ in
             })
