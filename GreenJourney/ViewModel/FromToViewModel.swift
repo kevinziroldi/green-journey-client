@@ -78,6 +78,7 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
         guard let url = URL(string:"\(baseURL)/travels/fromto?from=\(departure)&to=\(destination)&from_latitude=\(departureCoordinates.latitude)&from_longitude=\(departureCoordinates.longitude)&to_latitude=\(destinationCoordinates.latitude)&to_longitude=\(destinationCoordinates.longitude)&date=\(formattedDate)&time=\(formattedTime)&is_outward=\(isOutward)") else {
             return
         }
+        print("URL:  \(url)")
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         
@@ -226,7 +227,7 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
         var seenCoordinates: [CLLocationCoordinate2D] = []
             var uniqueResults: [MKLocalSearchCompletion] = []
             let group = DispatchGroup() // to handle asyncronous requests
-        let restrictedResults = completer.results.prefix(4)
+        let restrictedResults = completer.results
         for result in restrictedResults {
                 // filter to obtain only cities
                 guard (!result.subtitle.contains(",") && (!result.subtitle.isEmpty || result.title.contains(","))) else {
@@ -281,7 +282,7 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
         }
     }
     
-    func insertCoordinates () {
+    func insertCoordinatesDeparture () {
         getCoordinates(for: self.departure) { coordinate, error in
             if let error = error {
                 print(error)
@@ -291,6 +292,10 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
                 self.departureCoordinates = coordinate
             }
         }
+        print("messe coordinate departure")
+    }
+    
+    func insertCoordinatesDestinaton() {
         getCoordinates(for: self.destination) { coordinate, error in
             if let error = error {
                 print(error)
@@ -300,6 +305,7 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
                 self.destinationCoordinates = coordinate
             }
         }
+        print("messe coordinate destination")
     }
     
     func computeCo2Emitted(_ travelOption: [Segment]) -> Float64 {
