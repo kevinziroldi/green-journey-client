@@ -103,35 +103,6 @@ class TravelsViewModel: ObservableObject {
         }
     }
    
-    /*
-    private func getFirstSegment(travelDetails: TravelDetails) -> Segment? {
-        if let firstListSegment = travelDetails.segments.first {
-            var firstSegment = firstListSegment
-            for segment in travelDetails.segments {
-                if segment.numSegment < firstSegment.numSegment {
-                    firstSegment = segment
-                }
-            }
-            return firstSegment
-        }
-        return nil
-    }
-    */
-    /*
-    private func getLastSegment(travelDetails: TravelDetails) -> Segment? {
-        if let firstListSegment = travelDetails.segments.first {
-            var lastSegment = firstListSegment
-            for segment in travelDetails.segments {
-                if segment.numSegment > lastSegment.numSegment {
-                    lastSegment = segment
-                }
-            }
-            return lastSegment
-        }
-        return nil
-    }
-    */
-    
     // sort travel details list according to some sort option
     private func sortTravels() {
         switch self.sortOption {
@@ -188,6 +159,34 @@ class TravelsViewModel: ObservableObject {
                 }
                 return price1 > price2
             }
+        }
+    }
+    
+    func compensateCO2(travelID: Int, priceCompensated: Float) {
+        
+        // TODO
+        // compute CO2 compensated
+        let co2Compensated = 0  // TODO change
+    
+        // get travel
+        
+        let fetchDescriptor = FetchDescriptor<Travel>(
+            predicate: #Predicate { $0.travelID == travelID }
+        )
+        do {
+            let travel = try modelContext.fetch(fetchDescriptor)
+            
+            // update CO2 compensated in server
+            
+            // if response ok, update CO2 compensated in SwiftData
+            
+        }catch {
+            
+            
+            // TODO
+            print("Error fecthing travel from SwiftData")
+            
+            
         }
     }
 }

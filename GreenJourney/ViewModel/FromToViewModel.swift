@@ -502,21 +502,6 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
         }
     }
     
-    /*
-    private func getLastSegment(travelDetails: TravelDetails) -> Segment? {
-        if let firstListSegment = travelDetails.segments.first {
-            var lastSegment = firstListSegment
-            for segment in travelDetails.segments {
-                if segment.numSegment > lastSegment.numSegment {
-                    lastSegment = segment
-                }
-            }
-            return lastSegment
-        }
-        return nil
-    }
-     */
-    
     private func calculateMedian(_ values: [Double]) -> Double {
         let sortedValues = values.sorted()
         if sortedValues.count % 2 == 0 {

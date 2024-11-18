@@ -5,7 +5,7 @@ struct MainView: View {
     @StateObject private var viewModel: MainViewModel
     @StateObject var fromToViewModel: FromToViewModel
     @Environment(\.modelContext) private var modelContext
-    @State private var selectedTab = 1
+    @State private var selectedTab = 2
     
     @State var navigationPath: NavigationPath = NavigationPath()
     
@@ -25,18 +25,30 @@ struct MainView: View {
                         }
                         .tag(0)
                     
+                    ReviewsView(navigationPath: $navigationPath)
+                        .tabItem {
+                            Label("Reviews", systemImage: "star.fill")
+                        }
+                        .tag(1)
+                    
                     FromToView(navigationPath: $navigationPath)
                         .environmentObject(fromToViewModel)
                         .tabItem {
                             Label("From-To", systemImage: "location")
                         }
-                        .tag(1)
+                        .tag(2)
                     
                     TravelsView(modelContext: modelContext, navigationPath: $navigationPath)
                         .tabItem {
                             Label("My travels", systemImage: "airplane")
                         }
-                        .tag(2)
+                        .tag(3)
+                    
+                    DashboardView(navigationPath: $navigationPath)
+                        .tabItem {
+                            Label("Dashboard", systemImage: "house")
+                        }
+                        .tag(4)
                 }.onAppear {
                     // refresh travels data
                     viewModel.fetchTravels()

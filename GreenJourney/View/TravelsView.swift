@@ -16,57 +16,51 @@ struct TravelsView: View {
     }
     
     var body: some View {
-        //if users.first != nil {
-            VStack {
-                HStack {
-                    Text("My Travels")
-                        .font(.title)
-                        .padding()
-                    Spacer()
-                    
-                    Button(action: {
-                        navigationPath.append(NavigationDestination.UserPreferencesView)
-                    }) {
-                        Image(systemName: "person")
-                            .font(.title)
-                    }
-                }
-                
-                Picker("", selection: $viewModel.showCompleted) {
-                    Text("Completed").tag(true)
-                    Text("Scheduled").tag(false)
-                }
-                .pickerStyle(SegmentedPickerStyle())
-                .padding()
+        VStack {
+            HStack {
+                Text("My Travels")
+                    .font(.title)
+                    .padding()
+                Spacer()
                 
                 Button(action: {
-                    showSortOptions.toggle()
+                    navigationPath.append(NavigationDestination.UserPreferencesView)
                 }) {
-                    Text("Order by")
-                }
-                .padding()
-                .actionSheet(isPresented: $showSortOptions) {
-                    ActionSheet(title: Text("Order by"), buttons: [
-                        .default(Text("Departure date")) {viewModel.sortOption = .departureDate},
-                        .default(Text("CO2 emitted")) {viewModel.sortOption = .co2Emitted},
-                        .default(Text("CO2 compensation rate")) {viewModel.sortOption = .co2CompensationRate},
-                        .default(Text("Price")) {viewModel.sortOption = .price},
-                        .cancel()
-                    ])
-                }
-                
-                List(viewModel.filteredTravelDetailsList) { travelDetails in
-                    TravelRow(travelDetails: travelDetails)
+                    Image(systemName: "person")
+                        .font(.title)
                 }
             }
-            .onAppear {
-                viewModel.getUserTravels()
+            
+            Picker("", selection: $viewModel.showCompleted) {
+                Text("Completed").tag(true)
+                Text("Scheduled").tag(false)
             }
-        /*
-        }else {
-            LoginView(modelContext: modelContext)
-                .transition(.opacity.animation(.easeInOut(duration: 0.2)))
-        }*/
+            .pickerStyle(SegmentedPickerStyle())
+            .padding()
+            
+            Button(action: {
+                showSortOptions.toggle()
+            }) {
+                Text("Order by")
+            }
+            .padding()
+            .actionSheet(isPresented: $showSortOptions) {
+                ActionSheet(title: Text("Order by"), buttons: [
+                    .default(Text("Departure date")) {viewModel.sortOption = .departureDate},
+                    .default(Text("CO2 emitted")) {viewModel.sortOption = .co2Emitted},
+                    .default(Text("CO2 compensation rate")) {viewModel.sortOption = .co2CompensationRate},
+                    .default(Text("Price")) {viewModel.sortOption = .price},
+                    .cancel()
+                ])
+            }
+            
+            List(viewModel.filteredTravelDetailsList) { travelDetails in
+                TravelRow(travelDetails: travelDetails)
+            }
+        }
+        .onAppear {
+            viewModel.getUserTravels()
+        }
     }
 }
 
@@ -116,4 +110,3 @@ let dateFormatter: DateFormatter = {
     formatter.dateStyle = .short
     return formatter
 }()
-
