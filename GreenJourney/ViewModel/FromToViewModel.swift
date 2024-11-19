@@ -327,11 +327,23 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
     func computeTotalDuration (_ travelOption: [Segment]) -> String {
         var hours: Int = 0
         var minutes: Int = 0
+        var days: Int = 0
         for segment in travelOption {
             hours += durationToHoursAndMinutes(duration: segment.duration).hours
             minutes += durationToHoursAndMinutes(duration: segment.duration).minutes
         }
-        return "\(hours) h, \(minutes) min"
+        while (minutes >= 60) {
+            hours += 1
+            minutes -= 60
+        }
+        while (hours >= 24) {
+            days += 1
+            hours -= 24
+        }
+        if (days == 0) {
+            return "\(hours) h, \(minutes) min"
+        }
+        return "\(days) d, \(hours) h, \(minutes) min"
     }
     
     func durationToHoursAndMinutes(duration: Int) -> (hours: Int, minutes: Int) {
@@ -359,6 +371,28 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
             return ""
         }
     }
+    
+    func findVehicle(_ option: [Segment]) -> String {
+        var vehicle: String
+        switch option.first?.vehicle {
+        case .car:
+            vehicle = "car"
+        case .train:
+            vehicle = "tram"
+        case .plane:
+            vehicle = "airplane"
+        case .bus:
+            vehicle = "bus"
+        case .walk:
+            vehicle = "figure.walk"
+        case .bike:
+            vehicle = "bicycle"
+        default:
+            vehicle = ""
+        }
+        return vehicle
+    }
+    
     
     func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
         // error handling
