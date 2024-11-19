@@ -282,7 +282,7 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
         }
     }
     
-    func insertCoordinatesDeparture () {
+    func insertCoordinates (completion: @escaping () -> Void) {
         getCoordinates(for: self.departure) { coordinate, error in
             if let error = error {
                 print(error)
@@ -293,9 +293,6 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
             }
         }
         print("messe coordinate departure")
-    }
-    
-    func insertCoordinatesDestinaton() {
         getCoordinates(for: self.destination) { coordinate, error in
             if let error = error {
                 print(error)
@@ -306,6 +303,7 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
             }
         }
         print("messe coordinate destination")
+        completion()
     }
     
     func computeCo2Emitted(_ travelOption: [Segment]) -> Float64 {

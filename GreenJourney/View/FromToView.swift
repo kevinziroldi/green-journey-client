@@ -104,7 +104,6 @@ struct FromToView: View {
                                     }) { selected in
                                         viewModel.departure = selected
                                         departureTapped = false
-                                        viewModel.insertCoordinatesDeparture()
                                     }
                             }
                             
@@ -146,7 +145,6 @@ struct FromToView: View {
                                     viewModel.destination = selected
                                     destinationTapped = false
                                     triggerAI = false
-                                    viewModel.insertCoordinatesDestinaton()
                                 }
                             }
                         }
@@ -181,10 +179,12 @@ struct FromToView: View {
                     
                     Spacer()
                     Button(action: {
-                        viewModel.computeRoutes()
-                        
-                        // Naviga manualmente alla destinazione
-                        navigationPath.append(NavigationDestination.TravelOptionsView)
+                        viewModel.insertCoordinates {
+                            viewModel.computeRoutes()
+                            
+                            // Naviga manualmente alla destinazione
+                            navigationPath.append(NavigationDestination.TravelOptionsView)
+                        }
                     }) {
                         Text("Search")
                             .font(.title3)
