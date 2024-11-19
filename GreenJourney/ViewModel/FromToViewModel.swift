@@ -290,20 +290,22 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
             }
             else if let coordinate = coordinate {
                 self.departureCoordinates = coordinate
+                print("messe coordinate departure")
+                self.getCoordinates(for: self.destination) { coordinate, error in
+                    if let error = error {
+                        print(error)
+                        return
+                    }
+                    else if let coordinate = coordinate {
+                        self.destinationCoordinates = coordinate
+                        print("messe coordinate destination")
+                        completion()
+                    }
+                }
+                
             }
+            
         }
-        print("messe coordinate departure")
-        getCoordinates(for: self.destination) { coordinate, error in
-            if let error = error {
-                print(error)
-                return
-            }
-            else if let coordinate = coordinate {
-                self.destinationCoordinates = coordinate
-            }
-        }
-        print("messe coordinate destination")
-        completion()
     }
     
     func computeCo2Emitted(_ travelOption: [Segment]) -> Float64 {
