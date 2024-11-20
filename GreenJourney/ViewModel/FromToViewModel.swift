@@ -257,6 +257,7 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
             // Update suggestions
             group.notify(queue: .main) {
                 self.suggestions = uniqueResults
+                print(self.suggestions)
             }
     }
     

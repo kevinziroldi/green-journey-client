@@ -331,65 +331,70 @@ struct TextFieldSearchModalView: View {
     var onBack: () -> Void
     var onClick: (String) -> Void
     var body: some View {
-        VStack(spacing: 10) {
-            ZStack {
-                RoundedRectangle(cornerRadius: 20)
-                    .stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 2)
-                    .fill(colorScheme == .dark ? Color(red: 48/255, green: 48/255, blue: 48/255) : Color.white)
-                    .frame(height: 50)
+        //ScrollView {
+            VStack(spacing: 10) {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 20)
+                        .stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 2)
+                        .fill(colorScheme == .dark ? Color(red: 48/255, green: 48/255, blue: 48/255) : Color.white)
+                        .frame(height: 50)
+                    
+                    HStack {
+                        Button(action: {
+                            onBack()
+                        }) {
+                            Image(systemName: "chevron.backward")
+                                .font(.title2)
+                                .foregroundStyle(.gray)
+                        }
+                        TextField("insert", text: $testo)
+                            .font(.title2)
+                            .focused($textfieldOpen)
+                            .onSubmit {
+                                onClick(testo)
+                            }
+                    }
+                    .padding()
+                }
+                .padding(EdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10))
+                
+                
+                List(viewModel.suggestions, id: \.self) { suggestion in
+                    VStack(alignment: .leading) {
+                        Text(suggestion.title)
+                            .font(.headline)
+                        Text(suggestion.subtitle)
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                    }
+                    .padding(.vertical, 4)
+                    .onTapGesture {
+                        onClick(suggestion.title)
+                    }
+                }
+                .listStyle(PlainListStyle())
+                .cornerRadius(10)
+                .padding([.leading, .trailing], 16)
+                
                 
                 HStack {
-                    Button(action: {
+                    Button("Back") {
                         onBack()
-                    }) {
-                        Image(systemName: "chevron.backward")
-                            .font(.title2)
-                            .foregroundStyle(.gray)
                     }
-                    TextField("insert", text: $testo)
-                        .font(.title2)
-                        .focused($textfieldOpen)
-                        .onSubmit {
-                            onClick(testo)
-                        }
+                    .buttonStyle(.bordered)
                 }
-                .padding()
+                .padding(.horizontal)
             }
-            .padding(EdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10))
             
-            
-            List(viewModel.suggestions, id: \.self) { suggestion in
-                VStack(alignment: .leading) {
-                    Text(suggestion.title)
-                        .font(.headline)
-                    Text(suggestion.subtitle)
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
-                }
-                .padding(.vertical, 4)
-                .onTapGesture {
-                    onClick(suggestion.title)
-                }
+            .onAppear(){
+                textfieldOpen = true
             }
-            .listStyle(PlainListStyle())
-            .cornerRadius(10)
-            .padding([.leading, .trailing], 16)
-            
-            HStack {
-                Button("Back") {
-                    onBack()
-                }
-                .buttonStyle(.bordered)
-            }
-            .padding(.horizontal)
-        }
+        //}
+        .scrollDismissesKeyboard(.interactively)
         .ignoresSafeArea()
         .padding()
         .background(colorScheme == .dark ? Color.black : Color.white)
         .cornerRadius(12)
         .shadow(radius: 10)
-        .onAppear(){
-            textfieldOpen = true
-        }
     }
 }
