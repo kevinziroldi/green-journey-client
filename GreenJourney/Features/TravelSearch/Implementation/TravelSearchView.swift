@@ -2,10 +2,10 @@ import SwiftUI
 import SwiftData
 import MapKit
 
-struct FromToView: View {
+struct TravelSearchView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.colorScheme) var colorScheme
-    @EnvironmentObject var viewModel: FromToViewModel
+    @EnvironmentObject var viewModel: TravelSearchViewModel
     @State private var departureTapped: Bool = false
     @State private var destinationTapped: Bool = false
     @State private var dateTapped = false
@@ -195,31 +195,13 @@ struct FromToView: View {
                     
                     Spacer()
                     
-                    Button (action: {
-                        viewModel.destination = " "
-                        withAnimation(.snappy(duration: 4)) {
-                            //TODO change
-                            //viewModel.destination = "Milan"
-                            viewModel.getRecommendation()
-                            triggerAI = true
-                        }
-                    }){
-                        Text("Don't know where to go? Ask AI.")
-                            .foregroundColor(.gray)
-                            .padding()
-                        Spacer()
-                        Image(systemName: "apple.intelligence")
-                            .font(.title)
-                            .frame(width: 50, height: 50)
-                        //.background(.white)
-                            .clipShape(Circle())
-                            .padding(EdgeInsets(top: 0, leading: 5, bottom: 5, trailing: 5))
-                            .foregroundStyle(.linearGradient(Gradient(colors: [.blue, .pink]), startPoint: .bottomLeading, endPoint: .topTrailing))
-                        
-                    }
-                    .cornerRadius(10)
-                    .border(.gray, width: 1)
-                    .padding()
+                    DestinationPredictionView(
+                        modelContext: modelContext,
+                        confirm: { locode, city, country in
+                            viewModel.destination = city
+                            // TODO settare anche locode e country
+                            self.triggerAI = true
+                        })
                     
                 }
                 .padding()
@@ -325,7 +307,7 @@ struct DatePickerModalView: View {
 
 struct TextFieldSearchModalView: View {
     @Binding var testo: String
-    @ObservedObject var viewModel: FromToViewModel
+    @ObservedObject var viewModel: TravelSearchViewModel
     @Environment(\.colorScheme) var colorScheme
     @FocusState var textfieldOpen: Bool
     var onBack: () -> Void

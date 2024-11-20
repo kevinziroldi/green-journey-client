@@ -1,8 +1,8 @@
 import SwiftData
 import SwiftUI
 
-struct TravelsView: View {
-    @StateObject var viewModel: TravelsViewModel
+struct MyTravelsView: View {
+    @StateObject var viewModel: MyTravelsViewModel
     @State private var selectedSortOption: SortOption = .departureDate
     @State private var showSortOptions = false
     @Binding var navigationPath: NavigationPath
@@ -11,7 +11,7 @@ struct TravelsView: View {
     @Query var users: [User]
     
     init(modelContext: ModelContext, navigationPath: Binding<NavigationPath>) {
-        _viewModel = StateObject(wrappedValue: TravelsViewModel(modelContext: modelContext))
+        _viewModel = StateObject(wrappedValue: MyTravelsViewModel(modelContext: modelContext))
         _navigationPath = navigationPath
     }
     

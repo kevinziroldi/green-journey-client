@@ -9,7 +9,7 @@ enum SortOption {
     case co2CompensationRate
 }
 
-class TravelsViewModel: ObservableObject {
+class MyTravelsViewModel: ObservableObject {
     private var modelContext: ModelContext
     var travelDetailsList: [TravelDetails] = []
     @Published var filteredTravelDetailsList: [TravelDetails] = []

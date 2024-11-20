@@ -3,7 +3,7 @@ import SwiftUI
 
 struct MainView: View {
     @StateObject private var viewModel: MainViewModel
-    @StateObject var fromToViewModel: FromToViewModel
+    @StateObject var fromToViewModel: TravelSearchViewModel
     @Environment(\.modelContext) private var modelContext
     @State private var selectedTab = 2
     
@@ -11,7 +11,7 @@ struct MainView: View {
     
     init(modelContext: ModelContext) {
         _viewModel = StateObject(wrappedValue: MainViewModel(modelContext: modelContext))
-        _fromToViewModel = StateObject(wrappedValue: FromToViewModel(modelContext: modelContext))
+        _fromToViewModel = StateObject(wrappedValue: TravelSearchViewModel(modelContext: modelContext))
         navigationPath = NavigationPath()
     }
     
@@ -25,20 +25,20 @@ struct MainView: View {
                         }
                         .tag(0)
                     
-                    ReviewsView(navigationPath: $navigationPath)
+                    CityReviewsView(navigationPath: $navigationPath)
                         .tabItem {
                             Label("Reviews", systemImage: "star.fill")
                         }
                         .tag(1)
                     
-                    FromToView(navigationPath: $navigationPath)
+                    TravelSearchView(navigationPath: $navigationPath)
                         .environmentObject(fromToViewModel)
                         .tabItem {
                             Label("From-To", systemImage: "location")
                         }
                         .tag(2)
                     
-                    TravelsView(modelContext: modelContext, navigationPath: $navigationPath)
+                    MyTravelsView(modelContext: modelContext, navigationPath: $navigationPath)
                         .tabItem {
                             Label("My travels", systemImage: "airplane")
                         }
@@ -60,7 +60,7 @@ struct MainView: View {
                     case .UserPreferencesView:
                         UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath)
                     case .TravelOptionsView:
-                        TravelOptionsView(viewModel: fromToViewModel, navigationPath: $navigationPath)
+                        OutwardOptionsView(viewModel: fromToViewModel, navigationPath: $navigationPath)
                     case .ReturnOptionsView:
                         ReturnOptionsView(viewModel: fromToViewModel, navigationPath: $navigationPath)
                     case .LoginView:

@@ -1,7 +1,7 @@
 import SwiftUI
 import SwiftData
 
-struct ReviewsView: View {
+struct CityReviewsView: View {
     @Binding var navigationPath: NavigationPath
     
     var body: some View {

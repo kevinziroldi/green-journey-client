@@ -2,7 +2,7 @@ import Foundation
 import SwiftData
 
 @Model
-class CityDataset {
+class CityFeatures {
     var id: Int64
     var city: String
     var country: String

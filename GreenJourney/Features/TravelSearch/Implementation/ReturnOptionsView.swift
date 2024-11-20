@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ReturnOptionsView: View {
-    @ObservedObject var viewModel: FromToViewModel
+    @ObservedObject var viewModel: TravelSearchViewModel
     @Binding var navigationPath: NavigationPath
     
     var body: some View {

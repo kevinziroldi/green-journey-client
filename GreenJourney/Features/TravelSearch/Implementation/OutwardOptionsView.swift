@@ -1,7 +1,7 @@
 import SwiftUI
 
-struct TravelOptionsView: View {
-    @ObservedObject var viewModel: FromToViewModel
+struct OutwardOptionsView: View {
+    @ObservedObject var viewModel: TravelSearchViewModel
     @Binding var navigationPath: NavigationPath
     var body: some View {
         VStack (spacing: 0){
@@ -83,7 +83,7 @@ struct TravelOptionsView: View {
 struct OptionCard: View {
     var option: [Segment]
     @Environment(\.colorScheme) var colorScheme
-    @ObservedObject var viewModel: FromToViewModel
+    @ObservedObject var viewModel: TravelSearchViewModel
     
     var body: some View {
         ZStack{

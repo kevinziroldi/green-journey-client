@@ -120,7 +120,7 @@ class MainViewModel: ObservableObject {
     func loadCityDataset() {
         do {
             // check if there are no entries in SwiftData
-            let citiesDataset = try modelContext.fetch(FetchDescriptor<CityDataset>())
+            let citiesDataset = try modelContext.fetch(FetchDescriptor<CityFeatures>())
             if !citiesDataset.isEmpty {
                 // cities already loaded
                 print("Cities are already loaded in SwiftData")
@@ -135,7 +135,7 @@ class MainViewModel: ObservableObject {
                     let fileContents = try String(contentsOfFile: filePath, encoding: .utf8)
                     let rows = fileContents.components(separatedBy: "\n")
                     
-                    var citiesDataset: [CityDataset] = []
+                    var citiesDataset: [CityFeatures] = []
                     
                     // first row contains column names
                     for (index, row) in rows.enumerated() where index > 0 && !row.isEmpty {
@@ -163,7 +163,7 @@ class MainViewModel: ObservableObject {
                         let continent = rowValues[5]
 
                         // create cityDataset object
-                        let cityDataset = CityDataset(
+                        let cityDataset = CityFeatures(
                             id: id,
                             city: city,
                             country: country,

@@ -2,7 +2,7 @@ import SwiftUI
 
 struct OptionDetailsView: View {
     @Binding var segments: [Segment]
-    @ObservedObject var viewModel: FromToViewModel
+    @ObservedObject var viewModel: TravelSearchViewModel
     @Environment(\.modelContext) private var modelContext
     @Binding var navigationPath: NavigationPath
 
