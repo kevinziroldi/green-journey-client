@@ -543,10 +543,18 @@ class FromToViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegat
     }
     
     private func calculateMedian(_ values: [Double]) -> Double {
+        // if no values, return
+        if values.isEmpty {
+            return 0
+        }
+
+        // else, sort
         let sortedValues = values.sorted()
         if sortedValues.count % 2 == 0 {
+            // if even, mean of the central values
             return (sortedValues[sortedValues.count / 2 - 1] + sortedValues[sortedValues.count / 2]) / 2
         } else {
+            // if odd, central value
             return sortedValues[sortedValues.count / 2]
         }
     }
