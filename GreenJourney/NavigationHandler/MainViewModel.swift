@@ -235,7 +235,7 @@ class MainViewModel: ObservableObject {
             // else, load them
             print("Loading cities")
             
-            if let filePath = Bundle.main.path(forResource: "dataset_locode", ofType: "csv") {
+            if let filePath = Bundle.main.path(forResource: "ds_locode_reduced", ofType: "csv") {
                 do {
                     let fileContents = try String(contentsOfFile: filePath, encoding: .utf8)
                     let rows = fileContents.components(separatedBy: "\n")
@@ -246,25 +246,20 @@ class MainViewModel: ObservableObject {
                     for (index, row) in rows.enumerated() where index > 0 && !row.isEmpty {
                         let rowValues = row.components(separatedBy: ",")
                         
-                        guard let id = Int64(rowValues[0])
-                        else {
-                            print("Error parsing row \(rowValues[0])")
-                            continue
-                        }
-                        let locode = rowValues[1]
-                        let city = rowValues[2]
+                        let locode = rowValues[0]
+                        let city = rowValues[1]
+                        let continent = rowValues[6]
                         let countryCode = rowValues[3]
-                        let countryName = rowValues[4]
+                        let countryName = rowValues[2]
 
                         // create cityCompleterDataset object
-                        let cityCompleterDataset = CityCompleterDataset(city: city, countryName: countryName, id: id, locode: locode, countryCode: countryCode)
+                        let cityCompleterDataset = CityCompleterDataset(city: city, countryName: countryName,continent: continent, locode: locode, countryCode: countryCode)
 
                         citiesCompleterDataset.append(cityCompleterDataset)
                     }
                     
                     for cityCompleterDataset in citiesCompleterDataset {
                         modelContext.insert(cityCompleterDataset)
-                        print(cityCompleterDataset.id)
                     }
                     do {
                         try modelContext.save()

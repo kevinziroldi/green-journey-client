@@ -15,23 +15,10 @@ struct CityCountry: Hashable {
 
 class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegate {
     var modelContext: ModelContext
-    @Published var departure: String = "" {
-        didSet {
-            updateSearchResults(for: departure)
-        }
-    }
-    @Published var destination: String = "" {
-        didSet {
-            updateSearchResults(for: destination)
-        }
-    }
+    @Published var departure: CityCompleterDataset = CityCompleterDataset(city: "", countryName: "", continent: "", locode: "", countryCode: "")
+    @Published var arrival: CityCompleterDataset = CityCompleterDataset(city: "", countryName: "", continent: "", locode: "", countryCode: "")
     var users: [User] = []
     
-    private var departureCoordinates: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
-    private var destinationCoordinates: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
-    
-    @Published var suggestions: [MKLocalSearchCompletion] = []
-    private var completer: MKLocalSearchCompleter
     @Published var datePicked: Date = Date.now
     @Published var dateReturnPicked : Date = Date.now.addingTimeInterval(7 * 24 * 60 * 60) //seven days in ms
     @Published var oneWay: Bool = true
@@ -46,21 +33,11 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
         do {
             users = try modelContext.fetch(FetchDescriptor<User>())
         }catch {}
-        self.completer = MKLocalSearchCompleter()
-        //initialization of nsobject
-        super.init()
-        self.completer.delegate = self
-        self.completer.resultTypes = .address
-        let englishRegion = MKCoordinateRegion(
-            center: CLLocationCoordinate2D(latitude: 51.509865, longitude: -0.118092), // London coordinates
-            span: MKCoordinateSpan(latitudeDelta: 10, longitudeDelta: 10)
-        )
-        self.completer.region = englishRegion
     }
     
     func computeRoutes () {
         //REAL INTERACTION
-        self.outwardOptions = []
+        /*self.outwardOptions = []
         self.returnOptions = []
         self.selectedOption = []
         let isOutward = true
@@ -75,7 +52,7 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
         let formattedTime = timeFormatter.string(from: datePicked)
         let formattedTimeReturn = timeFormatter.string(from: dateReturnPicked)
         let baseURL = NetworkManager.shared.getBaseURL()
-        guard let url = URL(string:"\(baseURL)/travels/fromto?from=\(departure)&to=\(destination)&from_latitude=\(departureCoordinates.latitude)&from_longitude=\(departureCoordinates.longitude)&to_latitude=\(destinationCoordinates.latitude)&to_longitude=\(destinationCoordinates.longitude)&date=\(formattedDate)&time=\(formattedTime)&is_outward=\(isOutward)") else {
+        guard let url = URL(string:"\(baseURL)/travels/fromto?from=\(departure)&to=\(arrival)&from_latitude=\(departureCoordinates.latitude)&from_longitude=\(departureCoordinates.longitude)&to_latitude=\(arrivalCoordinates.latitude)&to_longitude=\(arrivalCoordinates.longitude)&date=\(formattedDate)&time=\(formattedTime)&is_outward=\(isOutward)") else {
             return
         }
         print("URL:  \(url)")
@@ -109,7 +86,7 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
             })
             .store(in: &cancellables)
         if (!oneWay) {
-            guard let returnUrl = URL(string:"\(baseURL)/travels/fromto?from=\(destination)&to=\(departure)&from_latitude=\(destinationCoordinates.latitude)&from_longitude=\(destinationCoordinates.longitude)&to_latitude=\(departureCoordinates.latitude)&to_longitude=\(departureCoordinates.longitude)&date=\(formattedDateReturn)&time=\(formattedTimeReturn)&is_outward=\(!isOutward)") else {
+            guard let returnUrl = URL(string:"\(baseURL)/travels/fromto?from=\(arrival)&to=\(departure)&from_latitude=\(arrivalCoordinates.latitude)&from_longitude=\(arrivalCoordinates.longitude)&to_latitude=\(departureCoordinates.latitude)&to_longitude=\(departureCoordinates.longitude)&date=\(formattedDateReturn)&time=\(formattedTimeReturn)&is_outward=\(!isOutward)") else {
                 return
             }
             URLSession.shared.dataTaskPublisher(for: returnUrl)
@@ -139,6 +116,7 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
                 })
                 .store(in: &cancellables)
         }
+         */
     }
     
     func saveTravel() {
@@ -212,102 +190,7 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
         
         
     }
-    
-    func updateSearchResults(for query: String) {
-        if query.isEmpty {
-            // if the query string is empty those clean the suggestions list
-            self.suggestions = []
-        } else {
-            // update with the new input
-            self.completer.queryFragment = query
-        }
-    }
-    
-    func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
-        var seenCoordinates: [CLLocationCoordinate2D] = []
-        var uniqueResults: [MKLocalSearchCompletion] = []
-        let group = DispatchGroup() // to handle asyncronous requests
-        let restrictedResults = completer.results
-        for result in restrictedResults {
-            // filter to obtain only cities
-            guard (!result.subtitle.contains(",") && (!result.subtitle.isEmpty || result.title.contains(","))) else {
-                continue
-            }
-            // add the asyncronus request to the group
-            group.enter()
-            // get coordinates for each unique result
-            getCoordinates(for: result.title) { coordinate, error in
-                defer { group.leave() } // leave the group when it's ended
-                
-                if let error = error {
-                    print(error)
-                    return
-                }
-                if let coordinate = coordinate {
-                    let isDuplicate = seenCoordinates.contains { $0.latitude == coordinate.latitude && $0.longitude == coordinate.longitude }
-                    if !isDuplicate {
-                        // add coordinate to seenCoordinates
-                        seenCoordinates.append(coordinate)
-                        uniqueResults.append(result)
-                    }
-                }
-            }
-        }
-        
-        // Update suggestions
-        group.notify(queue: .main) {
-            self.suggestions = uniqueResults
-            print(self.suggestions)
-        }
-    }
-    
-    private func getCoordinates(for city: String, completion: @escaping (CLLocationCoordinate2D?, Error?) -> Void) {
-        let request = MKLocalSearch.Request()
-        request.naturalLanguageQuery = city
-        let search = MKLocalSearch(request: request)
-        
-        search.start { response, error in
-            if let error = error {
-                completion(nil, error) // return the error
-                return
-            }
-            
-            // verify that there is at least one result
-            guard let coordinate = response?.mapItems.first?.placemark.coordinate else {
-                completion(nil, NSError(domain: "NoResults", code: 404, userInfo: [NSLocalizedDescriptionKey: "No results for this location"]))
-                return
-            }
-            
-            // return coordinate
-            completion(coordinate, nil)
-        }
-    }
-    
-    func insertCoordinates (completion: @escaping () -> Void) {
-        getCoordinates(for: self.departure) { coordinate, error in
-            if let error = error {
-                print(error)
-                return
-            }
-            else if let coordinate = coordinate {
-                self.departureCoordinates = coordinate
-                print("messe coordinate departure")
-                self.getCoordinates(for: self.destination) { coordinate, error in
-                    if let error = error {
-                        print(error)
-                        return
-                    }
-                    else if let coordinate = coordinate {
-                        self.destinationCoordinates = coordinate
-                        print("messe coordinate destination")
-                        completion()
-                    }
-                }
-                
-            }
-            
-        }
-    }
+   
     
     func computeCo2Emitted(_ travelOption: [Segment]) -> Float64 {
         var co2Emitted: Float64 = 0.0
@@ -392,11 +275,5 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
             vehicle = ""
         }
         return vehicle
-    }
-    
-    
-    func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
-        // error handling
-        print("error during completer search: \(error)")
     }
 }

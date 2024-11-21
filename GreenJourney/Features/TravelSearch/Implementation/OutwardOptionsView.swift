@@ -6,7 +6,7 @@ struct OutwardOptionsView: View {
     var body: some View {
         VStack (spacing: 0){
             HStack {
-                Text(viewModel.departure)
+                Text(viewModel.departure.city)
                     .font(.title2)
                     .fontWeight(.semibold)
                     .padding()
@@ -40,7 +40,7 @@ struct OutwardOptionsView: View {
                     .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                 }
                 .frame(width: 180, height: 75, alignment: .top)
-                Text(viewModel.destination)
+                Text(viewModel.arrival.city)
                     .font(.title2)
                     .fontWeight(.semibold)
                     .padding()

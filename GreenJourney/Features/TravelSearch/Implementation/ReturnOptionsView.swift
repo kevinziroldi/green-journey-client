@@ -6,7 +6,7 @@ struct ReturnOptionsView: View {
     
     var body: some View {
         HStack {
-            Text("\(viewModel.destination) -> \(viewModel.departure) on: \(viewModel.dateReturnPicked.formatted(date: .numeric, time: .shortened))")
+            Text("\(viewModel.arrival) -> \(viewModel.departure) on: \(viewModel.dateReturnPicked.formatted(date: .numeric, time: .shortened))")
         }
             if (viewModel.returnOptions.isEmpty){
                 ProgressView() // show loading symbol

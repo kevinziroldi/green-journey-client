@@ -3,17 +3,41 @@ import SwiftData
 
 struct CompleterView: View {
     @StateObject private var viewModel: CompleterViewModel
+    @Environment(\.colorScheme) var colorScheme
+    @FocusState var textfieldOpen: Bool
     var onBack: () -> Void
-    init(modelContext: ModelContext, searchText: String, onBack: @escaping () -> Void) {
+    var onClick: (CityCompleterDataset) -> Void
+    init(modelContext: ModelContext, searchText: String, onBack: @escaping () -> Void, onClick: @escaping (CityCompleterDataset) -> Void) {
         _viewModel = StateObject(wrappedValue: CompleterViewModel(modelContext: modelContext, searchText: searchText))
         self.onBack = onBack
+        self.onClick = onClick
     }
     
     var body: some View {
         VStack {
-            TextField("Search City", text: $viewModel.searchText)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
+            ZStack {
+                RoundedRectangle(cornerRadius: 20)
+                    .stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 2)
+                    .fill(colorScheme == .dark ? Color(red: 48/255, green: 48/255, blue: 48/255) : Color.white)
+                    .frame(height: 50)
+                
+                HStack {
+                    Button(action: {
+                        onBack()
+                    }) {
+                        Image(systemName: "chevron.backward")
+                            .font(.title2)
+                            .foregroundStyle(.gray)
+                    }
+                    TextField("Search City", text: $viewModel.searchText)
+                        .font(.title2)
+                        .focused($textfieldOpen)
+                        .padding()
+                }
                 .padding()
+            }
+            .padding(EdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10))
+            
             
             List(viewModel.suggestions, id: \.id) { city in
                 VStack(alignment: .leading) {
@@ -22,8 +46,22 @@ struct CompleterView: View {
                         .font(.subheadline)
                         .foregroundColor(.gray)
                 }
+                .onTapGesture {
+                    onClick(city)
+                }
             }
-            Button("Back") { onBack() }
+            .scrollDismissesKeyboard(.interactively)
+            HStack {
+                Button("Back") {
+                    onBack()
+                }
+                .buttonStyle(.bordered)
+            }
+            .padding(.horizontal)
+        }
+        
+        .onAppear(){
+            textfieldOpen = true
         }
     }
 }

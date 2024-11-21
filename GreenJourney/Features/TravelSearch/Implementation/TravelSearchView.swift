@@ -65,6 +65,7 @@ struct TravelSearchView: View {
                         }
                         .frame(width: 100, height: 110)
                         .padding(EdgeInsets(top: 0, leading: 0, bottom: 80, trailing: 300))
+                        
                         VStack {
                             VStack {
                                 Text("From")
@@ -80,12 +81,12 @@ struct TravelSearchView: View {
                                     Button(action: {
                                         departureTapped = true
                                     }) {
-                                        Text(viewModel.departure == "" ? "Insert departure" : viewModel.departure)
-                                            .foregroundColor(viewModel.departure == "" ? .secondary : .blue)
+                                        Text(viewModel.departure.city == "" ? "Insert departure" : viewModel.departure.city)
+                                            .foregroundColor(viewModel.departure.city == "" ? .secondary : .blue)
                                             .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 0))
                                             .frame(maxWidth: .infinity, alignment: .leading)
                                             .font(.title2)
-                                            .fontWeight(viewModel.departure == "" ? .light : .semibold)
+                                            .fontWeight(viewModel.departure.city == "" ? .light : .semibold)
                                     }
                                 }
                                 .background(colorScheme == .dark ? Color(red: 48/255, green: 48/255, blue: 48/255) : Color.white)
@@ -96,10 +97,15 @@ struct TravelSearchView: View {
                                 
                             }
                             .fullScreenCover(isPresented: $departureTapped ) {
-                                CompleterView(modelContext: modelContext, searchText: viewModel.departure,
+                                CompleterView(modelContext: modelContext, searchText: viewModel.departure.city,
                                               onBack: {
                                                   departureTapped = false
-                                              })
+                                              },
+                                              onClick: { city in
+                                    departureTapped = false
+                                    viewModel.departure = city
+                                }
+                                )
                             }
                             
                             VStack{
@@ -116,12 +122,12 @@ struct TravelSearchView: View {
                                     Button(action: {
                                         destinationTapped = true
                                     }) {
-                                        Text(viewModel.destination == "" ? "Insert destination" : viewModel.destination)
+                                        Text(viewModel.arrival.city == "" ? "Insert destination" : viewModel.arrival.city)
                                             .foregroundColor (getColorDest())
                                             .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 0))
                                             .frame(maxWidth: .infinity, alignment: .leading)
                                             .font(.title2)
-                                            .fontWeight(viewModel.destination == "" ? .light : .semibold)
+                                            .fontWeight(viewModel.arrival.city == "" ? .light : .semibold)
                                     }
                                 }
                                 .background(triggerAI ? LinearGradient(gradient: Gradient(colors: [.green, .cyan, .blue, .cyan, .green]), startPoint: .bottomLeading, endPoint: .topTrailing) : LinearGradient(gradient: Gradient(colors: [colorScheme == .dark ? Color(red: 48/255, green: 48/255, blue: 48/255) : Color.white]), startPoint: .bottomLeading, endPoint: .topTrailing))
@@ -130,21 +136,19 @@ struct TravelSearchView: View {
                                 .padding(EdgeInsets(top: 0, leading: 50, bottom: 20, trailing: 50))
                             }
                             .fullScreenCover(isPresented: $destinationTapped ) {
-                                TextFieldSearchModalView(
-                                    testo: $viewModel.destination,
-                                    viewModel: viewModel,
-                                    onBack: {
-                                        destinationTapped = false
-                                    }
-                                ) { selected in
-                                    viewModel.destination = selected
+                                CompleterView(modelContext: modelContext, searchText: viewModel.arrival.city,
+                                              onBack: {
                                     destinationTapped = false
-                                    triggerAI = false
+                                              },
+                                              onClick: { city in
+                                    destinationTapped = false
+                                    //TODO
+                                    viewModel.arrival = city
                                 }
+                                )
                             }
                         }
                     }
-                    
                     HStack {
                         Spacer()
                         VStack {
@@ -174,13 +178,8 @@ struct TravelSearchView: View {
                     
                     Spacer()
                     Button(action: {
-                        viewModel.insertCoordinates {
-                            viewModel.computeRoutes()
-                            
-                            // Naviga manualmente alla destinazione
                             navigationPath.append(NavigationDestination.TravelOptionsView)
-                        }
-                    }) {
+                        }) {
                         Text("Search")
                             .font(.title3)
                             .foregroundStyle(.white)
@@ -193,7 +192,7 @@ struct TravelSearchView: View {
                     DestinationPredictionView(
                         modelContext: modelContext,
                         confirm: { locode, city, country in
-                            viewModel.destination = city
+                            viewModel.arrival.city = city
                             // TODO settare anche locode e country
                             self.triggerAI = true
                         })
@@ -241,7 +240,7 @@ struct TravelSearchView: View {
     }
     
     private func getColorDest () -> Color {
-        if viewModel.destination == "" {
+        if viewModel.arrival.city == "" {
             return .secondary
         }
         else if triggerAI {
@@ -296,82 +295,5 @@ struct DatePickerModalView: View {
         .shadow(radius: 10)
         .frame(width: 330, height: 500)
         .cornerRadius(12)
-    }
-}
-
-
-struct TextFieldSearchModalView: View {
-    @Binding var testo: String
-    @ObservedObject var viewModel: TravelSearchViewModel
-    @Environment(\.colorScheme) var colorScheme
-    @FocusState var textfieldOpen: Bool
-    var onBack: () -> Void
-    var onClick: (String) -> Void
-    var body: some View {
-        //ScrollView {
-            VStack(spacing: 10) {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 20)
-                        .stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 2)
-                        .fill(colorScheme == .dark ? Color(red: 48/255, green: 48/255, blue: 48/255) : Color.white)
-                        .frame(height: 50)
-                    
-                    HStack {
-                        Button(action: {
-                            onBack()
-                        }) {
-                            Image(systemName: "chevron.backward")
-                                .font(.title2)
-                                .foregroundStyle(.gray)
-                        }
-                        TextField("insert", text: $testo)
-                            .font(.title2)
-                            .focused($textfieldOpen)
-                            .onSubmit {
-                                onClick(testo)
-                            }
-                    }
-                    .padding()
-                }
-                .padding(EdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10))
-                
-                
-                List(viewModel.suggestions, id: \.self) { suggestion in
-                    VStack(alignment: .leading) {
-                        Text(suggestion.title)
-                            .font(.headline)
-                        Text(suggestion.subtitle)
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
-                    }
-                    .padding(.vertical, 4)
-                    .onTapGesture {
-                        onClick(suggestion.title)
-                    }
-                }
-                .listStyle(PlainListStyle())
-                .cornerRadius(10)
-                .padding([.leading, .trailing], 16)
-                
-                
-                HStack {
-                    Button("Back") {
-                        onBack()
-                    }
-                    .buttonStyle(.bordered)
-                }
-                .padding(.horizontal)
-            }
-            
-            .onAppear(){
-                textfieldOpen = true
-            }
-        //}
-        .scrollDismissesKeyboard(.interactively)
-        .ignoresSafeArea()
-        .padding()
-        .background(colorScheme == .dark ? Color.black : Color.white)
-        .cornerRadius(12)
-        .shadow(radius: 10)
     }
 }
