@@ -177,7 +177,7 @@ class AuthenticationViewModel: ObservableObject {
                     user?.delete { error in
                       if let error = error {
                         // An error happened.
-                          print("Error deleting user from Firebase")
+                          print("Error deleting user from Firebase: \(error.localizedDescription)")
                       } else {
                         // Account deleted.
                           print("User deleted from firebase")

@@ -96,15 +96,10 @@ struct TravelSearchView: View {
                                 
                             }
                             .fullScreenCover(isPresented: $departureTapped ) {
-                                TextFieldSearchModalView(
-                                    testo: $viewModel.departure,
-                                    viewModel: viewModel,
-                                    onBack: {
-                                        departureTapped = false
-                                    }) { selected in
-                                        viewModel.departure = selected
-                                        departureTapped = false
-                                    }
+                                CompleterView(modelContext: modelContext, searchText: viewModel.departure,
+                                              onBack: {
+                                                  departureTapped = false
+                                              })
                             }
                             
                             VStack{
