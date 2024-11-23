@@ -31,6 +31,7 @@ struct CompleterView: View {
                     }
                     TextField("Search City", text: $viewModel.searchText)
                         .font(.title2)
+                        .textInputAutocapitalization(.words)
                         .focused($textfieldOpen)
                         .padding()
                 }

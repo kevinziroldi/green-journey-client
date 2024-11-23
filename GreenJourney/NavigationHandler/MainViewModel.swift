@@ -235,7 +235,7 @@ class MainViewModel: ObservableObject {
             // else, load them
             print("Loading cities")
             
-            if let filePath = Bundle.main.path(forResource: "ds_locode_reduced", ofType: "csv") {
+            if let filePath = Bundle.main.path(forResource: "ds_iata_v4", ofType: "csv") {
                 do {
                     let fileContents = try String(contentsOfFile: filePath, encoding: .utf8)
                     let rows = fileContents.components(separatedBy: "\n")
@@ -257,9 +257,17 @@ class MainViewModel: ObservableObject {
 
                         citiesCompleterDataset.append(cityCompleterDataset)
                     }
-                    
+                    var counter = 0
                     for cityCompleterDataset in citiesCompleterDataset {
                         modelContext.insert(cityCompleterDataset)
+                        counter += 1
+                        if counter.isMultiple(of: 20000) {
+                            do {
+                                try modelContext.save()
+                            } catch {
+                                print ("Error saving cities to dataset, counter: \(counter)")
+                            }
+                        }
                     }
                     do {
                         try modelContext.save()

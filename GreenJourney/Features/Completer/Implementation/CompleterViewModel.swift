@@ -12,10 +12,12 @@ class CompleterViewModel: ObservableObject {
             search()
         }
     }
+    private var continent: String = ""
     
     init(modelContext: ModelContext, searchText: String) {
         self.modelContext = modelContext
         self.searchText = searchText
+        self.continent = findContinent()
         search()
     }
     
@@ -29,16 +31,14 @@ class CompleterViewModel: ObservableObject {
             predicate: #Predicate { cityCompleter in
                 cityCompleter.city.localizedStandardContains(searchText)
             })
-        fetchRequest.fetchLimit = 30
+        fetchRequest.fetchLimit = 40
         
         do {
             let result = try modelContext.fetch(fetchRequest)
             let sortedResults = result.sorted { city1, city2 in
-                    let city1Name = city1.city.lowercased()
-                    let city2Name = city2.city.lowercased()
                     
-                let city1Score = matchScore(for: city1Name, query: searchText)
-                let city2Score = matchScore(for: city2Name, query: searchText)
+                let city1Score = matchScore(for: city1, query: searchText)
+                let city2Score = matchScore(for: city2, query: searchText)
                     
                     // Ordinamento decrescente per punteggio
                     if city1Score != city2Score {
@@ -56,15 +56,46 @@ class CompleterViewModel: ObservableObject {
     
     
     // Funzione che assegna un punteggio di pertinenza
-    private func matchScore(for cityName: String, query: String) -> Int {
-        if cityName == query {
-            return 3 // Matching esatto
-        } else if cityName.hasPrefix(query) {
-            return 2 // Matching per prefisso
-        } else if cityName.contains(query) {
-            return 1 // Matching parziale
-        } else {
-            return 0 // Nessun matching (non necessario se i risultati sono filtrati)
+    private func matchScore(for city: CityCompleterDataset, query: String) -> Int {
+        var score = 0
+        if city.continent == continent {
+            score += 5
         }
+        if city.city == query {
+           score += 8
+        } else {
+            if city.city.hasPrefix(query) {
+                score += 5
+            }
+            else {
+                if city.city.contains(query) {
+                    score += 3
+                }
+            }
+        }
+        return score
+    }
+    
+    private func findContinent() -> String {
+        guard let regionCode = Locale.current.region?.identifier else {
+                return "Europe"
+            }
+            
+            // Costruisci il FetchDescriptor con un Predicate valido
+            var fetchDescriptor = FetchDescriptor<CityCompleterDataset>(
+                predicate: #Predicate<CityCompleterDataset> {
+                    $0.countryCode == regionCode }
+            )
+            fetchDescriptor.fetchLimit = 1
+            
+            do {
+                let continent = try modelContext.fetch(fetchDescriptor).first?.continent ?? "Europe"
+                return continent
+            } catch {
+                // Gestione errori
+                print("Error while finding continent: \(error.localizedDescription)")
+                return ""
+            }
+        
     }
 }
