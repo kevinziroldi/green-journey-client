@@ -12,7 +12,7 @@ struct SignUpView: View {
                     .font(.largeTitle)
                     .padding(.bottom, 32)
                 
-                Image("prova2")
+                Image("loginLogo")
                     .resizable()
                     .padding()
                     .aspectRatio(contentMode: .fit)

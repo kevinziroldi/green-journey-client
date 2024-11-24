@@ -68,8 +68,6 @@ struct MainView: View {
                     case .LoginView:
                         LoginView(modelContext: modelContext)
                             .transition(.opacity.animation(.easeInOut(duration: 0.2)))
-                    default:
-                        Text("unknown destination")
                     }
                 }
             }

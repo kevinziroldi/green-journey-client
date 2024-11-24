@@ -27,10 +27,6 @@ class CompleterViewModel: ObservableObject {
             return
         }
         
-        print("")
-        print("")
-        print("")
-        print("")
         var fetchRequest = FetchDescriptor<CityCompleterDataset>(
             predicate: #Predicate { cityCompleter in
                 cityCompleter.city.localizedStandardContains(searchText)
@@ -69,7 +65,6 @@ class CompleterViewModel: ObservableObject {
         let similarityScore = stringScore(city.city, query)
         score += (similarityScore * 100)
         
-        print("City: \(city.city)   Score: \(score)")
         return score
     }
     

@@ -11,15 +11,17 @@ struct LoginView: View {
     }
 
     var body: some View {
+        VStack{
+            Text("Login")
+                .font(.largeTitle)
+                .padding(.bottom, 32)
+            Image("loginLogo")
+                .resizable()
+                .padding()
+                .aspectRatio(contentMode: .fit)
+        }
         ScrollView {
             VStack {
-                Text("Login")
-                    .font(.largeTitle)
-                    .padding(.bottom, 32)
-                Image("prova2")
-                    .resizable()
-                    .padding()
-                    .aspectRatio(contentMode: .fit)
                 Spacer()
                 
                 TextField("Email", text: $viewModel.email)
@@ -60,7 +62,7 @@ struct LoginView: View {
                             .padding()
                             .frame(maxWidth: .infinity)
                             .background(Color.blue)
-                            .cornerRadius(8)
+                            .cornerRadius(30)
                     }
                     .fullScreenCover(isPresented: $viewModel.isEmailVerificationActive) {
                         EmailVerificationView(viewModel: viewModel)
@@ -81,25 +83,37 @@ struct LoginView: View {
                     }
                     .padding(.horizontal, 16)
                     
-                    Button (action: {Task{await viewModel.signInWithGoogle()}}){
-                        Image("googleLogo")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(height: 40)
-                            .padding(.trailing, 8)
-                        Text("Sign in with Google")
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                    }
-                    .buttonStyle(.bordered)
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 30)
+                            .stroke(Color.gray, lineWidth: 1)
+                            .fill(Color.white)
+                            .shadow(radius: 1)
+                            
+                            
+                        Button(action: {
+                            Task{await viewModel.signInWithGoogle()}
+                                }) {
+                                    HStack(spacing: 10) {
+                                        Image("googleLogo")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 60)
+                                            .safeAreaPadding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 0))
+                                        Spacer()
+                                        Text("Sign in with Google")
+                                            .foregroundStyle(.black)
+                                        Spacer()
+                                        Spacer()
+                                        Spacer()
+                                    }
+                                    .padding(EdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 0))
+                                    
+                                }
+                        }
+                    
                     
                     Spacer()
-                    Button ("Sign up") {
-                        isNavigationActive = true
-                    }
-                    .fullScreenCover(isPresented: $isNavigationActive) {
-                        SignUpView(viewModel: viewModel)
-                    }
+                    
                 }
             }
             .padding()
@@ -109,5 +123,12 @@ struct LoginView: View {
             .navigationBarHidden(true)
         }
         .scrollDismissesKeyboard(.interactively)
+        
+        Button ("Sign up") {
+            isNavigationActive = true
+        }
+        .fullScreenCover(isPresented: $isNavigationActive) {
+            SignUpView(viewModel: viewModel)
+        }
     }
 }
