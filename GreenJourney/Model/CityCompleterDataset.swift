@@ -16,5 +16,13 @@ class CityCompleterDataset {
         self.countryCode = countryCode
         self.continent = continent
     }
+    
+    init() {
+        self.city = ""
+        self.countryName = ""
+        self.continent = ""
+        self.countryCode = ""
+        self.locode = ""
+    }
 }
   

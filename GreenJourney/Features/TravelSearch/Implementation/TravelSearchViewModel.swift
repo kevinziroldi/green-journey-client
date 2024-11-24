@@ -15,8 +15,8 @@ struct CityCountry: Hashable {
 
 class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegate {
     var modelContext: ModelContext
-    @Published var departure: CityCompleterDataset = CityCompleterDataset(city: "", countryName: "", continent: "", locode: "", countryCode: "")
-    @Published var arrival: CityCompleterDataset = CityCompleterDataset(city: "", countryName: "", continent: "", locode: "", countryCode: "")
+    @Published var departure: CityCompleterDataset = CityCompleterDataset()
+    @Published var arrival: CityCompleterDataset = CityCompleterDataset()
     var users: [User] = []
     
     @Published var datePicked: Date = Date.now
@@ -36,8 +36,7 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
     }
     
     func computeRoutes () {
-        //REAL INTERACTION
-        /*self.outwardOptions = []
+        self.outwardOptions = []
         self.returnOptions = []
         self.selectedOption = []
         let isOutward = true
@@ -52,9 +51,18 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
         let formattedTime = timeFormatter.string(from: datePicked)
         let formattedTimeReturn = timeFormatter.string(from: dateReturnPicked)
         let baseURL = NetworkManager.shared.getBaseURL()
-        guard let url = URL(string:"\(baseURL)/travels/fromto?from=\(departure)&to=\(arrival)&from_latitude=\(departureCoordinates.latitude)&from_longitude=\(departureCoordinates.longitude)&to_latitude=\(arrivalCoordinates.latitude)&to_longitude=\(arrivalCoordinates.longitude)&date=\(formattedDate)&time=\(formattedTime)&is_outward=\(isOutward)") else {
+        guard let url = URL(string:"\(baseURL)/travels/search?iata_departure=\(departure.locode)&country_code_departure=\(departure.countryCode)&iata_destination=\(arrival.locode)&country_code_destination=\(arrival.countryCode)&date=\(formattedDate)&time=\(formattedTime)&is_outward=\(isOutward)") else {
             return
         }
+        
+        /*iata_departure=\(iata_departure)&
+         country_code_departure=\(country_code_departure)&
+         iata_destination=\(iata_destination)&
+         country_code_destination=\(country_code_destination)&
+         date=\(formattedDate)&
+         time=\(formattedTime)&
+         is_outward=(true/false)
+*/
         print("URL:  \(url)")
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
@@ -86,7 +94,7 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
             })
             .store(in: &cancellables)
         if (!oneWay) {
-            guard let returnUrl = URL(string:"\(baseURL)/travels/fromto?from=\(arrival)&to=\(departure)&from_latitude=\(arrivalCoordinates.latitude)&from_longitude=\(arrivalCoordinates.longitude)&to_latitude=\(departureCoordinates.latitude)&to_longitude=\(departureCoordinates.longitude)&date=\(formattedDateReturn)&time=\(formattedTimeReturn)&is_outward=\(!isOutward)") else {
+            guard let returnUrl = URL(string:"\(baseURL)/travels/search?iata_departure=\(arrival.locode)&country_code_departure=\(arrival.countryCode)&iata_destination=\(departure.locode)&country_code_destination=\(departure.countryCode)&date=\(formattedDateReturn)&time=\(formattedTimeReturn)&is_outward=\(!isOutward)") else {
                 return
             }
             URLSession.shared.dataTaskPublisher(for: returnUrl)
@@ -116,7 +124,7 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
                 })
                 .store(in: &cancellables)
         }
-         */
+         
     }
     
     func saveTravel() {
@@ -187,8 +195,8 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
                 print("travel added to SwiftData")
             })
             .store(in: &cancellables)
-        
-        
+        departure = CityCompleterDataset()
+        arrival = CityCompleterDataset()
     }
    
     
@@ -240,7 +248,7 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
     
     func getOptionDeparture (_ travelOption: [Segment]) -> String {
         if let firstSegment = travelOption.first {
-            return firstSegment.departureCity
+            return firstSegment.segmentDescription
         }
         else {
             return ""
@@ -249,7 +257,7 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
     
     func getOptionDestination (_ travelOption: [Segment]) -> String {
         if let lastSegment = travelOption.last {
-            return lastSegment.destinationCity
+            return lastSegment.segmentDescription
         }
         else {
             return ""

@@ -242,7 +242,7 @@ class MainViewModel: ObservableObject {
             // else, load them
             print("Loading cities")
             
-            if let filePath = Bundle.main.path(forResource: "ds_iata_v4", ofType: "csv") {
+            if let filePath = Bundle.main.path(forResource: "ds_iata_v5", ofType: "csv") {
                 do {
                     let fileContents = try String(contentsOfFile: filePath, encoding: .utf8)
                     let rows = fileContents.components(separatedBy: "\n")
@@ -255,7 +255,7 @@ class MainViewModel: ObservableObject {
                         
                         let locode = rowValues[0]
                         let city = rowValues[1]
-                        let continent = rowValues[6]
+                        let continent = rowValues[4]
                         let countryCode = rowValues[3]
                         let countryName = rowValues[2]
 

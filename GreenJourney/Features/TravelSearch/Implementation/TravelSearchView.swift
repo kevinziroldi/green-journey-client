@@ -232,7 +232,7 @@ struct TravelSearchView: View {
                     )
                 }
             }
-            .animation(.default, value: dateTapped || dateReturnTapped)
+            //.animation(.default, value: dateTapped || dateReturnTapped)
         }
         else {
             LoginView(modelContext: modelContext)
