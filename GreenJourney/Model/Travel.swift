@@ -5,6 +5,7 @@ import SwiftData
 class Travel: Codable {
     var travelID: Int?
     var CO2Compensated: Float64 = 0
+    var confirmed = false
     var userID: Int
  
     init (travelID: Int? = nil, userID: Int) {

@@ -6,10 +6,6 @@ class Segment: Codable, Identifiable {
     var segmentID: Int
     var departureID: Int
     var destinationID: Int
-    var departureCity: String
-    var departureCountry: String
-    var destinationCity: String
-    var destinationCountry: String
     var date: Date
     var duration: Int
     var vehicle: Vehicle
@@ -23,14 +19,10 @@ class Segment: Codable, Identifiable {
     
     var id: UUID = UUID()
    
-    init(segmentID: Int, departureID: Int, destinationID: Int, departureCity: String, departureCountry: String,  destinationCity: String, destinationCountry: String, date: Date, duration: Int, vehicle: Vehicle, segmentDescription: String, price: Float64, co2Emitted: Float64, distance: Float64, numSegment: Int, isOutward: Bool, travelID: Int) {
+    init(segmentID: Int, departureID: Int, destinationID: Int, date: Date, duration: Int, vehicle: Vehicle, segmentDescription: String, price: Float64, co2Emitted: Float64, distance: Float64, numSegment: Int, isOutward: Bool, travelID: Int) {
         self.segmentID = segmentID
         self.departureID = departureID
         self.destinationID = destinationID
-        self.departureCity = departureCity
-        self.departureCountry = departureCountry
-        self.destinationCity = destinationCity
-        self.destinationCountry = destinationCountry
         self.date = date
         self.duration = duration
         self.vehicle = vehicle
@@ -69,10 +61,6 @@ class Segment: Codable, Identifiable {
         self.segmentID = try container.decode(Int.self, forKey: .segmentID)
         self.departureID = try container.decode(Int.self, forKey: .departureID)
         self.destinationID = try container.decode(Int.self, forKey: .destinationID)
-        self.departureCity = try container.decode(String.self, forKey: .departureCity)
-        self.departureCountry = try container.decode(String.self, forKey: .departureCountry)
-        self.destinationCity = try container.decode(String.self, forKey: .destinationCity)
-        self.destinationCountry = try container.decode(String.self, forKey: .destinationCountry)
         self.date = try container.decode(Date.self, forKey: .date)
         self.duration = try container.decode(Int.self, forKey: .duration)
         self.vehicle = try container.decode(Vehicle.self, forKey: .vehicle)
@@ -91,10 +79,6 @@ class Segment: Codable, Identifiable {
         try container.encode(segmentID, forKey: .segmentID)
         try container.encode(departureID, forKey: .departureID)
         try container.encode(destinationID, forKey: .destinationID)
-        try container.encode(departureCity, forKey: .departureCity)
-        try container.encode(departureCountry, forKey: .departureCountry)
-        try container.encode(destinationCity, forKey: .destinationCity)
-        try container.encode(destinationCountry, forKey: .destinationCountry)
         try container.encode(date, forKey: .date)
         try container.encode(duration, forKey: .duration)
         try container.encode(vehicle, forKey: .vehicle)

@@ -4,8 +4,10 @@ import SwiftData
 @Model
 class CityFeatures {
     var id: Int64
-    var city: String
-    var country: String
+    var iata: String
+    var countryCode: String
+    var cityName: String
+    var countryName: String
     var population: Double
     var capital: Bool
     var averageTemperature: Double
@@ -19,10 +21,12 @@ class CityFeatures {
     var internetAccess: Double
     var outdoors: Double
     
-    init(id: Int64, city: String, country: String, population: Double, capital: Bool, averageTemperature: Double, continent: String, livingCost: Double, travelConnectivity: Double, safety: Double, healthcare: Double, education: Double, economy: Double, internetAccess: Double, outdoors: Double) {
+    init(id: Int64, iata: String, countryCode: String, cityName: String, countryName: String, population: Double, capital: Bool, averageTemperature: Double, continent: String, livingCost: Double, travelConnectivity: Double, safety: Double, healthcare: Double, education: Double, economy: Double, internetAccess: Double, outdoors: Double) {
         self.id = id
-        self.city = city
-        self.country = country
+        self.iata = iata
+        self.countryCode = countryCode
+        self.cityName = cityName
+        self.countryName = countryName
         self.population = population
         self.capital = capital
         self.averageTemperature = averageTemperature
