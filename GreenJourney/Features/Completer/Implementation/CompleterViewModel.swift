@@ -27,6 +27,10 @@ class CompleterViewModel: ObservableObject {
             return
         }
         
+        print("")
+        print("")
+        print("")
+        print("")
         var fetchRequest = FetchDescriptor<CityCompleterDataset>(
             predicate: #Predicate { cityCompleter in
                 cityCompleter.city.localizedStandardContains(searchText)
@@ -56,23 +60,16 @@ class CompleterViewModel: ObservableObject {
     
     
     // Funzione che assegna un punteggio di pertinenza
-    private func matchScore(for city: CityCompleterDataset, query: String) -> Int {
-        var score = 0
+    private func matchScore(for city: CityCompleterDataset, query: String) -> Double {
+        var score = 0.0
         if city.continent == continent {
-            score += 5
+            score += 25
         }
-        if city.city == query {
-           score += 8
-        } else {
-            if city.city.hasPrefix(query) {
-                score += 5
-            }
-            else {
-                if city.city.contains(query) {
-                    score += 3
-                }
-            }
-        }
+
+        let similarityScore = stringScore(city.city, query)
+        score += (similarityScore * 100)
+        
+        print("City: \(city.city)   Score: \(score)")
         return score
     }
     
@@ -98,4 +95,54 @@ class CompleterViewModel: ObservableObject {
             }
         
     }
+    
+    private func stringScore(_ source: String, _ query: String) -> Double {
+        let lowerSource = source.lowercased()
+        let lowerQuery = query.lowercased()
+        
+        // Punteggio massimo se è un match esatto
+        if lowerSource == lowerQuery {
+            return 1.0
+        }
+        
+        // Bonus alto per corrispondenza del prefisso
+        if lowerSource.hasPrefix(lowerQuery) {
+            return 0.8 + (Double(lowerQuery.count) / Double(lowerSource.count)) * 0.2
+        }
+        
+        // Bonus medio per substring match
+        if lowerSource.contains(lowerQuery) {
+            return 0.5 + (Double(lowerQuery.count) / Double(lowerSource.count)) * 0.5
+        }
+        
+        // Penalità basata sulla distanza tra i caratteri
+        let distance = levenshteinDistance(lowerSource, lowerQuery)
+        let maxLen = max(lowerSource.count, lowerQuery.count)
+        return 1.0 - (Double(distance) / Double(maxLen))
+    }
+
+    private func levenshteinDistance(_ s1: String, _ s2: String) -> Int {
+        let a = Array(s1)
+        let b = Array(s2)
+        let m = a.count
+        let n = b.count
+        var matrix = [[Int]](repeating: [Int](repeating: 0, count: n + 1), count: m + 1)
+        
+        for i in 0...m {
+            matrix[i][0] = i
+        }
+        for j in 0...n {
+            matrix[0][j] = j
+        }
+        
+        for i in 1...m {
+            for j in 1...n {
+                let cost = a[i - 1] == b[j - 1] ? 0 : 1
+                matrix[i][j] = min(matrix[i - 1][j] + 1, min(matrix[i][j - 1] + 1, matrix[i - 1][j - 1] + cost))
+            }
+        }
+        
+        return matrix[m][n]
+    }
+
 }
