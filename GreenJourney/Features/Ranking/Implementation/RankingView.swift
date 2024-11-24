@@ -20,6 +20,7 @@ struct RankingView: View {
                         .font(.title)
                 }
             }
+            .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
             
             Spacer()
             

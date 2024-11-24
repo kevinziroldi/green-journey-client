@@ -30,6 +30,7 @@ struct MyTravelsView: View {
                         .font(.title)
                 }
             }
+            .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
             
             Picker("", selection: $viewModel.showCompleted) {
                 Text("Completed").tag(true)

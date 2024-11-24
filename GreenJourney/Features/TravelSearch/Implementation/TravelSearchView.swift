@@ -35,6 +35,7 @@ struct TravelSearchView: View {
                                 .font(.title)
                         }
                     }
+                    .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
                     
                     Picker("", selection: $viewModel.oneWay) {
                         Text("One way").tag(true)
@@ -149,6 +150,7 @@ struct TravelSearchView: View {
                             }
                         }
                     }
+                    .padding()
                     HStack {
                         Spacer()
                         VStack {
@@ -198,7 +200,6 @@ struct TravelSearchView: View {
                         })
                     
                 }
-                .padding()
                 .blur(radius: (dateTapped || dateReturnTapped) ? 2 : 0) // Sfoca tutto il contenuto sottostante
                 
                 // Modale per il DatePicker "Outward date"
