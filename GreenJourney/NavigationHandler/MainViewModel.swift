@@ -132,7 +132,7 @@ class MainViewModel: ObservableObject {
             
             // else, load them
             print("Loading cities")
-            
+        
             if let filePath = Bundle.main.path(forResource: "city_ds", ofType: "csv") {
                 do {
                     let fileContents = try String(contentsOfFile: filePath, encoding: .utf8)
@@ -145,31 +145,38 @@ class MainViewModel: ObservableObject {
                         let rowValues = row.components(separatedBy: ",")
                         
                         // extracr row values
-                        guard rowValues.count == 15,
-                            let population = Double(rowValues[2]),
-                            let averageTemperature = Double(rowValues[4]),
-                            let livingCost = Double(rowValues[6]),
-                            let travelConnectivity = Double(rowValues[7]),
-                            let safety = Double(rowValues[8]),
-                            let healthcare = Double(rowValues[9]),
-                            let education = Double(rowValues[10]),
-                            let economy = Double(rowValues[11]),
-                            let internetAccess = Double(rowValues[12]),
-                            let outdoors = Double(rowValues[13]),
-                            let id = Int64(rowValues[14]) else {
+                        guard rowValues.count == 17,
+                            let id = Int64(rowValues[0]),
+                            let population = Double(rowValues[5]),
+                            let averageTemperature = Double(rowValues[7]),
+                            let livingCost = Double(rowValues[9]),
+                            let travelConnectivity = Double(rowValues[10]),
+                            let safety = Double(rowValues[11]),
+                            let healthcare = Double(rowValues[12]),
+                            let education = Double(rowValues[13]),
+                            let economy = Double(rowValues[14]),
+                            let internetAccess = Double(rowValues[15]),
+                            let outdoors = Double(rowValues[16])
+                             else {
                             print("Error parsing row \(rowValues[0])")
                             continue
                         }
-                        let city = rowValues[0]
-                        let country = rowValues[1]
-                        let capital = Bool(Int(rowValues[3]) ?? 0)
-                        let continent = rowValues[5]
+                        
+                        let iata = rowValues[1]
+                        let countryCode = rowValues[2]
+                        let cityName = rowValues[3]
+                        let countryName = rowValues[4]
+                        let capital = Bool(Int(rowValues[6]) ?? 0)
+                        let continent = rowValues[8]
+                        
 
                         // create cityDataset object
-                        let cityDataset = CityFeatures(
+                        let cityFeatures = CityFeatures(
                             id: id,
-                            city: city,
-                            country: country,
+                            iata: iata,
+                            countryCode: countryCode,
+                            cityName: cityName,
+                            countryName: countryName,
                             population: population,
                             capital: capital,
                             averageTemperature: averageTemperature,
@@ -184,12 +191,12 @@ class MainViewModel: ObservableObject {
                             outdoors: outdoors
                         )
 
-                        citiesDataset.append(cityDataset)
+                        citiesDataset.append(cityFeatures)
                     }
                     
                     for cityDataset in citiesDataset {
                         modelContext.insert(cityDataset)
-                        print(cityDataset.city)
+                        print(cityDataset.cityName)
                     }
                     do {
                         try modelContext.save()
