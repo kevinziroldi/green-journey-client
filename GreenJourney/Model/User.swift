@@ -13,9 +13,11 @@ class User: Codable {
     var streetName: String?
     var houseNumber: Int?
     var city: String?
+    var scoreShortDistance: Float64
+    var scoreLongDistance: Float64
     
-    init(userID: Int? = nil, firstName: String, lastName: String, birthDate: Date? = nil, gender: String? = nil, firebaseUID: String, zipCode: Int? = nil, streetName: String? = nil, houseNumber: Int? = nil, city: String? = nil) {
-        self.firebaseUID = firebaseUID
+    init(userID: Int? = nil, firstName: String, lastName: String, birthDate: Date? = nil, gender: String? = nil, firebaseUID: String, zipCode: Int? = nil, streetName: String? = nil, houseNumber: Int? = nil, city: String? = nil, scoreShortDistance: Float64, scoreLongDistance: Float64) {
+        self.userID = userID
         self.firstName = firstName
         self.lastName = lastName
         self.birthDate = birthDate
@@ -25,7 +27,8 @@ class User: Codable {
         self.streetName = streetName
         self.houseNumber = houseNumber
         self.city = city
-        self.userID = userID
+        self.scoreShortDistance = scoreShortDistance
+        self.scoreLongDistance = scoreLongDistance
     }
     
     enum CodingKeys: String, CodingKey {
@@ -39,6 +42,8 @@ class User: Codable {
         case streetName = "street_name"
         case houseNumber = "house_number"
         case city = "city"
+        case scoreShortDistance = "score_short_distance"
+        case scoreLongDistance = "score_long_distance"
     }
     
     required init(from decoder: Decoder) throws {
@@ -59,6 +64,8 @@ class User: Codable {
         self.streetName = try container.decodeIfPresent(String.self, forKey: .streetName)
         self.houseNumber = try container.decodeIfPresent(Int.self, forKey: .houseNumber)
         self.city = try container.decodeIfPresent(String.self, forKey: .city)
+        self.scoreShortDistance = try container.decode(Float64.self, forKey: .scoreShortDistance)
+        self.scoreLongDistance = try container.decode(Float64.self, forKey: .scoreLongDistance)
     }
     
     func encode(to encoder: Encoder) throws {
@@ -78,5 +85,7 @@ class User: Codable {
         try container.encode(streetName, forKey: .streetName)
         try container.encode(houseNumber, forKey: .houseNumber)
         try container.encode(city, forKey: .city)
+        try container.encode(scoreShortDistance, forKey: .scoreShortDistance)
+        try container.encode(scoreLongDistance, forKey: .scoreLongDistance)
     }
 }
