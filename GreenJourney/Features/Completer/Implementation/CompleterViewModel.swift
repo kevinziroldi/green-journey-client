@@ -13,11 +13,13 @@ class CompleterViewModel: ObservableObject {
         }
     }
     private var continent: String = ""
+    private var country: String = ""
     
     init(modelContext: ModelContext, searchText: String) {
         self.modelContext = modelContext
         self.searchText = searchText
         self.continent = findContinent()
+        self.country = findCountry()
         search()
     }
     
@@ -61,6 +63,9 @@ class CompleterViewModel: ObservableObject {
         if city.continent == continent {
             score += 25
         }
+        if city.countryCode == country {
+            score += 5
+        }
 
         let similarityScore = stringScore(city.city, query)
         score += (similarityScore * 100)
@@ -91,6 +96,12 @@ class CompleterViewModel: ObservableObject {
         
     }
     
+    private func findCountry() -> String {
+        guard let regionCode = Locale.current.region?.identifier else {
+                return "Europe"
+            }
+        return regionCode
+    }
     private func stringScore(_ source: String, _ query: String) -> Double {
         let lowerSource = source.lowercased()
         let lowerQuery = query.lowercased()
