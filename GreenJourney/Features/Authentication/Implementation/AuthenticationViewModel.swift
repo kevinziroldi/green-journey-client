@@ -99,7 +99,17 @@ class AuthenticationViewModel: ObservableObject {
                     if let result = result {
                         // if login is ok
                         self.isEmailVerificationActive = true
-                        self.saveUserToServer(uid: result.user.uid)
+                        
+                        result.user.getIDToken { token, error in
+                            if let error = error {
+                                print("Error getting token: \(error.localizedDescription)")
+                            } else if let token = token {
+                                print("Token retrieved: \(token)")
+                                // Puoi utilizzare il token per fare chiamate al server
+                                self.saveUserToServer(firebaseUID: result.user.uid, firebaseToken: token)
+                            }
+                        }
+                        
                         Auth.auth().currentUser?.sendEmailVerification { error in
                             if let error = error {
                                 print("error while sending email verification: " + error.localizedDescription)
@@ -144,14 +154,14 @@ class AuthenticationViewModel: ObservableObject {
         })
     }
     
-    private func saveUserToServer(uid: String) {
+    private func saveUserToServer(firebaseUID: String, firebaseToken: String) {
         let baseURL = NetworkManager.shared.getBaseURL()
         guard let url = URL(string: "\(baseURL)/users/user") else {
             print("Invalid URL for posting user data to DB")
             return
         }
         
-        let user = User(firstName: self.firstName, lastName: self.lastName, firebaseUID: uid, scoreShortDistance: 0, scoreLongDistance: 0)
+        let user = User(firstName: self.firstName, lastName: self.lastName, firebaseUID: firebaseUID, scoreShortDistance: 0, scoreLongDistance: 0)
         // JSON encoding
         guard let body = try? JSONEncoder().encode(user) else {
             print("error in encoding user data")
@@ -164,8 +174,8 @@ class AuthenticationViewModel: ObservableObject {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(firebaseToken)", forHTTPHeaderField: "Authorization")
         request.httpBody = body
-        
        
         URLSession.shared.dataTaskPublisher(for: request)
             .retry(2)
@@ -292,7 +302,15 @@ extension AuthenticationViewModel {
                         let parts = fullName?.components(separatedBy: " ")
                         self.firstName = parts![0]
                         self.lastName = parts![1]
-                        self.saveUserToServer(uid: firebaseUser.uid)
+                        
+                        firebaseUser.getIDToken { token, error in
+                            if let error = error {
+                                self.errorMessage = "Failed to fetch token: \(error.localizedDescription)"
+                            } else if let token = token {
+                                // Passa il token alla funzione
+                                self.saveUserToServer(firebaseUID: firebaseUser.uid, firebaseToken: token)
+                            }
+                        }
                     }
                     // in any case, save to swift data
                     firebaseUser.getIDToken { token, error in
