@@ -40,8 +40,14 @@ class AuthenticationViewModel: ObservableObject {
             } else {
                 if let firebaseUser = result?.user {
                     if firebaseUser.isEmailVerified == true {
-                        // Login riuscito, salva l'utente in SwiftData
-                        strongSelf.getUserFromServer(firebaseUID: firebaseUser.uid)
+                        firebaseUser.getIDToken { token, error in
+                        if let error = error {
+                            strongSelf.errorMessage = "Failed to fetch token: \(error.localizedDescription)"
+                        } else if let token = token {
+                            strongSelf.getUserFromServer(firebaseToken: token)
+                        }
+                    }
+                        
                     }
                     else {
                         strongSelf.isEmailVerificationActive = true
@@ -117,8 +123,14 @@ class AuthenticationViewModel: ObservableObject {
                 self.errorMessage = nil
                 
                 // save user to swift data
-                if let firebaseUID = Auth.auth().currentUser?.uid {
-                    self.getUserFromServer(firebaseUID: firebaseUID)
+                if let firebaseUser = Auth.auth().currentUser {
+                    firebaseUser.getIDToken { token, error in
+                        if let error = error {
+                            self.errorMessage = "Failed to fetch token: \(error.localizedDescription)"
+                        } else if let token = token {
+                            self.getUserFromServer(firebaseToken: token)
+                        }
+                    }
                 }else {
                     print("Missing firebase uid")
                     return
@@ -134,7 +146,7 @@ class AuthenticationViewModel: ObservableObject {
     
     private func saveUserToServer(uid: String) {
         let baseURL = NetworkManager.shared.getBaseURL()
-        guard let url = URL(string: "\(baseURL)/users") else {
+        guard let url = URL(string: "\(baseURL)/users/user") else {
             print("Invalid URL for posting user data to DB")
             return
         }
@@ -189,16 +201,21 @@ class AuthenticationViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    private func getUserFromServer(firebaseUID: String) {
+    private func getUserFromServer(firebaseToken: String) {
         let baseURL = NetworkManager.shared.getBaseURL()
-        guard let url = URL(string:"\(baseURL)/users?uid=\(firebaseUID)") else {
+        guard let url = URL(string:"\(baseURL)/users/user") else {
             print("Invalid URL used to retrieve user from DB")
             return
         }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(firebaseToken)", forHTTPHeaderField: "Authorization")
+        
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         
-        URLSession.shared.dataTaskPublisher(for: url)
+        URLSession.shared.dataTaskPublisher(for: request)
             .retry(2)
             .tryMap {
                 result -> Data in
@@ -278,7 +295,14 @@ extension AuthenticationViewModel {
                         self.saveUserToServer(uid: firebaseUser.uid)
                     }
                     // in any case, save to swift data
-                    self.getUserFromServer(firebaseUID: firebaseUser.uid)
+                    firebaseUser.getIDToken { token, error in
+                        if let error = error {
+                            self.errorMessage = "Failed to fetch token: \(error.localizedDescription)"
+                        } else if let token = token {
+                            // Passa il token alla funzione
+                            self.getUserFromServer(firebaseToken: token)
+                        }
+                    }
                 }
             }
             
