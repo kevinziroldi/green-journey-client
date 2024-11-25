@@ -57,7 +57,6 @@ struct OutwardOptionsView: View {
                 .progressViewStyle(CircularProgressViewStyle())
                 .scaleEffect(1.5)
                 .padding()
-                .border(.black)
             Spacer()
             Spacer()
             Spacer()

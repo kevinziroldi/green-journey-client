@@ -107,7 +107,9 @@ class UserPreferencesViewModel: ObservableObject {
                     zipCode: zipCodeInt,
                     streetName: streetNameField,
                     houseNumber: houseNumberInt,
-                    city: cityField
+                    city: cityField,
+                    scoreShortDistance: user.scoreShortDistance,
+                    scoreLongDistance: user.scoreLongDistance
                 )
                 
                 // JSON encoding

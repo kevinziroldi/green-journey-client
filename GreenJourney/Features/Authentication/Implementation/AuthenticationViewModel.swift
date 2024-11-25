@@ -139,7 +139,7 @@ class AuthenticationViewModel: ObservableObject {
             return
         }
         
-        let user = User(firstName: self.firstName, lastName: self.lastName, firebaseUID: uid)
+        let user = User(firstName: self.firstName, lastName: self.lastName, firebaseUID: uid, scoreShortDistance: 0, scoreLongDistance: 0)
         // JSON encoding
         guard let body = try? JSONEncoder().encode(user) else {
             print("error in encoding user data")

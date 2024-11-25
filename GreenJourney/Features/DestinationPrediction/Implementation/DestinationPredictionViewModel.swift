@@ -58,8 +58,8 @@ class DestinationPredictionViewModel: ObservableObject {
             // get cities in the dataset for visited cities (destination)
             for cityCountry in visitedCities {
                 for cityDS in citiesDS {
-                    if cityCountry.city == cityDS.city &&
-                        cityCountry.country == cityDS.country {
+                    if cityCountry.city == cityDS.cityName &&
+                        cityCountry.country == cityDS.countryName {
                         populationValues.append(cityDS.population)
                         capitalValues.append(cityDS.capital)
                         averageTemperatureValues.append(cityDS.averageTemperature)
@@ -118,7 +118,7 @@ class DestinationPredictionViewModel: ObservableObject {
             // if all visited, return the first visited one (in time)
             for cityId in citiesIds {
                 if let cityDS = citiesDS.first(where: { $0.id == cityId }) {
-                    let cityCountrySearch = CityCountry(city: cityDS.city, country: cityDS.country)
+                    let cityCountrySearch = CityCountry(city: cityDS.cityName, country: cityDS.countryName)
                     if !visitedCities.contains(cityCountrySearch) {
                         self.city = cityCountrySearch.city
                         
@@ -133,7 +133,7 @@ class DestinationPredictionViewModel: ObservableObject {
             // else return the first one
             if let cityId = citiesIds.first {
                 if let firstCity = citiesDS.first(where: { $0.id == cityId }) {
-                    self.city = firstCity.city
+                    self.city = firstCity.cityName
                     
                     // TODO set also country !!!
                     

@@ -55,14 +55,6 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
             return
         }
         
-        /*iata_departure=\(iata_departure)&
-         country_code_departure=\(country_code_departure)&
-         iata_destination=\(iata_destination)&
-         country_code_destination=\(country_code_destination)&
-         date=\(formattedDate)&
-         time=\(formattedTime)&
-         is_outward=(true/false)
-*/
         print("URL:  \(url)")
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
@@ -248,7 +240,7 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
     
     func getOptionDeparture (_ travelOption: [Segment]) -> String {
         if let firstSegment = travelOption.first {
-            return firstSegment.segmentDescription
+            return firstSegment.departureCity
         }
         else {
             return ""
@@ -257,7 +249,7 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
     
     func getOptionDestination (_ travelOption: [Segment]) -> String {
         if let lastSegment = travelOption.last {
-            return lastSegment.segmentDescription
+            return lastSegment.destinationCity
         }
         else {
             return ""

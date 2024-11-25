@@ -29,7 +29,6 @@ struct TravelSearchView: View {
                         
                         Button(action: {
                             navigationPath.append(NavigationDestination.UserPreferencesView)
-                            print(navigationPath)
                         }) {
                             Image(systemName: "person")
                                 .font(.title)
@@ -180,7 +179,8 @@ struct TravelSearchView: View {
                     
                     Spacer()
                     Button(action: {
-                            navigationPath.append(NavigationDestination.TravelOptionsView)
+                        viewModel.computeRoutes()
+                        navigationPath.append(NavigationDestination.TravelOptionsView)
                         }) {
                         Text("Search")
                             .font(.title3)
