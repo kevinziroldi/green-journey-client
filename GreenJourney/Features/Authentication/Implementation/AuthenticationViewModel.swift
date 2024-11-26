@@ -125,7 +125,7 @@ class AuthenticationViewModel: ObservableObject {
     func verifyEmail() {
         Auth.auth().currentUser?.reload(completion: { (error) in
             if let error = error {
-                print("Errore nel ricaricare l'utente: \(error.localizedDescription)")
+                print("Error reloading user: \(error.localizedDescription)")
                 return
             }
             if Auth.auth().currentUser?.isEmailVerified == true {

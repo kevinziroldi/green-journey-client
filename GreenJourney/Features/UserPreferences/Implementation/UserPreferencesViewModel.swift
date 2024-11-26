@@ -1,6 +1,7 @@
 import Combine
 import SwiftData
 import SwiftUI
+import FirebaseAuth
 
 enum Gender: String, CaseIterable {
     case male = "male"
@@ -40,7 +41,7 @@ class UserPreferencesViewModel: ObservableObject {
     @Published var zipCodeField: Int?
     @Published var hasModified: Bool = false
     @Published var initializationPhase: Bool = true
-        
+    
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
         
@@ -82,7 +83,7 @@ class UserPreferencesViewModel: ObservableObject {
                 let userID = user.userID!
                 
                 let baseURL = NetworkManager.shared.getBaseURL()
-                guard let url = URL(string: "\(baseURL)/users/\(userID)") else {
+                guard let url = URL(string: "\(baseURL)/users/") else {
                     print("Invalid URL for posting user data to DB")
                     return
                 }
@@ -118,42 +119,64 @@ class UserPreferencesViewModel: ObservableObject {
                     return
                 }
                 
-                // PUT request
-                var request = URLRequest(url: url)
-                request.httpMethod = "PUT"
-                request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-                request.httpBody = body
                 
-                let decoder = JSONDecoder()
-                decoder.dateDecodingStrategy = .iso8601
-            
-                URLSession.shared.dataTaskPublisher(for: request)
-                    .retry(2)
-                    .tryMap {
-                        result -> Data in
-                        guard let httpResponse = result.response as? HTTPURLResponse,
-                              (200...299).contains(httpResponse.statusCode) else {
-                            throw URLError(.badServerResponse)
+                guard let firebaseUser = Auth.auth().currentUser else {
+                    print("no current user in firebase")
+                    return
+                }
+                firebaseUser.getIDToken { token, error in
+                    if let error = error {
+                        print("error retrieveing token: \(error.localizedDescription)")
+                        return
+                    } else if let token = token {
+                        let firebaseToken = token
+                        
+                        if firebaseToken != modifiedUser.firebaseUID {
+                            print("modified user has different firebase token")
+                            return
                         }
-                        return result.data
+                        // PUT request
+                        var request = URLRequest(url: url)
+                        request.httpMethod = "PUT"
+                        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                        request.setValue("Bearer \(firebaseToken)", forHTTPHeaderField: "Authorization")
+                        request.httpBody = body
+                        
+                        let decoder = JSONDecoder()
+                        decoder.dateDecodingStrategy = .iso8601
+                        
+                        URLSession.shared.dataTaskPublisher(for: request)
+                            .retry(2)
+                            .tryMap {
+                                result -> Data in
+                                guard let httpResponse = result.response as? HTTPURLResponse,
+                                      (200...299).contains(httpResponse.statusCode) else {
+                                    throw URLError(.badServerResponse)
+                                }
+                                return result.data
+                            }
+                            .decode(type: User.self, decoder: decoder)
+                            .receive(on: DispatchQueue.main)
+                            .sink(receiveCompletion: { completion in
+                                switch completion {
+                                case .finished:
+                                    print("User data posted successfully.")
+                                case .failure(let error):
+                                    print("Error posting user data: \(error.localizedDescription)")
+                                }
+                            }, receiveValue: { user in
+                                self.updateUser(newUser: user)
+                                self.getUserData()
+                            })
+                            .store(in: &self.cancellables)
                     }
-                    .decode(type: User.self, decoder: decoder)
-                    .receive(on: DispatchQueue.main)
-                    .sink(receiveCompletion: { completion in
-                        switch completion {
-                        case .finished:
-                            print("User data posted successfully.")
-                        case .failure(let error):
-                            print("Error posting user data: \(error.localizedDescription)")
-                        }
-                    }, receiveValue: { user in
-                        self.updateUser(newUser: user)
-                        self.getUserData()
-                    })
-                    .store(in: &cancellables)
+                    else {
+                        print("error retrieving user token")
+                    }
+                }
             }
         }catch {
-            
+            //TODO
         }
     }
     

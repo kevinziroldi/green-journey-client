@@ -1,7 +1,7 @@
 import Combine
 import SwiftData
 import SwiftUI
-
+import FirebaseAuth
 class MainViewModel: ObservableObject {
     var modelContext: ModelContext
     private var cancellables = Set<AnyCancellable>()
@@ -17,45 +17,61 @@ class MainViewModel: ObservableObject {
     }
     
     func fetchTravels() {
-        var userID = -1
-        if checkUserLogged() {
-            userID = users.first?.userID ?? -1
-        }
-        
-        let baseURL = NetworkManager.shared.getBaseURL()
-        guard let url = URL(string:"\(baseURL)/travels/user?id=\(userID)") else {
-            print("Invalid URL used to retrieve travels from DB")
+        guard let firebaseUser = Auth.auth().currentUser else {
+            print("error retrieving firebase user")
             return
         }
-        
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
-        
-        URLSession.shared.dataTaskPublisher(for: url)
-            .retry(2)
-            .tryMap {
-                result -> Data in
-                guard let httpResponse = result.response as? HTTPURLResponse,
-                      (200...299).contains(httpResponse.statusCode) else {
-                    throw URLError(.badServerResponse)
+        firebaseUser.getIDToken { token, error in
+            if let error = error {
+                print("Failed to fetch token: \(error.localizedDescription)")
+                return
+            } else if let token = token {
+                let firebaseToken = token
+                
+                let baseURL = NetworkManager.shared.getBaseURL()
+                guard let url = URL(string:"\(baseURL)/travels/user") else {
+                    print("Invalid URL used to retrieve travels from DB")
+                    return
                 }
-                return result.data
+                
+                let decoder = JSONDecoder()
+                decoder.dateDecodingStrategy = .iso8601
+                
+                var request = URLRequest(url: url)
+                request.httpMethod = "GET"
+                request.setValue("Bearer \(firebaseToken)", forHTTPHeaderField: "Authorization")
+                
+                URLSession.shared.dataTaskPublisher(for: request)
+                    .retry(2)
+                    .tryMap {
+                        result -> Data in
+                        guard let httpResponse = result.response as? HTTPURLResponse,
+                              (200...299).contains(httpResponse.statusCode) else {
+                            throw URLError(.badServerResponse)
+                        }
+                        return result.data
+                    }
+                    .decode(type: [TravelDetails].self, decoder: decoder)
+                    .receive(on: DispatchQueue.main)
+                    .sink(receiveCompletion: {
+                        completion in
+                        switch completion {
+                        case .finished:
+                            break
+                        case .failure(let error):
+                            print("Error fetching travels: \(error.localizedDescription)")
+                        }
+                    }, receiveValue: { [weak self] travelDetailsList in
+                        self?.removeExistingTravels()
+                        self?.addNewTravels(travelDetailsList)
+                    })
+                    .store(in: &self.cancellables)
             }
-            .decode(type: [TravelDetails].self, decoder: decoder)
-            .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: {
-                completion in
-                switch completion {
-                case .finished:
-                    break
-                case .failure(let error):
-                    print("Error fetching travels: \(error.localizedDescription)")
-                }
-            }, receiveValue: { [weak self] travelDetailsList in
-                self?.removeExistingTravels()
-                self?.addNewTravels(travelDetailsList)
-            })
-            .store(in: &cancellables)
+            else {
+                print("error retrieving user token")
+                return
+            }
+        }
     }
     
     private func removeExistingTravels() {

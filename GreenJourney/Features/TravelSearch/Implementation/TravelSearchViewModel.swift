@@ -3,6 +3,7 @@ import CoreML
 import Foundation
 import MapKit
 import SwiftData
+import FirebaseAuth
 
 struct OptionsResponse: Decodable {
     let options: [[Segment]]
@@ -111,7 +112,7 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
                 })
                 .store(in: &cancellables)
         }
-         
+        
     }
     
     func saveTravel() {
@@ -121,71 +122,99 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
             print("Invalid URL for posting user data to DB")
             return
         }
-        let travel = Travel(userID: users.first!.userID!)
-        var travelDetails = TravelDetails(travel: travel, segments: selectedOption)
-        // JSON encoding
-        let encoder = JSONEncoder()
-        encoder.dateEncodingStrategy = .iso8601
-        guard let body = try? encoder.encode(travelDetails) else {
-            print("Error encoding travel data")
+        if let user = users.first {
+            guard let userID = user.userID else {
+                print("userID not found")
+                return
+            }
+            let travel = Travel(userID: userID)
+            var travelDetails = TravelDetails(travel: travel, segments: selectedOption)
+            // JSON encoding
+            let encoder = JSONEncoder()
+            encoder.dateEncodingStrategy = .iso8601
+            guard let body = try? encoder.encode(travelDetails) else {
+                print("Error encoding travel data")
+                return
+            }
+            
+            print("body: " , String(data: body, encoding: .utf8)!)
+            
+            if let firebaseUser = Auth.auth().currentUser {
+                firebaseUser.getIDToken { token, error in
+                    if let error = error {
+                        print("error getting firebase token: \(error.localizedDescription)")
+                    } else if let token = token {
+                        let firebaseToken = token
+                        
+                        // POST request
+                        var request = URLRequest(url: url)
+                        request.httpMethod = "POST"
+                        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                        request.setValue("Bearer \(firebaseToken)", forHTTPHeaderField: "Authorization")
+                        request.httpBody = body
+                        
+                        let decoder = JSONDecoder()
+                        decoder.dateDecodingStrategy = .iso8601
+                        URLSession.shared.dataTaskPublisher(for: request)
+                            .retry(2)
+                            .tryMap {
+                                result -> Data in
+                                // check status of response
+                                guard let httpResponse = result.response as? HTTPURLResponse,
+                                      (200...299).contains(httpResponse.statusCode) else {
+                                    throw URLError(.badServerResponse)
+                                }
+                                return result.data
+                            }
+                            .receive(on: DispatchQueue.main)
+                            .decode(type: TravelDetails.self, decoder: decoder)
+                            .sink(receiveCompletion: { completion in
+                                switch completion {
+                                case .finished:
+                                    print("Travel data posted successfully.")
+                                case .failure(let error):
+                                    print("Error posting travel data: \(error.localizedDescription)")
+                                    return
+                                }
+                            }, receiveValue: { response in
+                                travelDetails = response
+                                
+                                // save travel in SwiftData
+                                self.modelContext.insert(travelDetails.travel)
+                                for segment in travelDetails.segments {
+                                    self.modelContext.insert(segment)
+                                }
+                                do {
+                                    try self.modelContext.save()
+                                } catch {
+                                    
+                                    // TODO gestione
+                                    
+                                    print("Error saving new travel: \(error.localizedDescription)")
+                                    return
+                                }
+                                print("travel added to SwiftData")
+                            })
+                            .store(in: &self.cancellables)
+                        self.departure = CityCompleterDataset()
+                        self.arrival = CityCompleterDataset()
+                    }
+                    else {
+                        print("error retrieving token")
+                        return
+                    }
+                }
+            }
+            else {
+                return
+            }
+            
+        } else {
+            print("no user present in swiftData")
             return
         }
-        print("body: " , String(data: body, encoding: .utf8)!)
-        
-        
-        // POST request
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = body
-        
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
-        URLSession.shared.dataTaskPublisher(for: request)
-            .retry(2)
-            .tryMap {
-                result -> Data in
-                // check status of response
-                guard let httpResponse = result.response as? HTTPURLResponse,
-                      (200...299).contains(httpResponse.statusCode) else {
-                    throw URLError(.badServerResponse)
-                }
-                return result.data
-            }
-            .receive(on: DispatchQueue.main)
-            .decode(type: TravelDetails.self, decoder: decoder)
-            .sink(receiveCompletion: { completion in
-                switch completion {
-                case .finished:
-                    print("Travel data posted successfully.")
-                case .failure(let error):
-                    print("Error posting travel data: \(error.localizedDescription)")
-                    return
-                }
-            }, receiveValue: { response in
-                travelDetails = response
-                
-                // save travel in SwiftData
-                self.modelContext.insert(travelDetails.travel)
-                for segment in travelDetails.segments {
-                    self.modelContext.insert(segment)
-                }
-                do {
-                    try self.modelContext.save()
-                } catch {
-                    
-                    // TODO gestione
-                    
-                    print("Error saving new travel: \(error.localizedDescription)")
-                    return
-                }
-                print("travel added to SwiftData")
-            })
-            .store(in: &cancellables)
-        departure = CityCompleterDataset()
-        arrival = CityCompleterDataset()
     }
-   
+    
     
     func computeCo2Emitted(_ travelOption: [Segment]) -> Float64 {
         var co2Emitted: Float64 = 0.0
