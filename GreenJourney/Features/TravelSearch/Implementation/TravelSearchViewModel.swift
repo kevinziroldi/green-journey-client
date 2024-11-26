@@ -8,11 +8,6 @@ struct OptionsResponse: Decodable {
     let options: [[Segment]]
 }
 
-struct CityCountry: Hashable {
-    let city: String
-    let country: String
-}
-
 class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegate {
     var modelContext: ModelContext
     @Published var departure: CityCompleterDataset = CityCompleterDataset()
@@ -51,7 +46,7 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
         let formattedTime = timeFormatter.string(from: datePicked)
         let formattedTimeReturn = timeFormatter.string(from: dateReturnPicked)
         let baseURL = NetworkManager.shared.getBaseURL()
-        guard let url = URL(string:"\(baseURL)/travels/search?iata_departure=\(departure.locode)&country_code_departure=\(departure.countryCode)&iata_destination=\(arrival.locode)&country_code_destination=\(arrival.countryCode)&date=\(formattedDate)&time=\(formattedTime)&is_outward=\(isOutward)") else {
+        guard let url = URL(string:"\(baseURL)/travels/search?iata_departure=\(departure.iata)&country_code_departure=\(departure.countryCode)&iata_destination=\(arrival.iata)&country_code_destination=\(arrival.countryCode)&date=\(formattedDate)&time=\(formattedTime)&is_outward=\(isOutward)") else {
             return
         }
         
@@ -86,7 +81,7 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
             })
             .store(in: &cancellables)
         if (!oneWay) {
-            guard let returnUrl = URL(string:"\(baseURL)/travels/search?iata_departure=\(arrival.locode)&country_code_departure=\(arrival.countryCode)&iata_destination=\(departure.locode)&country_code_destination=\(departure.countryCode)&date=\(formattedDateReturn)&time=\(formattedTimeReturn)&is_outward=\(!isOutward)") else {
+            guard let returnUrl = URL(string:"\(baseURL)/travels/search?iata_departure=\(arrival.iata)&country_code_departure=\(arrival.countryCode)&iata_destination=\(departure.iata)&country_code_destination=\(departure.countryCode)&date=\(formattedDateReturn)&time=\(formattedTimeReturn)&is_outward=\(!isOutward)") else {
                 return
             }
             URLSession.shared.dataTaskPublisher(for: returnUrl)

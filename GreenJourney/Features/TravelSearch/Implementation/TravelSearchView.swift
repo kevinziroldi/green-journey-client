@@ -81,12 +81,12 @@ struct TravelSearchView: View {
                                     Button(action: {
                                         departureTapped = true
                                     }) {
-                                        Text(viewModel.departure.city == "" ? "Insert departure" : viewModel.departure.city)
-                                            .foregroundColor(viewModel.departure.city == "" ? .secondary : .blue)
+                                        Text(viewModel.departure.cityName == "" ? "Insert departure" : viewModel.departure.cityName)
+                                            .foregroundColor(viewModel.departure.cityName == "" ? .secondary : .blue)
                                             .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 0))
                                             .frame(maxWidth: .infinity, alignment: .leading)
                                             .font(.title2)
-                                            .fontWeight(viewModel.departure.city == "" ? .light : .semibold)
+                                            .fontWeight(viewModel.departure.cityName == "" ? .light : .semibold)
                                     }
                                 }
                                 .background(colorScheme == .dark ? Color(red: 48/255, green: 48/255, blue: 48/255) : Color.white)
@@ -97,7 +97,7 @@ struct TravelSearchView: View {
                                 
                             }
                             .fullScreenCover(isPresented: $departureTapped ) {
-                                CompleterView(modelContext: modelContext, searchText: viewModel.departure.city,
+                                CompleterView(modelContext: modelContext, searchText: viewModel.departure.cityName,
                                               onBack: {
                                                   departureTapped = false
                                               },
@@ -122,12 +122,12 @@ struct TravelSearchView: View {
                                     Button(action: {
                                         destinationTapped = true
                                     }) {
-                                        Text(viewModel.arrival.city == "" ? "Insert destination" : viewModel.arrival.city)
+                                        Text(viewModel.arrival.cityName == "" ? "Insert destination" : viewModel.arrival.cityName)
                                             .foregroundColor (getColorDest())
                                             .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 0))
                                             .frame(maxWidth: .infinity, alignment: .leading)
                                             .font(.title2)
-                                            .fontWeight(viewModel.arrival.city == "" ? .light : .semibold)
+                                            .fontWeight(viewModel.arrival.cityName == "" ? .light : .semibold)
                                     }
                                 }
                                 .background(triggerAI ? LinearGradient(gradient: Gradient(colors: [.green, .cyan, .blue, .cyan, .green]), startPoint: .bottomLeading, endPoint: .topTrailing) : LinearGradient(gradient: Gradient(colors: [colorScheme == .dark ? Color(red: 48/255, green: 48/255, blue: 48/255) : Color.white]), startPoint: .bottomLeading, endPoint: .topTrailing))
@@ -136,7 +136,7 @@ struct TravelSearchView: View {
                                 .padding(EdgeInsets(top: 0, leading: 50, bottom: 20, trailing: 50))
                             }
                             .fullScreenCover(isPresented: $destinationTapped ) {
-                                CompleterView(modelContext: modelContext, searchText: viewModel.arrival.city,
+                                CompleterView(modelContext: modelContext, searchText: viewModel.arrival.cityName,
                                               onBack: {
                                     destinationTapped = false
                                               },
@@ -193,9 +193,8 @@ struct TravelSearchView: View {
                     
                     DestinationPredictionView(
                         modelContext: modelContext,
-                        confirm: { locode, city, country in
-                            viewModel.arrival.city = city
-                            // TODO settare anche locode e country
+                        confirm: { predictedCity in
+                            viewModel.arrival = predictedCity
                             self.triggerAI = true
                         })
                     
@@ -241,7 +240,7 @@ struct TravelSearchView: View {
     }
     
     private func getColorDest () -> Color {
-        if viewModel.arrival.city == "" {
+        if viewModel.arrival.cityName == "" {
             return .secondary
         }
         else if triggerAI {

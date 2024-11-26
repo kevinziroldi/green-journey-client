@@ -3,9 +3,9 @@ import SwiftUI
 
 struct DestinationPredictionView: View {
     @StateObject var viewModel: DestinationPredictionViewModel
-    var confirm: (String, String, String) -> Void
+    var confirm: (CityCompleterDataset) -> Void
     
-    init(modelContext: ModelContext, confirm: @escaping (String, String, String) -> Void) {
+    init(modelContext: ModelContext, confirm: @escaping (CityCompleterDataset) -> Void) {
         _viewModel = StateObject(wrappedValue: DestinationPredictionViewModel(modelContext: modelContext))
         self.confirm = confirm
     }
@@ -13,11 +13,9 @@ struct DestinationPredictionView: View {
     var body: some View {
         Button (action: {
             withAnimation(.snappy(duration: 4)) {
-                //TODO change
-                //viewModel.destination = "Milan"
                 viewModel.getRecommendation()
                 
-                confirm(viewModel.locode, viewModel.city, viewModel.country)
+                confirm(viewModel.predictedCity)
             }
         }){
             Text("Don't know where to go? Ask AI.")

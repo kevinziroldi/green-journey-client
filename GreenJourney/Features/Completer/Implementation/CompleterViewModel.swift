@@ -31,7 +31,7 @@ class CompleterViewModel: ObservableObject {
         
         var fetchRequest = FetchDescriptor<CityCompleterDataset>(
             predicate: #Predicate { cityCompleter in
-                cityCompleter.city.localizedStandardContains(searchText)
+                cityCompleter.cityName.localizedStandardContains(searchText)
             })
         fetchRequest.fetchLimit = 40
         
@@ -48,7 +48,7 @@ class CompleterViewModel: ObservableObject {
                     }
                     
                     // Fallback a ordinamento alfabetico
-                    return city1.city.localizedStandardCompare(city2.city) == .orderedAscending
+                    return city1.cityName.localizedStandardCompare(city2.cityName) == .orderedAscending
                 }
             suggestions = Array(sortedResults.prefix(10)) // Salva i risultati trovati
             } catch {
@@ -67,7 +67,7 @@ class CompleterViewModel: ObservableObject {
             score += 5
         }
 
-        let similarityScore = stringScore(city.city, query)
+        let similarityScore = stringScore(city.cityName, query)
         score += (similarityScore * 100)
         
         return score

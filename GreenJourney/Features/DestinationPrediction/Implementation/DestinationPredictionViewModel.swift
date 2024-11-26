@@ -2,17 +2,19 @@ import CoreML
 import Foundation
 import SwiftData
 
+struct CityCountry: Hashable {
+    let city: String
+    let country: String
+}
+
 class DestinationPredictionViewModel: ObservableObject {
     var modelContext: ModelContext
-    @Published var locode: String = ""
-    @Published var city: String = ""
-    @Published var country: String = ""
+    @Published var predictedCity: CityCompleterDataset = CityCompleterDataset()
     
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
     }
     
-    // TODO settare gli attributi 
     func getRecommendation() {
         do {
             // fetch data from SwiftData
@@ -58,8 +60,8 @@ class DestinationPredictionViewModel: ObservableObject {
             // get cities in the dataset for visited cities (destination)
             for cityCountry in visitedCities {
                 for cityDS in citiesDS {
-                    if cityCountry.city == cityDS.cityName &&
-                        cityCountry.country == cityDS.countryName {
+                    if hasVisited(visitedCity: cityCountry.city, visitedCountry: cityCountry.country,
+                                  cityNameDS: cityDS.cityName, countryNameDS: cityDS.countryName) {
                         populationValues.append(cityDS.population)
                         capitalValues.append(cityDS.capital)
                         averageTemperatureValues.append(cityDS.averageTemperature)
@@ -118,13 +120,15 @@ class DestinationPredictionViewModel: ObservableObject {
             // if all visited, return the first visited one (in time)
             for cityId in citiesIds {
                 if let cityDS = citiesDS.first(where: { $0.id == cityId }) {
-                    let cityCountrySearch = CityCountry(city: cityDS.cityName, country: cityDS.countryName)
-                    if !visitedCities.contains(cityCountrySearch) {
-                        self.city = cityCountrySearch.city
-                        
-                        
-                        // TODO set also country !!!
-                        
+                    var newCity = true
+                    for cityCountry in visitedCities {
+                        if hasVisited(visitedCity: cityCountry.city, visitedCountry: cityCountry.country, cityNameDS: cityDS.cityName, countryNameDS: cityDS.countryName) {
+                            newCity = false
+                            break
+                        }
+                    }
+                    if newCity {
+                        predictedCity = CityCompleterDataset(city: cityDS.cityName, countryName: cityDS.countryName, continent: cityDS.continent, locode: cityDS.iata, countryCode: cityDS.countryCode)
                         return
                     }
                 }
@@ -133,19 +137,28 @@ class DestinationPredictionViewModel: ObservableObject {
             // else return the first one
             if let cityId = citiesIds.first {
                 if let firstCity = citiesDS.first(where: { $0.id == cityId }) {
-                    self.city = firstCity.cityName
-                    
-                    // TODO set also country !!!
+                    predictedCity = CityCompleterDataset(city: firstCity.cityName, countryName: firstCity.countryName, continent: firstCity.continent, locode: firstCity.iata, countryCode: firstCity.countryCode)
                     
                     return
                 }
             }
             
-            // if not present, return a default
-            self.city = "Paris"
-            // TODO set also country !!!
-            
-            
+            // if not present, return a random one
+            if let randomCity = citiesDS.randomElement() {
+                predictedCity = CityCompleterDataset(
+                    city: randomCity.cityName,
+                    countryName: randomCity.countryName,
+                    continent: randomCity.continent,
+                    locode: randomCity.iata,
+                    countryCode: randomCity.countryCode
+                )
+                return
+            }else {
+                
+                // TODO
+                
+                print("Error getting a prediction")
+            }
         }catch {
             
             // TODO
@@ -153,6 +166,19 @@ class DestinationPredictionViewModel: ObservableObject {
             print("Error interacting with SwiftData")
             
         }
+    }
+    
+    private func hasVisited(visitedCity: String, visitedCountry: String,
+                            cityNameDS: String, countryNameDS: String) -> Bool {
+        if visitedCountry == countryNameDS {
+            // build regex pattern
+            let regexPattern = "\\b\(NSRegularExpression.escapedPattern(for: cityNameDS))\\b"
+            // verify
+            if let _ = visitedCity.range(of: regexPattern, options: .regularExpression) {
+                return true
+            }
+        }
+        return false
     }
     
     private func calculateMedian(_ values: [Double]) -> Double {

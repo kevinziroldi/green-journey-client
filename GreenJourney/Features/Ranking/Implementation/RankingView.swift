@@ -6,6 +6,7 @@ struct RankingView: View {
     @StateObject var viewModel: RankingViewModel = RankingViewModel()
     var body: some View {
         VStack {
+            /*
             HStack {
                 Text("Ranking")
                     .font(.title)
@@ -107,6 +108,7 @@ struct RankingView: View {
             }
             
             Spacer()
+         */
         }
     }
 }

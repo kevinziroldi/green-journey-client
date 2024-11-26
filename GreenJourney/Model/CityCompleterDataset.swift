@@ -3,26 +3,26 @@ import SwiftData
 
 @Model
 class CityCompleterDataset {
-    var city: String
+    var cityName: String
     var countryName: String
-    var locode: String
+    var iata: String
     var countryCode: String
     var continent: String
     
     init(city: String, countryName: String, continent: String, locode: String, countryCode: String) {
-        self.city = city
+        self.cityName = city
         self.countryName = countryName
-        self.locode = locode
+        self.iata = locode
         self.countryCode = countryCode
         self.continent = continent
     }
     
     init() {
-        self.city = ""
+        self.cityName = ""
         self.countryName = ""
         self.continent = ""
         self.countryCode = ""
-        self.locode = ""
+        self.iata = ""
     }
 }
   

@@ -42,7 +42,7 @@ struct CompleterView: View {
             
             List(viewModel.suggestions, id: \.id) { city in
                 VStack(alignment: .leading) {
-                    Text(city.city).font(.headline)
+                    Text(city.cityName).font(.headline)
                     Text("\(city.countryName) (\(city.countryCode))")
                         .font(.subheadline)
                         .foregroundColor(.gray)
