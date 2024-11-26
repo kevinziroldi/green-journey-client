@@ -19,7 +19,7 @@ struct MainView: View {
         if viewModel.checkUserLogged() {
             NavigationStack (path: $navigationPath) {
                 TabView(selection: $selectedTab) {
-                    RankingView(navigationPath: $navigationPath)
+                    RankingView(modelContext: modelContext, navigationPath: $navigationPath)
                         .tabItem {
                             Label("Ranking", systemImage: "star")
                         }

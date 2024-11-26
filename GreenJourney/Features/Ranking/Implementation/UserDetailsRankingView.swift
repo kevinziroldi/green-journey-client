@@ -4,7 +4,7 @@ struct UserDetailsRankingView: View {
     @ObservedObject var viewModel: RankingViewModel
     @Binding var navigationPath: NavigationPath
     
-    var user: UserRanking
+    var user: RankingElement
     var body: some View {
         VStack {
             HStack {
@@ -15,12 +15,10 @@ struct UserDetailsRankingView: View {
                 }
                 Spacer()
             }
-            Text("Short distance score: " + String(format: "%.2f", user.scoreShortDistance))
-            Text("Long distance score: " + String(format: "%.2f", user.scoreLongDistance))
             HStack {
                 VStack {
                     Text("Total distance")
-                    Text(String(format: "%.2f", user.distance))
+                    Text(String(format: "%.2f", user.totalDistance))
                 }
                 VStack {
                     Text("Total travel time")
@@ -30,11 +28,11 @@ struct UserDetailsRankingView: View {
             HStack {
                 VStack {
                     Text("Co2 emitted")
-                    Text(String(format: "%.2f", user.co2Emitted))
+                    Text(String(format: "%.2f", user.totalCo2Emitted))
                 }
                 VStack {
                     Text("co2 compensated")
-                    Text(String(format: "%.2f", user.co2Compensated))
+                    Text(String(format: "%.2f", user.totalCo2Compensated))
                 }
             }
             

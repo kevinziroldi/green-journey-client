@@ -1,22 +1,91 @@
 import Foundation
+import SwiftData
+import Combine
 
 class RankingViewModel: ObservableObject {
+    var modelContext: ModelContext
+    private var cancellables = Set<AnyCancellable>()
+    var users: [User] = []
+
+
+    @Published var shortDistanceRanking: [RankingElement] = []
+    @Published var longDistanceRanking: [RankingElement] = []
     
-    @Published var shortDistanceRanking: [User] = []
-    @Published var longDistanceRanking: [User] = []
     
+    init(modelContext: ModelContext) {
+        self.modelContext = modelContext
+        do {
+            users = try modelContext.fetch(FetchDescriptor<User>())
+        }catch {}
+    }
     
+    func fecthRanking() {
+        guard let userID = users.first?.userID else { return }
+        
+        let baseURL = NetworkManager.shared.getBaseURL()
+        guard let url = URL(string:"\(baseURL)/ranking?id=\(userID)") else { return}
+        let decoder = JSONDecoder()
+        
+        URLSession.shared.dataTaskPublisher(for: url)
+            .tryMap {
+                result -> Data in
+                guard let httpResponse = result.response as? HTTPURLResponse,
+                      (200...299).contains(httpResponse.statusCode) else {
+                    throw URLError(.badServerResponse)
+                }
+                print(String(data: result.data, encoding: .utf8) ?? "No data")
+
+                return result.data
+            }
+            .decode(type: RankingResponse.self, decoder: decoder)
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: {
+                completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    print("Error fetching rankings: \(error.localizedDescription)")
+                }
+            }, receiveValue: { [weak self] response in
+                self?.shortDistanceRanking = response.shortDistanceRanking
+                self?.longDistanceRanking = response.longDistanceRanking
+            })
+            .store(in: &cancellables)
+    }
 }
 
-struct UserRanking {
-    var id: Int
+struct RankingElement: Decodable {
+    var userID: Int
     var firstName: String
     var lastName: String
-    var distance: Float64
-    var scoreShortDistance: Float64
-    var scoreLongDistance: Float64
-    var totalTravelTime: Int
-    var co2Emitted: Float64
-    var co2Compensated: Float64
-    var badges: [String]
+    var totalDistance: Float64
+    var score: Float64
+    var totalDuration: Int
+    var totalCo2Emitted: Float64
+    var totalCo2Compensated: Float64
+    var badges: [Badge]
+    
+    enum CodingKeys: String, CodingKey {
+        case userID = "user_id"
+        case firstName = "first_name"
+        case lastName = "last_name"
+        case totalDistance = "total_distance"
+        case score = "score"
+        case totalDuration = "total_duration"
+        case totalCo2Emitted = "total_co_2_emitted"
+        case totalCo2Compensated = "total_co_2_compensated"
+        case badges = "badges"
+    }
+}
+
+
+struct RankingResponse: Decodable {
+    var shortDistanceRanking: [RankingElement]
+    var longDistanceRanking: [RankingElement]
+    
+    enum CodingKeys: String, CodingKey {
+        case shortDistanceRanking = "short_distance_ranking"
+        case longDistanceRanking = "long_distance_ranking"
+    }
 }
