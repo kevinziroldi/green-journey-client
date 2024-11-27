@@ -131,8 +131,8 @@ class UserPreferencesViewModel: ObservableObject {
                     } else if let token = token {
                         let firebaseToken = token
                         
-                        if firebaseToken != modifiedUser.firebaseUID {
-                            print("modified user has different firebase token")
+                        if firebaseUser.uid != modifiedUser.firebaseUID {
+                            print("modified user has different firebase uid")
                             return
                         }
                         // PUT request
