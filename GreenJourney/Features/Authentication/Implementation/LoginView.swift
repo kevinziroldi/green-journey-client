@@ -116,16 +116,18 @@ struct LoginView: View {
                     }
                 }
                 .padding()
-                .fullScreenCover(isPresented: $viewModel.isLogged) {
+                /*.fullScreenCover(isPresented: $viewModel.isLogged) {
                     MainView(modelContext: modelContext)
-                }
+                }*/
             }
             .scrollDismissesKeyboard(.interactively)
             
             Button ("Sign up") {
                 isNavigationActive = true
+                viewModel.resetParameters()
             }
-            .fullScreenCover(isPresented: $isNavigationActive) {
+            if (isNavigationActive) {
+                
                 SignUpView(viewModel: viewModel)
             }
         }
