@@ -149,7 +149,6 @@ class UserPreferencesViewModel: ObservableObject {
                                 result -> Data in
                                 guard let httpResponse = result.response as? HTTPURLResponse,
                                       (200...299).contains(httpResponse.statusCode) else {
-                                    print("Error")
                                     throw URLError(.badServerResponse)
                                 }
                                 return result.data
@@ -184,10 +183,6 @@ class UserPreferencesViewModel: ObservableObject {
         do {
             users = try modelContext.fetch(FetchDescriptor<User>())
             if let oldUser = users.first {
-                let oldGender = oldUser.gender ?? "Unknown"
-                let newGender = newUser.gender ?? "Unknown"
-                print("old gender: \(oldGender)")
-                print("new gender: \(newGender)")
                 do {
                     // update values
                     oldUser.firstName = newUser.firstName
