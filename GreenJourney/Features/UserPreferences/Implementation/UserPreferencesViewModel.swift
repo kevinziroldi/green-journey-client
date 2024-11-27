@@ -83,7 +83,7 @@ class UserPreferencesViewModel: ObservableObject {
                 let userID = user.userID!
                 
                 let baseURL = NetworkManager.shared.getBaseURL()
-                guard let url = URL(string: "\(baseURL)/users/") else {
+                guard let url = URL(string: "\(baseURL)/users") else {
                     print("Invalid URL for posting user data to DB")
                     return
                 }
@@ -128,9 +128,7 @@ class UserPreferencesViewModel: ObservableObject {
                     if let error = error {
                         print("error retrieveing token: \(error.localizedDescription)")
                         return
-                    } else if let token = token {
-                        let firebaseToken = token
-                        
+                    } else if let firebaseToken = token {
                         if firebaseUser.uid != modifiedUser.firebaseUID {
                             print("modified user has different firebase uid")
                             return
