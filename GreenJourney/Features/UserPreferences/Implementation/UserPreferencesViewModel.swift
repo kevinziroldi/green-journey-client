@@ -149,6 +149,7 @@ class UserPreferencesViewModel: ObservableObject {
                                 result -> Data in
                                 guard let httpResponse = result.response as? HTTPURLResponse,
                                       (200...299).contains(httpResponse.statusCode) else {
+                                    print("Error")
                                     throw URLError(.badServerResponse)
                                 }
                                 return result.data
@@ -162,8 +163,8 @@ class UserPreferencesViewModel: ObservableObject {
                                 case .failure(let error):
                                     print("Error posting user data: \(error.localizedDescription)")
                                 }
-                            }, receiveValue: { user in
-                                self.updateUser(newUser: user)
+                            }, receiveValue: { newUser in
+                                self.updateUser(newUser: newUser)
                                 self.getUserData()
                             })
                             .store(in: &self.cancellables)
@@ -183,9 +184,22 @@ class UserPreferencesViewModel: ObservableObject {
         do {
             users = try modelContext.fetch(FetchDescriptor<User>())
             if let oldUser = users.first {
+                let oldGender = oldUser.gender ?? "Unknown"
+                let newGender = newUser.gender ?? "Unknown"
+                print("old gender: \(oldGender)")
+                print("new gender: \(newGender)")
                 do {
-                    modelContext.delete(oldUser)
-                    modelContext.insert(newUser)
+                    // update values
+                    oldUser.firstName = newUser.firstName
+                    oldUser.lastName = newUser.lastName
+                    oldUser.birthDate = newUser.birthDate
+                    oldUser.gender = newUser.gender
+                    oldUser.city = newUser.city
+                    oldUser.streetName = newUser.streetName
+                    oldUser.houseNumber = newUser.houseNumber
+                    oldUser.zipCode = newUser.zipCode
+                    oldUser.scoreShortDistance = newUser.scoreShortDistance
+                    oldUser.scoreLongDistance = newUser.scoreLongDistance
                     try modelContext.save()
                 } catch {
                     print("Error while updating user in SwiftData")
