@@ -9,6 +9,16 @@ struct EmailVerificationView: View {
             Spacer()
             Text("check your email box and verify your GreenJourney account")
             Spacer()
+            HStack {
+                
+                if let resendMessage = viewModel.resendEmail {
+                    Text(resendMessage)
+                }
+                Button ("resend email") {
+                    viewModel.sendEmailVerification()
+                    viewModel.resendEmail = "email re-send correctly"
+                }
+            }
             Button ("Proceed"){
                 viewModel.verifyEmail()
             }

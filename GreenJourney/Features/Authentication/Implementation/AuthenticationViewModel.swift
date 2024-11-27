@@ -98,7 +98,6 @@ class AuthenticationViewModel: ObservableObject {
                     if let result = result {
                         // if login is ok
                         self.isEmailVerificationActive = true
-                        self.resendEmail = "email sent"
                         
                         result.user.getIDToken { token, error in
                             if let error = error {
@@ -277,7 +276,8 @@ class AuthenticationViewModel: ObservableObject {
         repeatPassword = ""
         firstName = ""
         lastName = ""
-        errorMessage = ""
+        errorMessage = nil
+        resendEmail = nil
     }
 }
 
