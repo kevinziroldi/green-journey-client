@@ -71,7 +71,7 @@ struct MainView: View {
                     }
                 }
             }
-        }else {
+        } else {
             LoginView(modelContext: modelContext)
         }
     }

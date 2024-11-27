@@ -15,7 +15,6 @@ class AuthenticationViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var resendEmail: String?
     @Published var isLogged: Bool = false
-    @Published var userID: Int?
     @Published var emailVerified: Bool = false
     @Published var isEmailVerificationActive: Bool = false
     private var cancellables = Set<AnyCancellable>()
@@ -109,15 +108,19 @@ class AuthenticationViewModel: ObservableObject {
                                 self.saveUserToServer(firebaseUID: result.user.uid, firebaseToken: token)
                             }
                         }
+                        self.sendEmailVerification()
                         
-                        Auth.auth().currentUser?.sendEmailVerification { error in
-                            if let error = error {
-                                print("error while sending email verification: " + error.localizedDescription)
-                            }
-                        }
                         self.errorMessage = nil
                     }
                 }
+            }
+        }
+    }
+    
+    func sendEmailVerification() {
+        Auth.auth().currentUser?.sendEmailVerification { error in
+            if let error = error {
+                print("error while sending email verification: " + error.localizedDescription)
             }
         }
     }
@@ -266,6 +269,15 @@ class AuthenticationViewModel: ObservableObject {
                 print("Error while saving user to SwiftData: \(error)")
             }
         }
+    }
+    func resetParameters() {
+        email = ""
+        password = ""
+        repeatPassword = ""
+        firstName = ""
+        lastName = ""
+        errorMessage = nil
+        resendEmail = nil
     }
 }
 

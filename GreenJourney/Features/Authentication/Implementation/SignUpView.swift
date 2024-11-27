@@ -95,8 +95,9 @@ struct SignUpView: View {
                         Spacer()
                         Button ("Login") {
                             isNavigationLoginActive = true
+                            viewModel.resetParameters()
                         }
-                        .fullScreenCover(isPresented: $isNavigationLoginActive) {
+                        if isNavigationLoginActive {
                             LoginView(modelContext: modelContext)
                         }
                     }
