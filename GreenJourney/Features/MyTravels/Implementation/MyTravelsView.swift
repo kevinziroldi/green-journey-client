@@ -68,10 +68,10 @@ struct MyTravelsView: View {
 struct TravelRow: View {
     let travelDetails: TravelDetails
     var departure: String {
-        travelDetails.segments.first?.departureCity ?? "Unknown"
+        travelDetails.getDepartureSegment()?.departureCity ?? "Unknown"
     }
     var destination: String {
-        travelDetails.segments.last?.destinationCity ?? "Unknown"
+        travelDetails.getDestinationSegment()?.destinationCity ?? "Unknown"
     }
     var departureDate: String {
         dateFormatter.string(for: travelDetails.segments.first?.date) ?? "Unknown"

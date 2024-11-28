@@ -69,14 +69,9 @@ class MyTravelsViewModel: ObservableObject {
         }
     }
     
-    // sort segments for all travels
     private func sortSegments() {
         for td in travelDetailsList {
-            td.segments.sort {
-                let numSegment1 = $0.numSegment
-                let numSegment2 = $1.numSegment
-                return numSegment1 < numSegment2
-            }
+            td.sortSegments()
         }
     }
     
