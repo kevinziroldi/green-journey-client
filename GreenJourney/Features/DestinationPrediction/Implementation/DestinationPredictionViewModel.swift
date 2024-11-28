@@ -38,8 +38,11 @@ class DestinationPredictionViewModel: ObservableObject {
             // get visited cities
             var visitedCities = Set<CityCountry>()
             for travelDetails in travelDetailsList {
-                if let lastSegment = travelDetails.getLastSegment() {
-                    visitedCities.insert(CityCountry(city: lastSegment.destinationCity, country: lastSegment.destinationCountry))
+                if let departureSegment = travelDetails.getDepartureSegment() {
+                    visitedCities.insert(CityCountry(city: departureSegment.destinationCity, country: departureSegment.destinationCountry))
+                }
+                if let destinationSegment = travelDetails.getDestinationSegment() {
+                    visitedCities.insert(CityCountry(city: destinationSegment.destinationCity, country: destinationSegment.destinationCountry))
                 }
             }
             
