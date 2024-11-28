@@ -61,9 +61,6 @@ struct SignUpView: View {
                                 .background(Color.blue)
                                 .cornerRadius(8)
                         }
-                        .fullScreenCover(isPresented: $viewModel.isEmailVerificationActive) {
-                            EmailVerificationView(viewModel: viewModel)
-                        }
                         
                         HStack {
                             Rectangle()
@@ -97,7 +94,7 @@ struct SignUpView: View {
                             isNavigationLoginActive = true
                             viewModel.resetParameters()
                         }
-                        if isNavigationLoginActive {
+                        .fullScreenCover(isPresented: $isNavigationLoginActive) {
                             LoginView(modelContext: modelContext)
                         }
                     }

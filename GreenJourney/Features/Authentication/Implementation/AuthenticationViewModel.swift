@@ -150,6 +150,7 @@ class AuthenticationViewModel: ObservableObject {
                 }
                 
                 self.emailVerified = true
+                self.isEmailVerificationActive = false
             } else {
                 self.errorMessage = "email has not yet been verified"
                 print("Email not verified.")

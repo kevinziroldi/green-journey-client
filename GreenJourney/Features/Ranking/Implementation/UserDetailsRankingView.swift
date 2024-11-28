@@ -10,9 +10,9 @@ struct UserDetailsRankingView: View {
             HStack {
                 Text(user.firstName + " " + user.lastName)
                 Spacer()
-                ForEach (user.badges, id: \.self) { badge in
+                /*ForEach (user.badges, id: \.self) { badge in
                     Image("badge")
-                }
+                }*/
                 Spacer()
             }
             HStack {

@@ -108,18 +108,13 @@ struct UserPreferencesView : View {
 
                 // logout button
                 Button("Logout") {
-                    navigationPath = NavigationPath()
                     viewModel.logout(user: user)
+                    navigationPath = NavigationPath()
                     navigationPath.append(NavigationDestination.LoginView)
                 }
             }
             .frame(maxWidth: .infinity)
             .padding()
-            .onDisappear(){
-                if !navigationPath.isEmpty && users.first != nil {
-                    navigationPath.removeLast()
-                }
-            }
         } else {
             LoginView(modelContext: modelContext)
                 .transition(.opacity.animation(.easeInOut(duration: 0.2)))

@@ -64,7 +64,7 @@ struct RankingElement: Decodable {
     var totalDuration: Int
     var totalCo2Emitted: Float64
     var totalCo2Compensated: Float64
-    var badges: [Badge]
+    var badges: [Badge]?
     
     enum CodingKeys: String, CodingKey {
         case userID = "user_id"
