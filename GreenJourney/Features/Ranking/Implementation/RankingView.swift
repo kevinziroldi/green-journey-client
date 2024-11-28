@@ -50,13 +50,15 @@ struct RankingView: View {
                         // Colonna Nome Utente
                         Text(viewModel.shortDistanceRanking[index].firstName + " " + viewModel.shortDistanceRanking[index].lastName)
                             .frame(maxWidth: .infinity, alignment: .leading)
+                            .foregroundStyle(.black)
                         // Colonna Badge
                         BadgeView(badges: viewModel.shortDistanceRanking[index].badges)
                         // Colonna Punteggio
                         Text(String(format: "%.2f", viewModel.shortDistanceRanking[index].score))
                             .frame(maxWidth: 80, alignment: .trailing)
+                            .foregroundStyle(.black)
                     }
-                    .padding(.vertical, 5)
+                    .padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
                 }
             }
             Spacer()
@@ -68,7 +70,7 @@ struct RankingView: View {
                 Text("Badge")
                     .font(.headline)
                     .frame(maxWidth: .infinity)
-                Text("Punteggio")
+                Text("Score")
                     .font(.headline)
                     .frame(maxWidth: 80, alignment: .trailing)
             }
@@ -80,14 +82,16 @@ struct RankingView: View {
                         // Colonna Nome Utente
                         Text(viewModel.longDistanceRanking[index].firstName + " " + viewModel.longDistanceRanking[index].lastName)
                             .frame(maxWidth: .infinity, alignment: .leading)
+                            .foregroundStyle(.black)
                         
                         // Colonna Badge
                         BadgeView(badges: viewModel.longDistanceRanking[index].badges)
                         // Colonna Punteggio
                         Text(String(format: "%.2f", viewModel.longDistanceRanking[index].score))
                             .frame(maxWidth: 80, alignment: .trailing)
+                            .foregroundStyle(.black)
                     }
-                    .padding(.vertical, 5)
+                    .padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
                 }
             }
             
