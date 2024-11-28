@@ -17,16 +17,23 @@ enum Badge: String, Decodable {
     case badgeTravelsNumberHigh = "badge_travels_number_high"
     case badgeTravelsNumberMid = "badge_travels_number_mid"
     
-    var baseBadge: String {
+    case badgeDistanceBase = "badge_distance_base"
+    case badgeEcologicalChoiceBase = "badge_ecological_choice_base"
+    case badgeCompensationBase = "badge_compensation_base"
+    case badgeTravelsNumberBase = "badge_travels_number_base"
+    
+    var baseBadge: Badge {
         switch self {
         case .badgeDistanceLow, .badgeDistanceMid, .badgeDistanceHigh:
-            return "badge_distance_base"
+            return Badge.badgeDistanceBase
         case .badgeEcologicalChoiceLow, .badgeEcologicalChoiceMid, .badgeEcologicalChoiceHigh:
-            return "badge_ecological_choice_base"
+            return Badge.badgeEcologicalChoiceBase
         case .badgeCompensationLow, .badgeCompensationMid, .badgeCompensationHigh:
-            return "badge_compensation_base"
+            return Badge.badgeCompensationBase
         case .badgeTravelsNumberLow, .badgeTravelsNumberMid, .badgeTravelsNumberHigh:
-            return "badge_travels_number_base"
+            return Badge.badgeTravelsNumberBase
+        default:
+            return self
         }
     }
     
