@@ -154,7 +154,7 @@ struct LeaderBoardView: View {
                                  }*/
                                 Spacer()
                                 // Colonna Badge
-                                BadgeView(badges: leaderboard[index].badges)
+                                BadgeView(badges: leaderboard[index].badges, dim: 40, inline: false)
                                 // Colonna Punteggio
                                 Text(String(format: "%.1f", leaderboard[index].score))
                                     .frame(maxWidth: 90, alignment: .trailing)
@@ -215,7 +215,7 @@ struct LeaderBoardUserView: View {
                     
                     Spacer()
                     // Colonna Badge
-                    BadgeView(badges: userRanking.badges)
+                    BadgeView(badges: userRanking.badges, dim: 40, inline: false)
                     // Colonna Punteggio
                     Text(String(format: "%.1f", userRanking.score))
                         .frame(maxWidth: 90, alignment: .trailing)
@@ -234,29 +234,54 @@ struct LeaderBoardUserView: View {
 
 struct BadgeView: View {
     var badges: [Badge]
+    var dim: CGFloat
+    var inline: Bool
     
     var body: some View {
         let allBadges = getBestBadges(badges: badges)
-        VStack(spacing: 5) { // Due righe
-            HStack(spacing: 5) { // Prima riga
+        if !inline {
+            
+            VStack(spacing: 5) { // Due righe
+                HStack(spacing: 5) { // Prima riga
+                    Image(allBadges[0].rawValue)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: dim, height: dim)
+                    Image(allBadges[1].rawValue)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: dim, height: dim)
+                }
+                HStack(spacing: 5) { // Seconda riga
+                    Image(allBadges[2].rawValue)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: dim, height: dim)
+                    Image(allBadges[3].rawValue)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: dim, height: dim)
+                }
+            }
+        }
+        else{
+            HStack (spacing: 3) {
                 Image(allBadges[0].rawValue)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 40, height: 40)
+                    .frame(width: dim, height: dim)
                 Image(allBadges[1].rawValue)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 40, height: 40)
-            }
-            HStack(spacing: 5) { // Seconda riga
+                    .frame(width: dim, height: dim)
                 Image(allBadges[2].rawValue)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 40, height: 40)
+                    .frame(width: dim, height: dim)
                 Image(allBadges[3].rawValue)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 40, height: 40)
+                    .frame(width: dim, height: dim)
             }
         }
         
@@ -276,6 +301,7 @@ struct BadgeView: View {
         return completedBadges
     }
 }
+
 
 struct TopRoundedCorners: Shape {
     var cornerRadius: CGFloat
