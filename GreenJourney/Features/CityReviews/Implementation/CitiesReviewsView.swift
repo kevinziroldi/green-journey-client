@@ -1,23 +1,17 @@
 import SwiftUI
 import SwiftData
 
-struct CityReviewsView: View {
-    @StateObject var viewModel: CityReviewsViewModel
+struct CitiesReviewsView: View {
+    @EnvironmentObject var viewModel: CitiesReviewsViewModel
     @Binding var navigationPath: NavigationPath
     @State private var searchTapped: Bool = false
     @Environment(\.modelContext) private var modelContext
     @Environment(\.colorScheme) var colorScheme
     
-    init(modelContext: ModelContext, navigationPath: Binding<NavigationPath>) {
-        _viewModel = StateObject(wrappedValue: CityReviewsViewModel(modelContext: modelContext))
-        _navigationPath = navigationPath
-    }
-    
     var body: some View {
         VStack {
             
             // header
-            
             HStack {
                 Text("City reviews")
                     .font(.title)
@@ -68,7 +62,10 @@ struct CityReviewsView: View {
                 },
                               onClick: { city in
                     searchTapped = false
+                    // for server call
                     viewModel.searchedCity = city
+                    // for details view
+                    viewModel.selectedCityIndex = -1
                 }
                 )
             }
@@ -76,9 +73,8 @@ struct CityReviewsView: View {
             Button(action: {
                 viewModel.getReviewsForSearchedCity()
                 
-                // TODO
                 // append path of the next view
-                //navigationPath.append(NavigationDestination.TravelOptionsView)
+                navigationPath.append(NavigationDestination.CityReviewsDetails)
                 
                 }) {
                 Text("Search")
@@ -88,11 +84,29 @@ struct CityReviewsView: View {
             .buttonStyle(.borderedProminent)
              
             // list of cities
-           
+            /*
             List(viewModel.bestCities) { city in
                 VStack(alignment: .leading) {
                     Text(city.cityName)
                         .font(.headline)
+                        .onTapGesture {
+                            // values for details view
+                            viewModel.isBest = true
+                            viewModel.selectedCity = city
+                            // move to details view
+                            navigationPath.append(NavigationDestination.CityReviewsDetails)
+                        }
+                }
+            }
+             */
+            List(viewModel.bestCities.indices, id: \.self) { index in
+                VStack(alignment: .leading) {
+                    Text(viewModel.bestCities[index].cityName)
+                        .font(.headline)
+                        .onTapGesture {
+                            viewModel.selectedCityIndex = index
+                            navigationPath.append(NavigationDestination.CityReviewsDetails)
+                        }
                 }
             }
         }

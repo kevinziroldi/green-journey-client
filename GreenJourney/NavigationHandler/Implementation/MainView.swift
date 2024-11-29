@@ -3,7 +3,8 @@ import SwiftUI
 
 struct MainView: View {
     @StateObject private var viewModel: MainViewModel
-    @StateObject var fromToViewModel: TravelSearchViewModel
+    @StateObject var travelSearchViewModel: TravelSearchViewModel
+    @StateObject var cityReviewsViewModel: CitiesReviewsViewModel
     @Environment(\.modelContext) private var modelContext
     @State private var selectedTab = 2
     
@@ -11,7 +12,8 @@ struct MainView: View {
     
     init(modelContext: ModelContext) {
         _viewModel = StateObject(wrappedValue: MainViewModel(modelContext: modelContext))
-        _fromToViewModel = StateObject(wrappedValue: TravelSearchViewModel(modelContext: modelContext))
+        _travelSearchViewModel = StateObject(wrappedValue: TravelSearchViewModel(modelContext: modelContext))
+        _cityReviewsViewModel = StateObject(wrappedValue: CitiesReviewsViewModel(modelContext: modelContext))
         navigationPath = NavigationPath()
     }
     
@@ -25,14 +27,15 @@ struct MainView: View {
                         }
                         .tag(0)
                     
-                    CityReviewsView(modelContext: modelContext, navigationPath: $navigationPath)
+                    CitiesReviewsView(navigationPath: $navigationPath)
+                        .environmentObject(cityReviewsViewModel)
                         .tabItem {
                             Label("Reviews", systemImage: "star.fill")
                         }
                         .tag(1)
                     
                     TravelSearchView(navigationPath: $navigationPath)
-                        .environmentObject(fromToViewModel)
+                        .environmentObject(travelSearchViewModel)
                         .tabItem {
                             Label("From-To", systemImage: "location")
                         }
@@ -62,12 +65,14 @@ struct MainView: View {
                     case .UserPreferencesView:
                         UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath)
                     case .TravelOptionsView:
-                        OutwardOptionsView(viewModel: fromToViewModel, navigationPath: $navigationPath)
+                        OutwardOptionsView(viewModel: travelSearchViewModel, navigationPath: $navigationPath)
                     case .ReturnOptionsView:
-                        ReturnOptionsView(viewModel: fromToViewModel, navigationPath: $navigationPath)
+                        ReturnOptionsView(viewModel: travelSearchViewModel, navigationPath: $navigationPath)
                     case .LoginView:
                         LoginView(modelContext: modelContext)
                             .transition(.opacity.animation(.easeInOut(duration: 0.2)))
+                    case .CityReviewsDetails:
+                        CityReviewsDetailsView(viewModel: cityReviewsViewModel, navigationPath: $navigationPath)
                     }
                 }
             }

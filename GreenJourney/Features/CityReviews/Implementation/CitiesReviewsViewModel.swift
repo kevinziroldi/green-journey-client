@@ -3,7 +3,7 @@ import FirebaseAuth
 import Foundation
 import SwiftData
 
-class CityReviewsViewModel: ObservableObject {
+class CitiesReviewsViewModel: ObservableObject {
     private var modelContext: ModelContext
     private var cancellables = Set<AnyCancellable>()
     
@@ -14,6 +14,9 @@ class CityReviewsViewModel: ObservableObject {
     // searched city
     @Published var searchedCity: CityCompleterDataset = CityCompleterDataset()
     @Published var searchedCityReviews: [Review] = []
+    
+    // selected city
+    @Published var selectedCityIndex: Int?
     
     
     init(modelContext: ModelContext) {

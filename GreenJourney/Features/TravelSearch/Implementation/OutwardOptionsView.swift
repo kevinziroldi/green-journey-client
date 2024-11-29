@@ -3,6 +3,7 @@ import SwiftUI
 struct OutwardOptionsView: View {
     @ObservedObject var viewModel: TravelSearchViewModel
     @Binding var navigationPath: NavigationPath
+    
     var body: some View {
         VStack (spacing: 0){
             HStack {
