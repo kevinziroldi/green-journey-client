@@ -51,7 +51,6 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
             return
         }
         
-        print("URL:  \(url)")
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         

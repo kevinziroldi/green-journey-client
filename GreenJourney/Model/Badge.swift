@@ -1,6 +1,6 @@
 import Foundation
 
-enum Badge: String, Decodable {
+enum Badge: String, Encodable, Decodable {
     case badgeDistanceLow = "badge_distance_low"
     case badgeDistanceHigh = "badge_distance_high"
     case badgeDistanceMid = "badge_distance_mid"

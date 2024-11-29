@@ -25,7 +25,7 @@ struct MainView: View {
                         }
                         .tag(0)
                     
-                    CityReviewsView(navigationPath: $navigationPath)
+                    CityReviewsView(modelContext: modelContext, navigationPath: $navigationPath)
                         .tabItem {
                             Label("Reviews", systemImage: "star.fill")
                         }

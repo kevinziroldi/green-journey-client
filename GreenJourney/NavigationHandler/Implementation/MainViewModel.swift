@@ -1,7 +1,8 @@
 import Combine
+import FirebaseAuth
 import SwiftData
 import SwiftUI
-import FirebaseAuth
+
 class MainViewModel: ObservableObject {
     var modelContext: ModelContext
     private var cancellables = Set<AnyCancellable>()
