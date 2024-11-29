@@ -215,6 +215,14 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
         }
     }
     
+    func resetParameters() {
+        self.arrival = CityCompleterDataset()
+        self.departure = CityCompleterDataset()
+        self.datePicked = Date()
+        self.selectedOption = []
+        self.outwardOptions = []
+        self.returnOptions = []
+    }
     
     func computeCo2Emitted(_ travelOption: [Segment]) -> Float64 {
         var co2Emitted: Float64 = 0.0

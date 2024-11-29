@@ -181,6 +181,7 @@ struct TravelSearchView: View {
                     Button(action: {
                         viewModel.computeRoutes()
                         navigationPath.append(NavigationDestination.TravelOptionsView)
+                        triggerAI = false
                         }) {
                         Text("Search")
                             .font(.title3)
