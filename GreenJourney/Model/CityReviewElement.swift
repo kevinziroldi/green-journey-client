@@ -1,4 +1,4 @@
-class BestReviewElement: Codable {
+class CityReviewElement: Codable {
     var reviews: [Review]
     var countLocalTransportRating: Int
     var countGreenSpacesRating: Int
@@ -15,6 +15,16 @@ class BestReviewElement: Codable {
         self.averageLocalTransportRating = averageLocalTransportRating
         self.averageGreenSpacesRating = averageGreenSpacesRating
         self.averageWasteBinsRating = averageWasteBinsRating
+    }
+    
+    init() {
+        self.reviews = []
+        self.countLocalTransportRating = 0
+        self.countGreenSpacesRating = 0
+        self.countWasteBinsRating = 0
+        self.averageLocalTransportRating = 0.0
+        self.averageGreenSpacesRating = 0.0
+        self.averageWasteBinsRating = 0.0
     }
     
     enum CodingKeys: String, CodingKey {

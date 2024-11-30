@@ -8,12 +8,12 @@ class CitiesReviewsViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     
     // best cities
-    @Published var bestCitiesReviewElements: [BestReviewElement] = []
+    @Published var bestCitiesReviewElements: [CityReviewElement] = []
     @Published var bestCities: [CityCompleterDataset] = []
     
     // searched city
     @Published var searchedCity: CityCompleterDataset = CityCompleterDataset()
-    @Published var searchedCityReviews: [Review] = []
+    @Published var searchedCityReviewElement: CityReviewElement?
     
     // selected city
     @Published var selectedCityIndex: Int?
@@ -57,7 +57,7 @@ class CitiesReviewsViewModel: ObservableObject {
                         }
                         return result.data
                     }
-                    .decode(type: [Review].self, decoder: decoder)
+                    .decode(type: CityReviewElement.self, decoder: decoder)
                     .receive(on: DispatchQueue.main)
                     .sink(receiveCompletion: {
                         completion in
@@ -67,14 +67,16 @@ class CitiesReviewsViewModel: ObservableObject {
                         case .failure(let error):
                             print("Error fetching user: \(error.localizedDescription)")
                         }
-                    }, receiveValue: { searchedCityReviews in
-                        self.searchedCityReviews = searchedCityReviews
+                    }, receiveValue: { cityReviewElement in
+                        self.searchedCityReviewElement = cityReviewElement
                     })
                     .store(in: &self.cancellables)
             }
         }
     }
         
+
+    
     func getBestReviewedCities() {
         let baseURL = NetworkManager.shared.getBaseURL()
         guard let url = URL(string:"\(baseURL)/reviews/best") else {
@@ -99,7 +101,7 @@ class CitiesReviewsViewModel: ObservableObject {
                 }
                 return result.data
             }
-            .decode(type: [BestReviewElement].self, decoder: decoder)
+            .decode(type: [CityReviewElement].self, decoder: decoder)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: {
                 completion in

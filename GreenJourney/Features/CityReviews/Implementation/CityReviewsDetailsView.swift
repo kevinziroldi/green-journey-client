@@ -7,18 +7,24 @@ struct CityReviewsDetailsView: View {
     var body: some View {
         VStack {
             if let selectedCityIndex = viewModel.selectedCityIndex {
-                if selectedCityIndex < 0 {
-                    Text(viewModel.searchedCity.cityName)
-                } else {
-                    VStack {
-                        Text(viewModel.bestCities[selectedCityIndex].cityName)
-                        Text(String(viewModel.bestCitiesReviewElements[selectedCityIndex].averageLocalTransportRating))
-                        Text(String(viewModel.bestCitiesReviewElements[selectedCityIndex].averageGreenSpacesRating))
-                        Text(String(viewModel.bestCitiesReviewElements[selectedCityIndex].averageWasteBinsRating))
-                    }
+                // get city and cityReviewElement
+                let (city, cityReviewElement) = getCityAndReviewElement(selectedCityIndex: selectedCityIndex)
+                
+                VStack {
+                    Text(city.cityName)
+                    Text(String(cityReviewElement.averageLocalTransportRating))
+                    Text(String(cityReviewElement.averageGreenSpacesRating))
+                    Text(String(cityReviewElement.averageWasteBinsRating))
                 }
             }
-            
+        }
+    }
+    
+    private func getCityAndReviewElement(selectedCityIndex: Int) -> (CityCompleterDataset, CityReviewElement) {
+        if selectedCityIndex < 0 {
+            return (viewModel.searchedCity, viewModel.searchedCityReviewElement ?? CityReviewElement())
+        } else {
+            return (viewModel.bestCities[selectedCityIndex], viewModel.bestCitiesReviewElements[selectedCityIndex])
         }
     }
 }
