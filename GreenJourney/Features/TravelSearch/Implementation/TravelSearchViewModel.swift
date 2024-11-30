@@ -136,7 +136,7 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
                 return
             }
             
-            print("body: " , String(data: body, encoding: .utf8)!)
+            //print("body: " , String(data: body, encoding: .utf8)!)
             
             if let firebaseUser = Auth.auth().currentUser {
                 firebaseUser.getIDToken { token, error in

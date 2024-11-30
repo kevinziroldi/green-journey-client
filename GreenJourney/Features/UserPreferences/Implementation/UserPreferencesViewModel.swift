@@ -119,7 +119,6 @@ class UserPreferencesViewModel: ObservableObject {
                     return
                 }
                 
-                
                 guard let firebaseUser = Auth.auth().currentUser else {
                     print("no current user in firebase")
                     return

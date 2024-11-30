@@ -26,9 +26,7 @@ class MainViewModel: ObservableObject {
             if let error = error {
                 print("Failed to fetch token: \(error.localizedDescription)")
                 return
-            } else if let token = token {
-                let firebaseToken = token
-                
+            } else if let firebaseToken = token {
                 let baseURL = NetworkManager.shared.getBaseURL()
                 guard let url = URL(string:"\(baseURL)/travels/user") else {
                     print("Invalid URL used to retrieve travels from DB")

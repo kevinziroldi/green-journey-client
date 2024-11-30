@@ -1,5 +1,6 @@
 import Combine
 import Foundation
+import FirebaseAuth
 import SwiftData
 
 enum SortOption {
@@ -11,6 +12,7 @@ enum SortOption {
 
 class MyTravelsViewModel: ObservableObject {
     private var modelContext: ModelContext
+    private var cancellables = Set<AnyCancellable>()
     
     // travels lists
     var travelDetailsList: [TravelDetails] = []
@@ -33,6 +35,7 @@ class MyTravelsViewModel: ObservableObject {
     
     // selected travel
     @Published var selectedTravel: TravelDetails?
+    @Published var compensatedPrice: Float64 = 1.0
     
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
@@ -102,7 +105,7 @@ class MyTravelsViewModel: ObservableObject {
             return false
         }
     }
-   
+    
     // sort travel details list according to some sort option
     private func sortTravels() {
         switch self.sortOption {
@@ -162,31 +165,89 @@ class MyTravelsViewModel: ObservableObject {
         }
     }
     
-    func compensateCO2(travelID: Int, priceCompensated: Float) {
-        
-        // TODO
+    func compensateCO2() {
         // compute CO2 compensated
-        let co2Compensated = 0  // TODO change
-    
-        // get travel
         
-        let fetchDescriptor = FetchDescriptor<Travel>(
-            predicate: #Predicate { $0.travelID == travelID }
-        )
-        do {
-            let travel = try modelContext.fetch(fetchDescriptor)
-            
-            // update CO2 compensated in server
-            
-            // if response ok, update CO2 compensated in SwiftData
-            
-        }catch {
-            
-            
-            // TODO
-            print("Error fecthing travel from SwiftData")
-            
-            
+        // TODO change
+        let co2CompensatedPerEuro = 37.5 // 37.5 kg/€
+        let co2Compensated = co2CompensatedPerEuro * self.compensatedPrice
+        
+        // TODO send request
+        // update swift data
+        
+        guard let firebaseUser = Auth.auth().currentUser else {
+            print("error retrieving firebase user")
+            return
+        }
+        firebaseUser.getIDToken { token, error in
+            if let error = error {
+                print("Failed to fetch token: \(error.localizedDescription)")
+                return
+            } else if let firebaseToken = token {
+                if let selectedTravel = self.selectedTravel {
+                    if let selectedTravelID = selectedTravel.travel.travelID {
+                        // JSON encoding and decoding
+                        let modifiedTravel = selectedTravel.travel
+                        modifiedTravel.CO2Compensated = co2Compensated
+                        guard let body = try? JSONEncoder().encode(modifiedTravel) else {
+                            print("Error encoding user data for PUT")
+                            return
+                        }
+                        let decoder = JSONDecoder()
+                        
+                        // build URL
+                        let baseURL = NetworkManager.shared.getBaseURL()
+                        guard let url = URL(string:"\(baseURL)/travels/user/\(selectedTravelID)") else {
+                            print("Invalid URL used to retrieve travels from DB")
+                            return
+                        }
+                        
+                        // build request
+                        var request = URLRequest(url: url)
+                        request.httpMethod = "PUT"
+                        request.setValue("Bearer \(firebaseToken)", forHTTPHeaderField: "Authorization")
+                        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                        request.httpBody = body
+                        
+                        // send request
+                        URLSession.shared.dataTaskPublisher(for: request)
+                            .retry(2)
+                            .tryMap {
+                                result -> Data in
+                                // check status of response
+                                guard let httpResponse = result.response as? HTTPURLResponse,
+                                      (200...299).contains(httpResponse.statusCode) else {
+                                    throw URLError(.badServerResponse)
+                                }
+                                return result.data
+                            }
+                            .receive(on: DispatchQueue.main)
+                            .decode(type: Travel.self, decoder: decoder)
+                            .sink(receiveCompletion: { completion in
+                                switch completion {
+                                case .finished:
+                                    print("Travel update posted successfully.")
+                                case .failure(let error):
+                                    print("Error updating travel data: \(error.localizedDescription)")
+                                    return
+                                }
+                            }, receiveValue: { travel in
+                                // save travel in SwiftData
+                                
+                                // TODO
+                                
+                                
+                            })
+                            .store(in: &self.cancellables)
+                    } else {
+                        // TODO
+                        print("Error")
+                    }
+                } else {
+                    // TODO
+                    print("Error")
+                }
+            }
         }
     }
 }

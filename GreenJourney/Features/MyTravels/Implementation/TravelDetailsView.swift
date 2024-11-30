@@ -6,7 +6,15 @@ struct TravelDetailsView: View {
     
     var body : some View {
         VStack {
-            Text(viewModel.selectedTravel?.segments.first?.departureCity ?? "unknown")
+            Text("From").font(.title)
+            Text(viewModel.selectedTravel?.getDepartureSegment()?.departureCity ?? "unknown").font(.headline)
+            
+            Text("To").font(.title)
+            Text(viewModel.selectedTravel?.getDestinationSegment()?.destinationCity ?? "unknown").font(.headline)
+            
+            Button ("COMPENSATION TRIAL") {
+                viewModel.compensateCO2()
+            }
         }
     }
 }
