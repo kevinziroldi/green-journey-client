@@ -58,7 +58,7 @@ struct CompleterView: View {
                 }
                 .buttonStyle(.bordered)
             }
-            .padding(.horizontal)
+            .padding()
         }
         
         .onAppear(){
