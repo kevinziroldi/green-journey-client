@@ -11,6 +11,8 @@ enum SortOption {
 
 class MyTravelsViewModel: ObservableObject {
     private var modelContext: ModelContext
+    
+    // travels lists
     var travelDetailsList: [TravelDetails] = []
     @Published var filteredTravelDetailsList: [TravelDetails] = []
     @Published var showCompleted = true {
@@ -28,6 +30,9 @@ class MyTravelsViewModel: ObservableObject {
             filterTravelDetails()
         }
     }
+    
+    // selected travel
+    @Published var selectedTravel: TravelDetails?
     
     init(modelContext: ModelContext) {
         self.modelContext = modelContext

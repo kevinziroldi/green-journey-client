@@ -65,7 +65,8 @@ struct CitiesReviewsView: View {
                     // for server call
                     viewModel.searchedCity = city
                     // for details view
-                    viewModel.selectedCityIndex = -1
+                    viewModel.selectedCity = viewModel.searchedCity
+                    viewModel.selectedCityReviewElement = viewModel.searchedCityReviewElement
                 }
                 )
             }
@@ -74,7 +75,7 @@ struct CitiesReviewsView: View {
                 viewModel.getReviewsForSearchedCity()
                 
                 // append path of the next view
-                navigationPath.append(NavigationDestination.CityReviewsDetails)
+                navigationPath.append(NavigationDestination.CityReviewsDetailsView)
                 
                 }) {
                 Text("Search")
@@ -84,28 +85,14 @@ struct CitiesReviewsView: View {
             .buttonStyle(.borderedProminent)
              
             // list of cities
-            /*
-            List(viewModel.bestCities) { city in
-                VStack(alignment: .leading) {
-                    Text(city.cityName)
-                        .font(.headline)
-                        .onTapGesture {
-                            // values for details view
-                            viewModel.isBest = true
-                            viewModel.selectedCity = city
-                            // move to details view
-                            navigationPath.append(NavigationDestination.CityReviewsDetails)
-                        }
-                }
-            }
-             */
             List(viewModel.bestCities.indices, id: \.self) { index in
                 VStack(alignment: .leading) {
                     Text(viewModel.bestCities[index].cityName)
                         .font(.headline)
                         .onTapGesture {
-                            viewModel.selectedCityIndex = index
-                            navigationPath.append(NavigationDestination.CityReviewsDetails)
+                            viewModel.selectedCity = viewModel.bestCities[index]
+                            viewModel.selectedCityReviewElement = viewModel.bestCitiesReviewElements[index]
+                            navigationPath.append(NavigationDestination.CityReviewsDetailsView)
                         }
                 }
             }

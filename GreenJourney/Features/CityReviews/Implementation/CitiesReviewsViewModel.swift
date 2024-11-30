@@ -16,7 +16,8 @@ class CitiesReviewsViewModel: ObservableObject {
     @Published var searchedCityReviewElement: CityReviewElement?
     
     // selected city
-    @Published var selectedCityIndex: Int?
+    @Published var selectedCity: CityCompleterDataset?
+    @Published var selectedCityReviewElement: CityReviewElement?
     
     
     init(modelContext: ModelContext) {
@@ -75,8 +76,6 @@ class CitiesReviewsViewModel: ObservableObject {
         }
     }
         
-
-    
     func getBestReviewedCities() {
         let baseURL = NetworkManager.shared.getBaseURL()
         guard let url = URL(string:"\(baseURL)/reviews/best") else {

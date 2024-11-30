@@ -3,5 +3,6 @@ enum NavigationDestination: Hashable {
     case LoginView
     case TravelOptionsView
     case ReturnOptionsView
-    case CityReviewsDetails
+    case CityReviewsDetailsView
+    case TravelDetailsView
 }

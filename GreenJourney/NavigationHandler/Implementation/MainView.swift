@@ -5,6 +5,7 @@ struct MainView: View {
     @StateObject private var viewModel: MainViewModel
     @StateObject var travelSearchViewModel: TravelSearchViewModel
     @StateObject var cityReviewsViewModel: CitiesReviewsViewModel
+    @StateObject var myTravelsViewModel: MyTravelsViewModel
     @Environment(\.modelContext) private var modelContext
     @State private var selectedTab = 2
     
@@ -14,6 +15,7 @@ struct MainView: View {
         _viewModel = StateObject(wrappedValue: MainViewModel(modelContext: modelContext))
         _travelSearchViewModel = StateObject(wrappedValue: TravelSearchViewModel(modelContext: modelContext))
         _cityReviewsViewModel = StateObject(wrappedValue: CitiesReviewsViewModel(modelContext: modelContext))
+        _myTravelsViewModel = StateObject(wrappedValue: MyTravelsViewModel(modelContext: modelContext))
         navigationPath = NavigationPath()
     }
     
@@ -42,6 +44,7 @@ struct MainView: View {
                         .tag(2)
                     
                     MyTravelsView(modelContext: modelContext, navigationPath: $navigationPath)
+                        .environmentObject(myTravelsViewModel)
                         .tabItem {
                             Label("My travels", systemImage: "airplane")
                         }
@@ -71,8 +74,10 @@ struct MainView: View {
                     case .LoginView:
                         LoginView(modelContext: modelContext)
                             .transition(.opacity.animation(.easeInOut(duration: 0.2)))
-                    case .CityReviewsDetails:
+                    case .CityReviewsDetailsView:
                         CityReviewsDetailsView(viewModel: cityReviewsViewModel, navigationPath: $navigationPath)
+                    case .TravelDetailsView:
+                        TravelDetailsView(viewModel: myTravelsViewModel, navigationPath: $navigationPath)
                     }
                 }
             }

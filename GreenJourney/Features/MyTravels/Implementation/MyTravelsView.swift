@@ -2,7 +2,7 @@ import SwiftData
 import SwiftUI
 
 struct MyTravelsView: View {
-    @StateObject var viewModel: MyTravelsViewModel
+    @EnvironmentObject var viewModel: MyTravelsViewModel
     @State private var selectedSortOption: SortOption = .departureDate
     @State private var showSortOptions = false
     @Binding var navigationPath: NavigationPath
@@ -11,7 +11,6 @@ struct MyTravelsView: View {
     @Query var users: [User]
     
     init(modelContext: ModelContext, navigationPath: Binding<NavigationPath>) {
-        _viewModel = StateObject(wrappedValue: MyTravelsViewModel(modelContext: modelContext))
         _navigationPath = navigationPath
     }
     
@@ -55,8 +54,12 @@ struct MyTravelsView: View {
                 ])
             }
             
-            List(viewModel.filteredTravelDetailsList) { travelDetails in
+            List(viewModel.filteredTravelDetailsList, id: \.id) { travelDetails in
                 TravelRow(travelDetails: travelDetails)
+                    .onTapGesture {
+                        viewModel.selectedTravel = travelDetails
+                        navigationPath.append(NavigationDestination.TravelDetailsView)
+                    }
             }
         }
         .onAppear {
@@ -67,6 +70,7 @@ struct MyTravelsView: View {
 
 struct TravelRow: View {
     let travelDetails: TravelDetails
+    
     var departure: String {
         travelDetails.getDepartureSegment()?.departureCity ?? "Unknown"
     }
