@@ -98,7 +98,7 @@ struct OptionCard: View {
                     Spacer()
                     VStack{
                         
-                        Text(option.first?.date.formatted(date: .numeric, time: .shortened) ?? "")
+                        Text(option.first?.dateTime.formatted(date: .numeric, time: .shortened) ?? "")
                             .font(.subheadline)
                             .fontWeight(.light)
                         Text(viewModel.getOptionDeparture(option))
@@ -127,7 +127,7 @@ struct OptionCard: View {
                         Text(viewModel.getOptionDestination(option))
                             .font(.title3)
                         
-                        let arrivalDate = option.last?.date.addingTimeInterval(TimeInterval(option.last?.duration ?? 0) / 1000000000)
+                        let arrivalDate = option.last?.dateTime.addingTimeInterval(TimeInterval(option.last?.duration ?? 0) / 1000000000)
                         Text(arrivalDate?.formatted(date: .numeric, time: .shortened) ?? "")
                             .font(.subheadline)
                             .fontWeight(.light)

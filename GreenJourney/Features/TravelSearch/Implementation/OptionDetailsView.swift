@@ -8,7 +8,7 @@ struct OptionDetailsView: View {
     @Binding var navigationPath: NavigationPath
     
     var body: some View {
-        HeaderView(from: getOptionDeparture(segments), to: getOptionDestination(segments), date: segments.first?.date)
+        HeaderView(from: getOptionDeparture(segments), to: getOptionDestination(segments), date: segments.first?.dateTime)
         Rectangle()
             .frame(height: 1)
             .foregroundColor(.gray)
@@ -285,7 +285,7 @@ struct SegmentDetailView: View {
                     .frame(width: 100)
             }
                 VStack {
-                    Text(segment.date.formatted(date: .numeric, time: .shortened))
+                    Text(segment.dateTime.formatted(date: .numeric, time: .shortened))
                         .font(.callout)
                         .fontWeight(.light)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -352,7 +352,7 @@ struct SegmentDetailView: View {
                         }
                     }
                     Spacer()
-                    Text(segment.date.addingTimeInterval(TimeInterval(segment.duration/1000000000)).formatted(date: .numeric, time: .shortened))
+                    Text(segment.dateTime.addingTimeInterval(TimeInterval(segment.duration/1000000000)).formatted(date: .numeric, time: .shortened))
                         .font(.callout)
                         .fontWeight(.light)
                         .frame(maxWidth: .infinity, alignment: .leading)
