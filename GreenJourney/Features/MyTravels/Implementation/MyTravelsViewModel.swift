@@ -170,7 +170,7 @@ class MyTravelsViewModel: ObservableObject {
         
         // TODO change
         let co2CompensatedPerEuro = 37.5 // 37.5 kg/€
-        let co2Compensated = co2CompensatedPerEuro * self.compensatedPrice
+        let newCo2Compensated = co2CompensatedPerEuro * self.compensatedPrice
         
         // TODO send request
         // update swift data
@@ -185,69 +185,90 @@ class MyTravelsViewModel: ObservableObject {
                 return
             } else if let firebaseToken = token {
                 if let selectedTravel = self.selectedTravel {
-                    if let selectedTravelID = selectedTravel.travel.travelID {
-                        // JSON encoding and decoding
-                        let modifiedTravel = selectedTravel.travel
-                        modifiedTravel.CO2Compensated = co2Compensated
-                        guard let body = try? JSONEncoder().encode(modifiedTravel) else {
-                            print("Error encoding user data for PUT")
-                            return
-                        }
-                        let decoder = JSONDecoder()
-                        
-                        // build URL
-                        let baseURL = NetworkManager.shared.getBaseURL()
-                        guard let url = URL(string:"\(baseURL)/travels/user/\(selectedTravelID)") else {
-                            print("Invalid URL used to retrieve travels from DB")
-                            return
-                        }
-                        
-                        // build request
-                        var request = URLRequest(url: url)
-                        request.httpMethod = "PUT"
-                        request.setValue("Bearer \(firebaseToken)", forHTTPHeaderField: "Authorization")
-                        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-                        request.httpBody = body
-                        
-                        // send request
-                        URLSession.shared.dataTaskPublisher(for: request)
-                            .retry(2)
-                            .tryMap {
-                                result -> Data in
-                                // check status of response
-                                guard let httpResponse = result.response as? HTTPURLResponse,
-                                      (200...299).contains(httpResponse.statusCode) else {
-                                    throw URLError(.badServerResponse)
-                                }
-                                return result.data
-                            }
-                            .receive(on: DispatchQueue.main)
-                            .decode(type: Travel.self, decoder: decoder)
-                            .sink(receiveCompletion: { completion in
-                                switch completion {
-                                case .finished:
-                                    print("Travel update posted successfully.")
-                                case .failure(let error):
-                                    print("Error updating travel data: \(error.localizedDescription)")
-                                    return
-                                }
-                            }, receiveValue: { travel in
-                                // save travel in SwiftData
-                                
-                                // TODO
-                                
-                                
-                            })
-                            .store(in: &self.cancellables)
-                    } else {
-                        // TODO
-                        print("Error")
+                    // JSON encoding and decoding
+                    let modifiedTravel = selectedTravel.travel
+                    modifiedTravel.CO2Compensated += newCo2Compensated
+                    guard let body = try? JSONEncoder().encode(modifiedTravel) else {
+                        print("Error encoding user data for PUT")
+                        return
                     }
+                    let decoder = JSONDecoder()
+                    
+                    // build URL
+                    let baseURL = NetworkManager.shared.getBaseURL()
+                    guard let url = URL(string:"\(baseURL)/travels/user") else {
+                        print("Invalid URL used to retrieve travels from DB")
+                        return
+                    }
+                    
+                    // build request
+                    var request = URLRequest(url: url)
+                    request.httpMethod = "PUT"
+                    request.setValue("Bearer \(firebaseToken)", forHTTPHeaderField: "Authorization")
+                    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                    request.httpBody = body
+                    
+                    // send request
+                    URLSession.shared.dataTaskPublisher(for: request)
+                        .retry(2)
+                        .tryMap {
+                            result -> Data in
+                            // check status of response
+                            guard let httpResponse = result.response as? HTTPURLResponse,
+                                  (200...299).contains(httpResponse.statusCode) else {
+                                throw URLError(.badServerResponse)
+                            }
+                            return result.data
+                        }
+                        .receive(on: DispatchQueue.main)
+                        .decode(type: Travel.self, decoder: decoder)
+                        .sink(receiveCompletion: { completion in
+                            switch completion {
+                            case .finished:
+                                print("Travel update posted successfully.")
+                            case .failure(let error):
+                                print("Error updating travel data: \(error.localizedDescription)")
+                                return
+                            }
+                        }, receiveValue: { travel in
+                            // save travel in SwiftData
+                            self.updateTravel(updatedTravel: travel)
+                        })
+                        .store(in: &self.cancellables)
                 } else {
                     // TODO
                     print("Error")
                 }
+            } else {
+                // TODO
+                print("Error")
             }
+        }
+    }
+    
+    func updateTravel(updatedTravel: Travel) {
+        do {
+            let travels = try modelContext.fetch(FetchDescriptor<Travel>())
+            
+            for travel in travels {
+                if travel.travelID == travel.travelID {
+                    do {
+                        // update values
+                        travel.CO2Compensated = updatedTravel.CO2Compensated
+                        travel.confirmed = updatedTravel.confirmed
+                        try modelContext.save()
+                    } catch {
+                        print("Error while updating travel in SwiftData")
+                        
+                        // TODO
+                    }
+                }
+            }
+        }catch {
+            print("Error while updating user in SwiftData")
+            
+            // TODO
+            
         }
     }
 }

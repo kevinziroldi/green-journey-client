@@ -9,8 +9,12 @@ struct TravelDetailsView: View {
             Text("From").font(.title)
             Text(viewModel.selectedTravel?.getDepartureSegment()?.departureCity ?? "unknown").font(.headline)
             
+            Spacer()
+            
             Text("To").font(.title)
             Text(viewModel.selectedTravel?.getDestinationSegment()?.destinationCity ?? "unknown").font(.headline)
+            
+            Spacer()
             
             Button ("COMPENSATION TRIAL") {
                 viewModel.compensateCO2()
