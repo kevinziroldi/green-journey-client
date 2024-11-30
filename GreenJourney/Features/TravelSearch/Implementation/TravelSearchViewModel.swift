@@ -102,18 +102,6 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
                         print("Error fetching options: \(error.localizedDescription)")
                     }
                 }, receiveValue: { [weak self] response in
-                
-                    print("options received")
-                    for option in response.options {
-                        print("option")
-                        for segment in option {
-                            
-                            print("TRYING TO CALL")
-                            
-                            self?.unifyDateHour(segment: segment)
-                        }
-                    }
-                    
                     self?.returnOptions = response.options
                 })
                 .store(in: &cancellables)
@@ -189,7 +177,6 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
                                 self.modelContext.insert(travelDetails.travel)
                                 
                                 for segment in travelDetails.segments {
-                                    self.unifyDateHour(segment: segment)
                                     self.modelContext.insert(segment)
                                 }
                                 do {
@@ -315,29 +302,5 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
             vehicle = ""
         }
         return vehicle
-    }
-    
-    func unifyDateHour(segment: Segment) {
-        
-        print("CALLED")
-        
-        let calendar = Calendar.current
-        let dateComponents = calendar.dateComponents([.year, .month, .day], from: segment.date)
-        let hourComponents = calendar.dateComponents([.hour, .minute], from: segment.hour)
-        if let unifiedDate = calendar.date(from: DateComponents(
-            year: dateComponents.year,
-            month: dateComponents.month,
-            day: dateComponents.day,
-            hour: hourComponents.hour,
-            minute: hourComponents.minute
-        )) {
-            segment.date = unifiedDate
-            segment.hour = unifiedDate
-            
-            print (segment.date)
-            print(segment.hour)
-        } else {
-            print("Error while modifying date and hour")
-        }
     }
 }

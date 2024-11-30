@@ -90,7 +90,7 @@ class MyTravelsViewModel: ObservableObject {
             let lastSegment = travel.getLastSegment()
             if let lastSegment = lastSegment {
                 let durationSeconds = Double(lastSegment.duration) / 1_000_000_000
-                let departureDateLastSegment = lastSegment.date
+                let departureDateLastSegment = lastSegment.dateTime
                 let arrivalDate = departureDateLastSegment.addingTimeInterval(durationSeconds)
                 
                 if showCompleted {
@@ -114,8 +114,8 @@ class MyTravelsViewModel: ObservableObject {
             travelDetailsList.sort {
                 if let firstSegment1 = $0.getFirstSegment() {
                     if let firstSegment2 = $1.getFirstSegment() {
-                        let date1 = firstSegment1.date
-                        let date2 = firstSegment2.date
+                        let date1 = firstSegment1.dateTime
+                        let date2 = firstSegment2.dateTime
                         return date1 > date2
                     }
                 }

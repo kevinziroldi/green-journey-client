@@ -10,8 +10,7 @@ class Segment: Codable, Identifiable {
     var departureCountry: String
     var destinationCity: String
     var destinationCountry: String
-    var date: Date
-    var hour: Date
+    var dateTime: Date
     var duration: Int
     var vehicle: Vehicle
     var segmentDescription: String
@@ -24,7 +23,7 @@ class Segment: Codable, Identifiable {
     
     var id: UUID = UUID()
    
-    init(segmentID: Int, departureID: Int, destinationID: Int, departureCity: String, departureCountry: String,  destinationCity: String, destinationCountry: String, date: Date, hour: Date, duration: Int, vehicle: Vehicle, segmentDescription: String, price: Float64, co2Emitted: Float64, distance: Float64, numSegment: Int, isOutward: Bool, travelID: Int) {
+    init(segmentID: Int, departureID: Int, destinationID: Int, departureCity: String, departureCountry: String,  destinationCity: String, destinationCountry: String, date: Date, duration: Int, vehicle: Vehicle, segmentDescription: String, price: Float64, co2Emitted: Float64, distance: Float64, numSegment: Int, isOutward: Bool, travelID: Int) {
         self.segmentID = segmentID
         self.departureID = departureID
         self.destinationID = destinationID
@@ -32,8 +31,7 @@ class Segment: Codable, Identifiable {
         self.departureCountry = departureCountry
         self.destinationCity = destinationCity
         self.destinationCountry = destinationCountry
-        self.date = date
-        self.hour = hour
+        self.dateTime = date
         self.duration = duration
         self.vehicle = vehicle
         self.segmentDescription = segmentDescription
@@ -55,7 +53,6 @@ class Segment: Codable, Identifiable {
         case destinationCity = "destination_city"
         case destinationCountry = "destination_country"
         case date = "date"
-        case hour = "hour"
         case duration = "duration"
         case vehicle = "vehicle"
         case segmentDescription = "description"
@@ -76,8 +73,7 @@ class Segment: Codable, Identifiable {
         self.departureCountry = try container.decode(String.self, forKey: .departureCountry)
         self.destinationCity = try container.decode(String.self, forKey: .destinationCity)
         self.destinationCountry = try container.decode(String.self, forKey: .destinationCountry)
-        self.date = try container.decode(Date.self, forKey: .date)
-        self.hour = try container.decode(Date.self, forKey: .hour)
+        self.dateTime = try container.decode(Date.self, forKey: .date)
         self.duration = try container.decode(Int.self, forKey: .duration)
         self.vehicle = try container.decode(Vehicle.self, forKey: .vehicle)
         self.segmentDescription = try container.decode(String.self, forKey: .segmentDescription)
@@ -99,8 +95,7 @@ class Segment: Codable, Identifiable {
         try container.encode(departureCountry, forKey: .departureCountry)
         try container.encode(destinationCity, forKey: .destinationCity)
         try container.encode(destinationCountry, forKey: .destinationCountry)
-        try container.encode(date, forKey: .date)
-        try container.encode(hour, forKey: .hour)
+        try container.encode(dateTime, forKey: .date)
         try container.encode(duration, forKey: .duration)
         try container.encode(vehicle, forKey: .vehicle)
         try container.encode(segmentDescription, forKey: .segmentDescription)

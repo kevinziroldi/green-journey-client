@@ -78,11 +78,11 @@ struct TravelRow: View {
         travelDetails.getDestinationSegment()?.destinationCity ?? "Unknown"
     }
     var departureDate: String {
-        dateFormatter.string(for: travelDetails.segments.first?.date) ?? "Unknown"
+        dateFormatter.string(for: travelDetails.segments.first?.dateTime) ?? "Unknown"
     }
     var destinationDate: String {
         let durationSeconds = Double((travelDetails.segments.last?.duration ?? 0) / 1_000_000_000)
-        let departureDateLastSegment = travelDetails.segments.last?.date
+        let departureDateLastSegment = travelDetails.segments.last?.dateTime
         let arrivalDate = departureDateLastSegment?.addingTimeInterval(durationSeconds)
         return dateFormatter.string(for: arrivalDate) ?? "Unkwnown"
     }
