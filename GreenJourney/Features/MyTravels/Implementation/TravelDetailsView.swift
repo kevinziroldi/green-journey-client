@@ -6,19 +6,33 @@ struct TravelDetailsView: View {
     
     var body : some View {
         VStack {
-            Text("From").font(.title)
-            Text(viewModel.selectedTravel?.getDepartureSegment()?.departureCity ?? "unknown").font(.headline)
+            Spacer()
+            
+            Button(action: {
+                viewModel.deleteSelectedTravel()
+                
+                if !navigationPath.isEmpty {
+                    navigationPath.removeLast()
+                }
+            }) {
+                Image(systemName: "trash")
+                    .foregroundColor(.red)
+            }
             
             Spacer()
             
+            Text("From").font(.title)
+            Text(viewModel.selectedTravel?.getDepartureSegment()?.departureCity ?? "unknown").font(.headline)
             Text("To").font(.title)
             Text(viewModel.selectedTravel?.getDestinationSegment()?.destinationCity ?? "unknown").font(.headline)
             
             Spacer()
-            
+                        
             Button ("COMPENSATION TRIAL") {
                 viewModel.compensateCO2()
             }
+            
+            Spacer()
         }
     }
 }
