@@ -25,6 +25,8 @@ struct TravelDetailsView: View {
             Text(viewModel.selectedTravel?.getDepartureSegment()?.departureCity ?? "unknown").font(.headline)
             Text("To").font(.title)
             Text(viewModel.selectedTravel?.getDestinationSegment()?.destinationCity ?? "unknown").font(.headline)
+            Text("Departure").font(.title)
+            Text(viewModel.selectedTravel?.getDepartureSegment()?.dateTime.formatted(date: .numeric, time: .shortened) ?? "unknown").font(.headline)
             
             Spacer()
                         

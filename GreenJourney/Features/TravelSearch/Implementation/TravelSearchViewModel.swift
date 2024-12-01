@@ -41,6 +41,8 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
         let timeFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         timeFormatter.dateFormat = "HH:mm"
+        dateFormatter.timeZone = TimeZone(identifier: "UTC")
+        timeFormatter.timeZone = TimeZone(identifier: "UTC")
         let formattedDate = dateFormatter.string(from: datePicked)
         let formattedDateReturn = dateFormatter.string(from: dateReturnPicked)
         let formattedTime = timeFormatter.string(from: datePicked)
