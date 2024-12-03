@@ -98,6 +98,7 @@ struct CitiesReviewsView: View {
             }
         }
         .onAppear {
+            viewModel.searchedCity.cityName = ""
             viewModel.getBestReviewedCities()
         }
     }

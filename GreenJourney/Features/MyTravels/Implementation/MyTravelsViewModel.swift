@@ -364,4 +364,8 @@ class MyTravelsViewModel: ObservableObject {
             }
         }
     }
+    
+    func uploadReview() {
+        // TODO
+    }
 }
