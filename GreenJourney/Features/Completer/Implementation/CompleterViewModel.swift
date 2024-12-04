@@ -15,9 +15,9 @@ class CompleterViewModel: ObservableObject {
     private var continent: String = ""
     private var country: String = ""
     
-    init(modelContext: ModelContext, searchText: String) {
+    init(modelContext: ModelContext) {
         self.modelContext = modelContext
-        self.searchText = searchText
+        self.searchText = ""
         self.continent = findContinent()
         self.country = findCountry()
         search()

@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct TravelDetailsView: View {
-    @ObservedObject var viewModel: MyTravelsViewModel
+    @EnvironmentObject var viewModel: MyTravelsViewModel
     @Binding var navigationPath: NavigationPath
     
     var body : some View {

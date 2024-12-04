@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ReturnOptionsView: View {
-    @ObservedObject var viewModel: TravelSearchViewModel
+    @EnvironmentObject var viewModel: TravelSearchViewModel
     @Binding var navigationPath: NavigationPath
     var body: some View {
         VStack (spacing: 0){

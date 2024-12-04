@@ -2,15 +2,17 @@ import SwiftUI
 import SwiftData
 
 struct CompleterView: View {
-    @StateObject private var viewModel: CompleterViewModel
+    @EnvironmentObject private var viewModel: CompleterViewModel
     @Environment(\.colorScheme) var colorScheme
     @FocusState var textfieldOpen: Bool
     var onBack: () -> Void
     var onClick: (CityCompleterDataset) -> Void
+    var searchText: String
+    
     init(modelContext: ModelContext, searchText: String, onBack: @escaping () -> Void, onClick: @escaping (CityCompleterDataset) -> Void) {
-        _viewModel = StateObject(wrappedValue: CompleterViewModel(modelContext: modelContext, searchText: searchText))
         self.onBack = onBack
         self.onClick = onClick
+        self.searchText = searchText
     }
     
     var body: some View {
@@ -60,8 +62,8 @@ struct CompleterView: View {
             }
             .padding()
         }
-        
         .onAppear(){
+            viewModel.searchText = self.searchText
             textfieldOpen = true
         }
     }

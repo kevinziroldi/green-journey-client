@@ -2,13 +2,9 @@ import SwiftUI
 import SwiftData
 
 struct LoginView: View {
-    @StateObject private var viewModel: AuthenticationViewModel
+    @EnvironmentObject private var viewModel: AuthenticationViewModel
     @State private var isNavigationActive = false
     @Environment(\.modelContext) private var modelContext
-    
-    init(modelContext: ModelContext) {
-        _viewModel = StateObject(wrappedValue: AuthenticationViewModel(modelContext: modelContext))
-    }
 
     var body: some View {
         VStack{
@@ -64,7 +60,7 @@ struct LoginView: View {
                                 .cornerRadius(30)
                         }
                         .fullScreenCover(isPresented: $viewModel.isEmailVerificationActive) {
-                            EmailVerificationView(viewModel: viewModel)
+                            EmailVerificationView()
                         }
                         
                         HStack {
@@ -128,7 +124,7 @@ struct LoginView: View {
             }
             .fullScreenCover(isPresented: $isNavigationActive, onDismiss: ({ isNavigationActive = false
                 viewModel.resetParameters()})) {
-                SignUpView(viewModel: viewModel)
+                SignUpView()
             }
         }
         .navigationBarHidden(true)

@@ -96,14 +96,13 @@ struct TravelSearchView: View {
                             }
                             .fullScreenCover(isPresented: $departureTapped ) {
                                 CompleterView(modelContext: modelContext, searchText: viewModel.departure.cityName,
-                                              onBack: {
-                                                  departureTapped = false
-                                              },
-                                              onClick: { city in
+                                onBack: {
+                                    departureTapped = false
+                                },
+                                onClick: { city in
                                     departureTapped = false
                                     viewModel.departure = city
-                                }
-                                )
+                                })
                             }
                             
                             VStack{
@@ -233,7 +232,7 @@ struct TravelSearchView: View {
             //.animation(.default, value: dateTapped || dateReturnTapped)
         }
         else {
-            LoginView(modelContext: modelContext)
+            LoginView()
                 .transition(.opacity.animation(.easeInOut(duration: 0.2)))
         }
     }

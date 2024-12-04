@@ -2,20 +2,13 @@ import SwiftData
 import SwiftUI
 
 struct MainView: View {
-    @StateObject private var viewModel: MainViewModel
-    @StateObject var travelSearchViewModel: TravelSearchViewModel
-    @StateObject var cityReviewsViewModel: CitiesReviewsViewModel
-    @StateObject var myTravelsViewModel: MyTravelsViewModel
+    @EnvironmentObject private var viewModel: MainViewModel
     @Environment(\.modelContext) private var modelContext
     @State private var selectedTab = 2
     
     @State var navigationPath: NavigationPath = NavigationPath()
     
     init(modelContext: ModelContext) {
-        _viewModel = StateObject(wrappedValue: MainViewModel(modelContext: modelContext))
-        _travelSearchViewModel = StateObject(wrappedValue: TravelSearchViewModel(modelContext: modelContext))
-        _cityReviewsViewModel = StateObject(wrappedValue: CitiesReviewsViewModel(modelContext: modelContext))
-        _myTravelsViewModel = StateObject(wrappedValue: MyTravelsViewModel(modelContext: modelContext))
         navigationPath = NavigationPath()
     }
     
@@ -30,21 +23,18 @@ struct MainView: View {
                         .tag(0)
                     
                     CitiesReviewsView(navigationPath: $navigationPath)
-                        .environmentObject(cityReviewsViewModel)
                         .tabItem {
                             Label("Reviews", systemImage: "star.fill")
                         }
                         .tag(1)
                     
                     TravelSearchView(navigationPath: $navigationPath)
-                        .environmentObject(travelSearchViewModel)
                         .tabItem {
                             Label("From-To", systemImage: "location")
                         }
                         .tag(2)
                     
                     MyTravelsView(modelContext: modelContext, navigationPath: $navigationPath)
-                        .environmentObject(myTravelsViewModel)
                         .tabItem {
                             Label("My travels", systemImage: "airplane")
                         }
@@ -66,21 +56,21 @@ struct MainView: View {
                 .navigationDestination(for: NavigationDestination.self) { destination in
                     switch destination {
                     case .OutwardOptionsView:
-                        OutwardOptionsView(viewModel: travelSearchViewModel, navigationPath: $navigationPath)
+                        OutwardOptionsView(navigationPath: $navigationPath)
                     case .ReturnOptionsView:
-                        ReturnOptionsView(viewModel: travelSearchViewModel, navigationPath: $navigationPath)
+                        ReturnOptionsView(navigationPath: $navigationPath)
                     case .LoginView:
-                        LoginView(modelContext: modelContext)
+                        LoginView()
                             .transition(.opacity.animation(.easeInOut(duration: 0.2)))
                     case .CityReviewsDetailsView:
-                        CityReviewsDetailsView(viewModel: cityReviewsViewModel, navigationPath: $navigationPath)
+                        CityReviewsDetailsView(navigationPath: $navigationPath)
                     case .TravelDetailsView:
-                        TravelDetailsView(viewModel: myTravelsViewModel, navigationPath: $navigationPath)
+                        TravelDetailsView(navigationPath: $navigationPath)
                     }
                 }
             }
         } else {
-            LoginView(modelContext: modelContext)
+            LoginView()
         }
     }
 }

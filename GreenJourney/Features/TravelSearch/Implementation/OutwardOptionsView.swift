@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct OutwardOptionsView: View {
-    @ObservedObject var viewModel: TravelSearchViewModel
+    @EnvironmentObject var viewModel: TravelSearchViewModel
     @Binding var navigationPath: NavigationPath
     
     var body: some View {

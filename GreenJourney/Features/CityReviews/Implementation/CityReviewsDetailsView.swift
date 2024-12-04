@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct CityReviewsDetailsView: View {
-    @ObservedObject var viewModel: CitiesReviewsViewModel
+    @EnvironmentObject var viewModel: CitiesReviewsViewModel
     @Binding var navigationPath: NavigationPath
     
     var body: some View {

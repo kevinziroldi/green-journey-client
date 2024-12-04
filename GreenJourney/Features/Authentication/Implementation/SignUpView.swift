@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct SignUpView: View {
-    @ObservedObject var viewModel: AuthenticationViewModel
+    @EnvironmentObject var viewModel: AuthenticationViewModel
     @State private var isNavigationLoginActive = false    
     @Environment(\.modelContext) private var modelContext
     
@@ -95,7 +95,7 @@ struct SignUpView: View {
                             viewModel.resetParameters()
                         }
                         .fullScreenCover(isPresented: $isNavigationLoginActive) {
-                            LoginView(modelContext: modelContext)
+                            LoginView()
                         }
                     }
                 }

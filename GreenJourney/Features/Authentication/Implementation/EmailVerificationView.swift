@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct EmailVerificationView: View {
-    @ObservedObject var viewModel: AuthenticationViewModel
+    @EnvironmentObject var viewModel: AuthenticationViewModel
     @Environment(\.modelContext) private var modelContext
     
     var body: some View {

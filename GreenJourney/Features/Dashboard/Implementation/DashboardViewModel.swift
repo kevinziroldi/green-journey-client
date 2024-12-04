@@ -1,7 +1,6 @@
-//
-//  DashboardViewModel.swift
-//  GreenJourney
-//
-//  Created by Kevin Ziroldi on 20/11/24.
-//
+import Foundation
 
+class DashboardViewModel: ObservableObject {
+    
+    
+}

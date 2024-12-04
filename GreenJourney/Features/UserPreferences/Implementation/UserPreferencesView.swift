@@ -116,7 +116,7 @@ struct UserPreferencesView : View {
             .frame(maxWidth: .infinity)
             .padding()
         } else {
-            LoginView(modelContext: modelContext)
+            LoginView()
                 .transition(.opacity.animation(.easeInOut(duration: 0.2)))
         }
     }
