@@ -133,14 +133,14 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
                 return
             }
             
+            // TODO remove
             //print("body: " , String(data: body, encoding: .utf8)!)
             
             if let firebaseUser = Auth.auth().currentUser {
                 firebaseUser.getIDToken { token, error in
                     if let error = error {
                         print("error getting firebase token: \(error.localizedDescription)")
-                    } else if let token = token {
-                        let firebaseToken = token
+                    } else if let firebaseToken = token {
                         
                         // POST request
                         var request = URLRequest(url: url)
