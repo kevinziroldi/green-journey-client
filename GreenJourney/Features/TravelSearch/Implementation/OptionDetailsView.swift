@@ -270,14 +270,66 @@ struct SegmentDetailView: View {
             VStack {
                 Text(segment.departureCity)
                     .font(.headline)
-                Spacer()
-                ZStack{
-                    Circle()
-                        .stroke(lineWidth: 2.5)
-                        .frame(width: 40, height: 40)
-                    Image(systemName: findVehicle(segment))
-                        .font(.title2)
+                if !detailsOpen {
+                    Spacer()
+                }
+                HStack{
+                    ZStack{
+                        Circle()
+                            .stroke(lineWidth: 2.5)
+                            .frame(width: 40, height: 40)
+                        Image(systemName: findVehicle(segment))
+                            .font(.title2)
+                        
+                    }
                     
+                    Button(action: {
+                        detailsOpen.toggle()
+                        if arrowImage == "chevron.right" {
+                            arrowImage = "chevron.down"
+                            lenght = 250
+                        }
+                        else {
+                            arrowImage = "chevron.right"
+                            lenght = 85
+                        }
+                    }) {
+                        Image(systemName: arrowImage)
+                            .font(.title2)
+                    }
+                    
+                    Spacer()
+                }
+            
+                if detailsOpen {
+                    Spacer()
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 15)
+                            .stroke(lineWidth: 1)
+                        
+                        VStack{
+                            Text(String(format: "%.1f", segment.distance) + " Km")
+                                .font(.callout)
+                                .fontWeight(.semibold)
+                                .padding(EdgeInsets(top: 10, leading: 10, bottom: 5, trailing: 10))
+                            Rectangle()
+                                .frame(height: 1)
+                            Text(String(format: "%.2f", segment.price) + " €")
+                                .font(.callout)
+                                .fontWeight(.semibold)
+                                .foregroundStyle(.green)
+                                .padding(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
+                            Rectangle()
+                                .frame(height: 1)
+                            Text(String(format: "%.1f", segment.co2Emitted) + " Kg CO2")
+                                .font(.callout)
+                                .fontWeight(.semibold)
+                                .foregroundStyle(.red)
+                                .padding(EdgeInsets(top: 5, leading: 10, bottom: 10, trailing: 10))
+                        }
+                    }
+                    .fixedSize(horizontal: false, vertical: true)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 Spacer()
                 Text(segment.destinationCity)
@@ -292,23 +344,6 @@ struct SegmentDetailView: View {
                     
                         Spacer()
                     
-                    HStack{
-                        Button(action: {
-                            detailsOpen.toggle()
-                            if arrowImage == "chevron.right" {
-                                arrowImage = "chevron.down"
-                                lenght = 180
-                            }
-                            else {
-                                arrowImage = "chevron.right"
-                                lenght = 85
-                            }
-                        }) {
-                            Image(systemName: arrowImage)
-                                .font(.title2)
-                        }
-                        Spacer()
-                    }
                     if detailsOpen {
                         VStack{
                             Spacer()
@@ -325,29 +360,6 @@ struct SegmentDetailView: View {
                                     Spacer()
                                 }
                             }
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 15)
-                                    .stroke(lineWidth: 2)
-                                    
-                                HStack{
-                                    Text(String(format: "%.1f", segment.distance) + " Km")
-                                        .font(.callout)
-                                        .fontWeight(.semibold)
-                                    Rectangle()
-                                        .frame(width: 2)
-                                    Text(String(format: "%.0f", segment.price) + " €")
-                                        .font(.callout)
-                                        .fontWeight(.semibold)
-                                        .foregroundStyle(.green)
-                                    Rectangle()
-                                        .frame(width: 2)
-                                    Text(String(format: "%.0f", segment.co2Emitted) + " Kg CO2")
-                                        .font(.callout)
-                                        .fontWeight(.semibold)
-                                        .foregroundStyle(.red)
-                                }
-                            }
-                            .frame(maxWidth: 250, maxHeight: 40)
                             Spacer()
                         }
                     }
