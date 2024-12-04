@@ -21,9 +21,7 @@ struct RankingView: View {
                     
                     Spacer()
                     
-                    Button(action: {
-                        navigationPath.append(NavigationDestination.UserPreferencesView)
-                    }) {
+                    NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath)) {
                         Image(systemName: "person")
                             .font(.title)
                     }

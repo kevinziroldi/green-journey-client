@@ -65,9 +65,7 @@ struct MainView: View {
                 }
                 .navigationDestination(for: NavigationDestination.self) { destination in
                     switch destination {
-                    case .UserPreferencesView:
-                        UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath)
-                    case .TravelOptionsView:
+                    case .OutwardOptionsView:
                         OutwardOptionsView(viewModel: travelSearchViewModel, navigationPath: $navigationPath)
                     case .ReturnOptionsView:
                         ReturnOptionsView(viewModel: travelSearchViewModel, navigationPath: $navigationPath)

@@ -1,7 +1,6 @@
 enum NavigationDestination: Hashable {
-    case UserPreferencesView
     case LoginView
-    case TravelOptionsView
+    case OutwardOptionsView
     case ReturnOptionsView
     case CityReviewsDetailsView
     case TravelDetailsView

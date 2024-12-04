@@ -27,9 +27,7 @@ struct TravelSearchView: View {
                         
                         Spacer()
                         
-                        Button(action: {
-                            navigationPath.append(NavigationDestination.UserPreferencesView)
-                        }) {
+                        NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath)) {
                             Image(systemName: "person")
                                 .font(.title)
                         }
@@ -180,7 +178,7 @@ struct TravelSearchView: View {
                     Spacer()
                     Button(action: {
                         viewModel.computeRoutes()
-                        navigationPath.append(NavigationDestination.TravelOptionsView)
+                        navigationPath.append(NavigationDestination.OutwardOptionsView)
                         triggerAI = false
                         }) {
                         Text("Search")
