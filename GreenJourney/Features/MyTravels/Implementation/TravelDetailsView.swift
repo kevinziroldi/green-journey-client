@@ -34,6 +34,14 @@ struct TravelDetailsView: View {
                 viewModel.compensateCO2()
             }
             
+            Button ("UPLOAD REVIEW") {
+                viewModel.reviewText = "review di prova"
+                viewModel.localTransportRating = 1
+                viewModel.greenSpacesRating = 1
+                viewModel.wasteBinsRating = 1
+                viewModel.uploadReview()
+            }
+            
             Spacer()
         }
     }

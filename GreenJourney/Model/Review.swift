@@ -33,6 +33,25 @@ class Review: Codable {
         self.badges = badges
     }
     
+    init(reviewID: Int?, cityID: Int, userID: Int, reviewText: String, localTransportRating: Int, greenSpacesRating: Int, wasteBinsRating: Int) {
+        self.reviewID = reviewID
+        self.cityID = cityID
+        self.userID = userID
+        self.reviewText = reviewText
+        self.localTransportRating = localTransportRating
+        self.greenSpacesRating = greenSpacesRating
+        self.wasteBinsRating = wasteBinsRating
+        
+        // injected data is empty
+        self.cityIata = ""
+        self.countryCode = ""
+        self.firstName = ""
+        self.lastName = ""
+        self.scoreShortDistance = 0
+        self.scoreLongDistance = 0
+        self.badges = []
+    }
+    
     enum CodingKeys: String, CodingKey {
         case reviewID = "review_id"
         case cityID = "city_id"

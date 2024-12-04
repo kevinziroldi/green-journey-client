@@ -9,8 +9,8 @@ class Travel: Codable {
     var userID: Int
  
     init (travelID: Int? = nil, userID: Int) {
-        self.userID = userID
         self.travelID = travelID
+        self.userID = userID
     }
     
     enum CodingKeys: String, CodingKey {
