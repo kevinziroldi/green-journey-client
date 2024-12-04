@@ -77,7 +77,8 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
                     print("Error fetching options: \(error.localizedDescription)")
                 }
             }, receiveValue: { [weak self] response in
-                self?.outwardOptions = response.options
+                guard let strongSelf = self else { return }
+                strongSelf.outwardOptions = response.options
             })
             .store(in: &cancellables)
         if (!oneWay) {
@@ -104,7 +105,8 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
                         print("Error fetching options: \(error.localizedDescription)")
                     }
                 }, receiveValue: { [weak self] response in
-                    self?.returnOptions = response.options
+                    guard let strongSelf = self else { return }
+                    strongSelf.returnOptions = response.options
                 })
                 .store(in: &cancellables)
         }
@@ -137,7 +139,8 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
             //print("body: " , String(data: body, encoding: .utf8)!)
             
             if let firebaseUser = Auth.auth().currentUser {
-                firebaseUser.getIDToken { token, error in
+                firebaseUser.getIDToken { [weak self] token, error in
+                    guard let strongSelf = self else { return }
                     if let error = error {
                         print("error getting firebase token: \(error.localizedDescription)")
                     } else if let firebaseToken = token {
@@ -172,17 +175,18 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
                                     print("Error posting travel data: \(error.localizedDescription)")
                                     return
                                 }
-                            }, receiveValue: { response in
+                            }, receiveValue: {[weak self] response in
+                                guard let strongSelf = self else { return }
                                 travelDetails = response
                                 
                                 // save travel in SwiftData
-                                self.modelContext.insert(travelDetails.travel)
+                                strongSelf.modelContext.insert(travelDetails.travel)
                                 
                                 for segment in travelDetails.segments {
-                                    self.modelContext.insert(segment)
+                                    strongSelf.modelContext.insert(segment)
                                 }
                                 do {
-                                    try self.modelContext.save()
+                                    try strongSelf.modelContext.save()
                                 } catch {
                                     
                                     // TODO gestione
@@ -192,9 +196,9 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
                                 }
                                 print("travel added to SwiftData")
                             })
-                            .store(in: &self.cancellables)
-                        self.departure = CityCompleterDataset()
-                        self.arrival = CityCompleterDataset()
+                            .store(in: &strongSelf.cancellables)
+                        strongSelf.departure = CityCompleterDataset()
+                        strongSelf.arrival = CityCompleterDataset()
                     }
                     else {
                         print("error retrieving token")

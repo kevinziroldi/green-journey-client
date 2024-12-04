@@ -29,14 +29,15 @@ class CitiesReviewsViewModel: ObservableObject {
             print("error retrieving firebase user")
             return
         }
-        firebaseUser.getIDToken { token, error in
+        firebaseUser.getIDToken { [weak self] token, error in
+            guard let strongSelf = self else { return }
             if let error = error {
                 print("Failed to fetch token: \(error.localizedDescription)")
                 return
             } else if let firebaseToken = token {
                 // build URL
                 let baseURL = NetworkManager.shared.getBaseURL()
-                guard let url = URL(string:"\(baseURL)/reviews?city_iata=\(self.searchedCity.iata)&country_code=\(self.searchedCity.countryCode)") else {
+                guard let url = URL(string:"\(baseURL)/reviews?city_iata=\(strongSelf.searchedCity.iata)&country_code=\(strongSelf.searchedCity.countryCode)") else {
                     print("Invalid URL used to retrieve user from DB")
                     return
                 }
@@ -68,10 +69,11 @@ class CitiesReviewsViewModel: ObservableObject {
                         case .failure(let error):
                             print("Error fetching user: \(error.localizedDescription)")
                         }
-                    }, receiveValue: { cityReviewElement in
-                        self.searchedCityReviewElement = cityReviewElement
+                    }, receiveValue: {[weak self] cityReviewElement in
+                        guard let strongSelf = self else { return }
+                        strongSelf.searchedCityReviewElement = cityReviewElement
                     })
-                    .store(in: &self.cancellables)
+                    .store(in: &strongSelf.cancellables)
             }
         }
     }
@@ -110,38 +112,37 @@ class CitiesReviewsViewModel: ObservableObject {
                 case .failure(let error):
                     print("Error fetching user: \(error.localizedDescription)")
                 }
-            }, receiveValue: { bestCities in
+            }, receiveValue: { [weak self] bestCities in
+                guard let strongSelf = self else { return }
                 // remove old elements
-                self.bestCitiesReviewElements = []
-                self.bestCities = []
+                strongSelf.bestCitiesReviewElements = []
+                strongSelf.bestCities = []
                 
                 // add new elements
-                for bestReviewCity in bestCities {
-                    if let cityIata = bestReviewCity.reviews.first?.cityIata {
-                        if let countryCode = bestReviewCity.reviews.first?.countryCode {
-                            let descriptor = FetchDescriptor<CityCompleterDataset>(
-                                predicate: #Predicate { city in
-                                    city.iata == cityIata && city.countryCode == countryCode
+                    for bestReviewCity in bestCities {
+                        if let cityIata = bestReviewCity.reviews.first?.cityIata {
+                            if let countryCode = bestReviewCity.reviews.first?.countryCode {
+                                let descriptor = FetchDescriptor<CityCompleterDataset>(
+                                    predicate: #Predicate { city in
+                                        city.iata == cityIata && city.countryCode == countryCode
+                                    }
+                                )
+                                do {
+                                    if let bestCity = try strongSelf.modelContext.fetch(descriptor).first {
+                                        strongSelf.bestCitiesReviewElements.append(bestReviewCity)
+                                        strongSelf.bestCities.append(bestCity)
+                                    }
+                                }catch {
+                                    
+                                    print("Error interacting with SwiftData")
+                                    
+                                    // TODO
+                                    
                                 }
-                            )
-                            do {
-                                if let bestCity = try self.modelContext.fetch(descriptor).first {
-                                    self.bestCitiesReviewElements.append(bestReviewCity)
-                                    self.bestCities.append(bestCity)
-                                }
-                            }catch {
-                                
-                                print("Error interacting with SwiftData")
-                                
-                                // TODO
-                                
                             }
                         }
                     }
-                }
-                
-                
-            })
+                })
             .store(in: &cancellables)
     }
 }

@@ -22,7 +22,8 @@ class MainViewModel: ObservableObject {
             print("error retrieving firebase user")
             return
         }
-        firebaseUser.getIDToken { token, error in
+        firebaseUser.getIDToken { [weak self] token, error in
+            guard let strongSelf = self else { return }
             if let error = error {
                 print("Failed to fetch token: \(error.localizedDescription)")
                 return
@@ -61,10 +62,11 @@ class MainViewModel: ObservableObject {
                             print("Error fetching travels: \(error.localizedDescription)")
                         }
                     }, receiveValue: { [weak self] travelDetailsList in
-                        self?.removeExistingTravels()
-                        self?.addNewTravels(travelDetailsList)
+                        guard let strongSelf = self else { return }
+                        strongSelf.removeExistingTravels()
+                        strongSelf.addNewTravels(travelDetailsList)
                     })
-                    .store(in: &self.cancellables)
+                    .store(in: &strongSelf.cancellables)
             }
             else {
                 print("error retrieving user token")

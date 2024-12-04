@@ -194,12 +194,13 @@ class MyTravelsViewModel: ObservableObject {
             print("error retrieving firebase user")
             return
         }
-        firebaseUser.getIDToken { token, error in
+        firebaseUser.getIDToken {[weak self] token, error in
+            guard let strongSelf = self else { return }
             if let error = error {
                 print("Failed to fetch token: \(error.localizedDescription)")
                 return
             } else if let firebaseToken = token {
-                if let selectedTravel = self.selectedTravel {
+                if let selectedTravel = strongSelf.selectedTravel {
                     // JSON encoding and decoding
                     let modifiedTravel = selectedTravel.travel
                     modifiedTravel.CO2Compensated += newCo2Compensated
@@ -245,13 +246,14 @@ class MyTravelsViewModel: ObservableObject {
                                 print("Error updating travel data: \(error.localizedDescription)")
                                 return
                             }
-                        }, receiveValue: { travel in
+                        }, receiveValue: { [weak self] travel in
+                            guard let strongSelf = self else { return }
                             // save travel in SwiftData
-                            self.updateTravelInSwiftData(updatedTravel: travel)
+                            strongSelf.updateTravelInSwiftData(updatedTravel: travel)
                             // refresh travels
-                            self.getUserTravels()
+                            strongSelf.getUserTravels()
                         })
-                        .store(in: &self.cancellables)
+                        .store(in: &strongSelf.cancellables)
                 } else {
                     // TODO
                     print("Error")
@@ -294,12 +296,13 @@ class MyTravelsViewModel: ObservableObject {
             print("error retrieving firebase user")
             return
         }
-        firebaseUser.getIDToken { token, error in
+        firebaseUser.getIDToken { [weak self] token, error in
+            guard let strongSelf = self else { return }
             if let error = error {
                 print("Failed to fetch token: \(error.localizedDescription)")
                 return
             } else if let firebaseToken = token {
-                if let selectedTravel = self.selectedTravel {
+                if let selectedTravel = strongSelf.selectedTravel {
                     if let travelID = selectedTravel.travel.travelID {
                         // build URL
                         let baseURL = NetworkManager.shared.getBaseURL()
@@ -334,13 +337,14 @@ class MyTravelsViewModel: ObservableObject {
                                     print("Error updating travel data: \(error.localizedDescription)")
                                     return
                                 }
-                            }, receiveValue: { _ in
+                            }, receiveValue: { [weak self] _ in
+                                guard let strongSelf = self else { return }
                                 // remove from SwiftData
-                                self.deleteTravelFromSwiftData(travelToDelete: self.selectedTravel)
+                                strongSelf.deleteTravelFromSwiftData(travelToDelete: strongSelf.selectedTravel)
                                 // refresh travels
-                                self.getUserTravels()
+                                strongSelf.getUserTravels()
                             })
-                            .store(in: &self.cancellables)
+                            .store(in: &strongSelf.cancellables)
                     }
                 }
             }
@@ -385,13 +389,14 @@ class MyTravelsViewModel: ObservableObject {
             if let destinationSegment = selectedTravel.getLastSegment() {
                 // make POST request
                 if let firebaseUser = Auth.auth().currentUser {
-                    firebaseUser.getIDToken { token, error in
+                    firebaseUser.getIDToken { [weak self] token, error in
+                        guard let strongSelf = self else { return }
                         if let error = error {
                             print("error getting firebase token: \(error.localizedDescription)")
                             return
                         } else if let firebaseToken = token {
                             // create review
-                            let review = Review(reviewID: nil, cityID: destinationSegment.destinationID, userID: selectedTravel.travel.userID, reviewText: self.reviewText, localTransportRating: self.localTransportRating, greenSpacesRating: self.greenSpacesRating, wasteBinsRating: self.wasteBinsRating)
+                            let review = Review(reviewID: nil, cityID: destinationSegment.destinationID, userID: selectedTravel.travel.userID, reviewText: strongSelf.reviewText, localTransportRating: strongSelf.localTransportRating, greenSpacesRating: strongSelf.greenSpacesRating, wasteBinsRating: strongSelf.wasteBinsRating)
                             
                             // JSON encoding
                             let encoder = JSONEncoder()
@@ -436,10 +441,11 @@ class MyTravelsViewModel: ObservableObject {
                                         print("Error posting travel data: \(error.localizedDescription)")
                                         return
                                     }
-                                }, receiveValue: { review in
-                                    self.travelReviews.append(review)
+                                }, receiveValue: { [weak self] review in
+                                    guard let strongSelf = self else { return }
+                                    strongSelf.travelReviews.append(review)
                                 })
-                                .store(in: &self.cancellables)
+                                .store(in: &strongSelf.cancellables)
                         }
                     }
                 }else {
@@ -461,22 +467,23 @@ class MyTravelsViewModel: ObservableObject {
     
     func modifyReview() {
         if let firebaseUser = Auth.auth().currentUser {
-            firebaseUser.getIDToken { token, error in
+            firebaseUser.getIDToken { [weak self] token, error in
+                guard let strongSelf = self else { return }
                 if let error = error {
                     print("error getting firebase token: \(error.localizedDescription)")
                     return
                 } else if let firebaseToken = token {
                     // get review
                     var reviewToModify: Review? = nil
-                    for review in self.travelReviews {
-                        if review.reviewID == self.modifiedReviewID {
+                    for review in strongSelf.travelReviews {
+                        if review.reviewID == strongSelf.modifiedReviewID {
                             reviewToModify = review
                         }
                     }
                     if let reviewToModify = reviewToModify {
                         if let reviewID  = reviewToModify.reviewID {
                             // create modified review
-                            let modifiedReview = Review(reviewID: reviewToModify.reviewID, cityID: reviewToModify.cityID, userID: reviewToModify.userID, reviewText: self.modifiedReviewText, localTransportRating: self.modifiedLocalTransportRating, greenSpacesRating: self.modifiedGreenSpacesRating, wasteBinsRating: self.modifiedWasteBinsRating)
+                            let modifiedReview = Review(reviewID: reviewToModify.reviewID, cityID: reviewToModify.cityID, userID: reviewToModify.userID, reviewText: strongSelf.modifiedReviewText, localTransportRating: strongSelf.modifiedLocalTransportRating, greenSpacesRating: strongSelf.modifiedGreenSpacesRating, wasteBinsRating: strongSelf.modifiedWasteBinsRating)
                             
                             // JSON encoding
                             let encoder = JSONEncoder()
@@ -518,11 +525,12 @@ class MyTravelsViewModel: ObservableObject {
                                     case .failure(let error):
                                         print("Error posting user data: \(error.localizedDescription)")
                                     }
-                                }, receiveValue: { updatedReview in
+                                }, receiveValue: { [weak self] updatedReview in
+                                    guard let strongSelf = self else { return }
                                     // remove old review and add new one
                                     var travelReviewsUpdated: [Review] = []
                                     
-                                    for review in self.travelReviews {
+                                    for review in strongSelf.travelReviews {
                                         if review.reviewID != reviewID {
                                             travelReviewsUpdated.append(review)
                                         } else {
@@ -530,9 +538,9 @@ class MyTravelsViewModel: ObservableObject {
                                         }
                                     }
                                     
-                                    self.travelReviews = travelReviewsUpdated
+                                    strongSelf.travelReviews = travelReviewsUpdated
                                 })
-                                .store(in: &self.cancellables)
+                                .store(in: &strongSelf.cancellables)
                         }
                     }else {
                         print("Review to modify not found")
@@ -548,7 +556,8 @@ class MyTravelsViewModel: ObservableObject {
     
     func deleteReview(reviewID: Int) {
         if let firebaseUser = Auth.auth().currentUser {
-            firebaseUser.getIDToken { token, error in
+            firebaseUser.getIDToken { [weak self] token, error in
+                guard let strongSelf = self else { return }
                 if let error = error {
                     print("error getting firebase token: \(error.localizedDescription)")
                     return
@@ -586,17 +595,18 @@ class MyTravelsViewModel: ObservableObject {
                                 print("Error deleting review: \(error.localizedDescription)")
                                 return
                             }
-                        }, receiveValue: { _ in
+                        }, receiveValue: { [weak self] _ in
+                            guard let strongSelf = self else { return }
                             // remove from travelReviews
                             var travelReviewsUpdated: [Review] = []
-                            for travelReview in self.travelReviews {
+                            for travelReview in strongSelf.travelReviews {
                                 if travelReview.reviewID != reviewID {
                                     travelReviewsUpdated.append(travelReview)
                                 }
                             }
-                            self.travelReviews = travelReviewsUpdated
+                            strongSelf.travelReviews = travelReviewsUpdated
                         })
-                        .store(in: &self.cancellables)
+                        .store(in: &strongSelf.cancellables)
                 }
             }
         }else {

@@ -63,15 +63,16 @@ class AuthenticationViewModel: ObservableObject {
             return
         }
         errorMessage = nil
-        Auth.auth().sendPasswordReset(withEmail: email) { error in
+        Auth.auth().sendPasswordReset(withEmail: email) {[weak self] error in
+            guard let strongSelf = self else { return }
             if let error = error {
                 print("error in sending email for password recovery")
-                self.errorMessage = error.localizedDescription
-                self.resendEmail = nil
+                strongSelf.errorMessage = error.localizedDescription
+                strongSelf.resendEmail = nil
             }
             else {
                 print("email for password reset sent")
-                self.resendEmail = "email sent"
+                strongSelf.resendEmail = "email sent"
             }
         }
     }
@@ -91,13 +92,14 @@ class AuthenticationViewModel: ObservableObject {
         }
         else {
             //Firebase call, create account
-            Auth.auth().createUser(withEmail: email, password: password) { result, error in
+            Auth.auth().createUser(withEmail: email, password: password) { [weak self] result, error in
+                guard let strongSelf = self else { return }
                 if let error = error {
-                    self.errorMessage = error.localizedDescription
+                    strongSelf.errorMessage = error.localizedDescription
                 } else {
                     if let result = result {
                         // if login is ok
-                        self.isEmailVerificationActive = true
+                        strongSelf.isEmailVerificationActive = true
                         
                         result.user.getIDToken { token, error in
                             if let error = error {
@@ -105,12 +107,12 @@ class AuthenticationViewModel: ObservableObject {
                             } else if let token = token {
                                 print("Token retrieved: \(token)")
                                 // Puoi utilizzare il token per fare chiamate al server
-                                self.saveUserToServer(firebaseUID: result.user.uid, firebaseToken: token)
+                                strongSelf.saveUserToServer(firebaseUID: result.user.uid, firebaseToken: token)
                             }
                         }
-                        self.sendEmailVerification()
+                        strongSelf.sendEmailVerification()
                         
-                        self.errorMessage = nil
+                        strongSelf.errorMessage = nil
                     }
                 }
             }
@@ -126,22 +128,23 @@ class AuthenticationViewModel: ObservableObject {
     }
     
     func verifyEmail() {
-        Auth.auth().currentUser?.reload(completion: { (error) in
+        Auth.auth().currentUser?.reload(completion: { [weak self] error in
+            guard let strongSelf = self else { return }
             if let error = error {
                 print("Error reloading user: \(error.localizedDescription)")
                 return
             }
             if Auth.auth().currentUser?.isEmailVerified == true {
                 print("Email verified")
-                self.errorMessage = nil
+                strongSelf.errorMessage = nil
                 
                 // save user to swift data
                 if let firebaseUser = Auth.auth().currentUser {
                     firebaseUser.getIDToken { token, error in
                         if let error = error {
-                            self.errorMessage = "Failed to fetch token: \(error.localizedDescription)"
+                            strongSelf.errorMessage = "Failed to fetch token: \(error.localizedDescription)"
                         } else if let token = token {
-                            self.getUserFromServer(firebaseToken: token)
+                            strongSelf.getUserFromServer(firebaseToken: token)
                         }
                     }
                 }else {
@@ -149,10 +152,10 @@ class AuthenticationViewModel: ObservableObject {
                     return
                 }
                 
-                self.emailVerified = true
-                self.isEmailVerificationActive = false
+                strongSelf.emailVerified = true
+                strongSelf.isEmailVerificationActive = false
             } else {
-                self.errorMessage = "email has not yet been verified"
+                strongSelf.errorMessage = "email has not yet been verified"
                 print("Email not verified.")
             }
         })
@@ -326,12 +329,13 @@ extension AuthenticationViewModel {
                         }
                     }
                     // in any case, save to swift data
-                    firebaseUser.getIDToken { token, error in
+                    firebaseUser.getIDToken { [weak self] token, error in
+                        guard let strongSelf = self else { return }
                         if let error = error {
-                            self.errorMessage = "Failed to fetch token: \(error.localizedDescription)"
+                            strongSelf.errorMessage = "Failed to fetch token: \(error.localizedDescription)"
                         } else if let token = token {
                             // Passa il token alla funzione
-                            self.getUserFromServer(firebaseToken: token)
+                            strongSelf.getUserFromServer(firebaseToken: token)
                         }
                     }
                 }

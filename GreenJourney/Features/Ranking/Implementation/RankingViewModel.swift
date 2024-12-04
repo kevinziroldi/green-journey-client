@@ -48,8 +48,9 @@ class RankingViewModel: ObservableObject {
                     print("Error fetching rankings: \(error.localizedDescription)")
                 }
             }, receiveValue: { [weak self] response in
-                self?.shortDistanceRanking = response.shortDistanceRanking
-                self?.longDistanceRanking = response.longDistanceRanking
+                guard let strongSelf = self else { return }
+                strongSelf.shortDistanceRanking = response.shortDistanceRanking
+                strongSelf.longDistanceRanking = response.longDistanceRanking
             })
             .store(in: &cancellables)
     }

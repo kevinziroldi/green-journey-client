@@ -123,7 +123,8 @@ class UserPreferencesViewModel: ObservableObject {
                     print("no current user in firebase")
                     return
                 }
-                firebaseUser.getIDToken { token, error in
+                firebaseUser.getIDToken { [weak self] token, error in
+                    guard let strongSelf = self else { return }
                     if let error = error {
                         print("error retrieveing token: \(error.localizedDescription)")
                         return
@@ -161,11 +162,12 @@ class UserPreferencesViewModel: ObservableObject {
                                 case .failure(let error):
                                     print("Error posting user data: \(error.localizedDescription)")
                                 }
-                            }, receiveValue: { newUser in
-                                self.updateUser(newUser: newUser)
-                                self.getUserData()
+                            }, receiveValue: { [weak self] newUser in
+                                guard let strongSelf = self else { return }
+                                strongSelf.updateUser(newUser: newUser)
+                                strongSelf.getUserData()
                             })
-                            .store(in: &self.cancellables)
+                            .store(in: &strongSelf.cancellables)
                     }
                     else {
                         print("error retrieving user token")
