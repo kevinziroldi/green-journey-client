@@ -46,12 +46,7 @@ struct MainView: View {
                         }
                         .tag(4)
                 }.onAppear {
-                    // refresh travels data
-                    viewModel.fetchTravels()
-                    // load cities from dataset for ML (if needed)
-                    viewModel.loadCityMLDataset()
-                    // load cities from dataset for auto completer (if needed)
-                    viewModel.loadCityCompleterDataset()
+                    viewModel.loadData()
                 }
                 .navigationDestination(for: NavigationDestination.self) { destination in
                     switch destination {

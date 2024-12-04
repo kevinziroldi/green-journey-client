@@ -33,8 +33,7 @@ class RankingViewModel: ObservableObject {
                       (200...299).contains(httpResponse.statusCode) else {
                     throw URLError(.badServerResponse)
                 }
-                print(String(data: result.data, encoding: .utf8) ?? "No data")
-
+                //print(String(data: result.data, encoding: .utf8) ?? "No data")
                 return result.data
             }
             .decode(type: RankingResponse.self, decoder: decoder)
