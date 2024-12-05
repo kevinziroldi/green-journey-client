@@ -59,8 +59,6 @@ struct MainView: View {
                             .transition(.opacity.animation(.easeInOut(duration: 0.2)))
                     case .CityReviewsDetailsView:
                         CityReviewsDetailsView(navigationPath: $navigationPath)
-                    case .TravelDetailsView:
-                        TravelDetailsView(navigationPath: $navigationPath)
                     }
                 }
             }

@@ -1,8 +1,11 @@
 import SwiftUI
 
 struct TravelDetailsView: View {
+    var travelDetails: TravelDetails
     @EnvironmentObject var viewModel: MyTravelsViewModel
     @Binding var navigationPath: NavigationPath
+    
+    
     
     var body : some View {
         VStack {

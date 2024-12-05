@@ -5,15 +5,16 @@ struct MyTravelsView: View {
     @EnvironmentObject var viewModel: MyTravelsViewModel
     @State private var selectedSortOption: SortOption = .departureDate
     @State private var showSortOptions = false
+    
+    @State private var showAlert: Bool = false
+    @State private var showConfirm: Bool = false
+    
     @Binding var navigationPath: NavigationPath
     @Environment(\.modelContext) private var modelContext
-    
-    @Query var users: [User]
-    
+        
     init(modelContext: ModelContext, navigationPath: Binding<NavigationPath>) {
         _navigationPath = navigationPath
     }
-    
     var body: some View {
         VStack {
             HStack {
@@ -22,7 +23,9 @@ struct MyTravelsView: View {
                     .padding()
                 Spacer()
                 
-                NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath)) {
+                Button(action: {
+                    //navigationPath.append(NavigationDestination.UserPreferencesView)
+                }) {
                     Image(systemName: "person")
                         .font(.title)
                 }
@@ -51,13 +54,55 @@ struct MyTravelsView: View {
                     .cancel()
                 ])
             }
-            
-            List(viewModel.filteredTravelDetailsList, id: \.id) { travelDetails in
-                TravelRow(travelDetails: travelDetails)
-                    .onTapGesture {
-                        viewModel.selectedTravel = travelDetails
-                        navigationPath.append(NavigationDestination.TravelDetailsView)
+            ScrollView {
+                VStack{
+                    ForEach(viewModel.filteredTravelDetailsList, id: \.id) { travelDetails in
+                        HStack (spacing: 10) {
+                            NavigationLink(destination: TravelDetailsView(travelDetails: travelDetails, navigationPath: $navigationPath)) {
+                                TravelCard(travelDetails: travelDetails)
+                            }
+                            if !travelDetails.travel.confirmed {
+                                VStack {
+                                    Button(action: {
+                                        showAlert = true
+                                    }) {
+                                        Image(systemName: "trash.circle")
+                                            .font(.largeTitle)
+                                            .scaleEffect(1.2)
+                                            .fontWeight(.light)
+                                            .foregroundStyle(.red)
+                                    }
+                                    .padding(.vertical, 5)
+                                    .alert(isPresented: $showAlert) {
+                                        Alert(title: Text("Delete this travel?"), message: Text("you cannot undo this action"), primaryButton: .destructive(Text("Delete")) {
+                                            //delete travel
+                                        }, secondaryButton: .cancel(Text("cancel")))
+                                    }
+                                    
+                                    Button(action: {
+                                        showConfirm = true
+                                    }) {
+                                        Image(systemName: "checkmark.circle")
+                                            .font(.largeTitle)
+                                            .scaleEffect(1.2)
+                                            .fontWeight(.light)
+                                            .foregroundStyle(.green)
+                                    }
+                                    .padding(.vertical, 5)
+                                    .alert(isPresented: $showConfirm) {
+                                        Alert(title: Text("Have you done this travel?"), primaryButton: .default(Text("Back")) {
+                                            //confirm travel
+                                        }, secondaryButton: .default(Text("Confirm")))
+                                    }
+                                }
+                            }
+                        }
+                        .padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
+                        
+                        
+                        
                     }
+                }
             }
         }
         .onAppear {
@@ -66,50 +111,126 @@ struct MyTravelsView: View {
     }
 }
 
-struct TravelRow: View {
+struct TravelCard: View {
     let travelDetails: TravelDetails
     
-    var departure: String {
-        travelDetails.getDepartureSegment()?.departureCity ?? "Unknown"
-    }
-    var destination: String {
-        travelDetails.getDestinationSegment()?.destinationCity ?? "Unknown"
-    }
-    var departureDate: String {
-        dateFormatter.string(for: travelDetails.segments.first?.dateTime) ?? "Unknown"
-    }
-    var destinationDate: String {
-        let durationSeconds = Double((travelDetails.segments.last?.duration ?? 0) / 1_000_000_000)
-        let departureDateLastSegment = travelDetails.segments.last?.dateTime
-        let arrivalDate = departureDateLastSegment?.addingTimeInterval(durationSeconds)
-        return dateFormatter.string(for: arrivalDate) ?? "Unkwnown"
-    }
-    var co2Compensated: String {
-        String(travelDetails.travel.CO2Compensated)
-    }
-    var co2Emitted: String {
+    var co2Emitted: Float64 {
         var co2Emitted = 0.0
         for segment in travelDetails.segments {
             co2Emitted += segment.co2Emitted
         }
-        return String(co2Emitted)
+        return co2Emitted
     }
     
     var body: some View {
-        VStack {
-            Text("\(departure) - \(destination)")
-            .font(.headline)
+        ZStack {
+            RoundedRectangle(cornerRadius: 20)
+                .stroke()
             
-            Text("\(departureDate) - \(destinationDate)")
-            
-            Text("\(co2Compensated)/\(co2Emitted)")
+            VStack {
+                HStack{
+                    ZStack{
+                        Circle()
+                            .stroke(lineWidth: 2)
+                            .frame(width: 45, height: 45)
+                        Image(systemName: findVehicle(travelDetails.segments))
+                            .font(.title2)
+                        
+                    }
+                    .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0))
+                    Spacer()
+                    VStack {
+                        HStack (spacing: 10){
+                            Text(getOptionDeparture(travelDetails.segments))
+                                .font(.headline)
+                            Text("-")
+                                .font(.headline)
+                            Text(getOptionDestination(travelDetails.segments))
+                                .font(.headline)
+                        }
+                        HStack{
+                            Text(travelDetails.segments.first?.dateTime.formatted(date: .numeric, time: .omitted) ?? "")
+                                .font(.subheadline)
+                                .fontWeight(.light)
+                            Text("-")
+                                .font(.subheadline)
+                            let arrivalDate = travelDetails.segments.last?.dateTime.addingTimeInterval(TimeInterval(travelDetails.segments.last?.duration ?? 0) / 1000000000)
+                            Text(arrivalDate?.formatted(date: .numeric, time: .omitted) ?? "")
+                                .font(.subheadline)
+                                .fontWeight(.light)
+                        }
+                    }
+                    Spacer()
+                    Image(systemName: "chevron.forward")
+                        .font(.title2)
+                        .foregroundStyle(.blue)
+                    
+                }
+                GeometryReader { geometry in
+                    Path { path in
+                        path.move(to: CGPoint(x: 0, y: 0))
+                        path.addLine(to: CGPoint(x: geometry.size.width, y: 0))
+                    }
+                    .stroke(style: StrokeStyle(lineWidth: 1, dash: [20, 10]))
+                    .foregroundStyle(.black)
+                }
+                .padding(EdgeInsets(top: 7, leading: 5, bottom: 0, trailing: 0))
+                
+                HStack {
+                    Image(systemName: "carbon.dioxide.cloud")
+                        .scaleEffect(1.5)
+                        .padding(.bottom, 5)
+                        .padding(.trailing, 10)
+                    Text("Compensation:" )
+                    Text(String(format: "%.2f", travelDetails.travel.CO2Compensated) + " / " + String(format: "%.2f", co2Emitted) + " Kg")
+                }
+            }
+            .padding()
         }
-        .padding()
+        .foregroundStyle(.black)
+        
+    }
+    
+    func getOptionDeparture (_ travelOption: [Segment]) -> String {
+        if let firstSegment = travelOption.first {
+            return firstSegment.departureCity
+        }
+        else {
+            return ""
+        }
+    }
+    
+    func findVehicle(_ option: [Segment]) -> String {
+        var vehicle: String
+        switch option.first?.vehicle {
+        case .car:
+            vehicle = "car"
+        case .train:
+            vehicle = "tram"
+        case .plane:
+            vehicle = "airplane"
+        case .bus:
+            vehicle = "bus"
+        case .walk:
+            vehicle = "figure.walk"
+        case .bike:
+            vehicle = "bicycle"
+        default:
+            vehicle = ""
+        }
+        return vehicle
+    }
+    
+    func getOptionDestination (_ travelOption: [Segment]) -> String {
+        if let lastSegment = travelOption.last {
+            return lastSegment.destinationCity
+        }
+        else {
+            return ""
+        }
     }
 }
 
-let dateFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateStyle = .short
-    return formatter
-}()
+
+
+
