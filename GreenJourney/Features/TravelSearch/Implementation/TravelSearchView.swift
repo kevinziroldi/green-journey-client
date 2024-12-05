@@ -27,7 +27,7 @@ struct TravelSearchView: View {
                         
                         Spacer()
                         
-                        NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath)) {
+                        NavigationLink(destination: UserPreferencesView(navigationPath: $navigationPath)) {
                             Image(systemName: "person")
                                 .font(.title)
                         }
@@ -95,7 +95,7 @@ struct TravelSearchView: View {
                                 
                             }
                             .fullScreenCover(isPresented: $departureTapped ) {
-                                CompleterView(modelContext: modelContext, searchText: viewModel.departure.cityName,
+                                CompleterView(searchText: viewModel.departure.cityName,
                                 onBack: {
                                     departureTapped = false
                                 },
@@ -133,7 +133,7 @@ struct TravelSearchView: View {
                                 .padding(EdgeInsets(top: 0, leading: 50, bottom: 20, trailing: 50))
                             }
                             .fullScreenCover(isPresented: $destinationTapped ) {
-                                CompleterView(modelContext: modelContext, searchText: viewModel.arrival.cityName,
+                                CompleterView(searchText: viewModel.arrival.cityName,
                                               onBack: {
                                     destinationTapped = false
                                               },
@@ -232,7 +232,7 @@ struct TravelSearchView: View {
             //.animation(.default, value: dateTapped || dateReturnTapped)
         }
         else {
-            LoginView()
+            LoginView(navigationPath: $navigationPath)
                 .transition(.opacity.animation(.easeInOut(duration: 0.2)))
         }
     }

@@ -18,7 +18,7 @@ struct CitiesReviewsView: View {
                     .padding()
                 Spacer()
                 
-                NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath)) {
+                NavigationLink(destination: UserPreferencesView(navigationPath: $navigationPath)) {
                     Image(systemName: "person")
                         .font(.title)
                 }
@@ -54,7 +54,7 @@ struct CitiesReviewsView: View {
                 .padding(EdgeInsets(top: 0, leading: 50, bottom: 20, trailing: 50))
             }
             .fullScreenCover(isPresented: $searchTapped ) {
-                CompleterView(modelContext: modelContext, searchText: viewModel.searchedCity.cityName,
+                CompleterView(searchText: viewModel.searchedCity.cityName,
                               onBack: {
                     searchTapped = false
                 },

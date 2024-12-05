@@ -14,7 +14,7 @@ class AuthenticationViewModel: ObservableObject {
     @Published var lastName: String = ""
     @Published var errorMessage: String?
     @Published var resendEmail: String?
-    @Published var isLogged: Bool = false
+    @Published public var isLogged: Bool = false
     @Published var emailVerified: Bool = false
     @Published var isEmailVerificationActive: Bool = false
     private var cancellables = Set<AnyCancellable>()
@@ -23,6 +23,7 @@ class AuthenticationViewModel: ObservableObject {
     
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
+        self.isLogged = false
     }
     
     func login() {
@@ -33,20 +34,20 @@ class AuthenticationViewModel: ObservableObject {
         }
         
         Auth.auth().signIn(withEmail: email, password: password) { [weak self] result, error in
-            guard let strongSelf = self else { return }
+            guard let strongSelf = self else { print("ERROR"); return }
             if let error = error {
                 strongSelf.errorMessage = error.localizedDescription
             } else {
                 if let firebaseUser = result?.user {
                     if firebaseUser.isEmailVerified == true {
-                        firebaseUser.getIDToken { token, error in
-                        if let error = error {
-                            strongSelf.errorMessage = "Failed to fetch token: \(error.localizedDescription)"
-                        } else if let token = token {
-                            strongSelf.getUserFromServer(firebaseToken: token)
+                        firebaseUser.getIDToken { [weak self] token, error in
+                            guard let strongSelf = self else {print("ERROR"); return }
+                            if let error = error {
+                                strongSelf.errorMessage = "Failed to fetch token: \(error.localizedDescription)"
+                            } else if let token = token {
+                                strongSelf.getUserFromServer(firebaseToken: token)
+                            }
                         }
-                    }
-                        
                     }
                     else {
                         strongSelf.isEmailVerificationActive = true
@@ -56,6 +57,20 @@ class AuthenticationViewModel: ObservableObject {
             }
         }
     }
+    
+    func logout(user: User) {
+        modelContext.delete(user)
+        
+        do {
+            try modelContext.save()
+            print("User successfully logged out and removed from SwiftData")
+        } catch {
+            print("Error while saving context after logout: \(error)")
+        }
+        
+        self.isLogged = false
+    }
+    
     
     func resetPassword() {
         guard(!email.isEmpty) else {
@@ -253,7 +268,7 @@ class AuthenticationViewModel: ObservableObject {
                     print("Error fetching user: \(error.localizedDescription)")
                 }
             }, receiveValue: { [weak self] user in
-                guard let strongSelf = self else { return }
+                guard let strongSelf = self else { print("ERROR"); return }
                 strongSelf.saveUserToSwiftData(serverUser: user)
                 strongSelf.isLogged = true
             })

@@ -3,9 +3,9 @@ import SwiftData
 
 struct LoginView: View {
     @EnvironmentObject private var viewModel: AuthenticationViewModel
-    @State private var isNavigationActive = false
     @Environment(\.modelContext) private var modelContext
-
+    @Binding var navigationPath: NavigationPath
+    
     var body: some View {
         VStack{
             Text("Login")
@@ -51,6 +51,10 @@ struct LoginView: View {
                     VStack(spacing: 20) {
                         Button(action: {
                             viewModel.login()
+                            
+                            if viewModel.isEmailVerificationActive {
+                                navigationPath.append(NavigationDestination.EmailVerificationView)
+                            }
                         }) {
                             Text("Login")
                                 .foregroundColor(.white)
@@ -59,9 +63,9 @@ struct LoginView: View {
                                 .background(Color.blue)
                                 .cornerRadius(30)
                         }
-                        .fullScreenCover(isPresented: $viewModel.isEmailVerificationActive) {
+                        /*.fullScreenCover(isPresented: $viewModel.isEmailVerificationActive) {
                             EmailVerificationView()
-                        }
+                        }*/
                         
                         HStack {
                             Rectangle()
@@ -105,28 +109,25 @@ struct LoginView: View {
                                 
                             }
                         }
-                        
-                        
                         Spacer()
-                        
                     }
                 }
                 .padding()
-                .fullScreenCover(isPresented: $viewModel.isLogged) {
-                    MainView(modelContext: modelContext)
-                }
             }
             .scrollDismissesKeyboard(.interactively)
             
             Button ("Sign up") {
-                isNavigationActive = true
-                viewModel.resetParameters()
-            }
-            .fullScreenCover(isPresented: $isNavigationActive, onDismiss: ({ isNavigationActive = false
-                viewModel.resetParameters()})) {
-                SignUpView()
+                navigationPath.append(NavigationDestination.SignupView)
             }
         }
+        .onAppear() {
+            viewModel.resetParameters()
+        }
+        .onChange(of: viewModel.isLogged, {
+            if viewModel.isLogged {
+                navigationPath = NavigationPath()
+            }
+        })
         .navigationBarHidden(true)
     }
 }

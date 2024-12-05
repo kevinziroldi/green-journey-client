@@ -7,11 +7,11 @@ struct UserPreferencesView : View {
     @Environment(\.modelContext) private var modelContext
     @Query var users: [User]
     let email: String = Auth.auth().currentUser?.email ?? ""
-    @StateObject private var viewModel: UserPreferencesViewModel
+    @EnvironmentObject private var userPreferencesViewModel: UserPreferencesViewModel
+    @EnvironmentObject private var authenticationViewModel: AuthenticationViewModel
     @Binding var navigationPath: NavigationPath
     
-    init(modelContext: ModelContext, navigationPath: Binding<NavigationPath>) {
-        _viewModel = StateObject(wrappedValue: UserPreferencesViewModel(modelContext: modelContext))
+    init(navigationPath: Binding<NavigationPath>) {
         _navigationPath = navigationPath
     }
     
@@ -46,47 +46,47 @@ struct UserPreferencesView : View {
                 Text("Do you want to get better predictions about your future travels? Complete your profile!")
                 
                 VStack() {
-                    TextField("First Name", text: $viewModel.firstNameField)
-                        .onChange(of: viewModel.firstNameField) {
-                            viewModel.hasModified = true
+                    TextField("First Name", text: $userPreferencesViewModel.firstNameField)
+                        .onChange(of: userPreferencesViewModel.firstNameField) {
+                            userPreferencesViewModel.hasModified = true
                         }
                         .textFieldStyle(RoundedBorderTextFieldStyle())
-                    TextField("Last Name", text: $viewModel.lastNameField)
-                        .onChange(of: viewModel.lastNameField) {
-                            viewModel.hasModified = true
+                    TextField("Last Name", text: $userPreferencesViewModel.lastNameField)
+                        .onChange(of: userPreferencesViewModel.lastNameField) {
+                            userPreferencesViewModel.hasModified = true
                         }
                         .textFieldStyle(RoundedBorderTextFieldStyle())
-                    DatePicker("Birth date", selection: $viewModel.birthDateField.toNonOptional(), displayedComponents: .date)
-                        .onChange(of: viewModel.birthDateField) {
-                            viewModel.hasModified = true
+                    DatePicker("Birth date", selection: $userPreferencesViewModel.birthDateField.toNonOptional(), displayedComponents: .date)
+                        .onChange(of: userPreferencesViewModel.birthDateField) {
+                            userPreferencesViewModel.hasModified = true
                         }
-                    Picker("Gender", selection: $viewModel.genderField) {
+                    Picker("Gender", selection: $userPreferencesViewModel.genderField) {
                         ForEach(Gender.allCases, id: \.self) { gender in
                             Text(gender.rawValue).tag(gender)
                         }
                     }
                     .pickerStyle(SegmentedPickerStyle())
-                    .onChange(of: viewModel.genderField) {
-                        viewModel.hasModified = true
+                    .onChange(of: userPreferencesViewModel.genderField) {
+                        userPreferencesViewModel.hasModified = true
                     }
-                    TextField("City", text: $viewModel.cityField.toNonOptional())
-                        .onChange(of: viewModel.cityField) {
-                            viewModel.hasModified = true
+                    TextField("City", text: $userPreferencesViewModel.cityField.toNonOptional())
+                        .onChange(of: userPreferencesViewModel.cityField) {
+                            userPreferencesViewModel.hasModified = true
                         }
                         .textFieldStyle(RoundedBorderTextFieldStyle())
-                    TextField("Street name", text: $viewModel.streetNameField.toNonOptional())
-                        .onChange(of: viewModel.streetNameField) {
-                            viewModel.hasModified = true
+                    TextField("Street name", text: $userPreferencesViewModel.streetNameField.toNonOptional())
+                        .onChange(of: userPreferencesViewModel.streetNameField) {
+                            userPreferencesViewModel.hasModified = true
                         }
                         .textFieldStyle(RoundedBorderTextFieldStyle())
-                    TextField("House number", value: $viewModel.houseNumberField.toNonOptional(), formatter: NumberFormatter())
-                        .onChange(of: viewModel.houseNumberField) {
-                            viewModel.hasModified = true
+                    TextField("House number", value: $userPreferencesViewModel.houseNumberField.toNonOptional(), formatter: NumberFormatter())
+                        .onChange(of: userPreferencesViewModel.houseNumberField) {
+                            userPreferencesViewModel.hasModified = true
                         }
                         .textFieldStyle(RoundedBorderTextFieldStyle())
-                    TextField("Zip code", value: $viewModel.zipCodeField.toNonOptional(), formatter: NumberFormatter())
-                        .onChange(of: viewModel.zipCodeField) {
-                            viewModel.hasModified = true
+                    TextField("Zip code", value: $userPreferencesViewModel.zipCodeField.toNonOptional(), formatter: NumberFormatter())
+                        .onChange(of: userPreferencesViewModel.zipCodeField) {
+                            userPreferencesViewModel.hasModified = true
                         }
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                 }
@@ -95,12 +95,12 @@ struct UserPreferencesView : View {
                 .frame(maxWidth: .infinity)
                 .padding(.horizontal)
                 
-                if !viewModel.initializationPhase && viewModel.hasModified {
-                    Button(action: viewModel.saveModifications) {
+                if !userPreferencesViewModel.initializationPhase && userPreferencesViewModel.hasModified {
+                    Button(action: userPreferencesViewModel.saveModifications) {
                         Text("Save modifications")
                     }
                    
-                    Button(action: viewModel.cancelModifications) {
+                    Button(action: userPreferencesViewModel.cancelModifications) {
                         Text("Cancel modifications")
                     }
                     
@@ -108,7 +108,7 @@ struct UserPreferencesView : View {
 
                 // logout button
                 Button("Logout") {
-                    viewModel.logout(user: user)
+                    authenticationViewModel.logout(user: user)
                     navigationPath = NavigationPath()
                     navigationPath.append(NavigationDestination.LoginView)
                 }
@@ -116,7 +116,7 @@ struct UserPreferencesView : View {
             .frame(maxWidth: .infinity)
             .padding()
         } else {
-            LoginView()
+            LoginView(navigationPath: $navigationPath)
                 .transition(.opacity.animation(.easeInOut(duration: 0.2)))
         }
     }

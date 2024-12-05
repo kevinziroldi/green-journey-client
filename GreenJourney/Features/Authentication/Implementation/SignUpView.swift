@@ -2,8 +2,8 @@ import SwiftUI
 
 struct SignUpView: View {
     @EnvironmentObject var viewModel: AuthenticationViewModel
-    @State private var isNavigationLoginActive = false    
     @Environment(\.modelContext) private var modelContext
+    @Binding var navigationPath: NavigationPath
     
     var body: some View {
         VStack {
@@ -53,6 +53,10 @@ struct SignUpView: View {
                     VStack (spacing: 20) {
                         Button(action: {
                             viewModel.signUp()
+                            
+                            if viewModel.isEmailVerificationActive {
+                                navigationPath.append(NavigationDestination.EmailVerificationView)
+                            }
                         }) {
                             Text("Create account")
                                 .foregroundColor(.white)
@@ -77,7 +81,9 @@ struct SignUpView: View {
                         }
                         .padding(.horizontal, 16)
                         
-                        Button (action: {Task{await viewModel.signInWithGoogle()}}){
+                        Button (action: {
+                            Task{await viewModel.signInWithGoogle()}
+                        }){
                             Image("googleLogo")
                                 .resizable()
                                 .scaledToFit()
@@ -90,12 +96,11 @@ struct SignUpView: View {
                         .buttonStyle(.bordered)
                         
                         Spacer()
+                        
                         Button ("Login") {
-                            isNavigationLoginActive = true
-                            viewModel.resetParameters()
-                        }
-                        .fullScreenCover(isPresented: $isNavigationLoginActive) {
-                            LoginView()
+                            if !navigationPath.isEmpty {
+                                navigationPath.removeLast()
+                            }
                         }
                     }
                 }
@@ -103,6 +108,14 @@ struct SignUpView: View {
             }
             .scrollDismissesKeyboard(.interactively)
         }
+        .onAppear() {
+            viewModel.resetParameters()
+        }
+        .onChange(of: viewModel.isLogged, {
+            if viewModel.isLogged {
+                navigationPath = NavigationPath()
+            }
+        })
         .navigationBarHidden(true)
     }
 }

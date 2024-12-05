@@ -9,7 +9,7 @@ struct CompleterView: View {
     var onClick: (CityCompleterDataset) -> Void
     var searchText: String
     
-    init(modelContext: ModelContext, searchText: String, onBack: @escaping () -> Void, onClick: @escaping (CityCompleterDataset) -> Void) {
+    init(searchText: String, onBack: @escaping () -> Void, onClick: @escaping (CityCompleterDataset) -> Void) {
         self.onBack = onBack
         self.onClick = onClick
         self.searchText = searchText

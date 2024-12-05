@@ -211,17 +211,6 @@ class UserPreferencesViewModel: ObservableObject {
         }
     }
     
-    func logout(user: User) {
-        modelContext.delete(user)
-        
-        do {
-            try modelContext.save()
-            print("User successfully logged out and removed from SwiftData")
-        } catch {
-            print("Error while saving context after logout: \(error)")
-        }
-    }
-    
     func cancelModifications() {
         getUserData()
     }

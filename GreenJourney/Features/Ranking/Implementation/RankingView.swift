@@ -4,10 +4,9 @@ import SwiftData
 struct RankingView: View {
     @Environment(\.modelContext) private var modelContext
     @Binding var navigationPath: NavigationPath
-    @StateObject var viewModel: RankingViewModel
+    @EnvironmentObject var viewModel: RankingViewModel
     
-    init(modelContext: ModelContext, navigationPath: Binding<NavigationPath>) {
-        _viewModel = StateObject(wrappedValue: RankingViewModel(modelContext: modelContext))
+    init(navigationPath: Binding<NavigationPath>) {
         _navigationPath = navigationPath
     }
     
@@ -21,7 +20,7 @@ struct RankingView: View {
                     
                     Spacer()
                     
-                    NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath)) {
+                    NavigationLink(destination: UserPreferencesView(navigationPath: $navigationPath)) {
                         Image(systemName: "person")
                             .font(.title)
                     }
@@ -45,10 +44,10 @@ struct RankingView: View {
                             .padding(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
                         VStack{
                             if viewModel.leaderboardSelected {
-                                LeaderBoardView(viewModel: viewModel, navigationPath: $navigationPath, leaderboard: Array(viewModel.longDistanceRanking.prefix(10)))
+                                LeaderBoardView(navigationPath: $navigationPath, leaderboard: Array(viewModel.longDistanceRanking.prefix(10)))
                             }
                             else {
-                                LeaderBoardView(viewModel: viewModel, navigationPath: $navigationPath, leaderboard: Array(viewModel.shortDistanceRanking.prefix(10)))
+                                LeaderBoardView(navigationPath: $navigationPath, leaderboard: Array(viewModel.shortDistanceRanking.prefix(10)))
                             }
                         }
                         .padding(EdgeInsets(top: 0, leading: 10, bottom: 5, trailing: 10))
@@ -82,7 +81,7 @@ struct RankingView: View {
 }
 
 struct LeaderBoardView: View {
-    @ObservedObject var viewModel: RankingViewModel
+    @EnvironmentObject var viewModel: RankingViewModel
     @Binding var navigationPath: NavigationPath
     var leaderboard: [RankingElement]
     @State private var userID = 1
@@ -122,7 +121,7 @@ struct LeaderBoardView: View {
                 .foregroundColor(.black)
                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 5, trailing: 0))
             ForEach (leaderboard.indices, id: \.self) { index in
-                    NavigationLink (destination: UserDetailsRankingView(viewModel: viewModel, navigationPath: $navigationPath, user: leaderboard[index])) {
+                    NavigationLink (destination: UserDetailsRankingView(navigationPath: $navigationPath, user: leaderboard[index])) {
                         VStack (spacing: 5){
                             HStack {
                                 // Colonna Nome Utente

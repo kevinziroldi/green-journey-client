@@ -22,7 +22,7 @@ struct MyTravelsView: View {
                     .padding()
                 Spacer()
                 
-                NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath)) {
+                NavigationLink(destination: UserPreferencesView(navigationPath: $navigationPath)) {
                     Image(systemName: "person")
                         .font(.title)
                 }
