@@ -316,8 +316,6 @@ class MainViewModel: ObservableObject {
                         try modelContext.save()
                         print("Cities for completer loaded correctly to SwiftData")
                         
-                        let cities = try modelContext.fetch(FetchDescriptor<CityCompleterDataset>())
-                        print(cities.count)
                         
                         
                     } catch {

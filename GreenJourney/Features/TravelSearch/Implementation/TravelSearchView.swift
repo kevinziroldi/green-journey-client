@@ -198,6 +198,7 @@ struct TravelSearchView: View {
                     
                 }
                 .blur(radius: (dateTapped || dateReturnTapped) ? 2 : 0) // Sfoca tutto il contenuto sottostante
+                .allowsHitTesting(!(dateTapped || dateReturnTapped))
                 
                 // Modale per il DatePicker "Outward date"
                 if dateTapped {
