@@ -14,46 +14,50 @@ class RankingViewModel: ObservableObject {
     
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
-        do {
-            users = try modelContext.fetch(FetchDescriptor<User>())
-        }catch {}
     }
     
     func fecthRanking() {
         print("RANKING REQUEST")
         
-        guard let userID = users.first?.userID else { return }
-        
-        let baseURL = NetworkManager.shared.getBaseURL()
-        guard let url = URL(string:"\(baseURL)/ranking?id=\(userID)") else { return}
-        let decoder = JSONDecoder()
-        
-        URLSession.shared.dataTaskPublisher(for: url)
-            .tryMap {
-                result -> Data in
-                guard let httpResponse = result.response as? HTTPURLResponse,
-                      (200...299).contains(httpResponse.statusCode) else {
-                    throw URLError(.badServerResponse)
+        do {
+            users = try modelContext.fetch(FetchDescriptor<User>())
+            
+            guard let userID = users.first?.userID else { return }
+            
+            let baseURL = NetworkManager.shared.getBaseURL()
+            guard let url = URL(string:"\(baseURL)/ranking?id=\(userID)") else { print("ERROR"); return }
+            let decoder = JSONDecoder()
+            
+            URLSession.shared.dataTaskPublisher(for: url)
+                .tryMap {
+                    result -> Data in
+                    guard let httpResponse = result.response as? HTTPURLResponse,
+                          (200...299).contains(httpResponse.statusCode) else {
+                        throw URLError(.badServerResponse)
+                    }
+                    //print(String(data: result.data, encoding: .utf8) ?? "No data")
+                    return result.data
                 }
-                //print(String(data: result.data, encoding: .utf8) ?? "No data")
-                return result.data
-            }
-            .decode(type: RankingResponse.self, decoder: decoder)
-            .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: {
-                completion in
-                switch completion {
-                case .finished:
-                    break
-                case .failure(let error):
-                    print("Error fetching rankings: \(error.localizedDescription)")
-                }
-            }, receiveValue: { [weak self] response in
-                guard let strongSelf = self else { return }
-                strongSelf.shortDistanceRanking = response.shortDistanceRanking
-                strongSelf.longDistanceRanking = response.longDistanceRanking
-            })
-            .store(in: &cancellables)
+                .decode(type: RankingResponse.self, decoder: decoder)
+                .receive(on: DispatchQueue.main)
+                .sink(receiveCompletion: {
+                    completion in
+                    switch completion {
+                    case .finished:
+                        break
+                    case .failure(let error):
+                        print("Error fetching rankings: \(error.localizedDescription)")
+                    }
+                }, receiveValue: { [weak self] response in
+                    guard let strongSelf = self else { return }
+                    strongSelf.shortDistanceRanking = response.shortDistanceRanking
+                    strongSelf.longDistanceRanking = response.longDistanceRanking
+                })
+                .store(in: &cancellables)
+            
+        }catch {
+            print("Error retrieving user from SwiftData")
+        }
     }
     
     func computeTotalDuration (duration: Int) -> String {
