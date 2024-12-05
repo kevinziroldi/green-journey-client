@@ -1,6 +1,6 @@
 import Combine
-import FirebaseCore
 import FirebaseAuth
+import FirebaseCore
 import GoogleSignIn
 import GoogleSignInSwift
 import SwiftData
@@ -34,14 +34,14 @@ class AuthenticationViewModel: ObservableObject {
         }
         
         Auth.auth().signIn(withEmail: email, password: password) { [weak self] result, error in
-            guard let strongSelf = self else { print("ERROR"); return }
+            guard let strongSelf = self else { return }
             if let error = error {
                 strongSelf.errorMessage = error.localizedDescription
             } else {
                 if let firebaseUser = result?.user {
                     if firebaseUser.isEmailVerified == true {
                         firebaseUser.getIDToken { [weak self] token, error in
-                            guard let strongSelf = self else {print("ERROR"); return }
+                            guard let strongSelf = self else { return }
                             if let error = error {
                                 strongSelf.errorMessage = "Failed to fetch token: \(error.localizedDescription)"
                             } else if let token = token {
@@ -58,10 +58,14 @@ class AuthenticationViewModel: ObservableObject {
         }
     }
     
-    func logout(user: User) {
-        modelContext.delete(user)
-        
+    func logout() {
         do {
+            let users = try modelContext.fetch(FetchDescriptor<User>())
+            
+            for user in users {
+                modelContext.delete(user)
+            }
+            
             try modelContext.save()
             print("User successfully logged out and removed from SwiftData")
         } catch {
@@ -106,28 +110,32 @@ class AuthenticationViewModel: ObservableObject {
             return
         }
         else {
-            //Firebase call, create account
+            // Firebase call, create account
             Auth.auth().createUser(withEmail: email, password: password) { [weak self] result, error in
                 guard let strongSelf = self else { return }
                 if let error = error {
                     strongSelf.errorMessage = error.localizedDescription
+                    return
                 } else {
                     if let result = result {
                         // if login is ok
-                        strongSelf.isEmailVerificationActive = true
                         
-                        result.user.getIDToken { token, error in
+                        result.user.getIDToken { [weak self] token, error in
+                            guard let strongSelf = self else { return }
                             if let error = error {
                                 print("Error getting token: \(error.localizedDescription)")
                             } else if let token = token {
-                                print("Token retrieved: \(token)")
-                                // Puoi utilizzare il token per fare chiamate al server
+                                print("Token retrieved")
                                 strongSelf.saveUserToServer(firebaseUID: result.user.uid, firebaseToken: token)
+                                
+                                
+                                
+                                // TODO qua???
+                                strongSelf.errorMessage = nil
+                                strongSelf.sendEmailVerification()
+                                strongSelf.isEmailVerificationActive = true
                             }
                         }
-                        strongSelf.sendEmailVerification()
-                        
-                        strongSelf.errorMessage = nil
                     }
                 }
             }
@@ -220,16 +228,15 @@ class AuthenticationViewModel: ObservableObject {
                     let user = Auth.auth().currentUser
                     user?.delete { error in
                       if let error = error {
-                        // An error happened.
+                          // An error happened.
                           print("Error deleting user from Firebase: \(error.localizedDescription)")
                       } else {
-                        // Account deleted.
+                          // Account deleted.
                           print("User deleted from firebase")
                       }
                     }
                 }
-            }, receiveValue: { _ in
-            })
+            }, receiveValue: { _ in })
             .store(in: &cancellables)
     }
     
@@ -277,18 +284,30 @@ class AuthenticationViewModel: ObservableObject {
     
     private func saveUserToSwiftData(serverUser: User?) {
         if let user = serverUser {
+            // check no user logged
+            do {
+                let users = try modelContext.fetch(FetchDescriptor<User>())
+                if users.count > 0 {
+                    print("Some user is already logged, new user NOT loaded to SwiftData")
+                    return
+                }
+            } catch {
+                print("Error while checking number of users: \(error)")
+            }
+            
             // add user to context
             modelContext.insert(user)
             
             // save user in SwiftData
             do {
                 try modelContext.save()
-                print("Saved user with firebaseuid " + user.firebaseUID + " in swift data")
+                print("Saved user (firebaseUID " + user.firebaseUID + ") in SwiftData")
             } catch {
                 print("Error while saving user to SwiftData: \(error)")
             }
         }
     }
+    
     func resetParameters() {
         email = ""
         password = ""

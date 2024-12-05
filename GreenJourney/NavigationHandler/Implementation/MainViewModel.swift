@@ -144,14 +144,9 @@ class MainViewModel: ObservableObject {
     }
     
     func checkUserLogged() -> Bool {
-        
-        print("CHECK EXECUTED")
-        
         if users.first != nil {
-            print("USER LOGGED")
             return true
         }else {
-            print("USER NOT LOGGED")
             return false
         }
     }
@@ -342,26 +337,26 @@ class MainViewModel: ObservableObject {
             
         }
     }
-     
     
     
-    /*
+    
+/*
     func loadCityCompleterDataset() {
-        Task {
+        Task { @MainActor in
             do {
-                // Verifica se i dati sono già presenti nel contesto
+                // check if there are no entries in SwiftData
                 var fetchRequest = FetchDescriptor<CityCompleterDataset>()
                 fetchRequest.fetchLimit = 20
                 let citiesCompleterDataset = try modelContext.fetch(fetchRequest)
                 
-
+                
                 if !citiesCompleterDataset.isEmpty {
-                    // I dati sono già presenti
+                    // cities already loaded
                     print("Cities for completer are already loaded in SwiftData")
                     return
                 }
                 
-                // Caricamento dei dati se non ci sono già
+                // else, load them
                 print("Loading cities")
                 
                 if let filePath = Bundle.main.path(forResource: "ds_iata_v5", ofType: "csv") {
@@ -371,7 +366,7 @@ class MainViewModel: ObservableObject {
                         
                         var citiesCompleterDataset: [CityCompleterDataset] = []
                         
-                        // La prima riga contiene i nomi delle colonne
+                        // first row contains column names
                         for (index, row) in rows.enumerated() where index > 0 && !row.isEmpty {
                             let rowValues = row.components(separatedBy: ",")
                             
@@ -380,29 +375,28 @@ class MainViewModel: ObservableObject {
                             let continent = rowValues[4]
                             let countryCode = rowValues[3]
                             let countryName = rowValues[2]
-
-                            // Creazione dell'oggetto CityCompleterDataset
+                            
+                            // create cityCompleterDataset object
                             let cityCompleterDataset = CityCompleterDataset(city: city, countryName: countryName, continent: continent, locode: locode, countryCode: countryCode)
-
+                            
                             citiesCompleterDataset.append(cityCompleterDataset)
                         }
-
+                        
                         var counter = 0
                         for cityCompleterDataset in citiesCompleterDataset {
                             modelContext.insert(cityCompleterDataset)
                             counter += 1
                             
-                            // Salvataggio periodico ogni 20.000 città per evitare blocchi
                             if counter.isMultiple(of: 20000) {
                                 do {
-                                    try modelContext.save() // Salvataggio asincrono
+                                    try modelContext.save()
+                                    print("Saved a block of cities")
                                 } catch {
                                     print("Error saving cities to dataset, counter: \(counter)")
                                 }
                             }
                         }
                         
-                        // Salvataggio finale
                         try modelContext.save()
                         print("Cities for completer loaded correctly to SwiftData")
                         
@@ -416,7 +410,8 @@ class MainViewModel: ObservableObject {
                 print("Error interacting with SwiftData: \(error)")
             }
         }
-    }*/
+    }
+ */
 
 }
 

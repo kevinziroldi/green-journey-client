@@ -108,7 +108,7 @@ struct UserPreferencesView : View {
 
                 // logout button
                 Button("Logout") {
-                    authenticationViewModel.logout(user: user)
+                    authenticationViewModel.logout()
                     navigationPath = NavigationPath()
                     navigationPath.append(NavigationDestination.LoginView)
                 }

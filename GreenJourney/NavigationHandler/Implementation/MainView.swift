@@ -55,7 +55,7 @@ struct MainView: View {
                 case .SignupView:
                     SignUpView(navigationPath: $navigationPath)
                 case .EmailVerificationView:
-                    EmailVerificationView()
+                    EmailVerificationView(navigationPath: $navigationPath)
                 case .OutwardOptionsView:
                     OutwardOptionsView(navigationPath: $navigationPath)
                 case .ReturnOptionsView:

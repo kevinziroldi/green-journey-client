@@ -55,7 +55,10 @@ struct SignUpView: View {
                             viewModel.signUp()
                             
                             if viewModel.isEmailVerificationActive {
+                                print("EMAIL VERIFICATION IS ACTIVE")
                                 navigationPath.append(NavigationDestination.EmailVerificationView)
+                            }else {
+                                print("EMAIL VERIFICATION IS NOT ACTIVE")
                             }
                         }) {
                             Text("Create account")
