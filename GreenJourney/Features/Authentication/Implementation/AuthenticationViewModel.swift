@@ -16,7 +16,8 @@ class AuthenticationViewModel: ObservableObject {
     @Published var resendEmail: String?
     @Published public var isLogged: Bool = false
     @Published var emailVerified: Bool = false
-    @Published var isEmailVerificationActive: Bool = false
+    @Published var isEmailVerificationActiveLogin: Bool = false
+    @Published var isEmailVerificationActiveSignup: Bool = false
     private var cancellables = Set<AnyCancellable>()
     //swift data model context
     var modelContext: ModelContext
@@ -50,7 +51,7 @@ class AuthenticationViewModel: ObservableObject {
                         }
                     }
                     else {
-                        strongSelf.isEmailVerificationActive = true
+                        strongSelf.isEmailVerificationActiveLogin = true
                     }
                 }
                 strongSelf.errorMessage = nil
@@ -133,7 +134,7 @@ class AuthenticationViewModel: ObservableObject {
                                 // TODO qua???
                                 strongSelf.errorMessage = nil
                                 strongSelf.sendEmailVerification()
-                                strongSelf.isEmailVerificationActive = true
+                                strongSelf.isEmailVerificationActiveSignup = true
                             }
                         }
                     }
@@ -176,7 +177,8 @@ class AuthenticationViewModel: ObservableObject {
                 }
                 
                 strongSelf.emailVerified = true
-                strongSelf.isEmailVerificationActive = false
+                strongSelf.isEmailVerificationActiveLogin = false
+                strongSelf.isEmailVerificationActiveSignup = false
             } else {
                 strongSelf.errorMessage = "email has not yet been verified"
                 print("Email not verified.")

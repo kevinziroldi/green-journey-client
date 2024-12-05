@@ -51,10 +51,6 @@ struct LoginView: View {
                     VStack(spacing: 20) {
                         Button(action: {
                             viewModel.login()
-                            
-                            if viewModel.isEmailVerificationActive {
-                                navigationPath.append(NavigationDestination.EmailVerificationView)
-                            }
                         }) {
                             Text("Login")
                                 .foregroundColor(.white)
@@ -126,6 +122,11 @@ struct LoginView: View {
         .onChange(of: viewModel.isLogged, {
             if viewModel.isLogged {
                 navigationPath = NavigationPath()
+            }
+        })
+        .onChange(of: viewModel.isEmailVerificationActiveLogin, {
+            if viewModel.isEmailVerificationActiveLogin {
+                navigationPath.append(NavigationDestination.EmailVerificationView)
             }
         })
         .navigationBarHidden(true)

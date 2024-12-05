@@ -53,13 +53,6 @@ struct SignUpView: View {
                     VStack (spacing: 20) {
                         Button(action: {
                             viewModel.signUp()
-                            
-                            if viewModel.isEmailVerificationActive {
-                                print("EMAIL VERIFICATION IS ACTIVE")
-                                navigationPath.append(NavigationDestination.EmailVerificationView)
-                            }else {
-                                print("EMAIL VERIFICATION IS NOT ACTIVE")
-                            }
                         }) {
                             Text("Create account")
                                 .foregroundColor(.white)
@@ -117,6 +110,11 @@ struct SignUpView: View {
         .onChange(of: viewModel.isLogged, {
             if viewModel.isLogged {
                 navigationPath = NavigationPath()
+            }
+        })
+        .onChange(of: viewModel.isEmailVerificationActiveSignup, {
+            if viewModel.isEmailVerificationActiveSignup {
+                navigationPath.append(NavigationDestination.EmailVerificationView)
             }
         })
         .navigationBarHidden(true)
