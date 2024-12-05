@@ -119,30 +119,30 @@ class CitiesReviewsViewModel: ObservableObject {
                 strongSelf.bestCities = []
                 
                 // add new elements
-                    for bestReviewCity in bestCities {
-                        if let cityIata = bestReviewCity.reviews.first?.cityIata {
-                            if let countryCode = bestReviewCity.reviews.first?.countryCode {
-                                let descriptor = FetchDescriptor<CityCompleterDataset>(
-                                    predicate: #Predicate { city in
-                                        city.iata == cityIata && city.countryCode == countryCode
-                                    }
-                                )
-                                do {
-                                    if let bestCity = try strongSelf.modelContext.fetch(descriptor).first {
-                                        strongSelf.bestCitiesReviewElements.append(bestReviewCity)
-                                        strongSelf.bestCities.append(bestCity)
-                                    }
-                                }catch {
-                                    
-                                    print("Error interacting with SwiftData")
-                                    
-                                    // TODO
-                                    
+                for bestReviewCity in bestCities {
+                    if let cityIata = bestReviewCity.reviews.first?.cityIata {
+                        if let countryCode = bestReviewCity.reviews.first?.countryCode {
+                            let descriptor = FetchDescriptor<CityCompleterDataset>(
+                                predicate: #Predicate { city in
+                                    city.iata == cityIata && city.countryCode == countryCode
                                 }
+                            )
+                            do {
+                                if let bestCity = try strongSelf.modelContext.fetch(descriptor).first {
+                                    strongSelf.bestCitiesReviewElements.append(bestReviewCity)
+                                    strongSelf.bestCities.append(bestCity)
+                                }
+                            }catch {
+                                
+                                print("Error interacting with SwiftData")
+                                
+                                // TODO
+                                
                             }
                         }
                     }
-                })
+                }
+            })
             .store(in: &cancellables)
     }
 }

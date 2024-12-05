@@ -25,17 +25,12 @@ class MainViewModel: ObservableObject {
         if !isDataLoaded {
             // refresh travels data
             fetchTravels()
-            
-            // TODO rimettere!!!!
-            
-            /*
             // load cities from dataset for ML (if needed)
             loadCityMLDataset()
             // load cities from dataset for auto completer (if needed)
             loadCityCompleterDataset()
             // set data loaded
             isDataLoaded = true
-             */
         }
     }
     
