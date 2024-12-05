@@ -62,8 +62,6 @@ struct MainView: View {
                     ReturnOptionsView(navigationPath: $navigationPath)
                 case .CityReviewsDetailsView:
                     CityReviewsDetailsView(navigationPath: $navigationPath)
-                case .TravelDetailsView:
-                    TravelDetailsView(navigationPath: $navigationPath)
                 }
             }
         }.onAppear() {
