@@ -20,6 +20,8 @@ class RankingViewModel: ObservableObject {
     }
     
     func fecthRanking() {
+        print("RANKING REQUEST")
+        
         guard let userID = users.first?.userID else { return }
         
         let baseURL = NetworkManager.shared.getBaseURL()

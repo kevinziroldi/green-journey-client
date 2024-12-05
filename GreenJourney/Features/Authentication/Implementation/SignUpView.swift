@@ -106,6 +106,7 @@ struct SignUpView: View {
         }
         .onAppear() {
             viewModel.resetParameters()
+            viewModel.isEmailVerificationActiveSignup = false
         }
         .onChange(of: viewModel.isLogged, {
             if viewModel.isLogged {

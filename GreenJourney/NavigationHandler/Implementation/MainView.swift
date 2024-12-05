@@ -64,7 +64,7 @@ struct MainView: View {
                     CityReviewsDetailsView(navigationPath: $navigationPath)
                 }
             }
-        }.onAppear() {
+        }.onAppear() {            
             if !viewModel.checkUserLogged() {
                 navigationPath.append(NavigationDestination.LoginView)
             }

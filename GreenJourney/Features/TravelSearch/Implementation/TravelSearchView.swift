@@ -231,10 +231,6 @@ struct TravelSearchView: View {
             }
             //.animation(.default, value: dateTapped || dateReturnTapped)
         }
-        else {
-            LoginView(navigationPath: $navigationPath)
-                .transition(.opacity.animation(.easeInOut(duration: 0.2)))
-        }
     }
     
     private func getColorDest () -> Color {

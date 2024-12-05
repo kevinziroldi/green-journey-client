@@ -27,9 +27,6 @@ If you didn’t get it, tap 'Resend Email'.
             }
             Button ("Proceed") {
                 viewModel.verifyEmail()
-                if !navigationPath.isEmpty {
-                    navigationPath.removeLast()
-                }
             }
             .buttonStyle(.borderedProminent)
             
@@ -40,5 +37,10 @@ If you didn’t get it, tap 'Resend Email'.
             }
             Spacer()
         }
+        .onChange(of: viewModel.emailVerified, {
+            if viewModel.emailVerified {
+                navigationPath = NavigationPath()
+            }
+        })
     }
 }

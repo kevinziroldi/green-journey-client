@@ -40,6 +40,8 @@ class AuthenticationViewModel: ObservableObject {
                 strongSelf.errorMessage = error.localizedDescription
             } else {
                 if let firebaseUser = result?.user {
+                    strongSelf.emailVerified = firebaseUser.isEmailVerified
+                    
                     if firebaseUser.isEmailVerified == true {
                         firebaseUser.getIDToken { [weak self] token, error in
                             guard let strongSelf = self else { return }
@@ -49,8 +51,7 @@ class AuthenticationViewModel: ObservableObject {
                                 strongSelf.getUserFromServer(firebaseToken: token)
                             }
                         }
-                    }
-                    else {
+                    } else {
                         strongSelf.isEmailVerificationActiveLogin = true
                     }
                 }
@@ -129,9 +130,6 @@ class AuthenticationViewModel: ObservableObject {
                                 print("Token retrieved")
                                 strongSelf.saveUserToServer(firebaseUID: result.user.uid, firebaseToken: token)
                                 
-                                
-                                
-                                // TODO qua???
                                 strongSelf.errorMessage = nil
                                 strongSelf.sendEmailVerification()
                                 strongSelf.isEmailVerificationActiveSignup = true
@@ -161,6 +159,9 @@ class AuthenticationViewModel: ObservableObject {
             if Auth.auth().currentUser?.isEmailVerified == true {
                 print("Email verified")
                 strongSelf.errorMessage = nil
+                strongSelf.emailVerified = true
+                strongSelf.isEmailVerificationActiveLogin = false
+                strongSelf.isEmailVerificationActiveSignup = false
                 
                 // save user to swift data
                 if let firebaseUser = Auth.auth().currentUser {
@@ -172,13 +173,9 @@ class AuthenticationViewModel: ObservableObject {
                         }
                     }
                 }else {
-                    print("Missing firebase uid")
+                    print("Missing firebaseUID")
                     return
                 }
-                
-                strongSelf.emailVerified = true
-                strongSelf.isEmailVerificationActiveLogin = false
-                strongSelf.isEmailVerificationActiveSignup = false
             } else {
                 strongSelf.errorMessage = "email has not yet been verified"
                 print("Email not verified.")
