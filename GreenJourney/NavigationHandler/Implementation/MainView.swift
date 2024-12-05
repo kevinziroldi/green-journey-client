@@ -65,7 +65,7 @@ struct MainView: View {
                 }
             }
         }.onAppear() {
-            if viewModel.checkUserLogged() {
+            if !viewModel.checkUserLogged() {
                 navigationPath.append(NavigationDestination.LoginView)
             }
         }

@@ -283,7 +283,7 @@ class AuthenticationViewModel: ObservableObject {
             // save user in SwiftData
             do {
                 try modelContext.save()
-                print("Saved user with firebaseuid " + user.firebaseUID + "in swift data")
+                print("Saved user with firebaseuid " + user.firebaseUID + " in swift data")
             } catch {
                 print("Error while saving user to SwiftData: \(error)")
             }
