@@ -17,7 +17,7 @@ class RankingViewModel: ObservableObject {
     }
     
     func fecthRanking() {
-        print("RANKING REQUEST")
+        print("FETCH RANKING")
         
         do {
             users = try modelContext.fetch(FetchDescriptor<User>())

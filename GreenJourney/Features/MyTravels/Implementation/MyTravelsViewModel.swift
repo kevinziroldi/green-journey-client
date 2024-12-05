@@ -56,7 +56,7 @@ class MyTravelsViewModel: ObservableObject {
         self.modelContext = modelContext
     }
     
-    func getUserTravels() {
+    func getUserTravels() {        
         do {
             let travels = try modelContext.fetch(FetchDescriptor<Travel>())
             let segments = try modelContext.fetch(FetchDescriptor<Segment>())
