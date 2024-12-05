@@ -145,4 +145,8 @@ class CitiesReviewsViewModel: ObservableObject {
             })
             .store(in: &cancellables)
     }
+    
+    func resetParameters() {
+        self.searchedCity = CityCompleterDataset()
+    }
 }

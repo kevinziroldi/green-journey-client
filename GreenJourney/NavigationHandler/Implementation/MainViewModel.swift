@@ -315,9 +315,10 @@ class MainViewModel: ObservableObject {
                     do {
                         try modelContext.save()
                         print("Cities for completer loaded correctly to SwiftData")
+                        let fetchRequest = FetchDescriptor<CityCompleterDataset>()
+                        let savedCount = try modelContext.fetch(fetchRequest).count
                         
-                        let cities = try modelContext.fetch(FetchDescriptor<CityCompleterDataset>())
-                        print(cities.count)
+                        print("NUMERO DI CITIES: \(savedCount)")
                         
                         
                     } catch {
