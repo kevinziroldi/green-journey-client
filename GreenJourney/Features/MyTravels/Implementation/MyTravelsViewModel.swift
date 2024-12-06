@@ -173,15 +173,34 @@ class MyTravelsViewModel: ObservableObject {
     }
     
     func compensateCO2() {
-        // compute CO2 compensated
-        
-        // TODO change
+        // TODO change value
         let co2CompensatedPerEuro = 37.5 // 37.5 kg/€
         let newCo2Compensated = co2CompensatedPerEuro * self.compensatedPrice
         
-        // TODO send request
-        // update swift data
+        if let selectedTravel = self.selectedTravel {
+            let modifiedTravel = Travel(travelCopy: selectedTravel.travel)
+            modifiedTravel.CO2Compensated += newCo2Compensated
+            
+            updateTravelOnServer(modifiedTravel: modifiedTravel)
+        } else {
+            print("Selected travel is nil")
+        }
         
+    }
+    
+    func confirmTravel(travel: Travel) {
+        if travel.confirmed {
+            print("Travel already confirmed")
+            return
+        }
+        
+        let modifiedTravel = Travel(travelCopy: travel)
+        modifiedTravel.confirmed = true
+        
+        updateTravelOnServer(modifiedTravel: modifiedTravel)
+    }
+    
+    private func updateTravelOnServer(modifiedTravel: Travel) {
         guard let firebaseUser = Auth.auth().currentUser else {
             print("error retrieving firebase user")
             return
@@ -192,64 +211,60 @@ class MyTravelsViewModel: ObservableObject {
                 print("Failed to fetch token: \(error.localizedDescription)")
                 return
             } else if let firebaseToken = token {
-                if let selectedTravel = strongSelf.selectedTravel {
-                    // JSON encoding and decoding
-                    let modifiedTravel = selectedTravel.travel
-                    modifiedTravel.CO2Compensated += newCo2Compensated
-                    guard let body = try? JSONEncoder().encode(modifiedTravel) else {
-                        print("Error encoding user data for PUT")
-                        return
-                    }
-                    let decoder = JSONDecoder()
-                    
-                    // build URL
-                    let baseURL = NetworkHandler.shared.getBaseURL()
-                    guard let url = URL(string:"\(baseURL)/travels/user") else {
-                        print("Invalid URL used to retrieve travels from DB")
-                        return
-                    }
-                    
-                    // build request
-                    var request = URLRequest(url: url)
-                    request.httpMethod = "PUT"
-                    request.setValue("Bearer \(firebaseToken)", forHTTPHeaderField: "Authorization")
-                    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-                    request.httpBody = body
-                    
-                    // send request
-                    URLSession.shared.dataTaskPublisher(for: request)
-                        .retry(2)
-                        .tryMap {
-                            result -> Data in
-                            // check status of response
-                            guard let httpResponse = result.response as? HTTPURLResponse,
-                                  (200...299).contains(httpResponse.statusCode) else {
-                                throw URLError(.badServerResponse)
-                            }
-                            return result.data
-                        }
-                        .receive(on: DispatchQueue.main)
-                        .decode(type: Travel.self, decoder: decoder)
-                        .sink(receiveCompletion: { completion in
-                            switch completion {
-                            case .finished:
-                                print("Travel update posted successfully.")
-                            case .failure(let error):
-                                print("Error updating travel data: \(error.localizedDescription)")
-                                return
-                            }
-                        }, receiveValue: { [weak self] travel in
-                            guard let strongSelf = self else { return }
-                            // save travel in SwiftData
-                            strongSelf.updateTravelInSwiftData(updatedTravel: travel)
-                            // refresh travels
-                            strongSelf.getUserTravels()
-                        })
-                        .store(in: &strongSelf.cancellables)
-                } else {
-                    // TODO
-                    print("Error")
+                // JSON encoding and decoding
+                guard let body = try? JSONEncoder().encode(modifiedTravel) else {
+                    print("Error encoding user data for PUT")
+                    return
                 }
+                let decoder = JSONDecoder()
+                
+                // build URL
+                let baseURL = NetworkHandler.shared.getBaseURL()
+                guard let url = URL(string:"\(baseURL)/travels/user") else {
+                    print("Invalid URL used to retrieve travels from DB")
+                    return
+                }
+                
+                // build request
+                var request = URLRequest(url: url)
+                request.httpMethod = "PUT"
+                request.setValue("Bearer \(firebaseToken)", forHTTPHeaderField: "Authorization")
+                request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                request.httpBody = body
+                
+                // send request
+                URLSession.shared.dataTaskPublisher(for: request)
+                    .retry(2)
+                    .tryMap {
+                        result -> Data in
+                        // check status of response
+                        guard let httpResponse = result.response as? HTTPURLResponse,
+                              (200...299).contains(httpResponse.statusCode) else {
+                            throw URLError(.badServerResponse)
+                        }
+                        return result.data
+                    }
+                    .receive(on: DispatchQueue.main)
+                    .decode(type: Travel.self, decoder: decoder)
+                    .sink(receiveCompletion: { completion in
+                        switch completion {
+                        case .finished:
+                            print("Travel update posted successfully.")
+                        case .failure(let error):
+                            print("Error updating travel data: \(error.localizedDescription)")
+                            return
+                        }
+                    }, receiveValue: { [weak self] travel in
+                        guard let strongSelf = self else { return }
+                        // save travel in SwiftData
+                        strongSelf.updateTravelInSwiftData(updatedTravel: travel)
+                        // refresh travels
+                        strongSelf.getUserTravels()
+                        
+                        print("TRAVEL MODIFIED", travel.confirmed)
+                        print("TRAVEL MODIFIED", travel.CO2Compensated)
+                    })
+                    .store(in: &strongSelf.cancellables)
             } else {
                 // TODO
                 print("Error")
@@ -262,7 +277,7 @@ class MyTravelsViewModel: ObservableObject {
             let travels = try modelContext.fetch(FetchDescriptor<Travel>())
             
             for travel in travels {
-                if travel.travelID == travel.travelID {
+                if travel.travelID == updatedTravel.travelID {
                     do {
                         // update values
                         travel.CO2Compensated = updatedTravel.CO2Compensated
@@ -283,7 +298,10 @@ class MyTravelsViewModel: ObservableObject {
         }
     }
     
-    func deleteSelectedTravel() {
+    func deleteTravel(travelToDelete: Travel) {
+        
+        print("CALLED ON ", travelToDelete.travelID)
+        
         guard let firebaseUser = Auth.auth().currentUser else {
             print("error retrieving firebase user")
             return
@@ -294,85 +312,83 @@ class MyTravelsViewModel: ObservableObject {
                 print("Failed to fetch token: \(error.localizedDescription)")
                 return
             } else if let firebaseToken = token {
-                if let selectedTravel = strongSelf.selectedTravel {
-                    if let travelID = selectedTravel.travel.travelID {
-                        // build URL
-                        let baseURL = NetworkHandler.shared.getBaseURL()
-                        guard let url = URL(string:"\(baseURL)/travels/user/\(travelID)") else {
-                            print("Invalid URL used to retrieve travels from DB")
-                            return
-                        }
-                        
-                        // build request
-                        var request = URLRequest(url: url)
-                        request.httpMethod = "DELETE"
-                        request.setValue("Bearer \(firebaseToken)", forHTTPHeaderField: "Authorization")
-                        
-                        // send request
-                        URLSession.shared.dataTaskPublisher(for: request)
-                            .retry(2)
-                            .tryMap {
-                                result -> Data in
-                                // check status of response
-                                guard let httpResponse = result.response as? HTTPURLResponse,
-                                      (200...299).contains(httpResponse.statusCode) else {
-                                    throw URLError(.badServerResponse)
-                                }
-                                return result.data
-                            }
-                            .receive(on: DispatchQueue.main)
-                            .sink(receiveCompletion: { completion in
-                                switch completion {
-                                case .finished:
-                                    print("Travel successfully deleted.")
-                                case .failure(let error):
-                                    print("Error updating travel data: \(error.localizedDescription)")
-                                    return
-                                }
-                            }, receiveValue: { [weak self] _ in
-                                guard let strongSelf = self else { return }
-                                // remove from SwiftData
-                                strongSelf.deleteTravelFromSwiftData(travelToDelete: strongSelf.selectedTravel)
-                                // refresh travels
-                                strongSelf.getUserTravels()
-                            })
-                            .store(in: &strongSelf.cancellables)
+                if let travelID = travelToDelete.travelID {
+                    // build URL
+                    let baseURL = NetworkHandler.shared.getBaseURL()
+                    guard let url = URL(string:"\(baseURL)/travels/user/\(travelID)") else {
+                        print("Invalid URL used to retrieve travels from DB")
+                        return
                     }
+                    
+                    // build request
+                    var request = URLRequest(url: url)
+                    request.httpMethod = "DELETE"
+                    request.setValue("Bearer \(firebaseToken)", forHTTPHeaderField: "Authorization")
+                    
+                    // send request
+                    URLSession.shared.dataTaskPublisher(for: request)
+                        .retry(2)
+                        .tryMap {
+                            result -> Data in
+                            // check status of response
+                            guard let httpResponse = result.response as? HTTPURLResponse,
+                                  (200...299).contains(httpResponse.statusCode) else {
+                                throw URLError(.badServerResponse)
+                            }
+                            return result.data
+                        }
+                        .receive(on: DispatchQueue.main)
+                        .sink(receiveCompletion: { completion in
+                            switch completion {
+                            case .finished:
+                                print("Travel successfully deleted.")
+                            case .failure(let error):
+                                print("Error updating travel data: \(error.localizedDescription)")
+                                return
+                            }
+                        }, receiveValue: { [weak self] _ in
+                            guard let strongSelf = self else { return }
+                            // remove from SwiftData
+                            strongSelf.deleteTravelFromSwiftData(travelToDelete: travelToDelete)
+                            // refresh travels
+                            strongSelf.getUserTravels()
+                        })
+                        .store(in: &strongSelf.cancellables)
                 }
             }
         }
     }
     
-    func deleteTravelFromSwiftData(travelToDelete: TravelDetails?) {
-        if let travelToDelete = travelToDelete {
+    func deleteTravelFromSwiftData(travelToDelete: Travel) {
+        if let travelID = travelToDelete.travelID {
             do {
                 let travels = try modelContext.fetch(FetchDescriptor<Travel>())
                 let segments = try modelContext.fetch(FetchDescriptor<Segment>())
                 
-                for travel in travels {
-                    if travel.travelID == travelToDelete.travel.travelID {
-                        modelContext.delete(travel)
-                    }
-                }
-                for segment in segments {
-                    if segment.travelID == travelToDelete.travel.travelID {
-                        modelContext.delete(segment)
-                    }
-                }
+                let segmentsByTravelID = Dictionary(grouping: segments, by: { $0.travelID })
+                let travelSegments = segmentsByTravelID[travelID]
                 
-                do {
+                if let travelSegments = travelSegments {
+                    for travel in travels {
+                        if travel.travelID == travelToDelete.travelID {
+                            modelContext.delete(travel)
+                        }
+                    }
+                    for segment in travelSegments {
+                        if segment.travelID == travelToDelete.travelID {
+                            modelContext.delete(segment)
+                        }
+                    }
                     try modelContext.save()
-                } catch {
-                    print("Error while updating travel in SwiftData")
-                    
-                    // TODO
+                } else {
+                    print("Error computing segments for travel to delete")
                 }
             }catch {
-                print("Error while updating travel in SwiftData")
-                
-                // TODO
-                
+                print("Error interacting with SwiftData")
+                return
             }
+        } else {
+            print("Error travel to delete has nil id")
         }
     }
     

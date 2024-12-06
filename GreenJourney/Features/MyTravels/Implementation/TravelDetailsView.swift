@@ -6,16 +6,19 @@ struct TravelDetailsView: View {
     @Binding var navigationPath: NavigationPath
     
     
-    
     var body : some View {
         VStack {
             Spacer()
             
             Button(action: {
-                viewModel.deleteSelectedTravel()
+                viewModel.deleteTravel(travelToDelete: travelDetails.travel)
                 
                 if !navigationPath.isEmpty {
+                    print("removing last element from navigationpath")
                     navigationPath.removeLast()
+                }else {
+                    print("navigationPath is empty")
+                    print(navigationPath)
                 }
             }) {
                 Image(systemName: "trash")
@@ -25,11 +28,11 @@ struct TravelDetailsView: View {
             Spacer()
             
             Text("From").font(.title)
-            Text(viewModel.selectedTravel?.getDepartureSegment()?.departureCity ?? "unknown").font(.headline)
+            Text(travelDetails.getDepartureSegment()?.departureCity ?? "unknown").font(.headline)
             Text("To").font(.title)
-            Text(viewModel.selectedTravel?.getDestinationSegment()?.destinationCity ?? "unknown").font(.headline)
+            Text(travelDetails.getDestinationSegment()?.destinationCity ?? "unknown").font(.headline)
             Text("Departure").font(.title)
-            Text(viewModel.selectedTravel?.getDepartureSegment()?.dateTime.formatted(date: .numeric, time: .shortened) ?? "unknown").font(.headline)
+            Text(travelDetails.getDepartureSegment()?.dateTime.formatted(date: .numeric, time: .shortened) ?? "unknown").font(.headline)
             
             Spacer()
                         

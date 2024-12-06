@@ -59,23 +59,8 @@ struct MyTravelsView: View {
                             NavigationLink(destination: TravelDetailsView(travelDetails: travelDetails, navigationPath: $navigationPath)) {
                                 TravelCard(travelDetails: travelDetails)
                             }
-                            if !travelDetails.travel.confirmed {
+                            if viewModel.showCompleted && !travelDetails.travel.confirmed {
                                 VStack {
-                                    Button(action: {
-                                        showAlert = true
-                                    }) {
-                                        Image(systemName: "trash.circle")
-                                            .font(.largeTitle)
-                                            .scaleEffect(1.2)
-                                            .fontWeight(.light)
-                                            .foregroundStyle(.red)
-                                    }
-                                    .padding(.vertical, 5)
-                                    .alert(isPresented: $showAlert) {
-                                        Alert(title: Text("Delete this travel?"), message: Text("you cannot undo this action"), primaryButton: .destructive(Text("Delete")) {
-                                            //delete travel
-                                        }, secondaryButton: .cancel(Text("cancel")))
-                                    }
                                     
                                     Button(action: {
                                         showConfirm = true
@@ -88,24 +73,46 @@ struct MyTravelsView: View {
                                     }
                                     .padding(.vertical, 5)
                                     .alert(isPresented: $showConfirm) {
-                                        Alert(title: Text("Have you done this travel?"), primaryButton: .default(Text("Back")) {
-                                            //confirm travel
-                                        }, secondaryButton: .default(Text("Confirm")))
+                                        Alert(
+                                            title: Text("Have you done this travel?"),
+                                            primaryButton: .cancel(Text("Cancel")) {},
+                                            secondaryButton: .default(Text("Confirm")) {
+                                                //confirm travel
+                                                viewModel.confirmTravel(travel: travelDetails.travel)
+                                            }
+                                        )
+                                    }
+                                    
+                                    Button(action: {
+                                        showAlert = true
+                                    }) {
+                                        Image(systemName: "trash.circle")
+                                            .font(.largeTitle)
+                                            .scaleEffect(1.2)
+                                            .fontWeight(.light)
+                                            .foregroundStyle(.red)
+                                    }
+                                    .padding(.vertical, 5)
+                                    .alert(isPresented: $showAlert) {
+                                        Alert(
+                                            title: Text("Delete this travel?"),
+                                            message: Text("you cannot undo this action"),
+                                            primaryButton: .cancel(Text("Cancel")) {},
+                                            secondaryButton: .destructive(Text("Delete")) {
+                                                //delete travel
+                                                viewModel.deleteTravel(travelToDelete: travelDetails.travel)
+                                            }
+                                        )
                                     }
                                 }
                             }
                         }
                         .padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
-                        
-                        
-                        
                     }
                 }
             }
         }
         .onAppear {
-            print("MyTravelsView onAppear")
-            
             viewModel.getUserTravels()
         }
     }

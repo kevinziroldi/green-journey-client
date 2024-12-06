@@ -8,9 +8,16 @@ class Travel: Codable {
     var confirmed = false
     var userID: Int
  
-    init (travelID: Int? = nil, userID: Int) {
+    init(travelID: Int? = nil, userID: Int) {
         self.travelID = travelID
         self.userID = userID
+    }
+    
+    init(travelCopy: Travel) {
+        self.travelID = travelCopy.travelID
+        self.CO2Compensated = travelCopy.CO2Compensated
+        self.confirmed = travelCopy.confirmed
+        self.userID = travelCopy.userID
     }
     
     enum CodingKeys: String, CodingKey {
