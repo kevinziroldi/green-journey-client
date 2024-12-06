@@ -74,7 +74,9 @@ class MyTravelsViewModel: ObservableObject {
             }
             
             // sort segments for every travel
-            sortSegments()
+            for td in travelDetailsList {
+                td.sortSegments()
+            }
             // sort the new list according to current sort option
             sortTravels()
             // filter according to current filter
@@ -82,19 +84,9 @@ class MyTravelsViewModel: ObservableObject {
             
         }catch {
             
-            
-            
             // TODO: gestire
-            
-            
-            
+        
             print("Error getting user's travels from SwiftData")
-        }
-    }
-    
-    private func sortSegments() {
-        for td in travelDetailsList {
-            td.sortSegments()
         }
     }
     
@@ -610,7 +602,7 @@ class MyTravelsViewModel: ObservableObject {
                 }
             }
         }else {
-            // TODO 
+            // TODO
             print("Error")
         }
     }

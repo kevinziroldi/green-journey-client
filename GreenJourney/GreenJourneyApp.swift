@@ -34,7 +34,6 @@ struct GreenJourneyApp: App {
     var body: some Scene {
         WindowGroup {
             MainView(modelContext: persistenceController.container.mainContext)
-            //MainView()
                 .environmentObject(authenticationViewModel)
                 .environmentObject(citiesReviewsViewModel)
                 .environmentObject(completerViewModel)
