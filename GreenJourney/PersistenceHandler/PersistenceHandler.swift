@@ -1,8 +1,8 @@
 import SwiftUI
 import SwiftData
 
-class PersistenceController {
-    static let shared = PersistenceController()
+class PersistenceHandler {
+    static let shared = PersistenceHandler()
     let container: ModelContainer
 
     init() {
