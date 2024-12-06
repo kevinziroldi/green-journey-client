@@ -56,6 +56,10 @@ class MyTravelsViewModel: ObservableObject {
         self.modelContext = modelContext
     }
     
+    func resetParameters() {
+        self.selectedTravel = nil
+    }
+    
     func getUserTravels() {        
         do {
             let travels = try modelContext.fetch(FetchDescriptor<Travel>())
@@ -299,9 +303,6 @@ class MyTravelsViewModel: ObservableObject {
     }
     
     func deleteTravel(travelToDelete: Travel) {
-        
-        print("CALLED ON ", travelToDelete.travelID)
-        
         guard let firebaseUser = Auth.auth().currentUser else {
             print("error retrieving firebase user")
             return

@@ -1,9 +1,9 @@
 import Combine
 import CoreML
+import FirebaseAuth
 import Foundation
 import MapKit
 import SwiftData
-import FirebaseAuth
 
 struct OptionsResponse: Decodable {
     let options: [[Segment]]
@@ -26,9 +26,6 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
     
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
-        do {
-            users = try modelContext.fetch(FetchDescriptor<User>())
-        }catch {}
     }
     
     func computeRoutes () {
@@ -114,105 +111,108 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
     }
     
     func saveTravel() {
-        // save travel on server
-        let baseURL = NetworkHandler.shared.getBaseURL()
-        guard let url = URL(string: "\(baseURL)/travels/user") else {
-            print("Invalid URL for posting user data to DB")
-            return
-        }
-        if let user = users.first {
-            guard let userID = user.userID else {
-                print("userID not found")
+        do {
+            users = try modelContext.fetch(FetchDescriptor<User>())
+            
+            // save travel on server
+            let baseURL = NetworkHandler.shared.getBaseURL()
+            guard let url = URL(string: "\(baseURL)/travels/user") else {
+                print("Invalid URL for posting user data to DB")
                 return
             }
-            let travel = Travel(userID: userID)
-            var travelDetails = TravelDetails(travel: travel, segments: selectedOption)
-            // JSON encoding
-            let encoder = JSONEncoder()
-            encoder.dateEncodingStrategy = .iso8601
-            guard let body = try? encoder.encode(travelDetails) else {
-                print("Error encoding travel data")
-                return
-            }
-            
-            // TODO remove
-            //print("body: " , String(data: body, encoding: .utf8)!)
-            
-            if let firebaseUser = Auth.auth().currentUser {
-                firebaseUser.getIDToken { [weak self] token, error in
-                    guard let strongSelf = self else { return }
-                    if let error = error {
-                        print("error getting firebase token: \(error.localizedDescription)")
-                    } else if let firebaseToken = token {
-                        
-                        // POST request
-                        var request = URLRequest(url: url)
-                        request.httpMethod = "POST"
-                        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-                        request.setValue("Bearer \(firebaseToken)", forHTTPHeaderField: "Authorization")
-                        request.httpBody = body
-                        
-                        let decoder = JSONDecoder()
-                        decoder.dateDecodingStrategy = .iso8601
-                        URLSession.shared.dataTaskPublisher(for: request)
-                            .retry(2)
-                            .tryMap {
-                                result -> Data in
-                                // check status of response
-                                guard let httpResponse = result.response as? HTTPURLResponse,
-                                      (200...299).contains(httpResponse.statusCode) else {
-                                    throw URLError(.badServerResponse)
+            if let user = users.first {
+                guard let userID = user.userID else {
+                    print("userID not found")
+                    return
+                }
+                let travel = Travel(userID: userID)
+                var travelDetails = TravelDetails(travel: travel, segments: selectedOption)
+                // JSON encoding
+                let encoder = JSONEncoder()
+                encoder.dateEncodingStrategy = .iso8601
+                guard let body = try? encoder.encode(travelDetails) else {
+                    print("Error encoding travel data")
+                    return
+                }
+                
+                if let firebaseUser = Auth.auth().currentUser {
+                    firebaseUser.getIDToken { [weak self] token, error in
+                        guard let strongSelf = self else { return }
+                        if let error = error {
+                            print("error getting firebase token: \(error.localizedDescription)")
+                        } else if let firebaseToken = token {
+                            
+                            // POST request
+                            var request = URLRequest(url: url)
+                            request.httpMethod = "POST"
+                            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                            request.setValue("Bearer \(firebaseToken)", forHTTPHeaderField: "Authorization")
+                            request.httpBody = body
+                            
+                            let decoder = JSONDecoder()
+                            decoder.dateDecodingStrategy = .iso8601
+                            URLSession.shared.dataTaskPublisher(for: request)
+                                .retry(2)
+                                .tryMap {
+                                    result -> Data in
+                                    // check status of response
+                                    guard let httpResponse = result.response as? HTTPURLResponse,
+                                          (200...299).contains(httpResponse.statusCode) else {
+                                        throw URLError(.badServerResponse)
+                                    }
+                                    return result.data
                                 }
-                                return result.data
-                            }
-                            .receive(on: DispatchQueue.main)
-                            .decode(type: TravelDetails.self, decoder: decoder)
-                            .sink(receiveCompletion: { completion in
-                                switch completion {
-                                case .finished:
-                                    print("Travel data posted successfully.")
-                                case .failure(let error):
-                                    print("Error posting travel data: \(error.localizedDescription)")
-                                    return
-                                }
-                            }, receiveValue: {[weak self] response in
-                                guard let strongSelf = self else { return }
-                                travelDetails = response
-                                
-                                // save travel in SwiftData
-                                strongSelf.modelContext.insert(travelDetails.travel)
-                                
-                                for segment in travelDetails.segments {
-                                    strongSelf.modelContext.insert(segment)
-                                }
-                                do {
-                                    try strongSelf.modelContext.save()
-                                } catch {
+                                .receive(on: DispatchQueue.main)
+                                .decode(type: TravelDetails.self, decoder: decoder)
+                                .sink(receiveCompletion: { completion in
+                                    switch completion {
+                                    case .finished:
+                                        print("Travel data posted successfully.")
+                                    case .failure(let error):
+                                        print("Error posting travel data: \(error.localizedDescription)")
+                                        return
+                                    }
+                                }, receiveValue: {[weak self] response in
+                                    guard let strongSelf = self else { return }
+                                    travelDetails = response
                                     
-                                    // TODO gestione
+                                    // save travel in SwiftData
+                                    strongSelf.modelContext.insert(travelDetails.travel)
                                     
-                                    print("Error saving new travel: \(error.localizedDescription)")
-                                    return
-                                }
-                                print("travel added to SwiftData")
-                            })
-                            .store(in: &strongSelf.cancellables)
-                        strongSelf.departure = CityCompleterDataset()
-                        strongSelf.arrival = CityCompleterDataset()
-                    }
-                    else {
-                        print("error retrieving token")
-                        return
+                                    for segment in travelDetails.segments {
+                                        strongSelf.modelContext.insert(segment)
+                                    }
+                                    do {
+                                        try strongSelf.modelContext.save()
+                                    } catch {
+                                        
+                                        // TODO gestione
+                                        
+                                        print("Error saving new travel: \(error.localizedDescription)")
+                                        return
+                                    }
+                                    print("travel added to SwiftData")
+                                })
+                                .store(in: &strongSelf.cancellables)
+                            strongSelf.departure = CityCompleterDataset()
+                            strongSelf.arrival = CityCompleterDataset()
+                        }
+                        else {
+                            print("error retrieving token")
+                            return
+                        }
                     }
                 }
-            }
-            else {
+                else {
+                    return
+                }
+                
+            } else {
+                print("no user present in swiftData")
                 return
             }
-            
-        } else {
-            print("no user present in swiftData")
-            return
+        } catch {
+            print("Error interacting with SwiftData")
         }
     }
     

@@ -37,27 +37,27 @@ class CompleterViewModel: ObservableObject {
         
         do {
             let result = try modelContext.fetch(fetchRequest)
+            
             let sortedResults = result.sorted { city1, city2 in
-                    
                 let city1Score = matchScore(for: city1, query: searchText)
                 let city2Score = matchScore(for: city2, query: searchText)
-                    
-                    // Ordinamento decrescente per punteggio
-                    if city1Score != city2Score {
-                        return city1Score > city2Score
-                    }
-                    
-                    // Fallback a ordinamento alfabetico
-                    return city1.cityName.localizedStandardCompare(city2.cityName) == .orderedAscending
+                
+                // order by decreasing score
+                if city1Score != city2Score {
+                    return city1Score > city2Score
                 }
-            suggestions = Array(sortedResults.prefix(10)) // Salva i risultati trovati
-            } catch {
+                
+                // alphabetical order
+                return city1.cityName.localizedStandardCompare(city2.cityName) == .orderedAscending
+            }
+            suggestions = Array(sortedResults.prefix(10))
+        } catch {
             print("Errore durante il fetch: \(error)")
         }
     }
     
     
-    // Funzione che assegna un punteggio di pertinenza
+    // compute score for the match
     private func matchScore(for city: CityCompleterDataset, query: String) -> Double {
         var score = 0.0
         if city.continent == continent {
@@ -75,53 +75,51 @@ class CompleterViewModel: ObservableObject {
     
     private func findContinent() -> String {
         guard let regionCode = Locale.current.region?.identifier else {
-                return "Europe"
-            }
-            
-            // Costruisci il FetchDescriptor con un Predicate valido
-            var fetchDescriptor = FetchDescriptor<CityCompleterDataset>(
-                predicate: #Predicate<CityCompleterDataset> {
-                    $0.countryCode == regionCode }
-            )
-            fetchDescriptor.fetchLimit = 1
-            
-            do {
-                let continent = try modelContext.fetch(fetchDescriptor).first?.continent ?? "Europe"
-                return continent
-            } catch {
-                // Gestione errori
-                print("Error while finding continent: \(error.localizedDescription)")
-                return ""
-            }
+            return "Europe"
+        }
         
+        var fetchDescriptor = FetchDescriptor<CityCompleterDataset>(
+            predicate: #Predicate<CityCompleterDataset> {
+                $0.countryCode == regionCode }
+        )
+        fetchDescriptor.fetchLimit = 1
+        
+        do {
+            let continent = try modelContext.fetch(fetchDescriptor).first?.continent ?? "Europe"
+            return continent
+        } catch {
+            print("Error while finding continent: \(error.localizedDescription)")
+            return ""
+        }
     }
     
     private func findCountry() -> String {
         guard let regionCode = Locale.current.region?.identifier else {
-                return "Europe"
-            }
+            return "Europe"
+        }
         return regionCode
     }
+    
     private func stringScore(_ source: String, _ query: String) -> Double {
         let lowerSource = source.lowercased()
         let lowerQuery = query.lowercased()
         
-        // Punteggio massimo se è un match esatto
+        // max score for exact match
         if lowerSource == lowerQuery {
             return 1.0
         }
         
-        // Bonus alto per corrispondenza del prefisso
+        // high score for prefix match
         if lowerSource.hasPrefix(lowerQuery) {
             return 0.8 + (Double(lowerQuery.count) / Double(lowerSource.count)) * 0.2
         }
         
-        // Bonus medio per substring match
+        // mid score for subtring match
         if lowerSource.contains(lowerQuery) {
             return 0.5 + (Double(lowerQuery.count) / Double(lowerSource.count)) * 0.5
         }
         
-        // Penalità basata sulla distanza tra i caratteri
+        // penalty based on distance between characters
         let distance = levenshteinDistance(lowerSource, lowerQuery)
         let maxLen = max(lowerSource.count, lowerQuery.count)
         return 1.0 - (Double(distance) / Double(maxLen))
@@ -150,5 +148,4 @@ class CompleterViewModel: ObservableObject {
         
         return matrix[m][n]
     }
-
 }

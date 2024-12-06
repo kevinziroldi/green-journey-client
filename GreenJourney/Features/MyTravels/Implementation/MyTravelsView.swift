@@ -56,9 +56,14 @@ struct MyTravelsView: View {
                 VStack{
                     ForEach(viewModel.filteredTravelDetailsList, id: \.id) { travelDetails in
                         HStack (spacing: 10) {
-                            NavigationLink(destination: TravelDetailsView(travelDetails: travelDetails, navigationPath: $navigationPath)) {
+                            Button(action: {
+                                viewModel.selectedTravel = travelDetails
+                                // selectedTravel is set synchronously
+                                navigationPath.append(NavigationDestination.TravelDetailsView)
+                            }) {
                                 TravelCard(travelDetails: travelDetails)
                             }
+                            
                             if viewModel.showCompleted && !travelDetails.travel.confirmed {
                                 VStack {
                                     
@@ -113,6 +118,7 @@ struct MyTravelsView: View {
             }
         }
         .onAppear {
+            viewModel.resetParameters()
             viewModel.getUserTravels()
         }
     }
