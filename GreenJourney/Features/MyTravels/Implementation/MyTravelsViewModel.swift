@@ -211,7 +211,7 @@ class MyTravelsViewModel: ObservableObject {
                     let decoder = JSONDecoder()
                     
                     // build URL
-                    let baseURL = NetworkManager.shared.getBaseURL()
+                    let baseURL = NetworkHandler.shared.getBaseURL()
                     guard let url = URL(string:"\(baseURL)/travels/user") else {
                         print("Invalid URL used to retrieve travels from DB")
                         return
@@ -305,7 +305,7 @@ class MyTravelsViewModel: ObservableObject {
                 if let selectedTravel = strongSelf.selectedTravel {
                     if let travelID = selectedTravel.travel.travelID {
                         // build URL
-                        let baseURL = NetworkManager.shared.getBaseURL()
+                        let baseURL = NetworkHandler.shared.getBaseURL()
                         guard let url = URL(string:"\(baseURL)/travels/user/\(travelID)") else {
                             print("Invalid URL used to retrieve travels from DB")
                             return
@@ -407,7 +407,7 @@ class MyTravelsViewModel: ObservableObject {
                             }
                             
                             // build URL
-                            let baseURL = NetworkManager.shared.getBaseURL()
+                            let baseURL = NetworkHandler.shared.getBaseURL()
                             guard let url = URL(string: "\(baseURL)/reviews") else {
                                 print("Invalid URL for posting user data to DB")
                                 return
@@ -494,7 +494,7 @@ class MyTravelsViewModel: ObservableObject {
                             }
                             
                             // create URL
-                            let baseURL = NetworkManager.shared.getBaseURL()
+                            let baseURL = NetworkHandler.shared.getBaseURL()
                             guard let url = URL(string: "\(baseURL)/reviews/\(reviewID)") else {
                                 print("Invalid URL for posting user data to DB")
                                 return
@@ -563,7 +563,7 @@ class MyTravelsViewModel: ObservableObject {
                     return
                 } else if let firebaseToken = token {
                     // build URL
-                    let baseURL = NetworkManager.shared.getBaseURL()
+                    let baseURL = NetworkHandler.shared.getBaseURL()
                     guard let url = URL(string:"\(baseURL)/reviews/\(reviewID)") else {
                         print("Invalid URL used to retrieve travels from DB")
                         return

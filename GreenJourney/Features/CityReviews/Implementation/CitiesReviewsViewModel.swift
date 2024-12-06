@@ -37,7 +37,7 @@ class CitiesReviewsViewModel: ObservableObject {
                 return
             } else if let firebaseToken = token {
                 // build URL
-                let baseURL = NetworkManager.shared.getBaseURL()
+                let baseURL = NetworkHandler.shared.getBaseURL()
                 guard let url = URL(string:"\(baseURL)/reviews?city_iata=\(strongSelf.searchedCity.iata)&country_code=\(strongSelf.searchedCity.countryCode)") else {
                     print("Invalid URL used to retrieve user from DB")
                     return
@@ -82,7 +82,7 @@ class CitiesReviewsViewModel: ObservableObject {
     }
         
     func getBestReviewedCities() {
-        let baseURL = NetworkManager.shared.getBaseURL()
+        let baseURL = NetworkHandler.shared.getBaseURL()
         guard let url = URL(string:"\(baseURL)/reviews/best") else {
             print("Invalid URL used to retrieve user from DB")
             return

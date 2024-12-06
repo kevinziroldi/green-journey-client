@@ -82,7 +82,7 @@ class UserPreferencesViewModel: ObservableObject {
             if let user = users.first {
                 let userID = user.userID!
                 
-                let baseURL = NetworkManager.shared.getBaseURL()
+                let baseURL = NetworkHandler.shared.getBaseURL()
                 guard let url = URL(string: "\(baseURL)/users") else {
                     print("Invalid URL for posting user data to DB")
                     return

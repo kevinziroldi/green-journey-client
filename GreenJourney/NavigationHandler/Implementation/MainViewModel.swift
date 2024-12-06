@@ -45,7 +45,7 @@ class MainViewModel: ObservableObject {
                 print("Failed to fetch token: \(error.localizedDescription)")
                 return
             } else if let firebaseToken = token {
-                let baseURL = NetworkManager.shared.getBaseURL()
+                let baseURL = NetworkHandler.shared.getBaseURL()
                 guard let url = URL(string:"\(baseURL)/travels/user") else {
                     print("Invalid URL used to retrieve travels from DB")
                     return
@@ -193,69 +193,71 @@ class MainViewModel: ObservableObject {
     private func readCSVMLDataset() -> [CityFeatures] {
         var citiesDataset: [CityFeatures] = []
         
-        if let filePath = Bundle.main.path(forResource: "ds_ml_v3", ofType: "csv") {
-            do {
-                let fileContents = try String(contentsOfFile: filePath, encoding: .utf8)
-                let rows = fileContents.components(separatedBy: "\n")
-                
-                // first row contains column names
-                for (index, row) in rows.enumerated() where index > 0 && !row.isEmpty {
-                    let rowValues = row.components(separatedBy: ",")
+        if let destinationPredictionDataset = ConfigReader.destinationPredictionDataset {
+            if let filePath = Bundle.main.path(forResource: destinationPredictionDataset, ofType: "csv") {
+                do {
+                    let fileContents = try String(contentsOfFile: filePath, encoding: .utf8)
+                    let rows = fileContents.components(separatedBy: "\n")
                     
-                    // extracr row values
-                    guard rowValues.count == 17,
-                          let id = Int64(rowValues[0]),
-                          let population = Double(rowValues[5]),
-                          let averageTemperature = Double(rowValues[7]),
-                          let livingCost = Double(rowValues[9]),
-                          let travelConnectivity = Double(rowValues[10]),
-                          let safety = Double(rowValues[11]),
-                          let healthcare = Double(rowValues[12]),
-                          let education = Double(rowValues[13]),
-                          let economy = Double(rowValues[14]),
-                          let internetAccess = Double(rowValues[15]),
-                          let outdoors = Double(rowValues[16])
-                    else {
-                        print("Error parsing row \(rowValues[0])")
-                        continue
+                    // first row contains column names
+                    for (index, row) in rows.enumerated() where index > 0 && !row.isEmpty {
+                        let rowValues = row.components(separatedBy: ",")
+                        
+                        // extracr row values
+                        guard rowValues.count == 17,
+                              let id = Int64(rowValues[0]),
+                              let population = Double(rowValues[5]),
+                              let averageTemperature = Double(rowValues[7]),
+                              let livingCost = Double(rowValues[9]),
+                              let travelConnectivity = Double(rowValues[10]),
+                              let safety = Double(rowValues[11]),
+                              let healthcare = Double(rowValues[12]),
+                              let education = Double(rowValues[13]),
+                              let economy = Double(rowValues[14]),
+                              let internetAccess = Double(rowValues[15]),
+                              let outdoors = Double(rowValues[16])
+                        else {
+                            print("Error parsing row \(rowValues[0])")
+                            continue
+                        }
+                        
+                        let iata = rowValues[1]
+                        let countryCode = rowValues[2]
+                        let cityName = rowValues[3]
+                        let countryName = rowValues[4]
+                        let capital = Bool(Int(rowValues[6]) ?? 0)
+                        let continent = rowValues[8]
+                        
+                        
+                        // create cityDataset object
+                        let cityFeatures = CityFeatures(
+                            id: id,
+                            iata: iata,
+                            countryCode: countryCode,
+                            cityName: cityName,
+                            countryName: countryName,
+                            population: population,
+                            capital: capital,
+                            averageTemperature: averageTemperature,
+                            continent: continent,
+                            livingCost: livingCost,
+                            travelConnectivity: travelConnectivity,
+                            safety: safety,
+                            healthcare: healthcare,
+                            education: education,
+                            economy: economy,
+                            internetAccess: internetAccess,
+                            outdoors: outdoors
+                        )
+                        
+                        citiesDataset.append(cityFeatures)
                     }
-                    
-                    let iata = rowValues[1]
-                    let countryCode = rowValues[2]
-                    let cityName = rowValues[3]
-                    let countryName = rowValues[4]
-                    let capital = Bool(Int(rowValues[6]) ?? 0)
-                    let continent = rowValues[8]
-                    
-                    
-                    // create cityDataset object
-                    let cityFeatures = CityFeatures(
-                        id: id,
-                        iata: iata,
-                        countryCode: countryCode,
-                        cityName: cityName,
-                        countryName: countryName,
-                        population: population,
-                        capital: capital,
-                        averageTemperature: averageTemperature,
-                        continent: continent,
-                        livingCost: livingCost,
-                        travelConnectivity: travelConnectivity,
-                        safety: safety,
-                        healthcare: healthcare,
-                        education: education,
-                        economy: economy,
-                        internetAccess: internetAccess,
-                        outdoors: outdoors
-                    )
-                    
-                    citiesDataset.append(cityFeatures)
+                } catch {
+                    print("Error reading ML CSV file")
                 }
-            } catch {
-                print("Error reading ML CSV file")
+            } else {
+                print("CSV file not found")
             }
-        } else {
-            print("CSV file not found")
         }
         
         return citiesDataset
@@ -278,62 +280,63 @@ class MainViewModel: ObservableObject {
             // else, load them
             print("Loading cities")
             
-            if let filePath = Bundle.main.path(forResource: "ds_iata_v5", ofType: "csv") {
-                do {
-                    let fileContents = try String(contentsOfFile: filePath, encoding: .utf8)
-                    let rows = fileContents.components(separatedBy: "\n")
-                    
-                    var citiesCompleterDataset: [CityCompleterDataset] = []
-                    
-                    // first row contains column names
-                    for (index, row) in rows.enumerated() where index > 0 && !row.isEmpty {
-                        let rowValues = row.components(separatedBy: ",")
+            if let citiesCompleterDataset = ConfigReader.citiesCompleterDataset {
+                if let filePath = Bundle.main.path(forResource: citiesCompleterDataset, ofType: "csv") {
+                    do {
+                        let fileContents = try String(contentsOfFile: filePath, encoding: .utf8)
+                        let rows = fileContents.components(separatedBy: "\n")
                         
-                        let locode = rowValues[0]
-                        let city = rowValues[1]
-                        let continent = rowValues[4]
-                        let countryCode = rowValues[3]
-                        let countryName = rowValues[2]
-
-                        // create cityCompleterDataset object
-                        let cityCompleterDataset = CityCompleterDataset(city: city, countryName: countryName,continent: continent, locode: locode, countryCode: countryCode)
-
-                        citiesCompleterDataset.append(cityCompleterDataset)
-                    }
-                    var counter = 0
-                    for cityCompleterDataset in citiesCompleterDataset {
-                        modelContext.insert(cityCompleterDataset)
-                        counter += 1
-                        if counter.isMultiple(of: 20000) {
-                            do {
-                                try modelContext.save()
-                            } catch {
-                                print ("Error saving cities to dataset, counter: \(counter)")
+                        var citiesCompleterDataset: [CityCompleterDataset] = []
+                        
+                        // first row contains column names
+                        for (index, row) in rows.enumerated() where index > 0 && !row.isEmpty {
+                            let rowValues = row.components(separatedBy: ",")
+                            
+                            let locode = rowValues[0]
+                            let city = rowValues[1]
+                            let continent = rowValues[4]
+                            let countryCode = rowValues[3]
+                            let countryName = rowValues[2]
+                            
+                            // create cityCompleterDataset object
+                            let cityCompleterDataset = CityCompleterDataset(city: city, countryName: countryName,continent: continent, locode: locode, countryCode: countryCode)
+                            
+                            citiesCompleterDataset.append(cityCompleterDataset)
+                        }
+                        var counter = 0
+                        for cityCompleterDataset in citiesCompleterDataset {
+                            modelContext.insert(cityCompleterDataset)
+                            counter += 1
+                            if counter.isMultiple(of: 20000) {
+                                do {
+                                    try modelContext.save()
+                                } catch {
+                                    print ("Error saving cities to dataset, counter: \(counter)")
+                                }
                             }
                         }
-                    }
-                    do {
-                        try modelContext.save()
-                        print("Cities for completer loaded correctly to SwiftData")
-                        
-                        
+                        do {
+                            try modelContext.save()
+                            print("Cities for completer loaded correctly to SwiftData")
+                            
+                            
+                            
+                        } catch {
+                            
+                            // TODO
+                            
+                            print ("Error saving cities to dataset")
+                        }
                         
                     } catch {
-                        
-                        // TODO
-                        
-                        print ("Error saving cities to dataset")
+                        print("Errore while reading CSV file: \(error)")
                     }
+                } else {
                     
-                } catch {
-                    print("Errore while reading CSV file: \(error)")
+                    print("CSV file not found")
+                    
                 }
-            } else {
-                
-                print("CSV file not found")
-                
             }
-            
         }catch {
             
             print("Error interacting with SwiftData")

@@ -22,7 +22,7 @@ class RankingViewModel: ObservableObject {
             
             guard let userID = users.first?.userID else { return }
             
-            let baseURL = NetworkManager.shared.getBaseURL()
+            let baseURL = NetworkHandler.shared.getBaseURL()
             guard let url = URL(string:"\(baseURL)/ranking?id=\(userID)") else { print("ERROR"); return }
             let decoder = JSONDecoder()
             

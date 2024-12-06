@@ -48,7 +48,7 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
         let formattedTime = timeFormatter.string(from: datePicked)
         let formattedTimeReturn = timeFormatter.string(from: dateReturnPicked)
         
-        let baseURL = NetworkManager.shared.getBaseURL()
+        let baseURL = NetworkHandler.shared.getBaseURL()
         guard let url = URL(string:"\(baseURL)/travels/search?iata_departure=\(departure.iata)&country_code_departure=\(departure.countryCode)&iata_destination=\(arrival.iata)&country_code_destination=\(arrival.countryCode)&date=\(formattedDate)&time=\(formattedTime)&is_outward=\(isOutward)") else {
             return
         }
@@ -115,7 +115,7 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
     
     func saveTravel() {
         // save travel on server
-        let baseURL = NetworkManager.shared.getBaseURL()
+        let baseURL = NetworkHandler.shared.getBaseURL()
         guard let url = URL(string: "\(baseURL)/travels/user") else {
             print("Invalid URL for posting user data to DB")
             return

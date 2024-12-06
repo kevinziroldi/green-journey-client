@@ -184,7 +184,7 @@ class AuthenticationViewModel: ObservableObject {
     }
     
     private func saveUserToServer(firebaseUID: String, firebaseToken: String) {
-        let baseURL = NetworkManager.shared.getBaseURL()
+        let baseURL = NetworkHandler.shared.getBaseURL()
         guard let url = URL(string: "\(baseURL)/users/user") else {
             print("Invalid URL for posting user data to DB")
             return
@@ -240,7 +240,7 @@ class AuthenticationViewModel: ObservableObject {
     }
     
     private func getUserFromServer(firebaseToken: String) {
-        let baseURL = NetworkManager.shared.getBaseURL()
+        let baseURL = NetworkHandler.shared.getBaseURL()
         guard let url = URL(string:"\(baseURL)/users/user") else {
             print("Invalid URL used to retrieve user from DB")
             return
