@@ -7,7 +7,7 @@ struct MainView: View {
     @Environment(\.modelContext) private var modelContext
     @State var navigationPath: NavigationPath = NavigationPath()
     
-    @State private var selectedTab = 2
+    @State private var selectedTab: TabViewElement = TabViewElement.SearchTravel
     
     init(modelContext: ModelContext) {
         navigationPath = NavigationPath()
@@ -20,31 +20,31 @@ struct MainView: View {
                     .tabItem {
                         Label("Ranking", systemImage: "star")
                     }
-                    .tag(0)
+                    .tag(TabViewElement.Ranking)
                 
                 CitiesReviewsView(navigationPath: $navigationPath)
                     .tabItem {
                         Label("Reviews", systemImage: "star.fill")
                     }
-                    .tag(1)
+                    .tag(TabViewElement.Reviews)
                 
                 TravelSearchView(navigationPath: $navigationPath)
                     .tabItem {
                         Label("From-To", systemImage: "location")
                     }
-                    .tag(2)
+                    .tag(TabViewElement.SearchTravel)
                 
                 MyTravelsView(modelContext: modelContext, navigationPath: $navigationPath)
                     .tabItem {
                         Label("My travels", systemImage: "airplane")
                     }
-                    .tag(3)
+                    .tag(TabViewElement.MyTravels)
                 
                 DashboardView(navigationPath: $navigationPath)
                     .tabItem {
                         Label("Dashboard", systemImage: "house")
                     }
-                    .tag(4)
+                    .tag(TabViewElement.Dashboard)
             }.onAppear {
                 viewModel.loadData()
             }
@@ -74,7 +74,7 @@ struct MainView: View {
             
             print("Selected tab = ", selectedTab)
             
-            if selectedTab == 0 {
+            if selectedTab == TabViewElement.Ranking {
                 rankingViewModel.fecthRanking()
             }
         }
