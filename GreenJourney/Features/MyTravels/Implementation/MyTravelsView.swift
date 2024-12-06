@@ -104,6 +104,8 @@ struct MyTravelsView: View {
             }
         }
         .onAppear {
+            print("MyTravelsView onAppear")
+            
             viewModel.getUserTravels()
         }
     }

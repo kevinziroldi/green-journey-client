@@ -14,6 +14,7 @@ class CitiesReviewsViewModel: ObservableObject {
     // searched city
     @Published var searchedCity: CityCompleterDataset = CityCompleterDataset()
     @Published var searchedCityReviewElement: CityReviewElement?
+    @Published var searchedCityAvailable: Bool = false
     
     // selected city
     @Published var selectedCity: CityCompleterDataset?
@@ -57,6 +58,7 @@ class CitiesReviewsViewModel: ObservableObject {
                               (200...299).contains(httpResponse.statusCode) else {
                             throw URLError(.badServerResponse)
                         }
+                        //print(String(data: result.data, encoding: .utf8) ?? "No data")
                         return result.data
                     }
                     .decode(type: CityReviewElement.self, decoder: decoder)
@@ -72,6 +74,7 @@ class CitiesReviewsViewModel: ObservableObject {
                     }, receiveValue: {[weak self] cityReviewElement in
                         guard let strongSelf = self else { return }
                         strongSelf.searchedCityReviewElement = cityReviewElement
+                        strongSelf.searchedCityAvailable = true
                     })
                     .store(in: &strongSelf.cancellables)
             }
@@ -148,5 +151,7 @@ class CitiesReviewsViewModel: ObservableObject {
     
     func resetParameters() {
         self.searchedCity = CityCompleterDataset()
+        self.searchedCityReviewElement = CityReviewElement()
+        self.searchedCityAvailable = false
     }
 }

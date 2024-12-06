@@ -71,6 +71,9 @@ struct MainView: View {
             }
         }
         .onChange(of:selectedTab) {
+            
+            print("Selected tab = ", selectedTab)
+            
             if selectedTab == 0 {
                 rankingViewModel.fecthRanking()
             }

@@ -230,7 +230,10 @@ struct TravelSearchView: View {
                     )
                 }
             }
-            //.animation(.default, value: dateTapped || dateReturnTapped)
+            //.animation(.default, value: dateTapped || dateReturnTapped) // TODO 
+            .onAppear() {
+                print("TravelSearchView onAppear")
+            }
         }
     }
     

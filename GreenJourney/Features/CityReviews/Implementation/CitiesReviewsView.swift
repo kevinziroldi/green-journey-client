@@ -71,10 +71,6 @@ struct CitiesReviewsView: View {
             
             Button(action: {
                 viewModel.getReviewsForSearchedCity()
-                
-                // append path of the next view
-                navigationPath.append(NavigationDestination.CityReviewsDetailsView)
-                
                 }) {
                 Text("Search")
                     .font(.title3)
@@ -96,8 +92,17 @@ struct CitiesReviewsView: View {
             }
         }
         .onAppear {
+            
+            print("CitiesReviewsView onAppear")
+            
             viewModel.resetParameters()
             viewModel.getBestReviewedCities()
+        }
+        .onChange(of: viewModel.searchedCityAvailable) {
+            if viewModel.searchedCityAvailable {
+                // append path of the inner view
+                navigationPath.append(NavigationDestination.CityReviewsDetailsView)
+            }
         }
     }
 }

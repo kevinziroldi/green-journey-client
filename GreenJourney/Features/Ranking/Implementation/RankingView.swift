@@ -75,9 +75,9 @@ struct RankingView: View {
             }
         }
         .onAppear() {
-            print("RANKING LOADED")
+            print("RankingView onAppear")
             
-            viewModel.fecthRanking()
+            //viewModel.fecthRanking()
         }
     }
 }
