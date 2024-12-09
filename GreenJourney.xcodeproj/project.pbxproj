@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A5D73C82D05A2C40099AA8E /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 0A5D73C72D05A2C40099AA8E /* SQLite */; };
 		428DEFB62CCB95220054AB9C /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 428DEFB52CCB95220054AB9C /* FirebaseAnalytics */; };
 		42B7F6BE2CDA1169006AB516 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 42B7F6BD2CDA1169006AB516 /* GoogleSignIn */; };
 		42B7F6C02CDA1169006AB516 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 42B7F6BF2CDA1169006AB516 /* GoogleSignInSwift */; };
@@ -43,6 +44,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A5D73C82D05A2C40099AA8E /* SQLite in Frameworks */,
 				428DEFB62CCB95220054AB9C /* FirebaseAnalytics in Frameworks */,
 				42EA5EAD2CCBF7540080B8F8 /* FirebaseAuth in Frameworks */,
 				42B7F6BE2CDA1169006AB516 /* GoogleSignIn in Frameworks */,
@@ -93,6 +95,7 @@
 				42EA5EAC2CCBF7540080B8F8 /* FirebaseAuth */,
 				42B7F6BD2CDA1169006AB516 /* GoogleSignIn */,
 				42B7F6BF2CDA1169006AB516 /* GoogleSignInSwift */,
+				0A5D73C72D05A2C40099AA8E /* SQLite */,
 			);
 			productName = GreenJourney;
 			productReference = 0A1576802CA459AC00EE99BC /* GreenJourney.app */;
@@ -125,6 +128,7 @@
 			packageReferences = (
 				428DEFB42CCB95220054AB9C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				42B7F6BC2CDA1169006AB516 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+				0A5D73C62D05A2C40099AA8E /* XCRemoteSwiftPackageReference "SQLite" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 0A1576812CA459AC00EE99BC /* Products */;
@@ -370,6 +374,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		0A5D73C62D05A2C40099AA8E /* XCRemoteSwiftPackageReference "SQLite" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/stephencelis/SQLite.swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.15.3;
+			};
+		};
 		428DEFB42CCB95220054AB9C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -389,6 +401,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		0A5D73C72D05A2C40099AA8E /* SQLite */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0A5D73C62D05A2C40099AA8E /* XCRemoteSwiftPackageReference "SQLite" */;
+			productName = SQLite;
+		};
 		428DEFB52CCB95220054AB9C /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 428DEFB42CCB95220054AB9C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
