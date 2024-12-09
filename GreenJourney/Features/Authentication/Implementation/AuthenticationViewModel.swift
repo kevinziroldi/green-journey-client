@@ -129,10 +129,30 @@ class AuthenticationViewModel: ObservableObject {
                             } else if let token = token {
                                 print("Token retrieved")
                                 strongSelf.saveUserToServer(firebaseUID: result.user.uid, firebaseToken: token)
-                                
-                                strongSelf.errorMessage = nil
-                                strongSelf.sendEmailVerification()
-                                strongSelf.isEmailVerificationActiveSignup = true
+                                    .sink(receiveCompletion: { completion in
+                                        
+                                        switch completion {
+                                        case .finished:
+                                            print("User data posted successfully.")
+                                        case .failure(let error):
+                                            print("Error posting user data: \(error.localizedDescription)")
+                                            let user = Auth.auth().currentUser
+                                            user?.delete { error in
+                                                if let error = error {
+                                                    // An error happened.
+                                                    print("Error deleting user from Firebase: \(error.localizedDescription)")
+                                                } else {
+                                                    // Account deleted.
+                                                    print("User deleted from firebase")
+                                                }
+                                            }
+                                        }
+                                    }, receiveValue: {
+                                        strongSelf.errorMessage = nil
+                                        strongSelf.sendEmailVerification()
+                                        strongSelf.isEmailVerificationActiveSignup = true
+                                    })
+                                    .store(in: &strongSelf.cancellables)
                             }
                         }
                     }
@@ -183,20 +203,19 @@ class AuthenticationViewModel: ObservableObject {
         })
     }
     
-    private func saveUserToServer(firebaseUID: String, firebaseToken: String) {
+    private func saveUserToServer(firebaseUID: String, firebaseToken: String) -> AnyPublisher<Void, Error>{
         let baseURL = NetworkHandler.shared.getBaseURL()
         guard let url = URL(string: "\(baseURL)/users/user") else {
             print("Invalid URL for posting user data to DB")
-            return
+            return Fail(error: URLError(.badURL)).eraseToAnyPublisher()
         }
         
         let user = User(firstName: self.firstName, lastName: self.lastName, firebaseUID: firebaseUID, scoreShortDistance: 0, scoreLongDistance: 0)
         // JSON encoding
         guard let body = try? JSONEncoder().encode(user) else {
             print("error in encoding user data")
-            return
+            return Fail(error: URLError(.badURL)).eraseToAnyPublisher()
         }
-        print("body: " , String(data: body, encoding: .utf8)!)
         
         
         // POST request
@@ -205,8 +224,8 @@ class AuthenticationViewModel: ObservableObject {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Bearer \(firebaseToken)", forHTTPHeaderField: "Authorization")
         request.httpBody = body
-       
-        URLSession.shared.dataTaskPublisher(for: request)
+        
+        return URLSession.shared.dataTaskPublisher(for: request)
             .retry(2)
             .tryMap {
                 result -> Void in
@@ -218,25 +237,7 @@ class AuthenticationViewModel: ObservableObject {
                 return
             }
             .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { completion in
-                switch completion {
-                case .finished:
-                    print("User data posted successfully.")
-                case .failure(let error):
-                    print("Error posting user data: \(error.localizedDescription)")
-                    let user = Auth.auth().currentUser
-                    user?.delete { error in
-                      if let error = error {
-                          // An error happened.
-                          print("Error deleting user from Firebase: \(error.localizedDescription)")
-                      } else {
-                          // Account deleted.
-                          print("User deleted from firebase")
-                      }
-                    }
-                }
-            }, receiveValue: { _ in })
-            .store(in: &cancellables)
+            .eraseToAnyPublisher()
     }
     
     private func getUserFromServer(firebaseToken: String) {
@@ -341,44 +342,63 @@ extension AuthenticationViewModel {
             }
             let accessToken = user.accessToken
             let credential = GoogleAuthProvider.credential(withIDToken: idToken.tokenString, accessToken: accessToken.tokenString)
-        
+            
             let result = try await Auth.auth().signIn(with: credential)
             let firebaseUser = result.user
             if let additionalUserInfo = result.additionalUserInfo {
                 DispatchQueue.main.async {
-                    if (additionalUserInfo.isNewUser) {
-                        let fullName = firebaseUser.displayName
-                        let parts = fullName?.components(separatedBy: " ")
-                        self.firstName = parts![0]
-                        self.lastName = parts![1]
-                        
-                        firebaseUser.getIDToken { token, error in
-                            if let error = error {
-                                self.errorMessage = "Failed to fetch token: \(error.localizedDescription)"
-                            } else if let token = token {
-                                // Passa il token alla funzione
-                                self.saveUserToServer(firebaseUID: firebaseUser.uid, firebaseToken: token)
-                            }
-                        }
-                    }
-                    // in any case, save to swift data
                     firebaseUser.getIDToken { [weak self] token, error in
                         guard let strongSelf = self else { return }
                         if let error = error {
                             strongSelf.errorMessage = "Failed to fetch token: \(error.localizedDescription)"
                         } else if let token = token {
-                            // Passa il token alla funzione
-                            strongSelf.getUserFromServer(firebaseToken: token)
+                            
+                            if (additionalUserInfo.isNewUser) {
+                                let fullName = firebaseUser.displayName
+                                let parts = fullName?.components(separatedBy: " ")
+                                strongSelf.firstName = parts![0]
+                                strongSelf.lastName = parts![1]
+                                
+                                strongSelf.saveUserToServer(firebaseUID: firebaseUser.uid, firebaseToken: token)
+                                    .sink(receiveCompletion: { completion in
+                                        
+                                        switch completion {
+                                        case .finished:
+                                            print("User data posted successfully.")
+                                            strongSelf.getUserFromServer(firebaseToken: token)
+                                        case .failure(let error):
+                                            print("Error posting user data: \(error.localizedDescription)")
+                                            let user = Auth.auth().currentUser
+                                            user?.delete { error in
+                                                if let error = error {
+                                                    // An error happened.
+                                                    print("Error deleting user from Firebase: \(error.localizedDescription)")
+                                                } else {
+                                                    // Account deleted.
+                                                    print("User deleted from firebase")
+                                                }
+                                            }
+                                        }
+                                    }, receiveValue: {})
+                                    .store(in: &strongSelf.cancellables)
+                                
+                                print("stampa salvataggio sul server")
+                            }
+                            else {
+                                strongSelf.getUserFromServer(firebaseToken: token)
+                                print("stampa getting from server")
+                            }
+                            
                         }
                     }
+                    
                 }
             }
-            
-            return true
         }
         catch {
             print(error.localizedDescription)
             return false
         }
+        return true
     }
 }
