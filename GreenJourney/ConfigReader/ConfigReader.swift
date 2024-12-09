@@ -17,19 +17,11 @@ struct ConfigReader {
         return config["ServerPort"] as? String
     }
     
-    static var destinationPredictionDataset: String? {
+    static var dbInstance: String? {
         guard let url = Bundle.main.url(forResource: "Config", withExtension: "plist"),
               let data = try? Data(contentsOf: url),
               let config = try? PropertyListSerialization.propertyList(from: data, options: [], format: nil) as? [String: Any]
         else { return nil }
-        return config["DestinationPredictionDataset"] as? String
-    }
-    
-    static var citiesCompleterDataset: String? {
-        guard let url = Bundle.main.url(forResource: "Config", withExtension: "plist"),
-              let data = try? Data(contentsOf: url),
-              let config = try? PropertyListSerialization.propertyList(from: data, options: [], format: nil) as? [String: Any]
-        else { return nil }
-        return config["CitiesCompleterDataset"] as? String
+        return config["DBInstance"] as? String
     }
 }
