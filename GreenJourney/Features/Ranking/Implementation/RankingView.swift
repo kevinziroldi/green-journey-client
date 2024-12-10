@@ -2,7 +2,6 @@ import SwiftUI
 import SwiftData
 
 struct RankingView: View {
-    @Environment(\.modelContext) private var modelContext
     @Binding var navigationPath: NavigationPath
     @EnvironmentObject var viewModel: RankingViewModel
     

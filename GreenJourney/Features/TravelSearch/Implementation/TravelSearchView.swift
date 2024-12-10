@@ -190,7 +190,6 @@ struct TravelSearchView: View {
                     Spacer()
                     
                     DestinationPredictionView(
-                        modelContext: modelContext,
                         confirm: { predictedCities in
                             if let firstCity = predictedCities.first {
                                 viewModel.arrival = firstCity

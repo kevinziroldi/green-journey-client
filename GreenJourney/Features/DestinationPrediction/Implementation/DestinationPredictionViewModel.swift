@@ -9,7 +9,7 @@ struct CityCountry: Hashable {
 
 class DestinationPredictionViewModel: ObservableObject {
     var modelContext: ModelContext
-    @Published var predictedCity: CityCompleterDataset = CityCompleterDataset()
+    @Published var predictedCity: [CityCompleterDataset] = []
     
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
@@ -131,7 +131,7 @@ class DestinationPredictionViewModel: ObservableObject {
                         }
                     }
                     if newCity {
-                        predictedCity = CityCompleterDataset(city: cityDS.cityName, countryName: cityDS.countryName, continent: cityDS.continent, locode: cityDS.iata, countryCode: cityDS.countryCode)
+                        predictedCity.append(CityCompleterDataset(city: cityDS.cityName, countryName: cityDS.countryName, continent: cityDS.continent, locode: cityDS.iata, countryCode: cityDS.countryCode))
                         return
                     }
                 }
@@ -140,7 +140,7 @@ class DestinationPredictionViewModel: ObservableObject {
             // else return the first one
             if let cityId = citiesIds.first {
                 if let firstCity = citiesDS.first(where: { $0.id == cityId }) {
-                    predictedCity = CityCompleterDataset(city: firstCity.cityName, countryName: firstCity.countryName, continent: firstCity.continent, locode: firstCity.iata, countryCode: firstCity.countryCode)
+                    predictedCity.append(CityCompleterDataset(city: firstCity.cityName, countryName: firstCity.countryName, continent: firstCity.continent, locode: firstCity.iata, countryCode: firstCity.countryCode))
                     
                     return
                 }
@@ -148,13 +148,13 @@ class DestinationPredictionViewModel: ObservableObject {
             
             // if not present, return a random one
             if let randomCity = citiesDS.randomElement() {
-                predictedCity = CityCompleterDataset(
+                predictedCity.append(CityCompleterDataset(
                     city: randomCity.cityName,
                     countryName: randomCity.countryName,
                     continent: randomCity.continent,
                     locode: randomCity.iata,
                     countryCode: randomCity.countryCode
-                )
+                ))
                 return
             }else {
                 

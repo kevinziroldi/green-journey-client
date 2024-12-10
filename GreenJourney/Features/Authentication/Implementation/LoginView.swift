@@ -3,7 +3,6 @@ import SwiftData
 
 struct LoginView: View {
     @EnvironmentObject private var viewModel: AuthenticationViewModel
-    @Environment(\.modelContext) private var modelContext: ModelContext
     @Binding var navigationPath: NavigationPath
     
     var body: some View {
