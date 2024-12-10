@@ -3,13 +3,13 @@ import SwiftData
 import MapKit
 
 struct TravelSearchView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Environment(\.colorScheme) var colorScheme
+    @Environment(\.modelContext) private var modelContext: ModelContext
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     @EnvironmentObject var viewModel: TravelSearchViewModel
     @State private var departureTapped: Bool = false
     @State private var destinationTapped: Bool = false
-    @State private var dateTapped = false
-    @State private var dateReturnTapped = false
+    @State private var dateTapped: Bool = false
+    @State private var dateReturnTapped: Bool = false
     @State private var triggerAI: Bool = false
     
     @Binding var navigationPath: NavigationPath
@@ -190,8 +190,12 @@ struct TravelSearchView: View {
                     Spacer()
                     
                     DestinationPredictionView(
-                        confirm: { predictedCity in
-                            viewModel.arrival = predictedCity
+                        modelContext: modelContext,
+                        confirm: { predictedCities in
+                            if let firstCity = predictedCities.first {
+                                viewModel.arrival = firstCity
+                                viewModel.predictedCities = predictedCities
+                            }
                             self.triggerAI = true
                         })
                     
