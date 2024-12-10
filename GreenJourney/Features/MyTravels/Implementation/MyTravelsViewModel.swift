@@ -623,4 +623,13 @@ class MyTravelsViewModel: ObservableObject {
             print("Error")
         }
     }
+    
+    func computeOneway(travel: TravelDetails) -> Bool {
+        for segment in travel.segments {
+            if !segment.isOutward {
+                return false
+            }
+        }
+        return true
+    }
 }

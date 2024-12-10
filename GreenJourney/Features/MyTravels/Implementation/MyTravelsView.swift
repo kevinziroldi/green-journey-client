@@ -10,6 +10,7 @@ struct MyTravelsView: View {
     @State private var showConfirm: Bool = false
     
     @Binding var navigationPath: NavigationPath
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
         
     init(navigationPath: Binding<NavigationPath>) {
         _navigationPath = navigationPath
@@ -36,84 +37,111 @@ struct MyTravelsView: View {
             .pickerStyle(SegmentedPickerStyle())
             .padding()
             
-            Button(action: {
-                showSortOptions.toggle()
-            }) {
-                Text("Order by")
+            HStack {
+                Spacer()
+                Button(action: {
+                    showSortOptions.toggle()
+                }) {
+                    Text("Order by")
+                }
+                .padding(.trailing, 20)
+                .actionSheet(isPresented: $showSortOptions) {
+                    ActionSheet(title: Text("Order by"), buttons: [
+                        .default(Text("Departure date")) {viewModel.sortOption = .departureDate},
+                        .default(Text("CO2 emitted")) {viewModel.sortOption = .co2Emitted},
+                        .default(Text("CO2 compensation rate")) {viewModel.sortOption = .co2CompensationRate},
+                        .default(Text("Price")) {viewModel.sortOption = .price},
+                        .cancel()
+                    ])
+                }
             }
-            .padding()
-            .actionSheet(isPresented: $showSortOptions) {
-                ActionSheet(title: Text("Order by"), buttons: [
-                    .default(Text("Departure date")) {viewModel.sortOption = .departureDate},
-                    .default(Text("CO2 emitted")) {viewModel.sortOption = .co2Emitted},
-                    .default(Text("CO2 compensation rate")) {viewModel.sortOption = .co2CompensationRate},
-                    .default(Text("Price")) {viewModel.sortOption = .price},
-                    .cancel()
-                ])
-            }
+            
             ScrollView {
-                VStack{
-                    ForEach(viewModel.filteredTravelDetailsList, id: \.id) { travelDetails in
-                        HStack (spacing: 10) {
-                            Button(action: {
-                                viewModel.selectedTravel = travelDetails
-                                // selectedTravel is set synchronously
-                                navigationPath.append(NavigationDestination.TravelDetailsView)
-                            }) {
-                                TravelCard(travelDetails: travelDetails)
-                            }
+                if viewModel.filteredTravelDetailsList.count == 0 {
+                    VStack {
+                        if colorScheme == .dark {
+                            Image("noTravelsDark")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 300, height: 300)
                             
-                            if viewModel.showCompleted && !travelDetails.travel.confirmed {
-                                VStack {
-                                    
-                                    Button(action: {
-                                        showConfirm = true
-                                    }) {
-                                        Image(systemName: "checkmark.circle")
-                                            .font(.largeTitle)
-                                            .scaleEffect(1.2)
-                                            .fontWeight(.light)
-                                            .foregroundStyle(.green)
-                                    }
-                                    .padding(.vertical, 5)
-                                    .alert(isPresented: $showConfirm) {
-                                        Alert(
-                                            title: Text("Have you done this travel?"),
-                                            primaryButton: .cancel(Text("Cancel")) {},
-                                            secondaryButton: .default(Text("Confirm")) {
-                                                //confirm travel
-                                                viewModel.confirmTravel(travel: travelDetails.travel)
-                                            }
-                                        )
-                                    }
-                                    
-                                    Button(action: {
-                                        showAlert = true
-                                    }) {
-                                        Image(systemName: "trash.circle")
-                                            .font(.largeTitle)
-                                            .scaleEffect(1.2)
-                                            .fontWeight(.light)
-                                            .foregroundStyle(.red)
-                                    }
-                                    .padding(.vertical, 5)
-                                    .alert(isPresented: $showAlert) {
-                                        Alert(
-                                            title: Text("Delete this travel?"),
-                                            message: Text("you cannot undo this action"),
-                                            primaryButton: .cancel(Text("Cancel")) {},
-                                            secondaryButton: .destructive(Text("Delete")) {
-                                                //delete travel
-                                                viewModel.deleteTravel(travelToDelete: travelDetails.travel)
-                                            }
-                                        )
+                            
+                        }
+                        else {
+                            Image("noTravelsLight")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 300, height: 300)
+                        }
+                        Text("You have no trips in this section yet")
+                            .font(.headline)
+                            .fontWeight(.light)
+                    }
+                }
+                else {
+                    VStack{
+                        ForEach(viewModel.filteredTravelDetailsList, id: \.id) { travelDetails in
+                            HStack (spacing: 10) {
+                                Button(action: {
+                                    viewModel.selectedTravel = travelDetails
+                                    // selectedTravel is set synchronously
+                                    navigationPath.append(NavigationDestination.TravelDetailsView)
+                                }) {
+                                    TravelCard(travelDetails: travelDetails)
+                                }
+                                
+                                if viewModel.showCompleted && !travelDetails.travel.confirmed {
+                                    VStack {
+                                        
+                                        Button(action: {
+                                            showConfirm = true
+                                        }) {
+                                            Image(systemName: "checkmark.circle")
+                                                .font(.largeTitle)
+                                                .scaleEffect(1.2)
+                                                .fontWeight(.light)
+                                                .foregroundStyle(.green)
+                                        }
+                                        .padding(.vertical, 5)
+                                        .alert(isPresented: $showConfirm) {
+                                            Alert(
+                                                title: Text("Have you done this travel?"),
+                                                primaryButton: .cancel(Text("Cancel")) {},
+                                                secondaryButton: .default(Text("Confirm")) {
+                                                    //confirm travel
+                                                    viewModel.confirmTravel(travel: travelDetails.travel)
+                                                }
+                                            )
+                                        }
+                                        
+                                        Button(action: {
+                                            showAlert = true
+                                        }) {
+                                            Image(systemName: "trash.circle")
+                                                .font(.largeTitle)
+                                                .scaleEffect(1.2)
+                                                .fontWeight(.light)
+                                                .foregroundStyle(.red)
+                                        }
+                                        .padding(.vertical, 5)
+                                        .alert(isPresented: $showAlert) {
+                                            Alert(
+                                                title: Text("Delete this travel?"),
+                                                message: Text("you cannot undo this action"),
+                                                primaryButton: .cancel(Text("Cancel")) {},
+                                                secondaryButton: .destructive(Text("Delete")) {
+                                                    //delete travel
+                                                    viewModel.deleteTravel(travelToDelete: travelDetails.travel)
+                                                }
+                                            )
+                                        }
                                     }
                                 }
                             }
+                            .padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
                         }
-                        .padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
                     }
-                }
+            }
             }
         }
         .onAppear {
@@ -124,8 +152,12 @@ struct MyTravelsView: View {
 }
 
 struct TravelCard: View {
-    let travelDetails: TravelDetails
     
+    let travelDetails: TravelDetails
+    @EnvironmentObject var viewModel: MyTravelsViewModel
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
+
+
     var co2Emitted: Float64 {
         var co2Emitted = 0.0
         for segment in travelDetails.segments {
@@ -137,7 +169,8 @@ struct TravelCard: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 20)
-                .stroke()
+                .stroke(colorScheme == .dark ? Color.white : Color.black)
+                .fill(colorScheme == .dark ? Color(red: 35/255, green: 35/255, blue: 35/255) : Color.white)
             
             VStack {
                 HStack{
@@ -173,6 +206,28 @@ struct TravelCard: View {
                         }
                     }
                     Spacer()
+                    VStack {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 20)
+                                .stroke()
+                            if viewModel.computeOneway(travel: travelDetails) {
+                                Text("One way")
+                                    .font(.caption)
+                                    .fontWeight(.bold)
+                                    .padding(5)
+                            }
+                            else {
+                                Text("Round trip")
+                                    .font(.caption)
+                                    .fontWeight(.bold)
+                                    .padding(5)
+                            }
+                        }
+                        .fixedSize()
+                        Spacer()
+                    }
+                    
+                    Spacer()
                     Image(systemName: "chevron.forward")
                         .font(.title2)
                         .foregroundStyle(.blue)
@@ -184,7 +239,7 @@ struct TravelCard: View {
                         path.addLine(to: CGPoint(x: geometry.size.width, y: 0))
                     }
                     .stroke(style: StrokeStyle(lineWidth: 1, dash: [20, 10]))
-                    .foregroundStyle(.black)
+                    .foregroundStyle(colorScheme == .dark ? Color.white : Color.black)
                 }
                 .padding(EdgeInsets(top: 7, leading: 5, bottom: 0, trailing: 0))
                 
@@ -198,8 +253,8 @@ struct TravelCard: View {
                 }
             }
             .padding()
+            .foregroundStyle(colorScheme == .dark ? Color.white : Color.black)
         }
-        .foregroundStyle(.black)
         
     }
     
