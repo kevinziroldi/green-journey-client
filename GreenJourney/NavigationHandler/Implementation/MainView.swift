@@ -4,13 +4,14 @@ import SwiftUI
 struct MainView: View {
     @EnvironmentObject private var viewModel: MainViewModel
     @EnvironmentObject private var rankingViewModel: RankingViewModel
-    @Environment(\.modelContext) private var modelContext
-    @State var navigationPath: NavigationPath = NavigationPath()
+    @Environment(\.modelContext) private var modelContext: ModelContext
+    @State var navigationPath: NavigationPath
     
-    @State private var selectedTab: TabViewElement = TabViewElement.SearchTravel
+    @State private var selectedTab: TabViewElement
     
     init(modelContext: ModelContext) {
-        navigationPath = NavigationPath()
+        self.navigationPath = NavigationPath()
+        self.selectedTab = TabViewElement.SearchTravel
     }
     
     var body: some View {

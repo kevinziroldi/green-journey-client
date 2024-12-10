@@ -5,7 +5,7 @@ import SwiftData
 
 class CitiesReviewsViewModel: ObservableObject {
     private var modelContext: ModelContext
-    private var cancellables = Set<AnyCancellable>()
+    private var cancellables: Set<AnyCancellable>
     
     // best cities
     @Published var bestCitiesReviewElements: [CityReviewElement] = []
@@ -23,6 +23,7 @@ class CitiesReviewsViewModel: ObservableObject {
     
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
+        self.cancellables = Set<AnyCancellable>()
     }
     
     func getReviewsForSearchedCity() {

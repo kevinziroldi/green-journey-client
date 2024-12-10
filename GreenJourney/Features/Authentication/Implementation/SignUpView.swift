@@ -2,18 +2,12 @@ import SwiftUI
 
 struct SignUpView: View {
     @EnvironmentObject var viewModel: AuthenticationViewModel
-    @Environment(\.modelContext) private var modelContext
     @Binding var navigationPath: NavigationPath
     
     var body: some View {
         VStack {
             ScrollView {
                 VStack {
-                    /*
-                    Text("Sign Up")
-                        .font(.largeTitle)
-                        .padding(.bottom, 32)
-                    */
                     Image("login_logo_map")
                         .resizable()
                         .padding()
