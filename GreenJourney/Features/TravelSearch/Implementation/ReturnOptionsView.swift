@@ -53,10 +53,7 @@ struct ReturnOptionsView: View {
         
         if (viewModel.returnOptions.isEmpty){
             Spacer()
-            ProgressView() // show loading symbol
-                .progressViewStyle(CircularProgressViewStyle())
-                .scaleEffect(1.5)
-                .padding()
+            CircularProgressView()
             Spacer()
             Spacer()
             Spacer()

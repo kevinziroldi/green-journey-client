@@ -54,10 +54,7 @@ struct OutwardOptionsView: View {
         
         if (viewModel.outwardOptions.isEmpty){
             Spacer()
-            ProgressView() // show loading symbol
-                .progressViewStyle(CircularProgressViewStyle())
-                .scaleEffect(1.5)
-                .padding()
+            CircularProgressView()
             Spacer()
             Spacer()
             Spacer()
@@ -118,11 +115,6 @@ struct OptionCard: View {
                                         .fontWeight(.semibold)
                                 }
                              }
-                            /*
-                            Image(systemName: "arrow.down")
-                                .font(.title2)
-                                .foregroundStyle(.black)
-                            */
                         }
                         Text(viewModel.getOptionDestination(option))
                             .font(.title3)
@@ -166,5 +158,33 @@ struct OptionCard: View {
         }
         .padding(EdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10))
         
+    }
+}
+
+
+struct CircularProgressView: View {
+    @State private var rotation: Double = 0
+
+    var body: some View {
+        ZStack {
+            // Cerchio di sfondo
+            Circle()
+                .stroke(lineWidth: 8)
+                .opacity(0.3)
+                .foregroundColor(Color.gray)
+            
+            // Parte rotante
+            Circle()
+                .trim(from: 0, to: 0.3) // Mostra solo una parte del cerchio
+                .stroke(style: StrokeStyle(lineWidth: 8, lineCap: .round))
+                .foregroundStyle(LinearGradient(colors: [Color.blue, Color.green], startPoint: .leading, endPoint: .trailing))
+                .rotationEffect(.degrees(rotation))
+                .onAppear {
+                    withAnimation(Animation.linear(duration: 3).repeatForever(autoreverses: false)) {
+                        rotation = 360
+                    }
+                }
+        }
+        .frame(width: 60, height: 60) // Imposta le dimensioni della progress view
     }
 }
