@@ -12,7 +12,7 @@ enum SortOption {
 
 class MyTravelsViewModel: ObservableObject {
     private var modelContext: ModelContext
-    private var cancellables = Set<AnyCancellable>()
+    private var cancellables: Set<AnyCancellable> = Set<AnyCancellable>()
     
     // travels lists
     var travelDetailsList: [TravelDetails] = []

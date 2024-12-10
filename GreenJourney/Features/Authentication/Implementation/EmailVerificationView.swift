@@ -2,7 +2,6 @@ import SwiftUI
 
 struct EmailVerificationView: View {
     @EnvironmentObject var viewModel: AuthenticationViewModel
-    @Environment(\.modelContext) private var modelContext
     @Binding var navigationPath: NavigationPath
     
     var body: some View {

@@ -3,16 +3,11 @@ import SwiftData
 
 struct LoginView: View {
     @EnvironmentObject private var viewModel: AuthenticationViewModel
-    @Environment(\.modelContext) private var modelContext
+    @Environment(\.modelContext) private var modelContext: ModelContext
     @Binding var navigationPath: NavigationPath
     
     var body: some View {
         VStack{
-            /*
-            Text("Login")
-                .font(.largeTitle)
-                .padding(.bottom, 32)
-             */
             Image("login_logo_map")
                 .resizable()
                 .padding()

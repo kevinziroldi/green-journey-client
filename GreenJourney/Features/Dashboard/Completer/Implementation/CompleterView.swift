@@ -3,7 +3,7 @@ import SwiftData
 
 struct CompleterView: View {
     @EnvironmentObject private var viewModel: CompleterViewModel
-    @Environment(\.colorScheme) var colorScheme
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     @FocusState var textfieldOpen: Bool
     var onBack: () -> Void
     var onClick: (CityCompleterDataset) -> Void
