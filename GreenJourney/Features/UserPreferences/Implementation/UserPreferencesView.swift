@@ -46,47 +46,54 @@ struct UserPreferencesView : View {
                 Text("Do you want to get better predictions about your future travels? Complete your profile!")
                 
                 VStack() {
-                    TextField("First Name", text: $userPreferencesViewModel.firstNameField)
-                        .onChange(of: userPreferencesViewModel.firstNameField) {
-                            userPreferencesViewModel.hasModified = true
+                    TextField("First Name", text: $userPreferencesViewModel.firstName)
+                        .onChange(of: userPreferencesViewModel.firstName) {
+                            userPreferencesViewModel.checkForModifications()
                         }
                         .textFieldStyle(RoundedBorderTextFieldStyle())
-                    TextField("Last Name", text: $userPreferencesViewModel.lastNameField)
-                        .onChange(of: userPreferencesViewModel.lastNameField) {
-                            userPreferencesViewModel.hasModified = true
+                    TextField("Last Name", text: $userPreferencesViewModel.lastName)
+                        .onChange(of: userPreferencesViewModel.lastName) {
+                            userPreferencesViewModel.checkForModifications()
+
                         }
                         .textFieldStyle(RoundedBorderTextFieldStyle())
-                    DatePicker("Birth date", selection: $userPreferencesViewModel.birthDateField.toNonOptional(), displayedComponents: .date)
-                        .onChange(of: userPreferencesViewModel.birthDateField) {
-                            userPreferencesViewModel.hasModified = true
+                    DatePicker("Birth date", selection: $userPreferencesViewModel.birthDate.toNonOptional(), displayedComponents: .date)
+                        .onChange(of: userPreferencesViewModel.birthDate) {
+                            userPreferencesViewModel.checkForModifications()
+
                         }
-                    Picker("Gender", selection: $userPreferencesViewModel.genderField) {
+                    Picker("Gender", selection: $userPreferencesViewModel.gender) {
                         ForEach(Gender.allCases, id: \.self) { gender in
                             Text(gender.rawValue).tag(gender)
                         }
                     }
                     .pickerStyle(SegmentedPickerStyle())
-                    .onChange(of: userPreferencesViewModel.genderField) {
-                        userPreferencesViewModel.hasModified = true
+                    .onChange(of: userPreferencesViewModel.gender) {
+                        userPreferencesViewModel.checkForModifications()
+
                     }
-                    TextField("City", text: $userPreferencesViewModel.cityField.toNonOptional())
-                        .onChange(of: userPreferencesViewModel.cityField) {
-                            userPreferencesViewModel.hasModified = true
+                    TextField("City", text: $userPreferencesViewModel.city.toNonOptional())
+                        .onChange(of: userPreferencesViewModel.city) {
+                            userPreferencesViewModel.checkForModifications()
+
                         }
                         .textFieldStyle(RoundedBorderTextFieldStyle())
-                    TextField("Street name", text: $userPreferencesViewModel.streetNameField.toNonOptional())
-                        .onChange(of: userPreferencesViewModel.streetNameField) {
-                            userPreferencesViewModel.hasModified = true
+                    TextField("Street name", text: $userPreferencesViewModel.streetName.toNonOptional())
+                        .onChange(of: userPreferencesViewModel.streetName) {
+                            userPreferencesViewModel.checkForModifications()
+
                         }
                         .textFieldStyle(RoundedBorderTextFieldStyle())
-                    TextField("House number", value: $userPreferencesViewModel.houseNumberField.toNonOptional(), formatter: NumberFormatter())
-                        .onChange(of: userPreferencesViewModel.houseNumberField) {
-                            userPreferencesViewModel.hasModified = true
+                    TextField("House number", value: $userPreferencesViewModel.houseNumber.toNonOptional(), formatter: NumberFormatter())
+                        .onChange(of: userPreferencesViewModel.houseNumber) {
+                            userPreferencesViewModel.checkForModifications()
+
                         }
                         .textFieldStyle(RoundedBorderTextFieldStyle())
-                    TextField("Zip code", value: $userPreferencesViewModel.zipCodeField.toNonOptional(), formatter: NumberFormatter())
-                        .onChange(of: userPreferencesViewModel.zipCodeField) {
-                            userPreferencesViewModel.hasModified = true
+                    TextField("Zip code", value: $userPreferencesViewModel.zipCode.toNonOptional(), formatter: NumberFormatter())
+                        .onChange(of: userPreferencesViewModel.zipCode) {
+                            userPreferencesViewModel.checkForModifications()
+
                         }
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                 }
@@ -95,14 +102,16 @@ struct UserPreferencesView : View {
                 .frame(maxWidth: .infinity)
                 .padding(.horizontal)
                 
-                if !userPreferencesViewModel.initializationPhase && userPreferencesViewModel.hasModified {
+                if userPreferencesViewModel.hasModified {
                     Button(action: userPreferencesViewModel.saveModifications) {
                         Text("Save modifications")
                     }
+                    .buttonStyle(.bordered)
                    
                     Button(action: userPreferencesViewModel.cancelModifications) {
                         Text("Cancel modifications")
                     }
+                    .buttonStyle(.bordered)
                     
                 }
 
@@ -112,9 +121,15 @@ struct UserPreferencesView : View {
                     navigationPath = NavigationPath()
                     navigationPath.append(NavigationDestination.LoginView)
                 }
+                .buttonStyle(.bordered)
+
             }
             .frame(maxWidth: .infinity)
             .padding()
+            .onAppear(){
+                userPreferencesViewModel.getUserData()
+                
+            }
         } else {
             LoginView(navigationPath: $navigationPath)
                 .transition(.opacity.animation(.easeInOut(duration: 0.2)))

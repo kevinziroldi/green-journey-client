@@ -31,45 +31,69 @@ class UserPreferencesViewModel: ObservableObject {
     //swift data model context
     var modelContext: ModelContext
     
-    @Published var firstNameField: String = ""
-    @Published var lastNameField: String = ""
-    @Published var birthDateField: Date?
-    @Published var genderField: Gender = .notSpecified
-    @Published var cityField: String?
-    @Published var streetNameField: String?
-    @Published var houseNumberField: Int?
-    @Published var zipCodeField: Int?
+    @Published var firstName: String = ""
+    @Published var lastName: String = ""
+    @Published var birthDate: Date?
+    @Published var gender: Gender = .notSpecified
+    @Published var city: String?
+    @Published var streetName: String?
+    @Published var houseNumber: Int?
+    @Published var zipCode: Int?
     @Published var hasModified: Bool = false
-    @Published var initializationPhase: Bool = true
+    
+    @Published var originalUser: User?
     
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
         
-        // must be done before view load
-        // in order not to show the submit button
-        getUserData()
     }
     
     func getUserData() {
         do {
             let users = try modelContext.fetch(FetchDescriptor<User>())
             if let user = users.first {
-                firstNameField = user.firstName
-                lastNameField = user.lastName
-                birthDateField = user.birthDate
-                genderField = Gender(from: user.gender)
-                cityField = user.city
-                streetNameField = user.streetName
-                houseNumberField = user.houseNumber
-                zipCodeField = user.zipCode
-                
-                initializationPhase = false
-                hasModified = false
+                DispatchQueue.main.async {
+                    self.originalUser = user
+                    self.firstName = user.firstName
+                    self.lastName = user.lastName
+                    self.birthDate = user.birthDate
+                    self.gender = Gender(from: user.gender)
+                    self.city = user.city
+                    self.streetName = user.streetName
+                    self.houseNumber = user.houseNumber
+                    self.zipCode = user.zipCode
+                    
+                    self.hasModified = false
+                }
             }
         }catch {
             // TODO
         }
     }
+    
+    func checkForModifications() {
+            guard let originalUser = originalUser else { return }
+        print(originalUser.firstName)
+        print(originalUser.lastName)
+        print(originalUser.gender ?? "")
+        print(originalUser.birthDate?.formatted() ?? "")
+        print(originalUser.city ?? "")
+        print ("CONFRONTO")
+        print(originalUser.birthDate?.formatted() ?? "")
+        print(firstName + lastName)
+        print(gender)
+        print(birthDate?.formatted() ?? "")
+        print(city ?? "")
+        
+            hasModified = firstName != originalUser.firstName ||
+                          lastName != originalUser.lastName ||
+                          birthDate != originalUser.birthDate ||
+                          /*gender.rawValue != originalUser.gender ||*/
+                          city != originalUser.city ||
+                          streetName != originalUser.streetName ||
+                          houseNumber != originalUser.houseNumber ||
+                          zipCode != originalUser.zipCode
+        }
     
     func saveModifications() {
         do {
@@ -89,26 +113,26 @@ class UserPreferencesViewModel: ObservableObject {
                 }
                 
                 var zipCodeInt = nil as Int?
-                if let zipCodeString = zipCodeField {
+                if let zipCodeString = zipCode {
                     zipCodeInt = Int(zipCodeString)
                 }
                 
                 var houseNumberInt = nil as Int?
-                if let houseNumberString = houseNumberField {
+                if let houseNumberString = houseNumber {
                     houseNumberInt = Int(houseNumberString)
                 }
                 
                 let modifiedUser = User (
                     userID: userID,
-                    firstName: firstNameField,
-                    lastName: lastNameField,
-                    birthDate: birthDateField,
-                    gender: genderField.asString(),
+                    firstName: firstName,
+                    lastName: lastName,
+                    birthDate: birthDate,
+                    gender: gender.asString(),
                     firebaseUID: user.firebaseUID,
                     zipCode: zipCodeInt,
-                    streetName: streetNameField,
+                    streetName: streetName,
                     houseNumber: houseNumberInt,
-                    city: cityField,
+                    city: city,
                     scoreShortDistance: user.scoreShortDistance,
                     scoreLongDistance: user.scoreLongDistance
                 )
