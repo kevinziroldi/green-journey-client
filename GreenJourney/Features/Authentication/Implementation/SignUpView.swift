@@ -9,11 +9,12 @@ struct SignUpView: View {
         VStack {
             ScrollView {
                 VStack {
+                    /*
                     Text("Sign Up")
                         .font(.largeTitle)
                         .padding(.bottom, 32)
-                    
-                    Image("loginLogo")
+                    */
+                    Image("login_logo_map")
                         .resizable()
                         .padding()
                         .aspectRatio(contentMode: .fit)
