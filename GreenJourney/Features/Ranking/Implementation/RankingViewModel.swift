@@ -4,7 +4,7 @@ import Combine
 
 class RankingViewModel: ObservableObject {
     var modelContext: ModelContext
-    private var cancellables = Set<AnyCancellable>()
+    private var cancellables: Set<AnyCancellable> = Set<AnyCancellable>()
     var users: [User] = []
 
 
