@@ -90,7 +90,7 @@ class AuthenticationViewModel: ObservableObject {
         Auth.auth().sendPasswordReset(withEmail: email) { [weak self] error in
             guard let strongSelf = self else { return }
             if let error = error {
-                print("Error in sending email for password recovery")
+                print("Error in sending email for password recovery: \(error.localizedDescription)")
                 strongSelf.errorMessage = "Error in sending email for password recovery"
                 strongSelf.resendEmail = nil
             }
@@ -119,6 +119,7 @@ class AuthenticationViewModel: ObservableObject {
             Auth.auth().createUser(withEmail: email, password: password) { [weak self] result, error in
                 guard let strongSelf = self else { return }
                 if let error = error {
+                    print(error.localizedDescription)
                     strongSelf.errorMessage = "Error creating account"
                     return
                 } else {
@@ -196,6 +197,7 @@ class AuthenticationViewModel: ObservableObject {
                 if let firebaseUser = Auth.auth().currentUser {
                     firebaseUser.getIDToken { token, error in
                         if let error = error {
+                            print(error.localizedDescription)
                             strongSelf.errorMessage = "Error verifying email"
                             return
                         } else if let token = token {
