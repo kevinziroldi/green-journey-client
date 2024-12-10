@@ -3,9 +3,9 @@ import SwiftUI
 
 struct DestinationPredictionView: View {
     @EnvironmentObject var viewModel: DestinationPredictionViewModel
-    var confirm: (CityCompleterDataset) -> Void
+    var confirm: ([CityCompleterDataset]) -> Void
     
-    init(modelContext: ModelContext, confirm: @escaping (CityCompleterDataset) -> Void) {
+    init(modelContext: ModelContext, confirm: @escaping ([CityCompleterDataset]) -> Void) {
         self.confirm = confirm
     }
     

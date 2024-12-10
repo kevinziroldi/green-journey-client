@@ -191,8 +191,11 @@ struct TravelSearchView: View {
                     
                     DestinationPredictionView(
                         modelContext: modelContext,
-                        confirm: { predictedCity in
-                            viewModel.arrival = predictedCity
+                        confirm: { predictedCities in
+                            if let firstCity = predictedCities.first {
+                                viewModel.arrival = firstCity
+                                viewModel.predictedCities = predictedCities
+                            }
                             self.triggerAI = true
                         })
                     

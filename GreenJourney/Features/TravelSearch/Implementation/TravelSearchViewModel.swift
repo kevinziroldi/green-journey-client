@@ -22,6 +22,8 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
     @Published var returnOptions: [[Segment]] = []
     
     @Published var selectedOption: [Segment] = []
+    
+    @Published var predictedCities: [CityCompleterDataset] = []
     private var cancellables = Set<AnyCancellable>()
     
     init(modelContext: ModelContext) {
