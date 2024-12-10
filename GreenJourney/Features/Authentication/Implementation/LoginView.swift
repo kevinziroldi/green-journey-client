@@ -8,10 +8,12 @@ struct LoginView: View {
     
     var body: some View {
         VStack{
+            /*
             Text("Login")
                 .font(.largeTitle)
                 .padding(.bottom, 32)
-            Image("loginLogo")
+             */
+            Image("login_logo_map")
                 .resizable()
                 .padding()
                 .aspectRatio(contentMode: .fit)
