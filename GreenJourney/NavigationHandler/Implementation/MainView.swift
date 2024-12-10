@@ -35,7 +35,7 @@ struct MainView: View {
                     }
                     .tag(TabViewElement.SearchTravel)
                 
-                MyTravelsView(modelContext: modelContext, navigationPath: $navigationPath)
+                MyTravelsView(navigationPath: $navigationPath)
                     .tabItem {
                         Label("My travels", systemImage: "airplane")
                     }

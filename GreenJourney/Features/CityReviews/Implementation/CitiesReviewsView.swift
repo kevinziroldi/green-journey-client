@@ -5,7 +5,6 @@ struct CitiesReviewsView: View {
     @EnvironmentObject var viewModel: CitiesReviewsViewModel
     @Binding var navigationPath: NavigationPath
     @State private var searchTapped: Bool = false
-    @Environment(\.modelContext) private var modelContext: ModelContext
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     
     var body: some View {

@@ -190,7 +190,6 @@ struct TravelSearchView: View {
                     Spacer()
                     
                     DestinationPredictionView(
-                        modelContext: modelContext,
                         confirm: { predictedCity in
                             viewModel.arrival = predictedCity
                             self.triggerAI = true

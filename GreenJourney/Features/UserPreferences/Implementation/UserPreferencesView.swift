@@ -4,7 +4,6 @@ import SwiftData
 import SwiftUI
 
 struct UserPreferencesView : View {
-    @Environment(\.modelContext) private var modelContext
     @Query var users: [User]
     let email: String = Auth.auth().currentUser?.email ?? ""
     @EnvironmentObject private var userPreferencesViewModel: UserPreferencesViewModel

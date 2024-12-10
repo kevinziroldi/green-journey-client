@@ -4,7 +4,6 @@ struct OptionDetailsView: View {
     var segments: [Segment]
 
     @EnvironmentObject var viewModel: TravelSearchViewModel
-    @Environment(\.modelContext) private var modelContext
     @Binding var navigationPath: NavigationPath
     
     var body: some View {

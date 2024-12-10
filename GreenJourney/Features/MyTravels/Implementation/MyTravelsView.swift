@@ -10,9 +10,8 @@ struct MyTravelsView: View {
     @State private var showConfirm: Bool = false
     
     @Binding var navigationPath: NavigationPath
-    @Environment(\.modelContext) private var modelContext
         
-    init(modelContext: ModelContext, navigationPath: Binding<NavigationPath>) {
+    init(navigationPath: Binding<NavigationPath>) {
         _navigationPath = navigationPath
     }
     var body: some View {
