@@ -59,7 +59,7 @@ struct SignUpView: View {
                                 .padding()
                                 .frame(maxWidth: .infinity)
                                 .background(Color.blue)
-                                .cornerRadius(8)
+                                .cornerRadius(30)
                         }
                         
                         HStack {
@@ -77,19 +77,33 @@ struct SignUpView: View {
                         }
                         .padding(.horizontal, 16)
                         
-                        Button (action: {
-                            Task{await viewModel.signInWithGoogle()}
-                        }){
-                            Image("googleLogo")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(height: 40)
-                                .padding(.trailing, 8)
-                            Text("Sign in with Google")
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity)
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 30)
+                                .stroke(Color.gray, lineWidth: 1)
+                                .fill(Color.white)
+                                .shadow(radius: 1)
+                            
+                            
+                            Button(action: {
+                                Task{await viewModel.signInWithGoogle()}
+                            }) {
+                                HStack(spacing: 10) {
+                                    Image("googleLogo")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 60)
+                                        .safeAreaPadding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 0))
+                                    Spacer()
+                                    Text("Sign in with Google")
+                                        .foregroundStyle(.black)
+                                    Spacer()
+                                    Spacer()
+                                    Spacer()
+                                }
+                                .padding(EdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 0))
+                                
+                            }
                         }
-                        .buttonStyle(.bordered)
                         
                         Spacer()
                         
