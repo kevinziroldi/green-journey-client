@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ServerIP</key>
+	<string>192.168.1.43</string>
+	<key>ServerPort</key>
+	<string>80</string>
+	<key>DBInstance</key>
+	<string>db_instance</string>
+</dict>
+</plist>
