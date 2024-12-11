@@ -54,7 +54,6 @@
 		422A00902CD188B200EF280D /* Exceptions for "GreenJourney" folder in "GreenJourney" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Config.plist,
 				Features/Authentication/Tests/AuthenticationViewModelTest.swift,
 				Features/Authentication/UITests/LoginViewUITest.swift,
 				Info.plist,
