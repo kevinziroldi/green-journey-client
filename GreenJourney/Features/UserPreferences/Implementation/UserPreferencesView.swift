@@ -93,14 +93,12 @@ struct UserPreferencesView : View {
                             Text("City")
                             TextField("Not set", text: $userPreferencesViewModel.city.toNonOptional())
                                 .multilineTextAlignment(.trailing)
-                                .keyboardType(.numberPad)
                         }
                         
                         HStack {
                             Text("Street Name")
                             TextField("Not set", text: $userPreferencesViewModel.streetName.toNonOptional())
                                 .multilineTextAlignment(.trailing)
-                                .keyboardType(.numberPad)
                         }
                         
                         HStack {
