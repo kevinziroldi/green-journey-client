@@ -27,6 +27,13 @@ class AuthenticationViewModel: ObservableObject {
         self.isLogged = false
     }
     
+    // TODO remove
+    /*
+    func add(_ a: Int, _ b: Int) -> Int {
+        return a+b
+    }
+    */
+    
     func login() {
         // input check and validation
         guard !email.isEmpty, !password.isEmpty else {
