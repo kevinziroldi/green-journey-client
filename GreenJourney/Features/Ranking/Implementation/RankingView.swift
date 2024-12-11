@@ -122,7 +122,7 @@ struct LeaderBoardView: View {
             )
             Rectangle()
                 .frame(height: 1)
-                .foregroundColor(.black)
+                .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 5, trailing: 0))
             ForEach (leaderboard.indices, id: \.self) { index in
                     NavigationLink (destination: UserDetailsRankingView(navigationPath: $navigationPath, user: leaderboard[index])) {
