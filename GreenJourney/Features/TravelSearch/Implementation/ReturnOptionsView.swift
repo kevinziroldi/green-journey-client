@@ -46,7 +46,7 @@ struct ReturnOptionsView: View {
                     .padding()
             }
             Text(viewModel.dateReturnPicked.formatted(date: .numeric, time: .shortened))
-        }
+        } 
         Rectangle()
             .frame(height: 1)
             .foregroundColor(.gray)
