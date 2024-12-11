@@ -13,14 +13,49 @@
 		42EA5EAD2CCBF7540080B8F8 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 42EA5EAC2CCBF7540080B8F8 /* FirebaseAuth */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		0AD1F04E2D099709001A8464 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0A1576782CA459AC00EE99BC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0A15767F2CA459AC00EE99BC;
+			remoteInfo = GreenJourney;
+		};
+		0AD1F0622D09987D001A8464 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0A1576782CA459AC00EE99BC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0A15767F2CA459AC00EE99BC;
+			remoteInfo = GreenJourney;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		0A1576802CA459AC00EE99BC /* GreenJourney.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GreenJourney.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0AD1F04A2D099709001A8464 /* GreenJourneyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GreenJourneyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		0AD1F05C2D09987D001A8464 /* GreenJourneyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GreenJourneyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		0AD1F0572D099766001A8464 /* Exceptions for "GreenJourney" folder in "GreenJourneyTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Features/Authentication/Tests/AuthenticationViewModelTest.swift,
+			);
+			target = 0AD1F0492D099709001A8464 /* GreenJourneyTests */;
+		};
+		0AD1F06C2D0998B6001A8464 /* Exceptions for "GreenJourney" folder in "GreenJourneyUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Features/Authentication/UITests/LoginViewUITest.swift,
+			);
+			target = 0AD1F05B2D09987D001A8464 /* GreenJourneyUITests */;
+		};
 		422A00902CD188B200EF280D /* Exceptions for "GreenJourney" folder in "GreenJourney" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Features/Authentication/Tests/AuthenticationViewModelTest.swift,
+				Features/Authentication/UITests/LoginViewUITest.swift,
 				Info.plist,
 			);
 			target = 0A15767F2CA459AC00EE99BC /* GreenJourney */;
@@ -32,6 +67,8 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				422A00902CD188B200EF280D /* Exceptions for "GreenJourney" folder in "GreenJourney" target */,
+				0AD1F0572D099766001A8464 /* Exceptions for "GreenJourney" folder in "GreenJourneyTests" target */,
+				0AD1F06C2D0998B6001A8464 /* Exceptions for "GreenJourney" folder in "GreenJourneyUITests" target */,
 			);
 			path = GreenJourney;
 			sourceTree = "<group>";
@@ -50,6 +87,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		0AD1F0472D099709001A8464 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0AD1F0592D09987D001A8464 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -65,6 +116,8 @@
 			isa = PBXGroup;
 			children = (
 				0A1576802CA459AC00EE99BC /* GreenJourney.app */,
+				0AD1F04A2D099709001A8464 /* GreenJourneyTests.xctest */,
+				0AD1F05C2D09987D001A8464 /* GreenJourneyUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -98,6 +151,46 @@
 			productReference = 0A1576802CA459AC00EE99BC /* GreenJourney.app */;
 			productType = "com.apple.product-type.application";
 		};
+		0AD1F0492D099709001A8464 /* GreenJourneyTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0AD1F0502D099709001A8464 /* Build configuration list for PBXNativeTarget "GreenJourneyTests" */;
+			buildPhases = (
+				0AD1F0462D099709001A8464 /* Sources */,
+				0AD1F0472D099709001A8464 /* Frameworks */,
+				0AD1F0482D099709001A8464 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				0AD1F04F2D099709001A8464 /* PBXTargetDependency */,
+			);
+			name = GreenJourneyTests;
+			packageProductDependencies = (
+			);
+			productName = GreenJourneyTests;
+			productReference = 0AD1F04A2D099709001A8464 /* GreenJourneyTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		0AD1F05B2D09987D001A8464 /* GreenJourneyUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0AD1F0642D09987D001A8464 /* Build configuration list for PBXNativeTarget "GreenJourneyUITests" */;
+			buildPhases = (
+				0AD1F0582D09987D001A8464 /* Sources */,
+				0AD1F0592D09987D001A8464 /* Frameworks */,
+				0AD1F05A2D09987D001A8464 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				0AD1F0632D09987D001A8464 /* PBXTargetDependency */,
+			);
+			name = GreenJourneyUITests;
+			packageProductDependencies = (
+			);
+			productName = GreenJourneyUITests;
+			productReference = 0AD1F05C2D09987D001A8464 /* GreenJourneyUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -105,11 +198,19 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1600;
+				LastSwiftUpdateCheck = 1610;
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					0A15767F2CA459AC00EE99BC = {
 						CreatedOnToolsVersion = 16.0;
+					};
+					0AD1F0492D099709001A8464 = {
+						CreatedOnToolsVersion = 16.1;
+						TestTargetID = 0A15767F2CA459AC00EE99BC;
+					};
+					0AD1F05B2D09987D001A8464 = {
+						CreatedOnToolsVersion = 16.1;
+						TestTargetID = 0A15767F2CA459AC00EE99BC;
 					};
 				};
 			};
@@ -132,12 +233,28 @@
 			projectRoot = "";
 			targets = (
 				0A15767F2CA459AC00EE99BC /* GreenJourney */,
+				0AD1F0492D099709001A8464 /* GreenJourneyTests */,
+				0AD1F05B2D09987D001A8464 /* GreenJourneyUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		0A15767E2CA459AC00EE99BC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0AD1F0482D099709001A8464 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0AD1F05A2D09987D001A8464 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -154,7 +271,34 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		0AD1F0462D099709001A8464 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0AD1F0582D09987D001A8464 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		0AD1F04F2D099709001A8464 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0A15767F2CA459AC00EE99BC /* GreenJourney */;
+			targetProxy = 0AD1F04E2D099709001A8464 /* PBXContainerItemProxy */;
+		};
+		0AD1F0632D09987D001A8464 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0A15767F2CA459AC00EE99BC /* GreenJourney */;
+			targetProxy = 0AD1F0622D09987D001A8464 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		0A15768C2CA459AF00EE99BC /* Debug */ = {
@@ -346,6 +490,76 @@
 			};
 			name = Release;
 		};
+		0AD1F0512D099709001A8464 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = it.polimi.dima.GreenJourney.GreenJourneyTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GreenJourney.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/GreenJourney";
+			};
+			name = Debug;
+		};
+		0AD1F0522D099709001A8464 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = it.polimi.dima.GreenJourney.GreenJourneyTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GreenJourney.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/GreenJourney";
+			};
+			name = Release;
+		};
+		0AD1F0652D09987D001A8464 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = it.polimi.dima.GreenJourney.GreenJourneyUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = GreenJourney;
+			};
+			name = Debug;
+		};
+		0AD1F0662D09987D001A8464 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = it.polimi.dima.GreenJourney.GreenJourneyUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = GreenJourney;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -363,6 +577,24 @@
 			buildConfigurations = (
 				0A15768F2CA459AF00EE99BC /* Debug */,
 				0A1576902CA459AF00EE99BC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0AD1F0502D099709001A8464 /* Build configuration list for PBXNativeTarget "GreenJourneyTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0AD1F0512D099709001A8464 /* Debug */,
+				0AD1F0522D099709001A8464 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0AD1F0642D09987D001A8464 /* Build configuration list for PBXNativeTarget "GreenJourneyUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0AD1F0652D09987D001A8464 /* Debug */,
+				0AD1F0662D09987D001A8464 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
