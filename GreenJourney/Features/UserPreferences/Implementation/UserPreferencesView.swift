@@ -10,6 +10,7 @@ struct UserPreferencesView : View {
     @EnvironmentObject private var authenticationViewModel: AuthenticationViewModel
     @Binding var navigationPath: NavigationPath
     @State var editTapped: Bool = false
+    @State private var showResendMessage = false
     
     init(navigationPath: Binding<NavigationPath>) {
         _navigationPath = navigationPath
@@ -80,7 +81,7 @@ struct UserPreferencesView : View {
                                 .multilineTextAlignment(.trailing)
                         }
                         
-                        DatePicker("Birth date", selection: $userPreferencesViewModel.birthDate.toNonOptional(), displayedComponents: .date)
+                        DatePicker("Birth date", selection: $userPreferencesViewModel.birthDate.toNonOptional(), in: Date.distantPast...Date(), displayedComponents: .date)
                         
                         Picker("Gender", selection: $userPreferencesViewModel.gender) {
                             ForEach(Gender.allCases, id: \.self) { gender in
@@ -130,12 +131,27 @@ struct UserPreferencesView : View {
                 .scrollDismissesKeyboard(.immediately)
                 HStack {
                     Spacer()
-                    Button ("Modify password") {
-                        authenticationViewModel.resetPassword()
-                    }
                     if let resendEmail = authenticationViewModel.resendEmail {
-                        Text("email sent")
+                        if showResendMessage {
+                            Text(resendEmail)
+                                .font(.subheadline)
+                                .fontWeight(.light)
+                        }
+                        
                     }
+                    Button ("Modify password") {
+                        
+                        withAnimation() {
+                            showResendMessage = true
+                        }
+                        authenticationViewModel.resetPassword(email: email)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                            withAnimation() {
+                                showResendMessage = false
+                            }
+                        }
+                    }
+                    
                 }
                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 20, trailing: 25))
                 

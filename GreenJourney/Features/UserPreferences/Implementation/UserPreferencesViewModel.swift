@@ -111,14 +111,12 @@ class UserPreferencesViewModel: ObservableObject {
                     scoreLongDistance: user.scoreLongDistance
                 )
                 
-                print(modifiedUser)
                 
                 // JSON encoding
                 guard let body = try? JSONEncoder().encode(modifiedUser) else {
                     print("Error encoding user data for PUT")
                     return
                 }
-                print(body)
                 
                 guard let firebaseUser = Auth.auth().currentUser else {
                     print("no current user in firebase")

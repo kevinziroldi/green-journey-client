@@ -88,7 +88,7 @@ class AuthenticationViewModel: ObservableObject {
     }
     
     
-    func resetPassword() {
+    func resetPassword(email: String) {
         guard(!email.isEmpty) else {
             errorMessage = "Insert email"
             return
@@ -103,7 +103,7 @@ class AuthenticationViewModel: ObservableObject {
             }
             else {
                 print("Email for password reset sent")
-                strongSelf.resendEmail = "Email sent"
+                strongSelf.resendEmail = "Email sent, check your inbox"
             }
         }
     }

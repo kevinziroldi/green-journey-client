@@ -34,7 +34,7 @@ struct LoginView: View {
                             Text(resendMessage)
                         }
                         Button("Reset password") {
-                            viewModel.resetPassword()
+                            viewModel.resetPassword(email: viewModel.email)
                         }
                     }
                     // error message
