@@ -17,21 +17,25 @@ struct DestinationPredictionView: View {
                 confirm(viewModel.predictedCity)
             }
         }){
-            Text("Don't know where to go? Ask AI.")
-                .foregroundColor(.gray)
-                .padding()
-            Spacer()
-            Image(systemName: "apple.intelligence")
-                .font(.title)
-                .frame(width: 50, height: 50)
-            //.background(.white)
-                .clipShape(Circle())
-                .padding(EdgeInsets(top: 0, leading: 5, bottom: 5, trailing: 5))
-                .foregroundStyle(.linearGradient(Gradient(colors: [.blue, .pink]), startPoint: .bottomLeading, endPoint: .topTrailing))
-            
+            ZStack {
+                RoundedRectangle(cornerRadius: 20)
+                    .stroke(.gray)
+                HStack{
+                    Text("Don't know where to go? Ask AI.")
+                        .foregroundColor(.gray)
+                        .padding()
+                    Spacer()
+                    Image(systemName: "apple.intelligence")
+                        .font(.title)
+                        .frame(width: 50, height: 50)
+                    //.background(.white)
+                        .clipShape(Circle())
+                        .padding(EdgeInsets(top: 0, leading: 5, bottom: 5, trailing: 5))
+                        .foregroundStyle(.linearGradient(Gradient(colors: [.blue, .pink]), startPoint: .bottomLeading, endPoint: .topTrailing))
+                }
+            }
+            .fixedSize()
         }
-        .cornerRadius(10)
-        .border(.gray, width: 1)
         .padding()
     }
 }

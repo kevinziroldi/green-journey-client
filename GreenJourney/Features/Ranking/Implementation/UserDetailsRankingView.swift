@@ -2,6 +2,8 @@ import SwiftUI
 
 struct UserDetailsRankingView: View {
     @EnvironmentObject var viewModel: RankingViewModel
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
+
     @Binding var navigationPath: NavigationPath
 
     var user: RankingElement
@@ -36,7 +38,7 @@ struct UserDetailsRankingView: View {
                 .padding(EdgeInsets(top: 10, leading: 15, bottom: 20, trailing: 15))
                 ZStack {
                     RoundedRectangle(cornerRadius: 20)
-                        .stroke(Color.black, lineWidth: 2)
+                        .stroke(colorScheme == .dark ? .white : .black, lineWidth: 2)
                         .shadow(radius: 10)
                     
                     VStack {
@@ -81,7 +83,7 @@ struct UserDetailsRankingView: View {
                 .padding(EdgeInsets(top: 10, leading: 15, bottom: 30, trailing: 15))
                 ZStack {
                     RoundedRectangle(cornerRadius: 20)
-                        .stroke(Color.black, lineWidth: 2)
+                        .stroke(colorScheme == .dark ? .white : .black, lineWidth: 2)
                         .shadow(radius: 10)
                     
                     VStack {
@@ -131,16 +133,18 @@ struct UserDetailsRankingView: View {
                 })
             }
         }
+        .background(colorScheme == .dark ? Color(red: 10/255, green: 10/255, blue: 10/255) : Color(red: 245/255, green: 245/255, blue: 245/255))
     }
 }
 
 struct LegendView: View {
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     var onClose: () -> Void
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 20)
                 .stroke(Color.gray, lineWidth: 2)
-                .fill(Color.white)
+                .fill(colorScheme == .dark ? Color.black : Color.white)
                 .shadow(radius: 10)
             VStack {
                 Spacer()

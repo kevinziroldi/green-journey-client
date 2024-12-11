@@ -4,6 +4,7 @@ import SwiftData
 struct RankingView: View {
     @Binding var navigationPath: NavigationPath
     @EnvironmentObject var viewModel: RankingViewModel
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     
     init(navigationPath: Binding<NavigationPath>) {
         _navigationPath = navigationPath
@@ -38,7 +39,7 @@ struct RankingView: View {
                 VStack{
                     ZStack {
                         RoundedRectangle(cornerRadius: 20)
-                            .stroke(Color.black, lineWidth: 1.5)
+                            .stroke(colorScheme == .dark ? Color.white : Color.black, lineWidth: 1.5)
                             .shadow(radius: 10)
                             .padding(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
                         VStack{
@@ -82,10 +83,12 @@ struct RankingView: View {
 }
 
 struct LeaderBoardView: View {
+    @Query var users: [User]
     @EnvironmentObject var viewModel: RankingViewModel
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
+    
     @Binding var navigationPath: NavigationPath
     var leaderboard: [RankingElement]
-    @State private var userID = 1
     
     var body: some View {
         VStack (spacing: 0){
@@ -134,22 +137,14 @@ struct LeaderBoardView: View {
                                     
                                     Text("#\(index + 1)")
                                         .foregroundStyle(
-                                            leaderboard[index].userID == userID ? .blue : .black)
+                                            leaderboard[index].userID == users.first?.userID ?? -1 ? .blue : colorScheme == .dark ? .white : .black)
                                         .fontWeight(.semibold)
                                 }
                                 Spacer()
                                 Text(leaderboard[index].firstName + " " + leaderboard[index].lastName.prefix(1) + ".")
                                     .frame(alignment: .leading)
-                                    .foregroundStyle(leaderboard[index].userID == userID ? .blue : .black)
+                                    .foregroundStyle(leaderboard[index].userID == users.first?.userID ?? -1 ? .blue : colorScheme == .dark ? .white : .black)
                                     .fontWeight(.semibold)
-                                /*VStack (spacing: 0){
-                                 Text(leaderboard[index].firstName)
-                                 .frame(maxWidth: .infinity, alignment: .leading)
-                                 .foregroundStyle(leaderboard[index].userID == userID ? .blue : .black)
-                                 Text(leaderboard[index].lastName)
-                                 .frame(maxWidth: .infinity, alignment: .leading)
-                                 .foregroundStyle(leaderboard[index].userID == userID ? .blue : .black)
-                                 }*/
                                 Spacer()
                                 // Colonna Badge
                                 BadgeView(badges: leaderboard[index].badges, dim: 40, inline: false)

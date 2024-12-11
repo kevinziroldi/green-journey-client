@@ -2,53 +2,311 @@ import SwiftUI
 
 struct TravelDetailsView: View {
     @EnvironmentObject var viewModel: MyTravelsViewModel
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     @Binding var navigationPath: NavigationPath
+    @State var compensationTapped: Bool = false
+    @State var progress: Float64 = 0
+    @State var showCompensation = true
     
     var body : some View {
-        if let selectedTravel = viewModel.selectedTravel {
-            VStack {
-                Spacer()
-                
-                Button(action: {
-                    viewModel.deleteTravel(travelToDelete: selectedTravel.travel)
-                    
-                    if !navigationPath.isEmpty {
-                        print("removing last element from navigationpath")
-                        navigationPath.removeLast()
-                    }else {
-                        print("navigationPath is empty")
-                        print(navigationPath)
+        if let travelDetails = viewModel.selectedTravel {
+            
+            ZStack {
+                VStack {
+                    HeaderView(from: getOptionDeparture(travelDetails.segments), to: getOptionDestination(travelDetails.segments), date: travelDetails.segments.first?.dateTime, dateArrival: travelDetails.segments.last?.dateTime.addingTimeInterval(TimeInterval((travelDetails.segments.last?.duration ?? 0)/1000000000)))
+                    Rectangle()
+                        .frame(height: 1)
+                        .foregroundStyle(.gray)
+                    ScrollView {
+                        
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 20)
+                                .fill(colorScheme == .dark ? Color(red: 20/255, green: 20/255, blue: 20/255) : Color(red: 235/255, green: 235/255, blue: 235/255))
+                                .strokeBorder(
+                                    LinearGradient(gradient: Gradient(colors: [.green, .mint, .cyan, .blue]),
+                                                   startPoint: .topTrailing, endPoint: .bottomLeading), lineWidth: 4)
+                                
+                                .padding(10)
+                            HStack {
+                                VStack {
+                                    ZStack {
+                                        SemiCircle()
+                                            .stroke(style: StrokeStyle(lineWidth: 10, lineCap: .round))
+                                            .foregroundColor(.gray.opacity(0.6))
+                                            .frame(width: 130, height: 110)
+                                        
+                                        
+                                        // Semicerchio riempito (colorato)
+                                        SemiCircle(progress: progress)
+                                            .stroke(style: StrokeStyle(lineWidth: 10, lineCap: .round))
+                                            .foregroundStyle(LinearGradient(gradient: Gradient(colors: [.red, .orange, .yellow, .green, .mint]), startPoint: .leading, endPoint: .trailing))
+                                            .frame(width: 130, height: 110)
+                                        
+                                        VStack (spacing: 15){
+                                            Image(systemName: "carbon.dioxide.cloud")
+                                                .font(.largeTitle)
+                                                .scaleEffect(1.5)
+                                            Text(String(format: "%.0f", progress * 100) + "%")
+                                                .font(.headline)
+                                                .fontWeight(.bold)
+                                        }
+                                        .foregroundStyle(computeColor(progress))
+                                        
+                                    }
+                                    .padding(.top, 30)
+                                    
+                                    HStack (spacing: 70){
+                                        Text("0 Kg")
+                                        
+                                        Text("100 Kg")
+                                    }
+                                    .padding(.leading, 20)
+                                    .font(.headline)
+                                    
+                                    if (showCompensation) {
+                                        Button(action: {
+                                            compensationTapped = true
+                                        }) {
+                                            ZStack {
+                                                RoundedRectangle(cornerRadius: 30)
+                                                    .fill(.green)
+                                                    .stroke(Color(red: 1/255, green: 150/255, blue: 1/255), lineWidth: 2)
+                                                HStack (spacing: 3) {
+                                                    Image(systemName: "plus.circle")
+                                                        .font(.title)
+                                                        .fontWeight(.semibold)
+                                                        .fontWeight(.light)
+                                                        .foregroundStyle(.white)
+                                                    Text("Compensate")
+                                                        .foregroundStyle(.white)
+                                                        .fontWeight(.semibold)
+                                                }
+                                                .padding(8)
+                                            }
+                                            .fixedSize()
+                                        }
+                                        .padding(EdgeInsets(top: 0, leading: 20, bottom: 15, trailing: 0))
+                                        
+                                        
+                                        
+                                    }
+                                }
+                                Spacer()
+                                Text("Compensation: price/totale")
+                            }
+                            .padding(10)
+                        }
+                        
+                        
+                        
+                        // if the user hasn't left a review yet
+                        Button(action: {
+                            //review
+                        }) {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke()
+                                    .frame(width: 90, height: 30)
+                                Text("Review")
+                                    .padding()
+                            }
+                        }
+                        HStack {
+                            Text("Outward")
+                                .font(.title)
+                                .fontWeight(.semibold)
+                            Spacer()
+                        }
+                        .padding(.horizontal, 15)
+                        SegmentsView(segments: travelDetails.segments)
+                        //if roundtrip
+                        HStack {
+                            Text("Return")
+                                .font(.title)
+                                .fontWeight(.semibold)
+                            Spacer()
+                        }
+                        .padding()
+                        SegmentsView(segments: travelDetails.segments)
                     }
-                }) {
-                    Image(systemName: "trash")
-                        .foregroundColor(.red)
+                    Spacer()
                 }
+                .blur(radius: (compensationTapped) ? 2 : 0)
+                .allowsHitTesting(!compensationTapped)
                 
-                Spacer()
-                
-                Text("From").font(.title)
-                Text(selectedTravel.getDepartureSegment()?.departureCity ?? "unknown").font(.headline)
-                Text("To").font(.title)
-                Text(selectedTravel.getDestinationSegment()?.destinationCity ?? "unknown").font(.headline)
-                Text("Departure").font(.title)
-                Text(selectedTravel.getDepartureSegment()?.dateTime.formatted(date: .numeric, time: .shortened) ?? "unknown").font(.headline)
-                
-                Spacer()
-                            
-                Button ("COMPENSATION TRIAL") {
-                    viewModel.compensateCO2()
+                if compensationTapped {
+                    CompensationView(co2Emitted: 10, progress: progress, onConfirm: { compensation in
+                        progress = compensation
+                        
+                        compensationTapped = false
+                    }, onBack: {
+                        compensationTapped = false
+                    })
                 }
-                
-                Button ("UPLOAD REVIEW") {
-                    viewModel.reviewText = "review di prova"
-                    viewModel.localTransportRating = 1
-                    viewModel.greenSpacesRating = 1
-                    viewModel.wasteBinsRating = 1
-                    viewModel.uploadReview()
-                }
-                
-                Spacer()
             }
+            .onAppear(){
+                /*if travelDetails.segments.co2Emitted == 0 {
+                 progress = 100
+                 showCompensation = false
+                 }*/
+            }
+            .background(colorScheme == .dark ? Color(red: 10/255, green: 10/255, blue: 10/255) : Color(red: 245/255, green: 245/255, blue: 245/255))
         }
+        
+        
     }
 }
+func computeColor(_ progress: Double) -> Color {
+    if progress >= 0.9 {
+        return Color.mint
+    }
+    else if progress >= 0.7 {
+        return Color.green
+    }
+    else if progress >= 0.5 {
+        return Color.yellow
+    }
+    else if progress >= 0.3 {
+        return Color.orange
+    }
+    else {
+        return Color.red
+    }
+}
+
+func getOptionDeparture (_ travelOption: [Segment]) -> String {
+    if let firstSegment = travelOption.first {
+        return firstSegment.departureCity
+    }
+    else {
+        return ""
+    }
+}
+
+func findVehicle(_ option: [Segment]) -> String {
+    var vehicle: String
+    switch option.first?.vehicle {
+    case .car:
+        vehicle = "car"
+    case .train:
+        vehicle = "tram"
+    case .plane:
+        vehicle = "airplane"
+    case .bus:
+        vehicle = "bus"
+    case .walk:
+        vehicle = "figure.walk"
+    case .bike:
+        vehicle = "bicycle"
+    default:
+        vehicle = ""
+    }
+    return vehicle
+}
+
+func getOptionDestination (_ travelOption: [Segment]) -> String {
+    if let lastSegment = travelOption.last {
+        return lastSegment.destinationCity
+    }
+    else {
+        return ""
+    }
+}
+
+
+struct SemiCircle: Shape {
+    var progress: Double = 1.0
+    
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        let startAngle = Angle(degrees: 135)
+        let endAngle = Angle(degrees: 135 + 270 * progress)
+        
+        path.addArc(
+            center: CGPoint(x: rect.midX, y: rect.midY),
+            radius: rect.width / 2,
+            startAngle: startAngle,
+            endAngle: endAngle,
+            clockwise: false
+        )
+        
+        
+        return path
+    }
+}
+
+struct CompensationView: View {
+    var co2Emitted: Float64
+    @State var progress: Float64
+    
+    var onConfirm: (Float64) -> Void
+    var onBack: () -> Void
+    var body: some View {
+        VStack {
+            Text("compensate")
+            Text(String(format: "%.0f", progress * 100) + "%")
+            /*Slider(value: $progress)
+             .tint(.green)
+             .frame(height: 20)*/
+            GeometryReader { geometry in
+                ZStack(alignment: .leading) {
+                    // Barra di sfondo
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Color.gray.opacity(0.3))
+                        .frame(height: 15)
+                    
+                    // Barra di progresso
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(.green)
+                        .frame(width: max(0, min(CGFloat(progress) * geometry.size.width, geometry.size.width)), height: 15) // Assicura valori validi
+                    
+                    // Thumb personalizzato
+                    Circle()
+                        .fill(Color(red: 1/255, green: 150/255, blue: 1/255))
+                        .frame(width: 25, height: 25)
+                        .position(x: max(0, min(CGFloat(progress) * geometry.size.width, geometry.size.width)), y: geometry.size.height / 2) // Assicura valori validi
+                        .gesture(
+                            DragGesture()
+                                .onChanged { value in
+                                    let width = geometry.size.width
+                                    if width > 0 { // Protezione contro divisione per zero
+                                        let locationX = max(0, min(value.location.x, width)) // Limita il drag ai bordi della barra
+                                        progress = Double(locationX / width) // Aggiorna il valore dello slider
+                                    }
+                                }
+                        )
+                }
+            }
+            .frame(height: 40)
+            
+            
+            HStack {
+                Text("Compensation price: " + String(format: "%.2f", co2Emitted * progress) + "€")
+            }
+            HStack (spacing: 80){
+                Button(action: {
+                    onBack()
+                }){
+                    Text("Back")
+                }
+                .buttonStyle(.bordered)
+                Button(action: {
+                    onConfirm(progress)
+                }){
+                    Text("Confirm")
+                }
+                .buttonStyle(.bordered)
+            }
+            
+            
+        }
+        .padding()
+        .background(Color.white)
+        .cornerRadius(12)
+        .shadow(radius: 10)
+        .frame(width: 330, height: 500)
+    }
+}
+
+
+

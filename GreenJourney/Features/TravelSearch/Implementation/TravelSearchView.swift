@@ -96,10 +96,10 @@ struct TravelSearchView: View {
                             }
                             .fullScreenCover(isPresented: $departureTapped ) {
                                 CompleterView(searchText: viewModel.departure.cityName,
-                                onBack: {
+                                              onBack: {
                                     departureTapped = false
                                 },
-                                onClick: { city in
+                                              onClick: { city in
                                     departureTapped = false
                                     viewModel.departure = city
                                 })
@@ -136,7 +136,7 @@ struct TravelSearchView: View {
                                 CompleterView(searchText: viewModel.arrival.cityName,
                                               onBack: {
                                     destinationTapped = false
-                                              },
+                                },
                                               onClick: { city in
                                     destinationTapped = false
                                     //TODO
@@ -180,12 +180,20 @@ struct TravelSearchView: View {
                         viewModel.computeRoutes()
                         navigationPath.append(NavigationDestination.OutwardOptionsView)
                         triggerAI = false
-                        }) {
-                        Text("Search")
-                            .font(.title3)
-                            .foregroundStyle(.white)
+                    }) {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill((viewModel.departure.iata == "" || viewModel.arrival.iata == "") ? .black.opacity(0.3): .blue)
+                            HStack{
+                                Text("Search")
+                                    .font(.title2)
+                                    .foregroundStyle(.white)
+                                    .padding(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
+                            }
+                        }
+                        .fixedSize()
                     }
-                    .buttonStyle(.borderedProminent)
+                    .disabled(viewModel.departure.iata == "" || viewModel.arrival.iata == "")
                     
                     
                     Spacer()
@@ -234,7 +242,7 @@ struct TravelSearchView: View {
                     )
                 }
             }
-            //.animation(.default, value: dateTapped || dateReturnTapped) // TODO 
+            //.animation(.default, value: dateTapped || dateReturnTapped) // TODO
             .onAppear() {
                 print("TravelSearchView onAppear")
             }
