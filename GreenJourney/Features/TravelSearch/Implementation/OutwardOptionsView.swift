@@ -161,7 +161,7 @@ struct OptionCard: View {
     }
 }
 
-
+ 
 struct CircularProgressView: View {
     @State private var rotation: Double = 0
 
