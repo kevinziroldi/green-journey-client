@@ -9,6 +9,7 @@ struct UserPreferencesView : View {
     @EnvironmentObject private var userPreferencesViewModel: UserPreferencesViewModel
     @EnvironmentObject private var authenticationViewModel: AuthenticationViewModel
     @Binding var navigationPath: NavigationPath
+    @State var editTapped: Bool = false
     
     init(navigationPath: Binding<NavigationPath>) {
         _navigationPath = navigationPath
@@ -16,112 +17,142 @@ struct UserPreferencesView : View {
     
     var body: some View {
         if let user = users.first {
-            VStack() {
+            
+            
+            
+            VStack(spacing: 0) {
                 HStack {
                     Text("Profile")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
+                        .font(.title)
+                        .padding(.leading)
+                        .padding(.bottom, 15)
                     Spacer()
-                }.padding()
+                }
                 
                 Text("Hi, \(user.firstName) \(user.lastName)")
-                    .font(.title2)
-                    .padding()
+                    .font(.title)
+                //.padding(5)
                 
-                // email and password
-                VStack(spacing: 8) {
-                    Text("Email: \(email)")
-                        .font(.body)
-                    Button("Modify Password") {
-                        // TODO
-                    }
-                }
-                .padding()
-                .background(Color.gray.opacity(0.2))
-                .cornerRadius(15)
-                .frame(maxWidth: .infinity)
-                .padding(.horizontal)
                 
                 Text("Do you want to get better predictions about your future travels? Complete your profile!")
-                
-                VStack() {
-                    TextField("First Name", text: $userPreferencesViewModel.firstName)
-                        .onChange(of: userPreferencesViewModel.firstName) {
-                            userPreferencesViewModel.checkForModifications()
+                    .font(.subheadline)
+                    .fontWeight(.light)
+                    .padding(.vertical)
+                    .frame(height: 80)
+                HStack {
+                    if editTapped {
+                        Button("Cancel") {
+                            withAnimation(.default) {
+                                editTapped = false
+                            }
+                            userPreferencesViewModel.cancelModifications()
                         }
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                    TextField("Last Name", text: $userPreferencesViewModel.lastName)
-                        .onChange(of: userPreferencesViewModel.lastName) {
-                            userPreferencesViewModel.checkForModifications()
-
-                        }
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                    DatePicker("Birth date", selection: $userPreferencesViewModel.birthDate.toNonOptional(), displayedComponents: .date)
-                        .onChange(of: userPreferencesViewModel.birthDate) {
-                            userPreferencesViewModel.checkForModifications()
-
-                        }
-                    Picker("Gender", selection: $userPreferencesViewModel.gender) {
-                        ForEach(Gender.allCases, id: \.self) { gender in
-                            Text(gender.rawValue).tag(gender)
+                        Spacer()
+                        Button("Save") {
+                            withAnimation(.default) {
+                                editTapped = false
+                            }
+                            userPreferencesViewModel.saveModifications()
                         }
                     }
-                    .pickerStyle(SegmentedPickerStyle())
-                    .onChange(of: userPreferencesViewModel.gender) {
-                        userPreferencesViewModel.checkForModifications()
-
+                    else {
+                        Spacer()
+                        Button("Edit") {
+                            withAnimation(.default) {
+                                editTapped = true
+                            }
+                        }
                     }
-                    TextField("City", text: $userPreferencesViewModel.city.toNonOptional())
-                        .onChange(of: userPreferencesViewModel.city) {
-                            userPreferencesViewModel.checkForModifications()
-
-                        }
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                    TextField("Street name", text: $userPreferencesViewModel.streetName.toNonOptional())
-                        .onChange(of: userPreferencesViewModel.streetName) {
-                            userPreferencesViewModel.checkForModifications()
-
-                        }
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                    TextField("House number", value: $userPreferencesViewModel.houseNumber.toNonOptional(), formatter: NumberFormatter())
-                        .onChange(of: userPreferencesViewModel.houseNumber) {
-                            userPreferencesViewModel.checkForModifications()
-
-                        }
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                    TextField("Zip code", value: $userPreferencesViewModel.zipCode.toNonOptional(), formatter: NumberFormatter())
-                        .onChange(of: userPreferencesViewModel.zipCode) {
-                            userPreferencesViewModel.checkForModifications()
-
-                        }
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
                 }
-                .padding()
-                .cornerRadius(15)
-                .frame(maxWidth: .infinity)
-                .padding(.horizontal)
-                
-                if userPreferencesViewModel.hasModified {
-                    Button(action: userPreferencesViewModel.saveModifications) {
-                        Text("Save modifications")
+                .padding(.horizontal, 15)
+                Form {
+                    Section {
+                        HStack {
+                            Text("First Name")
+                            TextField("Not set", text: $userPreferencesViewModel.firstName)
+                                .multilineTextAlignment(.trailing)
+                        }
+                        
+                        HStack {
+                            Text("Last Name")
+                            TextField("Not set", text: $userPreferencesViewModel.lastName)
+                                .multilineTextAlignment(.trailing)
+                        }
+                        
+                        DatePicker("Birth date", selection: $userPreferencesViewModel.birthDate.toNonOptional(), displayedComponents: .date)
+                        
+                        Picker("Gender", selection: $userPreferencesViewModel.gender) {
+                            ForEach(Gender.allCases, id: \.self) { gender in
+                                Text(gender.rawValue).tag(gender)
+                            }
+                        }
+                        .pickerStyle(.automatic)
+                        
+                        HStack {
+                            Text("City")
+                            TextField("Not set", text: $userPreferencesViewModel.city.toNonOptional())
+                                .multilineTextAlignment(.trailing)
+                                .keyboardType(.numberPad)
+                        }
+                        
+                        HStack {
+                            Text("Street Name")
+                            TextField("Not set", text: $userPreferencesViewModel.streetName.toNonOptional())
+                                .multilineTextAlignment(.trailing)
+                                .keyboardType(.numberPad)
+                        }
+                        
+                        HStack {
+                            Text("House number")
+                            TextField("Not set", text: userPreferencesViewModel.binding(for: $userPreferencesViewModel.houseNumber))
+                                .multilineTextAlignment(.trailing)
+                                .keyboardType(.numberPad)
+                        }
+                        
+                        HStack {
+                            Text("Zip code")
+                            TextField("Not set", text: userPreferencesViewModel.binding(for: $userPreferencesViewModel.zipCode))
+                                .multilineTextAlignment(.trailing)
+                                .keyboardType(.numberPad)
+                        }
                     }
-                    .buttonStyle(.bordered)
-                   
-                    Button(action: userPreferencesViewModel.cancelModifications) {
-                        Text("Cancel modifications")
+                    .disabled(!editTapped)
+                    Section {
+                        HStack {
+                            Text("Email")
+                            Spacer()
+                            Text(email)
+                        }
                     }
-                    .buttonStyle(.bordered)
-                    
                 }
-
+                .frame(height: 500)
+                .scrollContentBackground(.hidden)
+                .scrollDismissesKeyboard(.immediately)
+                HStack {
+                    Spacer()
+                    Button ("Modify password") {
+                        authenticationViewModel.resetPassword()
+                    }
+                    if let resendEmail = authenticationViewModel.resendEmail {
+                        Text("email sent")
+                    }
+                }
+                .padding(EdgeInsets(top: -10, leading: 0, bottom: 20, trailing: 30))
+                
                 // logout button
-                Button("Logout") {
+                Button(action: {
                     authenticationViewModel.logout()
-                    navigationPath = NavigationPath()
-                    navigationPath.append(NavigationDestination.LoginView)
+                     navigationPath = NavigationPath()
+                     navigationPath.append(NavigationDestination.LoginView)
+                }) {
+                    Text("Logout")
+                        .font(.title3)
+                        .fontWeight(.regular)
                 }
                 .buttonStyle(.bordered)
-
+                .padding(EdgeInsets(top: 30, leading: 0, bottom: 10, trailing: 0))
+                
+                Spacer()
             }
             .frame(maxWidth: .infinity)
             .padding()
@@ -129,6 +160,10 @@ struct UserPreferencesView : View {
                 userPreferencesViewModel.getUserData()
                 
             }
+            .background(Color(red: 245/255, green: 245/255, blue: 245/255))
+            
+            
+            
         } else {
             LoginView(navigationPath: $navigationPath)
                 .transition(.opacity.animation(.easeInOut(duration: 0.2)))
@@ -147,17 +182,6 @@ extension Binding where Value == String? {
     }
 }
 
-extension Binding where Value == Int? {
-    func toNonOptional(defaultValue: Int = 0) -> Binding<Int> {
-        Binding<Int>(
-            get: { self.wrappedValue ?? defaultValue },
-            set: { newValue in
-                self.wrappedValue = newValue == 0 ? nil : newValue
-            }
-        )
-    }
-}
-
 extension Binding where Value == Date? {
     func toNonOptional(defaultValue: Date = Date.now) -> Binding<Date> {
         Binding<Date>(
@@ -168,3 +192,4 @@ extension Binding where Value == Date? {
         )
     }
 }
+

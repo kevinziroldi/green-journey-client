@@ -235,6 +235,25 @@ class UserPreferencesViewModel: ObservableObject {
         }
     }
     
+    func binding(for value: Binding<Int?>) -> Binding<String> {
+            Binding<String>(
+                get: {
+                    if let unwrapped = value.wrappedValue {
+                        return String(unwrapped)
+                    } else {
+                        return ""
+                    }
+                },
+                set: { newValue in
+                    if let intValue = Int(newValue) {
+                        value.wrappedValue = intValue
+                    } else {
+                        value.wrappedValue = nil
+                    }
+                }
+            )
+        }
+    
     func cancelModifications() {
         getUserData()
     }
