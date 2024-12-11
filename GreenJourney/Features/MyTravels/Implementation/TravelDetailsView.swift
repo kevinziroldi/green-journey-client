@@ -7,13 +7,42 @@ struct TravelDetailsView: View {
     @State var compensationTapped: Bool = false
     @State var progress: Float64 = 0
     @State var showCompensation = true
+    @State var showAlert = false
     
     var body : some View {
         if let travelDetails = viewModel.selectedTravel {
             
             ZStack {
-                VStack {
-                    HeaderView(from: getOptionDeparture(travelDetails.segments), to: getOptionDestination(travelDetails.segments), date: travelDetails.segments.first?.dateTime, dateArrival: travelDetails.segments.last?.dateTime.addingTimeInterval(TimeInterval((travelDetails.segments.last?.duration ?? 0)/1000000000)))
+                VStack (spacing:0){
+                    ZStack{
+                        HeaderView(from: getOptionDeparture(travelDetails.segments), to: getOptionDestination(travelDetails.segments), date: travelDetails.segments.first?.dateTime, dateArrival: travelDetails.segments.last?.dateTime.addingTimeInterval(TimeInterval((travelDetails.segments.last?.duration ?? 0)/1000000000)))
+                        
+                            HStack{
+                                Spacer()
+                                Button(action: {
+                                    showAlert = true
+                                }) {
+                                    Image(systemName: "trash.circle")
+                                        .font(.largeTitle)
+                                        .scaleEffect(1.2)
+                                        .fontWeight(.light)
+                                        .foregroundStyle(.red)
+                                }
+                                .alert(isPresented: $showAlert) {
+                                    Alert(
+                                        title: Text("Delete this travel?"),
+                                        message: Text("you cannot undo this action"),
+                                        primaryButton: .cancel(Text("Cancel")) {},
+                                        secondaryButton: .destructive(Text("Delete")) {
+                                            //delete travel
+                                            viewModel.deleteTravel(travelToDelete: travelDetails.travel)
+                                        }
+                                    )
+                                }
+                                
+                            }
+                            .padding(EdgeInsets(top: 0, leading: 15, bottom: 120, trailing: 15))
+                    }
                     Rectangle()
                         .frame(height: 1)
                         .foregroundStyle(.gray)
