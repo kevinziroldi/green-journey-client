@@ -6,6 +6,7 @@ import SwiftUI
 struct UserPreferencesView : View {
     @Query var users: [User]
     let email: String = Auth.auth().currentUser?.email ?? ""
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     @EnvironmentObject private var userPreferencesViewModel: UserPreferencesViewModel
     @EnvironmentObject private var authenticationViewModel: AuthenticationViewModel
     @Binding var navigationPath: NavigationPath
@@ -176,7 +177,7 @@ struct UserPreferencesView : View {
                 userPreferencesViewModel.getUserData()
                 
             }
-            .background(Color(red: 245/255, green: 245/255, blue: 245/255))
+            .background(colorScheme == .dark ? Color(red: 10/255, green: 10/255, blue: 10/255) : Color(red: 245/255, green: 245/255, blue: 245/255))
             
             
             

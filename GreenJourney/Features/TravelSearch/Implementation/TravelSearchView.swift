@@ -166,7 +166,8 @@ struct TravelSearchView: View {
                             }
                             .buttonStyle(.bordered)
                             
-                            Text(!viewModel.oneWay ? viewModel.dateReturnPicked.formatted(date: .numeric, time: .shortened) : " ")
+                            Text(viewModel.dateReturnPicked.formatted(date: .numeric, time: .shortened))
+                                .opacity(viewModel.oneWay ? 0 : 1)
                                 .font(.subheadline)
                         }
                         .disabled(viewModel.oneWay)
@@ -197,6 +198,7 @@ struct TravelSearchView: View {
                             }
                             self.triggerAI = true
                         })
+                    .padding(.horizontal)
                     
                 }
                 .blur(radius: (dateTapped || dateReturnTapped) ? 2 : 0) // Sfoca tutto il contenuto sottostante
