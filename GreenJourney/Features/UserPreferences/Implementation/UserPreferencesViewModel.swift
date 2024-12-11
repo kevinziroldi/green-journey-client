@@ -39,13 +39,9 @@ class UserPreferencesViewModel: ObservableObject {
     @Published var streetName: String?
     @Published var houseNumber: Int?
     @Published var zipCode: Int?
-    @Published var hasModified: Bool = false
-    
-    @Published var originalUser: User?
-    
+        
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
-        
     }
     
     func getUserData() {
@@ -53,7 +49,6 @@ class UserPreferencesViewModel: ObservableObject {
             let users = try modelContext.fetch(FetchDescriptor<User>())
             if let user = users.first {
                 DispatchQueue.main.async {
-                    self.originalUser = user
                     self.firstName = user.firstName
                     self.lastName = user.lastName
                     self.birthDate = user.birthDate
@@ -62,8 +57,6 @@ class UserPreferencesViewModel: ObservableObject {
                     self.streetName = user.streetName
                     self.houseNumber = user.houseNumber
                     self.zipCode = user.zipCode
-                    
-                    self.hasModified = false
                 }
             }
         }catch {
@@ -71,36 +64,10 @@ class UserPreferencesViewModel: ObservableObject {
         }
     }
     
-    func checkForModifications() {
-            guard let originalUser = originalUser else { return }
-        print(originalUser.firstName)
-        print(originalUser.lastName)
-        print(originalUser.gender ?? "")
-        print(originalUser.birthDate?.formatted() ?? "")
-        print(originalUser.city ?? "")
-        print ("CONFRONTO")
-        print(originalUser.birthDate?.formatted() ?? "")
-        print(firstName + lastName)
-        print(gender)
-        print(birthDate?.formatted() ?? "")
-        print(city ?? "")
-        
-            hasModified = firstName != originalUser.firstName ||
-                          lastName != originalUser.lastName ||
-                          birthDate != originalUser.birthDate ||
-                          /*gender.rawValue != originalUser.gender ||*/
-                          city != originalUser.city ||
-                          streetName != originalUser.streetName ||
-                          houseNumber != originalUser.houseNumber ||
-                          zipCode != originalUser.zipCode
-        }
     
     func saveModifications() {
         do {
             let users = try modelContext.fetch(FetchDescriptor<User>())
-            
-            // hide sumbit button
-            hasModified = false
             
             // save to server and SwiftData
             if let user = users.first {
@@ -121,6 +88,13 @@ class UserPreferencesViewModel: ObservableObject {
                 if let houseNumberString = houseNumber {
                     houseNumberInt = Int(houseNumberString)
                 }
+                if (city == "") {
+                    city = nil
+                }
+                if (streetName == "") {
+                    streetName = nil
+                }
+                
                 
                 let modifiedUser = User (
                     userID: userID,
