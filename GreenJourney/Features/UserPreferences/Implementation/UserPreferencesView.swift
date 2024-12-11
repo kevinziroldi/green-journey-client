@@ -64,7 +64,8 @@ struct UserPreferencesView : View {
                         }
                     }
                 }
-                .padding(.horizontal, 15)
+                .padding(EdgeInsets(top: 0, leading: 25, bottom: 10, trailing: 25))
+                
                 Form {
                     Section {
                         HStack {
@@ -125,7 +126,8 @@ struct UserPreferencesView : View {
                         }
                     }
                 }
-                .frame(height: 500)
+                .frame(height: 440)
+                .contentMargins(.vertical, 0, for: .scrollContent)
                 .scrollContentBackground(.hidden)
                 .scrollDismissesKeyboard(.immediately)
                 HStack {
@@ -137,7 +139,7 @@ struct UserPreferencesView : View {
                         Text("email sent")
                     }
                 }
-                .padding(EdgeInsets(top: -10, leading: 0, bottom: 20, trailing: 30))
+                .padding(EdgeInsets(top: 0, leading: 0, bottom: 20, trailing: 25))
                 
                 // logout button
                 Button(action: {
