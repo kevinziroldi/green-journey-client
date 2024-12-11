@@ -77,7 +77,7 @@ class AuthenticationViewModel: ObservableObject {
             for user in users {
                 modelContext.delete(user)
             }
-            
+             
             try modelContext.save()
             print("User successfully logged out and removed from SwiftData")
         } catch {
