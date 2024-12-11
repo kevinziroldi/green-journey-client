@@ -39,8 +39,8 @@ struct RankingView: View {
                 VStack{
                     ZStack {
                         RoundedRectangle(cornerRadius: 20)
-                            .stroke(colorScheme == .dark ? Color.white : Color.black, lineWidth: 1.5)
-                            .shadow(radius: 10)
+                            .stroke(colorScheme == .dark ? Color.gray : Color.black, lineWidth: 3)
+                            .fill(colorScheme == .dark ? Color(red: 20/255, green: 20/255, blue: 20/255) : Color(red: 235/255, green: 235/255, blue: 235/255))
                             .padding(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
                         VStack{
                             if viewModel.leaderboardSelected {
@@ -116,13 +116,14 @@ struct LeaderBoardView: View {
                     .font(.headline)
             }
             .padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
+            .foregroundStyle(.black)
             .background(
-                Color.green.opacity(0.2)
+                Color(red: 167/255, green: 214/255, blue: 165/255)
                     .clipShape(TopRoundedCorners(cornerRadius: 20))
             )
             Rectangle()
                 .frame(height: 1)
-                .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
+                .foregroundColor(colorScheme == .dark ? Color.gray : Color.black)
                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 5, trailing: 0))
             ForEach (leaderboard.indices, id: \.self) { index in
                     NavigationLink (destination: UserDetailsRankingView(navigationPath: $navigationPath, user: leaderboard[index])) {

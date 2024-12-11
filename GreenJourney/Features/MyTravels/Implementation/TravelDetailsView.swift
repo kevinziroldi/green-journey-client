@@ -55,12 +55,11 @@ struct TravelDetailsView: View {
                                     }
                                     .padding(.top, 30)
                                     
-                                    HStack (spacing: 70){
-                                        Text("0 Kg")
+                                    HStack {
+                                        Text("  0 Kg       ")
                                         
                                         Text("100 Kg")
                                     }
-                                    .padding(.leading, 20)
                                     .font(.headline)
                                     
                                     if (showCompensation) {
@@ -85,12 +84,11 @@ struct TravelDetailsView: View {
                                             }
                                             .fixedSize()
                                         }
-                                        .padding(EdgeInsets(top: 0, leading: 20, bottom: 15, trailing: 0))
-                                        
                                         
                                         
                                     }
                                 }
+                                .padding(EdgeInsets(top: 0, leading: 15, bottom: 15, trailing: 0))
                                 Spacer()
                                 Text("Compensation: price/totale")
                             }

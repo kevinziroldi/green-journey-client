@@ -258,14 +258,7 @@ struct TravelCard: View {
         
     }
     
-    func getOptionDeparture (_ travelOption: [Segment]) -> String {
-        if let firstSegment = travelOption.first {
-            return firstSegment.departureCity
-        }
-        else {
-            return ""
-        }
-    }
+    
     
     func findVehicle(_ option: [Segment]) -> String {
         var vehicle: String
@@ -288,14 +281,7 @@ struct TravelCard: View {
         return vehicle
     }
     
-    func getOptionDestination (_ travelOption: [Segment]) -> String {
-        if let lastSegment = travelOption.last {
-            return lastSegment.destinationCity
-        }
-        else {
-            return ""
-        }
-    }
+    
 }
 
 
