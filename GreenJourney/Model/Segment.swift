@@ -106,4 +106,8 @@ class Segment: Codable, Identifiable {
         try container.encode(isOutward, forKey: .isOutward)
         try container.encode(travelID, forKey: .travelID)
     }
+    
+    func getArrivalDateTime() -> Date {
+        return dateTime.addingTimeInterval(TimeInterval(duration/1000000000))
+    }
 }

@@ -157,14 +157,6 @@ struct TravelCard: View {
     @EnvironmentObject var viewModel: MyTravelsViewModel
     @Environment(\.colorScheme) var colorScheme: ColorScheme
 
-
-    var co2Emitted: Float64 {
-        var co2Emitted = 0.0
-        for segment in travelDetails.segments {
-            co2Emitted += segment.co2Emitted
-        }
-        return co2Emitted
-    }
     
     var body: some View {
         ZStack {
@@ -186,11 +178,11 @@ struct TravelCard: View {
                     Spacer()
                     VStack {
                         HStack (spacing: 10){
-                            Text(getOptionDeparture(travelDetails.segments))
+                            Text(travelDetails.getDepartureSegment()?.departureCity ?? "")
                                 .font(.headline)
                             Text("-")
                                 .font(.headline)
-                            Text(getOptionDestination(travelDetails.segments))
+                            Text(travelDetails.getDestinationSegment()?.destinationCity ?? "")
                                 .font(.headline)
                         }
                         HStack{
@@ -199,7 +191,7 @@ struct TravelCard: View {
                                 .fontWeight(.light)
                             Text("-")
                                 .font(.subheadline)
-                            let arrivalDate = travelDetails.segments.last?.dateTime.addingTimeInterval(TimeInterval(travelDetails.segments.last?.duration ?? 0) / 1000000000)
+                            let arrivalDate = travelDetails.segments.last?.getArrivalDateTime()
                             Text(arrivalDate?.formatted(date: .numeric, time: .omitted) ?? "")
                                 .font(.subheadline)
                                 .fontWeight(.light)
@@ -210,7 +202,7 @@ struct TravelCard: View {
                         ZStack {
                             RoundedRectangle(cornerRadius: 20)
                                 .stroke()
-                            if viewModel.computeOneway(travel: travelDetails) {
+                            if travelDetails.isOneway() {
                                 Text("One way")
                                     .font(.caption)
                                     .fontWeight(.bold)
@@ -249,7 +241,7 @@ struct TravelCard: View {
                         .padding(.bottom, 5)
                         .padding(.trailing, 10)
                     Text("Compensation:" )
-                    Text(String(format: "%.2f", travelDetails.travel.CO2Compensated) + " / " + String(format: "%.2f", co2Emitted) + " Kg")
+                    Text(String(format: "%.2f", travelDetails.travel.CO2Compensated) + " / " + String(format: "%.2f", travelDetails.computeCo2Emitted()) + " Kg")
                 }
             }
             .padding()
