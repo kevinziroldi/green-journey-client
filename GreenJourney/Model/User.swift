@@ -15,8 +15,9 @@ class User: Codable {
     var city: String?
     var scoreShortDistance: Float64
     var scoreLongDistance: Float64
+    var badges: [Badge]
     
-    init(userID: Int? = nil, firstName: String, lastName: String, birthDate: Date? = nil, gender: String? = nil, firebaseUID: String, zipCode: Int? = nil, streetName: String? = nil, houseNumber: Int? = nil, city: String? = nil, scoreShortDistance: Float64, scoreLongDistance: Float64) {
+    init(userID: Int? = nil, firstName: String, lastName: String, birthDate: Date? = nil, gender: String? = nil, firebaseUID: String, zipCode: Int? = nil, streetName: String? = nil, houseNumber: Int? = nil, city: String? = nil, scoreShortDistance: Float64, scoreLongDistance: Float64, badges: [Badge] = []) {
         self.userID = userID
         self.firstName = firstName
         self.lastName = lastName
@@ -29,6 +30,7 @@ class User: Codable {
         self.city = city
         self.scoreShortDistance = scoreShortDistance
         self.scoreLongDistance = scoreLongDistance
+        self.badges = badges
     }
     
     enum CodingKeys: String, CodingKey {
@@ -44,6 +46,7 @@ class User: Codable {
         case city = "city"
         case scoreShortDistance = "score_short_distance"
         case scoreLongDistance = "score_long_distance"
+        case badges = "badges"
     }
     
     required init(from decoder: Decoder) throws {
@@ -66,6 +69,7 @@ class User: Codable {
         self.city = try container.decodeIfPresent(String.self, forKey: .city)
         self.scoreShortDistance = try container.decode(Float64.self, forKey: .scoreShortDistance)
         self.scoreLongDistance = try container.decode(Float64.self, forKey: .scoreLongDistance)
+        self.badges = try container.decode([Badge].self, forKey: .badges)
     }
     
     func encode(to encoder: Encoder) throws {
@@ -87,5 +91,6 @@ class User: Codable {
         try container.encode(city, forKey: .city)
         try container.encode(scoreShortDistance, forKey: .scoreShortDistance)
         try container.encode(scoreLongDistance, forKey: .scoreLongDistance)
+        try container.encode(badges, forKey: .badges)
     }
 }
