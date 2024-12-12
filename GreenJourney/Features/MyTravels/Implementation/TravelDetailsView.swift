@@ -14,7 +14,7 @@ struct TravelDetailsView: View {
             ZStack {
                 VStack (spacing:0){
                     ZStack{
-                        HeaderView(from: travelDetails.getDepartureSegment()?.departureCity ?? "", to: travelDetails.getDestinationSegment()?.destinationCity ?? "", date: travelDetails.segments.first?.dateTime, dateArrival: travelDetails.segments.last?.dateTime.addingTimeInterval(TimeInterval((travelDetails.segments.last?.duration ?? 0)/1000000000)))
+                        HeaderView(from: travelDetails.getDepartureSegment()?.departureCity ?? "", to: travelDetails.getDestinationSegment()?.destinationCity ?? "", date: travelDetails.segments.first?.dateTime, dateArrival: travelDetails.segments.last?.getArrivalDateTime())
                         
                             HStack{
                                 Spacer()
