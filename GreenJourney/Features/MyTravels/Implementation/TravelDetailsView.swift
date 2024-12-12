@@ -15,7 +15,6 @@ struct TravelDetailsView: View {
                 VStack (spacing:0){
                     ZStack{
                         HeaderView(from: travelDetails.getDepartureSegment()?.departureCity ?? "", to: travelDetails.getDestinationSegment()?.destinationCity ?? "", date: travelDetails.segments.first?.dateTime, dateArrival: travelDetails.segments.last?.getArrivalDateTime())
-                        
                             HStack{
                                 Spacer()
                                 Button(action: {

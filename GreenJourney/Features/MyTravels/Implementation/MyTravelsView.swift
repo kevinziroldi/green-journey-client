@@ -196,6 +196,28 @@ struct TravelCard: View {
                                 .font(.subheadline)
                                 .fontWeight(.light)
                         }
+                        if !travelDetails.isOneway() {
+                            HStack (spacing: 10){
+                                Text(travelDetails.getDestinationSegment()?.destinationCity ?? "")
+                                    .font(.headline)
+                                Text("-")
+                                    .font(.headline)
+                                Text(travelDetails.getDepartureSegment()?.departureCity ?? "")
+                                    .font(.headline)
+                            }
+                            HStack{
+                                //TODO
+                                Text(travelDetails.segments.first?.dateTime.formatted(date: .numeric, time: .omitted) ?? "")
+                                    .font(.subheadline)
+                                    .fontWeight(.light)
+                                Text("-")
+                                    .font(.subheadline)
+                                let arrivalDate = travelDetails.segments.last?.getArrivalDateTime()
+                                Text(arrivalDate?.formatted(date: .numeric, time: .omitted) ?? "")
+                                    .font(.subheadline)
+                                    .fontWeight(.light)
+                            }
+                        }
                     }
                     Spacer()
                     VStack {
