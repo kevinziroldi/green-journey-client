@@ -5,8 +5,11 @@ struct TravelDetailsView: View {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @Binding var navigationPath: NavigationPath
     @State var compensationTapped: Bool = false
+    @State var infoTapped: Bool = false
     @State var progress: Float64 = 0
     @State var showAlert = false
+    @State var plantedTrees = 0
+    @State var totalTrees = 0
     
     var body : some View {
         if let travelDetails = viewModel.selectedTravel {
@@ -96,6 +99,48 @@ struct TravelDetailsView: View {
                                 if (travelDetails.computeCo2Emitted() > 0.0 && travelDetails.travel.CO2Compensated < travelDetails.computeCo2Emitted()) {
                                     VStack {
                                         Spacer()
+                                        Text("Compensation")
+                                            .font(.title3)
+                                        Spacer()
+                                        HStack {
+                                            Spacer()
+                                            Text("\(plantedTrees) / \(totalTrees)")
+                                                .padding(.top, 5)
+                                                .font(.headline)
+                                            Image(systemName: "tree")
+                                                .font(.title2)
+                                            
+                                            Button(action: {
+                                                infoTapped = true
+                                            }) {
+                                                Image(systemName: "info.circle")
+                                                    .foregroundStyle(.gray)
+                                            }
+                                            Spacer()
+                                            VStack (spacing: 5) {
+                                                Button(action: {
+                                                    if plantedTrees < totalTrees {
+                                                        plantedTrees += 1
+                                                    }
+                                                }) {
+                                                    Image(systemName: "plus.circle")
+                                                        .foregroundStyle(.black)
+                                                }
+                                                Button(action: {
+                                                    if plantedTrees > 0 {
+                                                        plantedTrees -= 1
+                                                    }
+                                                }) {
+                                                    Image(systemName: "minus.circle")
+                                                        .foregroundStyle(.black)
+                                                }
+                                            }
+                                            
+                                        }
+                                        HStack {
+                                            Text("Price: \(plantedTrees * 15) €")
+                                        }
+                                        Spacer()
                                         Button(action: {
                                             compensationTapped = true
                                         }) {
@@ -104,8 +149,8 @@ struct TravelDetailsView: View {
                                                     .fill(.green)
                                                     .stroke(Color(red: 1/255, green: 150/255, blue: 1/255), lineWidth: 2)
                                                 HStack (spacing: 3) {
-                                                    Image(systemName: "leaf")
-                                                        .font(.title)
+                                                    Image(systemName: "plus.circle")
+                                                        .font(.title3)
                                                         .fontWeight(.semibold)
                                                         .fontWeight(.light)
                                                         .foregroundStyle(.white)
@@ -113,7 +158,7 @@ struct TravelDetailsView: View {
                                                         .foregroundStyle(.white)
                                                         .fontWeight(.semibold)
                                                 }
-                                                .padding(8)
+                                                .padding(5)
                                             }
                                             .fixedSize()
                                         }
@@ -271,20 +316,20 @@ struct TravelDetailsView: View {
                     
                     Spacer()
                 }
-                .blur(radius: (compensationTapped) ? 2 : 0)
-                .allowsHitTesting(!compensationTapped)
+                .blur(radius: (infoTapped) ? 2 : 0)
+                .allowsHitTesting(!infoTapped)
                 
-                /*if compensationTapped {
-                    CompensationView(co2Emitted: 10, progress: progress, onConfirm: { compensation in
-                        progress = compensation
-                        
-                        compensationTapped = false
-                    }, onBack: {
-                        compensationTapped = false
-                    })
-                }*/
+                if infoTapped {
+                    InfoView(onBack: {infoTapped = false})
+                }
             }
             .background(colorScheme == .dark ? Color(red: 10/255, green: 10/255, blue: 10/255) : Color(red: 245/255, green: 245/255, blue: 245/255))
+            .onAppear() {
+                if (travelDetails.computeCo2Emitted() > 0.0 && travelDetails.travel.CO2Compensated < travelDetails.computeCo2Emitted()) {
+                    totalTrees = viewModel.getNumTrees(travelDetails)
+                    plantedTrees = viewModel.getPlantedTrees(travelDetails)
+                }
+            }
         }
     }
 }
@@ -403,3 +448,25 @@ struct CompensationView: View {
 
 
 */
+
+
+struct InfoView: View {
+    var onBack: () -> Void
+    var body: some View {
+        VStack {
+            Text("""
+                long
+text
+legend compensation
+""")
+            Button("Close") {
+                onBack()
+            }
+        }
+        .padding()
+        .background(Color.white)
+        .cornerRadius(12)
+        .shadow(radius: 10)
+        .frame(width: 330, height: 500)
+    }
+}

@@ -624,5 +624,15 @@ class MyTravelsViewModel: ObservableObject {
         }
     }
     
+    func getNumTrees(_ travel: TravelDetails) -> Int {
+        var co2Emitted = travel.computeCo2Emitted()
+        return (Int(co2Emitted / 10)) + 1
+    }
     
+    func getPlantedTrees(_ travel: TravelDetails) -> Int {
+        if travel.travel.CO2Compensated == 0 {
+            return 0
+        }
+        return Int(travel.travel.CO2Compensated) / 10 + 1
+    }
 }
