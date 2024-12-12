@@ -14,7 +14,7 @@ struct DestinationPredictionView: View {
             withAnimation(.snappy(duration: 4)) {
                 viewModel.getRecommendation()
                 
-                confirm(viewModel.predictedCity)
+                confirm(viewModel.predictedCities)
             }
         }){
             ZStack {

@@ -9,7 +9,8 @@ struct CityCountry: Hashable {
 
 class DestinationPredictionViewModel: ObservableObject {
     var modelContext: ModelContext
-    @Published var predictedCity: [CityCompleterDataset] = []
+    @Published var predictedCities: [CityCompleterDataset] = []
+    let predictionSize = 5
     
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
@@ -117,7 +118,7 @@ class DestinationPredictionViewModel: ObservableObject {
             let outdoors = calculateMedian(outdoorsValues)
             
             // use model to make a prediction
-            let citiesIds = predictCity(population: population, capital: capital, averageTemperature: averageTemperature, continent: continent, livingCost: livingCost, travelConnectivity: travelConnectivity, safety: safety, healthcare: healthcare, education: education, economy: economy, internetAccess: internetAccess, outdoors: outdoors)
+            let citiesIds = predictCities(population: population, capital: capital, averageTemperature: averageTemperature, continent: continent, livingCost: livingCost, travelConnectivity: travelConnectivity, safety: safety, healthcare: healthcare, education: education, economy: economy, internetAccess: internetAccess, outdoors: outdoors)
             
             // check which is the first non visited city
             // if all visited, return the first visited one (in time)
@@ -131,36 +132,61 @@ class DestinationPredictionViewModel: ObservableObject {
                         }
                     }
                     if newCity {
-                        predictedCity.append(CityCompleterDataset(city: cityDS.cityName, countryName: cityDS.countryName, continent: cityDS.continent, locode: cityDS.iata, countryCode: cityDS.countryCode))
-                        return
+                        predictedCities.append(CityCompleterDataset(city: cityDS.cityName, countryName: cityDS.countryName, continent: cityDS.continent, locode: cityDS.iata, countryCode: cityDS.countryCode))
+                        
+                        // return if predictionSize cities found
+                        if predictedCities.count == predictionSize {
+                            
+                            
+                            print(predictedCities)
+                            
+                            
+                            
+                            return
+                        }
+                        // else continue
                     }
                 }
             }
             
-            // else return the first one
-            if let cityId = citiesIds.first {
-                if let firstCity = citiesDS.first(where: { $0.id == cityId }) {
-                    predictedCity.append(CityCompleterDataset(city: firstCity.cityName, countryName: firstCity.countryName, continent: firstCity.continent, locode: firstCity.iata, countryCode: firstCity.countryCode))
+            // if less than predictionSize found, check at least 1 found
+            if predictedCities.count == 0 {
+                // return the first predicted city (already visited)
+                if let cityId = citiesIds.first {
+                    if let firstCity = citiesDS.first(where: { $0.id == cityId }) {
+                        predictedCities.append(CityCompleterDataset(city: firstCity.cityName, countryName: firstCity.countryName, continent: firstCity.continent, locode: firstCity.iata, countryCode: firstCity.countryCode))
+                        
+                        
+                        print(predictedCities)
+                        
+                        
+                        return
+                    }
+                }
+                
+                // if not present, return a random one
+                if let randomCity = citiesDS.randomElement() {
+                    predictedCities.append(CityCompleterDataset(
+                        city: randomCity.cityName,
+                        countryName: randomCity.countryName,
+                        continent: randomCity.continent,
+                        locode: randomCity.iata,
+                        countryCode: randomCity.countryCode
+                    ))
+                    
+                    print(predictedCities)
+                    
                     
                     return
+                }else {
+                    
+                    // TODO
+                    
+                    print("Error getting a prediction")
                 }
-            }
-            
-            // if not present, return a random one
-            if let randomCity = citiesDS.randomElement() {
-                predictedCity.append(CityCompleterDataset(
-                    city: randomCity.cityName,
-                    countryName: randomCity.countryName,
-                    continent: randomCity.continent,
-                    locode: randomCity.iata,
-                    countryCode: randomCity.countryCode
-                ))
+            } else {
+                // if less than predictionSize, but > 0, return the found ones
                 return
-            }else {
-                
-                // TODO
-                
-                print("Error getting a prediction")
             }
         }catch {
             
@@ -201,7 +227,7 @@ class DestinationPredictionViewModel: ObservableObject {
         }
     }
     
-    private func predictCity(population: Double, capital: Bool, averageTemperature: Double, continent: String, livingCost: Double, travelConnectivity: Double, safety: Double, healthcare: Double, education: Double, economy: Double, internetAccess: Double, outdoors: Double) -> [Int64] {
+    private func predictCities(population: Double, capital: Bool, averageTemperature: Double, continent: String, livingCost: Double, travelConnectivity: Double, safety: Double, healthcare: Double, education: Double, economy: Double, internetAccess: Double, outdoors: Double) -> [Int64] {
         
         do {
             let config = MLModelConfiguration()
@@ -236,6 +262,7 @@ class DestinationPredictionViewModel: ObservableObject {
         }
     }
 }
+
 extension Int64 {
     init(_ bool: Bool) {
         if bool {
