@@ -34,10 +34,10 @@ struct TravelDetailsView: View {
                                         secondaryButton: .destructive(Text("Delete")) {
                                             //delete travel
                                             viewModel.deleteTravel(travelToDelete: travelDetails.travel)
+                                            navigationPath.removeLast()
                                         }
                                     )
                                 }
-                                
                             }
                             .padding(EdgeInsets(top: 0, leading: 15, bottom: 120, trailing: 15))
                     }
@@ -54,7 +54,7 @@ struct TravelDetailsView: View {
                                                    startPoint: .topTrailing, endPoint: .bottomLeading), lineWidth: 4)
                             
                                 .padding(10)
-                            HStack {
+                            HStack (spacing: 30){
                                 VStack {
                                     ZStack {
                                         SemiCircle()
@@ -89,8 +89,13 @@ struct TravelDetailsView: View {
                                     }
                                     .font(.headline)
                                     
-                                    if (travelDetails.computeCo2Emitted() > 0.0 && travelDetails.travel.CO2Compensated < travelDetails.computeCo2Emitted()) {
-                                        
+                                    
+                                }
+                                .padding(EdgeInsets(top: 0, leading: 15, bottom: 15, trailing: 0))
+                                
+                                if (travelDetails.computeCo2Emitted() > 0.0 && travelDetails.travel.CO2Compensated < travelDetails.computeCo2Emitted()) {
+                                    VStack {
+                                        Spacer()
                                         Button(action: {
                                             compensationTapped = true
                                         }) {
@@ -99,7 +104,7 @@ struct TravelDetailsView: View {
                                                     .fill(.green)
                                                     .stroke(Color(red: 1/255, green: 150/255, blue: 1/255), lineWidth: 2)
                                                 HStack (spacing: 3) {
-                                                    Image(systemName: "plus.circle")
+                                                    Image(systemName: "leaf")
                                                         .font(.title)
                                                         .fontWeight(.semibold)
                                                         .fontWeight(.light)
@@ -112,15 +117,119 @@ struct TravelDetailsView: View {
                                             }
                                             .fixedSize()
                                         }
-                                        
-                                        
+                                        .padding(.bottom, 15)
                                     }
+                                    
+                                    
                                 }
-                                .padding(EdgeInsets(top: 0, leading: 15, bottom: 15, trailing: 0))
-                                Spacer()
-                                Text("Compensation: price/totale")
                             }
                             .padding(10)
+                        }
+                        
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 20)
+                                .fill(colorScheme == .dark ? Color(red: 20/255, green: 20/255, blue: 20/255) : Color(red: 235/255, green: 235/255, blue: 235/255))
+                                .strokeBorder(colorScheme == .dark ? Color.gray : Color.black.opacity(0.6), lineWidth: 3)
+                                .padding(10)
+                            HStack {
+                                VStack {
+                                    VStack{
+                                        Text("Distance")
+                                            .font(.title3)
+                                            .fontWeight(.bold)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .padding(.bottom, 3)
+                                        
+                                        HStack {
+                                            Image(systemName: "road.lanes")
+                                                .font(.title2)
+                                                .frame(height: 25)
+
+                                            Text(String(format: "%.1f", travelDetails.computeTotalDistance()) + " Km")
+                                                .font(.headline)
+                                                .fontWeight(.semibold)
+                                            Spacer()
+                                        }
+                                        .padding(.leading, -8)
+                                    }
+                                    .padding(.vertical, 5)
+                                    
+                                    
+                                    VStack {
+                                        Text("Duration")
+                                            .font(.title3)
+                                            .fontWeight(.bold)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .padding(.bottom, 3)
+                                        
+                                        HStack{
+                                            Image(systemName: "clock")
+                                                .font(.title2)
+                                                .foregroundStyle(.cyan)
+                                                .frame(height: 25)
+
+                                            Text(travelDetails.computeTotalDuration())
+                                                .font(.headline)
+                                                .fontWeight(.semibold)
+                                            Spacer()
+                                        }
+                                    }
+                                    .padding(.vertical, 5)
+                                    
+                                }
+                                .fixedSize()
+                                .padding(10)
+
+                                VStack {
+                                    VStack {
+                                        Text("Price")
+                                            .font(.title3)
+                                            .fontWeight(.bold)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .padding(.bottom, 3)
+
+                                        
+                                        HStack {
+                                            Image("price_red")
+                                                .resizable()
+                                                .scaledToFit()
+                                                .frame(height: 25)
+                                            Text(String(format: "%.1f", 100) + " €")
+                                                .font(.headline)
+                                                .fontWeight(.semibold)
+                                            Spacer()
+
+                                        }
+                                    }
+                                    .padding(.vertical, 5)
+
+                                    VStack {
+                                        Text("Green Price")
+                                            .font(.title3)
+                                            .fontWeight(.bold)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .padding(.bottom, 3)
+
+                                        HStack {
+                                            Image("price_green")
+                                                .resizable()
+                                                .scaledToFit()
+                                                .frame(height: 25)
+                                            Text(String(format: "%.1f", 22.00) + " €")
+                                                .font(.headline)
+                                                .fontWeight(.semibold)
+                                            Spacer()
+                                        }
+                                    }
+                                    .padding(.vertical, 5)
+
+                                }
+                                .fixedSize()
+                                .padding(10)
+
+                            }
+                            .padding(10)
+                            
                         }
                         
                         
@@ -158,12 +267,14 @@ struct TravelDetailsView: View {
                             SegmentsView(segments: travelDetails.getReturnSegments())
                         }
                     }
+                    .padding(10)
+                    
                     Spacer()
                 }
                 .blur(radius: (compensationTapped) ? 2 : 0)
                 .allowsHitTesting(!compensationTapped)
                 
-                if compensationTapped {
+                /*if compensationTapped {
                     CompensationView(co2Emitted: 10, progress: progress, onConfirm: { compensation in
                         progress = compensation
                         
@@ -171,12 +282,10 @@ struct TravelDetailsView: View {
                     }, onBack: {
                         compensationTapped = false
                     })
-                }
+                }*/
             }
             .background(colorScheme == .dark ? Color(red: 10/255, green: 10/255, blue: 10/255) : Color(red: 245/255, green: 245/255, blue: 245/255))
         }
-        
-        
     }
 }
 
@@ -219,6 +328,7 @@ struct SemiCircle: Shape {
     }
 }
 
+/*
 struct CompensationView: View {
     var co2Emitted: Float64
     @State var progress: Float64
@@ -292,4 +402,4 @@ struct CompensationView: View {
 }
 
 
-
+*/

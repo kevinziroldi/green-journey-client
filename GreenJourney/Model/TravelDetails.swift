@@ -82,6 +82,39 @@ class TravelDetails: Codable, Identifiable {
         return co2Emitted
     }
     
+    func computeTotalPrice() -> Float64 {
+        var totalPrice = 0.0
+        for segment in self.segments {
+            totalPrice += segment.price
+        }
+        return totalPrice
+    }
+    
+    func computeTotalDistance() -> Float64 {
+        var totalDistance = 0.0
+        for segment in self.segments {
+            totalDistance += segment.distance
+        }
+        return totalDistance
+    }
+    
+    func computeTotalDuration() -> String {
+        var totalDuration = 0
+        var hours: Int = 0
+        var minutes: Int = 0
+        for segment in self.segments {
+            totalDuration += segment.duration
+        }
+        hours = totalDuration / (3600 * 1000000000)       // 1 hour = 3600 secsecondsondi
+        let remainingSeconds = (totalDuration / 1000000000) % (3600)
+        minutes = remainingSeconds / 60
+        while (minutes >= 60) {
+            hours += 1
+            minutes -= 60
+        }
+        return "\(hours) h, \(minutes) m"
+    }
+    
     func isOneway() -> Bool {
         for segment in segments {
             if !segment.isOutward {

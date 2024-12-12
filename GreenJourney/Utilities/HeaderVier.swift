@@ -41,7 +41,7 @@ struct HeaderView: View {
                     }
                     .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                 }
-                    .frame(width: .infinity, height: 75, alignment: .top)
+                    .frame(height: 75, alignment: .top)
                 Text(to)
                     .font(.title2)
                     .fontWeight(.semibold)
