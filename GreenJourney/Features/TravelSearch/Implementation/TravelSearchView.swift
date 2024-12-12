@@ -213,9 +213,7 @@ struct TravelSearchView: View {
                     .alert(isPresented: $showAlertPrediction) {
                         Alert(
                             title: Text("An error occurred while computing the prediction, try again later"),
-                            dismissButton: .default(Text("OK")) {
-                                showAlertPrediction = false
-                            }
+                            dismissButton: .default(Text("OK")) {}
                         )
                     }
                     
