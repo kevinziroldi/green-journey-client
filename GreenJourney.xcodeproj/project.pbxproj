@@ -41,6 +41,14 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Features/Authentication/Tests/AuthenticationViewModelTest.swift,
+				Features/CityReviews/Tests/CitiesReviewsViewModelTest.swift,
+				Features/Completer/Tests/CompleterViewModelTest.swift,
+				Features/Dashboard/Tests/DashboardViewModelTest.swift,
+				Features/DestinationPrediction/Tests/DestinationPredictionViewModelTest.swift,
+				Features/MyTravels/Tests/MyTravelsViewModelTest.swift,
+				Features/Ranking/Tests/RankingViewModelTest.swift,
+				Features/TravelSearch/Tests/TravelSearchViewModelTest.swift,
+				Features/UserPreferences/Tests/UserPreferencesViewModelTest.swift,
 			);
 			target = 0AD1F0492D099709001A8464 /* GreenJourneyTests */;
 		};
@@ -56,6 +64,14 @@
 			membershipExceptions = (
 				Features/Authentication/Tests/AuthenticationViewModelTest.swift,
 				Features/Authentication/UITests/LoginViewUITest.swift,
+				Features/CityReviews/Tests/CitiesReviewsViewModelTest.swift,
+				Features/Completer/Tests/CompleterViewModelTest.swift,
+				Features/Dashboard/Tests/DashboardViewModelTest.swift,
+				Features/DestinationPrediction/Tests/DestinationPredictionViewModelTest.swift,
+				Features/MyTravels/Tests/MyTravelsViewModelTest.swift,
+				Features/Ranking/Tests/RankingViewModelTest.swift,
+				Features/TravelSearch/Tests/TravelSearchViewModelTest.swift,
+				Features/UserPreferences/Tests/UserPreferencesViewModelTest.swift,
 				Info.plist,
 			);
 			target = 0A15767F2CA459AC00EE99BC /* GreenJourney */;

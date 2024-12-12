@@ -23,7 +23,7 @@ struct GreenJourneyApp: App {
     @StateObject private var authenticationViewModel = AuthenticationViewModel(modelContext: PersistenceHandler.shared.container.mainContext)
     @StateObject private var citiesReviewsViewModel = CitiesReviewsViewModel(modelContext: PersistenceHandler.shared.container.mainContext)
     @StateObject private var completerViewModel: CompleterViewModel = CompleterViewModel(modelContext: PersistenceHandler.shared.container.mainContext)
-    @StateObject private var dashboardViewModel: DashboardViewModel = DashboardViewModel()
+    @StateObject private var dashboardViewModel: DashboardViewModel = DashboardViewModel(modelContext: PersistenceHandler.shared.container.mainContext)
     @StateObject private var destinationPredictionViewModel: DestinationPredictionViewModel = DestinationPredictionViewModel(modelContext: PersistenceHandler.shared.container.mainContext)
     @StateObject private var myTravelsViewModel: MyTravelsViewModel = MyTravelsViewModel(modelContext: PersistenceHandler.shared.container.mainContext)
     @StateObject private var rankingViewModel: RankingViewModel = RankingViewModel(modelContext: PersistenceHandler.shared.container.mainContext)
