@@ -119,7 +119,7 @@ struct OptionCard: View {
                         Text(viewModel.getOptionDestination(option))
                             .font(.title3)
                         
-                        let arrivalDate = option.last?.dateTime.addingTimeInterval(TimeInterval(option.last?.duration ?? 0) / 1000000000)
+                        let arrivalDate = option.last?.getArrivalDateTime()
                         Text(arrivalDate?.formatted(date: .numeric, time: .shortened) ?? "")
                             .font(.subheadline)
                             .fontWeight(.light)

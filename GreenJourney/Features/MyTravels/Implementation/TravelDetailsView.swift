@@ -6,7 +6,6 @@ struct TravelDetailsView: View {
     @Binding var navigationPath: NavigationPath
     @State var compensationTapped: Bool = false
     @State var progress: Float64 = 0
-    @State var showCompensation = true
     @State var showAlert = false
     
     var body : some View {
@@ -15,8 +14,7 @@ struct TravelDetailsView: View {
             ZStack {
                 VStack (spacing:0){
                     ZStack{
-                        HeaderView(from: getOptionDeparture(travelDetails.segments), to: getOptionDestination(travelDetails.segments), date: travelDetails.segments.first?.dateTime, dateArrival: travelDetails.segments.last?.dateTime.addingTimeInterval(TimeInterval((travelDetails.segments.last?.duration ?? 0)/1000000000)))
-                        
+                        HeaderView(from: travelDetails.getDepartureSegment()?.departureCity ?? "", to: travelDetails.getDestinationSegment()?.destinationCity ?? "", date: travelDetails.segments.first?.dateTime, dateArrival: travelDetails.segments.last?.getArrivalDateTime())
                             HStack{
                                 Spacer()
                                 Button(action: {
@@ -54,7 +52,7 @@ struct TravelDetailsView: View {
                                 .strokeBorder(
                                     LinearGradient(gradient: Gradient(colors: [.green, .mint, .cyan, .blue]),
                                                    startPoint: .topTrailing, endPoint: .bottomLeading), lineWidth: 4)
-                                
+                            
                                 .padding(10)
                             HStack {
                                 VStack {
@@ -87,11 +85,12 @@ struct TravelDetailsView: View {
                                     HStack {
                                         Text("  0 Kg       ")
                                         
-                                        Text("100 Kg")
+                                        Text(String(format: "%.1f", travelDetails.computeCo2Emitted()) + " Kg")
                                     }
                                     .font(.headline)
                                     
-                                    if (showCompensation) {
+                                    if (travelDetails.computeCo2Emitted() > 0.0 && travelDetails.travel.CO2Compensated < travelDetails.computeCo2Emitted()) {
+                                        
                                         Button(action: {
                                             compensationTapped = true
                                         }) {
@@ -139,22 +138,25 @@ struct TravelDetailsView: View {
                             }
                         }
                         HStack {
-                            Text("Outward")
+                            Text(travelDetails.isOneway() ? "Segments" : "Outward")
                                 .font(.title)
                                 .fontWeight(.semibold)
                             Spacer()
                         }
                         .padding(.horizontal, 15)
-                        SegmentsView(segments: travelDetails.segments)
+                        SegmentsView(segments: travelDetails.getOutwardSegments())
                         //if roundtrip
-                        HStack {
-                            Text("Return")
-                                .font(.title)
-                                .fontWeight(.semibold)
-                            Spacer()
+                        
+                        if !travelDetails.isOneway() {
+                            HStack {
+                                Text("Return")
+                                    .font(.title)
+                                    .fontWeight(.semibold)
+                                Spacer()
+                            }
+                            .padding()
+                            SegmentsView(segments: travelDetails.getReturnSegments())
                         }
-                        .padding()
-                        SegmentsView(segments: travelDetails.segments)
                     }
                     Spacer()
                 }
@@ -171,18 +173,13 @@ struct TravelDetailsView: View {
                     })
                 }
             }
-            .onAppear(){
-                /*if travelDetails.segments.co2Emitted == 0 {
-                 progress = 100
-                 showCompensation = false
-                 }*/
-            }
             .background(colorScheme == .dark ? Color(red: 10/255, green: 10/255, blue: 10/255) : Color(red: 245/255, green: 245/255, blue: 245/255))
         }
         
         
     }
 }
+
 func computeColor(_ progress: Double) -> Color {
     if progress >= 0.9 {
         return Color.mint
@@ -200,46 +197,6 @@ func computeColor(_ progress: Double) -> Color {
         return Color.red
     }
 }
-
-func getOptionDeparture (_ travelOption: [Segment]) -> String {
-    if let firstSegment = travelOption.first {
-        return firstSegment.departureCity
-    }
-    else {
-        return ""
-    }
-}
-
-func findVehicle(_ option: [Segment]) -> String {
-    var vehicle: String
-    switch option.first?.vehicle {
-    case .car:
-        vehicle = "car"
-    case .train:
-        vehicle = "tram"
-    case .plane:
-        vehicle = "airplane"
-    case .bus:
-        vehicle = "bus"
-    case .walk:
-        vehicle = "figure.walk"
-    case .bike:
-        vehicle = "bicycle"
-    default:
-        vehicle = ""
-    }
-    return vehicle
-}
-
-func getOptionDestination (_ travelOption: [Segment]) -> String {
-    if let lastSegment = travelOption.last {
-        return lastSegment.destinationCity
-    }
-    else {
-        return ""
-    }
-}
-
 
 struct SemiCircle: Shape {
     var progress: Double = 1.0
@@ -272,9 +229,8 @@ struct CompensationView: View {
         VStack {
             Text("compensate")
             Text(String(format: "%.0f", progress * 100) + "%")
-            /*Slider(value: $progress)
-             .tint(.green)
-             .frame(height: 20)*/
+            
+            //slider
             GeometryReader { geometry in
                 ZStack(alignment: .leading) {
                     // Barra di sfondo

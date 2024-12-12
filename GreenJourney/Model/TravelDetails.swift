@@ -74,4 +74,72 @@ class TravelDetails: Codable, Identifiable {
         }
     }
     
+    func computeCo2Emitted() -> Float64 {
+        var co2Emitted = 0.0
+        for segment in self.segments {
+            co2Emitted += segment.co2Emitted
+        }
+        return co2Emitted
+    }
+    
+    func isOneway() -> Bool {
+        for segment in segments {
+            if !segment.isOutward {
+                return false
+            }
+        }
+        return true
+    }
+    
+    func getOutwardSegments() -> [Segment] {
+        var outwardSegments: [Segment] = []
+        for segment in segments {
+            if segment.isOutward {
+                outwardSegments.append(segment)
+            }
+        }
+        return outwardSegments
+    }
+    
+    func getReturnSegments() -> [Segment] {
+        var returnSegments: [Segment] = []
+        for segment in segments {
+            if !segment.isOutward {
+                returnSegments.append(segment)
+            }
+        }
+        return returnSegments
+    }
+    
+    func findVehicle(isOneway: Bool) -> String {
+        var vehicle: String = ""
+        var segments: [Segment] = []
+        if isOneway {
+            segments = self.segments
+        }
+        else {
+            segments = getReturnSegments()
+        }
+        for segment in segments {
+            if vehicle != "" {
+                return vehicle
+            }
+            switch segment.vehicle {
+            case .car:
+                vehicle = "car"
+            case .train:
+                vehicle = "tram"
+            case .plane:
+                vehicle = "airplane"
+            case .bus:
+                vehicle = "bus"
+            case .walk:
+                vehicle = ""
+            case .bike:
+                vehicle = "bicycle"
+            }
+        }
+        return vehicle
+    }
+    
 }

@@ -157,14 +157,6 @@ struct TravelCard: View {
     @EnvironmentObject var viewModel: MyTravelsViewModel
     @Environment(\.colorScheme) var colorScheme: ColorScheme
 
-
-    var co2Emitted: Float64 {
-        var co2Emitted = 0.0
-        for segment in travelDetails.segments {
-            co2Emitted += segment.co2Emitted
-        }
-        return co2Emitted
-    }
     
     var body: some View {
         ZStack {
@@ -174,35 +166,68 @@ struct TravelCard: View {
             
             VStack {
                 HStack{
-                    ZStack{
-                        Circle()
-                            .stroke(lineWidth: 2)
-                            .frame(width: 45, height: 45)
-                        Image(systemName: findVehicle(travelDetails.segments))
-                            .font(.title2)
-                        
+                    VStack {
+                        ZStack{
+                            Circle()
+                                .stroke(lineWidth: 2)
+                                .frame(width: 45, height: 45)
+                            Image(systemName: travelDetails.findVehicle(isOneway: true))
+                                .font(.title2)
+                            
+                        }
+                        if !travelDetails.isOneway() {
+                            ZStack{
+                                Circle()
+                                    .stroke(lineWidth: 2)
+                                    .frame(width: 45, height: 45)
+                                Image(systemName: travelDetails.findVehicle(isOneway: false))
+                                    .font(.title2)
+                                
+                            }
+                        }
                     }
                     .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0))
                     Spacer()
                     VStack {
                         HStack (spacing: 10){
-                            Text(getOptionDeparture(travelDetails.segments))
+                            Text(travelDetails.getDepartureSegment()?.departureCity ?? "")
                                 .font(.headline)
                             Text("-")
                                 .font(.headline)
-                            Text(getOptionDestination(travelDetails.segments))
+                            Text(travelDetails.getDestinationSegment()?.destinationCity ?? "")
                                 .font(.headline)
                         }
                         HStack{
-                            Text(travelDetails.segments.first?.dateTime.formatted(date: .numeric, time: .omitted) ?? "")
+                            Text(travelDetails.getOutwardSegments().first?.dateTime.formatted(date: .numeric, time: .omitted) ?? "")
                                 .font(.subheadline)
                                 .fontWeight(.light)
                             Text("-")
                                 .font(.subheadline)
-                            let arrivalDate = travelDetails.segments.last?.dateTime.addingTimeInterval(TimeInterval(travelDetails.segments.last?.duration ?? 0) / 1000000000)
+                            let arrivalDate = travelDetails.getOutwardSegments().last?.getArrivalDateTime()
                             Text(arrivalDate?.formatted(date: .numeric, time: .omitted) ?? "")
                                 .font(.subheadline)
                                 .fontWeight(.light)
+                        }
+                        if !travelDetails.isOneway() {
+                            HStack (spacing: 10){
+                                Text(travelDetails.getDestinationSegment()?.destinationCity ?? "")
+                                    .font(.headline)
+                                Text("-")
+                                    .font(.headline)
+                                Text(travelDetails.getDepartureSegment()?.departureCity ?? "")
+                                    .font(.headline)
+                            }
+                            HStack{
+                                Text(travelDetails.getReturnSegments().first?.dateTime.formatted(date: .numeric, time: .omitted) ?? "")
+                                    .font(.subheadline)
+                                    .fontWeight(.light)
+                                Text("-")
+                                    .font(.subheadline)
+                                let arrivalDate = travelDetails.getReturnSegments().last?.getArrivalDateTime()
+                                Text(arrivalDate?.formatted(date: .numeric, time: .omitted) ?? "")
+                                    .font(.subheadline)
+                                    .fontWeight(.light)
+                            }
                         }
                     }
                     Spacer()
@@ -210,7 +235,7 @@ struct TravelCard: View {
                         ZStack {
                             RoundedRectangle(cornerRadius: 20)
                                 .stroke()
-                            if viewModel.computeOneway(travel: travelDetails) {
+                            if travelDetails.isOneway() {
                                 Text("One way")
                                     .font(.caption)
                                     .fontWeight(.bold)
@@ -249,7 +274,7 @@ struct TravelCard: View {
                         .padding(.bottom, 5)
                         .padding(.trailing, 10)
                     Text("Compensation:" )
-                    Text(String(format: "%.2f", travelDetails.travel.CO2Compensated) + " / " + String(format: "%.2f", co2Emitted) + " Kg")
+                    Text(String(format: "%.2f", travelDetails.travel.CO2Compensated) + " / " + String(format: "%.2f", travelDetails.computeCo2Emitted()) + " Kg")
                 }
             }
             .padding()
@@ -257,31 +282,6 @@ struct TravelCard: View {
         }
         
     }
-    
-    
-    
-    func findVehicle(_ option: [Segment]) -> String {
-        var vehicle: String
-        switch option.first?.vehicle {
-        case .car:
-            vehicle = "car"
-        case .train:
-            vehicle = "tram"
-        case .plane:
-            vehicle = "airplane"
-        case .bus:
-            vehicle = "bus"
-        case .walk:
-            vehicle = "figure.walk"
-        case .bike:
-            vehicle = "bicycle"
-        default:
-            vehicle = ""
-        }
-        return vehicle
-    }
-    
-    
 }
 
 
