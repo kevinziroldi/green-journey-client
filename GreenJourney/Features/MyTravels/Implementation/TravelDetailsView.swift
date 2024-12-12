@@ -138,7 +138,7 @@ struct TravelDetailsView: View {
                             }
                         }
                         HStack {
-                            Text("Outward")
+                            Text(travelDetails.isOneway() ? "Segments" : "Outward")
                                 .font(.title)
                                 .fontWeight(.semibold)
                             Spacer()
