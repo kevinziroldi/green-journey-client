@@ -166,13 +166,25 @@ struct TravelCard: View {
             
             VStack {
                 HStack{
-                    ZStack{
-                        Circle()
-                            .stroke(lineWidth: 2)
-                            .frame(width: 45, height: 45)
-                        Image(systemName: findVehicle(travelDetails.segments))
-                            .font(.title2)
-                        
+                    VStack {
+                        ZStack{
+                            Circle()
+                                .stroke(lineWidth: 2)
+                                .frame(width: 45, height: 45)
+                            Image(systemName: travelDetails.findVehicle(isOneway: true))
+                                .font(.title2)
+                            
+                        }
+                        if !travelDetails.isOneway() {
+                            ZStack{
+                                Circle()
+                                    .stroke(lineWidth: 2)
+                                    .frame(width: 45, height: 45)
+                                Image(systemName: travelDetails.findVehicle(isOneway: false))
+                                    .font(.title2)
+                                
+                            }
+                        }
                     }
                     .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0))
                     Spacer()
@@ -186,12 +198,12 @@ struct TravelCard: View {
                                 .font(.headline)
                         }
                         HStack{
-                            Text(travelDetails.segments.first?.dateTime.formatted(date: .numeric, time: .omitted) ?? "")
+                            Text(travelDetails.getOutwardSegments().first?.dateTime.formatted(date: .numeric, time: .omitted) ?? "")
                                 .font(.subheadline)
                                 .fontWeight(.light)
                             Text("-")
                                 .font(.subheadline)
-                            let arrivalDate = travelDetails.segments.last?.getArrivalDateTime()
+                            let arrivalDate = travelDetails.getOutwardSegments().last?.getArrivalDateTime()
                             Text(arrivalDate?.formatted(date: .numeric, time: .omitted) ?? "")
                                 .font(.subheadline)
                                 .fontWeight(.light)
@@ -206,13 +218,12 @@ struct TravelCard: View {
                                     .font(.headline)
                             }
                             HStack{
-                                //TODO
-                                Text(travelDetails.segments.first?.dateTime.formatted(date: .numeric, time: .omitted) ?? "")
+                                Text(travelDetails.getReturnSegments().first?.dateTime.formatted(date: .numeric, time: .omitted) ?? "")
                                     .font(.subheadline)
                                     .fontWeight(.light)
                                 Text("-")
                                     .font(.subheadline)
-                                let arrivalDate = travelDetails.segments.last?.getArrivalDateTime()
+                                let arrivalDate = travelDetails.getReturnSegments().last?.getArrivalDateTime()
                                 Text(arrivalDate?.formatted(date: .numeric, time: .omitted) ?? "")
                                     .font(.subheadline)
                                     .fontWeight(.light)
@@ -271,31 +282,6 @@ struct TravelCard: View {
         }
         
     }
-    
-    
-    
-    func findVehicle(_ option: [Segment]) -> String {
-        var vehicle: String
-        switch option.first?.vehicle {
-        case .car:
-            vehicle = "car"
-        case .train:
-            vehicle = "tram"
-        case .plane:
-            vehicle = "airplane"
-        case .bus:
-            vehicle = "bus"
-        case .walk:
-            vehicle = "figure.walk"
-        case .bike:
-            vehicle = "bicycle"
-        default:
-            vehicle = ""
-        }
-        return vehicle
-    }
-    
-    
 }
 
 

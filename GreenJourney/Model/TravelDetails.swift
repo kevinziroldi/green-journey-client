@@ -111,4 +111,35 @@ class TravelDetails: Codable, Identifiable {
         return returnSegments
     }
     
+    func findVehicle(isOneway: Bool) -> String {
+        var vehicle: String = ""
+        var segments: [Segment] = []
+        if isOneway {
+            segments = self.segments
+        }
+        else {
+            segments = getReturnSegments()
+        }
+        for segment in segments {
+            if vehicle != "" {
+                return vehicle
+            }
+            switch segment.vehicle {
+            case .car:
+                vehicle = "car"
+            case .train:
+                vehicle = "tram"
+            case .plane:
+                vehicle = "airplane"
+            case .bus:
+                vehicle = "bus"
+            case .walk:
+                vehicle = ""
+            case .bike:
+                vehicle = "bicycle"
+            }
+        }
+        return vehicle
+    }
+    
 }
