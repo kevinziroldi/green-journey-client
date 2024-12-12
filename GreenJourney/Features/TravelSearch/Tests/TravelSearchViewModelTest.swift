@@ -3,13 +3,13 @@ import Testing
 
 @testable import GreenJourney
 
-struct AuthenticationViewModelTest {
-    private var viewModel: AuthenticationViewModel!
+struct TravelSearchViewModelTest {
+    private var viewModel: TravelSearchViewModel!
     
     @MainActor
     init() throws {
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: User.self, Travel.self, Segment.self, CityFeatures.self, CityCompleterDataset.self, configurations: configuration)
-        self.viewModel = AuthenticationViewModel(modelContext: container.mainContext)
-    }
+        self.viewModel = TravelSearchViewModel(modelContext: container.mainContext)
+    }    
 }
