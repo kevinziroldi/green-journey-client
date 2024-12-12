@@ -11,6 +11,7 @@ struct TravelSearchView: View {
     @State private var dateTapped: Bool = false
     @State private var dateReturnTapped: Bool = false
     @State private var triggerAI: Bool = false
+    @State private var showAlertPrediction: Bool = false
     
     @Binding var navigationPath: NavigationPath
     
@@ -203,10 +204,20 @@ struct TravelSearchView: View {
                             if let firstCity = predictedCities.first {
                                 viewModel.arrival = firstCity
                                 viewModel.predictedCities = predictedCities
+                                self.triggerAI = true
+                            } else {
+                                showAlertPrediction = true
                             }
-                            self.triggerAI = true
                         })
                     .padding(.horizontal)
+                    .alert(isPresented: $showAlertPrediction) {
+                        Alert(
+                            title: Text("An error occurred while computing the prediction, try again later"),
+                            dismissButton: .default(Text("OK")) {
+                                showAlertPrediction = false
+                            }
+                        )
+                    }
                     
                 }
                 .blur(radius: (dateTapped || dateReturnTapped) ? 2 : 0) // Sfoca tutto il contenuto sottostante

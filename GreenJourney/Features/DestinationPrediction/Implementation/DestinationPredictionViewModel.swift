@@ -10,7 +10,7 @@ struct CityCountry: Hashable {
 class DestinationPredictionViewModel: ObservableObject {
     var modelContext: ModelContext
     @Published var predictedCities: [CityCompleterDataset] = []
-    let predictionSize = 5
+    let predictionSize: Int = 5
     
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
@@ -106,8 +106,9 @@ class DestinationPredictionViewModel: ObservableObject {
             for continent in continentValues {
                 continentFrequency[continent, default: 0] += 1
             }
-            let continent = continentFrequency.max(by: { $0.value < $1.value })?.key ?? "Europe"
-
+            
+            let continent = continentFrequency.max(by: { $0.value < $1.value })?.key ?? randomContinent(citiesDS: citiesDS)
+            
             let livingCost = calculateMedian(livingCostValues)
             let travelConnectivity = calculateMedian(travelConnectivityValues)
             let safety = calculateMedian(safetyValues)
@@ -154,19 +155,11 @@ class DestinationPredictionViewModel: ObservableObject {
                 }
                 
                 // if not present, return a random one
-                if let randomCity = citiesDS.randomElement() {
-                    predictedCities.append(CityCompleterDataset(
-                        city: randomCity.cityName,
-                        countryName: randomCity.countryName,
-                        continent: randomCity.continent,
-                        locode: randomCity.iata,
-                        countryCode: randomCity.countryCode
-                    ))
+                if let randomCity = randomCity(citiesDS: citiesDS) {
+                    predictedCities.append(randomCity)
                     return
                 }else {
-                    
-                    // TODO
-                    
+                    // no real prediction, nor random city
                     print("Error getting a prediction")
                 }
             } else {
@@ -174,14 +167,16 @@ class DestinationPredictionViewModel: ObservableObject {
                 return
             }
         }catch {
-            
-            // TODO
-            
+            // no prediction will be made
             print("Error interacting with SwiftData")
             
         }
     }
     
+    // hasVisited returns true if the two cities have same
+    // countryName and the visited city name is a substring
+    // of the city name (preceeded and followed) by
+    // non-alphanumeric characters
     private func hasVisited(visitedCity: String, visitedCountry: String,
                             cityNameDS: String, countryNameDS: String) -> Bool {
         if visitedCountry == countryNameDS {
@@ -209,6 +204,29 @@ class DestinationPredictionViewModel: ObservableObject {
         } else {
             // if odd, central value
             return sortedValues[sortedValues.count / 2]
+        }
+    }
+    
+    private func randomCity(citiesDS: [CityFeatures]) -> CityCompleterDataset? {
+        if let randomCity = citiesDS.randomElement() {
+            return CityCompleterDataset(
+                city: randomCity.cityName,
+                countryName: randomCity.countryName,
+                continent: randomCity.continent,
+                locode: randomCity.iata,
+                countryCode: randomCity.countryCode
+            )
+        }
+        // if random element not found
+        return nil
+    }
+    
+    private func randomContinent(citiesDS: [CityFeatures]) -> String {
+        if let randomCity = randomCity(citiesDS: citiesDS) {
+            return randomCity.continent
+        } else {
+            // fallback
+            return "Europe"
         }
     }
     

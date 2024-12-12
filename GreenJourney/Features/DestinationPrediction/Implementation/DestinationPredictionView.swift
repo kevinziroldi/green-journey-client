@@ -13,7 +13,6 @@ struct DestinationPredictionView: View {
         Button (action: {
             withAnimation(.snappy(duration: 4)) {
                 viewModel.getRecommendation()
-                
                 confirm(viewModel.predictedCities)
             }
         }){
@@ -28,7 +27,7 @@ struct DestinationPredictionView: View {
                     Image(systemName: "apple.intelligence")
                         .font(.title)
                         .frame(width: 50, height: 50)
-                    //.background(.white)
+                        //.background(.white)
                         .clipShape(Circle())
                         .padding(EdgeInsets(top: 0, leading: 5, bottom: 5, trailing: 5))
                         .foregroundStyle(.linearGradient(Gradient(colors: [.blue, .pink]), startPoint: .bottomLeading, endPoint: .topTrailing))
