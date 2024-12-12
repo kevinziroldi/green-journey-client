@@ -3,13 +3,6 @@ import Foundation
 import FirebaseAuth
 import SwiftData
 
-enum SortOption {
-    case departureDate
-    case price
-    case co2Emitted
-    case co2CompensationRate
-}
-
 class MyTravelsViewModel: ObservableObject {
     private var modelContext: ModelContext
     private var cancellables: Set<AnyCancellable> = Set<AnyCancellable>()
@@ -35,8 +28,11 @@ class MyTravelsViewModel: ObservableObject {
     
     // selected travel
     @Published var selectedTravel: TravelDetails?
-    @Published var compensatedPrice: Float64 = 1.0
+    @Published var compensatedPrice: Float64 = 0
     @Published var travelReviews: [Review] = []
+    
+    // TODO change value
+    let co2CompensatedPerEuro = 37.5 // 37.5 kg/€
     
     // upload review
     @Published var reviewText: String = ""
@@ -57,10 +53,114 @@ class MyTravelsViewModel: ObservableObject {
     }
     
     func resetParameters() {
+        self.travelDetailsList = []
+        self.filteredTravelDetailsList = []
+        self.showCompleted = true
+        self.sortOption = SortOption.departureDate
         self.selectedTravel = nil
+        self.compensatedPrice = 0
+        self.travelReviews = []
+        self.reviewText = ""
+        self.localTransportRating = 0
+        self.greenSpacesRating = 0
+        self.wasteBinsRating = 0
+        self.modifiedReviewID = 0
+        self.modifiedReviewText = ""
+        self.modifiedLocalTransportRating = 0
+        self.modifiedGreenSpacesRating = 0
+        self.modifiedWasteBinsRating = 0
     }
     
-    func getUserTravels() {        
+    func fetchTravelsFromServer() {
+        guard let firebaseUser = Auth.auth().currentUser else {
+            print("error retrieving firebase user")
+            return
+        }
+        firebaseUser.getIDToken { [weak self] token, error in
+            guard let strongSelf = self else { return }
+            if let error = error {
+                print("Failed to fetch token: \(error.localizedDescription)")
+                return
+            } else if let firebaseToken = token {
+                let baseURL = NetworkHandler.shared.getBaseURL()
+                guard let url = URL(string:"\(baseURL)/travels/user") else {
+                    print("Invalid URL used to retrieve travels from DB")
+                    return
+                }
+                
+                let decoder = JSONDecoder()
+                decoder.dateDecodingStrategy = .iso8601
+                
+                var request = URLRequest(url: url)
+                request.httpMethod = "GET"
+                request.setValue("Bearer \(firebaseToken)", forHTTPHeaderField: "Authorization")
+                
+                URLSession.shared.dataTaskPublisher(for: request)
+                    .retry(2)
+                    .tryMap {
+                        result -> Data in
+                        guard let httpResponse = result.response as? HTTPURLResponse,
+                              (200...299).contains(httpResponse.statusCode) else {
+                            throw URLError(.badServerResponse)
+                        }
+                        return result.data
+                    }
+                    .decode(type: [TravelDetails].self, decoder: decoder)
+                    .receive(on: DispatchQueue.main)
+                    .sink(receiveCompletion: {
+                        completion in
+                        switch completion {
+                        case .finished:
+                            break
+                        case .failure(let error):
+                            print("Error fetching travels: \(error.localizedDescription)")
+                        }
+                    }, receiveValue: { [weak self] travelDetailsList in
+                        guard let strongSelf = self else { return }
+                        strongSelf.removeExistingTravels()
+                        strongSelf.addNewTravels(travelDetailsList)
+                    })
+                    .store(in: &strongSelf.cancellables)
+            }
+            else {
+                print("error retrieving user token")
+                return
+            }
+        }
+    }
+    
+    private func removeExistingTravels() {
+        do {
+            let travels = try modelContext.fetch(FetchDescriptor<Travel>())
+            let segments = try modelContext.fetch(FetchDescriptor<Segment>())
+            
+            for travel in travels {
+                modelContext.delete(travel)
+            }
+            for segment in segments {
+                modelContext.delete(segment)
+            }
+            try modelContext.save()
+        }catch {
+            print("Error deleting old travels from SwiftData: \(error.localizedDescription)")
+        }
+    }
+    
+    private func addNewTravels(_ travelDetailsList: [TravelDetails]) {
+        for travelDetails in travelDetailsList {
+            modelContext.insert(travelDetails.travel)
+            for segment in travelDetails.segments {
+                modelContext.insert(segment)
+            }
+        }
+        do {
+            try modelContext.save()
+        } catch {
+            print("Error saving new travels: \(error.localizedDescription)")
+        }
+    }
+    
+    func getUserTravels() {
         do {
             let travels = try modelContext.fetch(FetchDescriptor<Travel>())
             let segments = try modelContext.fetch(FetchDescriptor<Segment>())
@@ -87,9 +187,6 @@ class MyTravelsViewModel: ObservableObject {
             filterTravelDetails()
             
         }catch {
-            
-            // TODO: gestire
-        
             print("Error getting user's travels from SwiftData")
         }
     }
@@ -177,9 +274,7 @@ class MyTravelsViewModel: ObservableObject {
     }
     
     func compensateCO2() {
-        // TODO change value
-        let co2CompensatedPerEuro = 37.5 // 37.5 kg/€
-        let newCo2Compensated = co2CompensatedPerEuro * self.compensatedPrice
+        let newCo2Compensated = self.co2CompensatedPerEuro * self.compensatedPrice
         
         if let selectedTravel = self.selectedTravel {
             let modifiedTravel = Travel(travelCopy: selectedTravel.travel)
@@ -260,18 +355,12 @@ class MyTravelsViewModel: ObservableObject {
                         }
                     }, receiveValue: { [weak self] travel in
                         guard let strongSelf = self else { return }
-                        // save travel in SwiftData
+                        // save travel in SwiftData (sync)
                         strongSelf.updateTravelInSwiftData(updatedTravel: travel)
-                        // refresh travels
+                        // refresh travels (sync)
                         strongSelf.getUserTravels()
-                        
-                        print("TRAVEL MODIFIED", travel.confirmed)
-                        print("TRAVEL MODIFIED", travel.CO2Compensated)
                     })
                     .store(in: &strongSelf.cancellables)
-            } else {
-                // TODO
-                print("Error")
             }
         }
     }
@@ -282,23 +371,16 @@ class MyTravelsViewModel: ObservableObject {
             
             for travel in travels {
                 if travel.travelID == updatedTravel.travelID {
-                    do {
-                        // update values
-                        travel.CO2Compensated = updatedTravel.CO2Compensated
-                        travel.confirmed = updatedTravel.confirmed
-                        try modelContext.save()
-                    } catch {
-                        print("Error while updating travel in SwiftData")
-                        
-                        // TODO
-                    }
+                    // update values
+                    travel.CO2Compensated = updatedTravel.CO2Compensated
+                    travel.confirmed = updatedTravel.confirmed
+                    try modelContext.save()
                 }
             }
         }catch {
-            print("Error while updating user in SwiftData")
-            
-            // TODO
-            
+            print("Error while updating travel in SwiftData")
+            // refesh travels from server
+            self.fetchTravelsFromServer()
         }
     }
     
@@ -386,7 +468,8 @@ class MyTravelsViewModel: ObservableObject {
                 }
             }catch {
                 print("Error interacting with SwiftData")
-                return
+                // refresh data from server
+                self.fetchTravelsFromServer()
             }
         } else {
             print("Error travel to delete has nil id")
@@ -559,7 +642,6 @@ class MyTravelsViewModel: ObservableObject {
             }
         }else {
             print("Firebase error")
-            return
         }
     }
     
@@ -619,8 +701,7 @@ class MyTravelsViewModel: ObservableObject {
                 }
             }
         }else {
-            // TODO
-            print("Error")
+            print("Firebase error")
         }
     }
     

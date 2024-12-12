@@ -147,6 +147,11 @@ struct MyTravelsView: View {
         .onAppear {
             viewModel.resetParameters()
             viewModel.getUserTravels()
+            if viewModel.filteredTravelDetailsList.isEmpty {
+                // retry
+                viewModel.getUserTravels()
+            }
+            // else empty page
         }
     }
 }

@@ -3,6 +3,7 @@ import SwiftUI
 
 struct MainView: View {
     @EnvironmentObject private var viewModel: MainViewModel
+    @EnvironmentObject private var myTravelsViewModel: MyTravelsViewModel
     @EnvironmentObject private var rankingViewModel: RankingViewModel
     @Environment(\.modelContext) private var modelContext: ModelContext
     @State var navigationPath: NavigationPath
@@ -47,7 +48,10 @@ struct MainView: View {
                     }
                     .tag(TabViewElement.Dashboard)
             }.onAppear {
-                viewModel.loadData()
+                if !viewModel.isDataLoaded {
+                    myTravelsViewModel.fetchTravelsFromServer()
+                    viewModel.isDataLoaded = true
+                }
             }
             .navigationDestination(for: NavigationDestination.self) { destination in
                 switch destination {
@@ -74,9 +78,7 @@ struct MainView: View {
             }
         }
         .onChange(of:selectedTab) {
-            
-            print("Selected tab = ", selectedTab)
-            
+            // first tab, onAppear doesn't work first time
             if selectedTab == TabViewElement.Ranking {
                 rankingViewModel.fecthRanking()
             }

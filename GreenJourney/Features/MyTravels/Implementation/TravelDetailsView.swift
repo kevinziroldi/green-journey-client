@@ -65,7 +65,6 @@ struct TravelDetailsView: View {
                                             .foregroundColor(.gray.opacity(0.6))
                                             .frame(width: 130, height: 110)
                                         
-                                        
                                         // Semicerchio riempito (colorato)
                                         SemiCircle(progress: progress)
                                             .stroke(style: StrokeStyle(lineWidth: 10, lineCap: .round))
@@ -164,8 +163,6 @@ struct TravelDetailsView: View {
                                         }
                                         .padding(.bottom, 15)
                                     }
-                                    
-                                    
                                 }
                             }
                             .padding(10)
@@ -277,8 +274,6 @@ struct TravelDetailsView: View {
                             
                         }
                         
-                        
-                        
                         // if the user hasn't left a review yet
                         Button(action: {
                             //review
@@ -299,7 +294,6 @@ struct TravelDetailsView: View {
                         }
                         .padding(.horizontal, 15)
                         SegmentsView(segments: travelDetails.getOutwardSegments())
-                        //if roundtrip
                         
                         if !travelDetails.isOneway() {
                             HStack {
