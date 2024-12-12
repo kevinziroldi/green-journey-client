@@ -136,12 +136,6 @@ class DestinationPredictionViewModel: ObservableObject {
                         
                         // return if predictionSize cities found
                         if predictedCities.count == predictionSize {
-                            
-                            
-                            print(predictedCities)
-                            
-                            
-                            
                             return
                         }
                         // else continue
@@ -155,11 +149,6 @@ class DestinationPredictionViewModel: ObservableObject {
                 if let cityId = citiesIds.first {
                     if let firstCity = citiesDS.first(where: { $0.id == cityId }) {
                         predictedCities.append(CityCompleterDataset(city: firstCity.cityName, countryName: firstCity.countryName, continent: firstCity.continent, locode: firstCity.iata, countryCode: firstCity.countryCode))
-                        
-                        
-                        print(predictedCities)
-                        
-                        
                         return
                     }
                 }
@@ -173,10 +162,6 @@ class DestinationPredictionViewModel: ObservableObject {
                         locode: randomCity.iata,
                         countryCode: randomCity.countryCode
                     ))
-                    
-                    print(predictedCities)
-                    
-                    
                     return
                 }else {
                     
