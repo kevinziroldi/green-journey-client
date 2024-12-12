@@ -9,6 +9,7 @@ struct MainView: View {
     @State var navigationPath: NavigationPath
     
     @State private var selectedTab: TabViewElement
+    @Query var users: [User]
     
     init(modelContext: ModelContext) {
         self.navigationPath = NavigationPath()
@@ -16,38 +17,43 @@ struct MainView: View {
     }
     
     var body: some View {
-        NavigationStack (path: $navigationPath) {
+        NavigationStack(path: $navigationPath) {
             TabView(selection: $selectedTab) {
-                RankingView(navigationPath: $navigationPath)
-                    .tabItem {
-                        Label("Ranking", systemImage: "star")
-                    }
-                    .tag(TabViewElement.Ranking)
-                
-                CitiesReviewsView(navigationPath: $navigationPath)
-                    .tabItem {
-                        Label("Reviews", systemImage: "star.fill")
-                    }
-                    .tag(TabViewElement.Reviews)
-                
-                TravelSearchView(navigationPath: $navigationPath)
-                    .tabItem {
-                        Label("From-To", systemImage: "location")
-                    }
-                    .tag(TabViewElement.SearchTravel)
-                
-                MyTravelsView(navigationPath: $navigationPath)
-                    .tabItem {
-                        Label("My travels", systemImage: "airplane")
-                    }
-                    .tag(TabViewElement.MyTravels)
-                
-                DashboardView(navigationPath: $navigationPath)
-                    .tabItem {
-                        Label("Dashboard", systemImage: "house")
-                    }
-                    .tag(TabViewElement.Dashboard)
-            }.onAppear {
+                if users.first != nil{
+                    RankingView(navigationPath: $navigationPath)
+                        .tabItem {
+                            Label("Ranking", systemImage: "star")
+                        }
+                        .tag(TabViewElement.Ranking)
+                    
+                    CitiesReviewsView(navigationPath: $navigationPath)
+                        .tabItem {
+                            Label("Reviews", systemImage: "star.fill")
+                        }
+                        .tag(TabViewElement.Reviews)
+                    
+                    TravelSearchView(navigationPath: $navigationPath)
+                        .tabItem {
+                            Label("From-To", systemImage: "location")
+                        }
+                        .tag(TabViewElement.SearchTravel)
+                    
+                    MyTravelsView(navigationPath: $navigationPath)
+                        .tabItem {
+                            Label("My travels", systemImage: "airplane")
+                        }
+                        .tag(TabViewElement.MyTravels)
+                    
+                    DashboardView(navigationPath: $navigationPath)
+                        .tabItem {
+                            Label("Dashboard", systemImage: "house")
+                        }
+                        .tag(TabViewElement.Dashboard)
+                }else {
+                    EmptyView()
+                }
+            }
+            .onAppear {
                 if !viewModel.isDataLoaded {
                     myTravelsViewModel.fetchTravelsFromServer()
                     viewModel.isDataLoaded = true
@@ -72,18 +78,11 @@ struct MainView: View {
                     TravelDetailsView(navigationPath: $navigationPath)
                 }
             }
-        }.onAppear() {
-            if !viewModel.checkUserLogged() {
-                navigationPath.append(NavigationDestination.LoginView)
-            }
         }
-        .onChange(of:selectedTab) {
-            // first tab, onAppear doesn't work first time
-            if selectedTab == TabViewElement.Ranking {
-                rankingViewModel.fecthRanking()
+        .onAppear {
+            if users.first == nil {
+                navigationPath.append(NavigationDestination.LoginView)
             }
         }
     }
 }
-
-
