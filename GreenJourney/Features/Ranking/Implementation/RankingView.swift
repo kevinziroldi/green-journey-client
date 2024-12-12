@@ -74,11 +74,9 @@ struct RankingView: View {
                 Spacer()
             }
         }
-        .onAppear() {
-            print("RankingView onAppear")
-            
-            //viewModel.fecthRanking()
-        }
+        // viewModel.fecthRanking() is called in the MainView
+        // because this view is the first one to be presented
+        // and onAppear doesn't work
     }
 }
 

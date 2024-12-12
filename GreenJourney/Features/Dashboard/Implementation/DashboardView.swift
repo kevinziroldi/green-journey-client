@@ -7,8 +7,5 @@ struct DashboardView: View {
     
     var body: some View {
         Text("DashboardView")
-            .onAppear {
-                print("DashboardView onAppear")
-            }
     }
 }

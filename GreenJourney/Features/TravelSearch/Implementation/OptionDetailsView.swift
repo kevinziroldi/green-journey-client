@@ -57,8 +57,8 @@ struct OptionDetailsView: View {
                         }
                         .padding()
                     }
-                    
                 }
+                
                 VStack {
                     ZStack {
                         RoundedRectangle(cornerRadius: 10)
@@ -81,7 +81,6 @@ struct OptionDetailsView: View {
                         }
                         .padding()
                     }
-                    
                     
                     ZStack {
                         RoundedRectangle(cornerRadius: 10)
@@ -152,9 +151,7 @@ struct OptionDetailsView: View {
                 navigationPath = NavigationPath()
             }
             .buttonStyle(.borderedProminent)
-
         }
-        
     }
     
     

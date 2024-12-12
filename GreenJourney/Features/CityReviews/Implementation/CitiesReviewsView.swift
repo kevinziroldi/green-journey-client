@@ -91,9 +91,6 @@ struct CitiesReviewsView: View {
             }
         }
         .onAppear {
-            
-            print("CitiesReviewsView onAppear")
-            
             viewModel.resetParameters()
             viewModel.getBestReviewedCities()
         }
