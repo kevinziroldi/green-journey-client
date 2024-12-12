@@ -27,7 +27,7 @@ class CitiesReviewsViewModel: ObservableObject {
     
     func getReviewsForSearchedCity() {
         guard let firebaseUser = Auth.auth().currentUser else {
-            print("error retrieving firebase user")
+            print("Error retrieving firebase user")
             return
         }
         firebaseUser.getIDToken { [weak self] token, error in
@@ -58,7 +58,6 @@ class CitiesReviewsViewModel: ObservableObject {
                               (200...299).contains(httpResponse.statusCode) else {
                             throw URLError(.badServerResponse)
                         }
-                        //print(String(data: result.data, encoding: .utf8) ?? "No data")
                         return result.data
                     }
                     .decode(type: CityReviewElement.self, decoder: decoder)
@@ -136,11 +135,8 @@ class CitiesReviewsViewModel: ObservableObject {
                                     strongSelf.bestCities.append(bestCity)
                                 }
                             }catch {
-                                
+                                // just skip one city
                                 print("Error interacting with SwiftData")
-                                
-                                // TODO
-                                
                             }
                         }
                     }
@@ -150,8 +146,12 @@ class CitiesReviewsViewModel: ObservableObject {
     }
     
     func resetParameters() {
+        self.bestCitiesReviewElements = []
+        self.bestCities = []
         self.searchedCity = CityCompleterDataset()
-        self.searchedCityReviewElement = CityReviewElement()
+        self.searchedCityReviewElement = nil
         self.searchedCityAvailable = false
+        self.selectedCity = nil
+        self.selectedCityReviewElement = nil
     }
 }
