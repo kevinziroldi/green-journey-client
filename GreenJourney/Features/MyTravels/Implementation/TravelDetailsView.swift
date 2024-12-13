@@ -110,6 +110,7 @@ struct TravelDetailsView: View {
                                             }
                                             
                                         }
+                                        .padding(.trailing, 15)
                                         HStack {
                                             Text("Price: \(plantedTrees * 15) €")
                                         }
@@ -122,7 +123,7 @@ struct TravelDetailsView: View {
                                                     .fill(.green)
                                                     .stroke(Color(red: 1/255, green: 150/255, blue: 1/255), lineWidth: 2)
                                                 HStack (spacing: 3) {
-                                                    Image(systemName: "plus.circle")
+                                                    Image(systemName: "leaf")
                                                         .font(.title3)
                                                         .fontWeight(.semibold)
                                                         .fontWeight(.light)
