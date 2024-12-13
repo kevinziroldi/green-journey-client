@@ -64,8 +64,6 @@ struct MyTravelsView: View {
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 300, height: 300)
-                            
-                            
                         }
                         else {
                             Image("noTravelsLight")
@@ -141,7 +139,7 @@ struct MyTravelsView: View {
                             .padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
                         }
                     }
-            }
+                }
             }
         }
         .onAppear {

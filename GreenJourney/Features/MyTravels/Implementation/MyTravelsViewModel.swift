@@ -72,6 +72,9 @@ class MyTravelsViewModel: ObservableObject {
     }
     
     func fetchTravelsFromServer() {
+        
+        print("FETCH TRAVELS FROM SERVER CALLED")
+        
         guard let firebaseUser = Auth.auth().currentUser else {
             print("error retrieving firebase user")
             return

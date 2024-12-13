@@ -2,9 +2,6 @@ import SwiftData
 import SwiftUI
 
 struct MainView: View {
-    @EnvironmentObject private var viewModel: MainViewModel
-    @EnvironmentObject private var myTravelsViewModel: MyTravelsViewModel
-    @EnvironmentObject private var rankingViewModel: RankingViewModel
     @Environment(\.modelContext) private var modelContext: ModelContext
     @State var navigationPath: NavigationPath
     
@@ -50,13 +47,7 @@ struct MainView: View {
                         }
                         .tag(TabViewElement.Dashboard)
                 }else {
-                    EmptyView()
-                }
-            }
-            .onAppear {
-                if !viewModel.isDataLoaded {
-                    myTravelsViewModel.fetchTravelsFromServer()
-                    viewModel.isDataLoaded = true
+                    LoginView(navigationPath: $navigationPath)
                 }
             }
             .navigationDestination(for: NavigationDestination.self) { destination in
@@ -77,11 +68,6 @@ struct MainView: View {
                 case .TravelDetailsView:
                     TravelDetailsView(navigationPath: $navigationPath)
                 }
-            }
-        }
-        .onAppear {
-            if users.first == nil {
-                navigationPath.append(NavigationDestination.LoginView)
             }
         }
     }

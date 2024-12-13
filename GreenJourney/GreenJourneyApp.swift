@@ -29,7 +29,6 @@ struct GreenJourneyApp: App {
     @StateObject private var rankingViewModel: RankingViewModel = RankingViewModel(modelContext: PersistenceHandler.shared.container.mainContext)
     @StateObject private var travelSearchViewModel: TravelSearchViewModel = TravelSearchViewModel(modelContext: PersistenceHandler.shared.container.mainContext)
     @StateObject private var userPreferencesViewModel: UserPreferencesViewModel = UserPreferencesViewModel(modelContext: PersistenceHandler.shared.container.mainContext)
-    @StateObject private var mainViewModel: MainViewModel = MainViewModel(modelContext: PersistenceHandler.shared.container.mainContext)
 
     var body: some Scene {
         WindowGroup {
@@ -43,7 +42,9 @@ struct GreenJourneyApp: App {
                 .environmentObject(rankingViewModel)
                 .environmentObject(travelSearchViewModel)
                 .environmentObject(userPreferencesViewModel)
-                .environmentObject(mainViewModel)
+                .onAppear() {
+                    myTravelsViewModel.fetchTravelsFromServer()
+                }
         }
         // make persistence controller available to all views
         .modelContainer(persistenceController.container)
