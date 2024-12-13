@@ -16,34 +16,8 @@ struct TravelDetailsView: View {
             
             ZStack {
                 VStack (spacing:0){
-                    ZStack{
                         HeaderView(from: travelDetails.getDepartureSegment()?.departureCity ?? "", to: travelDetails.getDestinationSegment()?.destinationCity ?? "", date: travelDetails.segments.first?.dateTime, dateArrival: travelDetails.segments.last?.getArrivalDateTime())
-                            HStack{
-                                Spacer()
-                                Button(action: {
-                                    showAlert = true
-                                }) {
-                                    Image(systemName: "trash.circle")
-                                        .font(.largeTitle)
-                                        .scaleEffect(1.2)
-                                        .fontWeight(.light)
-                                        .foregroundStyle(.red)
-                                }
-                                .alert(isPresented: $showAlert) {
-                                    Alert(
-                                        title: Text("Delete this travel?"),
-                                        message: Text("you cannot undo this action"),
-                                        primaryButton: .cancel(Text("Cancel")) {},
-                                        secondaryButton: .destructive(Text("Delete")) {
-                                            //delete travel
-                                            viewModel.deleteTravel(travelToDelete: travelDetails.travel)
-                                            navigationPath.removeLast()
-                                        }
-                                    )
-                                }
-                            }
-                            .padding(EdgeInsets(top: 0, leading: 15, bottom: 120, trailing: 15))
-                    }
+                    
                     Rectangle()
                         .frame(height: 1)
                         .foregroundStyle(.gray)
@@ -136,6 +110,7 @@ struct TravelDetailsView: View {
                                             }
                                             
                                         }
+                                        .padding(.trailing, 15)
                                         HStack {
                                             Text("Price: \(plantedTrees * 15) €")
                                         }
@@ -148,7 +123,7 @@ struct TravelDetailsView: View {
                                                     .fill(.green)
                                                     .stroke(Color(red: 1/255, green: 150/255, blue: 1/255), lineWidth: 2)
                                                 HStack (spacing: 3) {
-                                                    Image(systemName: "plus.circle")
+                                                    Image(systemName: "leaf")
                                                         .font(.title3)
                                                         .fontWeight(.semibold)
                                                         .fontWeight(.light)
@@ -291,8 +266,31 @@ struct TravelDetailsView: View {
                                 .font(.title)
                                 .fontWeight(.semibold)
                             Spacer()
+                            
+                                Button(action: {
+                                    showAlert = true
+                                }) {
+                                    Image(systemName: "trash.circle")
+                                        .font(.largeTitle)
+                                        .scaleEffect(1.2)
+                                        .fontWeight(.light)
+                                        .foregroundStyle(.red)
+                                }
+                                .alert(isPresented: $showAlert) {
+                                    Alert(
+                                        title: Text("Delete this travel?"),
+                                        message: Text("you cannot undo this action"),
+                                        primaryButton: .cancel(Text("Cancel")) {},
+                                        secondaryButton: .destructive(Text("Delete")) {
+                                            //delete travel
+                                            viewModel.deleteTravel(travelToDelete: travelDetails.travel)
+                                            navigationPath.removeLast()
+                                        }
+                                    )
+                            }
                         }
                         .padding(.horizontal, 15)
+                        
                         SegmentsView(segments: travelDetails.getOutwardSegments())
                         
                         if !travelDetails.isOneway() {
