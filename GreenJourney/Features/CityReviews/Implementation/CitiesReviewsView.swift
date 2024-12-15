@@ -2,10 +2,17 @@ import SwiftUI
 import SwiftData
 
 struct CitiesReviewsView: View {
-    @EnvironmentObject var viewModel: CitiesReviewsViewModel
+    @StateObject var viewModel: CitiesReviewsViewModel
+    @Environment(\.modelContext) private var modelContext
     @Binding var navigationPath: NavigationPath
-    @State private var searchTapped: Bool = false
     @Environment(\.colorScheme) var colorScheme: ColorScheme
+    
+    @State private var searchTapped: Bool = false
+
+    init(modelContext: ModelContext, navigationPath: Binding<NavigationPath>) {
+        _viewModel = StateObject(wrappedValue: CitiesReviewsViewModel(modelContext: modelContext))
+        _navigationPath = navigationPath
+    }
     
     var body: some View {
         VStack {
@@ -17,7 +24,7 @@ struct CitiesReviewsView: View {
                     .padding()
                 Spacer()
                 
-                NavigationLink(destination: UserPreferencesView(navigationPath: $navigationPath)) {
+                NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath)) {
                     Image(systemName: "person")
                         .font(.title)
                 }
@@ -53,7 +60,7 @@ struct CitiesReviewsView: View {
                 .padding(EdgeInsets(top: 0, leading: 50, bottom: 20, trailing: 50))
             }
             .fullScreenCover(isPresented: $searchTapped ) {
-                CompleterView(searchText: viewModel.searchedCity.cityName,
+                CompleterView(modelContext: modelContext, searchText: viewModel.searchedCity.cityName,
                               onBack: {
                     searchTapped = false
                 },
@@ -85,7 +92,7 @@ struct CitiesReviewsView: View {
                         .onTapGesture {
                             viewModel.selectedCity = viewModel.bestCities[index]
                             viewModel.selectedCityReviewElement = viewModel.bestCitiesReviewElements[index]
-                            navigationPath.append(NavigationDestination.CityReviewsDetailsView)
+                            navigationPath.append(NavigationDestination.CityReviewsDetailsView(viewModel))
                         }
                 }
             }
@@ -97,7 +104,7 @@ struct CitiesReviewsView: View {
         .onChange(of: viewModel.searchedCityAvailable) {
             if viewModel.searchedCityAvailable {
                 // append path of the inner view
-                navigationPath.append(NavigationDestination.CityReviewsDetailsView)
+                navigationPath.append(NavigationDestination.CityReviewsDetailsView(viewModel))
             }
         }
     }

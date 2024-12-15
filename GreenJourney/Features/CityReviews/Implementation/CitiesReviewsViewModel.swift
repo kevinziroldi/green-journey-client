@@ -4,6 +4,8 @@ import Foundation
 import SwiftData
 
 class CitiesReviewsViewModel: ObservableObject {
+    let uuid: UUID = UUID()
+    
     private var modelContext: ModelContext
     private var cancellables: Set<AnyCancellable> = Set<AnyCancellable>()
     
@@ -155,3 +157,14 @@ class CitiesReviewsViewModel: ObservableObject {
         self.selectedCityReviewElement = nil
     }
 }
+
+extension CitiesReviewsViewModel: Hashable {
+    static func == (lhs: CitiesReviewsViewModel, rhs: CitiesReviewsViewModel) -> Bool {
+        return lhs.uuid == rhs.uuid
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(uuid)
+    }
+}
+

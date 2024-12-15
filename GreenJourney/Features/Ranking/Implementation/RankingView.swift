@@ -3,10 +3,12 @@ import SwiftData
 
 struct RankingView: View {
     @Binding var navigationPath: NavigationPath
-    @EnvironmentObject var viewModel: RankingViewModel
+    @StateObject var viewModel: RankingViewModel
     @Environment(\.colorScheme) var colorScheme: ColorScheme
-    
-    init(navigationPath: Binding<NavigationPath>) {
+    @Environment(\.modelContext) private var modelContext
+
+    init(modelContext: ModelContext,navigationPath: Binding<NavigationPath>) {
+        _viewModel = StateObject(wrappedValue: RankingViewModel(modelContext: modelContext))
         _navigationPath = navigationPath
     }
     
@@ -20,13 +22,12 @@ struct RankingView: View {
                     
                     Spacer()
                     
-                    NavigationLink(destination: UserPreferencesView(navigationPath: $navigationPath)) {
+                    NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath)) {
                         Image(systemName: "person")
                             .font(.title)
                     }
                 }
                 .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
-                
                 
                 Picker("", selection: $viewModel.leaderboardSelected) {
                     Text("Long distance").tag(true)
@@ -44,10 +45,10 @@ struct RankingView: View {
                             .padding(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
                         VStack{
                             if viewModel.leaderboardSelected {
-                                LeaderBoardView(navigationPath: $navigationPath, leaderboard: Array(viewModel.longDistanceRanking.prefix(10)))
+                                LeaderBoardView(viewModel: viewModel, navigationPath: $navigationPath, leaderboard: Array(viewModel.longDistanceRanking.prefix(10)))
                             }
                             else {
-                                LeaderBoardView(navigationPath: $navigationPath, leaderboard: Array(viewModel.shortDistanceRanking.prefix(10)))
+                                LeaderBoardView(viewModel: viewModel, navigationPath: $navigationPath, leaderboard: Array(viewModel.shortDistanceRanking.prefix(10)))
                             }
                         }
                         .padding(EdgeInsets(top: 0, leading: 10, bottom: 5, trailing: 10))
@@ -81,17 +82,17 @@ struct RankingView: View {
 }
 
 struct LeaderBoardView: View {
-    @Query var users: [User]
-    @EnvironmentObject var viewModel: RankingViewModel
-    @Environment(\.colorScheme) var colorScheme: ColorScheme
-    
+    @ObservedObject var viewModel: RankingViewModel
     @Binding var navigationPath: NavigationPath
+    
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
+    @Query var users: [User]
+    
     var leaderboard: [RankingElement]
     
     var body: some View {
         VStack (spacing: 0){
             HStack {
-                
                 Text("   #.")
                     .font(.headline)
                 Spacer()
@@ -124,46 +125,45 @@ struct LeaderBoardView: View {
                 .foregroundColor(colorScheme == .dark ? Color.gray : Color.black)
                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 5, trailing: 0))
             ForEach (leaderboard.indices, id: \.self) { index in
-                    NavigationLink (destination: UserDetailsRankingView(navigationPath: $navigationPath, user: leaderboard[index])) {
-                        VStack (spacing: 5){
-                            HStack {
-                                // Colonna Nome Utente
-                                ZStack {
-                                    Circle()
-                                        .stroke(LinearGradient(gradient: Gradient(colors: [.green, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing), lineWidth: 2)
-                                        .frame(width: 40, height: 40)
-                                    
-                                    
-                                    Text("#\(index + 1)")
-                                        .foregroundStyle(
-                                            leaderboard[index].userID == users.first?.userID ?? -1 ? .blue : colorScheme == .dark ? .white : .black)
-                                        .fontWeight(.semibold)
-                                }
-                                Spacer()
-                                Text(leaderboard[index].firstName + " " + leaderboard[index].lastName.prefix(1) + ".")
-                                    .frame(alignment: .leading)
-                                    .foregroundStyle(leaderboard[index].userID == users.first?.userID ?? -1 ? .blue : colorScheme == .dark ? .white : .black)
-                                    .fontWeight(.semibold)
-                                Spacer()
-                                // Colonna Badge
-                                BadgeView(badges: leaderboard[index].badges, dim: 40, inline: false)
-                                // Colonna Punteggio
-                                Text(String(format: "%.1f", leaderboard[index].score))
-                                    .frame(maxWidth: 90, alignment: .trailing)
-                                    .foregroundStyle(LinearGradient(gradient: Gradient(colors: [.green, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing))
-                                    .fontWeight(.bold)
+                NavigationLink (destination: UserDetailsRankingView(viewModel: viewModel, navigationPath: $navigationPath, user: leaderboard[index])) {
+                    VStack (spacing: 5){
+                        HStack {
+                            // Colonna Nome Utente
+                            ZStack {
+                                Circle()
+                                    .stroke(LinearGradient(gradient: Gradient(colors: [.green, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing), lineWidth: 2)
+                                    .frame(width: 40, height: 40)
                                 
+                                
+                                Text("#\(index + 1)")
+                                    .foregroundStyle(
+                                        leaderboard[index].userID == users.first?.userID ?? -1 ? .blue : colorScheme == .dark ? .white : .black)
+                                    .fontWeight(.semibold)
                             }
-                            .padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
+                            Spacer()
+                            Text(leaderboard[index].firstName + " " + leaderboard[index].lastName.prefix(1) + ".")
+                                .frame(alignment: .leading)
+                                .foregroundStyle(leaderboard[index].userID == users.first?.userID ?? -1 ? .blue : colorScheme == .dark ? .white : .black)
+                                .fontWeight(.semibold)
+                            Spacer()
+                            // Colonna Badge
+                            BadgeView(badges: leaderboard[index].badges, dim: 40, inline: false)
+                            // Colonna Punteggio
+                            Text(String(format: "%.1f", leaderboard[index].score))
+                                .frame(maxWidth: 90, alignment: .trailing)
+                                .foregroundStyle(LinearGradient(gradient: Gradient(colors: [.green, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing))
+                                .fontWeight(.bold)
                             
-                            if index < leaderboard.count - 1 {
-                                Rectangle()
-                                    .frame(height: 1)
-                                    .foregroundColor(.gray)
-                            }
+                        }
+                        .padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
+                        
+                        if index < leaderboard.count - 1 {
+                            Rectangle()
+                                .frame(height: 1)
+                                .foregroundColor(.gray)
                         }
                     }
-                
+                }
             }
         }
         .padding(EdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 0))
@@ -322,3 +322,4 @@ struct TopRoundedCorners: Shape {
         return path
     }
 }
+

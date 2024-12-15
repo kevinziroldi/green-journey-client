@@ -1,9 +1,9 @@
 enum NavigationDestination: Hashable {
     case LoginView
-    case SignupView
-    case EmailVerificationView
-    case OutwardOptionsView
-    case ReturnOptionsView
-    case CityReviewsDetailsView
-    case TravelDetailsView
+    case SignupView(AuthenticationViewModel)
+    case EmailVerificationView(AuthenticationViewModel)
+    case OutwardOptionsView(TravelSearchViewModel)
+    case ReturnOptionsView(TravelSearchViewModel)
+    case TravelDetailsView(MyTravelsViewModel)
+    case CityReviewsDetailsView(CitiesReviewsViewModel)
 }

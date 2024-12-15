@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ReturnOptionsView: View {
-    @EnvironmentObject var viewModel: TravelSearchViewModel
+    @ObservedObject var viewModel: TravelSearchViewModel
     @Binding var navigationPath: NavigationPath
     var body: some View {
         VStack (spacing: 0){
@@ -63,7 +63,7 @@ struct ReturnOptionsView: View {
             ScrollView {
                 VStack {
                     ForEach (viewModel.outwardOptions.indices, id: \.self) { option in
-                        NavigationLink (destination: OptionDetailsView(segments: viewModel.returnOptions[option], navigationPath: $navigationPath)){
+                        NavigationLink (destination: OptionDetailsView(segments: viewModel.returnOptions[option], viewModel: viewModel, navigationPath: $navigationPath)){
                             OptionCard(option: viewModel.returnOptions[option], viewModel: viewModel)
                         }
                     }

@@ -3,8 +3,13 @@ import SwiftData
 import Charts
 
 struct DashboardView: View {
-    @EnvironmentObject private var viewModel: DashboardViewModel
+    @StateObject private var viewModel: DashboardViewModel
     @Binding var navigationPath: NavigationPath
+    
+    init(modelContext: ModelContext, navigationPath: Binding<NavigationPath>) {
+        _viewModel = StateObject(wrappedValue: DashboardViewModel(modelContext: modelContext))
+        _navigationPath = navigationPath
+    }
     
     @State private var legendTapped: Bool = false
     var user = User(firstName: "Matteo", lastName: "Volpari", firebaseUID: "", scoreShortDistance: 12, scoreLongDistance: 24)

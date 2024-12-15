@@ -4,6 +4,8 @@ import FirebaseAuth
 import SwiftData
 
 class MyTravelsViewModel: ObservableObject {
+    let uuid: UUID = UUID()
+    
     private var modelContext: ModelContext
     private var cancellables: Set<AnyCancellable> = Set<AnyCancellable>()
     
@@ -714,5 +716,14 @@ class MyTravelsViewModel: ObservableObject {
             return 0
         }
         return Int(travel.travel.CO2Compensated) / 10 + 1
+    }
+}
+extension MyTravelsViewModel: Hashable {
+    static func == (lhs: MyTravelsViewModel, rhs: MyTravelsViewModel) -> Bool {
+        return lhs.uuid == rhs.uuid 
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(uuid)
     }
 }

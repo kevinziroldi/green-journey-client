@@ -5,7 +5,7 @@ import MapKit
 struct TravelSearchView: View {
     @Environment(\.modelContext) private var modelContext: ModelContext
     @Environment(\.colorScheme) var colorScheme: ColorScheme
-    @EnvironmentObject var viewModel: TravelSearchViewModel
+    @StateObject var viewModel: TravelSearchViewModel
     @State private var departureTapped: Bool = false
     @State private var destinationTapped: Bool = false
     @State private var dateTapped: Bool = false
@@ -17,6 +17,12 @@ struct TravelSearchView: View {
     
     @Query var users: [User]
     
+    
+    init(modelContext: ModelContext, navigationPath: Binding<NavigationPath>) {
+        _viewModel = StateObject(wrappedValue: TravelSearchViewModel(modelContext: modelContext))
+        _navigationPath = navigationPath
+    }
+ 
     var body: some View {
         if users.first != nil {
             ZStack {
@@ -28,7 +34,7 @@ struct TravelSearchView: View {
                         
                         Spacer()
                         
-                        NavigationLink(destination: UserPreferencesView(navigationPath: $navigationPath)) {
+                        NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath)) {
                             Image(systemName: "person")
                                 .font(.title)
                         }
@@ -96,7 +102,7 @@ struct TravelSearchView: View {
                                 
                             }
                             .fullScreenCover(isPresented: $departureTapped ) {
-                                CompleterView(searchText: viewModel.departure.cityName,
+                                CompleterView(modelContext: modelContext, searchText: viewModel.departure.cityName,
                                               onBack: {
                                     departureTapped = false
                                 },
@@ -134,7 +140,7 @@ struct TravelSearchView: View {
                                 .padding(EdgeInsets(top: 0, leading: 50, bottom: 20, trailing: 50))
                             }
                             .fullScreenCover(isPresented: $destinationTapped ) {
-                                CompleterView(searchText: viewModel.arrival.cityName,
+                                CompleterView(modelContext: modelContext, searchText: viewModel.arrival.cityName,
                                               onBack: {
                                     destinationTapped = false
                                 },
@@ -179,7 +185,7 @@ struct TravelSearchView: View {
                     Spacer()
                     Button(action: {
                         viewModel.computeRoutes()
-                        navigationPath.append(NavigationDestination.OutwardOptionsView)
+                        navigationPath.append(NavigationDestination.OutwardOptionsView(viewModel))
                         triggerAI = false
                     }) {
                         ZStack {
@@ -200,6 +206,7 @@ struct TravelSearchView: View {
                     Spacer()
                     
                     DestinationPredictionView(
+                        modelContext: modelContext,
                         confirm: { predictedCities in
                             if let firstCity = predictedCities.first {
                                 viewModel.arrival = firstCity

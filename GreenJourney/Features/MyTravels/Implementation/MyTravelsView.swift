@@ -2,7 +2,8 @@ import SwiftData
 import SwiftUI
 
 struct MyTravelsView: View {
-    @EnvironmentObject var viewModel: MyTravelsViewModel
+    @StateObject var viewModel: MyTravelsViewModel
+    @Environment(\.modelContext) private var modelContext
     @State private var selectedSortOption: SortOption = .departureDate
     @State private var showSortOptions = false
     
@@ -12,7 +13,8 @@ struct MyTravelsView: View {
     @Binding var navigationPath: NavigationPath
     @Environment(\.colorScheme) var colorScheme: ColorScheme
         
-    init(navigationPath: Binding<NavigationPath>) {
+    init(modelContext: ModelContext,navigationPath: Binding<NavigationPath>) {
+        _viewModel = StateObject(wrappedValue: MyTravelsViewModel(modelContext: modelContext))
         _navigationPath = navigationPath
     }
     var body: some View {
@@ -23,7 +25,7 @@ struct MyTravelsView: View {
                     .padding()
                 Spacer()
                 
-                NavigationLink(destination: UserPreferencesView(navigationPath: $navigationPath)) {
+                NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath)) {
                     Image(systemName: "person")
                         .font(.title)
                 }
@@ -83,7 +85,7 @@ struct MyTravelsView: View {
                                 Button(action: {
                                     viewModel.selectedTravel = travelDetails
                                     // selectedTravel is set synchronously
-                                    navigationPath.append(NavigationDestination.TravelDetailsView)
+                                    navigationPath.append(NavigationDestination.TravelDetailsView(viewModel))
                                 }) {
                                     TravelCard(travelDetails: travelDetails)
                                 }

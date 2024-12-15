@@ -17,56 +17,56 @@ struct MainView: View {
         NavigationStack(path: $navigationPath) {
             TabView(selection: $selectedTab) {
                 if users.first != nil{
-                    RankingView(navigationPath: $navigationPath)
+                    RankingView(modelContext: modelContext, navigationPath: $navigationPath)
                         .tabItem {
                             Label("Ranking", systemImage: "star")
                         }
                         .tag(TabViewElement.Ranking)
                     
-                    CitiesReviewsView(navigationPath: $navigationPath)
+                    CitiesReviewsView(modelContext: modelContext, navigationPath: $navigationPath)
                         .tabItem {
                             Label("Reviews", systemImage: "star.fill")
                         }
                         .tag(TabViewElement.Reviews)
                     
-                    TravelSearchView(navigationPath: $navigationPath)
+                    TravelSearchView(modelContext: modelContext, navigationPath: $navigationPath)
                         .tabItem {
                             Label("From-To", systemImage: "location")
                         }
                         .tag(TabViewElement.SearchTravel)
                     
-                    MyTravelsView(navigationPath: $navigationPath)
+                    MyTravelsView(modelContext: modelContext, navigationPath: $navigationPath)
                         .tabItem {
                             Label("My travels", systemImage: "airplane")
                         }
                         .tag(TabViewElement.MyTravels)
                     
-                    DashboardView(navigationPath: $navigationPath)
+                    DashboardView(modelContext: modelContext, navigationPath: $navigationPath)
                         .tabItem {
                             Label("Dashboard", systemImage: "house")
                         }
                         .tag(TabViewElement.Dashboard)
                 }else {
-                    LoginView(navigationPath: $navigationPath)
+                    LoginView(modelContext: modelContext, navigationPath: $navigationPath)
                 }
             }
             .navigationDestination(for: NavigationDestination.self) { destination in
                 switch destination {
                 case .LoginView:
-                    LoginView(navigationPath: $navigationPath)
+                    LoginView(modelContext: modelContext, navigationPath: $navigationPath)
                         .transition(.opacity.animation(.easeInOut(duration: 0.2)))
-                case .SignupView:
-                    SignUpView(navigationPath: $navigationPath)
-                case .EmailVerificationView:
-                    EmailVerificationView(navigationPath: $navigationPath)
-                case .OutwardOptionsView:
-                    OutwardOptionsView(navigationPath: $navigationPath)
-                case .ReturnOptionsView:
-                    ReturnOptionsView(navigationPath: $navigationPath)
-                case .CityReviewsDetailsView:
-                    CityReviewsDetailsView(navigationPath: $navigationPath)
-                case .TravelDetailsView:
-                    TravelDetailsView(navigationPath: $navigationPath)
+                case .SignupView(let viewModel):
+                    SignUpView(viewModel: viewModel, navigationPath: $navigationPath)
+                case .EmailVerificationView(let viewModel):
+                    EmailVerificationView(viewModel: viewModel, navigationPath: $navigationPath)
+                case .OutwardOptionsView(let viewModel):
+                    OutwardOptionsView(viewModel: viewModel, navigationPath: $navigationPath)
+                case .ReturnOptionsView(let viewModel):
+                    ReturnOptionsView(viewModel: viewModel, navigationPath: $navigationPath)
+                case .CityReviewsDetailsView(let viewModel):
+                    CityReviewsDetailsView(viewModel: viewModel, navigationPath: $navigationPath)
+                case .TravelDetailsView(let viewModel):
+                    TravelDetailsView(viewModel: viewModel, navigationPath: $navigationPath)
                 }
             }
         }

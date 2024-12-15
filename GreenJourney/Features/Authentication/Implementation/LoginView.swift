@@ -2,8 +2,15 @@ import SwiftUI
 import SwiftData
 
 struct LoginView: View {
-    @EnvironmentObject private var viewModel: AuthenticationViewModel
+    @StateObject var viewModel: AuthenticationViewModel
+    private var modelContext: ModelContext
     @Binding var navigationPath: NavigationPath
+   
+    init(modelContext: ModelContext, navigationPath: Binding<NavigationPath>) {
+        self.modelContext = modelContext
+        _navigationPath = navigationPath
+        _viewModel = StateObject(wrappedValue: AuthenticationViewModel(modelContext: modelContext))
+      }
     
     var body: some View {
         VStack{
@@ -106,7 +113,7 @@ struct LoginView: View {
             .scrollDismissesKeyboard(.interactively)
             
             Button ("Sign up") {
-                navigationPath.append(NavigationDestination.SignupView)
+                navigationPath.append(NavigationDestination.SignupView(viewModel))
             }
         }
         .onAppear() {
@@ -120,7 +127,7 @@ struct LoginView: View {
         })
         .onChange(of: viewModel.isEmailVerificationActiveLogin, {
             if viewModel.isEmailVerificationActiveLogin {
-                navigationPath.append(NavigationDestination.EmailVerificationView)
+                navigationPath.append(NavigationDestination.EmailVerificationView(viewModel))
             }
         })
         .navigationBarHidden(true)

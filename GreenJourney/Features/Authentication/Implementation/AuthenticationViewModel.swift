@@ -7,6 +7,8 @@ import SwiftData
 import SwiftUI
 
 class AuthenticationViewModel: ObservableObject {
+    let uuid: UUID = UUID()
+    
     @Published var email: String = ""
     @Published var password: String = ""
     @Published var repeatPassword: String = ""
@@ -351,6 +353,16 @@ class AuthenticationViewModel: ObservableObject {
         isEmailVerificationActiveLogin = false
         isEmailVerificationActiveSignup = false
         emailVerified = false
+    }
+}
+
+extension AuthenticationViewModel: Hashable {
+    static func == (lhs: AuthenticationViewModel, rhs: AuthenticationViewModel) -> Bool {
+        return lhs.uuid == rhs.uuid
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(uuid)
     }
 }
 

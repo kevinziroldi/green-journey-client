@@ -7,13 +7,16 @@ struct UserPreferencesView : View {
     @Query var users: [User]
     let email: String = Auth.auth().currentUser?.email ?? ""
     @Environment(\.colorScheme) var colorScheme: ColorScheme
-    @EnvironmentObject private var userPreferencesViewModel: UserPreferencesViewModel
-    @EnvironmentObject private var authenticationViewModel: AuthenticationViewModel
+    @Environment(\.modelContext) private var modelContext
+    @StateObject private var userPreferencesViewModel: UserPreferencesViewModel
+    @StateObject private var authenticationViewModel: AuthenticationViewModel
     @Binding var navigationPath: NavigationPath
     @State var editTapped: Bool = false
     @State private var showResendMessage = false
     
-    init(navigationPath: Binding<NavigationPath>) {
+    init(modelContext: ModelContext, navigationPath: Binding<NavigationPath>) {
+        _userPreferencesViewModel = StateObject(wrappedValue: UserPreferencesViewModel(modelContext: modelContext))
+        _authenticationViewModel = StateObject(wrappedValue: AuthenticationViewModel(modelContext: modelContext))
         _navigationPath = navigationPath
     }
     
@@ -160,7 +163,7 @@ struct UserPreferencesView : View {
                 Button(action: {
                     authenticationViewModel.logout()
                      navigationPath = NavigationPath()
-                     navigationPath.append(NavigationDestination.LoginView)
+                    navigationPath.append(NavigationDestination.LoginView)
                 }) {
                     Text("Logout")
                         .font(.title3)
@@ -182,7 +185,7 @@ struct UserPreferencesView : View {
             
             
         } else {
-            LoginView(navigationPath: $navigationPath)
+            LoginView(modelContext: modelContext, navigationPath: $navigationPath)
                 .transition(.opacity.animation(.easeInOut(duration: 0.2)))
         }
     }

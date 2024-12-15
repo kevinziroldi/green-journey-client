@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct TravelDetailsView: View {
-    @EnvironmentObject var viewModel: MyTravelsViewModel
+    @ObservedObject var viewModel: MyTravelsViewModel
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @Binding var navigationPath: NavigationPath
     @State var compensationTapped: Bool = false

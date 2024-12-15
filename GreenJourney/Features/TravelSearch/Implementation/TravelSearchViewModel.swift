@@ -10,6 +10,8 @@ struct OptionsResponse: Decodable {
 }
 
 class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegate {
+    let uuid: UUID = UUID()
+    
     var modelContext: ModelContext
     @Published var departure: CityCompleterDataset = CityCompleterDataset()
     @Published var arrival: CityCompleterDataset = CityCompleterDataset()
@@ -312,3 +314,15 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
         return vehicle
     }
 }
+
+/*
+extension TravelSearchViewModel: Hashable {
+    static func == (lhs: AuthenticationViewModel, rhs: AuthenticationViewModel) -> Bool {
+        return lhs.uuid == rhs.uuid
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(uuid)
+    }
+}
+*/

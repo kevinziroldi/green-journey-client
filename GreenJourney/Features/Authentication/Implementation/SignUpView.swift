@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct SignUpView: View {
-    @EnvironmentObject var viewModel: AuthenticationViewModel
+    @ObservedObject var viewModel: AuthenticationViewModel
     @Binding var navigationPath: NavigationPath
     
     var body: some View {
@@ -124,7 +124,7 @@ struct SignUpView: View {
         })
         .onChange(of: viewModel.isEmailVerificationActiveSignup, {
             if viewModel.isEmailVerificationActiveSignup {
-                navigationPath.append(NavigationDestination.EmailVerificationView)
+                navigationPath.append(NavigationDestination.EmailVerificationView(viewModel))
             }
         })
         .navigationBarHidden(true)

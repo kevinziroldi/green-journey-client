@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct UserDetailsRankingView: View {
-    @EnvironmentObject var viewModel: RankingViewModel
+    @ObservedObject var viewModel: RankingViewModel
     @Environment(\.colorScheme) var colorScheme: ColorScheme
 
     @Binding var navigationPath: NavigationPath

@@ -2,14 +2,15 @@ import SwiftUI
 import SwiftData
 
 struct CompleterView: View {
-    @EnvironmentObject private var viewModel: CompleterViewModel
+    @StateObject private var viewModel: CompleterViewModel
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @FocusState var textfieldOpen: Bool
     var onBack: () -> Void
     var onClick: (CityCompleterDataset) -> Void
     var searchText: String
     
-    init(searchText: String, onBack: @escaping () -> Void, onClick: @escaping (CityCompleterDataset) -> Void) {
+    init(modelContext: ModelContext, searchText: String, onBack: @escaping () -> Void, onClick: @escaping (CityCompleterDataset) -> Void) {
+        _viewModel = StateObject(wrappedValue: CompleterViewModel(modelContext: modelContext))
         self.onBack = onBack
         self.onClick = onClick
         self.searchText = searchText

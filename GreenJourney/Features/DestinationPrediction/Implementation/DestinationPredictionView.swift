@@ -2,10 +2,12 @@ import SwiftData
 import SwiftUI
 
 struct DestinationPredictionView: View {
-    @EnvironmentObject var viewModel: DestinationPredictionViewModel
+    @StateObject var viewModel: DestinationPredictionViewModel
     var confirm: ([CityCompleterDataset]) -> Void
     
-    init(confirm: @escaping ([CityCompleterDataset]) -> Void) {
+    
+    init(modelContext: ModelContext, confirm: @escaping ([CityCompleterDataset]) -> Void) {
+        _viewModel = StateObject(wrappedValue: DestinationPredictionViewModel(modelContext: modelContext))
         self.confirm = confirm
     }
     

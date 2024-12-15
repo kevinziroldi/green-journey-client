@@ -3,7 +3,7 @@ import SwiftUI
 struct OptionDetailsView: View {
     var segments: [Segment]
 
-    @EnvironmentObject var viewModel: TravelSearchViewModel
+    @ObservedObject var viewModel: TravelSearchViewModel
     @Binding var navigationPath: NavigationPath
     
     var body: some View {
@@ -128,7 +128,7 @@ struct OptionDetailsView: View {
             if (viewModel.selectedOption.isEmpty) {
                 Button ("proceed"){
                     viewModel.selectedOption.append(contentsOf: segments)
-                    navigationPath.append(NavigationDestination.ReturnOptionsView)
+                    navigationPath.append(NavigationDestination.ReturnOptionsView(viewModel))
                 }
                 .buttonStyle(.borderedProminent)
 
