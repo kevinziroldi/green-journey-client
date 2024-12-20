@@ -13,6 +13,12 @@ struct TravelSearchView: View {
     @State private var triggerAI: Bool = false
     @State private var showAlertPrediction: Bool = false
     
+    @State var counter: Int = 0
+    @State var origin: CGPoint = .init(x: 0.5, y: 0.5)
+    
+    // Gradient and masking vars
+//    @State var maskTimer: Float = 0.0
+    
     @Binding var navigationPath: NavigationPath
     
     @Query var users: [User]
@@ -22,243 +28,300 @@ struct TravelSearchView: View {
         _viewModel = StateObject(wrappedValue: TravelSearchViewModel(modelContext: modelContext))
         _navigationPath = navigationPath
     }
- 
+    
     var body: some View {
         if users.first != nil {
-            ZStack {
-                VStack {
-                    HStack {
-                        Text("Next journey")
-                            .font(.title)
-                            .padding()
-                        
-                        Spacer()
-                        
-                        NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath)) {
-                            Image(systemName: "person")
-                                .font(.title)
-                        }
-                    }
-                    .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
+            GeometryReader { geometry in
+                ZStack {
+                    // Colorful animated gradient
+                    MeshGradientView()
+                        .scaleEffect(1.3) // avoids clipping
+                        .opacity(triggerAI ? 1 : 0)
+                        .ignoresSafeArea()
                     
-                    Picker("", selection: $viewModel.oneWay) {
-                        Text("One way").tag(true)
-                        Text("Round trip").tag(false)
+                    // Brightness rim on edges
+                    if triggerAI {
+                        RoundedRectangle(cornerRadius: 52, style: .continuous)
+                            .stroke(Color.white, style: .init(lineWidth: 4))
+                            .blur(radius: 4)
+                            .ignoresSafeArea()
                     }
-                    .pickerStyle(.segmented)
-                    .padding()
-                    .frame(maxWidth: 190) // Set a max width to control the size
-                    
                     ZStack {
-                        GeometryReader { geometry in
-                            Path { path in
-                                // Punto iniziale in alto a sinistra
-                                path.move(to: CGPoint(x: geometry.size.width/2 - 10, y: 0))
-                                
-                                // Prima curva della "S" verso destra e in basso
-                                path.addQuadCurve(
-                                    to: CGPoint(x: geometry.size.width/2, y: geometry.size.height/2),
-                                    control: CGPoint(x: 0, y: geometry.size.height/4)
-                                )
-                                path.addQuadCurve(
-                                    to: CGPoint(x: geometry.size.width/2 + 25, y: geometry.size.height),
-                                    control: CGPoint(x: geometry.size.width, y: geometry.size.height * 3/4)
-                                )
-                            }
-                            .stroke(style: StrokeStyle(lineWidth: 5, dash: [11, 6])) // Stile tratteggiato
-                            .foregroundColor(.primary) // Colore della linea
-                        }
-                        .frame(width: 100, height: 110)
-                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 80, trailing: 300))
+                        Rectangle()
+                            .fill(colorScheme == .dark ? Color.black : Color.white)
+                            .ignoresSafeArea()
                         
                         VStack {
-                            VStack {
-                                Text("From")
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding(EdgeInsets(top: 10, leading: 50, bottom: 0, trailing: 50))
-                                    .frame(alignment: .top)
+                            HStack {
+                                Text("Next journey")
                                     .font(.title)
+                                    .padding()
+                                
+                                Spacer()
+                                
+                                NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath)) {
+                                    Image(systemName: "person")
+                                        .font(.title)
+                                }
+                            }
+                            .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
+                            
+                            Picker("", selection: $viewModel.oneWay) {
+                                Text("One way").tag(true)
+                                Text("Round trip").tag(false)
+                            }
+                            .pickerStyle(.segmented)
+                            .padding()
+                            .frame(maxWidth: 190) // Set a max width to control the size
+                            
+                            ZStack {
+                                GeometryReader { geometry in
+                                    Path { path in
+                                        // Punto iniziale in alto a sinistra
+                                        path.move(to: CGPoint(x: geometry.size.width/2 - 10, y: 0))
+                                        
+                                        // Prima curva della "S" verso destra e in basso
+                                        path.addQuadCurve(
+                                            to: CGPoint(x: geometry.size.width/2, y: geometry.size.height/2),
+                                            control: CGPoint(x: 0, y: geometry.size.height/4)
+                                        )
+                                        path.addQuadCurve(
+                                            to: CGPoint(x: geometry.size.width/2 + 25, y: geometry.size.height),
+                                            control: CGPoint(x: geometry.size.width, y: geometry.size.height * 3/4)
+                                        )
+                                    }
+                                    .stroke(style: StrokeStyle(lineWidth: 5, dash: [11, 6])) // Stile tratteggiato
+                                    .foregroundColor(.primary) // Colore della linea
+                                }
+                                .frame(width: 100, height: 110)
+                                .padding(EdgeInsets(top: 0, leading: 0, bottom: 80, trailing: 300))
+                                
+                                VStack {
+                                    VStack {
+                                        Text("From")
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .padding(EdgeInsets(top: 10, leading: 50, bottom: 0, trailing: 50))
+                                            .frame(alignment: .top)
+                                            .font(.title)
+                                        ZStack {
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 3)
+                                                .frame(height: 50)
+                                            
+                                            Button(action: {
+                                                departureTapped = true
+                                            }) {
+                                                Text(viewModel.departure.cityName == "" ? "Insert departure" : viewModel.departure.cityName)
+                                                    .foregroundColor(viewModel.departure.cityName == "" ? .secondary : .blue)
+                                                    .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 0))
+                                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                                    .font(.title2)
+                                                    .fontWeight(viewModel.departure.cityName == "" ? .light : .semibold)
+                                            }
+                                        }
+                                        .background(colorScheme == .dark ? Color(red: 48/255, green: 48/255, blue: 48/255) : Color.white)
+                                        .cornerRadius(10)
+                                        .shadow(radius: 5)
+                                        .padding(EdgeInsets(top: 0, leading: 50, bottom: 20, trailing: 50))
+                                        
+                                        
+                                    }
+                                    .fullScreenCover(isPresented: $departureTapped ) {
+                                        CompleterView(modelContext: modelContext, searchText: viewModel.departure.cityName,
+                                                      onBack: {
+                                            departureTapped = false
+                                        },
+                                                      onClick: { city in
+                                            departureTapped = false
+                                            viewModel.departure = city
+                                        })
+                                    }
+                                    
+                                    VStack{
+                                        Text("To")
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .padding(EdgeInsets(top: 10, leading: 50, bottom: 0, trailing: 50))
+                                            .frame(alignment: .top)
+                                            .font(.title)
+                                        ZStack{
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 3)
+                                                .frame(height: 50)
+                                            
+                                            Button(action: {
+                                                destinationTapped = true
+                                            }) {
+                                                Text(viewModel.arrival.cityName == "" ? "Insert destination" : viewModel.arrival.cityName)
+                                                    .foregroundColor (getColorDest())
+                                                    .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 0))
+                                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                                    .font(.title2)
+                                                    .fontWeight(viewModel.arrival.cityName == "" ? .light : .semibold)
+                                            }
+                                        }
+                                        .background(triggerAI ? LinearGradient(gradient: Gradient(colors: [.green, .cyan, .blue, .cyan, .green]), startPoint: .bottomLeading, endPoint: .topTrailing) : LinearGradient(gradient: Gradient(colors: [colorScheme == .dark ? Color(red: 48/255, green: 48/255, blue: 48/255) : Color.white]), startPoint: .bottomLeading, endPoint: .topTrailing))
+                                        .cornerRadius(10)
+                                        .shadow(radius: 5)
+                                        .padding(EdgeInsets(top: 0, leading: 50, bottom: 20, trailing: 50))
+                                    }
+                                    .fullScreenCover(isPresented: $destinationTapped ) {
+                                        CompleterView(modelContext: modelContext, searchText: viewModel.arrival.cityName,
+                                                      onBack: {
+                                            destinationTapped = false
+                                        },
+                                                      onClick: { city in
+                                            destinationTapped = false
+                                            triggerAI = false
+                                            viewModel.arrival = city
+                                        }
+                                        )
+                                    }
+                                }
+                            }
+                            .padding()
+                            HStack {
+                                Spacer()
+                                VStack {
+                                    Button("Outward date") {
+                                        dateTapped = true
+                                        
+                                    }
+                                    .buttonStyle(.bordered)
+                                    Text(viewModel.datePicked.formatted(date: .numeric, time: .shortened))
+                                        .font(.subheadline)
+                                    
+                                }
+                                Spacer()
+                                VStack {
+                                    Button("Return date") {
+                                        dateReturnTapped = true
+                                    }
+                                    .buttonStyle(.bordered)
+                                    
+                                    Text(viewModel.dateReturnPicked.formatted(date: .numeric, time: .shortened))
+                                        .opacity(viewModel.oneWay ? 0 : 1)
+                                        .font(.subheadline)
+                                }
+                                .disabled(viewModel.oneWay)
+                                Spacer()
+                            }
+                            .padding()
+                            
+                            Spacer()
+                            Button(action: {
+                                viewModel.computeRoutes()
+                                navigationPath.append(NavigationDestination.OutwardOptionsView(viewModel))
+                                triggerAI = false
+                            }) {
                                 ZStack {
                                     RoundedRectangle(cornerRadius: 10)
-                                        .stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 3)
-                                        .frame(height: 50)
-                                    
-                                    Button(action: {
-                                        departureTapped = true
-                                    }) {
-                                        Text(viewModel.departure.cityName == "" ? "Insert departure" : viewModel.departure.cityName)
-                                            .foregroundColor(viewModel.departure.cityName == "" ? .secondary : .blue)
-                                            .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 0))
-                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                        .fill((viewModel.departure.iata == "" || viewModel.arrival.iata == "") ? .black.opacity(0.3): .blue)
+                                    HStack{
+                                        Text("Search")
                                             .font(.title2)
-                                            .fontWeight(viewModel.departure.cityName == "" ? .light : .semibold)
+                                            .foregroundStyle(.white)
+                                            .padding(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
                                     }
                                 }
-                                .background(colorScheme == .dark ? Color(red: 48/255, green: 48/255, blue: 48/255) : Color.white)
-                                .cornerRadius(10)
-                                .shadow(radius: 5)
-                                .padding(EdgeInsets(top: 0, leading: 50, bottom: 20, trailing: 50))
-                                
-                                
+                                .fixedSize()
                             }
-                            .fullScreenCover(isPresented: $departureTapped ) {
-                                CompleterView(modelContext: modelContext, searchText: viewModel.departure.cityName,
-                                              onBack: {
-                                    departureTapped = false
-                                },
-                                              onClick: { city in
-                                    departureTapped = false
-                                    viewModel.departure = city
-                                })
+                            .disabled(viewModel.departure.iata == "" || viewModel.arrival.iata == "")
+                            
+                            
+                            Spacer()
+                            
+                            if triggerAI {
+                                Button (action: {
+                                    viewModel.arrival = CityCompleterDataset()
+                                    withAnimation(.bouncy(duration: 1)) {
+                                        triggerAI = false
+                                    }
+                                }) {
+                                        ZStack {
+                                            RoundedRectangle(cornerRadius: 20)
+                                                .stroke(.gray)
+                                            HStack {
+                                                ZStack{
+                                                    Image(systemName: "apple.intelligence")
+                                                        .resizable()
+                                                        .foregroundStyle(.gray)
+                                                        .frame(width: 30, height: 30)
+                                                    Image(systemName: "xmark")
+                                                        .resizable()
+                                                        .foregroundStyle(.red.opacity(0.8))
+                                                        .frame(width: 30, height: 30)
+                                                }
+                                                Text("Do not use AI")
+                                                    .foregroundStyle(.gray)
+                                            }
+                                            .padding(10)
+                                        }.fixedSize()
+                                }
                             }
                             
-                            VStack{
-                                Text("To")
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding(EdgeInsets(top: 10, leading: 50, bottom: 0, trailing: 50))
-                                    .frame(alignment: .top)
-                                    .font(.title)
-                                ZStack{
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 3)
-                                        .frame(height: 50)
-                                    
-                                    Button(action: {
-                                        destinationTapped = true
-                                    }) {
-                                        Text(viewModel.arrival.cityName == "" ? "Insert destination" : viewModel.arrival.cityName)
-                                            .foregroundColor (getColorDest())
-                                            .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 0))
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                            .font(.title2)
-                                            .fontWeight(viewModel.arrival.cityName == "" ? .light : .semibold)
+                            DestinationPredictionView(
+                                modelContext: modelContext,
+                                confirm: { predictedCities in
+                                    if let firstCity = predictedCities.first {
+                                        viewModel.arrival = firstCity
+                                        viewModel.predictedCities = predictedCities
+                                        withAnimation(.bouncy(duration: 1)) {
+                                            self.triggerAI = true
+                                        }
+                                    } else {
+                                        showAlertPrediction = true
                                     }
-                                }
-                                .background(triggerAI ? LinearGradient(gradient: Gradient(colors: [.green, .cyan, .blue, .cyan, .green]), startPoint: .bottomLeading, endPoint: .topTrailing) : LinearGradient(gradient: Gradient(colors: [colorScheme == .dark ? Color(red: 48/255, green: 48/255, blue: 48/255) : Color.white]), startPoint: .bottomLeading, endPoint: .topTrailing))
-                                .cornerRadius(10)
-                                .shadow(radius: 5)
-                                .padding(EdgeInsets(top: 0, leading: 50, bottom: 20, trailing: 50))
-                            }
-                            .fullScreenCover(isPresented: $destinationTapped ) {
-                                CompleterView(modelContext: modelContext, searchText: viewModel.arrival.cityName,
-                                              onBack: {
-                                    destinationTapped = false
-                                },
-                                              onClick: { city in
-                                    destinationTapped = false
-                                    //TODO
-                                    viewModel.arrival = city
-                                }
+                                })
+                            .padding(.horizontal)
+                            .alert(isPresented: $showAlertPrediction) {
+                                Alert(
+                                    title: Text("An error occurred while computing the prediction, try again later"),
+                                    dismissButton: .default(Text("OK")) {}
                                 )
                             }
-                        }
-                    }
-                    .padding()
-                    HStack {
-                        Spacer()
-                        VStack {
-                            Button("Outward date") {
-                                dateTapped = true
-                                
-                            }
-                            .buttonStyle(.bordered)
-                            Text(viewModel.datePicked.formatted(date: .numeric, time: .shortened))
-                                .font(.subheadline)
                             
                         }
-                        Spacer()
-                        VStack {
-                            Button("Return date") {
-                                dateReturnTapped = true
-                            }
-                            .buttonStyle(.bordered)
-                            
-                            Text(viewModel.dateReturnPicked.formatted(date: .numeric, time: .shortened))
-                                .opacity(viewModel.oneWay ? 0 : 1)
-                                .font(.subheadline)
-                        }
-                        .disabled(viewModel.oneWay)
-                        Spacer()
                     }
-                    .padding()
+                    .blur(radius: (dateTapped || dateReturnTapped) ? 2 : 0) // Sfoca tutto il contenuto sottostante
+                    .allowsHitTesting(!(dateTapped || dateReturnTapped))
+                    .mask {
+                        AnimatedRectangle(size: geometry.size, cornerRadius: 48, t: CGFloat(0.0))
+                            .scaleEffect(triggerAI ? 1 : 1.2)
+                     .frame(width: geometry.size.width, height: geometry.size.height)
+                     .blur(radius: triggerAI ? 28 : 8)
+                     }
                     
-                    Spacer()
-                    Button(action: {
-                        viewModel.computeRoutes()
-                        navigationPath.append(NavigationDestination.OutwardOptionsView(viewModel))
-                        triggerAI = false
-                    }) {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 10)
-                                .fill((viewModel.departure.iata == "" || viewModel.arrival.iata == "") ? .black.opacity(0.3): .blue)
-                            HStack{
-                                Text("Search")
-                                    .font(.title2)
-                                    .foregroundStyle(.white)
-                                    .padding(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
+                    // Modale per il DatePicker "Outward date"
+                    if dateTapped {
+                        DatePickerModalView(
+                            title: "Select Outward Date",
+                            date: $viewModel.datePicked,
+                            onConfirm: {
+                                dateTapped = false
+                            },
+                            onReset: {
+                                viewModel.datePicked = Date() // Imposta la data predefinita
+                                dateTapped = false
                             }
-                        }
-                        .fixedSize()
-                    }
-                    .disabled(viewModel.departure.iata == "" || viewModel.arrival.iata == "")
-                    
-                    
-                    Spacer()
-                    
-                    DestinationPredictionView(
-                        modelContext: modelContext,
-                        confirm: { predictedCities in
-                            if let firstCity = predictedCities.first {
-                                viewModel.arrival = firstCity
-                                viewModel.predictedCities = predictedCities
-                                self.triggerAI = true
-                            } else {
-                                showAlertPrediction = true
-                            }
-                        })
-                    .padding(.horizontal)
-                    .alert(isPresented: $showAlertPrediction) {
-                        Alert(
-                            title: Text("An error occurred while computing the prediction, try again later"),
-                            dismissButton: .default(Text("OK")) {}
                         )
                     }
                     
-                }
-                .blur(radius: (dateTapped || dateReturnTapped) ? 2 : 0) // Sfoca tutto il contenuto sottostante
-                .allowsHitTesting(!(dateTapped || dateReturnTapped))
-                
-                // Modale per il DatePicker "Outward date"
-                if dateTapped {
-                    DatePickerModalView(
-                        title: "Select Outward Date",
-                        date: $viewModel.datePicked,
-                        onConfirm: {
-                            dateTapped = false
-                        },
-                        onReset: {
-                            viewModel.datePicked = Date() // Imposta la data predefinita
-                            dateTapped = false
-                        }
-                    )
-                }
-                
-                // Modale per il DatePicker "Return date"
-                if dateReturnTapped && !viewModel.oneWay {
-                    DatePickerModalView(
-                        title: "Select Return Date",
-                        date: $viewModel.dateReturnPicked,
-                        onConfirm: {
-                            dateReturnTapped = false
-                        },
-                        onReset: {
-                            viewModel.dateReturnPicked = Date() // Imposta la data predefinita
-                            dateReturnTapped = false
-                        }
-                    )
+                    // Modale per il DatePicker "Return date"
+                    if dateReturnTapped && !viewModel.oneWay {
+                        DatePickerModalView(
+                            title: "Select Return Date",
+                            date: $viewModel.dateReturnPicked,
+                            onConfirm: {
+                                dateReturnTapped = false
+                            },
+                            onReset: {
+                                viewModel.dateReturnPicked = Date() // Imposta la data predefinita
+                                dateReturnTapped = false
+                            }
+                        )
+                    }
                 }
             }
-            //.animation(.default, value: dateTapped || dateReturnTapped) // TODO
         }
     }
     
