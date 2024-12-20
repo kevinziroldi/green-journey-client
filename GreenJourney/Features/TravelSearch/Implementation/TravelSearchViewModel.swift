@@ -26,6 +26,7 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
     @Published var selectedOption: [Segment] = []
     
     @Published var predictedCities: [CityCompleterDataset] = []
+    @Published var predictionShown: Int = 0
     private var cancellables = Set<AnyCancellable>()
     
     init(modelContext: ModelContext) {
@@ -227,6 +228,7 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
         self.selectedOption = []
         self.outwardOptions = []
         self.returnOptions = []
+        self.predictedCities = []
     }
     
     func computeCo2Emitted(_ travelOption: [Segment]) -> Float64 {
@@ -312,15 +314,6 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
             vehicle = ""
         }
         return vehicle
-    }
-    
-    func changePrediction() {
-        var found = false
-        for prediction in predictedCities {
-            if arrival == prediction {
-                found = true
-            }
-        }
     }
 }
 

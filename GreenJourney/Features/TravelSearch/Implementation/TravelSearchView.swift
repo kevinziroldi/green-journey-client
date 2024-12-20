@@ -69,7 +69,7 @@ struct TravelSearchView: View {
                             }
                             .pickerStyle(.segmented)
                             .padding()
-                            .frame(maxWidth: 190) // Set a max width to control the size
+                            .frame(maxWidth: 300) // Set a max width to control the size
                             
                             ZStack {
                                 GeometryReader { geometry in
@@ -146,7 +146,9 @@ struct TravelSearchView: View {
                                                 .frame(height: 50)
                                             
                                             Button(action: {
-                                                destinationTapped = true
+                                                if !triggerAI {
+                                                    destinationTapped = true
+                                                }
                                             }) {
                                                 Text(viewModel.arrival.cityName == "" ? "Insert destination" : viewModel.arrival.cityName)
                                                     .foregroundColor (getColorDest())
@@ -213,7 +215,7 @@ struct TravelSearchView: View {
                                         .fill((viewModel.departure.iata == "" || viewModel.arrival.iata == "") ? .black.opacity(0.3): .blue)
                                     HStack{
                                         Text("Search")
-                                            .font(.title2)
+                                            .font(.title)
                                             .foregroundStyle(.white)
                                             .padding(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
                                     }
@@ -225,13 +227,39 @@ struct TravelSearchView: View {
                             
                             Spacer()
                             
-                            if triggerAI {
-                                Button (action: {
-                                    viewModel.arrival = CityCompleterDataset()
-                                    withAnimation(.bouncy(duration: 1)) {
-                                        triggerAI = false
+                            
+                            HStack {
+                                if !triggerAI {
+                                    DestinationPredictionView(
+                                        modelContext: modelContext,
+                                        confirm: { predictedCities in
+                                            if let firstCity = predictedCities.first {
+                                                viewModel.predictionShown = 0
+                                                viewModel.arrival = firstCity
+                                                viewModel.predictedCities = predictedCities
+                                                withAnimation(.bouncy(duration: 1)) {
+                                                    self.triggerAI = true
+                                                }
+                                            } else {
+                                                showAlertPrediction = true
+                                            }
+                                        })
+                                    .alert(isPresented: $showAlertPrediction) {
+                                        Alert(
+                                            title: Text("An error occurred while computing the prediction, try again later"),
+                                            dismissButton: .default(Text("OK")) {}
+                                        )
                                     }
-                                }) {
+                                }
+                                else {
+                                    Spacer()
+                                    //button for avoid using AI
+                                    Button (action: {
+                                        viewModel.arrival = CityCompleterDataset()
+                                        withAnimation(.bouncy(duration: 1)) {
+                                            triggerAI = false
+                                        }
+                                    }) {
                                         ZStack {
                                             RoundedRectangle(cornerRadius: 20)
                                                 .stroke(.gray)
@@ -246,38 +274,57 @@ struct TravelSearchView: View {
                                                         .foregroundStyle(.red.opacity(0.8))
                                                         .frame(width: 30, height: 30)
                                                 }
+                                                .frame(height: 50)
                                                 Text("Do not use AI")
                                                     .foregroundStyle(.gray)
                                             }
-                                            .padding(10)
-                                        }.fixedSize()
-                                }
-                            }
-                            
-                            DestinationPredictionView(
-                                modelContext: modelContext,
-                                confirm: { predictedCities in
-                                    if let firstCity = predictedCities.first {
-                                        if viewModel.predictedCities == predictedCities {
-                                            //viewModel.changePredition()
+                                            .padding(5)
+                                            .padding(.horizontal, 5)
+                                        }
+                                        .frame(width: geometry.size.width/2 - 20, height: 60)
+                                    }
+                                    Spacer()
+                                    //button for see another prediction
+                                    Button (action: {
+                                        if viewModel.predictedCities.count == viewModel.predictionShown + 1 {
+                                            viewModel.predictionShown = 0
                                         }
                                         else {
-                                            viewModel.arrival = firstCity
-                                            viewModel.predictedCities = predictedCities
+                                            viewModel.predictionShown += 1
                                         }
                                         withAnimation(.bouncy(duration: 1)) {
-                                            self.triggerAI = true
+                                            viewModel.arrival = viewModel.predictedCities[viewModel.predictionShown]
                                         }
-                                    } else {
-                                        showAlertPrediction = true
+                                    }) {
+                                        ZStack {
+                                            RoundedRectangle(cornerRadius: 20)
+                                                .stroke(.gray)
+                                            HStack {
+                                                ZStack{
+                                                    Image(systemName: "apple.intelligence")
+                                                        .resizable()
+                                                        .foregroundStyle(.linearGradient(Gradient(colors: [.blue, .green]), startPoint: .bottomLeading, endPoint: .topTrailing))
+                                                        .frame(width: 25, height: 25)
+                                                    Image(systemName: "arrow.trianglehead.2.clockwise")
+                                                        .resizable()
+                                                        .foregroundStyle(.gray.opacity(0.7))
+                                                        .frame(width: 40, height: 40)
+                                                }
+                                                .frame(height: 50)
+                                                Text("New generation")
+                                                    .foregroundStyle(.gray)
+                                            }
+                                            .padding(5)
+                                            .padding(.horizontal, 5)
+                                        }
+                                        .frame(width: geometry.size.width/2 - 20, height: 60)
+
                                     }
-                                })
-                            .alert(isPresented: $showAlertPrediction) {
-                                Alert(
-                                    title: Text("An error occurred while computing the prediction, try again later"),
-                                    dismissButton: .default(Text("OK")) {}
-                                )
+                                    Spacer()
+                                }
+                                
                             }
+                            Spacer()
                             
                         }
                     }
@@ -321,6 +368,7 @@ struct TravelSearchView: View {
                     }
                 }
             }
+            
         }
     }
     

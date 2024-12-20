@@ -57,6 +57,7 @@ struct HeaderView: View {
                     Text(dateArrival.formatted(date: .numeric, time: .shortened))
                 }
             }
+            .padding(.bottom, 5)
         }
     }
 }
