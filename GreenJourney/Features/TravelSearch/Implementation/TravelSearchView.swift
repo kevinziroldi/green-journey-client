@@ -1,6 +1,5 @@
 import SwiftUI
 import SwiftData
-import MapKit
 
 struct TravelSearchView: View {
     @Environment(\.modelContext) private var modelContext: ModelContext
@@ -16,8 +15,6 @@ struct TravelSearchView: View {
     @State var counter: Int = 0
     @State var origin: CGPoint = .init(x: 0.5, y: 0.5)
     
-    // Gradient and masking vars
-//    @State var maskTimer: Float = 0.0
     
     @Binding var navigationPath: NavigationPath
     
@@ -178,7 +175,6 @@ struct TravelSearchView: View {
                                     }
                                 }
                             }
-                            .padding()
                             HStack {
                                 Spacer()
                                 VStack {
@@ -205,7 +201,6 @@ struct TravelSearchView: View {
                                 .disabled(viewModel.oneWay)
                                 Spacer()
                             }
-                            .padding()
                             
                             Spacer()
                             Button(action: {
@@ -277,7 +272,6 @@ struct TravelSearchView: View {
                                         showAlertPrediction = true
                                     }
                                 })
-                            .padding(.horizontal)
                             .alert(isPresented: $showAlertPrediction) {
                                 Alert(
                                     title: Text("An error occurred while computing the prediction, try again later"),
@@ -292,9 +286,9 @@ struct TravelSearchView: View {
                     .mask {
                         AnimatedRectangle(size: geometry.size, cornerRadius: 48, t: CGFloat(0.0))
                             .scaleEffect(triggerAI ? 1 : 1.2)
-                     .frame(width: geometry.size.width, height: geometry.size.height)
-                     .blur(radius: triggerAI ? 28 : 8)
-                     }
+                            .frame(width: geometry.size.width, height: geometry.size.height)
+                            .blur(radius: triggerAI ? 28 : 8)
+                    }
                     
                     // Modale per il DatePicker "Outward date"
                     if dateTapped {
@@ -388,3 +382,4 @@ struct DatePickerModalView: View {
         .cornerRadius(12)
     }
 }
+
