@@ -1,9 +1,12 @@
 
 import SwiftUI
+import Combine
 
 struct MeshGradientView: View {
     @State var maskTimer: Float = 0.0
     var gradientSpeed: Float = 0.3
+    
+    @State private var timerSubscription: Cancellable? = nil
     
     var body: some View {
         MeshGradient(width: 3, height: 3, points: [
@@ -22,12 +25,14 @@ struct MeshGradientView: View {
         ])
         
         .ignoresSafeArea()
-        .onAppear {
-            Timer.scheduledTimer(withTimeInterval: 0.02, repeats: true) { _ in
-                DispatchQueue.main.async {
+        .onAppear() {
+            timerSubscription = Timer.publish(every: 0.02, on: .main, in: .common).autoconnect()
+                .sink {_ in
                     maskTimer += gradientSpeed
                 }
-            }
+        }
+        .onDisappear {
+            timerSubscription?.cancel()
         }
     }
 

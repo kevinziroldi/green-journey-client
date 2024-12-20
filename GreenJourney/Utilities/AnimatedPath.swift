@@ -1,11 +1,13 @@
 import SwiftUI
+import Combine
 
 struct AnimatedRectangle: View {
     var size: CGSize
-    var padding: Double = 8.0
+    var padding: Double = 5.0
     var cornerRadius: CGFloat
     @State var t: CGFloat = 0.0
-    
+    @State private var timerSubscription: Cancellable? = nil
+
     
     var body: some View {
         
@@ -98,11 +100,13 @@ struct AnimatedRectangle: View {
             path.closeSubpath()
         }
         .onAppear() {
-            Timer.scheduledTimer(withTimeInterval: 0.02, repeats: true) { _ in
-                DispatchQueue.main.async {
-                    t += 0.1
+            timerSubscription = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
+                .sink {_ in
+                    t += 0.2
                 }
-            }
+        }
+        .onDisappear {
+            timerSubscription?.cancel()
         }
     }
 }

@@ -263,8 +263,13 @@ struct TravelSearchView: View {
                                 modelContext: modelContext,
                                 confirm: { predictedCities in
                                     if let firstCity = predictedCities.first {
-                                        viewModel.arrival = firstCity
-                                        viewModel.predictedCities = predictedCities
+                                        if viewModel.predictedCities == predictedCities {
+                                            //viewModel.changePredition()
+                                        }
+                                        else {
+                                            viewModel.arrival = firstCity
+                                            viewModel.predictedCities = predictedCities
+                                        }
                                         withAnimation(.bouncy(duration: 1)) {
                                             self.triggerAI = true
                                         }

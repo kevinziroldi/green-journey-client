@@ -313,6 +313,15 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
         }
         return vehicle
     }
+    
+    func changePrediction() {
+        var found = false
+        for prediction in predictedCities {
+            if arrival == prediction {
+                found = true
+            }
+        }
+    }
 }
 
 /*
