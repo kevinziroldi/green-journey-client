@@ -167,13 +167,13 @@ struct CircularProgressView: View {
 
     var body: some View {
         ZStack {
-            // Cerchio di sfondo
+            // background circle
             Circle()
                 .stroke(lineWidth: 8)
                 .opacity(0.3)
                 .foregroundColor(Color.gray)
             
-            // Parte rotante
+            // rotating part
             Circle()
                 .trim(from: 0, to: 0.3) // Mostra solo una parte del cerchio
                 .stroke(style: StrokeStyle(lineWidth: 8, lineCap: .round))
@@ -184,7 +184,11 @@ struct CircularProgressView: View {
                         rotation = 360
                     }
                 }
+            //TODO
+            /*Image("logo")
+                .resizable()
+                .frame(width: 60, height: 60)*/
         }
-        .frame(width: 60, height: 60) // Imposta le dimensioni della progress view
+        .frame(width: 90, height: 90) // Imposta le dimensioni della progress view
     }
 }
