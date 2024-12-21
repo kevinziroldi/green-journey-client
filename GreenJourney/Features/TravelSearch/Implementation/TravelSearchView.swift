@@ -91,7 +91,7 @@ struct TravelSearchView: View {
                                     .foregroundColor(.primary) // Colore della linea
                                 }
                                 .frame(width: 100, height: 110)
-                                .padding(EdgeInsets(top: 0, leading: 0, bottom: 80, trailing: 300))
+                                .padding(EdgeInsets(top: 0, leading: 0, bottom: 80, trailing: 320))
                                 
                                 VStack {
                                     VStack {
@@ -177,32 +177,49 @@ struct TravelSearchView: View {
                                     }
                                 }
                             }
-                            HStack {
-                                Spacer()
-                                VStack {
-                                    Button("Outward date") {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 20)
+                                    .stroke()
+                                HStack (spacing: 0) {
+                                    Button(action: {
                                         dateTapped = true
                                         
+                                    }) {
+                                        VStack{
+                                            Text("Outward date")
+                                                .font(.headline)
+                                            Text(viewModel.datePicked.formatted(date: .numeric, time: .shortened))
+                                                .font(.subheadline)
+                                                .padding(.top, 5)
+
+                                        }
+                                        .foregroundStyle(colorScheme == .dark ? .white : .black)
+
                                     }
-                                    .buttonStyle(.bordered)
-                                    Text(viewModel.datePicked.formatted(date: .numeric, time: .shortened))
-                                        .font(.subheadline)
+                                    .padding(EdgeInsets(top: 10, leading: 25, bottom: 10, trailing: 25))
+                                    Rectangle()
+                                        .frame(width: 2)
+                                        .foregroundStyle(.gray)
                                     
-                                }
-                                Spacer()
-                                VStack {
-                                    Button("Return date") {
+                                    Button(action:  {
                                         dateReturnTapped = true
+                                    }) {
+                                        VStack {
+                                            Text("Return date")
+                                                .font(.headline)
+                                            Text(viewModel.dateReturnPicked.formatted(date: .numeric, time: .shortened))
+                                                .opacity(viewModel.oneWay ? 0 : 1)
+                                                .font(.subheadline)
+                                                .padding(.top, 5)
+                                        }
+                                        .foregroundStyle(viewModel.oneWay ? Color.secondary : colorScheme == .dark ? Color.white : Color.black)
                                     }
-                                    .buttonStyle(.bordered)
+                                    .padding(EdgeInsets(top: 10, leading: 25, bottom: 10, trailing: 25))
+                                    .disabled(viewModel.oneWay)
                                     
-                                    Text(viewModel.dateReturnPicked.formatted(date: .numeric, time: .shortened))
-                                        .opacity(viewModel.oneWay ? 0 : 1)
-                                        .font(.subheadline)
                                 }
-                                .disabled(viewModel.oneWay)
-                                Spacer()
                             }
+                            .fixedSize()
                             
                             Spacer()
                             Button(action: {
@@ -318,7 +335,7 @@ struct TravelSearchView: View {
                                             .padding(.horizontal, 5)
                                         }
                                         .frame(width: geometry.size.width/2 - 20, height: 60)
-
+                                        
                                     }
                                     Spacer()
                                 }
