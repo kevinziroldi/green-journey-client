@@ -12,8 +12,8 @@ struct TravelDetailsView: View {
     @State var totalTrees = 0
     
     var body : some View {
+        
         if let travelDetails = viewModel.selectedTravel {
-            
             ZStack {
                 VStack (spacing:0){
                         HeaderView(from: travelDetails.getDepartureSegment()?.departureCity ?? "", to: travelDetails.getDestinationSegment()?.destinationCity ?? "", date: travelDetails.segments.first?.dateTime, dateArrival: travelDetails.segments.last?.getArrivalDateTime())
@@ -29,8 +29,6 @@ struct TravelDetailsView: View {
                                 .strokeBorder(
                                     LinearGradient(gradient: Gradient(colors: [.green, .mint, .cyan, .blue]),
                                                    startPoint: .topTrailing, endPoint: .bottomLeading), lineWidth: 4)
-                            
-                                .padding(10)
                             HStack (spacing: 30){
                                 VStack {
                                     ZStack {
@@ -39,7 +37,7 @@ struct TravelDetailsView: View {
                                             .foregroundColor(.gray.opacity(0.6))
                                             .frame(width: 130, height: 110)
                                         
-                                        // Semicerchio riempito (colorato)
+                                        // semiCircle filled
                                         SemiCircle(progress: progress)
                                             .stroke(style: StrokeStyle(lineWidth: 10, lineCap: .round))
                                             .foregroundStyle(LinearGradient(gradient: Gradient(colors: [.red, .orange, .yellow, .green, .mint]), startPoint: .leading, endPoint: .trailing))
@@ -73,7 +71,9 @@ struct TravelDetailsView: View {
                                     VStack {
                                         Spacer()
                                         Text("Compensation")
-                                            .font(.title3)
+                                            .font(.title2)
+                                            .foregroundStyle(.green.opacity(0.8))
+                                            .fontWeight(.semibold)
                                         Spacer()
                                         HStack {
                                             Spacer()
@@ -140,114 +140,12 @@ struct TravelDetailsView: View {
                                     }
                                 }
                             }
-                            .padding(10)
                         }
+                        .padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
                         
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 20)
-                                .fill(colorScheme == .dark ? Color(red: 20/255, green: 20/255, blue: 20/255) : Color(red: 235/255, green: 235/255, blue: 235/255))
-                                .strokeBorder(colorScheme == .dark ? Color.gray : Color.black.opacity(0.6), lineWidth: 3)
-                                .padding(10)
-                            HStack {
-                                VStack {
-                                    VStack{
-                                        Text("Distance")
-                                            .font(.title3)
-                                            .fontWeight(.bold)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                            .padding(.bottom, 3)
-                                        
-                                        HStack {
-                                            Image(systemName: "road.lanes")
-                                                .font(.title2)
-                                                .frame(height: 25)
-
-                                            Text(String(format: "%.1f", travelDetails.computeTotalDistance()) + " Km")
-                                                .font(.headline)
-                                                .fontWeight(.semibold)
-                                            Spacer()
-                                        }
-                                        .padding(.leading, -8)
-                                    }
-                                    .padding(.vertical, 5)
-                                    
-                                    
-                                    VStack {
-                                        Text("Duration")
-                                            .font(.title3)
-                                            .fontWeight(.bold)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                            .padding(.bottom, 3)
-                                        
-                                        HStack{
-                                            Image(systemName: "clock")
-                                                .font(.title2)
-                                                .foregroundStyle(.cyan)
-                                                .frame(height: 25)
-
-                                            Text(travelDetails.computeTotalDuration())
-                                                .font(.headline)
-                                                .fontWeight(.semibold)
-                                            Spacer()
-                                        }
-                                    }
-                                    .padding(.vertical, 5)
-                                    
-                                }
-                                .fixedSize()
-                                .padding(10)
-
-                                VStack {
-                                    VStack {
-                                        Text("Price")
-                                            .font(.title3)
-                                            .fontWeight(.bold)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                            .padding(.bottom, 3)
-
-                                        
-                                        HStack {
-                                            Image("price_red")
-                                                .resizable()
-                                                .scaledToFit()
-                                                .frame(height: 25)
-                                            Text(String(format: "%.1f", 100) + " €")
-                                                .font(.headline)
-                                                .fontWeight(.semibold)
-                                            Spacer()
-
-                                        }
-                                    }
-                                    .padding(.vertical, 5)
-
-                                    VStack {
-                                        Text("Green Price")
-                                            .font(.title3)
-                                            .fontWeight(.bold)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                            .padding(.bottom, 3)
-
-                                        HStack {
-                                            Image("price_green")
-                                                .resizable()
-                                                .scaledToFit()
-                                                .frame(height: 25)
-                                            Text(String(format: "%.1f", 22.00) + " €")
-                                                .font(.headline)
-                                                .fontWeight(.semibold)
-                                            Spacer()
-                                        }
-                                    }
-                                    .padding(.vertical, 5)
-
-                                }
-                                .fixedSize()
-                                .padding(10)
-
-                            }
-                            .padding(10)
+                        TravelRecapView(travelDetails: travelDetails)
+                            .padding(.horizontal)
                             
-                        }
                         
                         // if the user hasn't left a review yet
                         Button(action: {
@@ -364,82 +262,6 @@ struct SemiCircle: Shape {
         return path
     }
 }
-
-/*
-struct CompensationView: View {
-    var co2Emitted: Float64
-    @State var progress: Float64
-    
-    var onConfirm: (Float64) -> Void
-    var onBack: () -> Void
-    var body: some View {
-        VStack {
-            Text("compensate")
-            Text(String(format: "%.0f", progress * 100) + "%")
-            
-            //slider
-            GeometryReader { geometry in
-                ZStack(alignment: .leading) {
-                    // Barra di sfondo
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(Color.gray.opacity(0.3))
-                        .frame(height: 15)
-                    
-                    // Barra di progresso
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(.green)
-                        .frame(width: max(0, min(CGFloat(progress) * geometry.size.width, geometry.size.width)), height: 15) // Assicura valori validi
-                    
-                    // Thumb personalizzato
-                    Circle()
-                        .fill(Color(red: 1/255, green: 150/255, blue: 1/255))
-                        .frame(width: 25, height: 25)
-                        .position(x: max(0, min(CGFloat(progress) * geometry.size.width, geometry.size.width)), y: geometry.size.height / 2) // Assicura valori validi
-                        .gesture(
-                            DragGesture()
-                                .onChanged { value in
-                                    let width = geometry.size.width
-                                    if width > 0 { // Protezione contro divisione per zero
-                                        let locationX = max(0, min(value.location.x, width)) // Limita il drag ai bordi della barra
-                                        progress = Double(locationX / width) // Aggiorna il valore dello slider
-                                    }
-                                }
-                        )
-                }
-            }
-            .frame(height: 40)
-            
-            
-            HStack {
-                Text("Compensation price: " + String(format: "%.2f", co2Emitted * progress) + "€")
-            }
-            HStack (spacing: 80){
-                Button(action: {
-                    onBack()
-                }){
-                    Text("Back")
-                }
-                .buttonStyle(.bordered)
-                Button(action: {
-                    onConfirm(progress)
-                }){
-                    Text("Confirm")
-                }
-                .buttonStyle(.bordered)
-            }
-            
-            
-        }
-        .padding()
-        .background(Color.white)
-        .cornerRadius(12)
-        .shadow(radius: 10)
-        .frame(width: 330, height: 500)
-    }
-}
-
-
-*/
 
 
 struct InfoView: View {

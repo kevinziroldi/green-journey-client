@@ -21,12 +21,6 @@ struct DashboardView: View {
                     .padding()
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                
-                    /*Text(user.firstName + " " + user.lastName )
-                    .font(.system(size: 28).bold())
-                        .fontWeight(.semibold)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.leading)*/
                 ZStack {
                     RoundedRectangle(cornerRadius: 15)
                         .fill(Color(uiColor: .systemBackground))
@@ -124,8 +118,6 @@ struct DashboardView: View {
                     .padding()
                 BarChartView(title: "Distance made (Km)", value: "", data: [250, 427, 32, 500], labels: ["2020", "2021", "2022", "2023"], color: .indigo.opacity(0.8))
                     .padding()
-
-                //PieChartView(title: "Continenti visitati", data: [2, 1, 1], labels: ["Europa", "Asia", "America"], colors: [.orange, .blue, .green])
             }
             .padding()
             .blur(radius: (legendTapped) ? 1 : 0)
@@ -236,9 +228,9 @@ struct BarChartView: View {
                         y: .value("Trips", data[index])
                     )
                     .foregroundStyle(color.gradient)
-                    .cornerRadius(10) // Aggiunto arrotondamento delle barre
+                    .cornerRadius(10) // rounding of bars
 
-                    // Aggiunta dell'etichetta sopra ogni barra
+                    // Adding label on top of each bar
                     .annotation(position: .top) {
                         Text("\(Int(data[index]))")
                             .font(.caption)
@@ -263,87 +255,3 @@ struct BarChartView: View {
         .shadow(radius: 5)
     }
 }
-/*
-struct PieChartView: View {
-    let title: String
-    let data: [Double]
-    let labels: [String]
-    let colors: [Color]
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text(title)
-                .font(.headline)
-                .padding(.leading)
-
-            GeometryReader { geometry in
-                ZStack {
-                    ForEach(0..<data.count) { index in
-                        PieSliceView(
-                            startAngle: angle(for: index),
-                            endAngle: angle(for: index + 1)
-                        )
-                        .fill(colors[index % colors.count])
-
-                        PieLabelView(
-                            text: labels[index],
-                            value: data[index],
-                            startAngle: angle(for: index),
-                            endAngle: angle(for: index + 1),
-                            size: geometry.size
-                        )
-                    }
-                }
-                .frame(width: geometry.size.width, height: geometry.size.width)
-            }
-            .frame(height: 250)
-        }
-        .background(Color(UIColor.systemBackground))
-        .cornerRadius(15)
-        .shadow(radius: 5)
-    }
-
-    private func angle(for index: Int) -> Angle {
-        let total = data.reduce(0, +)
-        let value = data.prefix(index).reduce(0, +) / total
-        return .degrees(value * 360)
-    }
-}
-
-struct PieSliceView: Shape {
-    let startAngle: Angle
-    let endAngle: Angle
-
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-        let center = CGPoint(x: rect.midX, y: rect.midY)
-        let radius = min(rect.width, rect.height) / 2
-
-        path.move(to: center)
-        path.addArc(center: center, radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: false)
-        return path
-    }
-}
-
-struct PieLabelView: View {
-    let text: String
-    let value: Double
-    let startAngle: Angle
-    let endAngle: Angle
-    let size: CGSize
-
-    var body: some View {
-        let angle = (startAngle.radians + endAngle.radians) / 2
-        let radius = min(size.width, size.height) / 2 * 0.7
-        let xOffset = cos(angle) * radius
-        let yOffset = sin(angle) * radius
-
-        return Text(text)
-            .font(.caption)
-            .foregroundColor(.white)
-            .background(Circle().fill(Color.black.opacity(0.7)).frame(width: 40, height: 40))
-            .position(x: size.width / 2 + CGFloat(xOffset), y: size.height / 2 - CGFloat(yOffset))
-    }
-}
-*/
-
