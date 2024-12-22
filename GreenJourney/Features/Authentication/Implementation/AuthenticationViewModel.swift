@@ -122,7 +122,7 @@ class AuthenticationViewModel: ObservableObject {
                 
                 print("Token retrieved")
                 do {
-                    try await serverService.saveUserToServer(firstName: self.firstName, lastName: self.lastName, firebaseUID: authResult.user.uid, firebaseToken: firebaseToken)
+                    try await serverService.saveUserToServer(firebaseToken: firebaseToken, firstName: self.firstName, lastName: self.lastName, firebaseUID: authResult.user.uid)
                     
                     print("User data posted successfully.")
                     
@@ -130,16 +130,21 @@ class AuthenticationViewModel: ObservableObject {
                     self.sendEmailVerification()
                     self.isEmailVerificationActiveSignup = true
                 } catch {
+                    self.errorMessage = "Error creating account"
                     print("Error posting user data: \(error.localizedDescription)")
-                    let user = Auth.auth().currentUser
-                    user?.delete { error in
-                        if let error = error {
-                            // error happened
-                            print("Error deleting user from Firebase: \(error.localizedDescription)")
-                        } else {
-                            // account deleted
-                            print("User deleted from firebase")
-                        }
+                    
+                    // delete user
+                    guard let firebaseUser = Auth.auth().currentUser else {
+                        print("Error getting firebase user")
+                        return
+                    }
+                    do {
+                        try await firebaseAuthService.deleteFirebaseUser(firebaseUser: firebaseUser)
+                        // account deleted
+                        print("User deleted from firebase")
+                    }catch {
+                        // error happened
+                        print("Error deleting user from Firebase: \(error.localizedDescription)")
                     }
                     return
                 }
@@ -306,7 +311,7 @@ class AuthenticationViewModel: ObservableObject {
                     self.lastName = parts![1]
                     
                     do {
-                        try await serverService.saveUserToServer(firstName: self.firstName, lastName: self.lastName, firebaseUID: firebaseUser.uid, firebaseToken: firebaseToken)
+                        try await serverService.saveUserToServer(firebaseToken: firebaseToken, firstName: self.firstName, lastName: self.lastName, firebaseUID: firebaseUser.uid)
                         print("User data posted successfully.")
                         self.getUserFromServer(firebaseToken: firebaseToken)
                     } catch {

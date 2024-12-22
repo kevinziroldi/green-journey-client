@@ -8,7 +8,7 @@ class ServerService: ServerServiceProtocol {
         firebaseAuthService = FirebaseAuthService()
     }
     
-    func saveUserToServer(firstName: String, lastName: String, firebaseUID: String, firebaseToken: String) async throws {
+    func saveUserToServer(firebaseToken: String, firstName: String, lastName: String, firebaseUID: String) async throws {
         let user = User(firstName: firstName, lastName: lastName, firebaseUID: firebaseUID, scoreShortDistance: 0, scoreLongDistance: 0)
         // JSON encoding
         guard let body = try? JSONEncoder().encode(user) else {
@@ -42,7 +42,7 @@ class ServerService: ServerServiceProtocol {
         let baseURL = NetworkHandler.shared.getBaseURL()
         guard let url = URL(string:"\(baseURL)/users/user") else {
             print("Invalid URL used to retrieve user from DB")
-            throw NSError(domain: "FetchUserError", code: 4, userInfo: [NSLocalizedDescriptionKey: "Invalid base URL."])
+            throw URLError(.badURL)
         }
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -65,16 +65,16 @@ class ServerService: ServerServiceProtocol {
             return user
         } catch {
             print("Failed to decode user: \(error.localizedDescription)")
-            throw NSError(domain: "FetchUserError", code: 4, userInfo: [NSLocalizedDescriptionKey: "Failed to decode user."])
+            throw NSError(domain: "GetUserError", code: 4, userInfo: [NSLocalizedDescriptionKey: "Failed to decode user."])
         }
     }
     
-    func fetchTravelsFromServer(firebaseToken: String) async throws -> [TravelDetails] {
+    func getTravelsFromServer(firebaseToken: String) async throws -> [TravelDetails] {
         // build request
         let baseURL = NetworkHandler.shared.getBaseURL()
         guard let url = URL(string:"\(baseURL)/travels/user") else {
-            print("Invalid URL used to retrieve travels from DB")
-            throw NSError(domain: "FetchTravelsError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Invalid base URL"])
+            print("Invalid URL.")
+            throw URLError(.badURL)
         }
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -97,7 +97,67 @@ class ServerService: ServerServiceProtocol {
             return travelDetailsList
         } catch {
             print("Failed to decode travels: \(error.localizedDescription)")
-            throw NSError(domain: "FetchTravelsError", code: 4, userInfo: [NSLocalizedDescriptionKey: "Failed to decode travels."])
+            throw NSError(domain: "GetTravelsError", code: 4, userInfo: [NSLocalizedDescriptionKey: "Failed to decode travels."])
+        }
+    }
+    
+    func getReviewsForCity(firebaseToken: String, iata: String, countryCode: String) async throws -> CityReviewElement {
+        // build request
+        let baseURL = NetworkHandler.shared.getBaseURL()
+        guard let url = URL(string:"\(baseURL)/reviews?city_iata=\(iata)&country_code=\(countryCode)") else {
+            print("Invalid URL.")
+            throw URLError(.badURL)
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(firebaseToken)", forHTTPHeaderField: "Authorization")
+        
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        
+        // perform request
+        let (data, response) = try await URLSession.shared.data(for: request)
+        guard let httpResponse = response as? HTTPURLResponse,
+                (200...299).contains(httpResponse.statusCode) else {
+            throw URLError(.badServerResponse)
+        }
+        // decode response
+        do {
+            let reviews = try decoder.decode(CityReviewElement.self, from: data)
+            return reviews
+        } catch {
+            print("Failed to decode reviews: \(error.localizedDescription)")
+            throw NSError(domain: "GetReviewsError", code: 4, userInfo: [NSLocalizedDescriptionKey: "Failed to decode reviews."])
+        }
+    }
+    
+    func getBestReviewedCities() async throws -> [CityReviewElement] {
+        // build request
+        let baseURL = NetworkHandler.shared.getBaseURL()
+        guard let url = URL(string:"\(baseURL)/reviews/best") else {
+            print("Invalid URL used to retrieve user from DB")
+            throw URLError(.badURL)
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        // no authorization needed
+        
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        
+        // perform request
+        let (data, response) = try await URLSession.shared.data(for: request)
+        guard let httpResponse = response as? HTTPURLResponse,
+                (200...299).contains(httpResponse.statusCode) else {
+            throw URLError(.badServerResponse)
+        }
+        // decode response
+        do {
+            let reviews = try decoder.decode([CityReviewElement].self, from: data)
+            return reviews
+        } catch {
+            print("Failed to decode city review elements: \(error.localizedDescription)")
+            throw NSError(domain: "GetReviewsError", code: 4, userInfo: [NSLocalizedDescriptionKey: "Failed to decode city review elements."])
         }
     }
 }

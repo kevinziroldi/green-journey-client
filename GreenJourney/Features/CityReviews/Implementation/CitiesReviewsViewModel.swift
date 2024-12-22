@@ -22,108 +22,48 @@ class CitiesReviewsViewModel: ObservableObject {
     @Published var selectedCity: CityCompleterDataset?
     @Published var selectedCityReviewElement: CityReviewElement?
     
+    private var serverService: ServerServiceProtocol
+    private var firebaseAuthService: FirebaseAuthServiceProtocol
     
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
+        
+        // TODO mock or not mock
+        self.serverService = ServerService()
+        self.firebaseAuthService = FirebaseAuthService()
     }
     
     func getReviewsForSearchedCity() {
-        guard let firebaseUser = Auth.auth().currentUser else {
-            print("Error retrieving firebase user")
-            return
-        }
-        firebaseUser.getIDToken { [weak self] token, error in
-            guard let strongSelf = self else { return }
-            if let error = error {
-                print("Failed to fetch token: \(error.localizedDescription)")
+        Task { @MainActor in
+            guard let firebaseUser = Auth.auth().currentUser else {
+                print("Error retrieving firebase user")
                 return
-            } else if let firebaseToken = token {
-                // build URL
-                let baseURL = NetworkHandler.shared.getBaseURL()
-                guard let url = URL(string:"\(baseURL)/reviews?city_iata=\(strongSelf.searchedCity.iata)&country_code=\(strongSelf.searchedCity.countryCode)") else {
-                    print("Invalid URL used to retrieve user from DB")
-                    return
-                }
+            }
+            
+            do {
+                let firebaseToken = try await firebaseAuthService.getFirebaseToken(firebaseUser: firebaseUser)
+                let cityReviewElement = try await serverService.getReviewsForCity(firebaseToken: firebaseToken, iata: searchedCity.iata, countryCode: searchedCity.countryCode)
                 
-                var request = URLRequest(url: url)
-                request.httpMethod = "GET"
-                request.setValue("Bearer \(firebaseToken)", forHTTPHeaderField: "Authorization")
-                
-                let decoder = JSONDecoder()
-                decoder.dateDecodingStrategy = .iso8601
-                
-                URLSession.shared.dataTaskPublisher(for: request)
-                    .retry(2)
-                    .tryMap {
-                        result -> Data in
-                        guard let httpResponse = result.response as? HTTPURLResponse,
-                              (200...299).contains(httpResponse.statusCode) else {
-                            throw URLError(.badServerResponse)
-                        }
-                        return result.data
-                    }
-                    .decode(type: CityReviewElement.self, decoder: decoder)
-                    .receive(on: DispatchQueue.main)
-                    .sink(receiveCompletion: {
-                        completion in
-                        switch completion {
-                        case .finished:
-                            break
-                        case .failure(let error):
-                            print("Error fetching user: \(error.localizedDescription)")
-                        }
-                    }, receiveValue: {[weak self] cityReviewElement in
-                        guard let strongSelf = self else { return }
-                        strongSelf.searchedCityReviewElement = cityReviewElement
-                        strongSelf.searchedCityAvailable = true
-                    })
-                    .store(in: &strongSelf.cancellables)
+                self.searchedCityReviewElement = cityReviewElement
+                self.searchedCityAvailable = true
+            }catch {
+                print("Error getting reviews for searched city")
+                return
             }
         }
     }
-        
+    
     func getBestReviewedCities() {
-        let baseURL = NetworkHandler.shared.getBaseURL()
-        guard let url = URL(string:"\(baseURL)/reviews/best") else {
-            print("Invalid URL used to retrieve user from DB")
-            return
-        }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        // no authorization needed
-        
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
-        
-        URLSession.shared.dataTaskPublisher(for: request)
-            .retry(2)
-            .tryMap {
-                result -> Data in
-                guard let httpResponse = result.response as? HTTPURLResponse,
-                      (200...299).contains(httpResponse.statusCode) else {
-                    throw URLError(.badServerResponse)
-                }
-                return result.data
-            }
-            .decode(type: [CityReviewElement].self, decoder: decoder)
-            .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: {
-                completion in
-                switch completion {
-                case .finished:
-                    break
-                case .failure(let error):
-                    print("Error fetching user: \(error.localizedDescription)")
-                }
-            }, receiveValue: { [weak self] bestCities in
-                guard let strongSelf = self else { return }
+        Task { @MainActor in
+            do {
+                let bestReviewedCities = try await serverService.getBestReviewedCities()
+                
                 // remove old elements
-                strongSelf.bestCitiesReviewElements = []
-                strongSelf.bestCities = []
+                self.bestCitiesReviewElements = []
+                self.bestCities = []
                 
                 // add new elements
-                for bestReviewCity in bestCities {
+                for bestReviewCity in bestReviewedCities {
                     if let cityIata = bestReviewCity.reviews.first?.cityIata {
                         if let countryCode = bestReviewCity.reviews.first?.countryCode {
                             let descriptor = FetchDescriptor<CityCompleterDataset>(
@@ -132,9 +72,10 @@ class CitiesReviewsViewModel: ObservableObject {
                                 }
                             )
                             do {
-                                if let bestCity = try strongSelf.modelContext.fetch(descriptor).first {
-                                    strongSelf.bestCitiesReviewElements.append(bestReviewCity)
-                                    strongSelf.bestCities.append(bestCity)
+                                if let bestCity = try
+                                    self.modelContext.fetch(descriptor).first {
+                                    self.bestCitiesReviewElements.append(bestReviewCity)
+                                    self.bestCities.append(bestCity)
                                 }
                             }catch {
                                 // just skip one city
@@ -143,18 +84,11 @@ class CitiesReviewsViewModel: ObservableObject {
                         }
                     }
                 }
-            })
-            .store(in: &cancellables)
-    }
-    
-    func resetParameters() {
-        self.bestCitiesReviewElements = []
-        self.bestCities = []
-        self.searchedCity = CityCompleterDataset()
-        self.searchedCityReviewElement = nil
-        self.searchedCityAvailable = false
-        self.selectedCity = nil
-        self.selectedCityReviewElement = nil
+            }catch {
+                print("Error getting best reviewed cities")
+                return
+            }
+        }
     }
 }
 

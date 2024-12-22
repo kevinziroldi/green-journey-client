@@ -86,7 +86,7 @@ class MyTravelsViewModel: ObservableObject {
             }
             do {
                 let firebaseToken = try await   firebaseAuthServeice.getFirebaseToken(firebaseUser: firebaseUser)
-                let travelDetailsList = try await serverService.fetchTravelsFromServer(firebaseToken: firebaseToken)
+                let travelDetailsList = try await serverService.getTravelsFromServer(firebaseToken: firebaseToken)
                 removeExistingTravels()
                 addNewTravels(travelDetailsList)
             }catch {

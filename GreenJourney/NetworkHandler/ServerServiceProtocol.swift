@@ -1,5 +1,7 @@
 protocol ServerServiceProtocol {
-    func saveUserToServer(firstName: String, lastName: String, firebaseUID: String, firebaseToken: String) async throws
+    func saveUserToServer(firebaseToken: String, firstName: String, lastName: String, firebaseUID: String) async throws
     func getUserFromServer(firebaseToken: String) async throws -> User
-    func fetchTravelsFromServer(firebaseToken: String) async throws -> [TravelDetails]
+    func getReviewsForCity(firebaseToken: String, iata: String, countryCode: String) async throws -> CityReviewElement
+    func getBestReviewedCities() async throws -> [CityReviewElement]
+    func getTravelsFromServer(firebaseToken: String) async throws -> [TravelDetails]
 }
