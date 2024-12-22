@@ -152,6 +152,8 @@ struct MyTravelsView: View {
                 viewModel.getUserTravels()
             }
             // else empty page
+            
+            viewModel.fetchTravelsFromServer()
         }
     }
 }

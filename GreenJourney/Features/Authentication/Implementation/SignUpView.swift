@@ -47,7 +47,9 @@ struct SignUpView: View {
                     
                     VStack (spacing: 20) {
                         Button(action: {
-                            viewModel.signUp()
+                            Task {
+                                await viewModel.signUp()
+                            }
                         }) {
                             Text("Create account")
                                 .foregroundColor(.white)
