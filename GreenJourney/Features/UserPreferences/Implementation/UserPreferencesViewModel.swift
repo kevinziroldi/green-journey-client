@@ -39,6 +39,8 @@ class UserPreferencesViewModel: ObservableObject {
     @Published var streetName: String?
     @Published var houseNumber: Int?
     @Published var zipCode: Int?
+    
+    @Published var errorMessage: String?
         
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
@@ -46,6 +48,7 @@ class UserPreferencesViewModel: ObservableObject {
     
     func getUserData() {
         do {
+            errorMessage = nil
             let users = try modelContext.fetch(FetchDescriptor<User>())
             if let user = users.first {
                 DispatchQueue.main.async {
@@ -60,13 +63,14 @@ class UserPreferencesViewModel: ObservableObject {
                 }
             }
         }catch {
-            // TODO
+            print("Error fetching user data")
         }
     }
     
     
     func saveModifications() {
         do {
+            errorMessage = nil
             let users = try modelContext.fetch(FetchDescriptor<User>())
             
             // save to server and SwiftData
@@ -174,13 +178,14 @@ class UserPreferencesViewModel: ObservableObject {
                 }
             }
         }catch {
-            //TODO
+            errorMessage = "An error occurred during modification saving, retry later."
         }
     }
     
     func updateUser(newUser: User) {
         var users: [User]
         do {
+            errorMessage = nil
             users = try modelContext.fetch(FetchDescriptor<User>())
             if let oldUser = users.first {
                 do {
@@ -199,14 +204,12 @@ class UserPreferencesViewModel: ObservableObject {
                 } catch {
                     print("Error while updating user in SwiftData")
                     
-                    // TODO
+                    errorMessage = "An error occurred while updating user"
                 }
             }
         }catch {
             print("Error while updating user in SwiftData")
-            
-            
-            // TODO
+            errorMessage = "An error occurred while updating user"
         }
     }
     

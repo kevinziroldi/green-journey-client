@@ -22,9 +22,6 @@ struct UserPreferencesView : View {
     
     var body: some View {
         if let user = users.first {
-            
-            
-            
             VStack(spacing: 0) {
                 HStack {
                     Text("Profile")
@@ -36,7 +33,6 @@ struct UserPreferencesView : View {
                 
                 Text("Hi, \(user.firstName) \(user.lastName)")
                     .font(.title)
-                //.padding(5)
                 
                 
                 Text("Do you want to get better predictions about your future travels? Complete your profile!")
@@ -159,6 +155,11 @@ struct UserPreferencesView : View {
                 }
                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 20, trailing: 25))
                 
+                if let errorMessage = userPreferencesViewModel.errorMessage {
+                    Text(errorMessage)
+                        .font(.caption)
+                        .foregroundStyle(.red)
+                }
                 // logout button
                 Button(action: {
                     authenticationViewModel.logout()
