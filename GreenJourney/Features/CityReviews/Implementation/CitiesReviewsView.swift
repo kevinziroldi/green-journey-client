@@ -98,9 +98,6 @@ struct CitiesReviewsView: View {
             }
         }
         .onAppear {
-            // TODO remove
-            //viewModel.resetParameters()
-            
             viewModel.getBestReviewedCities()
         }
         .onChange(of: viewModel.searchedCityAvailable) {

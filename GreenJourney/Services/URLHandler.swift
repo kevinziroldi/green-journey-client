@@ -1,5 +1,5 @@
-class NetworkHandler {
-    static let shared = NetworkHandler()
+class URLHandler {
+    static let shared = URLHandler()
     private var baseURL = ""
     
     private init() {

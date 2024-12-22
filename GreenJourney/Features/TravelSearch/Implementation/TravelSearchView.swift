@@ -385,7 +385,6 @@ struct TravelSearchView: View {
                     }
                 }
             }
-            
         }
     }
     

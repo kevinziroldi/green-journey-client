@@ -10,7 +10,7 @@ class ServerService: ServerServiceProtocol {
         }
 
         // build request
-        let baseURL = NetworkHandler.shared.getBaseURL()
+        let baseURL = URLHandler.shared.getBaseURL()
         guard let url = URL(string: "\(baseURL)/users/user") else {
             throw URLError(.badURL)
         }
@@ -33,7 +33,7 @@ class ServerService: ServerServiceProtocol {
     
     func getUser(firebaseToken: String) async throws -> User {
         // build request
-        let baseURL = NetworkHandler.shared.getBaseURL()
+        let baseURL = URLHandler.shared.getBaseURL()
         guard let url = URL(string:"\(baseURL)/users/user") else {
             print("Invalid URL used to retrieve user from DB")
             throw URLError(.badURL)
@@ -73,7 +73,7 @@ class ServerService: ServerServiceProtocol {
         decoder.dateDecodingStrategy = .iso8601
         
         // build request
-        let baseURL = NetworkHandler.shared.getBaseURL()
+        let baseURL = URLHandler.shared.getBaseURL()
         guard let url = URL(string: "\(baseURL)/users") else {
             print("Invalid URL for posting user data to DB")
             throw URLError(.badURL)
@@ -103,7 +103,7 @@ class ServerService: ServerServiceProtocol {
     
     func getRanking(userID: Int) async throws -> RankingResponse {
         // create request
-        let baseURL = NetworkHandler.shared.getBaseURL()
+        let baseURL = URLHandler.shared.getBaseURL()
         guard let url = URL(string:"\(baseURL)/ranking?id=\(userID)") else {
             throw URLError(.badURL)
         }
@@ -133,7 +133,7 @@ class ServerService: ServerServiceProtocol {
     
     func getReviewsForCity(firebaseToken: String, iata: String, countryCode: String) async throws -> CityReviewElement {
         // build request
-        let baseURL = NetworkHandler.shared.getBaseURL()
+        let baseURL = URLHandler.shared.getBaseURL()
         guard let url = URL(string:"\(baseURL)/reviews?city_iata=\(iata)&country_code=\(countryCode)") else {
             print("Invalid URL.")
             throw URLError(.badURL)
@@ -163,7 +163,7 @@ class ServerService: ServerServiceProtocol {
     
     func getBestReviewedCities() async throws -> [CityReviewElement] {
         // build request
-        let baseURL = NetworkHandler.shared.getBaseURL()
+        let baseURL = URLHandler.shared.getBaseURL()
         guard let url = URL(string:"\(baseURL)/reviews/best") else {
             print("Invalid URL used to retrieve user from DB")
             throw URLError(.badURL)
@@ -201,7 +201,7 @@ class ServerService: ServerServiceProtocol {
         }
         
         // build request
-        let baseURL = NetworkHandler.shared.getBaseURL()
+        let baseURL = URLHandler.shared.getBaseURL()
         guard let url = URL(string: "\(baseURL)/reviews") else {
             print("Invalid URL for posting user data to DB")
             throw URLError(.badURL)
@@ -245,7 +245,7 @@ class ServerService: ServerServiceProtocol {
         }
         
         // create request
-        let baseURL = NetworkHandler.shared.getBaseURL()
+        let baseURL = URLHandler.shared.getBaseURL()
         guard let url = URL(string: "\(baseURL)/reviews/\(reviewID)") else {
             print("Invalid URL for posting user data to DB")
             throw URLError(.badURL)
@@ -275,7 +275,7 @@ class ServerService: ServerServiceProtocol {
     
     func deleteReview(firebaseToken: String, reviewID: Int) async throws {
         // build request
-        let baseURL = NetworkHandler.shared.getBaseURL()
+        let baseURL = URLHandler.shared.getBaseURL()
         guard let url = URL(string:"\(baseURL)/reviews/\(reviewID)") else {
             print("Invalid URL used to retrieve travels from DB")
             return
@@ -297,7 +297,7 @@ class ServerService: ServerServiceProtocol {
                        date: String, time: String, isOutward: Bool) async throws -> TravelOptionsResponse {
         
         // build request
-        let baseURL = NetworkHandler.shared.getBaseURL()
+        let baseURL = URLHandler.shared.getBaseURL()
         guard let url = URL(string:"\(baseURL)/travels/search?iata_departure=\(departureIata)&country_code_departure=\(departureCountryCode)&iata_destination=\(destinationIata)&country_code_destination=\(destinationCountryCode)&date=\(date)&time=\(time)&is_outward=\(isOutward)") else {
             throw URLError(.badURL)
         }
@@ -337,7 +337,7 @@ class ServerService: ServerServiceProtocol {
         decoder.dateDecodingStrategy = .iso8601
         
         // build request
-        let baseURL = NetworkHandler.shared.getBaseURL()
+        let baseURL = URLHandler.shared.getBaseURL()
         guard let url = URL(string: "\(baseURL)/travels/user") else {
             print("Invalid URL for posting user data to DB")
             throw URLError(.badURL)
@@ -367,7 +367,7 @@ class ServerService: ServerServiceProtocol {
     
     func getTravels(firebaseToken: String) async throws -> [TravelDetails] {
         // build request
-        let baseURL = NetworkHandler.shared.getBaseURL()
+        let baseURL = URLHandler.shared.getBaseURL()
         guard let url = URL(string:"\(baseURL)/travels/user") else {
             print("Invalid URL.")
             throw URLError(.badURL)
@@ -406,7 +406,7 @@ class ServerService: ServerServiceProtocol {
         let decoder = JSONDecoder()
         
         // build request
-        let baseURL = NetworkHandler.shared.getBaseURL()
+        let baseURL = URLHandler.shared.getBaseURL()
         guard let url = URL(string:"\(baseURL)/travels/user") else {
             print("Invalid URL used to retrieve travels from DB")
             throw URLError(.badURL)
@@ -436,7 +436,7 @@ class ServerService: ServerServiceProtocol {
     
     func deleteTravel(firebaseToken: String, travelID: Int) async throws {
         // build request
-        let baseURL = NetworkHandler.shared.getBaseURL()
+        let baseURL = URLHandler.shared.getBaseURL()
         guard let url = URL(string:"\(baseURL)/travels/user/\(travelID)") else {
             print("Invalid URL used to retrieve travels from DB")
             throw URLError(.badURL)

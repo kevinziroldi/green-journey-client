@@ -22,7 +22,7 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
     @Published var outwardOptions: [[Segment]] = []
     @Published var returnOptions: [[Segment]] = []
     
-    @Published var selectedOption: [Segment] = []
+    @Published var selectedOption: [Segment] = [] 
     
     @Published var predictedCities: [CityCompleterDataset] = []
     @Published var predictionShown: Int = 0
@@ -37,7 +37,7 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
     }
     
     // used after a travel search
-    func resetParameters() {
+    private func resetParameters() {
         self.arrival = CityCompleterDataset()
         self.departure = CityCompleterDataset()
         self.datePicked = Date()
@@ -97,6 +97,9 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
                 }
                 let travel = Travel(userID: userID)
                 let travelDetails = TravelDetails(travel: travel, segments: selectedOption)
+                
+                // after building travel details, I can reset
+                resetParameters()
                 
                 // get Firebase token
                 guard let firebaseUser = Auth.auth().currentUser else {

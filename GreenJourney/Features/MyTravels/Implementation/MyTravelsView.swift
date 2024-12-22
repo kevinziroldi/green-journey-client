@@ -150,18 +150,12 @@ struct MyTravelsView: View {
             }
         }
         .onAppear {
-            // TODO remove
-            // viewModel.resetParameters()
-            
             viewModel.showRequestedTravels()
             if viewModel.filteredTravelDetailsList.isEmpty {
                 // retry
                 viewModel.showRequestedTravels()
             }
             // else empty page
-            
-            // get travels from server
-            viewModel.getUserTravels()
         }
     }
 }

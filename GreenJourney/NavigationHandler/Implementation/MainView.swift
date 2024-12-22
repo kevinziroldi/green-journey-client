@@ -3,21 +3,22 @@ import SwiftUI
 
 struct MainView: View {
     private var modelContext: ModelContext
-    @State var navigationPath: NavigationPath
+    @State var navigationPath: NavigationPath = NavigationPath()
     
-    @State private var selectedTab: TabViewElement
+    @State private var selectedTab: TabViewElement = TabViewElement.SearchTravel
     @Query var users: [User]
+    
+    private var viewModel: MyTravelsViewModel
     
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
-        self.navigationPath = NavigationPath()
-        self.selectedTab = TabViewElement.SearchTravel
+        self.viewModel = MyTravelsViewModel(modelContext: modelContext)
     }
     
     var body: some View {
         NavigationStack(path: $navigationPath) {
             TabView(selection: $selectedTab) {
-            if users.first != nil {
+                if users.first != nil {
                     RankingView(modelContext: modelContext, navigationPath: $navigationPath)
                         .tabItem {
                             Label("Ranking", systemImage: "star")
@@ -71,6 +72,12 @@ struct MainView: View {
                 case .TravelNotDoneDetailsView(let vieModel):
                     TravelNotDoneDetailsView(viewModel: vieModel, navigationPath: $navigationPath)
                 }
+            }
+            .onAppear() {
+                // reset travel search tab
+                selectedTab = .SearchTravel
+                // get travels from server
+                viewModel.getUserTravels()
             }
         }
     }

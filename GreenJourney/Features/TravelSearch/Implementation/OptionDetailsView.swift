@@ -137,7 +137,6 @@ struct OptionDetailsView: View {
                 Button ("save travel") {
                     viewModel.selectedOption.append(contentsOf: segments)
                     viewModel.saveTravel()
-                    viewModel.resetParameters()
                     navigationPath = NavigationPath()
                 }
                 .buttonStyle(.borderedProminent)
@@ -147,13 +146,11 @@ struct OptionDetailsView: View {
             Button ("save travel") {
                 viewModel.selectedOption.append(contentsOf: segments)
                 viewModel.saveTravel()
-                viewModel.resetParameters()
                 navigationPath = NavigationPath()
             }
             .buttonStyle(.borderedProminent)
         }
     }
-    
     
     func getOptionDeparture (_ travelOption: [Segment]) -> String {
         if let firstSegment = travelOption.first {
