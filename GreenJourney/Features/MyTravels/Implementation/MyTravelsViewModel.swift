@@ -50,8 +50,15 @@ class MyTravelsViewModel: ObservableObject {
     @Published var modifiedGreenSpacesRating: Int = 0
     @Published var modifiedWasteBinsRating: Int = 0
     
+    private var serverService: ServerServiceProtocol
+    private var firebaseAuthServeice: FirebaseAuthServiceProtocol
+    
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
+        
+        // TODO mock vs non mock
+        self.serverService = ServerService()
+        self.firebaseAuthServeice = FirebaseAuthService()
     }
     
     func resetParameters() {
@@ -70,60 +77,20 @@ class MyTravelsViewModel: ObservableObject {
         self.modifiedGreenSpacesRating = 0
         self.modifiedWasteBinsRating = 0
     }
-    
-    func fetchTravelsFromServer() {
-        guard let firebaseUser = Auth.auth().currentUser else {
-            print("error retrieving firebase user")
-            return
-        }
-        firebaseUser.getIDToken { [weak self] token, error in
-            guard let strongSelf = self else { return }
-            if let error = error {
-                print("Failed to fetch token: \(error.localizedDescription)")
+   
+    func getUserTravels() {
+        Task{ @MainActor in
+            guard let firebaseUser = Auth.auth().currentUser else {
+                print("Error retrieving firebase user")
                 return
-            } else if let firebaseToken = token {
-                let baseURL = NetworkHandler.shared.getBaseURL()
-                guard let url = URL(string:"\(baseURL)/travels/user") else {
-                    print("Invalid URL used to retrieve travels from DB")
-                    return
-                }
-                
-                let decoder = JSONDecoder()
-                decoder.dateDecodingStrategy = .iso8601
-                
-                var request = URLRequest(url: url)
-                request.httpMethod = "GET"
-                request.setValue("Bearer \(firebaseToken)", forHTTPHeaderField: "Authorization")
-                
-                URLSession.shared.dataTaskPublisher(for: request)
-                    .retry(2)
-                    .tryMap {
-                        result -> Data in
-                        guard let httpResponse = result.response as? HTTPURLResponse,
-                              (200...299).contains(httpResponse.statusCode) else {
-                            throw URLError(.badServerResponse)
-                        }
-                        return result.data
-                    }
-                    .decode(type: [TravelDetails].self, decoder: decoder)
-                    .receive(on: DispatchQueue.main)
-                    .sink(receiveCompletion: {
-                        completion in
-                        switch completion {
-                        case .finished:
-                            break
-                        case .failure(let error):
-                            print("Error fetching travels: \(error.localizedDescription)")
-                        }
-                    }, receiveValue: { [weak self] travelDetailsList in
-                        guard let strongSelf = self else { return }
-                        strongSelf.removeExistingTravels()
-                        strongSelf.addNewTravels(travelDetailsList)
-                    })
-                    .store(in: &strongSelf.cancellables)
             }
-            else {
-                print("error retrieving user token")
+            do {
+                let firebaseToken = try await   firebaseAuthServeice.getFirebaseToken(firebaseUser: firebaseUser)
+                let travelDetailsList = try await serverService.fetchTravelsFromServer(firebaseToken: firebaseToken)
+                removeExistingTravels()
+                addNewTravels(travelDetailsList)
+            }catch {
+                print("Error fetching travels from server")
                 return
             }
         }
@@ -160,7 +127,7 @@ class MyTravelsViewModel: ObservableObject {
         }
     }
     
-    func getUserTravels() {
+    func showRequestedTravels() {
         do {
             let travels = try modelContext.fetch(FetchDescriptor<Travel>())
             let segments = try modelContext.fetch(FetchDescriptor<Segment>())
@@ -358,7 +325,7 @@ class MyTravelsViewModel: ObservableObject {
                         // save travel in SwiftData (sync)
                         strongSelf.updateTravelInSwiftData(updatedTravel: travel)
                         // refresh travels (sync)
-                        strongSelf.getUserTravels()
+                        strongSelf.showRequestedTravels()
                     })
                     .store(in: &strongSelf.cancellables)
             }
@@ -380,7 +347,7 @@ class MyTravelsViewModel: ObservableObject {
         }catch {
             print("Error while updating travel in SwiftData")
             // refesh travels from server
-            self.fetchTravelsFromServer()
+            self.getUserTravels()
         }
     }
     
@@ -434,7 +401,7 @@ class MyTravelsViewModel: ObservableObject {
                             // remove from SwiftData
                             strongSelf.deleteTravelFromSwiftData(travelToDelete: travelToDelete)
                             // refresh travels
-                            strongSelf.getUserTravels()
+                            strongSelf.showRequestedTravels()
                         })
                         .store(in: &strongSelf.cancellables)
                 }
@@ -469,7 +436,7 @@ class MyTravelsViewModel: ObservableObject {
             }catch {
                 print("Error interacting with SwiftData")
                 // refresh data from server
-                self.fetchTravelsFromServer()
+                self.getUserTravels()
             }
         } else {
             print("Error travel to delete has nil id")

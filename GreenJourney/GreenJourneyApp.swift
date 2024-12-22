@@ -18,20 +18,12 @@ struct GreenJourneyApp: App {
     
     // persistence controller for SwiftData
     let persistenceController = PersistenceHandler.shared
-    
-    // ViewModels
-    private var myTravelsViewModel: MyTravelsViewModel = MyTravelsViewModel(modelContext: PersistenceHandler.shared.container.mainContext)
 
     var body: some Scene {
         WindowGroup {
             MainView(modelContext: persistenceController.container.mainContext)
-                .onAppear() {
-                    myTravelsViewModel.fetchTravelsFromServer()
-                }
         }
         // make persistence controller available to all views
         .modelContainer(persistenceController.container)
     }
 }
-
-

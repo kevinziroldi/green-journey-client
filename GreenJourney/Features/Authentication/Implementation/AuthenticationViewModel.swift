@@ -110,52 +110,53 @@ class AuthenticationViewModel: ObservableObject {
         }
     }
     
-    @MainActor
-    func signUp() async {
-        guard !email.isEmpty, !password.isEmpty, !repeatPassword.isEmpty else {
-            errorMessage = "Insert email and password"
-            return
-        }
-        guard !firstName.isEmpty, !lastName.isEmpty else {
-            errorMessage = "Insert first name and last name"
-            return
-        }
-        if (password != repeatPassword) {
-            errorMessage = "Passwords do not match"
-            return
-        }
-        
-        // Firebase call, create account
-        do {
-            let authResult = try await firebaseAuthService.createUserFirebase(email: email, password: password)
-            let firebaseToken = try await firebaseAuthService.getFirebaseToken(firebaseUser: authResult.user)
-            
-            print("Token retrieved")
-            do {
-                try await serverService.saveUserToServer(firstName: self.firstName, lastName: self.lastName, firebaseUID: authResult.user.uid, firebaseToken: firebaseToken)
-                
-                print("User data posted successfully.")
-                
-                self.errorMessage = nil
-                self.sendEmailVerification()
-                self.isEmailVerificationActiveSignup = true
-            } catch {
-                print("Error posting user data: \(error.localizedDescription)")
-                let user = Auth.auth().currentUser
-                user?.delete { error in
-                    if let error = error {
-                        // error happened
-                        print("Error deleting user from Firebase: \(error.localizedDescription)")
-                    } else {
-                        // account deleted
-                        print("User deleted from firebase")
-                    }
-                }
+    func signUp() {
+        Task { @MainActor in
+            guard !email.isEmpty, !password.isEmpty, !repeatPassword.isEmpty else {
+                errorMessage = "Insert email and password"
                 return
             }
-        } catch {
-            self.errorMessage = "Error creating account"
-            return
+            guard !firstName.isEmpty, !lastName.isEmpty else {
+                errorMessage = "Insert first name and last name"
+                return
+            }
+            if (password != repeatPassword) {
+                errorMessage = "Passwords do not match"
+                return
+            }
+            
+            // Firebase call, create account
+            do {
+                let authResult = try await firebaseAuthService.createUserFirebase(email: email, password: password)
+                let firebaseToken = try await firebaseAuthService.getFirebaseToken(firebaseUser: authResult.user)
+                
+                print("Token retrieved")
+                do {
+                    try await serverService.saveUserToServer(firstName: self.firstName, lastName: self.lastName, firebaseUID: authResult.user.uid, firebaseToken: firebaseToken)
+                    
+                    print("User data posted successfully.")
+                    
+                    self.errorMessage = nil
+                    self.sendEmailVerification()
+                    self.isEmailVerificationActiveSignup = true
+                } catch {
+                    print("Error posting user data: \(error.localizedDescription)")
+                    let user = Auth.auth().currentUser
+                    user?.delete { error in
+                        if let error = error {
+                            // error happened
+                            print("Error deleting user from Firebase: \(error.localizedDescription)")
+                        } else {
+                            // account deleted
+                            print("User deleted from firebase")
+                        }
+                    }
+                    return
+                }
+            } catch {
+                self.errorMessage = "Error creating account"
+                return
+            }
         }
     }
     

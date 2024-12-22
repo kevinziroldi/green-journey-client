@@ -2,13 +2,14 @@ import SwiftData
 import SwiftUI
 
 struct MainView: View {
-    @Environment(\.modelContext) private var modelContext: ModelContext
+    private var modelContext: ModelContext
     @State var navigationPath: NavigationPath
     
     @State private var selectedTab: TabViewElement
     @Query var users: [User]
     
     init(modelContext: ModelContext) {
+        self.modelContext = modelContext
         self.navigationPath = NavigationPath()
         self.selectedTab = TabViewElement.SearchTravel
     }
@@ -16,7 +17,7 @@ struct MainView: View {
     var body: some View {
         NavigationStack(path: $navigationPath) {
             TabView(selection: $selectedTab) {
-                if users.first != nil{
+            if users.first != nil {
                     RankingView(modelContext: modelContext, navigationPath: $navigationPath)
                         .tabItem {
                             Label("Ranking", systemImage: "star")
