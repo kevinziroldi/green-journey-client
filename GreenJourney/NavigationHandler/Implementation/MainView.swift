@@ -50,6 +50,16 @@ struct MainView: View {
                         .tag(TabViewElement.Dashboard)
                 }else {
                     LoginView(modelContext: modelContext, navigationPath: $navigationPath)
+                        .onAppear() {
+                            // reset tab after logout+login
+                            selectedTab = .SearchTravel
+                        }
+                        .onDisappear() {
+                            print("Loading travels on disappear login")
+                        
+                            // get travels from server
+                            viewModel.getUserTravels()
+                        }
                 }
             }
             .navigationDestination(for: NavigationDestination.self) { destination in
@@ -73,12 +83,11 @@ struct MainView: View {
                     TravelNotDoneDetailsView(viewModel: vieModel, navigationPath: $navigationPath)
                 }
             }
-            .onAppear() {
-                // reset travel search tab
-                selectedTab = .SearchTravel
-                // get travels from server
-                viewModel.getUserTravels()
-            }
+        }.onAppear() {
+            print("Loading travels onAppear navigation stack")
+        
+            // get travels from server
+            viewModel.getUserTravels()
         }
     }
 }
