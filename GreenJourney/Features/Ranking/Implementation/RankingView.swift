@@ -38,20 +38,28 @@ struct RankingView: View {
                 
                 Spacer()
                 VStack{
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 20)
-                            .stroke(colorScheme == .dark ? Color.gray : Color.black, lineWidth: 3)
-                            .fill(colorScheme == .dark ? Color(red: 20/255, green: 20/255, blue: 20/255) : Color(red: 235/255, green: 235/255, blue: 235/255))
-                            .padding(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
-                        VStack{
-                            if viewModel.leaderboardSelected {
-                                LeaderBoardView(viewModel: viewModel, navigationPath: $navigationPath, leaderboard: Array(viewModel.longDistanceRanking.prefix(10)))
+                    if let errorMessage = viewModel.errorMessage {
+                        Text(errorMessage)
+                            .font(.headline)
+                            .fontWeight(.light)
+                            .foregroundStyle(.red)
+                    }
+                    else {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 20)
+                                .stroke(colorScheme == .dark ? Color.gray : Color.black, lineWidth: 3)
+                                .fill(colorScheme == .dark ? Color(red: 20/255, green: 20/255, blue: 20/255) : Color(red: 235/255, green: 235/255, blue: 235/255))
+                                .padding(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
+                            VStack{
+                                if viewModel.leaderboardSelected {
+                                    LeaderBoardView(viewModel: viewModel, navigationPath: $navigationPath, leaderboard: Array(viewModel.longDistanceRanking.prefix(10)))
+                                }
+                                else {
+                                    LeaderBoardView(viewModel: viewModel, navigationPath: $navigationPath, leaderboard: Array(viewModel.shortDistanceRanking.prefix(10)))
+                                }
                             }
-                            else {
-                                LeaderBoardView(viewModel: viewModel, navigationPath: $navigationPath, leaderboard: Array(viewModel.shortDistanceRanking.prefix(10)))
-                            }
+                            .padding(EdgeInsets(top: 0, leading: 10, bottom: 5, trailing: 10))
                         }
-                        .padding(EdgeInsets(top: 0, leading: 10, bottom: 5, trailing: 10))
                     }
                     
                     if viewModel.leaderboardSelected && viewModel.longDistanceRanking.count == 11 {
