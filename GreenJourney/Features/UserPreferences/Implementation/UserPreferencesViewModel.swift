@@ -45,10 +45,8 @@ class UserPreferencesViewModel: ObservableObject {
         
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
-        
-        // TODO mock or not
-        self.serverService = ServerService()
-        self.firebaseAuthService = FirebaseAuthService()
+        self.serverService = ServiceFactory.shared.serverService
+        self.firebaseAuthService = ServiceFactory.shared.firebaseAuthService
     }
     
     func getUserData() {

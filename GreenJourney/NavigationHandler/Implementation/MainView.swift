@@ -55,8 +55,6 @@ struct MainView: View {
                             selectedTab = .SearchTravel
                         }
                         .onDisappear() {
-                            print("Loading travels on disappear login")
-                        
                             // get travels from server
                             viewModel.getUserTravels()
                         }
@@ -84,8 +82,6 @@ struct MainView: View {
                 }
             }
         }.onAppear() {
-            print("Loading travels onAppear navigation stack")
-        
             // get travels from server
             viewModel.getUserTravels()
         }

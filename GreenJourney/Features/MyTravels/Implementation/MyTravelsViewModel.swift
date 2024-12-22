@@ -8,7 +8,7 @@ class MyTravelsViewModel: ObservableObject {
     
     private var modelContext: ModelContext
     private var serverService: ServerServiceProtocol
-    private var firebaseAuthServeice: FirebaseAuthServiceProtocol
+    private var firebaseAuthService: FirebaseAuthServiceProtocol
     
     // travels lists
     var travelDetailsList: [TravelDetails] = []
@@ -60,9 +60,8 @@ class MyTravelsViewModel: ObservableObject {
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
         
-        // TODO mock vs non mock
-        self.serverService = ServerService()
-        self.firebaseAuthServeice = FirebaseAuthService()
+        self.serverService = ServiceFactory.shared.serverService
+        self.firebaseAuthService = ServiceFactory.shared.firebaseAuthService
     }
        
     func getUserTravels() {
@@ -72,7 +71,7 @@ class MyTravelsViewModel: ObservableObject {
                 return
             }
             do {
-                let firebaseToken = try await   firebaseAuthServeice.getFirebaseToken(firebaseUser: firebaseUser)
+                let firebaseToken = try await   firebaseAuthService.getFirebaseToken(firebaseUser: firebaseUser)
                 let travelDetailsList = try await serverService.getTravels(firebaseToken: firebaseToken)
                 removeExistingTravels()
                 addNewTravels(travelDetailsList: travelDetailsList)
@@ -260,7 +259,7 @@ class MyTravelsViewModel: ObservableObject {
                 return
             }
             do {
-                let firebaseToken = try await firebaseAuthServeice.getFirebaseToken(firebaseUser: firebaseUser)
+                let firebaseToken = try await firebaseAuthService.getFirebaseToken(firebaseUser: firebaseUser)
                 let travel = try await serverService.updateTravel(firebaseToken: firebaseToken, modifiedTravel: modifiedTravel)
                 
                 // save travel in SwiftData (sync)
@@ -300,7 +299,7 @@ class MyTravelsViewModel: ObservableObject {
                 return
             }
             do {
-                let firebaseToken = try await firebaseAuthServeice.getFirebaseToken(firebaseUser: firebaseUser)
+                let firebaseToken = try await firebaseAuthService.getFirebaseToken(firebaseUser: firebaseUser)
                 guard let travelID = travelToDelete.travelID else {
                     print("Travel id for deletion is nil")
                     return

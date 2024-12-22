@@ -17,6 +17,22 @@ class User: Codable {
     var scoreLongDistance: Float64
     var badges: [Badge]
     
+    init() {
+        self.userID = -1
+        self.firstName = ""
+        self.lastName = ""
+        self.birthDate = nil
+        self.gender = nil
+        self.firebaseUID = ""
+        self.zipCode = nil
+        self.streetName = nil
+        self.houseNumber = nil
+        self.city = nil
+        self.scoreShortDistance = -1
+        self.scoreLongDistance = -1
+        self.badges = []
+    }
+    
     init(userID: Int? = nil, firstName: String, lastName: String, birthDate: Date? = nil, gender: String? = nil, firebaseUID: String, zipCode: Int? = nil, streetName: String? = nil, houseNumber: Int? = nil, city: String? = nil, scoreShortDistance: Float64, scoreLongDistance: Float64, badges: [Badge] = []) {
         self.userID = userID
         self.firstName = firstName

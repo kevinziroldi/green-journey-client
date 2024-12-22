@@ -9,6 +9,12 @@ import SwiftUI
 class AuthenticationViewModel: ObservableObject {
     let uuid: UUID = UUID()
     
+    //swift data model context
+    private var modelContext: ModelContext
+    // external services
+    private let serverService: ServerServiceProtocol
+    private let firebaseAuthService: FirebaseAuthServiceProtocol
+    
     @Published var email: String = ""
     @Published var password: String = ""
     @Published var repeatPassword: String = ""
@@ -20,19 +26,12 @@ class AuthenticationViewModel: ObservableObject {
     @Published var emailVerified: Bool = false
     @Published var isEmailVerificationActiveLogin: Bool = false
     @Published var isEmailVerificationActiveSignup: Bool = false
-    //swift data model context
-    private var modelContext: ModelContext
-    // external services
-    private let serverService: ServerServiceProtocol
-    private let firebaseAuthService: FirebaseAuthService
     
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
         self.isLogged = false
-        
-        // TODO mock vs not mock
-        self.serverService = ServerService()
-        self.firebaseAuthService = FirebaseAuthService()
+        self.serverService = ServiceFactory.shared.serverService
+        self.firebaseAuthService = ServiceFactory.shared.firebaseAuthService
     }
     
     func login() {

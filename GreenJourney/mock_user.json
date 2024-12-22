@@ -1,0 +1,15 @@
+{
+  "user_id": 56,
+  "first_name": "MockUser",
+  "last_name": "MockUser",
+  "birth_date": "1990-09-09T00:00:00Z",
+  "gender": "male",
+  "firebase_uid": "MockFirebaseToken",
+  "zip_code": null,
+  "street_name": null,
+  "house_number": null,
+  "city": null,
+  "score_short_distance": 0,
+  "score_long_distance": 0,
+  "badges": []
+}

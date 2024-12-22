@@ -16,10 +16,7 @@ class RankingViewModel: ObservableObject {
     
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
-        
-        
-        // TODO mock or not
-        self.serverService = ServerService()
+        self.serverService = ServiceFactory.shared.serverService
     }
     
     func fecthRanking() {
