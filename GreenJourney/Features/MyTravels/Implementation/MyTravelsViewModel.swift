@@ -73,7 +73,7 @@ class MyTravelsViewModel: ObservableObject {
             }
             do {
                 let firebaseToken = try await   firebaseAuthServeice.getFirebaseToken(firebaseUser: firebaseUser)
-                let travelDetailsList = try await serverService.getTravelsFromServer(firebaseToken: firebaseToken)
+                let travelDetailsList = try await serverService.getTravels(firebaseToken: firebaseToken)
                 removeExistingTravels()
                 addNewTravels(travelDetailsList: travelDetailsList)
             }catch {
@@ -261,7 +261,7 @@ class MyTravelsViewModel: ObservableObject {
             }
             do {
                 let firebaseToken = try await firebaseAuthServeice.getFirebaseToken(firebaseUser: firebaseUser)
-                let travel = try await serverService.updateTravelOnServer(firebaseToken: firebaseToken, modifiedTravel: modifiedTravel)
+                let travel = try await serverService.updateTravel(firebaseToken: firebaseToken, modifiedTravel: modifiedTravel)
                 
                 // save travel in SwiftData (sync)
                 self.updateTravelInSwiftData(updatedTravel: travel)
@@ -305,7 +305,7 @@ class MyTravelsViewModel: ObservableObject {
                     print("Travel id for deletion is nil")
                     return
                 }
-                try await serverService.deleteTravelFromServer(firebaseToken: firebaseToken, travelID: travelID)
+                try await serverService.deleteTravel(firebaseToken: firebaseToken, travelID: travelID)
                 // remove from SwiftData
                 self.deleteTravelFromSwiftData(travelToDelete: travelToDelete)
                 // refresh travels

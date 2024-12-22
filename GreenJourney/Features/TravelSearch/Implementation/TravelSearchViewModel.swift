@@ -5,14 +5,13 @@ import Foundation
 import MapKit
 import SwiftData
 
-struct OptionsResponse: Decodable {
-    let options: [[Segment]]
-}
-
 class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegate {
     let uuid: UUID = UUID()
     
-    var modelContext: ModelContext
+    private var modelContext: ModelContext
+    private var serverService: ServerServiceProtocol
+    private var firebaseAuthService: FirebaseAuthServiceProtocol
+    
     @Published var departure: CityCompleterDataset = CityCompleterDataset()
     @Published var arrival: CityCompleterDataset = CityCompleterDataset()
     var users: [User] = []
@@ -27,200 +26,17 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
     
     @Published var predictedCities: [CityCompleterDataset] = []
     @Published var predictionShown: Int = 0
-    private var cancellables = Set<AnyCancellable>()
     
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
+        
+        
+        // TODO mock or not
+        self.serverService = ServerService()
+        self.firebaseAuthService = FirebaseAuthService()
     }
     
-    func computeRoutes () {
-        self.outwardOptions = []
-        self.returnOptions = []
-        self.selectedOption = []
-        let isOutward = true
-        
-        let dateFormatter = DateFormatter()
-        let timeFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        timeFormatter.dateFormat = "HH:mm"
-        dateFormatter.timeZone = TimeZone(identifier: "UTC")
-        timeFormatter.timeZone = TimeZone(identifier: "UTC")
-        let formattedDate = dateFormatter.string(from: datePicked)
-        let formattedDateReturn = dateFormatter.string(from: dateReturnPicked)
-        let formattedTime = timeFormatter.string(from: datePicked)
-        let formattedTimeReturn = timeFormatter.string(from: dateReturnPicked)
-        
-        let baseURL = NetworkHandler.shared.getBaseURL()
-        guard let url = URL(string:"\(baseURL)/travels/search?iata_departure=\(departure.iata)&country_code_departure=\(departure.countryCode)&iata_destination=\(arrival.iata)&country_code_destination=\(arrival.countryCode)&date=\(formattedDate)&time=\(formattedTime)&is_outward=\(isOutward)") else {
-            return
-        }
-        
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
-        
-        URLSession.shared.dataTaskPublisher(for: url)
-            .tryMap {
-                result -> Data in
-                guard let httpResponse = result.response as? HTTPURLResponse,
-                      (200...299).contains(httpResponse.statusCode) else {
-                    throw URLError(.badServerResponse)
-                }
-            
-                return result.data
-            }
-            .decode(type: OptionsResponse.self, decoder: decoder)
-            .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: {
-                completion in
-                switch completion {
-                case .finished:
-                    break
-                case .failure(let error):
-                    print("Error fetching options: \(error.localizedDescription)")
-                }
-            }, receiveValue: { [weak self] response in
-                guard let strongSelf = self else { return }
-                strongSelf.outwardOptions = response.options
-            })
-            .store(in: &cancellables)
-        if (!oneWay) {
-            guard let returnUrl = URL(string:"\(baseURL)/travels/search?iata_departure=\(arrival.iata)&country_code_departure=\(arrival.countryCode)&iata_destination=\(departure.iata)&country_code_destination=\(departure.countryCode)&date=\(formattedDateReturn)&time=\(formattedTimeReturn)&is_outward=\(!isOutward)") else {
-                return
-            }
-            URLSession.shared.dataTaskPublisher(for: returnUrl)
-                .tryMap {
-                    result -> Data in
-                    guard let httpResponse = result.response as? HTTPURLResponse,
-                          (200...299).contains(httpResponse.statusCode) else {
-                        throw URLError(.badServerResponse)
-                    }
-                    return result.data
-                }
-                .decode(type: OptionsResponse.self, decoder: decoder)
-                .receive(on: DispatchQueue.main)
-                .sink(receiveCompletion: {
-                    completion in
-                    switch completion {
-                    case .finished:
-                        break
-                    case .failure(let error):
-                        print("Error fetching options: \(error.localizedDescription)")
-                    }
-                }, receiveValue: { [weak self] response in
-                    guard let strongSelf = self else { return }
-                    strongSelf.returnOptions = response.options
-                })
-                .store(in: &cancellables)
-        }
-        
-    }
-    
-    func saveTravel() {
-        do {
-            users = try modelContext.fetch(FetchDescriptor<User>())
-            
-            // save travel on server
-            let baseURL = NetworkHandler.shared.getBaseURL()
-            guard let url = URL(string: "\(baseURL)/travels/user") else {
-                print("Invalid URL for posting user data to DB")
-                return
-            }
-            if let user = users.first {
-                guard let userID = user.userID else {
-                    print("userID not found")
-                    return
-                }
-                let travel = Travel(userID: userID)
-                var travelDetails = TravelDetails(travel: travel, segments: selectedOption)
-                // JSON encoding
-                let encoder = JSONEncoder()
-                encoder.dateEncodingStrategy = .iso8601
-                guard let body = try? encoder.encode(travelDetails) else {
-                    print("Error encoding travel data")
-                    return
-                }
-                
-                if let firebaseUser = Auth.auth().currentUser {
-                    firebaseUser.getIDToken { [weak self] token, error in
-                        guard let strongSelf = self else { return }
-                        if let error = error {
-                            print("error getting firebase token: \(error.localizedDescription)")
-                        } else if let firebaseToken = token {
-                            
-                            // POST request
-                            var request = URLRequest(url: url)
-                            request.httpMethod = "POST"
-                            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-                            request.setValue("Bearer \(firebaseToken)", forHTTPHeaderField: "Authorization")
-                            request.httpBody = body
-                            
-                            let decoder = JSONDecoder()
-                            decoder.dateDecodingStrategy = .iso8601
-                            URLSession.shared.dataTaskPublisher(for: request)
-                                .retry(2)
-                                .tryMap {
-                                    result -> Data in
-                                    // check status of response
-                                    guard let httpResponse = result.response as? HTTPURLResponse,
-                                          (200...299).contains(httpResponse.statusCode) else {
-                                        throw URLError(.badServerResponse)
-                                    }
-                                    return result.data
-                                }
-                                .receive(on: DispatchQueue.main)
-                                .decode(type: TravelDetails.self, decoder: decoder)
-                                .sink(receiveCompletion: { completion in
-                                    switch completion {
-                                    case .finished:
-                                        print("Travel data posted successfully.")
-                                    case .failure(let error):
-                                        print("Error posting travel data: \(error.localizedDescription)")
-                                        return
-                                    }
-                                }, receiveValue: {[weak self] response in
-                                    guard let strongSelf = self else { return }
-                                    travelDetails = response
-                                    
-                                    // save travel in SwiftData
-                                    strongSelf.modelContext.insert(travelDetails.travel)
-                                    
-                                    for segment in travelDetails.segments {
-                                        strongSelf.modelContext.insert(segment)
-                                    }
-                                    do {
-                                        try strongSelf.modelContext.save()
-                                    } catch {
-                                        
-                                        // TODO gestione
-                                        
-                                        print("Error saving new travel: \(error.localizedDescription)")
-                                        return
-                                    }
-                                    print("travel added to SwiftData")
-                                })
-                                .store(in: &strongSelf.cancellables)
-                            strongSelf.departure = CityCompleterDataset()
-                            strongSelf.arrival = CityCompleterDataset()
-                        }
-                        else {
-                            print("error retrieving token")
-                            return
-                        }
-                    }
-                }
-                else {
-                    return
-                }
-                
-            } else {
-                print("no user present in swiftData")
-                return
-            }
-        } catch {
-            print("Error interacting with SwiftData")
-        }
-    }
-    
+    // used after a travel search
     func resetParameters() {
         self.arrival = CityCompleterDataset()
         self.departure = CityCompleterDataset()
@@ -231,6 +47,88 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
         self.predictedCities = []
     }
     
+    func computeRoutes () {
+        Task { @MainActor in
+            self.outwardOptions = []
+            self.returnOptions = []
+            self.selectedOption = []
+            let isOutward = true
+            
+            let dateFormatter = DateFormatter()
+            let timeFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            timeFormatter.dateFormat = "HH:mm"
+            dateFormatter.timeZone = TimeZone(identifier: "UTC")
+            timeFormatter.timeZone = TimeZone(identifier: "UTC")
+            let formattedDate = dateFormatter.string(from: datePicked)
+            let formattedDateReturn = dateFormatter.string(from: dateReturnPicked)
+            let formattedTime = timeFormatter.string(from: datePicked)
+            let formattedTimeReturn = timeFormatter.string(from: dateReturnPicked)
+            
+            // get outward options
+            do {
+                let outwardOptions = try await serverService.computeRoutes(departureIata: departure.iata, departureCountryCode: departure.countryCode, destinationIata: arrival.iata, destinationCountryCode: arrival.countryCode, date: formattedDate, time: formattedTime, isOutward: isOutward)
+                self.outwardOptions = outwardOptions.options
+            }catch {
+                print("Error fetching options: \(error.localizedDescription)")
+                return
+            }
+            
+            // get return options
+            if (!oneWay) {
+                do {
+                    let returnOptions = try await serverService.computeRoutes(departureIata: arrival.iata, departureCountryCode: arrival.countryCode, destinationIata: departure.iata, destinationCountryCode: departure.countryCode, date: formattedDateReturn, time: formattedTimeReturn, isOutward: !isOutward)
+                    self.returnOptions = returnOptions.options
+                }catch {
+                    print("Error fetching options: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+    
+    func saveTravel() {
+        Task { @MainActor in
+            do {
+                // build travel details
+                users = try modelContext.fetch(FetchDescriptor<User>())
+                guard let userID = users.first?.userID else {
+                    print("Missing user or user id")
+                    return
+                }
+                let travel = Travel(userID: userID)
+                let travelDetails = TravelDetails(travel: travel, segments: selectedOption)
+                
+                // get Firebase token
+                guard let firebaseUser = Auth.auth().currentUser else {
+                    print("Missing firebase user")
+                    return
+                }
+                let firebaseToken = try await firebaseAuthService.getFirebaseToken(firebaseUser: firebaseUser)
+                
+                // save on server
+                let returnedTravelDetails = try await serverService.saveTravel(firebaseToken: firebaseToken, travelDetails: travelDetails)
+                
+                // save travel in SwiftData
+                self.modelContext.insert(returnedTravelDetails.travel)
+                for segment in returnedTravelDetails.segments {
+                    self.modelContext.insert(segment)
+                }
+                do {
+                    try self.modelContext.save()
+                } catch {
+                    print("Error saving new travel: \(error.localizedDescription)")
+                    return
+                }
+                print("Travel added to SwiftData")
+            }catch{
+                print("Error saving travel: \(error.localizedDescription)")
+                return
+            }
+            self.departure = CityCompleterDataset()
+            self.arrival = CityCompleterDataset()
+        }
+    }
+        
     func computeCo2Emitted(_ travelOption: [Segment]) -> Float64 {
         var co2Emitted: Float64 = 0.0
         for segment in travelOption {
@@ -316,15 +214,3 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
         return vehicle
     }
 }
-
-/*
-extension TravelSearchViewModel: Hashable {
-    static func == (lhs: AuthenticationViewModel, rhs: AuthenticationViewModel) -> Bool {
-        return lhs.uuid == rhs.uuid
-    }
-
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(uuid)
-    }
-}
-*/
