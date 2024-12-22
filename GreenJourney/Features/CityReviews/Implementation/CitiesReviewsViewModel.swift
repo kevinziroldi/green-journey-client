@@ -7,7 +7,6 @@ class CitiesReviewsViewModel: ObservableObject {
     let uuid: UUID = UUID()
     
     private var modelContext: ModelContext
-    private var cancellables: Set<AnyCancellable> = Set<AnyCancellable>()
     
     // best cities
     @Published var bestCitiesReviewElements: [CityReviewElement] = []

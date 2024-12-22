@@ -20,7 +20,6 @@ class AuthenticationViewModel: ObservableObject {
     @Published var emailVerified: Bool = false
     @Published var isEmailVerificationActiveLogin: Bool = false
     @Published var isEmailVerificationActiveSignup: Bool = false
-    private var cancellables = Set<AnyCancellable>()
     //swift data model context
     private var modelContext: ModelContext
     // external services
