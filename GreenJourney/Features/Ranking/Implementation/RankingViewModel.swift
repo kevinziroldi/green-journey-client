@@ -12,12 +12,15 @@ class RankingViewModel: ObservableObject {
     @Published var longDistanceRanking: [RankingElement] = []
     @Published var leaderboardSelected: Bool = true
     
+    @Published var errorMessage: String?
+    
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
     }
     
     func fecthRanking() {
         do {
+            errorMessage = nil
             users = try modelContext.fetch(FetchDescriptor<User>())
             
             guard let userID = users.first?.userID else { return }
@@ -33,7 +36,6 @@ class RankingViewModel: ObservableObject {
                           (200...299).contains(httpResponse.statusCode) else {
                         throw URLError(.badServerResponse)
                     }
-                    //print(String(data: result.data, encoding: .utf8) ?? "No data")
                     return result.data
                 }
                 .decode(type: RankingResponse.self, decoder: decoder)
@@ -45,6 +47,7 @@ class RankingViewModel: ObservableObject {
                         break
                     case .failure(let error):
                         print("Error fetching rankings: \(error.localizedDescription)")
+                        self.errorMessage = "An error occurred retrieving rankings from server"
                     }
                 }, receiveValue: { [weak self] response in
                     guard let strongSelf = self else { return }
@@ -55,6 +58,7 @@ class RankingViewModel: ObservableObject {
             
         }catch {
             print("Error retrieving user from SwiftData")
+            errorMessage = "An error occurred retrieving rankings from server"
         }
     }
     
