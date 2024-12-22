@@ -117,7 +117,8 @@ struct LoginView: View {
             }
         }
         .onAppear() {
-            viewModel.resetParameters()
+            // TODO remove
+            // viewModel.resetParameters()
             viewModel.isEmailVerificationActiveLogin = false
         }
         .onChange(of: viewModel.isLogged, {

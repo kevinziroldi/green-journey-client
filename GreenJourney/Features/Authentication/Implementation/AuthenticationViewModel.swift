@@ -37,37 +37,28 @@ class AuthenticationViewModel: ObservableObject {
     }
     
     func login() {
-        // input check and validation
-        guard !email.isEmpty, !password.isEmpty else {
-            errorMessage = "Insert email and password."
-            return
-        }
-        
-        Auth.auth().signIn(withEmail: email, password: password) { [weak self] result, error in
-            guard let strongSelf = self else { return }
-            if let error = error {
-                strongSelf.errorMessage = error.localizedDescription
-            } else {
-                if let firebaseUser = result?.user {
-                    strongSelf.emailVerified = firebaseUser.isEmailVerified
-                    
-                    if firebaseUser.isEmailVerified == true {
-                        firebaseUser.getIDToken { [weak self] token, error in
-                            guard let strongSelf = self else { return }
-                            if let error = error {
-                                print("Failed to fetch token: \(error.localizedDescription)")
-                                strongSelf.errorMessage = "Error during authentication"
-                            } else if let token = token {
-                                strongSelf.errorMessage = nil
-                                strongSelf.getUserFromServer(firebaseToken: token)
-                            }
-                        }
-                    } else {
-                        strongSelf.isEmailVerificationActiveLogin = true
-                    }
+        Task { @MainActor in
+            // input check and validation
+            guard !email.isEmpty, !password.isEmpty else {
+                errorMessage = "Insert email and password."
+                return
+            }
+            
+            do {
+                let authResult = try await firebaseAuthService.signIn(email: email, password: password)
+                let firebaseUser = authResult.user
+                self.emailVerified = firebaseUser.isEmailVerified
+                
+                if firebaseUser.isEmailVerified == true {
+                    let firebaseToken = try await firebaseAuthService.getFirebaseToken(firebaseUser: firebaseUser)
+                    self.errorMessage = nil
+                    self.getUserFromServer(firebaseToken: firebaseToken)
                 } else {
-                    strongSelf.errorMessage = "Error during authentication"
+                    self.isEmailVerificationActiveLogin = true
                 }
+            } catch {
+                self.errorMessage = "Error during authentication"
+                return
             }
         }
     }
@@ -89,23 +80,22 @@ class AuthenticationViewModel: ObservableObject {
         self.isLogged = false
     }
     
-    
     func resetPassword(email: String) {
-        guard(!email.isEmpty) else {
-            errorMessage = "Insert email"
-            return
-        }
-        errorMessage = nil
-        Auth.auth().sendPasswordReset(withEmail: email) { [weak self] error in
-            guard let strongSelf = self else { return }
-            if let error = error {
-                print("Error in sending email for password recovery: \(error.localizedDescription)")
-                strongSelf.errorMessage = "Error in sending email for password recovery"
-                strongSelf.resendEmail = nil
+        Task { @MainActor in
+            guard(!email.isEmpty) else {
+                errorMessage = "Insert email"
+                return
             }
-            else {
+            errorMessage = nil
+            
+            do {
+                try await firebaseAuthService.sendPasswordReset(email: email)
                 print("Email for password reset sent")
-                strongSelf.resendEmail = "Email sent, check your inbox"
+                self.resendEmail = "Email sent, check your inbox"
+            } catch {
+                print("Error in sending email for password recovery: \(error.localizedDescription)")
+                self.errorMessage = "Error in sending email for password recovery"
+                self.resendEmail = nil
             }
         }
     }
@@ -127,7 +117,7 @@ class AuthenticationViewModel: ObservableObject {
             
             // Firebase call, create account
             do {
-                let authResult = try await firebaseAuthService.createUserFirebase(email: email, password: password)
+                let authResult = try await firebaseAuthService.createFirebaseUser(email: email, password: password)
                 let firebaseToken = try await firebaseAuthService.getFirebaseToken(firebaseUser: authResult.user)
                 
                 print("Token retrieved")
@@ -161,133 +151,72 @@ class AuthenticationViewModel: ObservableObject {
     }
     
     func sendEmailVerification() {
-        Auth.auth().currentUser?.sendEmailVerification { [weak self] error in
-            guard let strongSelf = self else { return }
-            strongSelf.errorMessage = "Error sending email verification"
-            if let error = error {
-                print("error while sending email verification: " + error.localizedDescription)
-                
+        Task { @MainActor in
+            guard let firebaseUser = Auth.auth().currentUser else {
+                print("Firebase user is nil")
+                self.errorMessage = "Error snending email verification"
+                return
+            }
+        
+            do {
+                try await firebaseAuthService.sendEmailVerification(firebaseUser: firebaseUser)
+            }catch {
+                print("Error sending email verification: \(error.localizedDescription)")
+                self.errorMessage = "Error sending email verification"
             }
         }
     }
     
     func verifyEmail() {
-        Auth.auth().currentUser?.reload(completion: { [weak self] error in
-            guard let strongSelf = self else { return }
-            if let error = error {
-                print("Error reloading user: \(error.localizedDescription)")
-                strongSelf.errorMessage = "Error verifying email"
+        Task { @MainActor in
+            guard let firebaseUser = Auth.auth().currentUser else {
+                print("No Firebase user present")
+                self.errorMessage = "Error verifying email"
                 return
             }
-            if Auth.auth().currentUser?.isEmailVerified == true {
-                print("Email verified")
-                strongSelf.errorMessage = nil
-                strongSelf.emailVerified = true
-                strongSelf.isEmailVerificationActiveLogin = false
-                strongSelf.isEmailVerificationActiveSignup = false
+            
+            do {
+                try await firebaseAuthService.reloadFirebaseUser(firebaseUser: firebaseUser)
                 
-                // save user to swift data
-                if let firebaseUser = Auth.auth().currentUser {
-                    firebaseUser.getIDToken { token, error in
-                        if let error = error {
-                            print(error.localizedDescription)
-                            strongSelf.errorMessage = "Error verifying email"
-                            return
-                        } else if let token = token {
-                            strongSelf.getUserFromServer(firebaseToken: token)
-                        }
-                    }
-                }else {
-                    strongSelf.errorMessage = "Error verifying email"
-                    print("Missing firebaseUID")
+                // need to get Firebase user again after reload
+                guard let firebaseUser = Auth.auth().currentUser else {
+                    print("No Firebase user present")
+                    self.errorMessage = "Error verifying email"
                     return
                 }
-            } else {
-                strongSelf.errorMessage = "Email has not been verified yet"
-                print("Email not verified")
-            }
-        })
-    }
-    
-    /*
-    private func saveUserToServer(firebaseUID: String, firebaseToken: String) -> AnyPublisher<Void, Error>{
-        let baseURL = NetworkHandler.shared.getBaseURL()
-        guard let url = URL(string: "\(baseURL)/users/user") else {
-            print("Invalid URL for posting user data to DB")
-            return Fail(error: URLError(.badURL)).eraseToAnyPublisher()
-        }
-        
-        let user = User(firstName: self.firstName, lastName: self.lastName, firebaseUID: firebaseUID, scoreShortDistance: 0, scoreLongDistance: 0)
-        // JSON encoding
-        guard let body = try? JSONEncoder().encode(user) else {
-            print("error in encoding user data")
-            return Fail(error: URLError(.badURL)).eraseToAnyPublisher()
-        }
-        
-        
-        // POST request
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("Bearer \(firebaseToken)", forHTTPHeaderField: "Authorization")
-        request.httpBody = body
-        
-        return URLSession.shared.dataTaskPublisher(for: request)
-            .retry(2)
-            .tryMap {
-                result -> Void in
-                // check status of response
-                guard let httpResponse = result.response as? HTTPURLResponse,
-                      (200...299).contains(httpResponse.statusCode) else {
-                    throw URLError(.badServerResponse)
+                
+                if firebaseUser.isEmailVerified == true {
+                    print("Email verified")
+                    self.errorMessage = nil
+                    self.emailVerified = true
+                    self.isEmailVerificationActiveLogin = false
+                    self.isEmailVerificationActiveSignup = false
+                    
+                    // save user to swift data
+                    let firebaseToken = try await firebaseAuthService.getFirebaseToken(firebaseUser: firebaseUser)
+                    self.getUserFromServer(firebaseToken: firebaseToken)
+                } else {
+                    self.errorMessage = "Email has not been verified yet"
+                    print("Email not verified")
                 }
+            }catch {
+                print("Error reloading user: \(error.localizedDescription)")
+                self.errorMessage = "Error verifying email"
                 return
             }
-            .receive(on: DispatchQueue.main)
-            .eraseToAnyPublisher()
+        }
     }
-     */
     
     private func getUserFromServer(firebaseToken: String) {
-        let baseURL = NetworkHandler.shared.getBaseURL()
-        guard let url = URL(string:"\(baseURL)/users/user") else {
-            print("Invalid URL used to retrieve user from DB")
-            return
-        }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.setValue("Bearer \(firebaseToken)", forHTTPHeaderField: "Authorization")
-        
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
-        
-        URLSession.shared.dataTaskPublisher(for: request)
-            .retry(2)
-            .tryMap {
-                result -> Data in
-                guard let httpResponse = result.response as? HTTPURLResponse,
-                      (200...299).contains(httpResponse.statusCode) else {
-                    throw URLError(.badServerResponse)
-                }
-                return result.data
+        Task { @MainActor in
+            do {
+                let user = try await serverService.getUserFromServer(firebaseToken: firebaseToken)
+                self.saveUserToSwiftData(serverUser: user)
+            }catch {
+                print("Error getting user from server")
+                return
             }
-            .decode(type: User.self, decoder: decoder)
-            .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: {
-                completion in
-                switch completion {
-                case .finished:
-                    break
-                case .failure(let error):
-                    print("Error fetching user: \(error.localizedDescription)")
-                    return
-                }
-            }, receiveValue: { [weak self] user in
-                guard let strongSelf = self else { return }
-                strongSelf.saveUserToSwiftData(serverUser: user)
-            })
-            .store(in: &cancellables)
+        }
     }
     
     private func saveUserToSwiftData(serverUser: User?) {
@@ -327,32 +256,6 @@ class AuthenticationViewModel: ObservableObject {
         }
     }
     
-    func resetParameters() {
-        email = ""
-        password = ""
-        repeatPassword = ""
-        firstName = ""
-        lastName = ""
-        errorMessage = nil
-        resendEmail = nil
-        isLogged = false
-        isEmailVerificationActiveLogin = false
-        isEmailVerificationActiveSignup = false
-        emailVerified = false
-    }
-}
-
-extension AuthenticationViewModel: Hashable {
-    static func == (lhs: AuthenticationViewModel, rhs: AuthenticationViewModel) -> Bool {
-        return lhs.uuid == rhs.uuid
-    }
-
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(uuid)
-    }
-}
-
-extension AuthenticationViewModel {
     func signInWithGoogle() async -> Bool {
         guard let clientID = FirebaseApp.app()?.options.clientID else {
             fatalError("No client ID found in Firebase")
@@ -438,5 +341,15 @@ extension AuthenticationViewModel {
         }
         
         return true
+    }
+}
+
+extension AuthenticationViewModel: Hashable {
+    static func == (lhs: AuthenticationViewModel, rhs: AuthenticationViewModel) -> Bool {
+        return lhs.uuid == rhs.uuid
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(uuid)
     }
 }

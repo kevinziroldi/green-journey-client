@@ -114,7 +114,9 @@ struct SignUpView: View {
             .scrollDismissesKeyboard(.interactively)
         }
         .onAppear() {
-            viewModel.resetParameters()
+            // TODO remove
+            //viewModel.resetParameters()
+            
             viewModel.isEmailVerificationActiveSignup = false
         }
         .onChange(of: viewModel.isLogged, {
