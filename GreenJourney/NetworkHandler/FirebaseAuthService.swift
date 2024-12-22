@@ -17,6 +17,10 @@ class FirebaseAuthService: FirebaseAuthServiceProtocol {
         try await Auth.auth().sendPasswordReset(withEmail: email)
     }
     
+    func deleteFirebaseUser(firebaseUser: FirebaseAuth.User) async throws {
+        try await firebaseUser.delete()
+    }
+    
     func getFirebaseToken(firebaseUser: FirebaseAuth.User) async throws -> String {
         return try await firebaseUser.getIDToken()
     }

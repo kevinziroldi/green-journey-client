@@ -86,7 +86,7 @@ struct LoginView: View {
                             
                             
                             Button(action: {
-                                Task{await viewModel.signInWithGoogle()}
+                                viewModel.signInWithGoogle()
                             }) {
                                 HStack(spacing: 10) {
                                     Image("googleLogo")

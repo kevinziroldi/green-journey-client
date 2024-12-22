@@ -256,51 +256,50 @@ class AuthenticationViewModel: ObservableObject {
         }
     }
     
-    func signInWithGoogle() async -> Bool {
-        guard let clientID = FirebaseApp.app()?.options.clientID else {
-            fatalError("No client ID found in Firebase")
-        }
-        let config = GIDConfiguration(clientID: clientID)
-        GIDSignIn.sharedInstance.configuration = config
-        
-        guard
-            let windowScene = await UIApplication.shared.connectedScenes.first as? UIWindowScene,
-            let window = await windowScene.windows.first,
-            let rootViewController = await window.rootViewController
-        else {
-            self.errorMessage = "Error signing in with Google"
-            print("There is no root view controller")
-            return false
-        }
-        do {
-            let userAuthentication = try await GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController)
-            let user = userAuthentication.user
-            guard let idToken = user.idToken else {
-                self.errorMessage = "Error signing in with Google"
-                print("ID token Missing")
-                return false
-            }
-            let accessToken = user.accessToken
-            let credential = GoogleAuthProvider.credential(withIDToken: idToken.tokenString, accessToken: accessToken.tokenString)
-            
-            let result: AuthDataResult
+    func signInWithGoogle() {
+        Task { @MainActor in
             do {
-                result = try await Auth.auth().signIn(with: credential)
-            } catch {
-                print("Error signin in")
-                return false
-            }
-            
-            let firebaseUser = result.user
-            guard let additionalUserInfo = result.additionalUserInfo else {
-                return false
-            }
-            
-            do {
-                let firebaseToken = try await firebaseAuthService.getFirebaseToken(firebaseUser: firebaseUser)
+                // Google signin configuration
+                guard let clientID = FirebaseApp.app()?.options.clientID else {
+                    fatalError("No client ID found in Firebase")
+                }
+                let config = GIDConfiguration(clientID: clientID)
+                GIDSignIn.sharedInstance.configuration = config
                 
+                // get root controller to show Google login screen
+                guard
+                    let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                    let window = windowScene.windows.first,
+                    let rootViewController = window.rootViewController
+                else {
+                    self.errorMessage = "Error signing in with Google"
+                    print("There is no root view controller")
+                    return
+                }
+                
+                // Google authentication
+                let userAuthentication = try await GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController)
+                guard let idToken = userAuthentication.user.idToken else {
+                    self.errorMessage = "Error signing in with Google"
+                    print("ID token Missing")
+                    return
+                }
+                
+                // create Firebase credentials
+                let credential = GoogleAuthProvider.credential(withIDToken: idToken.tokenString, accessToken: userAuthentication.user.accessToken.tokenString)
+
+                // signin with Firebase
+                let authResult = try await Auth.auth().signIn(with: credential)
+                guard let additionalUserInfo = authResult.additionalUserInfo else {
+                    self.errorMessage = "Error signing in with Google"
+                    return
+                }
+                let firebaseUser = authResult.user
+                let firebaseToken = try await firebaseAuthService.getFirebaseToken(firebaseUser: authResult.user)
                 
                 if (additionalUserInfo.isNewUser) {
+                    // if new user, save to server (signup)
+                    
                     let fullName = firebaseUser.displayName
                     let parts = fullName?.components(separatedBy: " ")
                     self.firstName = parts![0]
@@ -313,34 +312,31 @@ class AuthenticationViewModel: ObservableObject {
                     } catch {
                         self.errorMessage = "Error signing in with Google"
                         print("Error posting user data: \(error.localizedDescription)")
-                        let user = Auth.auth().currentUser
-                        user?.delete { error in
-                            if let error = error {
-                                // an error happened
-                                self.errorMessage = "Error signing in with Google"
-                                print("Error deleting user from Firebase: \(error.localizedDescription)")
-                            } else {
-                                // account deleted
-                                print("User deleted from Firebase")
-                            }
+                       
+                        // delete Firebase user
+                        do {
+                            try await firebaseAuthService.deleteFirebaseUser(firebaseUser: firebaseUser)
+                            // account deleted
+                            print("User deleted from Firebase")
+                        }catch {
+                            // an error happened
+                            self.errorMessage = "Error signing in with Google"
+                            print("Error deleting user from Firebase: \(error.localizedDescription)")
+                            return
                         }
+                        return
                     }
                 } else {
+                    // if not new, get from server (login)
+                    
                     self.getUserFromServer(firebaseToken: firebaseToken)
                 }
-                
             } catch {
                 self.errorMessage = "Error signing in with Google"
-                print("Failed to fetch token: \(error.localizedDescription)")
-                return false
+                print("Error signing in with Google: \(error.localizedDescription)")
+                return
             }
         }
-        catch {
-            print(error.localizedDescription)
-            return false
-        }
-        
-        return true
     }
 }
 
