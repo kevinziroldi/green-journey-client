@@ -10,7 +10,7 @@ class RankingViewModel: ObservableObject {
 
     @Published var shortDistanceRanking: [RankingElement] = []
     @Published var longDistanceRanking: [RankingElement] = []
-    var leaderboardSelected: Bool = true
+    @Published var leaderboardSelected: Bool = true
     
     init(modelContext: ModelContext) {
         self.modelContext = modelContext

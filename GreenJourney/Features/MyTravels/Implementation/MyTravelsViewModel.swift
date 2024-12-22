@@ -57,9 +57,7 @@ class MyTravelsViewModel: ObservableObject {
     func resetParameters() {
         self.travelDetailsList = []
         self.filteredTravelDetailsList = []
-        self.showCompleted = true
         self.sortOption = SortOption.departureDate
-        self.selectedTravel = nil
         self.compensatedPrice = 0
         self.travelReviews = []
         self.reviewText = ""

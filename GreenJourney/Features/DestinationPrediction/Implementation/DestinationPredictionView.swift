@@ -30,7 +30,6 @@ struct DestinationPredictionView: View {
                         .font(.title)
                         .frame(width: 50, height: 50)
                         .clipShape(Circle())
-                        //.padding(EdgeInsets(top: 0, leading: 5, bottom: 5, trailing: 5))
                         .foregroundStyle(.linearGradient(Gradient(colors: [.blue, .green]), startPoint: .bottomLeading, endPoint: .topTrailing))
                 }
                 .padding(5)

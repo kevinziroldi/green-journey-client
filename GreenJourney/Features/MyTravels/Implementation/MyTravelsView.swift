@@ -85,7 +85,12 @@ struct MyTravelsView: View {
                                 Button(action: {
                                     viewModel.selectedTravel = travelDetails
                                     // selectedTravel is set synchronously
-                                    navigationPath.append(NavigationDestination.TravelDetailsView(viewModel))
+                                    if viewModel.showCompleted {
+                                        navigationPath.append(NavigationDestination.TravelDetailsView(viewModel))
+                                    }
+                                    else {
+                                        navigationPath.append(NavigationDestination.TravelNotDoneDetailsView(viewModel))
+                                    }
                                 }) {
                                     TravelCard(travelDetails: travelDetails)
                                 }

@@ -3,7 +3,7 @@ import Combine
 
 struct AnimatedRectangle: View {
     var size: CGSize
-    var padding: Double = 5.0
+    var padding: Double = 7.0
     var cornerRadius: CGFloat
     @State var t: CGFloat = 0.0
     @State private var timerSubscription: Cancellable? = nil
@@ -100,7 +100,7 @@ struct AnimatedRectangle: View {
             path.closeSubpath()
         }
         .onAppear() {
-            timerSubscription = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
+            timerSubscription = Timer.publish(every: 0.02, on: .main, in: .common).autoconnect()
                 .sink {_ in
                     t += 0.2
                 }

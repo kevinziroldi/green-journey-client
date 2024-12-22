@@ -20,13 +20,13 @@ struct MeshGradientView: View {
             [sinInRange(1.0...1.5, offset: 0.939, timeScale: 0.056, t: maskTimer), sinInRange(1.3...1.7, offset: 0.47, timeScale: 0.342, t: maskTimer)]
         ], colors: [
             .green, .blue, .mint,
-            .mint, .green, .blue,
+            .green, .green, .green,
             .blue, .mint, .green
         ])
         
         .ignoresSafeArea()
         .onAppear() {
-            timerSubscription = Timer.publish(every: 0.02, on: .main, in: .common).autoconnect()
+            timerSubscription = Timer.publish(every: 0.05, on: .main, in: .common).autoconnect()
                 .sink {_ in
                     maskTimer += gradientSpeed
                 }

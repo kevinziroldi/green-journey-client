@@ -67,6 +67,8 @@ struct MainView: View {
                     CityReviewsDetailsView(viewModel: viewModel, navigationPath: $navigationPath)
                 case .TravelDetailsView(let viewModel):
                     TravelDetailsView(viewModel: viewModel, navigationPath: $navigationPath)
+                case .TravelNotDoneDetailsView(let vieModel):
+                    TravelNotDoneDetailsView(viewModel: vieModel, navigationPath: $navigationPath)
                 }
             }
         }
