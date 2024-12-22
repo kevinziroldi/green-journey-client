@@ -2,6 +2,7 @@ protocol ServerServiceProtocol {
     // user
     func saveUser(firebaseToken: String, firstName: String, lastName: String, firebaseUID: String) async throws
     func getUser(firebaseToken: String) async throws -> User
+    func modifyUser(firebaseToken: String, modifiedUser: User) async throws -> User
     
     // ranking
     func getRanking(userID: Int) async throws -> RankingResponse

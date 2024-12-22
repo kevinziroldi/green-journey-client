@@ -27,9 +27,10 @@ enum Gender: String, CaseIterable {
 }
 
 class UserPreferencesViewModel: ObservableObject {
-    private var cancellables = Set<AnyCancellable>()
     //swift data model context
-    var modelContext: ModelContext
+    private var modelContext: ModelContext
+    private var serverService: ServerServiceProtocol
+    private var firebaseAuthService: FirebaseAuthServiceProtocol
     
     @Published var firstName: String = ""
     @Published var lastName: String = ""
@@ -44,6 +45,10 @@ class UserPreferencesViewModel: ObservableObject {
         
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
+        
+        // TODO mock or not
+        self.serverService = ServerService()
+        self.firebaseAuthService = FirebaseAuthService()
     }
     
     func getUserData() {
@@ -69,120 +74,69 @@ class UserPreferencesViewModel: ObservableObject {
     
     
     func saveModifications() {
-        do {
+        Task { @MainActor in
             errorMessage = nil
-            let users = try modelContext.fetch(FetchDescriptor<User>())
             
-            // save to server and SwiftData
-            if let user = users.first {
-                let userID = user.userID!
-                
-                let baseURL = NetworkHandler.shared.getBaseURL()
-                guard let url = URL(string: "\(baseURL)/users") else {
-                    print("Invalid URL for posting user data to DB")
-                    return
-                }
-                
-                var zipCodeInt = nil as Int?
-                if let zipCodeString = zipCode {
-                    zipCodeInt = Int(zipCodeString)
-                }
-                
-                var houseNumberInt = nil as Int?
-                if let houseNumberString = houseNumber {
-                    houseNumberInt = Int(houseNumberString)
-                }
-                if (city == "") {
-                    city = nil
-                }
-                if (streetName == "") {
-                    streetName = nil
-                }
-                
-                
-                let modifiedUser = User (
-                    userID: userID,
-                    firstName: firstName,
-                    lastName: lastName,
-                    birthDate: birthDate,
-                    gender: gender.asString(),
-                    firebaseUID: user.firebaseUID,
-                    zipCode: zipCodeInt,
-                    streetName: streetName,
-                    houseNumber: houseNumberInt,
-                    city: city,
-                    scoreShortDistance: user.scoreShortDistance,
-                    scoreLongDistance: user.scoreLongDistance
-                )
-                
-                
-                // JSON encoding
-                guard let body = try? JSONEncoder().encode(modifiedUser) else {
-                    print("Error encoding user data for PUT")
-                    return
-                }
-                
-                guard let firebaseUser = Auth.auth().currentUser else {
-                    print("no current user in firebase")
-                    return
-                }
-                firebaseUser.getIDToken { [weak self] token, error in
-                    guard let strongSelf = self else { return }
-                    if let error = error {
-                        print("error retrieveing token: \(error.localizedDescription)")
-                        return
-                    } else if let firebaseToken = token {
-                        if firebaseUser.uid != modifiedUser.firebaseUID {
-                            print("modified user has different firebase uid")
-                            return
-                        }
-                        // PUT request
-                        var request = URLRequest(url: url)
-                        request.httpMethod = "PUT"
-                        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-                        request.setValue("Bearer \(firebaseToken)", forHTTPHeaderField: "Authorization")
-                        request.httpBody = body
-                        
-                        let decoder = JSONDecoder()
-                        decoder.dateDecodingStrategy = .iso8601
-                        
-                        URLSession.shared.dataTaskPublisher(for: request)
-                            .retry(2)
-                            .tryMap {
-                                result -> Data in
-                                guard let httpResponse = result.response as? HTTPURLResponse,
-                                      (200...299).contains(httpResponse.statusCode) else {
-                                    throw URLError(.badServerResponse)
-                                }
-                                return result.data
-                            }
-                            .decode(type: User.self, decoder: decoder)
-                            .receive(on: DispatchQueue.main)
-                            .sink(receiveCompletion: { completion in
-                                switch completion {
-                                case .finished:
-                                    print("User data posted successfully.")
-                                case .failure(let error):
-                                    print("Error posting user data: \(error.localizedDescription)")
-                                }
-                            }, receiveValue: { [weak self] newUser in
-                                guard let strongSelf = self else { return }
-                                strongSelf.updateUser(newUser: newUser)
-                                strongSelf.getUserData()
-                            })
-                            .store(in: &strongSelf.cancellables)
-                    }
-                    else {
-                        print("error retrieving user token")
-                    }
-                }
+            // get current user
+            let users = try modelContext.fetch(FetchDescriptor<User>())
+            guard let user = users.first else {
+                print("No user present")
+                return
             }
-        }catch {
-            errorMessage = "An error occurred during modification saving, retry later."
+            guard let userID = user.userID else {
+                print("User has no user id")
+                return
+            }
+            
+            // build modified user
+            var zipCodeInt = nil as Int?
+            if let zipCodeString = zipCode {
+                zipCodeInt = Int(zipCodeString)
+            }
+            var houseNumberInt = nil as Int?
+            if let houseNumberString = houseNumber {
+                houseNumberInt = Int(houseNumberString)
+            }
+            if (city == "") {
+                city = nil
+            }
+            if (streetName == "") {
+                streetName = nil
+            }
+            let modifiedUser = User (
+                userID: userID,
+                firstName: firstName,
+                lastName: lastName,
+                birthDate: birthDate,
+                gender: gender.asString(),
+                firebaseUID: user.firebaseUID,
+                zipCode: zipCodeInt,
+                streetName: streetName,
+                houseNumber: houseNumberInt,
+                city: city,
+                scoreShortDistance: user.scoreShortDistance,
+                scoreLongDistance: user.scoreLongDistance
+            )
+            
+            // update user on server
+            guard let firebaseUser = Auth.auth().currentUser else {
+                print("No current user in firebase")
+                return
+            }
+            do {
+                let firebaseToken = try await firebaseAuthService.getFirebaseToken(firebaseUser: firebaseUser)
+                let returnedUser = try await serverService.modifyUser(firebaseToken: firebaseToken, modifiedUser: modifiedUser)
+                self.updateUserInSwiftData(newUser: returnedUser)
+                self.getUserData()
+            }catch {
+                self.errorMessage = "Error saving modifications"
+                print("Error saving modifications on server: \(error.localizedDescription)")
+                return
+            }
         }
     }
-    
-    func updateUser(newUser: User) {
+        
+    func updateUserInSwiftData(newUser: User) {
         var users: [User]
         do {
             errorMessage = nil
@@ -203,7 +157,6 @@ class UserPreferencesViewModel: ObservableObject {
                     try modelContext.save()
                 } catch {
                     print("Error while updating user in SwiftData")
-                    
                     errorMessage = "An error occurred while updating user"
                 }
             }

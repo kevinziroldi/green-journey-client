@@ -63,6 +63,44 @@ class ServerService: ServerServiceProtocol {
         }
     }
     
+    func modifyUser(firebaseToken: String, modifiedUser: User) async throws -> User {
+        // JSON encoding
+        guard let body = try? JSONEncoder().encode(modifiedUser) else {
+            print("Error encoding user data for PUT")
+            throw NSError(domain: "ModifyUserError", code: 4, userInfo: [NSLocalizedDescriptionKey: "Failed to modify user."])
+        }
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        
+        // build request
+        let baseURL = NetworkHandler.shared.getBaseURL()
+        guard let url = URL(string: "\(baseURL)/users") else {
+            print("Invalid URL for posting user data to DB")
+            throw URLError(.badURL)
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = "PUT"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(firebaseToken)", forHTTPHeaderField: "Authorization")
+        request.httpBody = body
+        
+        // perform request
+        let (data, response) = try await URLSession.shared.data(for: request)
+        guard let httpResponse = response as? HTTPURLResponse,
+                (200...299).contains(httpResponse.statusCode) else {
+            throw URLError(.badServerResponse)
+        }
+        
+        // decode response
+        do {
+            let user = try decoder.decode(User.self, from: data)
+            return user
+        } catch {
+            print("Failed to decode user: \(error.localizedDescription)")
+            throw NSError(domain: "GetUserError", code: 4, userInfo: [NSLocalizedDescriptionKey: "Failed to decode user."])
+        }
+    }
+    
     func getRanking(userID: Int) async throws -> RankingResponse {
         // create request
         let baseURL = NetworkHandler.shared.getBaseURL()
