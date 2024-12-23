@@ -1,0 +1,48 @@
+{
+  "count_local_transport_rating" : 2,
+  "count_green_spaces_rating" : 2,
+  "count_waste_bins_rating" : 2,
+  "reviews" : [
+    {
+      "green_spaces_rating" : 4,
+      "score_short_distance" : 100.11276627381579,
+      "badges" : [
+        "badge_distance_high",
+        "badge_ecological_choice_high",
+        "badge_travels_number_mid"
+      ],
+      "user_id" : 53,
+      "review_id" : 9,
+      "review_text" : "Beautiful city and very clean! 🤩",
+      "city_id" : 275549,
+      "local_transport_rating" : 4,
+      "first_name" : "Kevin",
+      "score_long_distance" : 433.60000000000002,
+      "city_iata" : "PAR",
+      "last_name" : "Ziroldi",
+      "country_code" : "FR",
+      "waste_bins_rating" : 5
+    },
+    {
+      "green_spaces_rating" : 4,
+      "score_short_distance" : 0,
+      "badges" : [
+        "badge_ecological_choice_high"
+      ],
+      "user_id" : 54,
+      "review_id" : 10,
+      "review_text" : "The local transport was very efficient!",
+      "city_id" : 275549,
+      "local_transport_rating" : 5,
+      "first_name" : "K",
+      "score_long_distance" : 50.051408149013206,
+      "city_iata" : "PAR",
+      "last_name" : "K",
+      "country_code" : "FR",
+      "waste_bins_rating" : 4
+    }
+  ],
+  "average_waste_bins_rating" : 4.5,
+  "average_local_transport_rating" : 4.5,
+  "average_green_spaces_rating" : 4
+}

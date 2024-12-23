@@ -6,6 +6,7 @@ struct CityReviewsDetailsView: View {
     
     var body: some View {
         VStack {
+            /*
             if let selectedCity = viewModel.selectedCity {
                 if let selectedCityReviewElement = viewModel.selectedCityReviewElement {
                     VStack {
@@ -16,6 +17,17 @@ struct CityReviewsDetailsView: View {
                     }
                 }
             }
+             */
+            let selectedCity = viewModel.searchedCity
+            if let selectedCityReviewElement = viewModel.searchedCityReviewElement {
+                VStack {
+                    Text(selectedCity.cityName)
+                    Text(String(selectedCityReviewElement.averageLocalTransportRating))
+                    Text(String(selectedCityReviewElement.averageGreenSpacesRating))
+                    Text(String(selectedCityReviewElement.averageWasteBinsRating))
+                }
+            }
+            
         }
     }
 }

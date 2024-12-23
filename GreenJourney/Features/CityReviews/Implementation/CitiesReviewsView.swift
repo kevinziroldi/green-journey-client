@@ -77,7 +77,7 @@ struct CitiesReviewsView: View {
             
             Button(action: {
                 viewModel.getReviewsForSearchedCity()
-                }) {
+            }) {
                 Text("Search")
                     .font(.title3)
                     .foregroundStyle(.white)
@@ -104,6 +104,7 @@ struct CitiesReviewsView: View {
             if viewModel.searchedCityAvailable {
                 // append path of the inner view
                 navigationPath.append(NavigationDestination.CityReviewsDetailsView(viewModel))
+                viewModel.searchedCityAvailable = false
             }
         }
     }

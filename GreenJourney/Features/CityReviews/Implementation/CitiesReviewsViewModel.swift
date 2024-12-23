@@ -44,6 +44,8 @@ class CitiesReviewsViewModel: ObservableObject {
                 
                 self.searchedCityReviewElement = cityReviewElement
                 self.searchedCityAvailable = true
+                
+                print("Searched city reviews available")
             }catch {
                 print("Error getting reviews for searched city")
                 return
