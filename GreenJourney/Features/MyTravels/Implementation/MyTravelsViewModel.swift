@@ -40,19 +40,19 @@ class MyTravelsViewModel: ObservableObject {
     
     // TODO probably to be moved to reviews view model
     /*
-    // upload review
-    @Published var reviewText: String = ""
-    @Published var localTransportRating: Int = 0
-    @Published var greenSpacesRating: Int = 0
-    @Published var wasteBinsRating: Int = 0
-    
-    // modify review
-    // can't be modified, it is the id of the review the user is modifying
-    @Published var modifiedReviewID: Int = 0
-    @Published var modifiedReviewText: String = ""
-    @Published var modifiedLocalTransportRating: Int = 0
-    @Published var modifiedGreenSpacesRating: Int = 0
-    @Published var modifiedWasteBinsRating: Int = 0
+     // upload review
+     @Published var reviewText: String = ""
+     @Published var localTransportRating: Int = 0
+     @Published var greenSpacesRating: Int = 0
+     @Published var wasteBinsRating: Int = 0
+     
+     // modify review
+     // can't be modified, it is the id of the review the user is modifying
+     @Published var modifiedReviewID: Int = 0
+     @Published var modifiedReviewText: String = ""
+     @Published var modifiedLocalTransportRating: Int = 0
+     @Published var modifiedGreenSpacesRating: Int = 0
+     @Published var modifiedWasteBinsRating: Int = 0
      */
     
     
@@ -60,17 +60,16 @@ class MyTravelsViewModel: ObservableObject {
         self.modelContext = modelContext
         self.serverService = ServiceFactory.shared.serverService
     }
-       
-    func getUserTravels() {
-        Task{ @MainActor in
-            do {
-                let travelDetailsList = try await serverService.getTravels()
-                removeExistingTravels()
-                addNewTravels(travelDetailsList: travelDetailsList)
-            }catch {
-                print("Error fetching travels from server")
-                return
-            }
+    
+    @MainActor
+    func getUserTravels() async {
+        do {
+            let travelDetailsList = try await serverService.getTravels()
+            removeExistingTravels()
+            addNewTravels(travelDetailsList: travelDetailsList)
+        }catch {
+            print("Error fetching travels from server")
+            return
         }
     }
     
@@ -218,21 +217,23 @@ class MyTravelsViewModel: ObservableObject {
         }
     }
     
-    func compensateCO2() {
+    @MainActor
+    func compensateCO2() async {
         let newCo2Compensated = self.co2CompensatedPerEuro * self.compensatedPrice
         
         if let selectedTravel = self.selectedTravel {
             let modifiedTravel = Travel(travelCopy: selectedTravel.travel)
             modifiedTravel.CO2Compensated += newCo2Compensated
             
-            updateTravelOnServer(modifiedTravel: modifiedTravel)
+            await updateTravelOnServer(modifiedTravel: modifiedTravel)
         } else {
             print("Selected travel is nil")
         }
         
     }
     
-    func confirmTravel(travel: Travel) {
+    @MainActor
+    func confirmTravel(travel: Travel) async {
         if travel.confirmed {
             print("Travel already confirmed")
             return
@@ -241,26 +242,26 @@ class MyTravelsViewModel: ObservableObject {
         let modifiedTravel = Travel(travelCopy: travel)
         modifiedTravel.confirmed = true
         
-        updateTravelOnServer(modifiedTravel: modifiedTravel)
+        await updateTravelOnServer(modifiedTravel: modifiedTravel)
     }
     
-    private func updateTravelOnServer(modifiedTravel: Travel) {
-        Task { @MainActor in
-            do {
-                let travel = try await serverService.updateTravel(modifiedTravel: modifiedTravel)
-                
-                // save travel in SwiftData (sync)
-                self.updateTravelInSwiftData(updatedTravel: travel)
-                // refresh travels (sync)
-                self.showRequestedTravels()
-            }catch {
-                print("Error updating travel data: \(error.localizedDescription)")
-                return
-            }
+    @MainActor
+    private func updateTravelOnServer(modifiedTravel: Travel) async {
+        do {
+            let travel = try await serverService.updateTravel(modifiedTravel: modifiedTravel)
+            
+            // save travel in SwiftData
+            await self.updateTravelInSwiftData(updatedTravel: travel)
+            // refresh travels
+            self.showRequestedTravels()
+        }catch {
+            print("Error updating travel data: \(error.localizedDescription)")
+            return
         }
     }
     
-    private func updateTravelInSwiftData(updatedTravel: Travel) {
+    @MainActor
+    private func updateTravelInSwiftData(updatedTravel: Travel) async {
         do {
             let travels = try modelContext.fetch(FetchDescriptor<Travel>())
             
@@ -275,29 +276,29 @@ class MyTravelsViewModel: ObservableObject {
         }catch {
             print("Error while updating travel in SwiftData")
             // refesh travels from server
-            self.getUserTravels()
+            await self.getUserTravels()
         }
     }
     
-    func deleteTravel(travelToDelete: Travel) {
-        Task { @MainActor in
-            do {
-                guard let travelID = travelToDelete.travelID else {
-                    print("Travel id for deletion is nil")
-                    return
-                }
-                try await serverService.deleteTravel(travelID: travelID)
-                // remove from SwiftData
-                self.deleteTravelFromSwiftData(travelToDelete: travelToDelete)
-                // refresh travels
-                self.showRequestedTravels()
-            }catch {
-                
+    @MainActor
+    func deleteTravel(travelToDelete: Travel) async {
+        do {
+            guard let travelID = travelToDelete.travelID else {
+                print("Travel id for deletion is nil")
+                return
             }
+            try await serverService.deleteTravel(travelID: travelID)
+            // remove from SwiftData
+            await self.deleteTravelFromSwiftData(travelToDelete: travelToDelete)
+            // refresh travels
+            self.showRequestedTravels()
+        }catch {
+            print("Error while deletitng")
         }
     }
     
-    func deleteTravelFromSwiftData(travelToDelete: Travel) {
+    @MainActor
+    func deleteTravelFromSwiftData(travelToDelete: Travel) async {
         if let travelID = travelToDelete.travelID {
             do {
                 let travels = try modelContext.fetch(FetchDescriptor<Travel>())
@@ -324,7 +325,7 @@ class MyTravelsViewModel: ObservableObject {
             }catch {
                 print("Error interacting with SwiftData")
                 // refresh data from server
-                self.getUserTravels()
+                await self.getUserTravels()
             }
         } else {
             print("Error travel to delete has nil id")
@@ -576,7 +577,7 @@ class MyTravelsViewModel: ObservableObject {
 }
 extension MyTravelsViewModel: Hashable {
     static func == (lhs: MyTravelsViewModel, rhs: MyTravelsViewModel) -> Bool {
-        return lhs.uuid == rhs.uuid 
+        return lhs.uuid == rhs.uuid
     }
 
     func hash(into hasher: inout Hasher) {

@@ -41,7 +41,9 @@ struct LoginView: View {
                             Text(resendMessage)
                         }
                         Button("Reset password") {
-                            viewModel.resetPassword(email: viewModel.email)
+                            Task {
+                                await viewModel.resetPassword(email: viewModel.email)
+                            }
                         }
                     }
                     // error message
@@ -53,7 +55,9 @@ struct LoginView: View {
                     
                     VStack(spacing: 20) {
                         Button(action: {
-                            viewModel.login()
+                            Task {
+                                await viewModel.login()
+                            }
                         }) {
                             Text("Login")
                                 .foregroundColor(.white)
@@ -86,7 +90,9 @@ struct LoginView: View {
                             
                             
                             Button(action: {
-                                viewModel.signInWithGoogle()
+                                Task {
+                                    await viewModel.signInWithGoogle()
+                                }
                             }) {
                                 HStack(spacing: 10) {
                                     Image("googleLogo")

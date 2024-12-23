@@ -41,7 +41,7 @@ class UserPreferencesViewModel: ObservableObject {
     @Published var zipCode: Int?
     
     @Published var errorMessage: String?
-        
+    
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
         self.serverService = ServiceFactory.shared.serverService
@@ -68,65 +68,69 @@ class UserPreferencesViewModel: ObservableObject {
         }
     }
     
-    
-    func saveModifications() {
-        Task { @MainActor in
-            errorMessage = nil
-            
-            // get current user
-            let users = try modelContext.fetch(FetchDescriptor<User>())
-            guard let user = users.first else {
-                print("No user present")
-                return
-            }
-            guard let userID = user.userID else {
-                print("User has no user id")
-                return
-            }
-            
-            // build modified user
-            var zipCodeInt = nil as Int?
-            if let zipCodeString = zipCode {
-                zipCodeInt = Int(zipCodeString)
-            }
-            var houseNumberInt = nil as Int?
-            if let houseNumberString = houseNumber {
-                houseNumberInt = Int(houseNumberString)
-            }
-            if (city == "") {
-                city = nil
-            }
-            if (streetName == "") {
-                streetName = nil
-            }
-            let modifiedUser = User (
-                userID: userID,
-                firstName: firstName,
-                lastName: lastName,
-                birthDate: birthDate,
-                gender: gender.asString(),
-                firebaseUID: user.firebaseUID,
-                zipCode: zipCodeInt,
-                streetName: streetName,
-                houseNumber: houseNumberInt,
-                city: city,
-                scoreShortDistance: user.scoreShortDistance,
-                scoreLongDistance: user.scoreLongDistance
-            )
-            
-            // update user on server
-            do {
-                let returnedUser = try await serverService.modifyUser(modifiedUser: modifiedUser)
-                self.updateUserInSwiftData(newUser: returnedUser)
-                self.getUserData()
-            }catch {
-                self.errorMessage = "Error saving modifications"
-                print("Error saving modifications on server: \(error.localizedDescription)")
-                return
-            }
+    @MainActor
+    func saveModifications() async {
+        errorMessage = nil
+        
+        // get current user
+        let users: [User]
+        do {
+            users = try modelContext.fetch(FetchDescriptor<User>())
+        }catch {
+            print("Error fetching user from SwiftData")
+            return
+        }
+        guard let user = users.first else {
+            print("No user present")
+            return
+        }
+        guard let userID = user.userID else {
+            print("User has no user id")
+            return
+        }
+        
+        // build modified user
+        var zipCodeInt = nil as Int?
+        if let zipCodeString = zipCode {
+            zipCodeInt = Int(zipCodeString)
+        }
+        var houseNumberInt = nil as Int?
+        if let houseNumberString = houseNumber {
+            houseNumberInt = Int(houseNumberString)
+        }
+        if (city == "") {
+            city = nil
+        }
+        if (streetName == "") {
+            streetName = nil
+        }
+        let modifiedUser = User (
+            userID: userID,
+            firstName: firstName,
+            lastName: lastName,
+            birthDate: birthDate,
+            gender: gender.asString(),
+            firebaseUID: user.firebaseUID,
+            zipCode: zipCodeInt,
+            streetName: streetName,
+            houseNumber: houseNumberInt,
+            city: city,
+            scoreShortDistance: user.scoreShortDistance,
+            scoreLongDistance: user.scoreLongDistance
+        )
+        
+        // update user on server
+        do {
+            let returnedUser = try await serverService.modifyUser(modifiedUser: modifiedUser)
+            self.updateUserInSwiftData(newUser: returnedUser)
+            self.getUserData()
+        }catch {
+            self.errorMessage = "Error saving modifications"
+            print("Error saving modifications on server: \(error.localizedDescription)")
+            return
         }
     }
-        
+    
     func updateUserInSwiftData(newUser: User) {
         var users: [User]
         do {
@@ -158,23 +162,23 @@ class UserPreferencesViewModel: ObservableObject {
     }
     
     func binding(for value: Binding<Int?>) -> Binding<String> {
-            Binding<String>(
-                get: {
-                    if let unwrapped = value.wrappedValue {
-                        return String(unwrapped)
-                    } else {
-                        return ""
-                    }
-                },
-                set: { newValue in
-                    if let intValue = Int(newValue) {
-                        value.wrappedValue = intValue
-                    } else {
-                        value.wrappedValue = nil
-                    }
+        Binding<String>(
+            get: {
+                if let unwrapped = value.wrappedValue {
+                    return String(unwrapped)
+                } else {
+                    return ""
                 }
-            )
-        }
+            },
+            set: { newValue in
+                if let intValue = Int(newValue) {
+                    value.wrappedValue = intValue
+                } else {
+                    value.wrappedValue = nil
+                }
+            }
+        )
+    }
     
     func cancelModifications() {
         getUserData()

@@ -19,33 +19,32 @@ class RankingViewModel: ObservableObject {
         self.serverService = ServiceFactory.shared.serverService
     }
     
-    func fecthRanking() {
-        Task { @MainActor in
-            errorMessage = nil
-            
-            // get user id
-            do {
-                users = try modelContext.fetch(FetchDescriptor<User>())
-            }catch {
-                print("Error getting user from SwiftData")
-                errorMessage = "An error occurred retrieving rankings from server"
-                return
-            }
-            guard let userID = users.first?.userID else {
-                print("No user found")
-                errorMessage = "An error occurred retrieving rankings from server"
-                return
-            }
-            
-            // get ranking from server
-            do {
-                let rankingResponse = try await serverService.getRanking(userID: userID)
-                self.shortDistanceRanking = rankingResponse.shortDistanceRanking
-                self.longDistanceRanking = rankingResponse.longDistanceRanking
-            }catch {
-                print("Error fetching rankings: \(error.localizedDescription)")
-                self.errorMessage = "An error occurred retrieving rankings from server"
-            }
+    @MainActor
+    func fecthRanking() async {
+        errorMessage = nil
+        
+        // get user id
+        do {
+            users = try modelContext.fetch(FetchDescriptor<User>())
+        }catch {
+            print("Error getting user from SwiftData")
+            errorMessage = "An error occurred retrieving rankings from server"
+            return
+        }
+        guard let userID = users.first?.userID else {
+            print("No user found")
+            errorMessage = "An error occurred retrieving rankings from server"
+            return
+        }
+        
+        // get ranking from server
+        do {
+            let rankingResponse = try await serverService.getRanking(userID: userID)
+            self.shortDistanceRanking = rankingResponse.shortDistanceRanking
+            self.longDistanceRanking = rankingResponse.longDistanceRanking
+        }catch {
+            print("Error fetching rankings: \(error.localizedDescription)")
+            self.errorMessage = "An error occurred retrieving rankings from server"
         }
     }
     

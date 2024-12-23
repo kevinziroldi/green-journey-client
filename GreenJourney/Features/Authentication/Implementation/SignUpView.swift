@@ -47,7 +47,9 @@ struct SignUpView: View {
                     
                     VStack (spacing: 20) {
                         Button(action: {
-                            viewModel.signUp()
+                            Task {
+                                await viewModel.signUp()
+                            }
                         }) {
                             Text("Create account")
                                 .foregroundColor(.white)
@@ -80,7 +82,9 @@ struct SignUpView: View {
                             
                             
                             Button(action: {
-                                viewModel.signInWithGoogle()
+                                Task {
+                                    await viewModel.signInWithGoogle()
+                                }
                             }) {
                                 HStack(spacing: 10) {
                                     Image("googleLogo")

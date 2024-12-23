@@ -73,8 +73,10 @@ struct TravelNotDoneDetailsView: View {
                                     primaryButton: .cancel(Text("Cancel")) {},
                                     secondaryButton: .destructive(Text("Delete")) {
                                         //delete travel
-                                        viewModel.deleteTravel(travelToDelete: travelDetails.travel)
-                                        navigationPath.removeLast()
+                                        Task {
+                                            await viewModel.deleteTravel(travelToDelete: travelDetails.travel)
+                                           navigationPath.removeLast()
+                                        }
                                     }
                                 )
                             }

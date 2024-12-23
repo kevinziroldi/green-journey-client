@@ -339,8 +339,6 @@ class ServerService: ServerServiceProtocol {
                 (200...299).contains(httpResponse.statusCode) else {
             throw URLError(.badServerResponse)
         }
-        
-        print(data.prettyPrintedJSONString!)
             
         // decode response
         do {

@@ -84,7 +84,9 @@ struct RankingView: View {
             }
         }
         .onAppear {
-            viewModel.fecthRanking()
+            Task {
+                await viewModel.fecthRanking()
+            }
         }
     }
 }

@@ -50,10 +50,12 @@ struct UserPreferencesView : View {
                         }
                         Spacer()
                         Button("Save") {
-                            withAnimation(.default) {
-                                editTapped = false
+                            Task {
+                                withAnimation(.default) {
+                                    editTapped = false
+                                }
+                                await userPreferencesViewModel.saveModifications()
                             }
-                            userPreferencesViewModel.saveModifications()
                         }
                     }
                     else {
@@ -140,18 +142,18 @@ struct UserPreferencesView : View {
                         
                     }
                     Button ("Modify password") {
-                        
                         withAnimation() {
                             showResendMessage = true
                         }
-                        authenticationViewModel.resetPassword(email: email)
+                        Task {
+                            await authenticationViewModel.resetPassword(email: email)
+                        }
                         DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
                             withAnimation() {
                                 showResendMessage = false
                             }
                         }
                     }
-                    
                 }
                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 20, trailing: 25))
                 

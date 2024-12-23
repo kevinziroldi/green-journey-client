@@ -135,18 +135,22 @@ struct OptionDetailsView: View {
             }
             else {
                 Button ("save travel") {
-                    viewModel.selectedOption.append(contentsOf: segments)
-                    viewModel.saveTravel()
-                    navigationPath = NavigationPath()
+                    Task {
+                        viewModel.selectedOption.append(contentsOf: segments)
+                        await viewModel.saveTravel()
+                        navigationPath = NavigationPath()
+                    }
                 }
                 .buttonStyle(.borderedProminent)
             }
         }
         else {
             Button ("save travel") {
-                viewModel.selectedOption.append(contentsOf: segments)
-                viewModel.saveTravel()
-                navigationPath = NavigationPath()
+                Task {
+                    viewModel.selectedOption.append(contentsOf: segments)
+                    await viewModel.saveTravel()
+                    navigationPath = NavigationPath()
+                }
             }
             .buttonStyle(.borderedProminent)
         }

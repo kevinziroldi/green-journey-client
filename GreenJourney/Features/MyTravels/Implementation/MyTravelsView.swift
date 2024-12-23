@@ -114,7 +114,9 @@ struct MyTravelsView: View {
                                                 primaryButton: .cancel(Text("Cancel")) {},
                                                 secondaryButton: .default(Text("Confirm")) {
                                                     //confirm travel
-                                                    viewModel.confirmTravel(travel: travelDetails.travel)
+                                                    Task {
+                                                        await viewModel.confirmTravel(travel: travelDetails.travel)
+                                                    }
                                                 }
                                             )
                                         }
@@ -136,7 +138,9 @@ struct MyTravelsView: View {
                                                 primaryButton: .cancel(Text("Cancel")) {},
                                                 secondaryButton: .destructive(Text("Delete")) {
                                                     //delete travel
-                                                    viewModel.deleteTravel(travelToDelete: travelDetails.travel)
+                                                    Task {
+                                                        await viewModel.deleteTravel(travelToDelete: travelDetails.travel)
+                                                    }
                                                 }
                                             )
                                         }

@@ -223,9 +223,11 @@ struct TravelSearchView: View {
                             
                             Spacer()
                             Button(action: {
-                                viewModel.computeRoutes()
-                                navigationPath.append(NavigationDestination.OutwardOptionsView(viewModel))
-                                triggerAI = false
+                                Task {
+                                    await viewModel.computeRoutes()
+                                    navigationPath.append(NavigationDestination.OutwardOptionsView(viewModel))
+                                    triggerAI = false
+                                }
                             }) {
                                 ZStack {
                                     RoundedRectangle(cornerRadius: 10)

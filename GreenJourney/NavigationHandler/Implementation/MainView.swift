@@ -56,7 +56,9 @@ struct MainView: View {
                         }
                         .onDisappear() {
                             // get travels from server
-                            viewModel.getUserTravels()
+                            Task {
+                                await viewModel.getUserTravels()
+                            }
                         }
                 }
             }
@@ -83,7 +85,9 @@ struct MainView: View {
             }
         }.onAppear() {
             // get travels from server
-            viewModel.getUserTravels()
+            Task {
+                await viewModel.getUserTravels()
+            }
         }
     }
 }
