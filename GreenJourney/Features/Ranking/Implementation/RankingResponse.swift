@@ -2,6 +2,11 @@ struct RankingResponse: Decodable {
     var shortDistanceRanking: [RankingElement]
     var longDistanceRanking: [RankingElement]
     
+    init() {
+        self.shortDistanceRanking = []
+        self.longDistanceRanking = []
+    }
+    
     enum CodingKeys: String, CodingKey {
         case shortDistanceRanking = "short_distance_ranking"
         case longDistanceRanking = "long_distance_ranking"

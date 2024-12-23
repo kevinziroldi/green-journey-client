@@ -1,0 +1,88 @@
+{
+  "long_distance_ranking" : [
+    {
+      "total_distance" : 5773.3509999999997,
+      "score" : 433.60000000000002,
+      "total_co_2_compensated" : 0,
+      "badges" : [
+        "badge_distance_high",
+        "badge_ecological_choice_high",
+        "badge_travels_number_mid"
+      ],
+      "total_duration" : 298568000000000,
+      "last_name" : "MockUser",
+      "user_id" : 1,
+      "total_co_2_emitted" : 877.17000000000007,
+      "first_name" : "MockUser"
+    },
+    {
+      "total_distance" : 573.37099999999998,
+      "score" : 0,
+      "total_co_2_compensated" : 0,
+      "badges" : [
+        "badge_ecological_choice_high"
+      ],
+      "total_duration" : 21620000000000,
+      "last_name" : "MockUser2",
+      "user_id" : 2,
+      "total_co_2_emitted" : 114.60000000000001,
+      "first_name" : "MockUser2"
+    },
+    {
+      "total_distance" : 0,
+      "score" : 0,
+      "total_co_2_compensated" : 0,
+      "badges" : [
+
+      ],
+      "total_duration" : 0,
+      "last_name" : "MockUser3",
+      "user_id" : 3,
+      "total_co_2_emitted" : 0,
+      "first_name" : "MockUser3"
+    }
+  ],
+  "short_distance_ranking" : [
+    {
+      "total_distance" : 5773.3509999999997,
+      "score" : 100.11276627381579,
+      "total_co_2_compensated" : 0,
+      "badges" : [
+        "badge_distance_high",
+        "badge_ecological_choice_high",
+        "badge_travels_number_mid"
+      ],
+      "total_duration" : 298568000000000,
+      "last_name" : "MockUser1",
+      "user_id" : 1,
+      "total_co_2_emitted" : 877.17000000000007,
+      "first_name" : "MockUser1"
+    },
+    {
+      "total_distance" : 573.37099999999998,
+      "score" : 0,
+      "total_co_2_compensated" : 0,
+      "badges" : [
+        "badge_ecological_choice_high"
+      ],
+      "total_duration" : 21620000000000,
+      "last_name" : "MockUser2",
+      "user_id" : 2,
+      "total_co_2_emitted" : 114.60000000000001,
+      "first_name" : "MockUser2"
+    },
+    {
+      "total_distance" : 0,
+      "score" : 0,
+      "total_co_2_compensated" : 0,
+      "badges" : [
+
+      ],
+      "total_duration" : 0,
+      "last_name" : "MockUser3",
+      "user_id" : 3,
+      "total_co_2_emitted" : 0,
+      "first_name" : "MockUser3"
+    }
+  ]
+}

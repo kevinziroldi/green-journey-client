@@ -1,7 +1,7 @@
 {
-  "user_id": 56,
-  "first_name": "MockUser",
-  "last_name": "MockUser",
+  "user_id": 1,
+  "first_name": "MockUser1",
+  "last_name": "MockUser1",
   "birth_date": "1990-09-09T00:00:00Z",
   "gender": "male",
   "firebase_uid": "MockFirebaseToken",

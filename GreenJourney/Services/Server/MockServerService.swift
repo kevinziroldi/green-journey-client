@@ -9,6 +9,7 @@ class MockServerService: ServerServiceProtocol {
     func getUser(firebaseToken: String) async throws -> User {
         // read mock user from json
         guard let path = Bundle.main.path(forResource: "mock_user", ofType: "json") else {
+            print("Mock user file not found")
             return User()
         }
         do {
@@ -28,32 +29,19 @@ class MockServerService: ServerServiceProtocol {
     }
     
     func getRanking(userID: Int) async throws -> RankingResponse {
-        // create request
-        let baseURL = URLHandler.shared.getBaseURL()
-        guard let url = URL(string:"\(baseURL)/ranking?id=\(userID)") else {
-            throw URLError(.badURL)
+        // read mock ranking from json
+        guard let path = Bundle.main.path(forResource: "mock_ranking", ofType: "json") else {
+            print("Mock ranking file not found")
+            return RankingResponse()
         }
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        // no authentication needed
-        
-        // decoder
-        let decoder = JSONDecoder()
-        
-        // perform request
-        let (data, response) = try await URLSession.shared.data(for: request)
-        guard let httpResponse = response as? HTTPURLResponse,
-                (200...299).contains(httpResponse.statusCode) else {
-            throw URLError(.badServerResponse)
-        }
-        
-        // decode response
         do {
-            let ranking = try decoder.decode(RankingResponse.self, from: data)
+            let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            let ranking = try JSONDecoder().decode(RankingResponse.self, from: data)
             return ranking
         } catch {
-            print("Failed to decode ranking: \(error.localizedDescription)")
-            throw NSError(domain: "GetRankingError", code: 4, userInfo: [NSLocalizedDescriptionKey: "Failed to decode ranking."])
+            return RankingResponse()
         }
     }
     
