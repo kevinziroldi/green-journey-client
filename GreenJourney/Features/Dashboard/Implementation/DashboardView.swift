@@ -3,11 +3,9 @@ import SwiftData
 import Charts
 
 struct DashboardView: View {
-    @StateObject private var viewModel: DashboardViewModel
     @Binding var navigationPath: NavigationPath
     
     init(modelContext: ModelContext, navigationPath: Binding<NavigationPath>) {
-        _viewModel = StateObject(wrappedValue: DashboardViewModel(modelContext: modelContext))
         _navigationPath = navigationPath
     }
     

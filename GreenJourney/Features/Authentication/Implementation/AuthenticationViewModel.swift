@@ -34,6 +34,7 @@ class AuthenticationViewModel: ObservableObject {
         self.firebaseAuthService = ServiceFactory.shared.firebaseAuthService
     }
     
+    
     func login() {
         Task { @MainActor in
             // input check and validation

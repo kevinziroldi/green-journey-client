@@ -76,7 +76,9 @@ struct CitiesReviewsView: View {
             }
             
             Button(action: {
-                viewModel.getReviewsForSearchedCity()
+                Task {
+                    await viewModel.getReviewsForSearchedCity()
+                }
             }) {
                 Text("Search")
                     .font(.title3)
@@ -98,7 +100,9 @@ struct CitiesReviewsView: View {
             }
         }
         .onAppear {
-            viewModel.getBestReviewedCities()
+            Task {
+                await viewModel.getBestReviewedCities()
+            }
         }
         .onChange(of: viewModel.searchedCityAvailable) {
             if viewModel.searchedCityAvailable {

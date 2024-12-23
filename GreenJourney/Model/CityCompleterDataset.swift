@@ -9,12 +9,20 @@ class CityCompleterDataset: Identifiable, Equatable {
     var countryCode: String
     var continent: String
     
-    init(city: String, countryName: String, iata: String, continent: String, countryCode: String) {
+    init(existingCity: CityCompleterDataset) {
+        self.cityName = existingCity.cityName
+        self.countryName = existingCity.countryName
+        self.iata = existingCity.iata
+        self.countryCode = existingCity.countryCode
+        self.continent = existingCity.continent
+    }
+    
+    init(city: String, countryName: String, iata: String, countryCode: String, continent: String) {
         self.cityName = city
         self.countryName = countryName
         self.iata = iata
-        self.continent = continent
         self.countryCode = countryCode
+        self.continent = continent
     }
     
     init() {

@@ -133,7 +133,7 @@ class DestinationPredictionViewModel: ObservableObject {
                         }
                     }
                     if newCity {
-                        predictedCities.append(CityCompleterDataset(city: cityDS.cityName, countryName: cityDS.countryName, iata: cityDS.iata, continent: cityDS.continent, countryCode: cityDS.countryCode))
+                        predictedCities.append(CityCompleterDataset(city: cityDS.cityName, countryName: cityDS.countryName, iata: cityDS.iata, countryCode: cityDS.countryCode, continent: cityDS.continent))
                         
                         // return if predictionSize cities found
                         if predictedCities.count == predictionSize {
@@ -149,7 +149,7 @@ class DestinationPredictionViewModel: ObservableObject {
                 // return the first predicted city (already visited)
                 if let cityId = citiesIds.first {
                     if let firstCity = citiesDS.first(where: { $0.id == cityId }) {
-                        predictedCities.append(CityCompleterDataset(city: firstCity.cityName, countryName: firstCity.countryName, iata: firstCity.iata, continent: firstCity.continent, countryCode: firstCity.countryCode))
+                        predictedCities.append(CityCompleterDataset(city: firstCity.cityName, countryName: firstCity.countryName, iata: firstCity.iata, countryCode: firstCity.countryCode, continent: firstCity.continent))
                         return
                     }
                 }
@@ -211,8 +211,7 @@ class DestinationPredictionViewModel: ObservableObject {
         if let randomCity = citiesDS.randomElement() {
             return CityCompleterDataset(
                 city: randomCity.cityName,
-                countryName: randomCity.countryName, iata: randomCity.iata, continent: randomCity.continent,
-                countryCode: randomCity.countryCode
+                countryName: randomCity.countryName, iata: randomCity.iata, countryCode: randomCity.countryCode, continent: randomCity.continent
             )
         }
         // if random element not found
