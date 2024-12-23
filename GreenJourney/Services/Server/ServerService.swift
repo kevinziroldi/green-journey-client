@@ -316,6 +316,8 @@ class ServerService: ServerServiceProtocol {
                 (200...299).contains(httpResponse.statusCode) else {
             throw URLError(.badServerResponse)
         }
+        
+        print(data.prettyPrintedJSONString!)
             
         // decode response
         do {
@@ -381,14 +383,14 @@ class ServerService: ServerServiceProtocol {
         // build JSON decoder
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
-        
+                
         // perform request
         let (data, response) = try await URLSession.shared.data(for: request)
         guard let httpResponse = response as? HTTPURLResponse,
                 (200...299).contains(httpResponse.statusCode) else {
             throw URLError(.badServerResponse)
         }
-            
+        
         // decode response
         do {
             let travelDetailsList = try decoder.decode([TravelDetails].self, from: data)

@@ -1,6 +1,5 @@
 import Foundation
 
-// TODO realize mock
 class MockServerService: ServerServiceProtocol {
     func saveUser(firebaseToken: String, firstName: String, lastName: String, firebaseUID: String) async throws {
         // don't save anything
@@ -16,9 +15,10 @@ class MockServerService: ServerServiceProtocol {
             let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .iso8601
-            let user = try JSONDecoder().decode(User.self, from: data)
+            let user = try decoder.decode(User.self, from: data)
             return user
         } catch {
+            print(error)
             return User()
         }
     }
@@ -38,9 +38,10 @@ class MockServerService: ServerServiceProtocol {
             let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .iso8601
-            let ranking = try JSONDecoder().decode(RankingResponse.self, from: data)
+            let ranking = try decoder.decode(RankingResponse.self, from: data)
             return ranking
         } catch {
+            print(error)
             return RankingResponse()
         }
     }
@@ -55,9 +56,10 @@ class MockServerService: ServerServiceProtocol {
             let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .iso8601
-            let reviews = try JSONDecoder().decode(CityReviewElement.self, from: data)
+            let reviews = try decoder.decode(CityReviewElement.self, from: data)
             return reviews
         } catch {
+            print(error)
             return CityReviewElement()
         }
     }
@@ -72,9 +74,10 @@ class MockServerService: ServerServiceProtocol {
             let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .iso8601
-            let bestCities = try JSONDecoder().decode([CityReviewElement].self, from: data)
+            let bestCities = try decoder.decode([CityReviewElement].self, from: data)
             return bestCities
         } catch {
+            print(error)
             return []
         }
     }
@@ -94,33 +97,20 @@ class MockServerService: ServerServiceProtocol {
     func computeRoutes(departureIata: String, departureCountryCode: String,
                        destinationIata: String, destinationCountryCode: String,
                        date: String, time: String, isOutward: Bool) async throws -> TravelOptionsResponse {
-        
-        // build request
-        let baseURL = URLHandler.shared.getBaseURL()
-        guard let url = URL(string:"\(baseURL)/travels/search?iata_departure=\(departureIata)&country_code_departure=\(departureCountryCode)&iata_destination=\(destinationIata)&country_code_destination=\(destinationCountryCode)&date=\(date)&time=\(time)&is_outward=\(isOutward)") else {
-            throw URLError(.badURL)
+        // read mock review from json
+        guard let path = Bundle.main.path(forResource: "mock_travel_options", ofType: "json") else {
+            print("Mock travel options file not found")
+            return TravelOptionsResponse(options: [])
         }
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        
-        // build decoder
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
-        
-        // perform request
-        let (data, response) = try await URLSession.shared.data(for: request)
-        guard let httpResponse = response as? HTTPURLResponse,
-                (200...299).contains(httpResponse.statusCode) else {
-            throw URLError(.badServerResponse)
-        }
-            
-        // decode response
         do {
+            let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
             let travelOptions = try decoder.decode(TravelOptionsResponse.self, from: data)
             return travelOptions
         } catch {
-            print("Failed to decode review: \(error.localizedDescription)")
-            throw NSError(domain: "UploadReviewError", code: 4, userInfo: [NSLocalizedDescriptionKey: "Failed to decode review."])
+            print(error)
+            return TravelOptionsResponse(options: [])
         }
     }
     
@@ -131,34 +121,20 @@ class MockServerService: ServerServiceProtocol {
     }
     
     func getTravels(firebaseToken: String) async throws -> [TravelDetails] {
-        // build request
-        let baseURL = URLHandler.shared.getBaseURL()
-        guard let url = URL(string:"\(baseURL)/travels/user") else {
-            print("Invalid URL.")
-            throw URLError(.badURL)
+        // read mock review from json
+        guard let path = Bundle.main.path(forResource: "mock_user_travels", ofType: "json") else {
+            print("Mock user travel file not found")
+            return []
         }
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.setValue("Bearer \(firebaseToken)", forHTTPHeaderField: "Authorization")
-        
-        // build JSON decoder
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
-        
-        // perform request
-        let (data, response) = try await URLSession.shared.data(for: request)
-        guard let httpResponse = response as? HTTPURLResponse,
-                (200...299).contains(httpResponse.statusCode) else {
-            throw URLError(.badServerResponse)
-        }
-            
-        // decode response
         do {
-            let travelDetailsList = try decoder.decode([TravelDetails].self, from: data)
-            return travelDetailsList
+            let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            let travels = try decoder.decode([TravelDetails].self, from: data)
+            return travels
         } catch {
-            print("Failed to decode travels: \(error.localizedDescription)")
-            throw NSError(domain: "GetTravelsError", code: 4, userInfo: [NSLocalizedDescriptionKey: "Failed to decode travels."])
+            print(error)
+            return []
         }
     }
     
