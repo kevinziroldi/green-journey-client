@@ -8,7 +8,6 @@ class MyTravelsViewModel: ObservableObject {
     
     private var modelContext: ModelContext
     private var serverService: ServerServiceProtocol
-    private var firebaseAuthService: FirebaseAuthServiceProtocol
     
     // travels lists
     var travelDetailsList: [TravelDetails] = []
@@ -59,20 +58,13 @@ class MyTravelsViewModel: ObservableObject {
     
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
-        
         self.serverService = ServiceFactory.shared.serverService
-        self.firebaseAuthService = ServiceFactory.shared.firebaseAuthService
     }
        
     func getUserTravels() {
         Task{ @MainActor in
-            guard let firebaseUser = Auth.auth().currentUser else {
-                print("Error retrieving firebase user")
-                return
-            }
             do {
-                let firebaseToken = try await   firebaseAuthService.getFirebaseToken(firebaseUser: firebaseUser)
-                let travelDetailsList = try await serverService.getTravels(firebaseToken: firebaseToken)
+                let travelDetailsList = try await serverService.getTravels()
                 removeExistingTravels()
                 addNewTravels(travelDetailsList: travelDetailsList)
             }catch {
@@ -254,13 +246,8 @@ class MyTravelsViewModel: ObservableObject {
     
     private func updateTravelOnServer(modifiedTravel: Travel) {
         Task { @MainActor in
-            guard let firebaseUser = Auth.auth().currentUser else {
-                print("error retrieving firebase user")
-                return
-            }
             do {
-                let firebaseToken = try await firebaseAuthService.getFirebaseToken(firebaseUser: firebaseUser)
-                let travel = try await serverService.updateTravel(firebaseToken: firebaseToken, modifiedTravel: modifiedTravel)
+                let travel = try await serverService.updateTravel(modifiedTravel: modifiedTravel)
                 
                 // save travel in SwiftData (sync)
                 self.updateTravelInSwiftData(updatedTravel: travel)
@@ -294,17 +281,12 @@ class MyTravelsViewModel: ObservableObject {
     
     func deleteTravel(travelToDelete: Travel) {
         Task { @MainActor in
-            guard let firebaseUser = Auth.auth().currentUser else {
-                print("Error retrieving firebase user")
-                return
-            }
             do {
-                let firebaseToken = try await firebaseAuthService.getFirebaseToken(firebaseUser: firebaseUser)
                 guard let travelID = travelToDelete.travelID else {
                     print("Travel id for deletion is nil")
                     return
                 }
-                try await serverService.deleteTravel(firebaseToken: firebaseToken, travelID: travelID)
+                try await serverService.deleteTravel(travelID: travelID)
                 // remove from SwiftData
                 self.deleteTravelFromSwiftData(travelToDelete: travelToDelete)
                 // refresh travels

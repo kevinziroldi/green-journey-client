@@ -1,8 +1,6 @@
 import FirebaseAuth
 
-// TODO sostituire con mock !!!
-
-class MockFirebaseAuthService: FirebaseAuthServiceProtocol {
+class FirebaseAuthService {
     func signIn(email: String, password: String) async throws -> AuthDataResult {
         return try await Auth.auth().signIn(withEmail: email, password: password)
     }
@@ -31,4 +29,3 @@ class MockFirebaseAuthService: FirebaseAuthServiceProtocol {
         try await firebaseUser.reload()
     }
 }
-

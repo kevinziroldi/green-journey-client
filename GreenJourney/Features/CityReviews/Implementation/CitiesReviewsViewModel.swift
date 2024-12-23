@@ -22,25 +22,16 @@ class CitiesReviewsViewModel: ObservableObject {
     @Published var selectedCityReviewElement: CityReviewElement?
     
     private var serverService: ServerServiceProtocol
-    private var firebaseAuthService: FirebaseAuthServiceProtocol
     
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
-        
         self.serverService = ServiceFactory.shared.serverService
-        self.firebaseAuthService = ServiceFactory.shared.firebaseAuthService
     }
     
     func getReviewsForSearchedCity() {
         Task { @MainActor in
-            guard let firebaseUser = Auth.auth().currentUser else {
-                print("Error retrieving firebase user")
-                return
-            }
-            
             do {
-                let firebaseToken = try await firebaseAuthService.getFirebaseToken(firebaseUser: firebaseUser)
-                let cityReviewElement = try await serverService.getReviewsForCity(firebaseToken: firebaseToken, iata: searchedCity.iata, countryCode: searchedCity.countryCode)
+                let cityReviewElement = try await serverService.getReviewsForCity(iata: searchedCity.iata, countryCode: searchedCity.countryCode)
                 
                 self.searchedCityReviewElement = cityReviewElement
                 self.searchedCityAvailable = true

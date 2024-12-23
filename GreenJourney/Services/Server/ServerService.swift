@@ -2,7 +2,19 @@ import FirebaseAuth
 import Foundation
 
 class ServerService: ServerServiceProtocol {
-    func saveUser(firebaseToken: String, firstName: String, lastName: String, firebaseUID: String) async throws {
+    private let firebaseAuthService: FirebaseAuthService = FirebaseAuthService()
+    
+    func getFirebaseToken() async throws -> String {
+        guard let firebaseUser = Auth.auth().currentUser else {
+            print("Error retrieving firebase user")
+            throw NSError(domain: "GetFirebaseTokenError", code: 4, userInfo: [NSLocalizedDescriptionKey: "Failed to get Firebase token."])
+        }
+        return try await firebaseAuthService.getFirebaseToken(firebaseUser: firebaseUser)
+    }
+    
+    func saveUser(firstName: String, lastName: String, firebaseUID: String) async throws {
+        let firebaseToken = try await getFirebaseToken()
+        
         let user = User(firstName: firstName, lastName: lastName, firebaseUID: firebaseUID, scoreShortDistance: 0, scoreLongDistance: 0)
         // JSON encoding
         guard let body = try? JSONEncoder().encode(user) else {
@@ -31,7 +43,9 @@ class ServerService: ServerServiceProtocol {
         }
     }
     
-    func getUser(firebaseToken: String) async throws -> User {
+    func getUser() async throws -> User {
+        let firebaseToken = try await getFirebaseToken()
+        
         // build request
         let baseURL = URLHandler.shared.getBaseURL()
         guard let url = URL(string:"\(baseURL)/users/user") else {
@@ -63,7 +77,9 @@ class ServerService: ServerServiceProtocol {
         }
     }
     
-    func modifyUser(firebaseToken: String, modifiedUser: User) async throws -> User {
+    func modifyUser(modifiedUser: User) async throws -> User {
+        let firebaseToken = try await getFirebaseToken()
+
         // JSON encoding
         guard let body = try? JSONEncoder().encode(modifiedUser) else {
             print("Error encoding user data for PUT")
@@ -131,7 +147,9 @@ class ServerService: ServerServiceProtocol {
         }
     }
     
-    func getReviewsForCity(firebaseToken: String, iata: String, countryCode: String) async throws -> CityReviewElement {
+    func getReviewsForCity(iata: String, countryCode: String) async throws -> CityReviewElement {
+        let firebaseToken = try await getFirebaseToken()
+        
         // build request
         let baseURL = URLHandler.shared.getBaseURL()
         guard let url = URL(string:"\(baseURL)/reviews?city_iata=\(iata)&country_code=\(countryCode)") else {
@@ -193,7 +211,9 @@ class ServerService: ServerServiceProtocol {
         }
     }
     
-    func uploadReview(firebaseToken: String, review: Review) async throws -> Review {
+    func uploadReview(review: Review) async throws -> Review {
+        let firebaseToken = try await getFirebaseToken()
+        
         // JSON encoding
         let encoder = JSONEncoder()
         let decoder = JSONDecoder()
@@ -231,7 +251,9 @@ class ServerService: ServerServiceProtocol {
         }
     }
     
-    func modifyReview(firebaseToken: String, modifiedReview: Review) async throws -> Review {
+    func modifyReview(modifiedReview: Review) async throws -> Review {
+        let firebaseToken = try await getFirebaseToken()
+        
         // JSON encoding
         let encoder = JSONEncoder()
         let decoder = JSONDecoder()
@@ -275,7 +297,9 @@ class ServerService: ServerServiceProtocol {
         }
     }
     
-    func deleteReview(firebaseToken: String, reviewID: Int) async throws {
+    func deleteReview(reviewID: Int) async throws {
+        let firebaseToken = try await getFirebaseToken()
+        
         // build request
         let baseURL = URLHandler.shared.getBaseURL()
         guard let url = URL(string:"\(baseURL)/reviews/\(reviewID)") else {
@@ -297,7 +321,6 @@ class ServerService: ServerServiceProtocol {
     func computeRoutes(departureIata: String, departureCountryCode: String,
                        destinationIata: String, destinationCountryCode: String,
                        date: String, time: String, isOutward: Bool) async throws -> TravelOptionsResponse {
-        
         // build request
         let baseURL = URLHandler.shared.getBaseURL()
         guard let url = URL(string:"\(baseURL)/travels/search?iata_departure=\(departureIata)&country_code_departure=\(departureCountryCode)&iata_destination=\(destinationIata)&country_code_destination=\(destinationCountryCode)&date=\(date)&time=\(time)&is_outward=\(isOutward)") else {
@@ -329,7 +352,9 @@ class ServerService: ServerServiceProtocol {
         }
     }
     
-    func saveTravel(firebaseToken: String, travelDetails: TravelDetails) async throws -> TravelDetails {
+    func saveTravel(travelDetails: TravelDetails) async throws -> TravelDetails {
+        let firebaseToken = try await getFirebaseToken()
+        
         // JSON encoding
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
@@ -369,7 +394,9 @@ class ServerService: ServerServiceProtocol {
         }
     }
     
-    func getTravels(firebaseToken: String) async throws -> [TravelDetails] {
+    func getTravels() async throws -> [TravelDetails] {
+        let firebaseToken = try await getFirebaseToken()
+        
         // build request
         let baseURL = URLHandler.shared.getBaseURL()
         guard let url = URL(string:"\(baseURL)/travels/user") else {
@@ -401,7 +428,9 @@ class ServerService: ServerServiceProtocol {
         }
     }
     
-    func updateTravel(firebaseToken: String, modifiedTravel: Travel) async throws -> Travel {
+    func updateTravel(modifiedTravel: Travel) async throws -> Travel {
+        let firebaseToken = try await getFirebaseToken()
+        
         // JSON encoding and decoding
         guard let body = try? JSONEncoder().encode(modifiedTravel) else {
             print("Error encoding user data for PUT")
@@ -438,7 +467,9 @@ class ServerService: ServerServiceProtocol {
         }
     }
     
-    func deleteTravel(firebaseToken: String, travelID: Int) async throws {
+    func deleteTravel(travelID: Int) async throws {
+        let firebaseToken = try await getFirebaseToken()
+        
         // build request
         let baseURL = URLHandler.shared.getBaseURL()
         guard let url = URL(string:"\(baseURL)/travels/user/\(travelID)") else {

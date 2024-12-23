@@ -13,7 +13,7 @@ class AuthenticationViewModel: ObservableObject {
     private var modelContext: ModelContext
     // external services
     private let serverService: ServerServiceProtocol
-    private let firebaseAuthService: FirebaseAuthServiceProtocol
+    private let firebaseAuthService: FirebaseAuthService
     
     @Published var email: String = ""
     @Published var password: String = ""
@@ -116,11 +116,8 @@ class AuthenticationViewModel: ObservableObject {
             // Firebase call, create account
             do {
                 let authResult = try await firebaseAuthService.createFirebaseUser(email: email, password: password)
-                let firebaseToken = try await firebaseAuthService.getFirebaseToken(firebaseUser: authResult.user)
-                
-                print("Token retrieved")
                 do {
-                    try await serverService.saveUser(firebaseToken: firebaseToken, firstName: self.firstName, lastName: self.lastName, firebaseUID: authResult.user.uid)
+                    try await serverService.saveUser(firstName: self.firstName, lastName: self.lastName, firebaseUID: authResult.user.uid)
                     
                     print("User data posted successfully.")
                     
@@ -213,7 +210,7 @@ class AuthenticationViewModel: ObservableObject {
     private func getUserFromServer(firebaseToken: String) {
         Task { @MainActor in
             do {
-                let user = try await serverService.getUser(firebaseToken: firebaseToken)
+                let user = try await serverService.getUser()
                 self.saveUserToSwiftData(serverUser: user)
             }catch {
                 print("Error getting user from server")
@@ -309,7 +306,7 @@ class AuthenticationViewModel: ObservableObject {
                     self.lastName = parts![1]
                     
                     do {
-                        try await serverService.saveUser(firebaseToken: firebaseToken, firstName: self.firstName, lastName: self.lastName, firebaseUID: firebaseUser.uid)
+                        try await serverService.saveUser(firstName: self.firstName, lastName: self.lastName, firebaseUID: firebaseUser.uid)
                         print("User data posted successfully.")
                         self.getUserFromServer(firebaseToken: firebaseToken)
                     } catch {

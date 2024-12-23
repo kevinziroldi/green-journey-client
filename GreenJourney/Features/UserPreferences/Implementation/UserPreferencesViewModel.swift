@@ -30,7 +30,6 @@ class UserPreferencesViewModel: ObservableObject {
     //swift data model context
     private var modelContext: ModelContext
     private var serverService: ServerServiceProtocol
-    private var firebaseAuthService: FirebaseAuthServiceProtocol
     
     @Published var firstName: String = ""
     @Published var lastName: String = ""
@@ -46,7 +45,6 @@ class UserPreferencesViewModel: ObservableObject {
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
         self.serverService = ServiceFactory.shared.serverService
-        self.firebaseAuthService = ServiceFactory.shared.firebaseAuthService
     }
     
     func getUserData() {
@@ -117,13 +115,8 @@ class UserPreferencesViewModel: ObservableObject {
             )
             
             // update user on server
-            guard let firebaseUser = Auth.auth().currentUser else {
-                print("No current user in firebase")
-                return
-            }
             do {
-                let firebaseToken = try await firebaseAuthService.getFirebaseToken(firebaseUser: firebaseUser)
-                let returnedUser = try await serverService.modifyUser(firebaseToken: firebaseToken, modifiedUser: modifiedUser)
+                let returnedUser = try await serverService.modifyUser(modifiedUser: modifiedUser)
                 self.updateUserInSwiftData(newUser: returnedUser)
                 self.getUserData()
             }catch {

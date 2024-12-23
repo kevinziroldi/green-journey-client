@@ -10,7 +10,6 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
     
     private var modelContext: ModelContext
     private var serverService: ServerServiceProtocol
-    private var firebaseAuthService: FirebaseAuthServiceProtocol
     
     @Published var departure: CityCompleterDataset = CityCompleterDataset()
     @Published var arrival: CityCompleterDataset = CityCompleterDataset()
@@ -30,7 +29,6 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
         self.serverService = ServiceFactory.shared.serverService
-        self.firebaseAuthService = ServiceFactory.shared.firebaseAuthService
     }
     
     // used after a travel search
@@ -98,15 +96,8 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
                 // after building travel details, I can reset
                 resetParameters()
                 
-                // get Firebase token
-                guard let firebaseUser = Auth.auth().currentUser else {
-                    print("Missing firebase user")
-                    return
-                }
-                let firebaseToken = try await firebaseAuthService.getFirebaseToken(firebaseUser: firebaseUser)
-                
                 // save on server
-                let returnedTravelDetails = try await serverService.saveTravel(firebaseToken: firebaseToken, travelDetails: travelDetails)
+                let returnedTravelDetails = try await serverService.saveTravel(travelDetails: travelDetails)
                 
                 // save travel in SwiftData
                 self.modelContext.insert(returnedTravelDetails.travel)
