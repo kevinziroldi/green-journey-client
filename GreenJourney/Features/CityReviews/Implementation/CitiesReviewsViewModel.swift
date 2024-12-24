@@ -21,6 +21,9 @@ class CitiesReviewsViewModel: ObservableObject {
     @Published var selectedCityReviewElement: CityReviewElement?
     
     @Published var userReview: Review?
+    @Published var page: Int = 0
+    @Published var pageInput: String = "1" // Textfield input
+    
     
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
@@ -92,8 +95,7 @@ class CitiesReviewsViewModel: ObservableObject {
     }
     
     func isReviewable(userID: Int) -> Bool {
-        
-        var fetchRequest = FetchDescriptor<Segment>(
+        let fetchRequest = FetchDescriptor<Segment>(
             predicate: #Predicate { segment in
                 segment.isOutward == true
             },
@@ -119,6 +121,25 @@ class CitiesReviewsViewModel: ObservableObject {
             print("error during segments fetch")
         }
         return false
+    }
+    
+    func getNumPages() -> Int {
+        guard let selectedCityReviewElement else { return 0 }
+        if selectedCityReviewElement.reviews.count % 10 == 0 {
+            return selectedCityReviewElement.reviews.count / 10
+        }
+        else {
+            return (selectedCityReviewElement.reviews.count / 10) + 1
+        }
+    }
+    
+    func validatePageInput() {
+        if let page = Int(pageInput) {
+            if page >= 1 && page <= getNumPages() {
+                self.page = page - 1
+            }
+            pageInput = "\(self.page + 1)" // go back on the previous page
+        }
     }
 }
 extension CitiesReviewsViewModel: Hashable {

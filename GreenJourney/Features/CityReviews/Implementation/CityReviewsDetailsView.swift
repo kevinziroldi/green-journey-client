@@ -117,85 +117,96 @@ struct CityReviewsDetailsView: View {
                             }
                             .fixedSize()
                             .padding(EdgeInsets(top: 5, leading: 10, bottom: 0, trailing: 10))
-                            
-                            if viewModel.isReviewable(userID: users.first?.userID ?? -1) {
-                                VStack {
-                                    if viewModel.userReview == nil {
-                                        ZStack{
-                                            RoundedRectangle(cornerRadius: 20)
-                                                .fill(Color(uiColor: .systemBackground))
-                                                .shadow(color: .blue.opacity(0.3), radius: 5, x: 0, y: 3)
-                                            HStack{
-                                                Text("add your review")
-                                                    .padding()
-                                                    .foregroundStyle(.blue.opacity(0.8))
-                                                    .font(.headline)
-                                                Spacer()
-                                                FiveStarView(rating: 5, dim: 20, color: .white.opacity(0.5))
-                                            }
-                                            .padding(.horizontal)
-                                        }
-                                        .padding()
-                                    } else {
-                                        if let userReview = viewModel.userReview {
+                            VStack{
+                                if viewModel.isReviewable(userID: users.first?.userID ?? -1) {
+                                    VStack {
+                                        if viewModel.userReview == nil {
                                             ZStack{
                                                 RoundedRectangle(cornerRadius: 20)
                                                     .fill(Color(uiColor: .systemBackground))
                                                     .shadow(color: .blue.opacity(0.3), radius: 5, x: 0, y: 3)
-                                                VStack {
-                                                    Text("Your review")
-                                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                                        .font(.title3)
-                                                        .fontWeight(.semibold)
-                                                    HStack {
-                                                        FiveStarView(rating: userReview.computeRating(), dim: 20, color: .green.opacity(0.8))
-                                                        Text(userReview.firstName + " " + userReview.lastName)
-                                                            .font(.headline)
-                                                            .fontWeight(.semibold)
-                                                            .foregroundStyle(.green.opacity(0.6))
-                                                            .padding(EdgeInsets(top: 3, leading: 5, bottom: 0, trailing: 0))
-                                                        Spacer()
-                                                    }
-                                                    Text(userReview.reviewText)
-                                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                                HStack{
+                                                    Text("add your review")
+                                                        .padding()
+                                                        .foregroundStyle(.blue.opacity(0.8))
+                                                        .font(.headline)
                                                     Spacer()
-                                                    HStack{
-                                                        Spacer()
-                                                        Button(action: {
-                                                            editTapped = true
-                                                        }) {
-                                                            Text("Edit")
+                                                    FiveStarView(rating: 5, dim: 20, color: .white.opacity(0.5))
+                                                }
+                                                .padding(.horizontal)
+                                            }
+                                            .padding()
+                                        } else {
+                                            if let userReview = viewModel.userReview {
+                                                ZStack{
+                                                    RoundedRectangle(cornerRadius: 20)
+                                                        .fill(Color(uiColor: .systemBackground))
+                                                        .shadow(color: .blue.opacity(0.3), radius: 5, x: 0, y: 3)
+                                                    VStack {
+                                                        Text("Your review")
+                                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                                            .font(.title3)
+                                                            .fontWeight(.semibold)
+                                                        HStack {
+                                                            FiveStarView(rating: userReview.computeRating(), dim: 20, color: .green.opacity(0.8))
+                                                            Text(userReview.firstName + " " + userReview.lastName)
+                                                                .font(.headline)
+                                                                .fontWeight(.semibold)
+                                                                .foregroundStyle(.green.opacity(0.6))
+                                                                .padding(EdgeInsets(top: 3, leading: 5, bottom: 0, trailing: 0))
+                                                            Spacer()
                                                         }
+                                                        Text(userReview.reviewText)
+                                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                                        Spacer()
+                                                        HStack{
+                                                            Spacer()
+                                                            Button(action: {
+                                                                editTapped = true
+                                                            }) {
+                                                                Text("Edit")
+                                                            }
+                                                        }
+                                                        .padding(.horizontal)
                                                     }
-                                                    .padding(.horizontal)
+                                                    .padding()
                                                 }
                                                 .padding()
                                             }
-                                            .padding()
                                         }
                                     }
                                 }
+                                if !selectedCityReviewElement.reviews.isEmpty {
+                                    Text("Latest Reviews for " + viewModel.selectedCity.cityName + ", " + viewModel.selectedCity.countryName)
+                                        .font(.headline)
+                                        .padding(.top, 5)
+                                    
+                                    
+                                    CarouselView(cards: selectedCityReviewElement.getLastReviews())
+                                        .frame(height: 250)
+                                    
+                                    if selectedCityReviewElement.reviews.count > 5 {
+                                        // Button to see all reviews
+                                        Button (action: {
+                                            navigationPath.append(NavigationDestination.AllReviewsView(viewModel))
+                                        }){
+                                            Text("See all reviews")
+                                                .font(.headline)
+                                                .padding(10)
+                                                .background(Color.blue)
+                                                .foregroundColor(.white)
+                                                .cornerRadius(10)
+                                        }
+                                        .padding()
+                                    }
+                                }
+                                else {
+                                    Text("There are no reviews yet for " + viewModel.selectedCity.cityName + ", " + viewModel.selectedCity.countryName + ".")
+                                        .font(.system(size: 15))
+                                        .fontWeight(.light)
+                                        .padding(.top, 40)
+                                }
                             }
-                            Text("Latest Reviews for " + viewModel.selectedCity.cityName + ", " + viewModel.selectedCity.countryName)
-                                .font(.headline)
-                                .padding(.top, 5)
-                            
-                            
-                            CarouselView(cards: selectedCityReviewElement.getLastReviews())
-                                .frame(height: 250)
-                            
-                            // Button to see all reviews
-                            Button (action: {
-                                
-                            }){
-                                Text("See all reviews")
-                                    .font(.headline)
-                                    .padding(10)
-                                    .background(Color.blue)
-                                    .foregroundColor(.white)
-                                    .cornerRadius(10)
-                            }
-                            .padding()
                         }
                         .padding()
                     }
