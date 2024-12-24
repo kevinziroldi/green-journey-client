@@ -5,7 +5,6 @@ import SwiftData
 
 class CitiesReviewsViewModel: ObservableObject {
     let uuid: UUID = UUID()
-    
     private var modelContext: ModelContext
     private var serverService: ServerServiceProtocol
     
@@ -15,12 +14,13 @@ class CitiesReviewsViewModel: ObservableObject {
     
     // searched city
     @Published var searchedCity: CityCompleterDataset = CityCompleterDataset()
-    @Published var searchedCityReviewElement: CityReviewElement?
     @Published var searchedCityAvailable: Bool = false
     
     // selected city
-    @Published var selectedCity: CityCompleterDataset?
+    @Published var selectedCity: CityCompleterDataset = CityCompleterDataset()
     @Published var selectedCityReviewElement: CityReviewElement?
+    
+    @Published var userReview: Review?
     
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
@@ -30,9 +30,9 @@ class CitiesReviewsViewModel: ObservableObject {
     @MainActor
     func getReviewsForSearchedCity() async {
         do {
+            print("entro nella funzione")
             let cityReviewElement = try await serverService.getReviewsForCity(iata: searchedCity.iata, countryCode: searchedCity.countryCode)
-            
-            self.searchedCityReviewElement = cityReviewElement
+            self.selectedCityReviewElement = cityReviewElement
             self.searchedCityAvailable = true
             
             print("Searched city reviews available")
@@ -40,6 +40,7 @@ class CitiesReviewsViewModel: ObservableObject {
             print("Error getting reviews for searched city")
             return
         }
+        print("esco dalla funzione")
     }
     
     @MainActor
@@ -77,6 +78,47 @@ class CitiesReviewsViewModel: ObservableObject {
             print("Error getting best reviewed cities")
             return
         }
+    }
+    
+    func getUserReview(userID: Int) {
+        guard let selectedCityReviewElement else { return}
+        userReview = nil
+        for review in selectedCityReviewElement.reviews {
+            if review.userID == userID {
+                userReview = review
+                return
+            }
+        }
+    }
+    
+    func isReviewable(userID: Int) -> Bool {
+        
+        var fetchRequest = FetchDescriptor<Segment>(
+            predicate: #Predicate { segment in
+                segment.isOutward == true
+            },
+            sortBy: [
+                SortDescriptor(\Segment.travelID),
+                SortDescriptor(\Segment.numSegment, order: .reverse)
+            ]
+        )
+
+        do {
+            let segments = try modelContext.fetch(fetchRequest)
+            let filteredSegments = Dictionary(grouping: segments, by: \.travelID)
+                .compactMapValues { $0.first }
+                .values
+            for segment in filteredSegments {
+                if selectedCity.cityName == segment.destinationCity {
+                    if selectedCity.countryName == segment.destinationCountry {
+                        return true
+                    }
+                }
+            }
+        } catch {
+            print("error during segments fetch")
+        }
+        return false
     }
 }
 extension CitiesReviewsViewModel: Hashable {

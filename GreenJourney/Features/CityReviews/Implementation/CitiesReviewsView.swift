@@ -70,7 +70,6 @@ struct CitiesReviewsView: View {
                     viewModel.searchedCity = city
                     // for details view
                     viewModel.selectedCity = viewModel.searchedCity
-                    viewModel.selectedCityReviewElement = viewModel.searchedCityReviewElement
                 }
                 )
             }

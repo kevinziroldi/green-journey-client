@@ -1,6 +1,6 @@
 import Foundation
 
-class Review: Codable {
+class Review: Codable, Identifiable {
     var reviewID: Int?
     var cityID: Int
     var userID: Int
@@ -105,5 +105,9 @@ class Review: Codable {
         try container.encode(scoreShortDistance, forKey: .scoreShortDistance)
         try container.encode(scoreLongDistance, forKey: .scoreLongDistance)
         try container.encode(badges, forKey: .badges)
+    }
+    
+    func computeRating() -> Float64 {
+        return Float64(wasteBinsRating + localTransportRating + greenSpacesRating) / 3
     }
 }

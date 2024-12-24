@@ -52,7 +52,7 @@ class CompleterViewModel: ObservableObject {
             }
             suggestions = Array(sortedResults.prefix(10))
         } catch {
-            print("Errore durante il fetch: \(error)")
+            print("Error during fetch: \(error)")
         }
     }
     
