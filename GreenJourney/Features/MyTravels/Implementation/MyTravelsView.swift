@@ -153,6 +153,7 @@ struct MyTravelsView: View {
                 }
             }
         }
+        .background(.green.opacity(0.1))
         .onAppear {
             viewModel.showRequestedTravels()
             if viewModel.filteredTravelDetailsList.isEmpty {

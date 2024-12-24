@@ -225,9 +225,10 @@ struct TravelSearchView: View {
                             Button(action: {
                                 Task {
                                     await viewModel.computeRoutes()
-                                    navigationPath.append(NavigationDestination.OutwardOptionsView(viewModel))
-                                    triggerAI = false
                                 }
+                                navigationPath.append(NavigationDestination.OutwardOptionsView(viewModel))
+                                triggerAI = false
+                                
                             }) {
                                 ZStack {
                                     RoundedRectangle(cornerRadius: 10)
@@ -347,6 +348,7 @@ struct TravelSearchView: View {
                             
                         }
                     }
+                    .background(.green.opacity(0.1))
                     .blur(radius: (dateTapped || dateReturnTapped) ? 2 : 0) // Sfoca tutto il contenuto sottostante
                     .allowsHitTesting(!(dateTapped || dateReturnTapped))
                     .mask {
@@ -386,6 +388,7 @@ struct TravelSearchView: View {
                         )
                     }
                 }
+                
             }
         }
     }

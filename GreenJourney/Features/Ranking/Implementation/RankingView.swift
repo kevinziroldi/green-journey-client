@@ -88,6 +88,7 @@ struct RankingView: View {
                 await viewModel.fecthRanking()
             }
         }
+        .background(.green.opacity(0.1))
     }
 }
 

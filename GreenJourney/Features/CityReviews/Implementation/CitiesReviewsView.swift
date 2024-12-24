@@ -83,20 +83,30 @@ struct CitiesReviewsView: View {
                     .font(.title3)
                     .foregroundStyle(.white)
             }
+            .disabled(viewModel.searchedCity.cityName == "")
             .buttonStyle(.borderedProminent)
-             
+            
+            Spacer()
             // list of cities
-            List(viewModel.bestCities.indices, id: \.self) { index in
-                VStack(alignment: .leading) {
-                    Text(viewModel.bestCities[index].cityName)
-                        .font(.headline)
-                        .onTapGesture {
-                            viewModel.selectedCity = viewModel.bestCities[index]
-                            viewModel.selectedCityReviewElement = viewModel.bestCitiesReviewElements[index]
-                            navigationPath.append(NavigationDestination.CityReviewsDetailsView(viewModel))
-                        }
-                }
+            
+            Text("Top Cities")
+                .font(.title2)
+                .fontWeight(.semibold)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 30)
+            
+            ForEach(viewModel.bestCities.indices, id: \.self) { index in
+                BestCityView(city: viewModel.bestCities[index], cityReview: viewModel.bestCitiesReviewElements[index])
+                    .padding(.horizontal)
+                    .onTapGesture {
+                        viewModel.selectedCity = viewModel.bestCities[index]
+                        viewModel.selectedCityReviewElement = viewModel.bestCitiesReviewElements[index]
+                        navigationPath.append(NavigationDestination.CityReviewsDetailsView(viewModel))
+                    }
+                
             }
+            
+            Spacer()
         }
         .onAppear {
             Task {
@@ -110,5 +120,33 @@ struct CitiesReviewsView: View {
                 viewModel.searchedCityAvailable = false
             }
         }
+        .background(.green.opacity(0.1))
+    }
+}
+
+
+
+struct BestCityView: View {
+    var city: CityCompleterDataset
+    var cityReview: CityReviewElement
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color(uiColor: .systemBackground))
+                .shadow(color: .green.opacity(0.3), radius: 5, x: 0, y: 3)
+            HStack {
+                Text(city.cityName)
+                    .font(.system(size: 17))
+                    .fontWeight(.semibold)
+                Spacer()
+                Text(String(format: "%.1f", cityReview.getAverageRating()))
+                    .fontWeight(.bold)
+                FiveStarView(rating: cityReview.getAverageRating(), dim: 20, color: .yellow)
+            }
+            .padding()
+            
+        }
+        .fixedSize(horizontal: false, vertical: true)
+        .padding(.horizontal)
     }
 }

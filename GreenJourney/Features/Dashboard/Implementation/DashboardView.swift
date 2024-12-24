@@ -126,7 +126,7 @@ struct DashboardView: View {
             }
             
         }
-        
+        .background(.green.opacity(0.1))
     }
 }
 
