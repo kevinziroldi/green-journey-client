@@ -4,21 +4,59 @@ import Testing
 @testable import GreenJourney
 
 struct CitiesReviewsViewModelTest {
-    private var mockModelContext: ModelContext
+    @MainActor private var mockModelContext: ModelContext
     private var viewModel: CitiesReviewsViewModel
     
     @MainActor
     init() throws {
+        // create model context
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
         let mockContainer = try ModelContainer(for: User.self, Travel.self, Segment.self, CityFeatures.self, CityCompleterDataset.self, configurations: configuration)
         self.mockModelContext = mockContainer.mainContext
+        
+        // create view model
         self.viewModel = CitiesReviewsViewModel(modelContext: self.mockModelContext)
+        
+        // add some cities to SwiftData
+        try addCitiesToSwiftData()
+        
+        let result = try mockModelContext.fetch(FetchDescriptor<CityCompleterDataset>())
+        print(result)
+    }
+    @MainActor
+    private func addCitiesToSwiftData() throws {
+        let cityBerlin = CityCompleterDataset(
+            cityName: "Berlin",
+            countryName: "Germany",
+            iata: "BER",
+            countryCode: "DE",
+            continent: "Europe"
+        )
+        let cityParis = CityCompleterDataset(
+            cityName: "Paris",
+            countryName: "France",
+            iata: "PAR",
+            countryCode: "FR",
+            continent: "Europe"
+        )
+        let cityRome = CityCompleterDataset(
+            cityName: "Roma",
+            countryName: "Italy",
+            iata: "ROM",
+            countryCode: "IT",
+            continent: "Europe"
+        )
+        
+        self.mockModelContext.insert(cityBerlin)
+        self.mockModelContext.insert(cityParis)
+        self.mockModelContext.insert(cityRome)
+        try self.mockModelContext.save()
     }
     
     @Test
     func testGetReviewsForSearchedCity() async {
         viewModel.searchedCity = CityCompleterDataset(
-            city: "Paris",
+            cityName: "Paris",
             countryName: "France",
             iata: "PAR",
             countryCode: "FR",
@@ -49,11 +87,47 @@ struct CitiesReviewsViewModelTest {
         }
     }
     
-    // TODO problema non ho le città caricate
-    // se uso il db vero, lo stroio 
-    /*
+    // TODO: se uso il model context creato nell'init non funziona! Errore a runtime!
     @Test
-    func testGetBestReviewedCities() async {
+    @MainActor
+    func testGetBestReviewedCities() async throws {
+        // create model context
+        let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
+        let mockContainer = try ModelContainer(for: User.self, Travel.self, Segment.self, CityFeatures.self, CityCompleterDataset.self, configurations: configuration)
+        let mockModelContext = mockContainer.mainContext
+        
+        let viewModel = CitiesReviewsViewModel(modelContext: mockModelContext)
+        
+        let cityBerlin = CityCompleterDataset(
+            cityName: "Berlin",
+            countryName: "Germany",
+            iata: "BER",
+            countryCode: "DE",
+            continent: "Europe"
+        )
+        let cityParis = CityCompleterDataset(
+            cityName: "Paris",
+            countryName: "France",
+            iata: "PAR",
+            countryCode: "FR",
+            continent: "Europe"
+        )
+        let cityRome = CityCompleterDataset(
+            cityName: "Roma",
+            countryName: "Italy",
+            iata: "ROM",
+            countryCode: "IT",
+            continent: "Europe"
+        )
+        mockModelContext.insert(cityBerlin)
+        mockModelContext.insert(cityParis)
+        mockModelContext.insert(cityRome)
+        try mockModelContext.save()
+     
+        // check cities present
+        let citiesSwiftData = try mockModelContext.fetch(FetchDescriptor<CityCompleterDataset>())
+        #expect(citiesSwiftData.count == 3)
+        
         await viewModel.getBestReviewedCities()
         
         #expect(viewModel.bestCitiesReviewElements.count <= 5)
@@ -76,5 +150,4 @@ struct CitiesReviewsViewModelTest {
             #expect(city.countryCode == viewModel.bestCitiesReviewElements[i].reviews.first!.countryCode)
         }
     }
-    */
 }

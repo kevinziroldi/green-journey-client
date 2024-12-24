@@ -17,8 +17,8 @@ class CityCompleterDataset: Identifiable, Equatable {
         self.continent = existingCity.continent
     }
     
-    init(city: String, countryName: String, iata: String, countryCode: String, continent: String) {
-        self.cityName = city
+    init(cityName: String, countryName: String, iata: String, countryCode: String, continent: String) {
+        self.cityName = cityName
         self.countryName = countryName
         self.iata = iata
         self.countryCode = countryCode

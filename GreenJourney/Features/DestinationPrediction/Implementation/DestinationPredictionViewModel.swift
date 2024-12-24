@@ -133,7 +133,7 @@ class DestinationPredictionViewModel: ObservableObject {
                         }
                     }
                     if newCity {
-                        predictedCities.append(CityCompleterDataset(city: cityDS.cityName, countryName: cityDS.countryName, iata: cityDS.iata, countryCode: cityDS.countryCode, continent: cityDS.continent))
+                        predictedCities.append(CityCompleterDataset(cityName: cityDS.cityName, countryName: cityDS.countryName, iata: cityDS.iata, countryCode: cityDS.countryCode, continent: cityDS.continent))
                         
                         // return if predictionSize cities found
                         if predictedCities.count == predictionSize {
@@ -149,7 +149,7 @@ class DestinationPredictionViewModel: ObservableObject {
                 // return the first predicted city (already visited)
                 if let cityId = citiesIds.first {
                     if let firstCity = citiesDS.first(where: { $0.id == cityId }) {
-                        predictedCities.append(CityCompleterDataset(city: firstCity.cityName, countryName: firstCity.countryName, iata: firstCity.iata, countryCode: firstCity.countryCode, continent: firstCity.continent))
+                        predictedCities.append(CityCompleterDataset(cityName: firstCity.cityName, countryName: firstCity.countryName, iata: firstCity.iata, countryCode: firstCity.countryCode, continent: firstCity.continent))
                         return
                     }
                 }
@@ -210,7 +210,7 @@ class DestinationPredictionViewModel: ObservableObject {
     private func randomCity(citiesDS: [CityFeatures]) -> CityCompleterDataset? {
         if let randomCity = citiesDS.randomElement() {
             return CityCompleterDataset(
-                city: randomCity.cityName,
+                cityName: randomCity.cityName,
                 countryName: randomCity.countryName, iata: randomCity.iata, countryCode: randomCity.countryCode, continent: randomCity.continent
             )
         }
