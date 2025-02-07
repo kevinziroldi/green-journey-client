@@ -33,7 +33,6 @@ class CitiesReviewsViewModel: ObservableObject {
     @MainActor
     func getReviewsForSearchedCity() async {
         do {
-            print("entro nella funzione")
             let cityReviewElement = try await serverService.getReviewsForCity(iata: searchedCity.iata, countryCode: searchedCity.countryCode)
             self.selectedCityReviewElement = cityReviewElement
             self.searchedCityAvailable = true
@@ -84,7 +83,7 @@ class CitiesReviewsViewModel: ObservableObject {
     }
     
     func getUserReview(userID: Int) {
-        guard let selectedCityReviewElement else { return}
+        guard let selectedCityReviewElement else {return}
         userReview = nil
         for review in selectedCityReviewElement.reviews {
             if review.userID == userID {
@@ -94,6 +93,7 @@ class CitiesReviewsViewModel: ObservableObject {
         }
     }
     
+    // TODO change - check on iata and country code
     func isReviewable(userID: Int) -> Bool {
         let fetchRequest = FetchDescriptor<Segment>(
             predicate: #Predicate { segment in

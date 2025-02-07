@@ -16,10 +16,10 @@
       "review_text" : "Beautiful city and very clean! 🤩",
       "city_id" : 275549,
       "local_transport_rating" : 4,
-      "first_name" : "Kevin",
+      "first_name" : "John",
       "score_long_distance" : 433.60000000000002,
       "city_iata" : "PAR",
-      "last_name" : "Ziroldi",
+      "last_name" : "Doe",
       "country_code" : "FR",
       "waste_bins_rating" : 5
     },
@@ -34,10 +34,10 @@
       "review_text" : "The local transport was very efficient!",
       "city_id" : 275549,
       "local_transport_rating" : 5,
-      "first_name" : "K",
+      "first_name" : "John",
       "score_long_distance" : 50.051408149013206,
       "city_iata" : "PAR",
-      "last_name" : "K",
+      "last_name" : "Smith",
       "country_code" : "FR",
       "waste_bins_rating" : 4
     }

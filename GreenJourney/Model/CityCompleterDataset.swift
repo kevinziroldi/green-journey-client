@@ -39,7 +39,6 @@ class CityCompleterDataset: Identifiable, Equatable {
         lhs.iata == rhs.iata &&
         lhs.countryCode == rhs.countryCode &&
         lhs.continent == rhs.continent
-}
-
+    }
 }
   
