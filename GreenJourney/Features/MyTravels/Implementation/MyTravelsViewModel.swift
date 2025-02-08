@@ -1,6 +1,5 @@
 import Combine
 import Foundation
-import FirebaseAuth
 import SwiftData
 
 class MyTravelsViewModel: ObservableObject {

@@ -1,8 +1,3 @@
-import Combine
-import FirebaseAuth
-import FirebaseCore
-import GoogleSignIn
-import GoogleSignInSwift
 import SwiftData
 import SwiftUI
 
@@ -13,7 +8,7 @@ class AuthenticationViewModel: ObservableObject {
     private var modelContext: ModelContext
     // external services
     private let serverService: ServerServiceProtocol
-    private let firebaseAuthService: FirebaseAuthService
+    private let firebaseAuthService: FirebaseAuthServiceProtocol
     
     @Published var email: String = ""
     @Published var password: String = ""
@@ -43,12 +38,11 @@ class AuthenticationViewModel: ObservableObject {
         }
         
         do {
-            let authResult = try await firebaseAuthService.signIn(email: email, password: password)
-            let firebaseUser = authResult.user
-            self.emailVerified = firebaseUser.isEmailVerified
+            let emailVerified = try await firebaseAuthService.signInWithCredentials(email: email, password: password)
+            self.emailVerified = emailVerified
             
-            if firebaseUser.isEmailVerified == true {
-                let firebaseToken = try await firebaseAuthService.getFirebaseToken(firebaseUser: firebaseUser)
+            if emailVerified == true {
+                let firebaseToken = try await firebaseAuthService.getFirebaseToken()
                 self.errorMessage = nil
                 await self.getUserFromServer(firebaseToken: firebaseToken)
             } else {
@@ -113,9 +107,9 @@ class AuthenticationViewModel: ObservableObject {
         
         // Firebase call, create account
         do {
-            let authResult = try await firebaseAuthService.createFirebaseUser(email: email, password: password)
+            let firebaseUID = try await firebaseAuthService.createFirebaseUser(email: email, password: password)
             do {
-                try await serverService.saveUser(firstName: self.firstName, lastName: self.lastName, firebaseUID: authResult.user.uid)
+                try await serverService.saveUser(firstName: self.firstName, lastName: self.lastName, firebaseUID: firebaseUID)
                 
                 print("User data posted successfully.")
                 
@@ -127,12 +121,8 @@ class AuthenticationViewModel: ObservableObject {
                 print("Error posting user data: \(error.localizedDescription)")
                 
                 // delete user
-                guard let firebaseUser = Auth.auth().currentUser else {
-                    print("Error getting firebase user")
-                    return
-                }
                 do {
-                    try await firebaseAuthService.deleteFirebaseUser(firebaseUser: firebaseUser)
+                    try await firebaseAuthService.deleteFirebaseUser()
                     // account deleted
                     print("User deleted from firebase")
                 }catch {
@@ -149,14 +139,8 @@ class AuthenticationViewModel: ObservableObject {
     
     @MainActor
     func sendEmailVerification() async {
-        guard let firebaseUser = Auth.auth().currentUser else {
-            print("Firebase user is nil")
-            self.errorMessage = "Error snending email verification"
-            return
-        }
-        
         do {
-            try await firebaseAuthService.sendEmailVerification(firebaseUser: firebaseUser)
+            try await firebaseAuthService.sendEmailVerification()
         }catch {
             print("Error sending email verification: \(error.localizedDescription)")
             self.errorMessage = "Error sending email verification"
@@ -165,23 +149,13 @@ class AuthenticationViewModel: ObservableObject {
     
     @MainActor
     func verifyEmail() async {
-        guard let firebaseUser = Auth.auth().currentUser else {
-            print("No Firebase user present")
-            self.errorMessage = "Error verifying email"
-            return
-        }
-        
         do {
-            try await firebaseAuthService.reloadFirebaseUser(firebaseUser: firebaseUser)
+            try await firebaseAuthService.reloadFirebaseUser()
             
             // need to get Firebase user again after reload
-            guard let firebaseUser = Auth.auth().currentUser else {
-                print("No Firebase user present")
-                self.errorMessage = "Error verifying email"
-                return
-            }
+            let isEmailVerified = try await firebaseAuthService.isEmailVerified()
             
-            if firebaseUser.isEmailVerified == true {
+            if isEmailVerified == true {
                 print("Email verified")
                 self.errorMessage = nil
                 self.emailVerified = true
@@ -189,7 +163,7 @@ class AuthenticationViewModel: ObservableObject {
                 self.isEmailVerificationActiveSignup = false
                 
                 // save user to swift data
-                let firebaseToken = try await firebaseAuthService.getFirebaseToken(firebaseUser: firebaseUser)
+                let firebaseToken = try await firebaseAuthService.getFirebaseToken()
                 await self.getUserFromServer(firebaseToken: firebaseToken)
             } else {
                 self.errorMessage = "Email has not been verified yet"
@@ -253,54 +227,20 @@ class AuthenticationViewModel: ObservableObject {
     @MainActor
     func signInWithGoogle() async {
         do {
-            // Google signin configuration
-            guard let clientID = FirebaseApp.app()?.options.clientID else {
-                fatalError("No client ID found in Firebase")
-            }
-            let config = GIDConfiguration(clientID: clientID)
-            GIDSignIn.sharedInstance.configuration = config
+            let isNewUser = try await firebaseAuthService.signInWithGoogle()
+            let firebaseToken = try await firebaseAuthService.getFirebaseToken()
             
-            // get root controller to show Google login screen
-            guard
-                let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                let window = windowScene.windows.first,
-                let rootViewController = window.rootViewController
-            else {
-                self.errorMessage = "Error signing in with Google"
-                print("There is no root view controller")
-                return
-            }
-            
-            // Google authentication
-            let userAuthentication = try await GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController)
-            guard let idToken = userAuthentication.user.idToken else {
-                self.errorMessage = "Error signing in with Google"
-                print("ID token Missing")
-                return
-            }
-            
-            // create Firebase credentials
-            let credential = GoogleAuthProvider.credential(withIDToken: idToken.tokenString, accessToken: userAuthentication.user.accessToken.tokenString)
-            
-            // signin with Firebase
-            let authResult = try await Auth.auth().signIn(with: credential)
-            guard let additionalUserInfo = authResult.additionalUserInfo else {
-                self.errorMessage = "Error signing in with Google"
-                return
-            }
-            let firebaseUser = authResult.user
-            let firebaseToken = try await firebaseAuthService.getFirebaseToken(firebaseUser: authResult.user)
-            
-            if (additionalUserInfo.isNewUser) {
+            if (isNewUser) {
                 // if new user, save to server (signup)
                 
-                let fullName = firebaseUser.displayName
-                let parts = fullName?.components(separatedBy: " ")
-                self.firstName = parts![0]
-                self.lastName = parts![1]
+                let fullName = try await firebaseAuthService.getUserFullName()
+                let parts = fullName.components(separatedBy: " ")
+                self.firstName = parts[0]
+                self.lastName = parts[1]
                 
                 do {
-                    try await serverService.saveUser(firstName: self.firstName, lastName: self.lastName, firebaseUID: firebaseUser.uid)
+                    let firebaseUID = try await firebaseAuthService.getFirebaseUID()
+                    try await serverService.saveUser(firstName: self.firstName, lastName: self.lastName, firebaseUID: firebaseUID)
                     print("User data posted successfully.")
                     await self.getUserFromServer(firebaseToken: firebaseToken)
                 } catch {
@@ -309,7 +249,7 @@ class AuthenticationViewModel: ObservableObject {
                     
                     // delete Firebase user
                     do {
-                        try await firebaseAuthService.deleteFirebaseUser(firebaseUser: firebaseUser)
+                        try await firebaseAuthService.deleteFirebaseUser()
                         // account deleted
                         print("User deleted from Firebase")
                     }catch {
@@ -325,6 +265,8 @@ class AuthenticationViewModel: ObservableObject {
                 
                 await self.getUserFromServer(firebaseToken: firebaseToken)
             }
+            
+            
         } catch {
             self.errorMessage = "Error signing in with Google"
             print("Error signing in with Google: \(error.localizedDescription)")

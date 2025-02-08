@@ -4,16 +4,8 @@ import Foundation
 class ServerService: ServerServiceProtocol {
     private let firebaseAuthService: FirebaseAuthService = FirebaseAuthService()
     
-    func getFirebaseToken() async throws -> String {
-        guard let firebaseUser = Auth.auth().currentUser else {
-            print("Error retrieving firebase user")
-            throw NSError(domain: "GetFirebaseTokenError", code: 4, userInfo: [NSLocalizedDescriptionKey: "Failed to get Firebase token."])
-        }
-        return try await firebaseAuthService.getFirebaseToken(firebaseUser: firebaseUser)
-    }
-    
     func saveUser(firstName: String, lastName: String, firebaseUID: String) async throws {
-        let firebaseToken = try await getFirebaseToken()
+        let firebaseToken = try await firebaseAuthService.getFirebaseToken()
         
         let user = User(firstName: firstName, lastName: lastName, firebaseUID: firebaseUID, scoreShortDistance: 0, scoreLongDistance: 0)
         // JSON encoding
@@ -44,7 +36,7 @@ class ServerService: ServerServiceProtocol {
     }
     
     func getUser() async throws -> User {
-        let firebaseToken = try await getFirebaseToken()
+        let firebaseToken = try await firebaseAuthService.getFirebaseToken()
         
         // build request
         let baseURL = URLHandler.shared.getBaseURL()
@@ -78,7 +70,7 @@ class ServerService: ServerServiceProtocol {
     }
     
     func modifyUser(modifiedUser: User) async throws -> User {
-        let firebaseToken = try await getFirebaseToken()
+        let firebaseToken = try await firebaseAuthService.getFirebaseToken()
 
         // JSON encoding
         guard let body = try? JSONEncoder().encode(modifiedUser) else {
@@ -148,7 +140,7 @@ class ServerService: ServerServiceProtocol {
     }
     
     func getReviewsForCity(iata: String, countryCode: String) async throws -> CityReviewElement {
-        let firebaseToken = try await getFirebaseToken()
+        let firebaseToken = try await firebaseAuthService.getFirebaseToken()
         
         // build request
         let baseURL = URLHandler.shared.getBaseURL()
@@ -212,7 +204,7 @@ class ServerService: ServerServiceProtocol {
     }
     
     func uploadReview(review: Review) async throws -> Review {
-        let firebaseToken = try await getFirebaseToken()
+        let firebaseToken = try await firebaseAuthService.getFirebaseToken()
         
         // JSON encoding
         let encoder = JSONEncoder()
@@ -252,7 +244,7 @@ class ServerService: ServerServiceProtocol {
     }
     
     func modifyReview(modifiedReview: Review) async throws -> Review {
-        let firebaseToken = try await getFirebaseToken()
+        let firebaseToken = try await firebaseAuthService.getFirebaseToken()
         
         // JSON encoding
         let encoder = JSONEncoder()
@@ -298,7 +290,7 @@ class ServerService: ServerServiceProtocol {
     }
     
     func deleteReview(reviewID: Int) async throws {
-        let firebaseToken = try await getFirebaseToken()
+        let firebaseToken = try await firebaseAuthService.getFirebaseToken()
         
         // build request
         let baseURL = URLHandler.shared.getBaseURL()
@@ -351,7 +343,7 @@ class ServerService: ServerServiceProtocol {
     }
     
     func saveTravel(travelDetails: TravelDetails) async throws -> TravelDetails {
-        let firebaseToken = try await getFirebaseToken()
+        let firebaseToken = try await firebaseAuthService.getFirebaseToken()
         
         // JSON encoding
         let encoder = JSONEncoder()
@@ -393,7 +385,7 @@ class ServerService: ServerServiceProtocol {
     }
     
     func getTravels() async throws -> [TravelDetails] {
-        let firebaseToken = try await getFirebaseToken()
+        let firebaseToken = try await firebaseAuthService.getFirebaseToken()
         
         // build request
         let baseURL = URLHandler.shared.getBaseURL()
@@ -427,7 +419,7 @@ class ServerService: ServerServiceProtocol {
     }
     
     func updateTravel(modifiedTravel: Travel) async throws -> Travel {
-        let firebaseToken = try await getFirebaseToken()
+        let firebaseToken = try await firebaseAuthService.getFirebaseToken()
         
         // JSON encoding and decoding
         guard let body = try? JSONEncoder().encode(modifiedTravel) else {
@@ -466,7 +458,7 @@ class ServerService: ServerServiceProtocol {
     }
     
     func deleteTravel(travelID: Int) async throws {
-        let firebaseToken = try await getFirebaseToken()
+        let firebaseToken = try await firebaseAuthService.getFirebaseToken()
         
         // build request
         let baseURL = URLHandler.shared.getBaseURL()

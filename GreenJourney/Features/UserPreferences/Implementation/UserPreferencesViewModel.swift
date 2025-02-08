@@ -1,7 +1,6 @@
 import Combine
 import SwiftData
 import SwiftUI
-import FirebaseAuth
 
 enum Gender: String, CaseIterable {
     case male = "male"

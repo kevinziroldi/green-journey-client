@@ -1,6 +1,5 @@
 import Combine
 import CoreML
-import FirebaseAuth
 import Foundation
 import MapKit
 import SwiftData
