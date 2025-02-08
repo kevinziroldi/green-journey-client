@@ -41,9 +41,9 @@ class UserPreferencesViewModel: ObservableObject {
     
     @Published var errorMessage: String?
     
-    init(modelContext: ModelContext) {
+    init(modelContext: ModelContext, serverService: ServerServiceProtocol) {
         self.modelContext = modelContext
-        self.serverService = ServiceFactory.shared.serverService
+        self.serverService = serverService
     }
     
     func getUserData() {

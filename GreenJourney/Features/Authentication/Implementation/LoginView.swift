@@ -6,10 +6,10 @@ struct LoginView: View {
     private var modelContext: ModelContext
     @Binding var navigationPath: NavigationPath
    
-    init(modelContext: ModelContext, navigationPath: Binding<NavigationPath>) {
+    init(modelContext: ModelContext, navigationPath: Binding<NavigationPath>, serverService: ServerServiceProtocol, firebaseAuthService: FirebaseAuthServiceProtocol) {
         self.modelContext = modelContext
         _navigationPath = navigationPath
-        _viewModel = StateObject(wrappedValue: AuthenticationViewModel(modelContext: modelContext))
+        _viewModel = StateObject(wrappedValue: AuthenticationViewModel(modelContext: modelContext, serverService: serverService, firebaseAuthService: firebaseAuthService))
       }
     
     var body: some View {

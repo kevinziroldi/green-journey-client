@@ -4,6 +4,9 @@ import SwiftUI
 struct MyTravelsView: View {
     @StateObject var viewModel: MyTravelsViewModel
     @Environment(\.modelContext) private var modelContext
+    private var serverService: ServerServiceProtocol
+    private var firebaseAuthService: FirebaseAuthServiceProtocol
+    
     @State private var selectedSortOption: SortOption = .departureDate
     @State private var showSortOptions = false
     
@@ -13,9 +16,11 @@ struct MyTravelsView: View {
     @Binding var navigationPath: NavigationPath
     @Environment(\.colorScheme) var colorScheme: ColorScheme
         
-    init(modelContext: ModelContext,navigationPath: Binding<NavigationPath>) {
-        _viewModel = StateObject(wrappedValue: MyTravelsViewModel(modelContext: modelContext))
+    init(modelContext: ModelContext,navigationPath: Binding<NavigationPath>, serverService: ServerServiceProtocol, firebaseAuthService: FirebaseAuthServiceProtocol) {
+        _viewModel = StateObject(wrappedValue: MyTravelsViewModel(modelContext: modelContext, serverService: serverService))
         _navigationPath = navigationPath
+        self.serverService = serverService
+        self.firebaseAuthService = firebaseAuthService
     }
     var body: some View {
         VStack {
@@ -25,7 +30,7 @@ struct MyTravelsView: View {
                     .padding()
                 Spacer()
                 
-                NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath)) {
+                NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)) {
                     Image(systemName: "person")
                         .font(.title)
                 }

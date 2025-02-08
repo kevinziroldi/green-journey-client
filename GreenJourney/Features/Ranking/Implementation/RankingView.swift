@@ -6,10 +6,15 @@ struct RankingView: View {
     @StateObject var viewModel: RankingViewModel
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @Environment(\.modelContext) private var modelContext
+    private var serverService: ServerServiceProtocol
+    private var firebaseAuthService: FirebaseAuthServiceProtocol
 
-    init(modelContext: ModelContext,navigationPath: Binding<NavigationPath>) {
-        _viewModel = StateObject(wrappedValue: RankingViewModel(modelContext: modelContext))
+    init(modelContext: ModelContext,navigationPath: Binding<NavigationPath>, serverService: ServerServiceProtocol, firebaseAuthService: FirebaseAuthServiceProtocol) {
+        _viewModel = StateObject(wrappedValue: RankingViewModel(modelContext: modelContext, serverService: serverService))
         _navigationPath = navigationPath
+        self.serverService = serverService
+        self.firebaseAuthService = firebaseAuthService
+        
     }
     
     var body: some View {
@@ -22,7 +27,7 @@ struct RankingView: View {
                     
                     Spacer()
                     
-                    NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath)) {
+                    NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)) {
                         Image(systemName: "person")
                             .font(.title)
                     }

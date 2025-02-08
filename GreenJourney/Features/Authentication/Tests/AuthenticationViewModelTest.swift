@@ -7,7 +7,8 @@ struct AuthenticationViewModelTest {
     private var viewModel: AuthenticationViewModel
     private var mockModelContext: ModelContext
     private var mockModelContainer: ModelContainer
-    private var firebaseAuthService: FirebaseAuthServiceProtocol
+    private var mockServerService: MockServerService
+    private var mockFirebaseAuthService: MockFirebaseAuthService
     
     @MainActor
     init() throws {
@@ -15,8 +16,10 @@ struct AuthenticationViewModelTest {
         let mockContainer = try ModelContainer(for: User.self, Travel.self, Segment.self, CityFeatures.self, CityCompleterDataset.self, configurations: configuration)
         self.mockModelContainer = mockContainer
         self.mockModelContext = mockContainer.mainContext
-        self.viewModel = AuthenticationViewModel(modelContext: mockContainer.mainContext)
-        self.firebaseAuthService = ServiceFactory.shared.firebaseAuthService
+        self.mockServerService = MockServerService()
+        self.mockFirebaseAuthService = MockFirebaseAuthService()
+        
+        self.viewModel = AuthenticationViewModel(modelContext: mockContainer.mainContext, serverService: mockServerService, firebaseAuthService: mockFirebaseAuthService)
     }
     
     @Test
@@ -31,12 +34,34 @@ struct AuthenticationViewModelTest {
     }
     
     @Test
-    func testLoginSuccessful() async {
+    func testLoginSuccessfulEmailNotVerified() async {
         // set email and password
         viewModel.email = "test@test.com"
         viewModel.password = "test"
     
+        self.mockFirebaseAuthService.signInShouldSucceed = true
+        self.mockFirebaseAuthService.emailVerified = false
+        
         await viewModel.login()
+        
+        #expect(viewModel.isEmailVerificationActiveLogin)
     }
     
+    @MainActor
+    @Test
+    func testLoginSuccessfulEmailVerified() async throws {
+        // set email and password
+        viewModel.email = "test@test.com"
+        viewModel.password = "test"
+    
+        self.mockFirebaseAuthService.signInShouldSucceed = true
+        self.mockFirebaseAuthService.emailVerified = true
+        
+        await viewModel.login()
+        
+        #expect(viewModel.isEmailVerificationActiveLogin == false)
+        #expect(viewModel.errorMessage == nil)
+        let users = try mockModelContext.fetch(FetchDescriptor<User>())
+        #expect(users.count == 1)
+    }
 }

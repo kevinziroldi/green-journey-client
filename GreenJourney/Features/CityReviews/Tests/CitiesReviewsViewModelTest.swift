@@ -16,9 +16,10 @@ class CitiesReviewsViewModelTest {
         let mockContainer = try ModelContainer(for: User.self, Travel.self, Segment.self, CityFeatures.self, CityCompleterDataset.self, configurations: configuration)
         self.mockModelContainer = mockContainer
         self.mockModelContext = mockContainer.mainContext
+        let mockServerService = MockServerService()
         
         // create view model
-        self.viewModel = CitiesReviewsViewModel(modelContext: self.mockModelContext)
+        self.viewModel = CitiesReviewsViewModel(modelContext: self.mockModelContext, serverService: mockServerService)
         
         // add some cities to SwiftData
         try addCitiesToSwiftData()

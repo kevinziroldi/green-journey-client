@@ -25,9 +25,9 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
     @Published var predictedCities: [CityCompleterDataset] = []
     @Published var predictionShown: Int = 0
     
-    init(modelContext: ModelContext) {
+    init(modelContext: ModelContext, serverService: ServerServiceProtocol) {
         self.modelContext = modelContext
-        self.serverService = ServiceFactory.shared.serverService
+        self.serverService = serverService
     }
     
     // used after a travel search

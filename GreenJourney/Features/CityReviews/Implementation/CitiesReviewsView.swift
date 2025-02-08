@@ -4,14 +4,19 @@ import SwiftData
 struct CitiesReviewsView: View {
     @StateObject var viewModel: CitiesReviewsViewModel
     @Environment(\.modelContext) private var modelContext
+    private var serverService: ServerServiceProtocol
+    private var firebaseAuthService: FirebaseAuthServiceProtocol
+    
     @Binding var navigationPath: NavigationPath
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     
     @State private var searchTapped: Bool = false
 
-    init(modelContext: ModelContext, navigationPath: Binding<NavigationPath>) {
-        _viewModel = StateObject(wrappedValue: CitiesReviewsViewModel(modelContext: modelContext))
+    init(modelContext: ModelContext, navigationPath: Binding<NavigationPath>, serverService: ServerServiceProtocol, firebaseAuthService: FirebaseAuthServiceProtocol) {
+        _viewModel = StateObject(wrappedValue: CitiesReviewsViewModel(modelContext: modelContext, serverService: serverService))
         _navigationPath = navigationPath
+        self.serverService = serverService
+        self.firebaseAuthService = firebaseAuthService
     }
     
     var body: some View {
@@ -24,7 +29,7 @@ struct CitiesReviewsView: View {
                     .padding()
                 Spacer()
                 
-                NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath)) {
+                NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)) {
                     Image(systemName: "person")
                         .font(.title)
                 }

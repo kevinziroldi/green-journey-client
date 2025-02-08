@@ -18,10 +18,14 @@ struct GreenJourneyApp: App {
     
     // persistence controller for SwiftData
     let persistenceController = PersistenceHandler.shared
+    // server service
+    let serverService = ServiceFactory.shared.getServerService()
+    // firebase auth service
+    let firebaseAuthService = ServiceFactory.shared.getFirebaseAuthService()
 
     var body: some Scene {
         WindowGroup {
-            MainView(modelContext: persistenceController.container.mainContext)
+            MainView(modelContext: persistenceController.container.mainContext, serverService: serverService, firebaseAuthService: firebaseAuthService)
         }
         // make persistence controller available to all views
         .modelContainer(persistenceController.container)

@@ -22,11 +22,11 @@ class AuthenticationViewModel: ObservableObject {
     @Published var isEmailVerificationActiveLogin: Bool = false
     @Published var isEmailVerificationActiveSignup: Bool = false
     
-    init(modelContext: ModelContext) {
+    init(modelContext: ModelContext, serverService: ServerServiceProtocol, firebaseAuthService: FirebaseAuthServiceProtocol) {
         self.modelContext = modelContext
         self.isLogged = false
-        self.serverService = ServiceFactory.shared.serverService
-        self.firebaseAuthService = ServiceFactory.shared.firebaseAuthService
+        self.serverService = serverService
+        self.firebaseAuthService = firebaseAuthService
     }
     
     @MainActor

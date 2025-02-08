@@ -4,20 +4,25 @@ import SwiftData
 import SwiftUI
 
 struct UserPreferencesView : View {
+    @Environment(\.modelContext) private var modelContext
+    private var serverService: ServerServiceProtocol
+    private var firebaseAuthService: FirebaseAuthServiceProtocol
+    
     @Query var users: [User]
     let email: String = Auth.auth().currentUser?.email ?? ""
     @Environment(\.colorScheme) var colorScheme: ColorScheme
-    @Environment(\.modelContext) private var modelContext
     @StateObject private var userPreferencesViewModel: UserPreferencesViewModel
     @StateObject private var authenticationViewModel: AuthenticationViewModel
     @Binding var navigationPath: NavigationPath
     @State var editTapped: Bool = false
     @State private var showResendMessage = false
     
-    init(modelContext: ModelContext, navigationPath: Binding<NavigationPath>) {
-        _userPreferencesViewModel = StateObject(wrappedValue: UserPreferencesViewModel(modelContext: modelContext))
-        _authenticationViewModel = StateObject(wrappedValue: AuthenticationViewModel(modelContext: modelContext))
+    init(modelContext: ModelContext, navigationPath: Binding<NavigationPath>, serverService: ServerServiceProtocol, firebaseAuthService: FirebaseAuthServiceProtocol) {
+        _userPreferencesViewModel = StateObject(wrappedValue: UserPreferencesViewModel(modelContext: modelContext, serverService: serverService))
+        _authenticationViewModel = StateObject(wrappedValue: AuthenticationViewModel(modelContext: modelContext, serverService: serverService, firebaseAuthService: firebaseAuthService))
         _navigationPath = navigationPath
+        self.serverService = serverService
+        self.firebaseAuthService = firebaseAuthService
     }
     
     var body: some View {
@@ -188,7 +193,7 @@ struct UserPreferencesView : View {
             
             
         } else {
-            LoginView(modelContext: modelContext, navigationPath: $navigationPath)
+            LoginView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
                 .transition(.opacity.animation(.easeInOut(duration: 0.2)))
         }
     }

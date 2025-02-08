@@ -3,6 +3,8 @@ import SwiftData
 
 struct TravelSearchView: View {
     @Environment(\.modelContext) private var modelContext: ModelContext
+    private var serverService: ServerServiceProtocol
+    private var firebaseAuthService: FirebaseAuthServiceProtocol
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @StateObject var viewModel: TravelSearchViewModel
     @State private var departureTapped: Bool = false
@@ -15,15 +17,16 @@ struct TravelSearchView: View {
     @State var counter: Int = 0
     @State var origin: CGPoint = .init(x: 0.5, y: 0.5)
     
-    
     @Binding var navigationPath: NavigationPath
     
     @Query var users: [User]
     
     
-    init(modelContext: ModelContext, navigationPath: Binding<NavigationPath>) {
-        _viewModel = StateObject(wrappedValue: TravelSearchViewModel(modelContext: modelContext))
+    init(modelContext: ModelContext, navigationPath: Binding<NavigationPath>, serverService: ServerServiceProtocol, firebaseAuthService: FirebaseAuthServiceProtocol) {
+        _viewModel = StateObject(wrappedValue: TravelSearchViewModel(modelContext: modelContext, serverService: serverService))
         _navigationPath = navigationPath
+        self.serverService = serverService
+        self.firebaseAuthService = firebaseAuthService
     }
     
     var body: some View {
@@ -56,7 +59,7 @@ struct TravelSearchView: View {
                                 
                                 Spacer()
                                 
-                                NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath)) {
+                                NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)) {
                                     Image(systemName: "person")
                                         .font(.title)
                                 }

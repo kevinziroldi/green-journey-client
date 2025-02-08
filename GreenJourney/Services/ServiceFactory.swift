@@ -1,19 +1,23 @@
 class ServiceFactory {
     static let shared = ServiceFactory()
     
-    let serverService: ServerServiceProtocol
-    let firebaseAuthService: FirebaseAuthServiceProtocol
-    
-    private init() {
+    func getServerService() -> ServerServiceProtocol {
         // check the type of service in the Config
         switch ConfigReader.serverServicesType {
         case .real:
-            self.serverService = ServerService()
-            self.firebaseAuthService = FirebaseAuthService()
-            
+            return ServerService()
         case .mock:
-            self.serverService = MockServerService()
-            self.firebaseAuthService = MockFirebaseAuthService()
+            return MockServerService()
+        }
+    }
+    
+    func getFirebaseAuthService() -> FirebaseAuthServiceProtocol {
+        // check the type of service in the Config
+        switch ConfigReader.serverServicesType {
+        case .real:
+            return FirebaseAuthService()
+        case .mock:
+            return MockFirebaseAuthService()
         }
     }
 }

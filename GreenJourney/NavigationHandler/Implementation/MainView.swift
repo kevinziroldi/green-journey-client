@@ -4,40 +4,44 @@ import SwiftUI
 struct MainView: View {
     private var modelContext: ModelContext
     @State var navigationPath: NavigationPath = NavigationPath()
+    private var serverService: ServerServiceProtocol
+    private var firebaseAuthService: FirebaseAuthServiceProtocol
     
     @State private var selectedTab: TabViewElement = TabViewElement.SearchTravel
     @Query var users: [User]
     
     private var viewModel: MyTravelsViewModel
     
-    init(modelContext: ModelContext) {
+    init(modelContext: ModelContext, serverService: ServerServiceProtocol, firebaseAuthService: FirebaseAuthServiceProtocol) {
         self.modelContext = modelContext
-        self.viewModel = MyTravelsViewModel(modelContext: modelContext)
+        self.viewModel = MyTravelsViewModel(modelContext: modelContext, serverService: serverService)
+        self.serverService = serverService
+        self.firebaseAuthService = firebaseAuthService
     }
     
     var body: some View {
         NavigationStack(path: $navigationPath) {
             TabView(selection: $selectedTab) {
                 if users.first != nil {
-                    RankingView(modelContext: modelContext, navigationPath: $navigationPath)
+                    RankingView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
                         .tabItem {
                             Label("Ranking", systemImage: "star")
                         }
                         .tag(TabViewElement.Ranking)
                     
-                    CitiesReviewsView(modelContext: modelContext, navigationPath: $navigationPath)
+                    CitiesReviewsView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
                         .tabItem {
                             Label("Reviews", systemImage: "star.fill")
                         }
                         .tag(TabViewElement.Reviews)
                     
-                    TravelSearchView(modelContext: modelContext, navigationPath: $navigationPath)
+                    TravelSearchView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
                         .tabItem {
                             Label("From-To", systemImage: "location")
                         }
                         .tag(TabViewElement.SearchTravel)
                     
-                    MyTravelsView(modelContext: modelContext, navigationPath: $navigationPath)
+                    MyTravelsView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
                         .tabItem {
                             Label("My travels", systemImage: "airplane")
                         }
@@ -49,7 +53,7 @@ struct MainView: View {
                         }
                         .tag(TabViewElement.Dashboard)
                 }else {
-                    LoginView(modelContext: modelContext, navigationPath: $navigationPath)
+                    LoginView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
                         .onAppear() {
                             // reset tab after logout+login
                             selectedTab = .SearchTravel
@@ -65,7 +69,7 @@ struct MainView: View {
             .navigationDestination(for: NavigationDestination.self) { destination in
                 switch destination {
                 case .LoginView:
-                    LoginView(modelContext: modelContext, navigationPath: $navigationPath)
+                    LoginView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
                         .transition(.opacity.animation(.easeInOut(duration: 0.2)))
                 case .SignupView(let viewModel):
                     SignUpView(viewModel: viewModel, navigationPath: $navigationPath)
