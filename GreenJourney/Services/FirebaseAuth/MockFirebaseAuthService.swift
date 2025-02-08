@@ -1,4 +1,6 @@
 class MockFirebaseAuthService: FirebaseAuthServiceProtocol {
+    var signInShouldSucceed: Bool = true
+    
     func signInWithCredentials(email: String, password: String) async throws -> Bool {
         // nothing to do
         return true
