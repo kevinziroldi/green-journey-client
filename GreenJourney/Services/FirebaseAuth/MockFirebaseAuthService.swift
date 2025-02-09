@@ -1,9 +1,14 @@
 class MockFirebaseAuthService: FirebaseAuthServiceProtocol {
-    var signInShouldSucceed: Bool = true
+    var correctCredentials: Bool = true
     var emailVerified: Bool = true
+    var resetPasswordShouldSucceed: Bool = true
     
     func signInWithCredentials(email: String, password: String) async throws -> Bool {
-        return emailVerified
+        if correctCredentials {
+            return emailVerified
+        } else {
+            throw MockFirebaseAuthError.invalidCredentials
+        }
     }
     
     func signInWithGoogle() async throws -> Bool {
@@ -26,7 +31,9 @@ class MockFirebaseAuthService: FirebaseAuthServiceProtocol {
     }
     
     func sendPasswordReset(email: String) async throws {
-        // nothing to do
+        if !resetPasswordShouldSucceed {
+            throw MockFirebaseAuthError.resetPasswordFailed
+        }
     }
     
     func deleteFirebaseUser() async throws {
