@@ -44,7 +44,7 @@ class AuthenticationViewModel: ObservableObject {
             if emailVerified == true {
                 let firebaseToken = try await firebaseAuthService.getFirebaseToken()
                 self.errorMessage = nil
-                await self.getUserFromServer(firebaseToken: firebaseToken)
+                try await self.getUserFromServer(firebaseToken: firebaseToken)
             } else {
                 self.isEmailVerificationActiveLogin = true
             }
@@ -164,7 +164,7 @@ class AuthenticationViewModel: ObservableObject {
                 
                 // save user to swift data
                 let firebaseToken = try await firebaseAuthService.getFirebaseToken()
-                await self.getUserFromServer(firebaseToken: firebaseToken)
+                try await self.getUserFromServer(firebaseToken: firebaseToken)
             } else {
                 self.errorMessage = "Email has not been verified yet"
                 print("Email not verified")
@@ -177,14 +177,9 @@ class AuthenticationViewModel: ObservableObject {
     }
     
     @MainActor
-    private func getUserFromServer(firebaseToken: String) async {
-        do {
-            let user = try await serverService.getUser()
-            self.saveUserToSwiftData(serverUser: user)
-        }catch {
-            print("Error getting user from server")
-            return
-        }
+    private func getUserFromServer(firebaseToken: String) async throws {
+        let user = try await serverService.getUser()
+        self.saveUserToSwiftData(serverUser: user)
     }
     
     private func saveUserToSwiftData(serverUser: User?) {
@@ -230,9 +225,8 @@ class AuthenticationViewModel: ObservableObject {
             let isNewUser = try await firebaseAuthService.signInWithGoogle()
             let firebaseToken = try await firebaseAuthService.getFirebaseToken()
             
-            if (isNewUser) {
+            if isNewUser {
                 // if new user, save to server (signup)
-                
                 let fullName = try await firebaseAuthService.getUserFullName()
                 let parts = fullName.components(separatedBy: " ")
                 self.firstName = parts[0]
@@ -242,7 +236,7 @@ class AuthenticationViewModel: ObservableObject {
                     let firebaseUID = try await firebaseAuthService.getFirebaseUID()
                     try await serverService.saveUser(firstName: self.firstName, lastName: self.lastName, firebaseUID: firebaseUID)
                     print("User data posted successfully.")
-                    await self.getUserFromServer(firebaseToken: firebaseToken)
+                    try await self.getUserFromServer(firebaseToken: firebaseToken)
                 } catch {
                     self.errorMessage = "Error signing in with Google"
                     print("Error posting user data: \(error.localizedDescription)")
@@ -262,11 +256,8 @@ class AuthenticationViewModel: ObservableObject {
                 }
             } else {
                 // if not new, get from server (login)
-                
-                await self.getUserFromServer(firebaseToken: firebaseToken)
+                try await self.getUserFromServer(firebaseToken: firebaseToken)
             }
-            
-            
         } catch {
             self.errorMessage = "Error signing in with Google"
             print("Error signing in with Google: \(error.localizedDescription)")

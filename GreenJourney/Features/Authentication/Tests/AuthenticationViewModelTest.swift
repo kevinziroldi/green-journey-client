@@ -37,8 +37,9 @@ struct AuthenticationViewModelTest {
         // set email and password
         viewModel.email = "test@test.com"
         viewModel.password = "test"
-        self.mockFirebaseAuthService.correctCredentials = true
+        self.mockFirebaseAuthService.shouldSucceed = true
         self.mockFirebaseAuthService.emailVerified = false
+        self.mockServerService.shouldSucceed = true
         
         await viewModel.login()
         
@@ -57,8 +58,9 @@ struct AuthenticationViewModelTest {
         viewModel.email = "test@test.com"
         viewModel.password = "test"
     
-        self.mockFirebaseAuthService.correctCredentials = true
+        self.mockFirebaseAuthService.shouldSucceed = true
         self.mockFirebaseAuthService.emailVerified = true
+        self.mockServerService.shouldSucceed = true
         
         await viewModel.login()
         #expect(viewModel.isEmailVerificationActiveLogin == false)
@@ -69,11 +71,25 @@ struct AuthenticationViewModelTest {
     }
     
     @Test
-    func testLoginWithCredentialsFailed() async {
+    func testLoginWrongCredentials() async {
         // set email and password
         viewModel.email = "test@test.com"
         viewModel.password = "test"
-        self.mockFirebaseAuthService.correctCredentials = false
+        self.mockFirebaseAuthService.shouldSucceed = false
+        self.mockServerService.shouldSucceed = true
+        
+        await viewModel.login()
+        #expect(viewModel.isLogged == false)
+        #expect(viewModel.errorMessage != nil)
+    }
+    
+    @Test
+    func testLoginServerFailed() async {
+        // set email and password
+        viewModel.email = "test@test.com"
+        viewModel.password = "test"
+        self.mockFirebaseAuthService.shouldSucceed = false
+        self.mockServerService.shouldSucceed = false
         
         await viewModel.login()
         #expect(viewModel.isLogged == false)
@@ -87,8 +103,9 @@ struct AuthenticationViewModelTest {
         viewModel.email = "test@test.com"
         viewModel.password = "test"
     
-        self.mockFirebaseAuthService.correctCredentials = true
+        self.mockFirebaseAuthService.shouldSucceed = true
         self.mockFirebaseAuthService.emailVerified = true
+        // no interaction with server
         
         await viewModel.login()
         #expect(viewModel.isLogged == true)
@@ -101,6 +118,7 @@ struct AuthenticationViewModelTest {
     
     @Test
     func testResetPasswordEmptyEmail() async {
+        // no interaction with server
         await viewModel.resetPassword(email: "")
         #expect(viewModel.errorMessage != nil)
     }
@@ -108,7 +126,8 @@ struct AuthenticationViewModelTest {
     @Test
     func testResetPasswordSuccessful() async {
         let email = "test@test.com"
-        mockFirebaseAuthService.resetPasswordShouldSucceed = true
+        mockFirebaseAuthService.shouldSucceed = true
+        // no interaction with server
         
         await viewModel.resetPassword(email: email)
         #expect(viewModel.errorMessage == nil)
@@ -118,7 +137,8 @@ struct AuthenticationViewModelTest {
     @Test
     func testResetPasswordUnsuccessful() async {
         let email = "test@test.com"
-        mockFirebaseAuthService.resetPasswordShouldSucceed = false
+        mockFirebaseAuthService.shouldSucceed = false
+        // no interaction with server
         
         await viewModel.resetPassword(email: email)
         #expect(viewModel.errorMessage != nil)
@@ -127,10 +147,26 @@ struct AuthenticationViewModelTest {
     
     @MainActor
     @Test
-    func testSignupMissingData() async throws {
+    func testSignupMissingLoginData() async throws {
         viewModel.email = ""
         viewModel.password = ""
         viewModel.repeatPassword = ""
+        viewModel.firstName = "test_name"
+        viewModel.lastName = "test_name"
+        
+        await viewModel.signUp()
+        #expect(viewModel.errorMessage != nil)
+        #expect(viewModel.isLogged == false)
+        let users = try mockModelContext.fetch(FetchDescriptor<User>())
+        #expect(users.count == 0)
+    }
+    
+    @MainActor
+    @Test
+    func testSignupMissingNameData() async throws {
+        viewModel.email = "test@test.com"
+        viewModel.password = "test_password"
+        viewModel.repeatPassword = "test_password"
         viewModel.firstName = ""
         viewModel.lastName = ""
         
@@ -140,4 +176,208 @@ struct AuthenticationViewModelTest {
         let users = try mockModelContext.fetch(FetchDescriptor<User>())
         #expect(users.count == 0)
     }
+    
+    @MainActor
+    @Test
+    func testSignupRepeatPasswordWrong() async throws {
+        // fill all fields
+        viewModel.email = "test@test.com"
+        viewModel.password = "test_password"
+        // repeat password different from password
+        viewModel.repeatPassword = "test_password_diff"
+        viewModel.firstName = "test_name"
+        viewModel.lastName = "test_name"
+        
+        await viewModel.signUp()
+        #expect(viewModel.errorMessage != nil)
+        #expect(viewModel.isLogged == false)
+        let users = try mockModelContext.fetch(FetchDescriptor<User>())
+        #expect(users.count == 0)
+    }
+    
+    @MainActor
+    @Test
+    func testSignupFirebaseFails() async throws {
+        // fill all fields
+        viewModel.email = "test@test.com"
+        viewModel.password = "test_password"
+        viewModel.repeatPassword = "test_password"
+        viewModel.firstName = "test_name"
+        viewModel.lastName = "test_name"
+
+        // firebase auth should fail
+        self.mockFirebaseAuthService.shouldSucceed = false
+        self.mockServerService.shouldSucceed = true
+        
+        await viewModel.signUp()
+        #expect(viewModel.errorMessage != nil)
+        #expect(viewModel.isLogged == false)
+        let users = try mockModelContext.fetch(FetchDescriptor<User>())
+        #expect(users.count == 0)
+    }
+    
+    @MainActor
+    @Test
+    func testSignupServerFails() async throws {
+        // fill all fields
+        viewModel.email = "test@test.com"
+        viewModel.password = "test_password"
+        viewModel.repeatPassword = "test_password"
+        viewModel.firstName = "test_name"
+        viewModel.lastName = "test_name"
+
+        // firebase auth should fail
+        self.mockFirebaseAuthService.shouldSucceed = true
+        self.mockServerService.shouldSucceed = false
+        
+        await viewModel.signUp()
+        #expect(viewModel.errorMessage != nil)
+        #expect(viewModel.isLogged == false)
+        let users = try mockModelContext.fetch(FetchDescriptor<User>())
+        #expect(users.count == 0)
+    }
+    
+    @MainActor
+    @Test
+    func testSignupSuccessful() async throws {
+        // fill all fields
+        viewModel.email = "test@test.com"
+        viewModel.password = "test_password"
+        viewModel.repeatPassword = "test_password"
+        viewModel.firstName = "test_name"
+        viewModel.lastName = "test_name"
+
+        // firebase auth should fail
+        self.mockFirebaseAuthService.shouldSucceed = true
+        self.mockServerService.shouldSucceed = true
+        
+        await viewModel.signUp()
+        #expect(viewModel.errorMessage == nil)
+        #expect(viewModel.isLogged == false)
+        let users = try mockModelContext.fetch(FetchDescriptor<User>())
+        #expect(users.count == 0)
+        #expect(viewModel.isEmailVerificationActiveSignup == true)
+    }
+    
+    @Test
+    func testSendEmailVerificationFirebaseFailed() async {
+        self.mockFirebaseAuthService.shouldSucceed = false
+        self.mockServerService.shouldSucceed = true
+        await viewModel.sendEmailVerification()
+        #expect(viewModel.errorMessage != nil)
+    }
+    
+    @Test
+    func testSendEmailVerificationSuccessful() async {
+        self.mockFirebaseAuthService.shouldSucceed = true
+        self.mockServerService.shouldSucceed = true
+        await viewModel.sendEmailVerification()
+        #expect(viewModel.errorMessage == nil)
+    }
+    
+    @Test
+    func testVerifyEmailFirebaseFailed() async {
+        self.mockFirebaseAuthService.shouldSucceed = false
+        self.mockServerService.shouldSucceed = true
+        await viewModel.verifyEmail()
+        #expect(viewModel.errorMessage != nil)
+    }
+    
+    @Test
+    func testVerifyEmailServerFailed() async {
+        self.mockFirebaseAuthService.shouldSucceed = true
+        self.mockFirebaseAuthService.emailVerified = true
+        self.mockServerService.shouldSucceed = false
+        await viewModel.verifyEmail()
+        #expect(viewModel.errorMessage != nil)
+    }
+    
+    @Test
+    func testVerifyEmailNotVerified() async {
+        self.mockFirebaseAuthService.shouldSucceed = true
+        self.mockFirebaseAuthService.emailVerified = false
+        self.mockFirebaseAuthService.shouldSucceed = true
+        await viewModel.verifyEmail()
+        #expect(viewModel.errorMessage != nil)
+    }
+    
+    @Test
+    func testVerifyEmailVerified() async {
+        self.mockFirebaseAuthService.shouldSucceed = true
+        self.mockFirebaseAuthService.emailVerified = true
+        self.mockFirebaseAuthService.shouldSucceed = true
+        await viewModel.verifyEmail()
+        #expect(viewModel.errorMessage == nil)
+    }
+    
+    @Test
+    func testSignInGoogleFirebaseFailed() async throws {
+        self.mockFirebaseAuthService.shouldSucceed = false
+        self.mockServerService.shouldSucceed = true
+        
+        await viewModel.signInWithGoogle()
+        #expect(viewModel.errorMessage != nil)
+        #expect(viewModel.isLogged == false)
+        let users = try mockModelContext.fetch(FetchDescriptor<User>())
+        #expect(users.count == 0)
+    }
+    
+    @Test
+    func testSignInGoogleServerFailedLogin() async throws {
+        self.mockFirebaseAuthService.shouldSucceed = true
+        // login - not new user
+        self.mockFirebaseAuthService.isNewUser = false
+        self.mockServerService.shouldSucceed = false
+        
+        await viewModel.signInWithGoogle()
+        #expect(viewModel.errorMessage != nil)
+        #expect(viewModel.isLogged == false)
+        let users = try mockModelContext.fetch(FetchDescriptor<User>())
+        #expect(users.count == 0)
+    }
+    
+    @Test
+    func testSignInGoogleServerFailedSignup() async throws {
+        self.mockFirebaseAuthService.shouldSucceed = true
+        // signup - new user
+        self.mockFirebaseAuthService.isNewUser = true
+        self.mockServerService.shouldSucceed = false
+        
+        await viewModel.signInWithGoogle()
+        #expect(viewModel.errorMessage != nil)
+        #expect(viewModel.isLogged == false)
+        let users = try mockModelContext.fetch(FetchDescriptor<User>())
+        #expect(users.count == 0)
+    }
+    
+    @Test
+    func testSignInGoogleSuccessfulLogin() async throws {
+        self.mockFirebaseAuthService.shouldSucceed = true
+        // login - not new user
+        self.mockFirebaseAuthService.isNewUser = false
+        self.mockServerService.shouldSucceed = true
+        
+        await viewModel.signInWithGoogle()
+        #expect(viewModel.errorMessage == nil)
+        #expect(viewModel.isLogged == true)
+        let users = try mockModelContext.fetch(FetchDescriptor<User>())
+        #expect(users.count == 1)
+    }
+    
+    @Test
+    func testSignInGoogleSuccessfulSignup() async throws {
+        self.mockFirebaseAuthService.shouldSucceed = true
+        // signup - new user
+        self.mockFirebaseAuthService.isNewUser = true
+        self.mockServerService.shouldSucceed = true
+        
+        await viewModel.signInWithGoogle()
+        #expect(viewModel.errorMessage == nil)
+        
+        // signup with google is the same as a login, user enters immediately
+        #expect(viewModel.isLogged == true)
+        let users = try mockModelContext.fetch(FetchDescriptor<User>())
+        #expect(users.count == 1)
+    }
 }
+
