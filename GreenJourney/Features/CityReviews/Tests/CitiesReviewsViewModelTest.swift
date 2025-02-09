@@ -6,6 +6,7 @@ import Testing
 
 class CitiesReviewsViewModelTest {
     private var mockModelContext: ModelContext
+    private var mockServerService: MockServerService
     private var mockModelContainer: ModelContainer
     private var viewModel: CitiesReviewsViewModel
     
@@ -16,10 +17,10 @@ class CitiesReviewsViewModelTest {
         let mockContainer = try ModelContainer(for: User.self, Travel.self, Segment.self, CityFeatures.self, CityCompleterDataset.self, configurations: configuration)
         self.mockModelContainer = mockContainer
         self.mockModelContext = mockContainer.mainContext
-        let mockServerService = MockServerService()
+        self.mockServerService = MockServerService()
         
         // create view model
-        self.viewModel = CitiesReviewsViewModel(modelContext: self.mockModelContext, serverService: mockServerService)
+        self.viewModel = CitiesReviewsViewModel(modelContext: self.mockModelContext, serverService: self.mockServerService)
         
         // add some cities to SwiftData
         try addCitiesToSwiftData()
@@ -101,7 +102,9 @@ class CitiesReviewsViewModelTest {
     }
     
     @Test
-    func testGetReviewsForSearchedCity() async {
+    func testGetReviewsForSearchedCitySuccessful() async {
+        self.mockServerService.shouldSucceed = true
+        
         viewModel.searchedCity = CityCompleterDataset(
             cityName: "Paris",
             countryName: "France",
@@ -135,7 +138,27 @@ class CitiesReviewsViewModelTest {
     }
     
     @Test
-    func testGetBestReviewedCities() async throws {
+    func testGetReviewsForSearchedCityUnsuccessful() async {
+        self.mockServerService.shouldSucceed = false
+        
+        viewModel.searchedCity = CityCompleterDataset(
+            cityName: "Paris",
+            countryName: "France",
+            iata: "PAR",
+            countryCode: "FR",
+            continent: "Europe"
+        )
+        
+        await viewModel.getReviewsForSearchedCity()
+        
+        viewModel.selectedCityReviewElement = nil
+        viewModel.searchedCityAvailable = false
+    }
+    
+    @Test
+    func testGetBestReviewedCitiesSuccessful() async throws {
+        self.mockServerService.shouldSucceed = true
+        
         await viewModel.getBestReviewedCities()
         
         #expect(viewModel.bestCitiesReviewElements.count == 3)
@@ -160,7 +183,19 @@ class CitiesReviewsViewModelTest {
     }
     
     @Test
-    func testGetUserReview() async throws {
+    func testGetBestReviewedCitiesUnsuccessful() async throws {
+        self.mockServerService.shouldSucceed = false
+        
+        await viewModel.getBestReviewedCities()
+        
+        #expect(viewModel.bestCitiesReviewElements.count == 0)
+        #expect(viewModel.bestCitiesReviewElements.count == viewModel.bestCities.count)
+    }
+    
+    @Test
+    func testGetUserReviewSuccessful() async throws {
+        self.mockServerService.shouldSucceed = true
+        
         // retrieve reviews for Paris
         viewModel.searchedCity = CityCompleterDataset(
             cityName: "Paris",
@@ -180,7 +215,30 @@ class CitiesReviewsViewModelTest {
     }
     
     @Test
-    func testGetNumPages() async {
+    func testGetUserReviewUnuccessful() async throws {
+        self.mockServerService.shouldSucceed = false
+
+        // retrieve reviews for Paris
+        viewModel.searchedCity = CityCompleterDataset(
+            cityName: "Paris",
+            countryName: "France",
+            iata: "PAR",
+            countryCode: "FR",
+            continent: "Europe"
+        )
+        await viewModel.getReviewsForSearchedCity()
+        
+        // call ViewModel function
+        let userID = try mockModelContext.fetch(FetchDescriptor<User>()).first!.userID!
+        viewModel.getUserReview(userID: userID)
+        
+        #expect(viewModel.userReview == nil)
+    }
+    
+    @Test
+    func testGetNumPagesSuccessful() async {
+        self.mockServerService.shouldSucceed = true
+        
         // retrieve reviews for Paris
         viewModel.searchedCity = CityCompleterDataset(
             cityName: "Paris",
@@ -194,10 +252,29 @@ class CitiesReviewsViewModelTest {
         #expect(viewModel.getNumPages() == 1)
     }
     
+    @Test
+    func testGetNumPagesUnsuccessful() async {
+        self.mockServerService.shouldSucceed = false
+        
+        // retrieve reviews for Paris
+        viewModel.searchedCity = CityCompleterDataset(
+            cityName: "Paris",
+            countryName: "France",
+            iata: "PAR",
+            countryCode: "FR",
+            continent: "Europe"
+        )
+        await viewModel.getReviewsForSearchedCity()
+        
+        #expect(viewModel.getNumPages() == 0)
+    }
+    
     // TODO to be changed
     /*
     @Test
     func testIsReviewable() async throws {
+        self.mockServerService.shouldSucceed = true
+     
         let userID = try mockModelContext.fetch(FetchDescriptor<User>()).first!.userID!
         viewModel.getUserReview(userID: userID)
         

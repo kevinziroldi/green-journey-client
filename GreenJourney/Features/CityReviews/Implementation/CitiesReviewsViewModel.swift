@@ -41,7 +41,6 @@ class CitiesReviewsViewModel: ObservableObject {
             print("Error getting reviews for searched city")
             return
         }
-        print("esco dalla funzione")
     }
     
     @MainActor
@@ -117,7 +116,7 @@ class CitiesReviewsViewModel: ObservableObject {
                 }
             }
         } catch {
-            print("error during segments fetch")
+            print("Error during segments fetch")
         }
         return false
     }
