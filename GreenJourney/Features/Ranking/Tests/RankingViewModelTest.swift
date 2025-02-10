@@ -4,7 +4,7 @@ import Testing
 @testable import GreenJourney
 
 struct RankingViewModelTest {
-    private var viewModel: RankingViewModel!
+    private var viewModel: RankingViewModel
     private var mockServerService: MockServerService
     private var mockFirebaseAuthService: MockFirebaseAuthService
     

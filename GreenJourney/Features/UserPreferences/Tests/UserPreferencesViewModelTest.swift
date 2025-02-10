@@ -4,7 +4,7 @@ import Testing
 @testable import GreenJourney
 
 struct UserPreferencesViewModelTest {
-    private var viewModel: UserPreferencesViewModel!
+    private var viewModel: UserPreferencesViewModel
     private var mockServerService: MockServerService
     private var mockFirebaseAuthService: MockFirebaseAuthService
     

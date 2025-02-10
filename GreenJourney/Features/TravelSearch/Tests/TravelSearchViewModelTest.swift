@@ -4,7 +4,7 @@ import Testing
 @testable import GreenJourney
 
 struct TravelSearchViewModelTest {
-    private var viewModel: TravelSearchViewModel!
+    private var viewModel: TravelSearchViewModel
     private var mockServerService: MockServerService
     private var mockFirebaseAuthService: MockFirebaseAuthService
     

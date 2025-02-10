@@ -64,6 +64,7 @@ class MyTravelsViewModel: ObservableObject {
     func getUserTravels() async {
         do {
             let travelDetailsList = try await serverService.getTravels()
+            self.travelDetailsList = travelDetailsList
             removeExistingTravels()
             addNewTravels(travelDetailsList: travelDetailsList)
         }catch {
@@ -198,7 +199,19 @@ class MyTravelsViewModel: ObservableObject {
                 }
                 let co2Compensated1 = $0.travel.CO2Compensated
                 let co2Compensated2 = $1.travel.CO2Compensated
-                return co2Compensated1/co2Emitted1 < co2Compensated2/co2Emitted2
+                let co2Rate1: Double
+                let co2Rate2: Double
+                if co2Emitted1 == 0 {
+                    co2Rate1 = 0
+                } else {
+                    co2Rate1 = co2Compensated1/co2Emitted1
+                }
+                if co2Emitted2 == 0 {
+                    co2Rate2 = 0
+                } else {
+                    co2Rate2 = co2Compensated1/co2Emitted1
+                }
+                return co2Rate1 < co2Rate2
             }
         case .price:
             // decreasing price
