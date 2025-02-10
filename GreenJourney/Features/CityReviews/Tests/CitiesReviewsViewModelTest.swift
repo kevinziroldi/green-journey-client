@@ -6,8 +6,8 @@ import Testing
 
 class CitiesReviewsViewModelTest {
     private var mockModelContext: ModelContext
-    private var mockServerService: MockServerService
     private var mockModelContainer: ModelContainer
+    private var mockServerService: MockServerService
     private var viewModel: CitiesReviewsViewModel
     
     @MainActor
@@ -44,11 +44,11 @@ class CitiesReviewsViewModelTest {
     
     @MainActor
     private func addCitiesToSwiftData() throws {
-        let cityBerlin = CityCompleterDataset(
-            cityName: "Berlin",
-            countryName: "Germany",
-            iata: "BER",
-            countryCode: "DE",
+        let cityMilan = CityCompleterDataset(
+            cityName: "Milan",
+            countryName: "Italy",
+            iata: "MIL",
+            countryCode: "IT",
             continent: "Europe"
         )
         let cityParis = CityCompleterDataset(
@@ -56,6 +56,13 @@ class CitiesReviewsViewModelTest {
             countryName: "France",
             iata: "PAR",
             countryCode: "FR",
+            continent: "Europe"
+        )
+        let cityBerlin = CityCompleterDataset(
+            cityName: "Berlin",
+            countryName: "Germany",
+            iata: "BER",
+            countryCode: "DE",
             continent: "Europe"
         )
         let cityRome = CityCompleterDataset(
@@ -66,6 +73,7 @@ class CitiesReviewsViewModelTest {
             continent: "Europe"
         )
         
+        self.mockModelContext.insert(cityMilan)
         self.mockModelContext.insert(cityBerlin)
         self.mockModelContext.insert(cityParis)
         self.mockModelContext.insert(cityRome)

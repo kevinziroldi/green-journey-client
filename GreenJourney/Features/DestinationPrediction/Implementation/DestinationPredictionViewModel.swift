@@ -8,7 +8,7 @@ struct CityCountry: Hashable {
 }
 
 class DestinationPredictionViewModel: ObservableObject {
-    var modelContext: ModelContext
+    private var modelContext: ModelContext
     @Published var predictedCities: [CityCompleterDataset] = []
     let predictionSize: Int = 5
     
