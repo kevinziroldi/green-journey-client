@@ -21,19 +21,19 @@ class RankingViewModel: ObservableObject {
     
     @MainActor
     func fecthRanking() async {
-        errorMessage = nil
+        self.errorMessage = nil
         
         // get user id
         do {
             users = try modelContext.fetch(FetchDescriptor<User>())
         }catch {
             print("Error getting user from SwiftData")
-            errorMessage = "An error occurred retrieving rankings from server"
+            self.errorMessage = "An error occurred retrieving rankings from server"
             return
         }
         guard let userID = users.first?.userID else {
             print("No user found")
-            errorMessage = "An error occurred retrieving rankings from server"
+            self.errorMessage = "An error occurred retrieving rankings from server"
             return
         }
         
@@ -55,7 +55,8 @@ class RankingViewModel: ObservableObject {
         var months: Int = 0
         var years: Int = 0
         
-        hours = duration / (3600 * 1000000000)       // 1 hour = 3600 secsecondsondi
+        // 1 hour = 3600 secsecondsondi
+        hours = duration / (3600 * 1000000000)
         let remainingSeconds = (duration / 1000000000) % (3600)
         minutes = remainingSeconds / 60
         while (minutes >= 60) {

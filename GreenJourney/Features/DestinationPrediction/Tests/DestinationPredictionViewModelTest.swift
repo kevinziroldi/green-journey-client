@@ -139,22 +139,20 @@ struct DestinationPredictionViewModelTest {
         try self.mockModelContext.save()
     }
     
-    @MainActor
     @Test
-    func testPredictionAllVisited() throws {
+    func testPredictionAllVisited() async throws {
         // add only visited cities
-        try addVisitedCitiesFeaturesToSwiftData()
+        try await addVisitedCitiesFeaturesToSwiftData()
         
         viewModel.getRecommendation()
         #expect(viewModel.predictedCities.count > 0)
     }
     
-    @MainActor
     @Test
-    func testPredictionSomeNotVisited() throws {
+    func testPredictionSomeNotVisited() async throws {
         // add both visited and non visited cities
-        try addVisitedCitiesFeaturesToSwiftData()
-        try addNewCitiesFeaturesToSwiftData()
+        try await addVisitedCitiesFeaturesToSwiftData()
+        try await addNewCitiesFeaturesToSwiftData()
         
         viewModel.getRecommendation()
         #expect(viewModel.predictedCities.count > 0)
