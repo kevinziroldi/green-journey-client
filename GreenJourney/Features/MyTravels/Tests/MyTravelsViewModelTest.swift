@@ -188,4 +188,120 @@ struct MyTravelsViewModelTest {
             #expect(priceCurrent >= priceNext)
         }
     }
+    
+    @Test
+    func testCompensateCo2Successful() async {
+        // initialize server and ViewModel
+        self.mockServerService.shouldSucceed = true
+        await viewModel.getUserTravels()
+        viewModel.selectedTravel = viewModel.travelDetailsList.first!
+        viewModel.compensatedPrice = 1
+        
+        let travelId = viewModel.selectedTravel?.travel.travelID!
+        let co2Compensated = viewModel.selectedTravel!.travel.CO2Compensated
+        let compensatedPrice = viewModel.compensatedPrice
+        
+        // compensate
+        await viewModel.compensateCO2()
+        
+        // check co2 compensated
+        for td in viewModel.travelDetailsList {
+            if td.travel.travelID == travelId {
+                let newCo2Compensated = co2CompensatedPerEuro * compensatedPrice
+                #expect(td.travel.CO2Compensated == co2Compensated + newCo2Compensated)
+            }
+        }
+    }
+    
+    @Test
+    func testCompensateCo2Unsuccessful() async {
+        // initialize server and ViewModel
+        self.mockServerService.shouldSucceed = true
+        await viewModel.getUserTravels()
+        viewModel.selectedTravel = viewModel.travelDetailsList.first!
+        viewModel.compensatedPrice = 1
+        
+        let travelId = viewModel.selectedTravel?.travel.travelID!
+        let co2Compensated = viewModel.selectedTravel!.travel.CO2Compensated
+        
+        // initialize server and compensate co2
+        self.mockServerService.shouldSucceed = false
+        await viewModel.compensateCO2()
+        
+        // check co2 compensated
+        for td in viewModel.travelDetailsList {
+            if td.travel.travelID == travelId {
+                #expect(td.travel.CO2Compensated == co2Compensated)
+            }
+        }
+    }
+    
+    @Test
+    func testConfirmTravelSuccessful() async {
+        // initialize server and ViewModel
+        self.mockServerService.shouldSucceed = true
+        await viewModel.getUserTravels()
+        let travel = viewModel.travelDetailsList.first!.travel
+        #expect(travel.confirmed == false)
+        
+        // initialize server and compensate co2
+        self.mockServerService.shouldSucceed = true
+        await viewModel.confirmTravel(travel: travel)
+        
+        #expect(travel.confirmed == true)
+    }
+    
+    @Test
+    func testConfirmTravelUnsuccessful() async {
+        // initialize server and ViewModel
+        self.mockServerService.shouldSucceed = true
+        await viewModel.getUserTravels()
+        let travel = viewModel.travelDetailsList.first!.travel
+        #expect(travel.confirmed == false)
+        
+        // initialize server and compensate co2
+        self.mockServerService.shouldSucceed = false
+        await viewModel.confirmTravel(travel: travel)
+        
+        #expect(travel.confirmed == false)
+    }
+    
+    @Test
+    func testDeleteTravelSuccessful() async {
+        // initialize server and ViewModel
+        self.mockServerService.shouldSucceed = true
+        await viewModel.getUserTravels()
+        let travel = viewModel.travelDetailsList.first!.travel
+        
+        // initialize server and delete travel
+        self.mockServerService.shouldSucceed = true
+        await viewModel.deleteTravel(travelToDelete: travel)
+        
+        // check travel not present anymore
+        for td in viewModel.travelDetailsList {
+            #expect(td.travel.travelID != travel.travelID)
+        }
+    }
+    
+    @Test
+    func testDeleteTravelUnsuccessful() async {
+        // initialize server and ViewModel
+        self.mockServerService.shouldSucceed = true
+        await viewModel.getUserTravels()
+        let travel = viewModel.travelDetailsList.first!.travel
+        
+        // initialize server and delete travel
+        self.mockServerService.shouldSucceed = false
+        await viewModel.deleteTravel(travelToDelete: travel)
+        
+        // check travel not present anymore
+        var foundTravel = false
+        for td in viewModel.travelDetailsList {
+            if td.travel.travelID == travel.travelID {
+                foundTravel = true
+            }
+        }
+        
+        #expect(foundTravel)
+    }
 }

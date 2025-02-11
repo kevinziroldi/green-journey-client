@@ -2,6 +2,9 @@ import Combine
 import Foundation
 import SwiftData
 
+// TODO change value
+let co2CompensatedPerEuro = 37.5 // 37.5 kg/€
+
 class MyTravelsViewModel: ObservableObject {
     let uuid: UUID = UUID()
     
@@ -31,10 +34,6 @@ class MyTravelsViewModel: ObservableObject {
     @Published var selectedTravel: TravelDetails?
     @Published var compensatedPrice: Float64 = 0
     @Published var travelReviews: [Review] = []
-    
-    // TODO change value
-    let co2CompensatedPerEuro = 37.5 // 37.5 kg/€
-    
     
     
     // TODO probably to be moved to reviews view model
@@ -209,7 +208,7 @@ class MyTravelsViewModel: ObservableObject {
                 if co2Emitted2 == 0 {
                     co2Rate2 = 0
                 } else {
-                    co2Rate2 = co2Compensated1/co2Emitted1
+                    co2Rate2 = co2Compensated2/co2Emitted2
                 }
                 return co2Rate1 < co2Rate2
             }
@@ -231,13 +230,14 @@ class MyTravelsViewModel: ObservableObject {
     
     @MainActor
     func compensateCO2() async {
-        let newCo2Compensated = self.co2CompensatedPerEuro * self.compensatedPrice
+        let newCo2Compensated = co2CompensatedPerEuro * self.compensatedPrice
         
         if let selectedTravel = self.selectedTravel {
             let modifiedTravel = Travel(travelCopy: selectedTravel.travel)
             modifiedTravel.CO2Compensated += newCo2Compensated
             
             await updateTravelOnServer(modifiedTravel: modifiedTravel)
+            self.compensatedPrice = 0
         } else {
             print("Selected travel is nil")
         }
@@ -310,7 +310,7 @@ class MyTravelsViewModel: ObservableObject {
     }
     
     @MainActor
-    func deleteTravelFromSwiftData(travelToDelete: Travel) async {
+    private func deleteTravelFromSwiftData(travelToDelete: Travel) async {
         if let travelID = travelToDelete.travelID {
             do {
                 let travels = try modelContext.fetch(FetchDescriptor<Travel>())
