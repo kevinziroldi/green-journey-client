@@ -223,4 +223,183 @@ struct TravelSearchViewModelTest {
         }
         #expect(found)
     }
+    
+    @Test
+    func testComputeCo2EmittedNoSegments() async {
+        let co2Emitted = viewModel.computeCo2Emitted([])
+        #expect(co2Emitted == 0)
+    }
+    
+    @Test
+    func testComputeCo2EmittedWithSegments() async {
+        self.mockServerService.shouldSucceed = true
+        viewModel.oneWay = true
+        await viewModel.computeRoutes()
+        
+        let option = viewModel.outwardOptions[1]
+        
+        let co2Emitted = viewModel.computeCo2Emitted(option)
+        #expect(co2Emitted == 170.40000000000001)
+    }
+    
+    @Test
+    func testComputeTotalPriceNoSegments() async {
+        let price = viewModel.computeTotalPrice([])
+        #expect(price == 0)
+    }
+    
+    @Test
+    func testComputeTotalPriceBike() async {
+        self.mockServerService.shouldSucceed = true
+        viewModel.oneWay = true
+        await viewModel.computeRoutes()
+        
+        let option = viewModel.outwardOptions[0]
+        let price = viewModel.computeTotalPrice(option)
+        #expect(price == 0)
+    }
+   
+    @Test
+    func testComputeTotalPriceMultipleSegments() async {
+        self.mockServerService.shouldSucceed = true
+        viewModel.oneWay = true
+        await viewModel.computeRoutes()
+        
+        let option = viewModel.outwardOptions[2]
+        let price = viewModel.computeTotalPrice(option)
+        let expectedPrice = 8.3599999999999994 + 28.050000000000001 + 15.619999999999999 + 48.18
+        #expect(price == expectedPrice)
+    }
+    
+    @Test
+    func testComputeTotalDurationNoSegments() async {
+        let totalDuration = viewModel.computeTotalDuration([])
+        #expect(totalDuration == "0 h, 0 min")
+    }
+    
+    @Test
+    func testComputeTotalDurationOneSegment() async {
+        self.mockServerService.shouldSucceed = true
+        viewModel.oneWay = true
+        await viewModel.computeRoutes()
+        
+        let option = viewModel.outwardOptions[1]
+        let duration = viewModel.computeTotalDuration(option)
+        let expectedDuration = "8 h, 45 min"
+        #expect(duration == expectedDuration)
+    }
+    
+    @Test
+    func testComputeTotalDurationLongSegment() async {
+        self.mockServerService.shouldSucceed = true
+        viewModel.oneWay = true
+        await viewModel.computeRoutes()
+        
+        let option = viewModel.outwardOptions[6]
+        let duration = viewModel.computeTotalDuration(option)
+        let expectedDuration = "5 d, 21 h, 40 min"
+        #expect(duration == expectedDuration)
+    }
+    
+    @Test
+    func testGetOptionDepartureNoSegments() async {
+        let departure = viewModel.getOptionDeparture([])
+        #expect(departure == "")
+    }
+    
+    @Test
+    func testGetOptionDeparture() async {
+        self.mockServerService.shouldSucceed = true
+        viewModel.oneWay = true
+        await viewModel.computeRoutes()
+        
+        let option = viewModel.outwardOptions[0]
+        let departure = viewModel.getOptionDeparture(option)
+        let expectedDeparture = "Milano"
+        #expect(departure == expectedDeparture)
+    }
+    
+    @Test
+    func testGetOptionDestinationNoSegments() async {
+        let departure = viewModel.getOptionDestination([])
+        #expect(departure == "")
+    }
+    
+    @Test
+    func testGetOptionDestination() async {
+        self.mockServerService.shouldSucceed = true
+        viewModel.oneWay = true
+        await viewModel.computeRoutes()
+        
+        let option = viewModel.outwardOptions[0]
+        let destination = viewModel.getOptionDestination(option)
+        let expectedDestination = "Paris"
+        #expect(destination == expectedDestination)
+    }
+    
+    @Test
+    func testGetVehicleCar() async {
+        self.mockServerService.shouldSucceed = true
+        viewModel.oneWay = true
+        await viewModel.computeRoutes()
+        
+        let option = viewModel.outwardOptions[1]
+        
+        let vehicle = viewModel.findVehicle(option)
+        #expect(vehicle == "car")
+    }
+    
+    @Test
+    func testGetVehicleBike() async {
+        self.mockServerService.shouldSucceed = true
+        viewModel.oneWay = true
+        await viewModel.computeRoutes()
+        
+        let option = viewModel.outwardOptions[0]
+        
+        let vehicle = viewModel.findVehicle(option)
+        #expect(vehicle == "bicycle")
+    }
+    
+    @Test
+    func testGetVehicleTrain() async {
+        self.mockServerService.shouldSucceed = true
+        viewModel.oneWay = true
+        await viewModel.computeRoutes()
+        
+        let option = viewModel.outwardOptions[2]
+        
+        let vehicle = viewModel.findVehicle(option)
+        #expect(vehicle == "tram")
+    }
+    
+    @Test
+    func testGetVehiclePlane() async {
+        self.mockServerService.shouldSucceed = true
+        viewModel.oneWay = true
+        await viewModel.computeRoutes()
+        
+        let option = viewModel.outwardOptions[3]
+        
+        let vehicle = viewModel.findVehicle(option)
+        #expect(vehicle == "airplane")
+    }
+    
+    @Test
+    func testGetVehicleBus() async {
+        self.mockServerService.shouldSucceed = true
+        viewModel.oneWay = true
+        await viewModel.computeRoutes()
+        
+        let option = viewModel.outwardOptions[6]
+        
+        let vehicle = viewModel.findVehicle(option)
+        #expect(vehicle == "bus")
+    }
+    
+    @Test
+    func testGetVehicleNoSegments() async {
+        let vehicle = viewModel.findVehicle([])
+        #expect(vehicle == "")
+    }
 }

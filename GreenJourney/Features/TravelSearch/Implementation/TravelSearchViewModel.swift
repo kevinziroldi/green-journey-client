@@ -160,7 +160,7 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
         return "\(days) d, \(hours) h, \(minutes) min"
     }
     
-    func durationToHoursAndMinutes(duration: Int) -> (hours: Int, minutes: Int) {
+    private func durationToHoursAndMinutes(duration: Int) -> (hours: Int, minutes: Int) {
         let hours = duration / (3600 * 1000000000)       // 1 hour = 3600 secsecondsondi
         let remainingSeconds = (duration / 1000000000) % (3600)
         let minutes = remainingSeconds / 60  // 1 minute = 60 seconds

@@ -239,6 +239,27 @@
         "date_time" : "2024-12-23T20:20:00Z",
         "duration" : 5100000000000
       }
+    ],
+    [
+      {
+        "description" : "AZ 352",
+        "co2_emitted" : 148.70588235294119,
+        "vehicle" : "bus",
+        "distance" : 637.82560356753254,
+        "destination_city" : "Paris",
+        "destination_country" : "France",
+        "is_outward" : true,
+        "departure_id" : 264373,
+        "travel_id" : 0,
+        "segment_id" : 0,
+        "num_segment" : 1,
+        "price" : 201.22,
+        "destination_id" : 275549,
+        "departure_city" : "Milano",
+        "departure_country" : "Italy",
+        "date_time" : "2024-12-23T20:20:00Z",
+        "duration" : 510000000000000
+      }
     ]
   ]
 }
