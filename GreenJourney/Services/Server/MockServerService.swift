@@ -155,10 +155,10 @@ class MockServerService: ServerServiceProtocol {
         }
     }
     
-    // TODO
     func saveTravel(travelDetails: TravelDetails) async throws -> TravelDetails {
         if shouldSucceed {
-            // TODO need to add info
+            // add custom travelID
+            travelDetails.travel.travelID = 999
             return travelDetails
         } else {
             throw MockServerError.saveTravelFailed

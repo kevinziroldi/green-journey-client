@@ -88,6 +88,11 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
                 print("Missing user or user id")
                 return
             }
+            if self.selectedOption.isEmpty {
+                print("Missing selected option")
+                return
+            }
+            
             let travel = Travel(userID: userID)
             let travelDetails = TravelDetails(travel: travel, segments: selectedOption)
             
