@@ -46,30 +46,32 @@ class UserPreferencesViewModel: ObservableObject {
         self.serverService = serverService
     }
     
+    @MainActor
     func getUserData() {
         do {
-            errorMessage = nil
+            self.errorMessage = nil
             let users = try modelContext.fetch(FetchDescriptor<User>())
             if let user = users.first {
-                DispatchQueue.main.async {
-                    self.firstName = user.firstName
-                    self.lastName = user.lastName
-                    self.birthDate = user.birthDate
-                    self.gender = Gender(from: user.gender)
-                    self.city = user.city
-                    self.streetName = user.streetName
-                    self.houseNumber = user.houseNumber
-                    self.zipCode = user.zipCode
-                }
+                self.firstName = user.firstName
+                self.lastName = user.lastName
+                self.birthDate = user.birthDate
+                self.gender = Gender(from: user.gender)
+                self.city = user.city
+                self.streetName = user.streetName
+                self.houseNumber = user.houseNumber
+                self.zipCode = user.zipCode
+            } else {
+                self.errorMessage = "An error occurred"
             }
         }catch {
             print("Error fetching user data")
+            self.errorMessage = "An error occurred"
         }
     }
     
     @MainActor
     func saveModifications() async {
-        errorMessage = nil
+        self.errorMessage = nil
         
         // get current user
         let users: [User]
@@ -77,31 +79,34 @@ class UserPreferencesViewModel: ObservableObject {
             users = try modelContext.fetch(FetchDescriptor<User>())
         }catch {
             print("Error fetching user from SwiftData")
+            self.errorMessage = "An error occurred"
             return
         }
         guard let user = users.first else {
             print("No user present")
+            self.errorMessage = "An error occurred"
             return
         }
         guard let userID = user.userID else {
             print("User has no user id")
+            self.errorMessage = "An error occurred"
             return
         }
         
         // build modified user
         var zipCodeInt = nil as Int?
-        if let zipCodeString = zipCode {
+        if let zipCodeString = self.zipCode {
             zipCodeInt = Int(zipCodeString)
         }
         var houseNumberInt = nil as Int?
-        if let houseNumberString = houseNumber {
+        if let houseNumberString = self.houseNumber {
             houseNumberInt = Int(houseNumberString)
         }
-        if (city == "") {
-            city = nil
+        if (self.city == "") {
+            self.city = nil
         }
-        if (streetName == "") {
-            streetName = nil
+        if (self.streetName == "") {
+            self.streetName = nil
         }
         let modifiedUser = User (
             userID: userID,
@@ -130,10 +135,10 @@ class UserPreferencesViewModel: ObservableObject {
         }
     }
     
-    func updateUserInSwiftData(newUser: User) {
+    private func updateUserInSwiftData(newUser: User) {
         var users: [User]
         do {
-            errorMessage = nil
+            self.errorMessage = nil
             users = try modelContext.fetch(FetchDescriptor<User>())
             if let oldUser = users.first {
                 do {
@@ -151,12 +156,12 @@ class UserPreferencesViewModel: ObservableObject {
                     try modelContext.save()
                 } catch {
                     print("Error while updating user in SwiftData")
-                    errorMessage = "An error occurred while updating user"
+                    self.errorMessage = "An error occurred while updating user"
                 }
             }
         }catch {
             print("Error while updating user in SwiftData")
-            errorMessage = "An error occurred while updating user"
+            self.errorMessage = "An error occurred while updating user"
         }
     }
     
@@ -179,6 +184,7 @@ class UserPreferencesViewModel: ObservableObject {
         )
     }
     
+    @MainActor
     func cancelModifications() {
         getUserData()
     }
