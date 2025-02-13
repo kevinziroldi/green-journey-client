@@ -48,6 +48,16 @@
 				Features/Ranking/Tests/RankingViewModelTest.swift,
 				Features/TravelSearch/Tests/TravelSearchViewModelTest.swift,
 				Features/UserPreferences/Tests/UserPreferencesViewModelTest.swift,
+				Model/Tests/BadgeTest.swift,
+				Model/Tests/CityCompleterDatasetTest.swift,
+				Model/Tests/CityFeaturesTest.swift,
+				Model/Tests/CityReviewElementTest.swift,
+				Model/Tests/ReviewTest.swift,
+				Model/Tests/SegmentTest.swift,
+				Model/Tests/TravelDetailsTest.swift,
+				Model/Tests/TravelTest.swift,
+				Model/Tests/UserTest.swift,
+				Model/Tests/VehicleTest.swift,
 			);
 			target = 0AD1F0492D099709001A8464 /* GreenJourneyTests */;
 		};
@@ -71,6 +81,16 @@
 				Features/TravelSearch/Tests/TravelSearchViewModelTest.swift,
 				Features/UserPreferences/Tests/UserPreferencesViewModelTest.swift,
 				Info.plist,
+				Model/Tests/BadgeTest.swift,
+				Model/Tests/CityCompleterDatasetTest.swift,
+				Model/Tests/CityFeaturesTest.swift,
+				Model/Tests/CityReviewElementTest.swift,
+				Model/Tests/ReviewTest.swift,
+				Model/Tests/SegmentTest.swift,
+				Model/Tests/TravelDetailsTest.swift,
+				Model/Tests/TravelTest.swift,
+				Model/Tests/UserTest.swift,
+				Model/Tests/VehicleTest.swift,
 			);
 			target = 0A15767F2CA459AC00EE99BC /* GreenJourney */;
 		};

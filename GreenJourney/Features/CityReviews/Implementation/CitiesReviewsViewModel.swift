@@ -92,6 +92,7 @@ class CitiesReviewsViewModel: ObservableObject {
     }
     
     // TODO change - check on iata and country code
+    // TODO test once changed
     func isReviewable(userID: Int) -> Bool {
         let fetchRequest = FetchDescriptor<Segment>(
             predicate: #Predicate { segment in

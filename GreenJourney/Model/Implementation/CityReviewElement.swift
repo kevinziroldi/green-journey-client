@@ -4,18 +4,18 @@ class CityReviewElement: Codable {
     var averageGreenSpacesRating: Float64
     var averageWasteBinsRating: Float64
 
-    init(reviews: [Review], averageLocalTransportRating: Float64, averageGreenSpacesRating: Float64, averageWasteBinsRating: Float64) {
-        self.reviews = reviews
-        self.averageLocalTransportRating = averageLocalTransportRating
-        self.averageGreenSpacesRating = averageGreenSpacesRating
-        self.averageWasteBinsRating = averageWasteBinsRating
-    }
-    
     init() {
         self.reviews = []
         self.averageLocalTransportRating = 0.0
         self.averageGreenSpacesRating = 0.0
         self.averageWasteBinsRating = 0.0
+    }
+    
+    init(reviews: [Review], averageLocalTransportRating: Float64, averageGreenSpacesRating: Float64, averageWasteBinsRating: Float64) {
+        self.reviews = reviews
+        self.averageLocalTransportRating = averageLocalTransportRating
+        self.averageGreenSpacesRating = averageGreenSpacesRating
+        self.averageWasteBinsRating = averageWasteBinsRating
     }
     
     enum CodingKeys: String, CodingKey {
@@ -42,7 +42,7 @@ class CityReviewElement: Codable {
         try container.encode(averageWasteBinsRating, forKey: .averageWasteBinsRating)
     }
     
-    func getLastReviews() -> [Review] {
+    func getLastFiveReviews() -> [Review] {
         return reviews.suffix(5)
     }
     func getAverageRating() -> Float64 {
