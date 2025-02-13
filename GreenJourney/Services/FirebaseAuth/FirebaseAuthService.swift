@@ -12,7 +12,7 @@ class FirebaseAuthService: FirebaseAuthServiceProtocol {
     func signInWithGoogle() async throws -> Bool {
         // Google signin configuration
         guard let clientID = FirebaseApp.app()?.options.clientID else {
-            fatalError("No client ID found in Firebase")
+            throw FirebaseAuthServiceError.signInWithGoogleFailed
         }
         let config = GIDConfiguration(clientID: clientID)
         GIDSignIn.sharedInstance.configuration = config
@@ -23,15 +23,13 @@ class FirebaseAuthService: FirebaseAuthServiceProtocol {
             let window = await windowScene.windows.first,
             let rootViewController = await window.rootViewController
         else {
-            // TODO ok ?
-            throw NSError()
+            throw FirebaseAuthServiceError.signInWithGoogleFailed
         }
         
         // Google authentication
         let userAuthentication = try await GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController)
         guard let idToken = userAuthentication.user.idToken else {
-            // TODO ok ?
-            throw NSError()
+            throw FirebaseAuthServiceError.signInWithGoogleFailed
         }
         
         // create Firebase credentials
@@ -41,8 +39,7 @@ class FirebaseAuthService: FirebaseAuthServiceProtocol {
         let authResult = try await Auth.auth().signIn(with: credential)
         
         guard let additionalUserInfo = authResult.additionalUserInfo else {
-            // TODO ok ?
-            throw NSError()
+            throw FirebaseAuthServiceError.signInWithGoogleFailed
         }
         
         return additionalUserInfo.isNewUser
@@ -57,7 +54,7 @@ class FirebaseAuthService: FirebaseAuthServiceProtocol {
         if let firebaseUser = Auth.auth().currentUser {
             try await firebaseUser.sendEmailVerification()
         } else {
-            throw NSError()
+            throw FirebaseAuthServiceError.sendEmailVerificationFailed
         }
     }
     
@@ -65,8 +62,7 @@ class FirebaseAuthService: FirebaseAuthServiceProtocol {
         if let firebaseUser = Auth.auth().currentUser {
             return firebaseUser.isEmailVerified
         } else {
-            // TODO ok ?
-            throw NSError()
+            throw FirebaseAuthServiceError.isEmailVerifiedFailed
         }
     }
     
@@ -78,8 +74,7 @@ class FirebaseAuthService: FirebaseAuthServiceProtocol {
         if let firebaseUser = Auth.auth().currentUser {
             try await firebaseUser.delete()
         } else {
-            // TODO ok ?
-            throw NSError()
+            throw FirebaseAuthServiceError.deleteFirebaseUserFailed
         }
     }
     
@@ -87,8 +82,7 @@ class FirebaseAuthService: FirebaseAuthServiceProtocol {
         if let firebaseUser = Auth.auth().currentUser {
             return try await firebaseUser.getIDToken()
         } else {
-            // TODO ok ?
-            throw NSError()
+            throw FirebaseAuthServiceError.getFirebaseTokenFailed
         }
     }
     
@@ -96,8 +90,7 @@ class FirebaseAuthService: FirebaseAuthServiceProtocol {
         if let firebaseUser = Auth.auth().currentUser {
             return firebaseUser.uid
         } else {
-            // TODO ok ?
-            throw NSError()
+            throw FirebaseAuthServiceError.getFirebaseUIDFailed
         }
     }
     
@@ -107,15 +100,14 @@ class FirebaseAuthService: FirebaseAuthServiceProtocol {
                 return name
             }
         }
-        throw NSError()
+        throw FirebaseAuthServiceError.getUserFullNameFailed
     }
     
     func reloadFirebaseUser() async throws {
         if let firebaseUser = Auth.auth().currentUser {
             try await firebaseUser.reload()
         } else {
-            // TODO ok ?
-            throw NSError()
+            throw FirebaseAuthServiceError.reloadUserFailed
         }
     }
 }

@@ -10,7 +10,7 @@ class ServerService: ServerServiceProtocol {
         let user = User(firstName: firstName, lastName: lastName, firebaseUID: firebaseUID, scoreShortDistance: 0, scoreLongDistance: 0)
         // JSON encoding
         guard let body = try? JSONEncoder().encode(user) else {
-            throw EncodingError.invalidValue(user, EncodingError.Context(codingPath: [], debugDescription: "Error encoding user data"))
+            throw ServerServiceError.saveUserFailed
         }
 
         // build request
@@ -65,7 +65,7 @@ class ServerService: ServerServiceProtocol {
             return user
         } catch {
             print("Failed to decode user: \(error.localizedDescription)")
-            throw NSError(domain: "GetUserError", code: 4, userInfo: [NSLocalizedDescriptionKey: "Failed to decode user."])
+            throw ServerServiceError.getUserFailed
         }
     }
     
@@ -75,7 +75,7 @@ class ServerService: ServerServiceProtocol {
         // JSON encoding
         guard let body = try? JSONEncoder().encode(modifiedUser) else {
             print("Error encoding user data for PUT")
-            throw NSError(domain: "ModifyUserError", code: 4, userInfo: [NSLocalizedDescriptionKey: "Failed to modify user."])
+            throw ServerServiceError.modifyUserFailed
         }
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
@@ -105,7 +105,7 @@ class ServerService: ServerServiceProtocol {
             return user
         } catch {
             print("Failed to decode user: \(error.localizedDescription)")
-            throw NSError(domain: "GetUserError", code: 4, userInfo: [NSLocalizedDescriptionKey: "Failed to decode user."])
+            throw ServerServiceError.modifyUserFailed
         }
     }
     
@@ -135,7 +135,7 @@ class ServerService: ServerServiceProtocol {
             return ranking
         } catch {
             print("Failed to decode ranking: \(error.localizedDescription)")
-            throw NSError(domain: "GetRankingError", code: 4, userInfo: [NSLocalizedDescriptionKey: "Failed to decode ranking."])
+            throw ServerServiceError.getRankingFailed
         }
     }
     
@@ -168,7 +168,7 @@ class ServerService: ServerServiceProtocol {
             return reviews
         } catch {
             print("Failed to decode reviews: \(error.localizedDescription)")
-            throw NSError(domain: "GetReviewsError", code: 4, userInfo: [NSLocalizedDescriptionKey: "Failed to decode reviews."])
+            throw ServerServiceError.getReviewsCityFailed
         }
     }
     
@@ -199,7 +199,7 @@ class ServerService: ServerServiceProtocol {
             return reviews
         } catch {
             print("Failed to decode city review elements: \(error.localizedDescription)")
-            throw NSError(domain: "GetReviewsError", code: 4, userInfo: [NSLocalizedDescriptionKey: "Failed to decode city review elements."])
+            throw ServerServiceError.getBestReviewsFailed
         }
     }
     
@@ -211,7 +211,7 @@ class ServerService: ServerServiceProtocol {
         let decoder = JSONDecoder()
         guard let body = try? encoder.encode(review) else {
             print("Error encoding review data")
-            throw NSError(domain: "GetReviewsError", code: 4, userInfo: [NSLocalizedDescriptionKey: "Failed to encode review."])
+            throw ServerServiceError.uploadReviewFailed
         }
         
         // build request
@@ -239,7 +239,7 @@ class ServerService: ServerServiceProtocol {
             return review
         } catch {
             print("Failed to decode review: \(error.localizedDescription)")
-            throw NSError(domain: "UploadReviewError", code: 4, userInfo: [NSLocalizedDescriptionKey: "Failed to decode review."])
+            throw ServerServiceError.uploadReviewFailed
         }
     }
     
@@ -251,13 +251,13 @@ class ServerService: ServerServiceProtocol {
         let decoder = JSONDecoder()
         guard let body = try? encoder.encode(modifiedReview) else {
             print("Error encoding review data for PUT")
-            throw NSError(domain: "ModifyReviewError", code: 4, userInfo: [NSLocalizedDescriptionKey: "Failed to encode review."])
+            throw ServerServiceError.modifyReviewFailed
         }
         
         // extract reviewID
         guard let reviewID = modifiedReview.reviewID else {
             print("Review ID missing")
-            throw NSError(domain: "ModifyReviewError", code: 4, userInfo: [NSLocalizedDescriptionKey: "Review ID missing."])
+            throw ServerServiceError.modifyReviewFailed
         }
         
         // create request
@@ -285,7 +285,7 @@ class ServerService: ServerServiceProtocol {
             return review
         } catch {
             print("Failed to decode review: \(error.localizedDescription)")
-            throw NSError(domain: "UploadReviewError", code: 4, userInfo: [NSLocalizedDescriptionKey: "Failed to decode review."])
+            throw ServerServiceError.modifyReviewFailed
         }
     }
     
@@ -338,7 +338,7 @@ class ServerService: ServerServiceProtocol {
             return travelOptions
         } catch {
             print("Failed to decode review: \(error.localizedDescription)")
-            throw NSError(domain: "UploadReviewError", code: 4, userInfo: [NSLocalizedDescriptionKey: "Failed to decode review."])
+            throw ServerServiceError.computeRoutesFailed
         }
     }
     
@@ -350,7 +350,7 @@ class ServerService: ServerServiceProtocol {
         encoder.dateEncodingStrategy = .iso8601
         guard let body = try? encoder.encode(travelDetails) else {
             print("Error encoding travel data")
-            throw NSError(domain: "SaveTravelError", code: 4, userInfo: [NSLocalizedDescriptionKey: "Failed to encode travel details."])
+            throw ServerServiceError.saveTravelFailed
         }
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
@@ -380,7 +380,7 @@ class ServerService: ServerServiceProtocol {
             return travelDetails
         } catch {
             print("Failed to decode review: \(error.localizedDescription)")
-            throw NSError(domain: "UploadReviewError", code: 4, userInfo: [NSLocalizedDescriptionKey: "Failed to decode review."])
+            throw ServerServiceError.saveTravelFailed
         }
     }
     
@@ -414,7 +414,7 @@ class ServerService: ServerServiceProtocol {
             return travelDetailsList
         } catch {
             print("Failed to decode travels: \(error.localizedDescription)")
-            throw NSError(domain: "GetTravelsError", code: 4, userInfo: [NSLocalizedDescriptionKey: "Failed to decode travels."])
+            throw ServerServiceError.getTravelsFailed
         }
     }
     
@@ -424,7 +424,7 @@ class ServerService: ServerServiceProtocol {
         // JSON encoding and decoding
         guard let body = try? JSONEncoder().encode(modifiedTravel) else {
             print("Error encoding user data for PUT")
-            throw NSError(domain: "UpdateTravelError", code: 4, userInfo: [NSLocalizedDescriptionKey: "Failed to encode travel."])
+            throw ServerServiceError.modifyTravelFailed
         }
         let decoder = JSONDecoder()
         
@@ -453,7 +453,7 @@ class ServerService: ServerServiceProtocol {
             return travel
         } catch {
             print("Failed to decode trave: \(error.localizedDescription)")
-            throw NSError(domain: "GetTravelsError", code: 4, userInfo: [NSLocalizedDescriptionKey: "Failed to decode travels."])
+            throw ServerServiceError.modifyTravelFailed
         }
     }
     
