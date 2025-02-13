@@ -95,8 +95,8 @@ struct MyTravelsViewModelTest {
         
         let tdList = viewModel.filteredTravelDetailsList
         for (current, next) in zip(tdList, tdList.dropFirst()) {
-            if let currDate = current.getFirstSegment()?.dateTime {
-                if let nextDate = next.getFirstSegment()?.dateTime {
+            if let currDate = current.getDepartureSegment()?.dateTime {
+                if let nextDate = next.getDepartureSegment()?.dateTime {
                     #expect(currDate >= nextDate)
                 }
             }

@@ -163,8 +163,8 @@ class MyTravelsViewModel: ObservableObject {
         case .departureDate:
             // decreasing departure date
             travelDetailsList.sort {
-                if let firstSegment1 = $0.getFirstSegment() {
-                    if let firstSegment2 = $1.getFirstSegment() {
+                if let firstSegment1 = $0.getDepartureSegment() {
+                    if let firstSegment2 = $1.getDepartureSegment() {
                         let date1 = firstSegment1.dateTime
                         let date2 = firstSegment2.dateTime
                         return date1 > date2

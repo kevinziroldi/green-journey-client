@@ -190,7 +190,7 @@ struct TravelCard: View {
                             Circle()
                                 .stroke(lineWidth: 2)
                                 .frame(width: 45, height: 45)
-                            Image(systemName: travelDetails.findVehicle(isOneway: true))
+                            Image(systemName: travelDetails.findVehicle(outwardDirection: true))
                                 .font(.title2)
                             
                         }
@@ -199,7 +199,7 @@ struct TravelCard: View {
                                 Circle()
                                     .stroke(lineWidth: 2)
                                     .frame(width: 45, height: 45)
-                                Image(systemName: travelDetails.findVehicle(isOneway: false))
+                                Image(systemName: travelDetails.findVehicle(outwardDirection: false))
                                     .font(.title2)
                                 
                             }

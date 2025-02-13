@@ -15,7 +15,8 @@ class TravelDetails: Codable, Identifiable {
         case segments = "segments"
     }
     
-    func getFirstSegment() -> Segment? {
+    // the departure segment is the first one
+    func getDepartureSegment() -> Segment? {
         if let firstListSegment = self.segments.first {
             var firstSegment = firstListSegment
             for segment in self.segments {
@@ -41,10 +42,7 @@ class TravelDetails: Codable, Identifiable {
         return nil
     }
     
-    func getDepartureSegment() -> Segment? {
-        return self.segments.first
-    }
-    
+    // the destination segment is the last outward segment
     func getDestinationSegment() -> Segment? {
         // last segment with outward = true
         var maxOutwardSegment = -1
@@ -105,7 +103,8 @@ class TravelDetails: Codable, Identifiable {
         for segment in self.segments {
             totalDuration += segment.duration
         }
-        hours = totalDuration / (3600 * 1000000000)       // 1 hour = 3600 secsecondsondi
+        // 1 hour = 3600 seconds
+        hours = totalDuration / (3600 * 1000000000)
         let remainingSeconds = (totalDuration / 1000000000) % (3600)
         minutes = remainingSeconds / 60
         while (minutes >= 60) {
@@ -144,15 +143,21 @@ class TravelDetails: Codable, Identifiable {
         return returnSegments
     }
     
-    func findVehicle(isOneway: Bool) -> String {
+    func findVehicle(outwardDirection: Bool) -> String {
         var vehicle: String = ""
         var segments: [Segment] = []
-        if isOneway {
+        if outwardDirection {
             segments = self.segments
         }
         else {
             segments = getReturnSegments()
         }
+        segments.sort {
+            let numSegment1 = $0.numSegment
+            let numSegment2 = $1.numSegment
+            return numSegment1 < numSegment2
+        }
+        
         for segment in segments {
             if vehicle != "" {
                 return vehicle
