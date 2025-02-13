@@ -74,9 +74,7 @@ class CompleterViewModel: ObservableObject {
     }
     
     private func findContinent() -> String {
-        guard let regionCode = Locale.current.region?.identifier else {
-            return "Europe"
-        }
+        let regionCode = findCountry()
         
         var fetchDescriptor = FetchDescriptor<CityCompleterDataset>(
             predicate: #Predicate<CityCompleterDataset> {
