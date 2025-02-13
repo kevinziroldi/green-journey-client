@@ -107,7 +107,7 @@ class DestinationPredictionViewModel: ObservableObject {
                 continentFrequency[continent, default: 0] += 1
             }
             
-            let continent = continentFrequency.max(by: { $0.value < $1.value })?.key ?? randomContinent(citiesDS: citiesDS)
+            let continent = continentFrequency.max(by: { $0.value < $1.value })?.key ?? findContinent()
             
             let livingCost = calculateMedian(livingCostValues)
             let travelConnectivity = calculateMedian(travelConnectivityValues)
@@ -218,12 +218,23 @@ class DestinationPredictionViewModel: ObservableObject {
         return nil
     }
     
-    private func randomContinent(citiesDS: [CityFeatures]) -> String {
-        if let randomCity = randomCity(citiesDS: citiesDS) {
-            return randomCity.continent
-        } else {
-            // fallback
+    private func findContinent() -> String {
+        guard let regionCode = Locale.current.region?.identifier else {
             return "Europe"
+        }
+        
+        var fetchDescriptor = FetchDescriptor<CityCompleterDataset>(
+            predicate: #Predicate<CityCompleterDataset> {
+                $0.countryCode == regionCode }
+        )
+        fetchDescriptor.fetchLimit = 1
+        
+        do {
+            let continent = try modelContext.fetch(fetchDescriptor).first?.continent ?? "Europe"
+            return continent
+        } catch {
+            print("Error while finding continent: \(error.localizedDescription)")
+            return ""
         }
     }
     

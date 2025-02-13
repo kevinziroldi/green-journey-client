@@ -55,14 +55,10 @@ class RankingViewModel: ObservableObject {
         var months: Int = 0
         var years: Int = 0
         
-        // 1 hour = 3600 secsecondsondi
+        // 1 hour = 3600 seconds
         hours = duration / (3600 * 1000000000)
         let remainingSeconds = (duration / 1000000000) % (3600)
         minutes = remainingSeconds / 60
-        while (minutes >= 60) {
-            hours += 1
-            minutes -= 60
-        }
         while (hours >= 24) {
             days += 1
             hours -= 24

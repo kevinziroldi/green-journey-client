@@ -94,14 +94,6 @@ class UserPreferencesViewModel: ObservableObject {
         }
         
         // build modified user
-        var zipCodeInt = nil as Int?
-        if let zipCodeString = self.zipCode {
-            zipCodeInt = Int(zipCodeString)
-        }
-        var houseNumberInt = nil as Int?
-        if let houseNumberString = self.houseNumber {
-            houseNumberInt = Int(houseNumberString)
-        }
         if (self.city == "") {
             self.city = nil
         }
@@ -110,15 +102,15 @@ class UserPreferencesViewModel: ObservableObject {
         }
         let modifiedUser = User (
             userID: userID,
-            firstName: firstName,
-            lastName: lastName,
-            birthDate: birthDate,
-            gender: gender.asString(),
+            firstName: self.firstName,
+            lastName: self.lastName,
+            birthDate: self.birthDate,
+            gender: self.gender.asString(),
             firebaseUID: user.firebaseUID,
-            zipCode: zipCodeInt,
-            streetName: streetName,
-            houseNumber: houseNumberInt,
-            city: city,
+            zipCode: self.zipCode,
+            streetName: self.streetName,
+            houseNumber: self.houseNumber,
+            city: self.city,
             scoreShortDistance: user.scoreShortDistance,
             scoreLongDistance: user.scoreLongDistance
         )
