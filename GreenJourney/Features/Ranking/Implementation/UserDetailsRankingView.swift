@@ -161,14 +161,14 @@ struct LegendView: View {
                     Spacer()
                 }
                 HStack {
-                    Image(Badge.badgeCompensationLow.rawValue)
+                    Image(Badge.badgeEcologicalChoiceLow.rawValue)
                         .resizable()
                         .scaledToFit()
                         .frame(width: 65, height: 65)
                         .shadow(radius: 10)
                     Image(systemName: "arrowshape.right")
                         .frame(width: 20, height: 20)
-                    Text("how much a user has compensated")
+                    Text("how much a user has been ecofriendly")
                     Spacer()
                 }
                 HStack {
@@ -183,16 +183,18 @@ struct LegendView: View {
                     Spacer()
                 }
                 HStack {
-                    Image(Badge.badgeEcologicalChoiceLow.rawValue)
+                    Image(Badge.badgeCompensationLow.rawValue)
                         .resizable()
                         .scaledToFit()
                         .frame(width: 65, height: 65)
                         .shadow(radius: 10)
                     Image(systemName: "arrowshape.right")
                         .frame(width: 20, height: 20)
-                    Text("how much a user has been ecofriendly")
+                    Text("how much a user has compensated")
                     Spacer()
                 }
+                
+                
                 Spacer()
                 Button("Close") {
                     onClose()
