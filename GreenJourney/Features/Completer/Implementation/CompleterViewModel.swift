@@ -104,7 +104,7 @@ class CompleterViewModel: ObservableObject {
     private func stringScore(_ source: String, _ query: String) -> Double {
         let lowerSource = source.lowercased()
         let lowerQuery = query.lowercased()
-        
+        var score = 0.0
         // max score for exact match
         if lowerSource == lowerQuery {
             return 1.0
@@ -117,9 +117,9 @@ class CompleterViewModel: ObservableObject {
         
         // mid score for subtring match
         if lowerSource.contains(lowerQuery) {
-            return 0.3 + (Double(lowerQuery.count) / Double(lowerSource.count)) * 0.7
+            score = 0.3 + (Double(lowerQuery.count) / Double(lowerSource.count)) * 0.7
         }
-        return 0
+        return score
         
     }
 }
