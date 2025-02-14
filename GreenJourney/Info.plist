@@ -19,7 +19,7 @@
 	<dict>
 		<key>NSExceptionDomains</key>
 		<dict>
-			<key>93.66.99.84</key>
+			<key>2.36.6.225</key>
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
 				<true/>
