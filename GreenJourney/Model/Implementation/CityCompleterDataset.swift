@@ -9,12 +9,12 @@ class CityCompleterDataset: Identifiable, Equatable {
     var countryCode: String
     var continent: String
     
-    init(existingCity: CityCompleterDataset) {
-        self.cityName = existingCity.cityName
-        self.countryName = existingCity.countryName
-        self.iata = existingCity.iata
-        self.countryCode = existingCity.countryCode
-        self.continent = existingCity.continent
+    init() {
+        self.cityName = ""
+        self.countryName = ""
+        self.continent = ""
+        self.countryCode = ""
+        self.iata = ""
     }
     
     init(cityName: String, countryName: String, iata: String, countryCode: String, continent: String) {
@@ -25,14 +25,14 @@ class CityCompleterDataset: Identifiable, Equatable {
         self.continent = continent
     }
     
-    init() {
-        self.cityName = ""
-        self.countryName = ""
-        self.continent = ""
-        self.countryCode = ""
-        self.iata = ""
+    init(existingCity: CityCompleterDataset) {
+        self.cityName = existingCity.cityName
+        self.countryName = existingCity.countryName
+        self.iata = existingCity.iata
+        self.countryCode = existingCity.countryCode
+        self.continent = existingCity.continent
     }
-    
+        
     static func == (lhs: CityCompleterDataset, rhs: CityCompleterDataset) -> Bool {
         return lhs.cityName == rhs.cityName &&
         lhs.countryName == rhs.countryName &&

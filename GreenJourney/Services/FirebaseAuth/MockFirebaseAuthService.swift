@@ -7,7 +7,7 @@ class MockFirebaseAuthService: FirebaseAuthServiceProtocol {
         if shouldSucceed {
             return emailVerified
         } else {
-            throw MockFirebaseAuthError.invalidCredentials
+            throw FirebaseAuthServiceError.invalidCredentials
         }
     }
     
@@ -15,13 +15,13 @@ class MockFirebaseAuthService: FirebaseAuthServiceProtocol {
         if shouldSucceed {
             return "firebase_uid"
         } else {
-            throw MockFirebaseAuthError.createFirebaseUserFailed
+            throw FirebaseAuthServiceError.createFirebaseUserFailed
         }
     }
         
     func sendEmailVerification() async throws {
         if !shouldSucceed {
-            throw MockFirebaseAuthError.sendEmailVerificationFailed
+            throw FirebaseAuthServiceError.sendEmailVerificationFailed
         }
         // nothing to do
     }
@@ -30,13 +30,13 @@ class MockFirebaseAuthService: FirebaseAuthServiceProtocol {
         if shouldSucceed {
             return emailVerified
         } else {
-            throw MockFirebaseAuthError.isEmailVerifiedFailed
+            throw FirebaseAuthServiceError.isEmailVerifiedFailed
         }
     }
     
     func sendPasswordReset(email: String) async throws {
         if !shouldSucceed {
-            throw MockFirebaseAuthError.resetPasswordFailed
+            throw FirebaseAuthServiceError.resetPasswordFailed
         }
     }
     
@@ -44,13 +44,13 @@ class MockFirebaseAuthService: FirebaseAuthServiceProtocol {
         if shouldSucceed {
             return isNewUser
         } else {
-            throw MockFirebaseAuthError.signInWithGoogleFailed
+            throw FirebaseAuthServiceError.signInWithGoogleFailed
         }
     }
     
     func deleteFirebaseUser() async throws {
         if !shouldSucceed {
-            throw MockFirebaseAuthError.deleteFirebaseUserFailed
+            throw FirebaseAuthServiceError.deleteFirebaseUserFailed
         }
         // nothing to do
     }
@@ -59,7 +59,7 @@ class MockFirebaseAuthService: FirebaseAuthServiceProtocol {
         if shouldSucceed {
             return "firebase_token"
         } else {
-            throw MockFirebaseAuthError.getFirebaseTokenFailed
+            throw FirebaseAuthServiceError.getFirebaseTokenFailed
         }
     }
     
@@ -67,7 +67,7 @@ class MockFirebaseAuthService: FirebaseAuthServiceProtocol {
         if shouldSucceed {
             return "firebase_uid"
         } else {
-            throw MockFirebaseAuthError.getFirebaseUIDFailed
+            throw FirebaseAuthServiceError.getFirebaseUIDFailed
         }
     }
     
@@ -75,13 +75,13 @@ class MockFirebaseAuthService: FirebaseAuthServiceProtocol {
         if shouldSucceed {
             return "full name"
         } else {
-            throw MockFirebaseAuthError.getUserFullNameFailed
+            throw FirebaseAuthServiceError.getUserFullNameFailed
         }
     }
     
     func reloadFirebaseUser() async throws {
         if !shouldSucceed {
-            throw MockFirebaseAuthError.reloadUserFailed
+            throw FirebaseAuthServiceError.reloadUserFailed
         }
         // nothing to do
     }

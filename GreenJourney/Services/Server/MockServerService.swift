@@ -5,7 +5,7 @@ class MockServerService: ServerServiceProtocol {
     
     func saveUser(firstName: String, lastName: String, firebaseUID: String) async throws {
         if !shouldSucceed {
-            throw MockServerError.saveUserFailed
+            throw ServerServiceError.saveUserFailed
         }
         // don't save anything
     }
@@ -28,7 +28,7 @@ class MockServerService: ServerServiceProtocol {
                 return User()
             }
         } else {
-            throw MockServerError.getUserFailed
+            throw ServerServiceError.getUserFailed
         }
     }
     
@@ -37,7 +37,7 @@ class MockServerService: ServerServiceProtocol {
             // return the modified user itself
             return modifiedUser
         } else {
-            throw MockServerError.modifyUserFailed
+            throw ServerServiceError.modifyUserFailed
         }
     }
     
@@ -59,7 +59,7 @@ class MockServerService: ServerServiceProtocol {
                 return RankingResponse()
             }
         } else {
-            throw MockServerError.getRankingFailed
+            throw ServerServiceError.getRankingFailed
         }
     }
     
@@ -81,7 +81,7 @@ class MockServerService: ServerServiceProtocol {
                 return CityReviewElement()
             }
         } else {
-            throw MockServerError.getReviewsCityFailed
+            throw ServerServiceError.getReviewsCityFailed
         }
     }
     
@@ -103,7 +103,7 @@ class MockServerService: ServerServiceProtocol {
                 return []
             }
         } else {
-            throw MockServerError.getBestReviewsFailed
+            throw ServerServiceError.getBestReviewsFailed
         }
     }
     
@@ -111,7 +111,7 @@ class MockServerService: ServerServiceProtocol {
         if shouldSucceed {
             return review
         } else {
-            throw MockServerError.uploadReviewFailed
+            throw ServerServiceError.uploadReviewFailed
         }
     }
     
@@ -119,7 +119,7 @@ class MockServerService: ServerServiceProtocol {
         if shouldSucceed {
             return modifiedReview
         } else {
-            throw MockServerError.modifyReviewFailed
+            throw ServerServiceError.modifyReviewFailed
         }
     }
     
@@ -127,7 +127,7 @@ class MockServerService: ServerServiceProtocol {
         if shouldSucceed {
             return
         } else {
-            throw MockServerError.deleteReviewFailed
+            throw ServerServiceError.deleteReviewFailed
         }
     }
 
@@ -151,7 +151,7 @@ class MockServerService: ServerServiceProtocol {
                 return TravelOptionsResponse(options: [])
             }
         } else {
-            throw MockServerError.computeRoutesFailed
+            throw ServerServiceError.computeRoutesFailed
         }
     }
     
@@ -161,7 +161,7 @@ class MockServerService: ServerServiceProtocol {
             travelDetails.travel.travelID = 999
             return travelDetails
         } else {
-            throw MockServerError.saveTravelFailed
+            throw ServerServiceError.saveTravelFailed
         }
     }
     
@@ -183,7 +183,7 @@ class MockServerService: ServerServiceProtocol {
                 return []
             }
         } else {
-            throw MockServerError.getTravelsFailed
+            throw ServerServiceError.getTravelsFailed
         }
     }
     
@@ -191,7 +191,7 @@ class MockServerService: ServerServiceProtocol {
         if shouldSucceed {
             return modifiedTravel
         } else {
-            throw MockServerError.modifyTravelFailed
+            throw ServerServiceError.modifyTravelFailed
         }
     }
     
@@ -199,7 +199,7 @@ class MockServerService: ServerServiceProtocol {
         if shouldSucceed {
             return
         } else {
-            throw MockServerError.deleteTravelFailed
+            throw ServerServiceError.deleteTravelFailed
         }
     }
 }

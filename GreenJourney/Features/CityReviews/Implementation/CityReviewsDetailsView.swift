@@ -182,7 +182,7 @@ struct CityReviewsDetailsView: View {
                                         .padding(.top, 5)
                                     
                                     
-                                    CarouselView(cards: selectedCityReviewElement.getLastReviews())
+                                    CarouselView(cards: selectedCityReviewElement.getLastFiveReviews())
                                         .frame(height: 250)
                                     
                                     if selectedCityReviewElement.reviews.count > 5 {

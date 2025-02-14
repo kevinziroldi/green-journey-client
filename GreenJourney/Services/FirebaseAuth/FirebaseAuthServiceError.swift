@@ -1,4 +1,4 @@
-enum MockFirebaseAuthError: Error {
+enum FirebaseAuthServiceError: Error {
     case invalidCredentials
     case resetPasswordFailed
     case createFirebaseUserFailed

@@ -1,4 +1,4 @@
-enum MockServerError: Error {
+enum ServerServiceError: Error {
     case saveUserFailed
     case getUserFailed
     case modifyUserFailed
