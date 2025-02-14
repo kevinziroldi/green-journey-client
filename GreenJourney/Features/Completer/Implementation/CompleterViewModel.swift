@@ -33,7 +33,7 @@ class CompleterViewModel: ObservableObject {
             predicate: #Predicate { cityCompleter in
                 cityCompleter.cityName.localizedStandardContains(searchText)
             })
-        fetchRequest.fetchLimit = 100
+        fetchRequest.fetchLimit = 300
         
         do {
             let result = try modelContext.fetch(fetchRequest)
@@ -41,7 +41,7 @@ class CompleterViewModel: ObservableObject {
             let sortedResults = result.sorted { city1, city2 in
                 let city1Score = matchScore(for: city1, query: searchText)
                 let city2Score = matchScore(for: city2, query: searchText)
-                
+                //print(city1.cityName, city1.countryName, city1.continent, city1Score)
                 // order by decreasing score
                 if city1Score != city2Score {
                     return city1Score > city2Score
@@ -51,6 +51,9 @@ class CompleterViewModel: ObservableObject {
                 return city1.cityName.localizedStandardCompare(city2.cityName) == .orderedAscending
             }
             suggestions = Array(sortedResults.prefix(10))
+            for city in suggestions {
+                print(city.cityName, city.countryCode, city.continent, matchScore(for: city, query: searchText))
+            }
         } catch {
             print("Error during fetch: \(error)")
         }
@@ -60,11 +63,11 @@ class CompleterViewModel: ObservableObject {
     // compute score for the match
     private func matchScore(for city: CityCompleterDataset, query: String) -> Double {
         var score = 0.0
-        if city.continent == continent {
-            score += 25
+        if city.continent == self.continent {
+            score += 15
         }
-        if city.countryCode == country {
-            score += 5
+        if city.countryCode == self.country {
+            score += 2
         }
 
         let similarityScore = stringScore(city.cityName, query)
@@ -109,41 +112,14 @@ class CompleterViewModel: ObservableObject {
         
         // high score for prefix match
         if lowerSource.hasPrefix(lowerQuery) {
-            return 0.8 + (Double(lowerQuery.count) / Double(lowerSource.count)) * 0.2
+            return 0.6 + (Double(lowerQuery.count) / Double(lowerSource.count)) * 0.4
         }
         
         // mid score for subtring match
         if lowerSource.contains(lowerQuery) {
-            return 0.5 + (Double(lowerQuery.count) / Double(lowerSource.count)) * 0.5
+            return 0.3 + (Double(lowerQuery.count) / Double(lowerSource.count)) * 0.7
         }
+        return 0
         
-        // penalty based on distance between characters
-        let distance = levenshteinDistance(lowerSource, lowerQuery)
-        let maxLen = max(lowerSource.count, lowerQuery.count)
-        return 1.0 - (Double(distance) / Double(maxLen))
-    }
-
-    private func levenshteinDistance(_ s1: String, _ s2: String) -> Int {
-        let a = Array(s1)
-        let b = Array(s2)
-        let m = a.count
-        let n = b.count
-        var matrix = [[Int]](repeating: [Int](repeating: 0, count: n + 1), count: m + 1)
-        
-        for i in 0...m {
-            matrix[i][0] = i
-        }
-        for j in 0...n {
-            matrix[0][j] = j
-        }
-        
-        for i in 1...m {
-            for j in 1...n {
-                let cost = a[i - 1] == b[j - 1] ? 0 : 1
-                matrix[i][j] = min(matrix[i - 1][j] + 1, min(matrix[i][j - 1] + 1, matrix[i - 1][j - 1] + cost))
-            }
-        }
-        
-        return matrix[m][n]
     }
 }
