@@ -57,6 +57,7 @@
 				Model/Tests/TravelDetailsTest.swift,
 				Model/Tests/TravelTest.swift,
 				Model/Tests/UserTest.swift,
+				NavigationHandler/Tests/NavigationDestinationTest.swift,
 			);
 			target = 0AD1F0492D099709001A8464 /* GreenJourneyTests */;
 		};
@@ -89,6 +90,7 @@
 				Model/Tests/TravelDetailsTest.swift,
 				Model/Tests/TravelTest.swift,
 				Model/Tests/UserTest.swift,
+				NavigationHandler/Tests/NavigationDestinationTest.swift,
 			);
 			target = 0A15767F2CA459AC00EE99BC /* GreenJourney */;
 		};
