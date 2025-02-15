@@ -340,7 +340,6 @@ class CitiesReviewsViewModelTest {
         #expect(viewModel.getNumPages() == 0)
     }
    
-    /*
     @Test
     func testValidatePageInputNotANumber() {
         // the server returns 2 reviews, 1 page
@@ -349,8 +348,37 @@ class CitiesReviewsViewModelTest {
         self.mockServerService.tenReviews = true
         
         viewModel.pageInput = "notANumber"
-        
+        let oldPage = viewModel.page
         viewModel.validatePageInput()
+        
+        #expect(viewModel.page == oldPage)
     }
-     */
+    
+    @Test
+    func testValidatePageInputNumberOutOfRange() {
+        // the server returns 2 reviews, 1 page
+        self.mockServerService.shouldSucceed = true
+        self.mockServerService.twoReviews = false
+        self.mockServerService.tenReviews = true
+        
+        viewModel.pageInput = "10"
+        let oldPage = viewModel.page
+        viewModel.validatePageInput()
+        
+        #expect(viewModel.page == oldPage)
+    }
+    
+    @Test
+    func testValidatePageInputNumberInRange() {
+        // the server returns 2 reviews, 1 page
+        self.mockServerService.shouldSucceed = true
+        self.mockServerService.twoReviews = false
+        self.mockServerService.tenReviews = true
+        
+        viewModel.pageInput = "1"
+        viewModel.validatePageInput()
+        
+        #expect(viewModel.page == 0)
+    }
+    
 }
