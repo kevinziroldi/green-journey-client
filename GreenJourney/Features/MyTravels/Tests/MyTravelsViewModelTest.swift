@@ -4,14 +4,14 @@ import Testing
 
 @testable import GreenJourney
 
-struct MyTravelsViewModelTest {
+@MainActor
+final class MyTravelsViewModelTest {
     private var viewModel: MyTravelsViewModel
     private var mockModelContainer: ModelContainer
     private var mockModelContext: ModelContext
     private var mockServerService: MockServerService
     private var mockFirebaseAuthService: MockFirebaseAuthService
     
-    @MainActor
     init() throws {
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: User.self, Travel.self, Segment.self, CityFeatures.self, CityCompleterDataset.self, configurations: configuration)
@@ -22,7 +22,6 @@ struct MyTravelsViewModelTest {
         self.viewModel = MyTravelsViewModel(modelContext: container.mainContext, serverService: mockServerService)
     }
     
-    @MainActor
     @Test
     func testGetUserTravelsError() async throws {
         self.mockServerService.shouldSucceed = false

@@ -3,14 +3,14 @@ import Testing
 
 @testable import GreenJourney
 
-struct RankingViewModelTest {
+@MainActor
+final class RankingViewModelTest {
     private var mockModelContainer: ModelContainer
     private var mockModelContext: ModelContext
     private var viewModel: RankingViewModel
     private var mockServerService: MockServerService
     private var mockFirebaseAuthService: MockFirebaseAuthService
     
-    @MainActor
     init() throws {
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: User.self, Travel.self, Segment.self, CityFeatures.self, CityCompleterDataset.self, configurations: configuration)
@@ -22,7 +22,6 @@ struct RankingViewModelTest {
         self.viewModel = RankingViewModel(modelContext: container.mainContext, serverService: mockServerService)
     }
     
-    @MainActor
     private func addUserToSwiftData() throws {
         let mockUser = User(
             userID: 53,
@@ -35,7 +34,6 @@ struct RankingViewModelTest {
         self.mockModelContext.insert(mockUser)
         try self.mockModelContext.save()
     }
-    
     
     @Test
     func testFetchRankingsNoUser() async {
@@ -52,7 +50,7 @@ struct RankingViewModelTest {
     @Test
     func testFetchRankingServerFails() async throws {
         // add user to SwiftData
-        try await addUserToSwiftData()
+        try addUserToSwiftData()
         
         self.mockServerService.shouldSucceed = false
         await viewModel.fecthRanking()
@@ -65,7 +63,7 @@ struct RankingViewModelTest {
     @Test
     func testFetchRankingSuccessful() async throws {
         // add user to SwiftData
-        try await addUserToSwiftData()
+        try addUserToSwiftData()
         
         self.mockServerService.shouldSucceed = true
         await viewModel.fecthRanking()

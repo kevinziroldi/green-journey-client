@@ -7,6 +7,7 @@ struct CityCountry: Hashable {
     let country: String
 }
 
+@MainActor
 class DestinationPredictionViewModel: ObservableObject {
     private var modelContext: ModelContext
     @Published var predictedCities: [CityCompleterDataset] = []

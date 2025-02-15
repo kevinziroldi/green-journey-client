@@ -3,12 +3,12 @@ import Testing
 
 @testable import GreenJourney
 
-struct CompleterViewModelTest {
+@MainActor
+final class CompleterViewModelTest {
     private var mockModelContext: ModelContext
     private var mockModelContainer: ModelContainer
     private var viewModel: CompleterViewModel
     
-    @MainActor
     init() throws {
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: User.self, Travel.self, Segment.self, CityFeatures.self, CityCompleterDataset.self, configurations: configuration)
@@ -19,7 +19,6 @@ struct CompleterViewModelTest {
         try addCitiesToSwiftData()
     }
     
-    @MainActor
     func addCitiesToSwiftData() throws {
         let cityMilan = CityCompleterDataset(
             cityName: "Milan",

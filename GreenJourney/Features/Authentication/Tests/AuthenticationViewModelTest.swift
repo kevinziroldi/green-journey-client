@@ -3,14 +3,14 @@ import Testing
 
 @testable import GreenJourney
 
-struct AuthenticationViewModelTest {
+@MainActor
+final class AuthenticationViewModelTest {
     private var viewModel: AuthenticationViewModel
     private var mockModelContext: ModelContext
     private var mockModelContainer: ModelContainer
     private var mockServerService: MockServerService
     private var mockFirebaseAuthService: MockFirebaseAuthService
     
-    @MainActor
     init() throws {
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
         let mockContainer = try ModelContainer(for: User.self, Travel.self, Segment.self, CityFeatures.self, CityCompleterDataset.self, configurations: configuration)
@@ -51,7 +51,6 @@ struct AuthenticationViewModelTest {
         #expect(viewModel.isEmailVerificationActiveLogin)
     }
     
-    @MainActor
     @Test
     func testLoginWithCredentialsSuccessfulEmailVerified() async throws {
         // set email and password
@@ -96,7 +95,6 @@ struct AuthenticationViewModelTest {
         #expect(viewModel.errorMessage != nil)
     }
     
-    @MainActor
     @Test
     func testLogout() async throws {
         // set email and password
@@ -145,7 +143,6 @@ struct AuthenticationViewModelTest {
         #expect(viewModel.resendEmail == nil)
     }
     
-    @MainActor
     @Test
     func testSignupMissingLoginData() async throws {
         viewModel.email = ""
@@ -161,7 +158,6 @@ struct AuthenticationViewModelTest {
         #expect(users.count == 0)
     }
     
-    @MainActor
     @Test
     func testSignupMissingNameData() async throws {
         viewModel.email = "test@test.com"
@@ -177,7 +173,6 @@ struct AuthenticationViewModelTest {
         #expect(users.count == 0)
     }
     
-    @MainActor
     @Test
     func testSignupRepeatPasswordWrong() async throws {
         // fill all fields
@@ -195,7 +190,6 @@ struct AuthenticationViewModelTest {
         #expect(users.count == 0)
     }
     
-    @MainActor
     @Test
     func testSignupFirebaseFails() async throws {
         // fill all fields
@@ -216,7 +210,6 @@ struct AuthenticationViewModelTest {
         #expect(users.count == 0)
     }
     
-    @MainActor
     @Test
     func testSignupServerFails() async throws {
         // fill all fields
@@ -237,7 +230,6 @@ struct AuthenticationViewModelTest {
         #expect(users.count == 0)
     }
     
-    @MainActor
     @Test
     func testSignupSuccessful() async throws {
         // fill all fields

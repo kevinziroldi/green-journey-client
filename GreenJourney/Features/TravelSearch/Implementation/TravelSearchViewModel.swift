@@ -4,6 +4,7 @@ import Foundation
 import MapKit
 import SwiftData
 
+@MainActor
 class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegate {
     let uuid: UUID = UUID()
     
@@ -41,7 +42,6 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
         self.predictedCities = []
     }
     
-    @MainActor
     func computeRoutes () async {
         self.outwardOptions = []
         self.returnOptions = []
@@ -79,7 +79,6 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
         }
     }
     
-    @MainActor
     func saveTravel() async {
         do {
             // build travel details

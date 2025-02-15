@@ -1,6 +1,7 @@
 import SwiftData
 import SwiftUI
 
+@MainActor
 class AuthenticationViewModel: ObservableObject {
     let uuid: UUID = UUID()
     
@@ -29,7 +30,6 @@ class AuthenticationViewModel: ObservableObject {
         self.firebaseAuthService = firebaseAuthService
     }
     
-    @MainActor
     func login() async {
         // input check and validation
         guard !email.isEmpty, !password.isEmpty else {
@@ -71,7 +71,6 @@ class AuthenticationViewModel: ObservableObject {
         self.isLogged = false
     }
     
-    @MainActor
     func resetPassword(email: String) async {
         guard(!email.isEmpty) else {
             errorMessage = "Insert email"
@@ -90,7 +89,6 @@ class AuthenticationViewModel: ObservableObject {
         }
     }
     
-    @MainActor
     func signUp() async {
         guard !email.isEmpty, !password.isEmpty, !repeatPassword.isEmpty else {
             errorMessage = "Insert email and password"
@@ -137,7 +135,6 @@ class AuthenticationViewModel: ObservableObject {
         }
     }
     
-    @MainActor
     func sendEmailVerification() async {
         do {
             try await firebaseAuthService.sendEmailVerification()
@@ -147,7 +144,6 @@ class AuthenticationViewModel: ObservableObject {
         }
     }
     
-    @MainActor
     func verifyEmail() async {
         do {
             try await firebaseAuthService.reloadFirebaseUser()
@@ -176,7 +172,6 @@ class AuthenticationViewModel: ObservableObject {
         }
     }
     
-    @MainActor
     private func getUserFromServer(firebaseToken: String) async throws {
         let user = try await serverService.getUser()
         self.saveUserToSwiftData(serverUser: user)
@@ -219,7 +214,6 @@ class AuthenticationViewModel: ObservableObject {
         }
     }
     
-    @MainActor
     func signInWithGoogle() async {
         do {
             let isNewUser = try await firebaseAuthService.signInWithGoogle()
@@ -267,11 +261,11 @@ class AuthenticationViewModel: ObservableObject {
 }
 
 extension AuthenticationViewModel: Hashable {
-    static func == (lhs: AuthenticationViewModel, rhs: AuthenticationViewModel) -> Bool {
+    nonisolated static func == (lhs: AuthenticationViewModel, rhs: AuthenticationViewModel) -> Bool {
         return lhs.uuid == rhs.uuid
     }
     
-    func hash(into hasher: inout Hasher) {
+    nonisolated func hash(into hasher: inout Hasher) {
         hasher.combine(uuid)
     }
 }

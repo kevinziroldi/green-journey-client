@@ -25,6 +25,7 @@ enum Gender: String, CaseIterable {
     }
 }
 
+@MainActor
 class UserPreferencesViewModel: ObservableObject {
     //swift data model context
     private var modelContext: ModelContext
@@ -46,7 +47,6 @@ class UserPreferencesViewModel: ObservableObject {
         self.serverService = serverService
     }
     
-    @MainActor
     func getUserData() {
         do {
             self.errorMessage = nil
@@ -69,7 +69,6 @@ class UserPreferencesViewModel: ObservableObject {
         }
     }
     
-    @MainActor
     func saveModifications() async {
         self.errorMessage = nil
         
@@ -176,7 +175,6 @@ class UserPreferencesViewModel: ObservableObject {
         )
     }
     
-    @MainActor
     func cancelModifications() {
         getUserData()
     }

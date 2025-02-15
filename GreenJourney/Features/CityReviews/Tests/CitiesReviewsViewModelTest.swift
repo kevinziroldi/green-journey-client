@@ -4,13 +4,13 @@ import Testing
 
 @testable import GreenJourney
 
-class CitiesReviewsViewModelTest {
+@MainActor
+final class CitiesReviewsViewModelTest {
     private var mockModelContext: ModelContext
     private var mockModelContainer: ModelContainer
     private var mockServerService: MockServerService
     private var viewModel: CitiesReviewsViewModel
     
-    @MainActor
     init() throws {
         // create model context
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
@@ -28,7 +28,6 @@ class CitiesReviewsViewModelTest {
         try addTravelsToSwiftData()
     }
     
-    @MainActor
     private func addUserToSwiftData() throws {
         let mockUser = User(
             userID: 53,
@@ -42,7 +41,6 @@ class CitiesReviewsViewModelTest {
         try self.mockModelContext.save()
     }
     
-    @MainActor
     private func addCitiesToSwiftData() throws {
         let cityMilan = CityCompleterDataset(
             cityName: "Milan",
@@ -80,7 +78,6 @@ class CitiesReviewsViewModelTest {
         try self.mockModelContext.save()
     }
     
-    @MainActor
     private func addTravelsToSwiftData() throws {
         let mockTravel = Travel(travelID: 1, userID: 53)
         

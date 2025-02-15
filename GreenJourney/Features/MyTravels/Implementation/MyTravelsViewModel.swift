@@ -5,6 +5,7 @@ import SwiftData
 // 37.5 kg/€
 let co2CompensatedPerEuro = 37.5
 
+@MainActor
 class MyTravelsViewModel: ObservableObject {
     let uuid: UUID = UUID()
     
@@ -59,7 +60,6 @@ class MyTravelsViewModel: ObservableObject {
         self.serverService = serverService
     }
     
-    @MainActor
     func getUserTravels() async {
         do {
             let travelDetailsList = try await serverService.getTravels()
@@ -228,7 +228,6 @@ class MyTravelsViewModel: ObservableObject {
         }
     }
     
-    @MainActor
     func compensateCO2() async {
         let newCo2Compensated = co2CompensatedPerEuro * self.compensatedPrice
         
@@ -244,7 +243,6 @@ class MyTravelsViewModel: ObservableObject {
         
     }
     
-    @MainActor
     func confirmTravel(travel: Travel) async {
         if travel.confirmed {
             print("Travel already confirmed")
@@ -257,7 +255,6 @@ class MyTravelsViewModel: ObservableObject {
         await updateTravelOnServer(modifiedTravel: modifiedTravel)
     }
     
-    @MainActor
     private func updateTravelOnServer(modifiedTravel: Travel) async {
         do {
             let travel = try await serverService.updateTravel(modifiedTravel: modifiedTravel)
@@ -272,7 +269,6 @@ class MyTravelsViewModel: ObservableObject {
         }
     }
     
-    @MainActor
     private func updateTravelInSwiftData(updatedTravel: Travel) async {
         do {
             let travels = try modelContext.fetch(FetchDescriptor<Travel>())
@@ -292,7 +288,6 @@ class MyTravelsViewModel: ObservableObject {
         }
     }
     
-    @MainActor
     func deleteTravel(travelToDelete: Travel) async {
         do {
             guard let travelID = travelToDelete.travelID else {
@@ -309,7 +304,6 @@ class MyTravelsViewModel: ObservableObject {
         }
     }
     
-    @MainActor
     private func deleteTravelFromSwiftData(travelToDelete: Travel) async {
         if let travelID = travelToDelete.travelID {
             do {
@@ -589,11 +583,11 @@ class MyTravelsViewModel: ObservableObject {
     }
 }
 extension MyTravelsViewModel: Hashable {
-    static func == (lhs: MyTravelsViewModel, rhs: MyTravelsViewModel) -> Bool {
+    nonisolated static func == (lhs: MyTravelsViewModel, rhs: MyTravelsViewModel) -> Bool {
         return lhs.uuid == rhs.uuid
     }
 
-    func hash(into hasher: inout Hasher) {
+    nonisolated func hash(into hasher: inout Hasher) {
         hasher.combine(uuid)
     }
 }

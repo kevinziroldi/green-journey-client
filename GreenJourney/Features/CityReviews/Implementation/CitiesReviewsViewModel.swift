@@ -2,6 +2,7 @@ import Combine
 import Foundation
 import SwiftData
 
+@MainActor
 class CitiesReviewsViewModel: ObservableObject {
     let uuid: UUID = UUID()
     private var modelContext: ModelContext
@@ -29,7 +30,6 @@ class CitiesReviewsViewModel: ObservableObject {
         self.serverService = serverService
     }
     
-    @MainActor
     func getReviewsForSearchedCity() async {
         do {
             let cityReviewElement = try await serverService.getReviewsForCity(iata: searchedCity.iata, countryCode: searchedCity.countryCode)
@@ -43,7 +43,6 @@ class CitiesReviewsViewModel: ObservableObject {
         }
     }
     
-    @MainActor
     func getBestReviewedCities() async {
         do {
             let bestReviewedCities = try await serverService.getBestReviewedCities()
@@ -142,11 +141,11 @@ class CitiesReviewsViewModel: ObservableObject {
     }
 }
 extension CitiesReviewsViewModel: Hashable {
-    static func == (lhs: CitiesReviewsViewModel, rhs: CitiesReviewsViewModel) -> Bool {
+    nonisolated static func == (lhs: CitiesReviewsViewModel, rhs: CitiesReviewsViewModel) -> Bool {
         return lhs.uuid == rhs.uuid
     }
 
-    func hash(into hasher: inout Hasher) {
+    nonisolated func hash(into hasher: inout Hasher) {
         hasher.combine(uuid)
     }
 }

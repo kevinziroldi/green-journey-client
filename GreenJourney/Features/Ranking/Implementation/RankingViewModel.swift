@@ -2,6 +2,7 @@ import Foundation
 import SwiftData
 import Combine
 
+@MainActor
 class RankingViewModel: ObservableObject {
     var modelContext: ModelContext
     private var serverService: ServerServiceProtocol
@@ -19,7 +20,6 @@ class RankingViewModel: ObservableObject {
         self.serverService = serverService
     }
     
-    @MainActor
     func fecthRanking() async {
         self.errorMessage = nil
         

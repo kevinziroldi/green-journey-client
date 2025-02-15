@@ -5,14 +5,14 @@ import Testing
 
 @testable import GreenJourney
 
-struct UserPreferencesViewModelTest {
+@MainActor
+final class UserPreferencesViewModelTest {
     private var viewModel: UserPreferencesViewModel
     private var mockServerService: MockServerService
     private var mockFirebaseAuthService: MockFirebaseAuthService
     private var mockModelContainer: ModelContainer
     private var mockModelContext: ModelContext
     
-    @MainActor
     init() throws {
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: User.self, Travel.self, Segment.self, CityFeatures.self, CityCompleterDataset.self, configurations: configuration)
@@ -24,7 +24,6 @@ struct UserPreferencesViewModelTest {
         self.viewModel = UserPreferencesViewModel(modelContext: container.mainContext, serverService: mockServerService)
     }
     
-    @MainActor
     private func addUserToSwiftData() throws {
         let mockUser = User(
             userID: 1,
@@ -42,7 +41,6 @@ struct UserPreferencesViewModelTest {
         try self.mockModelContext.save()
     }
     
-    @MainActor
     private func addUserToSwiftDataNoGender() throws {
         let mockUser = User(
             userID: 1,
@@ -60,7 +58,6 @@ struct UserPreferencesViewModelTest {
         try self.mockModelContext.save()
     }
     
-    @MainActor
     private func addUserToSwiftDataNoId() throws {
         let mockUser = User(
             userID: nil,
@@ -81,7 +78,7 @@ struct UserPreferencesViewModelTest {
     @Test
     func testGetUserDataNoUser() async throws {
         // no user present
-        await viewModel.getUserData()
+        viewModel.getUserData()
         
         #expect(viewModel.firstName == "")
         #expect(viewModel.lastName == "")
@@ -96,8 +93,8 @@ struct UserPreferencesViewModelTest {
     
     @Test
     func testGetUserDataNoGender() async throws {
-        try await addUserToSwiftDataNoGender()
-        await viewModel.getUserData()
+        try addUserToSwiftDataNoGender()
+        viewModel.getUserData()
         
         #expect(viewModel.firstName == "John")
         #expect(viewModel.lastName == "Doe")
@@ -113,9 +110,9 @@ struct UserPreferencesViewModelTest {
     @Test
     func testGetUserDataWithUser() async throws {
         // add a user
-        try await addUserToSwiftData()
+        try addUserToSwiftData()
         
-        await viewModel.getUserData()
+        viewModel.getUserData()
         
         #expect(viewModel.firstName == "John")
         #expect(viewModel.lastName == "Doe")
@@ -140,7 +137,7 @@ struct UserPreferencesViewModelTest {
     @Test
     func testSaveModificationsUserNoId() async throws {
         // add user without userId to SwiftData
-        try await addUserToSwiftDataNoId()
+        try addUserToSwiftDataNoId()
         
         await viewModel.saveModifications()
         
@@ -153,8 +150,8 @@ struct UserPreferencesViewModelTest {
         self.mockServerService.shouldSucceed = false
         
         // add user with userId to SwiftData
-        try await addUserToSwiftData()
-        await viewModel.getUserData()
+        try addUserToSwiftData()
+        viewModel.getUserData()
         
         // add new data, correct type
         viewModel.houseNumber = 10
@@ -195,8 +192,8 @@ struct UserPreferencesViewModelTest {
         self.mockServerService.shouldSucceed = true
         
         // add user with userId to SwiftData
-        try await addUserToSwiftData()
-        await viewModel.getUserData()
+        try addUserToSwiftData()
+        viewModel.getUserData()
         
         // add new data, correct type
         viewModel.houseNumber = 10
@@ -237,8 +234,8 @@ struct UserPreferencesViewModelTest {
         self.mockServerService.shouldSucceed = true
         
         // add user with userId to SwiftData
-        try await addUserToSwiftData()
-        await viewModel.getUserData()
+        try addUserToSwiftData()
+        viewModel.getUserData()
         
         // must be interpreted as nil
         viewModel.city = ""
@@ -332,15 +329,15 @@ struct UserPreferencesViewModelTest {
         self.mockServerService.shouldSucceed = true
         
         // add user with userId to SwiftData
-        try await addUserToSwiftData()
-        await viewModel.getUserData()
+        try addUserToSwiftData()
+        viewModel.getUserData()
         
         // add new data, correct type
         viewModel.houseNumber = 10
         // modify data, correct type
         viewModel.zipCode = 20
         
-        await viewModel.cancelModifications()
+        viewModel.cancelModifications()
         
         #expect(viewModel.firstName == "John")
         #expect(viewModel.lastName == "Doe")

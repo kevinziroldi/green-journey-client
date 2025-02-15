@@ -4,14 +4,14 @@ import Testing
 
 @testable import GreenJourney
 
-struct TravelSearchViewModelTest {
+@MainActor
+final class TravelSearchViewModelTest {
     private var viewModel: TravelSearchViewModel
     private var mockServerService: MockServerService
     private var mockFirebaseAuthService: MockFirebaseAuthService
     private var mockModelContainer: ModelContainer
     private var mockModelContext: ModelContext
     
-    @MainActor
     init() throws {
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: User.self, Travel.self, Segment.self, CityFeatures.self, CityCompleterDataset.self, configurations: configuration)
@@ -22,7 +22,6 @@ struct TravelSearchViewModelTest {
         self.viewModel = TravelSearchViewModel(modelContext: container.mainContext, serverService: mockServerService)
     }
     
-    @MainActor
     private func addUserToSwiftData() throws {
         let mockUser = User(
             userID: 53,
@@ -36,7 +35,6 @@ struct TravelSearchViewModelTest {
         try self.mockModelContext.save()
     }
     
-    @MainActor
     private func addTravelsToSwiftData() throws {
         let mockTravel = Travel(travelID: 1, userID: 53)
         let mockSegment = Segment(
@@ -121,7 +119,7 @@ struct TravelSearchViewModelTest {
     @Test
     func testSaveTravelNoUser() async throws {
         // add travel
-        try await addTravelsToSwiftData()
+        try addTravelsToSwiftData()
         // no user in SwiftData
         
         // server should succeed
@@ -146,8 +144,8 @@ struct TravelSearchViewModelTest {
     @Test
     func testSaveTravelNoSelectedOption() async throws {
         // add travel and user
-        try await addTravelsToSwiftData()
-        try await addUserToSwiftData()
+        try addTravelsToSwiftData()
+        try addUserToSwiftData()
         
         // server should succeed
         self.mockServerService.shouldSucceed = true
@@ -169,8 +167,8 @@ struct TravelSearchViewModelTest {
     @Test
     func testSaveTravelServerFail() async throws {
         // add travel and user
-        try await addTravelsToSwiftData()
-        try await addUserToSwiftData()
+        try addTravelsToSwiftData()
+        try addUserToSwiftData()
         
         // server should succeed for compute routes
         self.mockServerService.shouldSucceed = true
@@ -197,8 +195,8 @@ struct TravelSearchViewModelTest {
     @Test
     func testSaveTravelServerSucceessful() async throws {
         // add travel and user
-        try await addTravelsToSwiftData()
-        try await addUserToSwiftData()
+        try addTravelsToSwiftData()
+        try addUserToSwiftData()
         
         // server should succeed
         self.mockServerService.shouldSucceed = true

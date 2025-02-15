@@ -4,12 +4,12 @@ import Testing
 
 @testable import GreenJourney
 
-struct DestinationPredictionViewModelTest {
+@MainActor
+final class DestinationPredictionViewModelTest {
     private var viewModel: DestinationPredictionViewModel
     private var mockModelContext: ModelContext
     private var mockModelContainer: ModelContainer
     
-    @MainActor
     init() throws {
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: User.self, Travel.self, Segment.self, CityFeatures.self, CityCompleterDataset.self, configurations: configuration)
@@ -20,7 +20,6 @@ struct DestinationPredictionViewModelTest {
         try addTravelsToSwiftData()
     }
     
-    @MainActor
     private func addVisitedCitiesFeaturesToSwiftData() throws {
         let cityFeatureParis = CityFeatures(
             id: 55,
@@ -46,7 +45,6 @@ struct DestinationPredictionViewModelTest {
         try self.mockModelContext.save()
     }
     
-    @MainActor
     private func addNewCitiesFeaturesToSwiftData() throws {
         let cityFeatureRome = CityFeatures(
             id: 69,
@@ -111,7 +109,6 @@ struct DestinationPredictionViewModelTest {
         try self.mockModelContext.save()
     }
     
-    @MainActor
     private func addTravelsToSwiftData() throws {
         let mockTravel = Travel(travelID: 1, userID: 53)
         let mockSegment = Segment(
@@ -142,7 +139,7 @@ struct DestinationPredictionViewModelTest {
     @Test
     func testPredictionAllVisited() async throws {
         // add only visited cities
-        try await addVisitedCitiesFeaturesToSwiftData()
+        try addVisitedCitiesFeaturesToSwiftData()
         
         viewModel.getRecommendation()
         #expect(viewModel.predictedCities.count > 0)
@@ -151,8 +148,8 @@ struct DestinationPredictionViewModelTest {
     @Test
     func testPredictionSomeNotVisited() async throws {
         // add both visited and non visited cities
-        try await addVisitedCitiesFeaturesToSwiftData()
-        try await addNewCitiesFeaturesToSwiftData()
+        try addVisitedCitiesFeaturesToSwiftData()
+        try addNewCitiesFeaturesToSwiftData()
         
         viewModel.getRecommendation()
         #expect(viewModel.predictedCities.count > 0)
