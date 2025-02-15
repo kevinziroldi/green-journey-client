@@ -2,8 +2,8 @@ import Combine
 import Foundation
 import SwiftData
 
-// TODO change value
-let co2CompensatedPerEuro = 37.5 // 37.5 kg/€
+// 37.5 kg/€
+let co2CompensatedPerEuro = 37.5
 
 class MyTravelsViewModel: ObservableObject {
     let uuid: UUID = UUID()
@@ -576,6 +576,7 @@ class MyTravelsViewModel: ObservableObject {
     }
      */
     
+    // TODO mettere le costanti sopra
     func getNumTrees(_ travel: TravelDetails) -> Int {
         return (Int(travel.computeCo2Emitted() / 10)) + 1
     }
