@@ -1,7 +1,4 @@
 {
-  "count_local_transport_rating" : 2,
-  "count_green_spaces_rating" : 2,
-  "count_waste_bins_rating" : 2,
   "reviews" : [
     {
       "green_spaces_rating" : 4,

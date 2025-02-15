@@ -2,6 +2,8 @@ import Foundation
 
 class MockServerService: ServerServiceProtocol {
     var shouldSucceed: Bool = true
+    var twoReviews: Bool = true
+    var tenReviews: Bool = false
     
     func saveUser(firstName: String, lastName: String, firebaseUID: String) async throws {
         if !shouldSucceed {
@@ -64,25 +66,30 @@ class MockServerService: ServerServiceProtocol {
     }
     
     func getReviewsForCity(iata: String, countryCode: String) async throws -> CityReviewElement {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        
         if shouldSucceed {
-            // read mock review from json
-            guard let path = Bundle.main.path(forResource: "mock_review", ofType: "json") else {
-                print("Mock review file not found")
-                return CityReviewElement()
-            }
-            do {
+            if twoReviews {
+                // read mock 2 reviews from json
+                guard let path = Bundle.main.path(forResource: "mock_review_2_elements", ofType: "json") else {
+                    print("Mock review file not found")
+                    throw ServerServiceError.getReviewsCityFailed
+                }
                 let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
-                let decoder = JSONDecoder()
-                decoder.dateDecodingStrategy = .iso8601
-                let reviews = try decoder.decode(CityReviewElement.self, from: data)
-                return reviews
-            } catch {
-                print(error)
-                return CityReviewElement()
+                return try decoder.decode(CityReviewElement.self, from: data)
+            } else if tenReviews {
+                // read mock 10 reviews from json
+                guard let path = Bundle.main.path(forResource: "mock_review_10_elements", ofType: "json") else {
+                    print("Mock review file not found")
+                    throw ServerServiceError.getReviewsCityFailed
+                }
+                let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
+                return try decoder.decode(CityReviewElement.self, from: data)
             }
-        } else {
-            throw ServerServiceError.getReviewsCityFailed
         }
+        
+        throw ServerServiceError.getReviewsCityFailed
     }
     
     func getBestReviewedCities() async throws -> [CityReviewElement] {

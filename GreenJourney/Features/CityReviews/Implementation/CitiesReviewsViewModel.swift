@@ -91,8 +91,6 @@ class CitiesReviewsViewModel: ObservableObject {
         }
     }
     
-    // TODO change - check on iata and country code
-    // TODO test once changed
     func isReviewable(userID: Int) -> Bool {
         let fetchRequest = FetchDescriptor<Segment>(
             predicate: #Predicate { segment in
@@ -109,6 +107,8 @@ class CitiesReviewsViewModel: ObservableObject {
             let filteredSegments = Dictionary(grouping: segments, by: \.travelID)
                 .compactMapValues { $0.first }
                 .values
+            
+            // cityName + countryName uniquely identifies a city in the dataset
             for segment in filteredSegments {
                 if selectedCity.cityName == segment.destinationCity {
                     if selectedCity.countryName == segment.destinationCountry {
@@ -133,11 +133,11 @@ class CitiesReviewsViewModel: ObservableObject {
     }
     
     func validatePageInput() {
-        if let page = Int(pageInput) {
+        if let page = Int(self.pageInput) {
             if page >= 1 && page <= getNumPages() {
                 self.page = page - 1
             }
-            pageInput = "\(self.page + 1)" // go back on the previous page
+            self.pageInput = "\(self.page + 1)" // go back on the previous page
         }
     }
 }

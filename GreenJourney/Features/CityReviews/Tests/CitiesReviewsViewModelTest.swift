@@ -244,8 +244,52 @@ class CitiesReviewsViewModelTest {
     }
     
     @Test
-    func testGetNumPagesSuccessful() async {
+    func testIsReviewableTrue() async throws {
         self.mockServerService.shouldSucceed = true
+     
+        let userID = try mockModelContext.fetch(FetchDescriptor<User>()).first!.userID!
+        viewModel.getUserReview(userID: userID)
+        
+        // retrieve reviews for Paris
+        viewModel.selectedCity = CityCompleterDataset(
+            cityName: "Paris",
+            countryName: "France",
+            iata: "PAR",
+            countryCode: "FR",
+            continent: "Europe"
+        )
+        await viewModel.getReviewsForSearchedCity()
+    
+        // selected city = Paris, user has visited Paris
+        #expect(viewModel.isReviewable(userID: userID) == true)
+    }
+    
+    @Test
+    func testIsReviewableFalse() async throws {
+        self.mockServerService.shouldSucceed = true
+     
+        let userID = try mockModelContext.fetch(FetchDescriptor<User>()).first!.userID!
+        viewModel.getUserReview(userID: userID)
+        
+        // retrieve reviews for Berlin
+        viewModel.searchedCity = CityCompleterDataset(
+            cityName: "Berlin",
+            countryName: "Germany",
+            iata: "BER",
+            countryCode: "DE",
+            continent: "Europe"
+        )
+        await viewModel.getReviewsForSearchedCity()
+        
+        // selected city = Berlin, user has NOT visited Paris
+        #expect(viewModel.isReviewable(userID: userID) == false)
+    }
+    
+    @Test
+    func testGetNumPagesWithRest() async {
+        self.mockServerService.shouldSucceed = true
+        self.mockServerService.twoReviews = true
+        self.mockServerService.tenReviews = false
         
         // retrieve reviews for Paris
         viewModel.searchedCity = CityCompleterDataset(
@@ -253,6 +297,25 @@ class CitiesReviewsViewModelTest {
             countryName: "France",
             iata: "PAR",
             countryCode: "FR",
+            continent: "Europe"
+        )
+        await viewModel.getReviewsForSearchedCity()
+        
+        #expect(viewModel.getNumPages() == 1)
+    }
+    
+    @Test
+    func testGetNumPagesInteger() async {
+        self.mockServerService.shouldSucceed = true
+        self.mockServerService.twoReviews = false
+        self.mockServerService.tenReviews = true
+        
+        // retrieve reviews for Paris
+        viewModel.searchedCity = CityCompleterDataset(
+            cityName: "Berlin",
+            countryName: "Germany",
+            iata: "BER",
+            countryCode: "DE",
             continent: "Europe"
         )
         await viewModel.getReviewsForSearchedCity()
@@ -276,51 +339,18 @@ class CitiesReviewsViewModelTest {
         
         #expect(viewModel.getNumPages() == 0)
     }
-    
-    // TODO to be changed
+   
     /*
     @Test
-    func testIsReviewable() async throws {
+    func testValidatePageInputNotANumber() {
+        // the server returns 2 reviews, 1 page
         self.mockServerService.shouldSucceed = true
-     
-        let userID = try mockModelContext.fetch(FetchDescriptor<User>()).first!.userID!
-        viewModel.getUserReview(userID: userID)
+        self.mockServerService.twoReviews = false
+        self.mockServerService.tenReviews = true
         
-        // retrieve reviews for Paris
-        viewModel.searchedCity = CityCompleterDataset(
-            cityName: "Paris",
-            countryName: "France",
-            iata: "PAR",
-            countryCode: "FR",
-            continent: "Europe"
-        )
-        await viewModel.getReviewsForSearchedCity()
+        viewModel.pageInput = "notANumber"
         
-        print(viewModel.searchedCity.cityName)
-        print(viewModel.searchedCity.countryName)
-        
-        let segments = try mockModelContext.fetch(FetchDescriptor<Segment>())
-        for segment in segments {
-            print(segment.destinationCity)
-            print(segment.destinationCountry)
-        }
-        
-        
-        // selected city = Paris, user has visited Paris
-        #expect(viewModel.isReviewable(userID: userID) == true)
-        
-        // retrieve reviews for Berlin
-        viewModel.searchedCity = CityCompleterDataset(
-            cityName: "Berlin",
-            countryName: "Germany",
-            iata: "BER",
-            countryCode: "DE",
-            continent: "Europe"
-        )
-        await viewModel.getReviewsForSearchedCity()
-        
-        // selected city = Berlin, user has NOT visited Paris
-        #expect(viewModel.isReviewable(userID: userID) == false)
+        viewModel.validatePageInput()
     }
      */
 }
