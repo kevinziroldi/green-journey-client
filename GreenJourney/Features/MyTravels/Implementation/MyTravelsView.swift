@@ -302,7 +302,3 @@ struct TravelCard: View {
         
     }
 }
-
-
-
-

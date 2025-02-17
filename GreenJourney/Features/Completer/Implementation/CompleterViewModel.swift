@@ -51,11 +51,6 @@ class CompleterViewModel: ObservableObject {
                 return city1.cityName.localizedStandardCompare(city2.cityName) == .orderedAscending
             }
             suggestions = Array(sortedResults.prefix(10))
-            
-            // TODO remove
-            for city in suggestions {
-                print(city.cityName, city.countryCode, city.continent, matchScore(for: city, query: searchText))
-            }
         } catch {
             print("Error during fetch: \(error)")
         }

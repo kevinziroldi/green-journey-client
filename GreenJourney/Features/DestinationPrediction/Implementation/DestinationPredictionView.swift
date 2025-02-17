@@ -13,7 +13,6 @@ struct DestinationPredictionView: View {
     
     var body: some View {
         Button (action: {
-            
             viewModel.getRecommendation()
             confirm(viewModel.predictedCities)
             
@@ -24,7 +23,6 @@ struct DestinationPredictionView: View {
                 HStack{
                     Text("Don't know where to go? Ask AI.")
                         .foregroundColor(.gray)
-                        //.padding()
                     Spacer()
                     Image(systemName: "apple.intelligence")
                         .font(.title)
