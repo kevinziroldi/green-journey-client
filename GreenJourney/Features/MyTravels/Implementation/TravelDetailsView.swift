@@ -112,7 +112,7 @@ struct TravelDetailsView: View {
                                         }
                                         .padding(.trailing, 15)
                                         HStack {
-                                            Text("Price: \(plantedTrees * 15) €")
+                                            Text("Price: \(plantedTrees * 2) €")
                                         }
                                         Spacer()
                                         Button(action: {
@@ -137,6 +137,29 @@ struct TravelDetailsView: View {
                                             .fixedSize()
                                         }
                                         .padding(.bottom, 15)
+                                    }
+                                }
+                                else {
+                                    VStack {
+                                        Text("Compensation 100%")
+                                            .foregroundStyle(.green)
+                                            .font(.headline)
+                                        HStack (spacing: 0){
+                                            Text("you planted: \(plantedTrees)")
+                                            Image(systemName: "tree")
+                                                .padding(.bottom, 5)
+                                        }
+                                        .padding()
+                                        
+                                        HStack {
+                                            Image(systemName: "leaf")
+                                                .fontWeight(.semibold)
+                                                .foregroundStyle(.green)
+                                            
+                                            Text("Thank you")
+                                                .fontWeight(.light)
+                                        }
+                                        .padding()
                                     }
                                 }
                             }
@@ -217,7 +240,13 @@ struct TravelDetailsView: View {
             }
             .background(colorScheme == .dark ? Color(red: 10/255, green: 10/255, blue: 10/255) : Color(red: 245/255, green: 245/255, blue: 245/255))
             .onAppear() {
-                if (travelDetails.computeCo2Emitted() > 0.0 && travelDetails.travel.CO2Compensated < travelDetails.computeCo2Emitted()) {
+                if (travelDetails.computeCo2Emitted() > 0.0) {
+                    if (travelDetails.travel.CO2Compensated >= travelDetails.computeCo2Emitted()) {
+                        progress = 1.0
+                    }
+                    else {
+                        progress = travelDetails.travel.CO2Compensated / travelDetails.computeCo2Emitted()
+                    }
                     totalTrees = viewModel.getNumTrees(travelDetails)
                     plantedTrees = viewModel.getPlantedTrees(travelDetails)
                 }

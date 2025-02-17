@@ -9,8 +9,8 @@ struct CompleterView: View {
     var onClick: (CityCompleterDataset) -> Void
     var searchText: String
     
-    init(modelContext: ModelContext, searchText: String, onBack: @escaping () -> Void, onClick: @escaping (CityCompleterDataset) -> Void) {
-        _viewModel = StateObject(wrappedValue: CompleterViewModel(modelContext: modelContext))
+    init(modelContext: ModelContext, searchText: String, onBack: @escaping () -> Void, onClick: @escaping (CityCompleterDataset) -> Void, departure: Bool) {
+        _viewModel = StateObject(wrappedValue: CompleterViewModel(modelContext: modelContext, departure: departure))
         self.onBack = onBack
         self.onClick = onClick
         self.searchText = searchText

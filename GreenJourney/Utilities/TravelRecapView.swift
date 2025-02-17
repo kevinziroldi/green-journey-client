@@ -118,7 +118,7 @@ struct TravelRecapView: View {
                         .padding(.leading, 5)
                         .frame(width: 120, alignment: .leading)
 
-                    Text(String(format: "%.1f", travelDetails.computeTotalDistance()) + " Km")
+                    Text(String(format: "%.2f", travelDetails.computeGreenPrice()) + " €")
                         .font(.system(size: 25).bold())
                         .bold()
                         .foregroundColor(.green.opacity(0.8))
