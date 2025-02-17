@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0AB2AA892D63E08A00FDF38D /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 0AB2AA882D63E08A00FDF38D /* FirebaseAuth */; };
+		0AB2AA8B2D63E09000FDF38D /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 0AB2AA8A2D63E09000FDF38D /* GoogleSignIn */; };
 		428DEFB62CCB95220054AB9C /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 428DEFB52CCB95220054AB9C /* FirebaseAnalytics */; };
 		42B7F6BE2CDA1169006AB516 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 42B7F6BD2CDA1169006AB516 /* GoogleSignIn */; };
 		42B7F6C02CDA1169006AB516 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 42B7F6BF2CDA1169006AB516 /* GoogleSignInSwift */; };
@@ -14,14 +16,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		0AD1F04E2D099709001A8464 /* PBXContainerItemProxy */ = {
+		0AB2AA832D63E08000FDF38D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0A1576782CA459AC00EE99BC /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 0A15767F2CA459AC00EE99BC;
 			remoteInfo = GreenJourney;
 		};
-		0AD1F0622D09987D001A8464 /* PBXContainerItemProxy */ = {
+		0AD1F04E2D099709001A8464 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0A1576782CA459AC00EE99BC /* Project object */;
 			proxyType = 1;
@@ -32,11 +34,19 @@
 
 /* Begin PBXFileReference section */
 		0A1576802CA459AC00EE99BC /* GreenJourney.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GreenJourney.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0AB2AA7D2D63E08000FDF38D /* GreenJourneyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GreenJourneyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AD1F04A2D099709001A8464 /* GreenJourneyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GreenJourneyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		0AD1F05C2D09987D001A8464 /* GreenJourneyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GreenJourneyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		0AB2AA8D2D63E0A500FDF38D /* Exceptions for "GreenJourney" folder in "GreenJourneyUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Features/Authentication/UITests/LoginViewUITest.swift,
+				Features/MyTravels/UITests/MyTravelsViewTest.swift,
+			);
+			target = 0AB2AA7C2D63E08000FDF38D /* GreenJourneyUITests */;
+		};
 		0AD1F0572D099766001A8464 /* Exceptions for "GreenJourney" folder in "GreenJourneyTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -60,14 +70,6 @@
 				NavigationHandler/Tests/NavigationDestinationTest.swift,
 			);
 			target = 0AD1F0492D099709001A8464 /* GreenJourneyTests */;
-		};
-		0AD1F06C2D0998B6001A8464 /* Exceptions for "GreenJourney" folder in "GreenJourneyUITests" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Features/Authentication/UITests/LoginViewUITest.swift,
-				Features/MyTravels/UITests/MyTravelsViewTest.swift,
-			);
-			target = 0AD1F05B2D09987D001A8464 /* GreenJourneyUITests */;
 		};
 		422A00902CD188B200EF280D /* Exceptions for "GreenJourney" folder in "GreenJourney" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
@@ -104,9 +106,14 @@
 			exceptions = (
 				422A00902CD188B200EF280D /* Exceptions for "GreenJourney" folder in "GreenJourney" target */,
 				0AD1F0572D099766001A8464 /* Exceptions for "GreenJourney" folder in "GreenJourneyTests" target */,
-				0AD1F06C2D0998B6001A8464 /* Exceptions for "GreenJourney" folder in "GreenJourneyUITests" target */,
+				0AB2AA8D2D63E0A500FDF38D /* Exceptions for "GreenJourney" folder in "GreenJourneyUITests" target */,
 			);
 			path = GreenJourney;
+			sourceTree = "<group>";
+		};
+		0AB2AA7E2D63E08000FDF38D /* GreenJourneyUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = GreenJourneyUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -123,14 +130,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		0AD1F0472D099709001A8464 /* Frameworks */ = {
+		0AB2AA7A2D63E08000FDF38D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0AB2AA892D63E08A00FDF38D /* FirebaseAuth in Frameworks */,
+				0AB2AA8B2D63E09000FDF38D /* GoogleSignIn in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		0AD1F0592D09987D001A8464 /* Frameworks */ = {
+		0AD1F0472D099709001A8464 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -144,6 +153,8 @@
 			isa = PBXGroup;
 			children = (
 				0A1576822CA459AC00EE99BC /* GreenJourney */,
+				0AB2AA7E2D63E08000FDF38D /* GreenJourneyUITests */,
+				0AB2A9602D63B6DB00FDF38D /* Frameworks */,
 				0A1576812CA459AC00EE99BC /* Products */,
 			);
 			sourceTree = "<group>";
@@ -153,9 +164,16 @@
 			children = (
 				0A1576802CA459AC00EE99BC /* GreenJourney.app */,
 				0AD1F04A2D099709001A8464 /* GreenJourneyTests.xctest */,
-				0AD1F05C2D09987D001A8464 /* GreenJourneyUITests.xctest */,
+				0AB2AA7D2D63E08000FDF38D /* GreenJourneyUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		0AB2A9602D63B6DB00FDF38D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -187,6 +205,31 @@
 			productReference = 0A1576802CA459AC00EE99BC /* GreenJourney.app */;
 			productType = "com.apple.product-type.application";
 		};
+		0AB2AA7C2D63E08000FDF38D /* GreenJourneyUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0AB2AA852D63E08000FDF38D /* Build configuration list for PBXNativeTarget "GreenJourneyUITests" */;
+			buildPhases = (
+				0AB2AA792D63E08000FDF38D /* Sources */,
+				0AB2AA7A2D63E08000FDF38D /* Frameworks */,
+				0AB2AA7B2D63E08000FDF38D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				0AB2AA842D63E08000FDF38D /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				0AB2AA7E2D63E08000FDF38D /* GreenJourneyUITests */,
+			);
+			name = GreenJourneyUITests;
+			packageProductDependencies = (
+				0AB2AA882D63E08A00FDF38D /* FirebaseAuth */,
+				0AB2AA8A2D63E09000FDF38D /* GoogleSignIn */,
+			);
+			productName = GreenJourneyUITests;
+			productReference = 0AB2AA7D2D63E08000FDF38D /* GreenJourneyUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		0AD1F0492D099709001A8464 /* GreenJourneyTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0AD1F0502D099709001A8464 /* Build configuration list for PBXNativeTarget "GreenJourneyTests" */;
@@ -207,26 +250,6 @@
 			productReference = 0AD1F04A2D099709001A8464 /* GreenJourneyTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		0AD1F05B2D09987D001A8464 /* GreenJourneyUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 0AD1F0642D09987D001A8464 /* Build configuration list for PBXNativeTarget "GreenJourneyUITests" */;
-			buildPhases = (
-				0AD1F0582D09987D001A8464 /* Sources */,
-				0AD1F0592D09987D001A8464 /* Frameworks */,
-				0AD1F05A2D09987D001A8464 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				0AD1F0632D09987D001A8464 /* PBXTargetDependency */,
-			);
-			name = GreenJourneyUITests;
-			packageProductDependencies = (
-			);
-			productName = GreenJourneyUITests;
-			productReference = 0AD1F05C2D09987D001A8464 /* GreenJourneyUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -234,17 +257,17 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1610;
+				LastSwiftUpdateCheck = 1620;
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					0A15767F2CA459AC00EE99BC = {
 						CreatedOnToolsVersion = 16.0;
 					};
-					0AD1F0492D099709001A8464 = {
-						CreatedOnToolsVersion = 16.1;
+					0AB2AA7C2D63E08000FDF38D = {
+						CreatedOnToolsVersion = 16.2;
 						TestTargetID = 0A15767F2CA459AC00EE99BC;
 					};
-					0AD1F05B2D09987D001A8464 = {
+					0AD1F0492D099709001A8464 = {
 						CreatedOnToolsVersion = 16.1;
 						TestTargetID = 0A15767F2CA459AC00EE99BC;
 					};
@@ -270,7 +293,7 @@
 			targets = (
 				0A15767F2CA459AC00EE99BC /* GreenJourney */,
 				0AD1F0492D099709001A8464 /* GreenJourneyTests */,
-				0AD1F05B2D09987D001A8464 /* GreenJourneyUITests */,
+				0AB2AA7C2D63E08000FDF38D /* GreenJourneyUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -283,14 +306,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		0AD1F0482D099709001A8464 /* Resources */ = {
+		0AB2AA7B2D63E08000FDF38D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		0AD1F05A2D09987D001A8464 /* Resources */ = {
+		0AD1F0482D099709001A8464 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -307,14 +330,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		0AD1F0462D099709001A8464 /* Sources */ = {
+		0AB2AA792D63E08000FDF38D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		0AD1F0582D09987D001A8464 /* Sources */ = {
+		0AD1F0462D099709001A8464 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -324,15 +347,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		0AB2AA842D63E08000FDF38D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0A15767F2CA459AC00EE99BC /* GreenJourney */;
+			targetProxy = 0AB2AA832D63E08000FDF38D /* PBXContainerItemProxy */;
+		};
 		0AD1F04F2D099709001A8464 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 0A15767F2CA459AC00EE99BC /* GreenJourney */;
 			targetProxy = 0AD1F04E2D099709001A8464 /* PBXContainerItemProxy */;
-		};
-		0AD1F0632D09987D001A8464 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 0A15767F2CA459AC00EE99BC /* GreenJourney */;
-			targetProxy = 0AD1F0622D09987D001A8464 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -466,6 +489,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"GreenJourney/Preview Content\"";
 				DEVELOPMENT_TEAM = 84G86C8P4S;
+				EAGER_LINKING = NO;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GreenJourney/Info.plist;
@@ -504,7 +528,9 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"GreenJourney/Preview Content\"";
 				DEVELOPMENT_TEAM = 84G86C8P4S;
+				EAGER_LINKING = NO;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_TESTABILITY = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GreenJourney/Info.plist;
 				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "local network access";
@@ -529,6 +555,40 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		0AB2AA862D63E08000FDF38D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = it.polimi.dima.GreenJourney.GreenJourneyUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = GreenJourney;
+			};
+			name = Debug;
+		};
+		0AB2AA872D63E08000FDF38D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = it.polimi.dima.GreenJourney.GreenJourneyUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = GreenJourney;
 			};
 			name = Release;
 		};
@@ -570,42 +630,6 @@
 			};
 			name = Release;
 		};
-		0AD1F0652D09987D001A8464 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 84G86C8P4S;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = it.polimi.dima.GreenJourney.GreenJourneyUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = GreenJourney;
-			};
-			name = Debug;
-		};
-		0AD1F0662D09987D001A8464 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 84G86C8P4S;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = it.polimi.dima.GreenJourney.GreenJourneyUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = GreenJourney;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -627,20 +651,20 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		0AB2AA852D63E08000FDF38D /* Build configuration list for PBXNativeTarget "GreenJourneyUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0AB2AA862D63E08000FDF38D /* Debug */,
+				0AB2AA872D63E08000FDF38D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		0AD1F0502D099709001A8464 /* Build configuration list for PBXNativeTarget "GreenJourneyTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0AD1F0512D099709001A8464 /* Debug */,
 				0AD1F0522D099709001A8464 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		0AD1F0642D09987D001A8464 /* Build configuration list for PBXNativeTarget "GreenJourneyUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				0AD1F0652D09987D001A8464 /* Debug */,
-				0AD1F0662D09987D001A8464 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -667,6 +691,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		0AB2AA882D63E08A00FDF38D /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 428DEFB42CCB95220054AB9C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		0AB2AA8A2D63E09000FDF38D /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 42B7F6BC2CDA1169006AB516 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
 		428DEFB52CCB95220054AB9C /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 428DEFB42CCB95220054AB9C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
