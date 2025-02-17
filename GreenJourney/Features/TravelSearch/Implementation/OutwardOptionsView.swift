@@ -175,7 +175,7 @@ struct CircularProgressView: View {
             
             // rotating part
             Circle()
-                .trim(from: 0, to: 0.3) // Mostra solo una parte del cerchio
+                .trim(from: 0, to: 0.3)
                 .stroke(style: StrokeStyle(lineWidth: 8, lineCap: .round))
                 .foregroundStyle(LinearGradient(colors: [Color.blue, Color.green], startPoint: .leading, endPoint: .trailing))
                 .rotationEffect(.degrees(rotation))
@@ -184,11 +184,10 @@ struct CircularProgressView: View {
                         rotation = 360
                     }
                 }
-            //TODO
-            /*Image("logo")
+            Image("icon_no_background")
                 .resizable()
-                .frame(width: 60, height: 60)*/
+                .frame(width: 60, height: 60)
         }
-        .frame(width: 90, height: 90) // Imposta le dimensioni della progress view
+        .frame(width: 90, height: 90)
     }
 }
