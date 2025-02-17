@@ -4,6 +4,8 @@ import SwiftData
 
 // 37.5 kg/€
 let co2CompensatedPerEuro = 37.5
+// 2 €/Tree
+let pricePerTree = 2.0
 
 @MainActor
 class MyTravelsViewModel: ObservableObject {
@@ -572,14 +574,17 @@ class MyTravelsViewModel: ObservableObject {
     
     // TODO mettere le costanti sopra
     func getNumTrees(_ travel: TravelDetails) -> Int {
-        return (Int(travel.computeCo2Emitted() / 10)) + 1
+        if travel.computeCo2Emitted() == 0 {
+            return 0
+        }
+        return Int(ceil(travel.computeCo2Emitted() / (pricePerTree * co2CompensatedPerEuro)))
     }
     
     func getPlantedTrees(_ travel: TravelDetails) -> Int {
         if travel.travel.CO2Compensated == 0 {
             return 0
         }
-        return Int(travel.travel.CO2Compensated) / 10 + 1
+        return Int(ceil(travel.travel.CO2Compensated / (pricePerTree * co2CompensatedPerEuro)))
     }
 }
 extension MyTravelsViewModel: Hashable {

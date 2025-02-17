@@ -212,7 +212,7 @@ struct TravelDetailsView: View {
                 .allowsHitTesting(!infoTapped)
                 
                 if infoTapped {
-                    InfoView(onBack: {infoTapped = false})
+                    InfoCompensationView(onBack: {infoTapped = false})
                 }
             }
             .background(colorScheme == .dark ? Color(red: 10/255, green: 10/255, blue: 10/255) : Color(red: 245/255, green: 245/255, blue: 245/255))
@@ -266,7 +266,7 @@ struct SemiCircle: Shape {
 }
 
 
-struct InfoView: View {
+struct InfoCompensationView: View {
     var onBack: () -> Void
     var body: some View {
         VStack {

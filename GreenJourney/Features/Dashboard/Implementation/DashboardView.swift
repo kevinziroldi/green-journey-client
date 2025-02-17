@@ -122,7 +122,7 @@ struct DashboardView: View {
             .allowsHitTesting(!legendTapped)
             
             if legendTapped {
-                LegendView(onClose: {legendTapped = false})
+                LegendBadgeView(onClose: {legendTapped = false})
             }
             
         }
