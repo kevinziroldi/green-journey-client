@@ -17,17 +17,28 @@ struct GreenJourneyApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
     // persistence controller for SwiftData
-    let persistenceController = PersistenceHandler.shared
+    let persistenceHandler = PersistenceHandler.shared
     // server service
     let serverService = ServiceFactory.shared.getServerService()
     // firebase auth service
     let firebaseAuthService = ServiceFactory.shared.getFirebaseAuthService()
 
+    init() {
+        if ProcessInfo.processInfo.arguments.contains("ui_tests") {
+            let modelContext = persistenceHandler.container.mainContext
+            let users = try! modelContext.fetch(FetchDescriptor<User>())
+            for user in users {
+                modelContext.delete(user)
+            }
+            try! modelContext.save()
+        }
+    }
+    
     var body: some Scene {
         WindowGroup {
-            MainView(modelContext: persistenceController.container.mainContext, serverService: serverService, firebaseAuthService: firebaseAuthService)
+            MainView(modelContext: persistenceHandler.container.mainContext, serverService: serverService, firebaseAuthService: firebaseAuthService)
         }
         // make persistence controller available to all views
-        .modelContainer(persistenceController.container)
+        .modelContainer(persistenceHandler.container)
     }
 }

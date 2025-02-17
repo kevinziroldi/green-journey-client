@@ -55,6 +55,7 @@ struct TravelSearchView: View {
                                 Text("Next journey")
                                     .font(.title)
                                     .padding()
+                                    .accessibilityIdentifier("nextJourneyTitle")
                                 
                                 Spacer()
                                 

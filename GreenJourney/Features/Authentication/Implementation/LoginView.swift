@@ -18,6 +18,7 @@ struct LoginView: View {
                 .resizable()
                 .padding()
                 .aspectRatio(contentMode: .fit)
+                .accessibilityIdentifier("loginLogoImage")
             ScrollView {
                 VStack {
                     Spacer()
@@ -30,27 +31,35 @@ struct LoginView: View {
                         .frame(maxWidth: 300)
                         .background(Color.gray.opacity(0.2))
                         .cornerRadius(8)
+                        .accessibilityIdentifier("emailTextField")
                     
                     SecureField("Password", text: $viewModel.password)
                         .padding()
                         .frame(maxWidth: 300)
                         .background(Color.gray.opacity(0.2))
                         .cornerRadius(8)
+                        .accessibilityIdentifier("passwordSecureField")
+
                     HStack {
                         if let resendMessage = viewModel.resendEmail {
                             Text(resendMessage)
+                                .accessibilityIdentifier("resendEmailLabel")
                         }
                         Button("Reset password") {
                             Task {
                                 await viewModel.resetPassword(email: viewModel.email)
                             }
                         }
+                        .accessibilityIdentifier("resetPasswordButton")
+
                     }
                     // error message
                     if let errorMessage = viewModel.errorMessage {
                         Text(errorMessage)
                             .foregroundColor(.red)
                             .font(.caption)
+                            .accessibilityIdentifier("errorMessageLabel")
+
                     }
                     
                     VStack(spacing: 20) {
@@ -66,6 +75,8 @@ struct LoginView: View {
                                 .background(Color.blue)
                                 .cornerRadius(30)
                         }
+                        .accessibilityIdentifier("loginButton")
+
                         
                         HStack {
                             Rectangle()
@@ -110,6 +121,7 @@ struct LoginView: View {
                                 .padding(EdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 0))
                                 
                             }
+                            .accessibilityIdentifier("googleSignInButton")
                         }
                         Spacer()
                     }
@@ -121,6 +133,7 @@ struct LoginView: View {
             Button ("Sign up") {
                 navigationPath.append(NavigationDestination.SignupView(viewModel))
             }
+            .accessibilityIdentifier("signUpButton")
         }
         .onAppear() {
             viewModel.isEmailVerificationActiveLogin = false

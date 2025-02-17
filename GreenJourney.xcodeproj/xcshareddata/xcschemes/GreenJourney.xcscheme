@@ -32,7 +32,7 @@
       <Testables>
          <TestableReference
             skipped = "NO"
-            parallelizable = "YES">
+            parallelizable = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "0AD1F0492D099709001A8464"
@@ -46,7 +46,7 @@
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "0AD1F05B2D09987D001A8464"
+               BlueprintIdentifier = "0AB2AA7C2D63E08000FDF38D"
                BuildableName = "GreenJourneyUITests.xctest"
                BlueprintName = "GreenJourneyUITests"
                ReferencedContainer = "container:GreenJourney.xcodeproj">
