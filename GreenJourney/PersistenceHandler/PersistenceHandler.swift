@@ -1,6 +1,7 @@
 import SwiftUI
 import SwiftData
 
+@MainActor
 class PersistenceHandler {
     static let shared = PersistenceHandler()
     let container: ModelContainer
