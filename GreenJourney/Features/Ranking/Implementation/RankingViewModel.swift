@@ -36,7 +36,6 @@ class RankingViewModel: ObservableObject {
             self.errorMessage = "An error occurred retrieving rankings from server"
             return
         }
-        
         // get ranking from server
         do {
             let rankingResponse = try await serverService.getRanking(userID: userID)
