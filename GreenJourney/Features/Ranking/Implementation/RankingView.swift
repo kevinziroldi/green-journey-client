@@ -239,8 +239,6 @@ struct LeaderBoardUserView: View {
     }
 }
 
-
-
 struct TopRoundedCorners: Shape {
     var cornerRadius: CGFloat
     
