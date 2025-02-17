@@ -21,7 +21,6 @@ struct TravelSearchView: View {
     
     @Query var users: [User]
     
-    
     init(modelContext: ModelContext, navigationPath: Binding<NavigationPath>, serverService: ServerServiceProtocol, firebaseAuthService: FirebaseAuthServiceProtocol) {
         _viewModel = StateObject(wrappedValue: TravelSearchViewModel(modelContext: modelContext, serverService: serverService))
         _navigationPath = navigationPath
