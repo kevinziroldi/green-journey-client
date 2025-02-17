@@ -65,6 +65,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Features/Authentication/UITests/LoginViewUITest.swift,
+				Features/MyTravels/UITests/MyTravelsViewTest.swift,
 			);
 			target = 0AD1F05B2D09987D001A8464 /* GreenJourneyUITests */;
 		};
@@ -77,6 +78,7 @@
 				Features/Completer/Tests/CompleterViewModelTest.swift,
 				Features/DestinationPrediction/Tests/DestinationPredictionViewModelTest.swift,
 				Features/MyTravels/Tests/MyTravelsViewModelTest.swift,
+				Features/MyTravels/UITests/MyTravelsViewTest.swift,
 				Features/Ranking/Tests/RankingViewModelTest.swift,
 				Features/TravelSearch/Tests/TravelSearchViewModelTest.swift,
 				Features/UserPreferences/Tests/UserPreferencesViewModelTest.swift,
