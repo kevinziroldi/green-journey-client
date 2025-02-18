@@ -240,7 +240,7 @@ struct TravelDetailsView: View {
             }
             .background(colorScheme == .dark ? Color(red: 10/255, green: 10/255, blue: 10/255) : Color(red: 245/255, green: 245/255, blue: 245/255))
             .onAppear() {
-                if (travelDetails.computeCo2Emitted() > 0.0) {
+                if (travelDetails.computeCo2Emitted() >= 0.0) {
                     if (travelDetails.travel.CO2Compensated >= travelDetails.computeCo2Emitted()) {
                         progress = 1.0
                     }

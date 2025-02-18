@@ -1,4 +1,5 @@
 import Foundation
+import SwiftData
 
 class TravelDetails: Codable, Identifiable {
     var id = UUID()

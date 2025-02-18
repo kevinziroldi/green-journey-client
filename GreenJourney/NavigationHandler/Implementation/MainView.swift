@@ -55,7 +55,7 @@ struct MainView: View {
                         }
                         .tag(TabViewElement.MyTravels)
                     
-                    DashboardView(modelContext: modelContext, navigationPath: $navigationPath)
+                    DashboardView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
                         .tabItem {
                             Label("Dashboard", systemImage: "house")
                                 .accessibilityElement(children: .contain)

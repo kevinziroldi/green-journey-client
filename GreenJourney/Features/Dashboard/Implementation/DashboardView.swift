@@ -4,13 +4,18 @@ import Charts
 
 struct DashboardView: View {
     @Binding var navigationPath: NavigationPath
+    private var serverService: ServerServiceProtocol
+    private var firebaseAuthService: FirebaseAuthServiceProtocol
     
-    init(modelContext: ModelContext, navigationPath: Binding<NavigationPath>) {
+    init(modelContext: ModelContext, navigationPath: Binding<NavigationPath>, serverService: ServerServiceProtocol, firebaseAuthService: FirebaseAuthServiceProtocol) {
         _navigationPath = navigationPath
+        _viewModel = StateObject(wrappedValue: DashboardViewModel(modelContext: modelContext, serverService: serverService))
+        self.serverService = serverService
+        self.firebaseAuthService = firebaseAuthService
     }
     
     @State private var legendTapped: Bool = false
-    var user = User(firstName: "Matteo", lastName: "Volpari", firebaseUID: "", scoreShortDistance: 12, scoreLongDistance: 24)
+    @StateObject var viewModel: DashboardViewModel
     var body: some View {
         ZStack {
             ScrollView {
@@ -40,7 +45,7 @@ struct DashboardView: View {
                         }
                         .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 0))
                         HStack{
-                            BadgeView(badges: user.badges, dim: 80, inline: true)
+                            BadgeView(badges: viewModel.badges, dim: 80, inline: true)
                                 .padding()
                             
                         }
@@ -62,11 +67,11 @@ struct DashboardView: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                         
                         
-                        InfoRow(title: "Co2 emitted", value: "570 Kg", icon: "carbon.dioxide.cloud", color: .red, imageValue: false, imageValueString: nil)
+                        InfoRow(title: "Co2 emitted", value: String(format: "%.1f", viewModel.co2Emitted) + " Kg", icon: "carbon.dioxide.cloud", color: .red, imageValue: false, imageValueString: nil)
                         
-                        InfoRow(title: "Co2 compensated", value: "523 Kg", icon: "leaf", color: .green, imageValue: false, imageValueString: nil)
+                        InfoRow(title: "Co2 compensated", value: String(format: "%.0f", viewModel.co2Compensated) + " Kg", icon: "leaf", color: .green, imageValue: false, imageValueString: nil)
                         
-                        InfoRow(title: "Trees planted", value: "31", icon: "tree", color: Color(hue: 0.309, saturation: 1.0, brightness: 0.665), imageValue: false, imageValueString: nil)
+                        InfoRow(title: "Trees planted", value: "\(viewModel.treesPlanted)", icon: "tree", color: Color(hue: 0.309, saturation: 1.0, brightness: 0.665), imageValue: false, imageValueString: nil)
                     }
                 }
                 .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
@@ -83,11 +88,11 @@ struct DashboardView: View {
                             .fontWeight(.semibold)
                             .frame(maxWidth: .infinity, alignment: .leading)
                         
-                        InfoRow(title: "Distance made", value: "542 Km", icon: "road.lanes", color: .indigo, imageValue: false, imageValueString: nil)
+                        InfoRow(title: "Distance made", value: String(format: "%.0f", viewModel.totalDistance) + " Km", icon: "road.lanes", color: .indigo, imageValue: false, imageValueString: nil)
                         
-                        InfoRow(title: "Most chosen vehicle", value: "", icon: "figure.wave", color: .indigo, imageValue: true, imageValueString: "bicycle")
+                        InfoRow(title: "Most chosen vehicle", value: "", icon: "figure.wave", color: .indigo, imageValue: true, imageValueString: viewModel.mostChosenVehicle)
                         
-                        InfoRow(title: "Continents visited", value: "5 / 7", icon: "globe", color: .indigo, imageValue: false, imageValueString: nil)
+                        InfoRow(title: "Continents visited", value: "\(viewModel.visitedContinents) / 7", icon: "globe", color: .indigo, imageValue: false, imageValueString: nil)
                         
                     }
                 }
@@ -112,9 +117,9 @@ struct DashboardView: View {
                 .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
                 
                 
-                BarChartView(title: "Trips completed", value: "27", data: [10, 12, 5, 15], labels: ["2020", "2021", "2022", "2023"], color: .pink.opacity(0.8))
+                BarChartView(title: "Trips completed", value: "27", data: [10, 12, 5, 15], labels: ["2022", "2023", "2024", "2025"], color: .pink.opacity(0.8))
                     .padding()
-                BarChartView(title: "Distance made (Km)", value: "", data: [250, 427, 32, 500], labels: ["2020", "2021", "2022", "2023"], color: .indigo.opacity(0.8))
+                BarChartView(title: "Distance made (Km)", value: "", data: [250, 427, 32, 500], labels: ["2022", "2023", "2024", "2025"], color: .indigo.opacity(0.8))
                     .padding()
             }
             .padding()
@@ -127,6 +132,10 @@ struct DashboardView: View {
             
         }
         .background(.green.opacity(0.1))
+        .onAppear() {
+            viewModel.getUserBadges()
+            viewModel.getUserTravels()
+        }
     }
 }
 
@@ -178,9 +187,6 @@ struct InfoRow: View {
                 }
                 
             }
-                
-            
-           
             Spacer()
         }
         .padding()
