@@ -12,6 +12,7 @@ struct SignUpView: View {
                         .resizable()
                         .padding()
                         .aspectRatio(contentMode: .fit)
+                        .accessibilityIdentifier("signupLogoImage")
                     
                     TextField("Email", text: $viewModel.email)
                         .autocapitalization(.none)
