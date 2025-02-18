@@ -26,30 +26,40 @@ struct MainView: View {
                     RankingView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
                         .tabItem {
                             Label("Ranking", systemImage: "star")
+                                .accessibilityElement(children: .contain)
+                                .accessibilityIdentifier("rankingTabViewElement")
                         }
                         .tag(TabViewElement.Ranking)
                     
                     CitiesReviewsView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
                         .tabItem {
                             Label("Reviews", systemImage: "star.fill")
+                                .accessibilityElement(children: .contain)
+                                .accessibilityIdentifier("citiesReviewsTabViewElement")
                         }
                         .tag(TabViewElement.Reviews)
                     
                     TravelSearchView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
                         .tabItem {
                             Label("From-To", systemImage: "location")
+                                .accessibilityElement(children: .contain)
+                                .accessibilityIdentifier("travelSearchTabViewElement")
                         }
                         .tag(TabViewElement.SearchTravel)
                     
                     MyTravelsView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
                         .tabItem {
                             Label("My travels", systemImage: "airplane")
+                                .accessibilityElement(children: .contain)
+                                .accessibilityIdentifier("myTravelsTabViewElement")
                         }
                         .tag(TabViewElement.MyTravels)
                     
                     DashboardView(modelContext: modelContext, navigationPath: $navigationPath)
                         .tabItem {
                             Label("Dashboard", systemImage: "house")
+                                .accessibilityElement(children: .contain)
+                                .accessibilityIdentifier("dashboardTabViewElement")
                         }
                         .tag(TabViewElement.Dashboard)
                 }else {

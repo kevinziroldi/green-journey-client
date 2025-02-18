@@ -16,7 +16,7 @@ struct TravelDetailsView: View {
         if let travelDetails = viewModel.selectedTravel {
             ZStack {
                 VStack (spacing:0){
-                        HeaderView(from: travelDetails.getDepartureSegment()?.departureCity ?? "", to: travelDetails.getDestinationSegment()?.destinationCity ?? "", date: travelDetails.segments.first?.dateTime, dateArrival: travelDetails.segments.last?.getArrivalDateTime())
+                    HeaderView(from: travelDetails.getDepartureSegment()?.departureCity ?? "", to: travelDetails.getDestinationSegment()?.destinationCity ?? "", date: travelDetails.segments.first?.dateTime, dateArrival: travelDetails.segments.last?.getArrivalDateTime())
                     
                     Rectangle()
                         .frame(height: 1)

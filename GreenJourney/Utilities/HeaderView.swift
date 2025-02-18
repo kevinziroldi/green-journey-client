@@ -12,6 +12,7 @@ struct HeaderView: View {
                     .font(.title2)
                     .fontWeight(.semibold)
                     .padding()
+                    .accessibilityIdentifier("fromTravelHeader")
                 
                     GeometryReader { geometry in
                         ZStack {

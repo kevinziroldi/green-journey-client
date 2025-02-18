@@ -43,6 +43,9 @@ class PersistenceHandler {
             
             try! addCitiesCompleterDatasetToSwiftData()
             try! addCitiesFeaturesToSwiftData()
+            
+            // user inserted with login
+            // travels retrieved from the mock server 
         }
     }
     

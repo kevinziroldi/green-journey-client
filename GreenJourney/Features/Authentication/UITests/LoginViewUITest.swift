@@ -6,7 +6,6 @@ final class LoginViewUITests: XCTestCase {
     
     override func setUpWithError() throws {
         continueAfterFailure = false
-        app.launchArguments.append("ui_tests")
         app.launch()
     }
     
@@ -43,7 +42,7 @@ final class LoginViewUITests: XCTestCase {
         let emailTextField = app.textFields["emailTextField"]
         let passwordField = app.secureTextFields["passwordSecureField"]
         let loginButton = app.buttons["loginButton"]
-        let nextJourneyTitle = app.staticTexts["nextJourneyTitle"]
+        let travelSearchViewTitle = app.staticTexts["travelSearchViewTitle"]
 
         // check UI are elements present
         XCTAssertTrue(emailTextField.exists, "The email field is not displayed")
@@ -59,7 +58,8 @@ final class LoginViewUITests: XCTestCase {
         loginButton.tap()
         
         // check page change after login
-        XCTAssertTrue(nextJourneyTitle.waitForExistence(timeout: timer), "TravelSearchView not appeared after login")
+        XCTAssertTrue(travelSearchViewTitle.waitForExistence(timeout: timer), "TravelSearchView not appeared after login")
+        
     }
     
     func testLoginWithCredentialsFailure() {
@@ -89,7 +89,7 @@ final class LoginViewUITests: XCTestCase {
     func testSignInWithGoogle() {
         // UI elements
         let googleButton = app.buttons["googleSignInButton"]
-        let nextJourneyTitle = app.staticTexts["nextJourneyTitle"]
+        let travelSearchViewTitle = app.staticTexts["travelSearchViewTitle"]
         
         // check Google sign in button exists
         XCTAssertTrue(googleButton.exists, "The google sign in button is not displayed")
@@ -97,7 +97,7 @@ final class LoginViewUITests: XCTestCase {
         googleButton.tap()
         
         // check page change after login
-        XCTAssertTrue(nextJourneyTitle.waitForExistence(timeout: timer), "TravelSearchView not appeared after sign in with Google")
+        XCTAssertTrue(travelSearchViewTitle.waitForExistence(timeout: timer), "TravelSearchView not appeared after sign in with Google")
     }
     
     func testSignUpNavigation() {

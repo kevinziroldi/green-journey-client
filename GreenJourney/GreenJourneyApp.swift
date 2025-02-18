@@ -22,17 +22,6 @@ struct GreenJourneyApp: App {
     let serverService = ServiceFactory.shared.getServerService()
     // firebase auth service
     let firebaseAuthService = ServiceFactory.shared.getFirebaseAuthService()
-
-    init() {
-        if ProcessInfo.processInfo.arguments.contains("ui_tests") {
-            let modelContext = persistenceHandler.container.mainContext
-            let users = try! modelContext.fetch(FetchDescriptor<User>())
-            for user in users {
-                modelContext.delete(user)
-            }
-            try! modelContext.save()
-        }
-    }
     
     var body: some Scene {
         WindowGroup {

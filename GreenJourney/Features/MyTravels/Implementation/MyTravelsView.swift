@@ -28,14 +28,14 @@ struct MyTravelsView: View {
                 Text("My Travels")
                     .font(.title)
                     .padding()
-                    .accessibilityIdentifier("MyTravelsTitle")
+                    .accessibilityIdentifier("myTravelsTitle")
                 Spacer()
                 
                 NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)) {
                     Image(systemName: "person")
                         .font(.title)
                 }
-                .accessibilityIdentifier("UserPreferencesButton")
+                .accessibilityIdentifier("userPreferencesButton")
             }
             .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
             
@@ -45,7 +45,7 @@ struct MyTravelsView: View {
             }
             .pickerStyle(SegmentedPickerStyle())
             .padding()
-            .accessibilityIdentifier("TravelCompletedControl")
+            .accessibilityIdentifier("travelCompletedControl")
             
             HStack {
                 Spacer()
@@ -64,7 +64,7 @@ struct MyTravelsView: View {
                         .cancel()
                     ])
                 }
-                .accessibilityIdentifier("SortByButton")
+                .accessibilityIdentifier("sortByButton")
             }
             
             ScrollView {
@@ -86,7 +86,7 @@ struct MyTravelsView: View {
                             .font(.headline)
                             .fontWeight(.light)
                     }
-                    .accessibilityIdentifier("NoTravelsAlert")
+                    .accessibilityIdentifier("noTravelsAlert")
                 }
                 else {
                     VStack{
@@ -104,7 +104,7 @@ struct MyTravelsView: View {
                                 }) {
                                     TravelCard(travelDetails: travelDetails)
                                 }
-                                .accessibilityIdentifier("TravelCardButton_\(travelDetails.id)")
+                                .accessibilityIdentifier("travelCardButton_\(travelDetails.travel.travelID ?? 1)")
                                 
                                 if viewModel.showCompleted && !travelDetails.travel.confirmed {
                                     VStack {
@@ -131,7 +131,7 @@ struct MyTravelsView: View {
                                                 }
                                             )
                                         }
-                                        .accessibilityIdentifier("ConfirmTravelButton_\(travelDetails.id)")
+                                        .accessibilityIdentifier("confirmTravelButton_\(travelDetails.travel.travelID ?? 1)")
                                         
                                         Button(action: {
                                             showAlert = true
@@ -156,7 +156,7 @@ struct MyTravelsView: View {
                                                 }
                                             )
                                         }
-                                        .accessibilityIdentifier("DeleteTravelButton_\(travelDetails.id)")
+                                        .accessibilityIdentifier("deleteTravelButton_\(travelDetails.travel.travelID ?? 1)")
                                     }
                                 }
                             }
@@ -179,12 +179,10 @@ struct MyTravelsView: View {
 }
 
 struct TravelCard: View {
-    
     let travelDetails: TravelDetails
     @EnvironmentObject var viewModel: MyTravelsViewModel
     @Environment(\.colorScheme) var colorScheme: ColorScheme
 
-    
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 20)
