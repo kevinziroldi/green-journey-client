@@ -103,6 +103,7 @@ struct TravelSearchView: View {
                                             .padding(EdgeInsets(top: 10, leading: 50, bottom: 0, trailing: 50))
                                             .frame(alignment: .top)
                                             .font(.title)
+                                            .accessibilityIdentifier("departureTextField")
                                         ZStack {
                                             RoundedRectangle(cornerRadius: 10)
                                                 .stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 3)
@@ -143,6 +144,7 @@ struct TravelSearchView: View {
                                             .padding(EdgeInsets(top: 10, leading: 50, bottom: 0, trailing: 50))
                                             .frame(alignment: .top)
                                             .font(.title)
+                                            .accessibilityIdentifier("destinationTextField")
                                         ZStack{
                                             RoundedRectangle(cornerRadius: 10)
                                                 .stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 3)

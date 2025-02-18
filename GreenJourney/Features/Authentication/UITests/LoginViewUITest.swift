@@ -16,7 +16,7 @@ final class LoginViewUITests: XCTestCase {
     
     func testLoginViewElementsExist() {
         // UI elements
-        let logoImage = app.images["loginLogoImage"]
+        let loginLogoImage = app.images["loginLogoImage"]
         let emailTextField = app.textFields["emailTextField"]
         let passwordField = app.secureTextFields["passwordSecureField"]
         let resendEmailTextField = app.textFields["resendEmailLabel"]
@@ -27,7 +27,7 @@ final class LoginViewUITests: XCTestCase {
         let signUpButton = app.buttons["signUpButton"]
         
         // check UI are elements present
-        XCTAssertTrue(logoImage.exists, "The logo image is not displayed")
+        XCTAssertTrue(loginLogoImage.exists, "The logo image is not displayed")
         XCTAssertTrue(emailTextField.exists, "The email field is not displayed")
         XCTAssertTrue(passwordField.exists, "The password field is not displayed")
         XCTAssertFalse(resendEmailTextField.exists, "The resend email field is displayed and should not")
@@ -38,14 +38,13 @@ final class LoginViewUITests: XCTestCase {
         XCTAssertTrue(signUpButton.exists, "The signup button is not displayed")
     }
     
-    // TODO doesn't work
-    func testLoginFlow() {
+    func testLoginWithCredentialsSuccessful() {
         // UI elements
         let emailTextField = app.textFields["emailTextField"]
         let passwordField = app.secureTextFields["passwordSecureField"]
         let loginButton = app.buttons["loginButton"]
-        let mainViewTextField = app.textFields["nextJourneyTitle"]
-        
+        let nextJourneyTitle = app.staticTexts["nextJourneyTitle"]
+
         // check UI are elements present
         XCTAssertTrue(emailTextField.exists, "The email field is not displayed")
         XCTAssertTrue(passwordField.exists, "The password field is not displayed")
@@ -60,40 +59,89 @@ final class LoginViewUITests: XCTestCase {
         loginButton.tap()
         
         // check page change after login
-        XCTAssertTrue(mainViewTextField.waitForExistence(timeout: timer), "TravelSearchView not appeared after login")
+        XCTAssertTrue(nextJourneyTitle.waitForExistence(timeout: timer), "TravelSearchView not appeared after login")
     }
     
-    /*
-    // Test della navigazione verso la view di registrazione (Sign up)
-    func testSignUpNavigation() {
-        // Premi il bottone Sign up
-        let signUpButton = app.buttons["Sign up"]
-        XCTAssertTrue(signUpButton.exists, "Il bottone Sign up non esiste")
-        signUpButton.tap()
+    func testLoginWithCredentialsFailure() {
+        // UI elements
+        let emailTextField = app.textFields["emailTextField"]
+        let passwordField = app.secureTextFields["passwordSecureField"]
+        let loginButton = app.buttons["loginButton"]
+        let loginLogoImage = app.images["loginLogoImage"]
+        let errorMessageTextField = app.staticTexts["errorMessageLabel"]
         
-        // Verifica che la SignupView venga presentata.
-        // Per esempio, se nella SignupView hai un titolo con accessibilityIdentifier "SignupViewTitle":
-        let signupTitle = app.staticTexts["SignupViewTitle"]
-        XCTAssertTrue(signupTitle.waitForExistence(timeout: 2), "La SignupView non è apparsa dopo aver premuto Sign up")
-    }
-    
-    // Test del flusso di reset password
-    func testResetPasswordFlow() {
-        // Inserisci un'email per il reset
-        let emailTextField = app.textFields["Email"]
-        XCTAssertTrue(emailTextField.waitForExistence(timeout: 2), "Il campo email non è stato trovato")
+        // check UI are elements present
+        XCTAssertTrue(emailTextField.exists, "The email field is not displayed")
+        XCTAssertTrue(passwordField.exists, "The password field is not displayed")
+        XCTAssertTrue(loginButton.exists, "The login button is not displayed")
+        
+        // insert only email
         emailTextField.tap()
         emailTextField.typeText("test@example.com")
+        // tap login button
+        loginButton.tap()
         
-        // Premi il bottone Reset password
-        let resetPasswordButton = app.buttons["Reset password"]
-        XCTAssertTrue(resetPasswordButton.exists, "Il bottone Reset password non esiste")
+        // check login page and error message
+        XCTAssertTrue(loginLogoImage.exists, "The login logo image is not displayed")
+        XCTAssertTrue(errorMessageTextField.waitForExistence(timeout: timer), "The error message was not displayed")
+    }
+    
+    func testSignInWithGoogle() {
+        // UI elements
+        let googleButton = app.buttons["googleSignInButton"]
+        let nextJourneyTitle = app.staticTexts["nextJourneyTitle"]
+        
+        // check Google sign in button exists
+        XCTAssertTrue(googleButton.exists, "The google sign in button is not displayed")
+        
+        googleButton.tap()
+        
+        // check page change after login
+        XCTAssertTrue(nextJourneyTitle.waitForExistence(timeout: timer), "TravelSearchView not appeared after sign in with Google")
+    }
+    
+    func testSignUpNavigation() {
+        // UI elements
+        let signUpButton = app.buttons["signUpButton"]
+        let signupLogoImage = app.images["signupLogoImage"]
+        
+        XCTAssertTrue(signUpButton.exists, "The signup button is not displayed")
+        signUpButton.tap()
+        
+        XCTAssertTrue(signupLogoImage.waitForExistence(timeout: timer), "Signup view did not appear after clicking signup button")
+    }
+    
+    func testResetPasswordWithEmail() {
+        // UI elements
+        let emailTextField = app.textFields["emailTextField"]
+        let resetPasswordButton = app.buttons["resetPasswordButton"]
+        let resendEmailTextField = app.staticTexts["resendEmailLabel"]
+        
+        // check UI elements exist
+        XCTAssertTrue(emailTextField.exists, "The email field is not displayed")
+        XCTAssertTrue(resetPasswordButton.exists, "The reset password button is not displayed")
+        
+        // insert email and tap reset password
+        emailTextField.tap()
+        emailTextField.typeText("test@example.com")
         resetPasswordButton.tap()
         
-        // Verifica che venga visualizzato un messaggio di conferma (ad es. "Reset email sent")
-        // Assicurati di impostare un accessibilityIdentifier o testo esplicito in viewModel per il messaggio
-        let resetMessage = app.staticTexts["Reset email sent"]
-        XCTAssertTrue(resetMessage.waitForExistence(timeout: 5), "Il messaggio di reset non è stato visualizzato")
+        XCTAssertTrue(resendEmailTextField.waitForExistence(timeout: timer), "The sent email message has not been displayed")
     }
-     */
+    
+    func testResetPasswordWithoutEmail() {
+        // UI elements
+        let emailTextField = app.textFields["emailTextField"]
+        let resetPasswordButton = app.buttons["resetPasswordButton"]
+        let errorMessageTextField = app.staticTexts["errorMessageLabel"]
+        
+        // check UI elements exist
+        XCTAssertTrue(emailTextField.exists, "The email field is not displayed")
+        XCTAssertTrue(resetPasswordButton.exists, "The reset password button is not displayed")
+        
+        // don't insert an email
+        resetPasswordButton.tap()
+        
+        XCTAssertTrue(errorMessageTextField.waitForExistence(timeout: timer), "The error message was not displayed")
+    }
 }
