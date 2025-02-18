@@ -37,6 +37,7 @@ struct TravelSearchView: View {
                         .scaleEffect(1.3) // avoids clipping
                         .opacity(triggerAI ? 1 : 0)
                         .ignoresSafeArea()
+                        .accessibilityIdentifier("meshGradientView")
                     
                     // Brightness rim on edges
                     if triggerAI {
@@ -62,6 +63,7 @@ struct TravelSearchView: View {
                                 NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)) {
                                     Image(systemName: "person")
                                         .font(.title)
+                                        .accessibilityIdentifier("userPreferencesLink")
                                 }
                             }
                             .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
@@ -72,7 +74,8 @@ struct TravelSearchView: View {
                             }
                             .pickerStyle(.segmented)
                             .padding()
-                            .frame(maxWidth: 300) // Set a max width to control the size
+                            .frame(maxWidth: 300) // set a max width to control the size
+                            .accessibilityIdentifier("tripTypePicker")
                             
                             ZStack {
                                 GeometryReader { geometry in
@@ -103,7 +106,7 @@ struct TravelSearchView: View {
                                             .padding(EdgeInsets(top: 10, leading: 50, bottom: 0, trailing: 50))
                                             .frame(alignment: .top)
                                             .font(.title)
-                                            .accessibilityIdentifier("departureTextField")
+                                            .accessibilityIdentifier("departureLabel")
                                         ZStack {
                                             RoundedRectangle(cornerRadius: 10)
                                                 .stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 3)
@@ -119,6 +122,7 @@ struct TravelSearchView: View {
                                                     .font(.title2)
                                                     .fontWeight(viewModel.departure.cityName == "" ? .light : .semibold)
                                             }
+                                            .accessibilityIdentifier("departureButton")
                                         }
                                         .background(colorScheme == .dark ? Color(red: 48/255, green: 48/255, blue: 48/255) : Color.white)
                                         .cornerRadius(10)
@@ -145,7 +149,7 @@ struct TravelSearchView: View {
                                             .padding(EdgeInsets(top: 10, leading: 50, bottom: 0, trailing: 50))
                                             .frame(alignment: .top)
                                             .font(.title)
-                                            .accessibilityIdentifier("destinationTextField")
+                                            .accessibilityIdentifier("destinationLabel")
                                         ZStack{
                                             RoundedRectangle(cornerRadius: 10)
                                                 .stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 3)
@@ -163,6 +167,7 @@ struct TravelSearchView: View {
                                                     .font(.title2)
                                                     .fontWeight(viewModel.arrival.cityName == "" ? .light : .semibold)
                                             }
+                                            .accessibilityIdentifier("destinationButton")
                                         }
                                         .background(triggerAI ? LinearGradient(gradient: Gradient(colors: [.green, .cyan, .blue, .cyan, .green]), startPoint: .bottomLeading, endPoint: .topTrailing) : LinearGradient(gradient: Gradient(colors: [colorScheme == .dark ? Color(red: 48/255, green: 48/255, blue: 48/255) : Color.white]), startPoint: .bottomLeading, endPoint: .topTrailing))
                                         .cornerRadius(10)
@@ -204,6 +209,7 @@ struct TravelSearchView: View {
 
                                     }
                                     .padding(EdgeInsets(top: 10, leading: 25, bottom: 10, trailing: 25))
+                                    .accessibilityIdentifier("outwardDateButton")
                                     Rectangle()
                                         .frame(width: 2)
                                         .foregroundStyle(.gray)
@@ -223,7 +229,7 @@ struct TravelSearchView: View {
                                     }
                                     .padding(EdgeInsets(top: 10, leading: 25, bottom: 10, trailing: 25))
                                     .disabled(viewModel.oneWay)
-                                    
+                                    .accessibilityIdentifier("returnDateButton")
                                 }
                             }
                             .fixedSize()
@@ -250,10 +256,9 @@ struct TravelSearchView: View {
                                 .fixedSize()
                             }
                             .disabled(viewModel.departure.iata == "" || viewModel.arrival.iata == "")
-                            
+                            .accessibilityIdentifier("searchButton")
                             
                             Spacer()
-                            
                             
                             HStack {
                                 if !triggerAI {
