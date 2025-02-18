@@ -187,4 +187,8 @@ class TravelDetails: Codable, Identifiable {
         return vehicle
     }
     
+    func getYear() -> Int {
+        let calendar = Calendar.current
+        return calendar.component(.year, from: getLastSegment()?.dateTime ?? Date())
+    }
 }

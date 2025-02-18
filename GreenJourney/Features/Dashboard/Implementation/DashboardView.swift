@@ -110,16 +110,16 @@ struct DashboardView: View {
                             .fontWeight(.semibold)
                             .frame(maxWidth: .infinity, alignment: .leading)
                         
-                        InfoRow(title: "", value: "2 m, 24 d, 13 h, 58 min", icon: "clock", color: .blue, imageValue: false, imageValueString: nil)
+                        InfoRow(title: "", value: viewModel.totalDurationString, icon: "clock", color: .blue, imageValue: false, imageValueString: nil)
                         
                     }
                 }
                 .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
                 
                 
-                BarChartView(title: "Trips completed", value: "27", data: [10, 12, 5, 15], labels: ["2022", "2023", "2024", "2025"], color: .pink.opacity(0.8))
+                BarChartView(title: "Trips completed", value: "\(viewModel.totalTripsMade)", data: viewModel.tripsMade.keys.sorted().map{viewModel.tripsMade[$0]!}, labels: viewModel.keysToString(keys: viewModel.tripsMade.keys.sorted()) , color: .pink.opacity(0.8))
                     .padding()
-                BarChartView(title: "Distance made (Km)", value: "", data: [250, 427, 32, 500], labels: ["2022", "2023", "2024", "2025"], color: .indigo.opacity(0.8))
+                BarChartView(title: "Distance made (Km)", value: "", data: viewModel.distances.keys.sorted().map{viewModel.distances[$0]!}, labels: viewModel.keysToString(keys: viewModel.distances.keys.sorted()), color: .indigo.opacity(0.8))
                     .padding()
             }
             .padding()
@@ -197,7 +197,7 @@ struct InfoRow: View {
 struct BarChartView: View {
     let title: String
     let value: String
-    let data: [Double]
+    let data: [Int]
     let labels: [String]
     let color: Color
 
