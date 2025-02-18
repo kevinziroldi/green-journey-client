@@ -195,7 +195,6 @@ struct TravelSearchView: View {
                                 HStack (spacing: 0) {
                                     Button(action: {
                                         dateTapped = true
-                                        
                                     }) {
                                         VStack{
                                             Text("Outward date")
@@ -203,10 +202,10 @@ struct TravelSearchView: View {
                                             Text(viewModel.datePicked.formatted(date: .numeric, time: .shortened))
                                                 .font(.subheadline)
                                                 .padding(.top, 5)
-
+                                            
                                         }
                                         .foregroundStyle(colorScheme == .dark ? .white : .black)
-
+                                        
                                     }
                                     .padding(EdgeInsets(top: 10, leading: 25, bottom: 10, trailing: 25))
                                     .accessibilityIdentifier("outwardDateButton")
@@ -216,6 +215,7 @@ struct TravelSearchView: View {
                                     
                                     Button(action:  {
                                         dateReturnTapped = true
+                                        
                                     }) {
                                         VStack {
                                             Text("Return date")
@@ -256,6 +256,7 @@ struct TravelSearchView: View {
                                 .fixedSize()
                             }
                             .disabled(viewModel.departure.iata == "" || viewModel.arrival.iata == "")
+                            .padding(.top, 20)
                             .accessibilityIdentifier("searchButton")
                             
                             Spacer()
@@ -352,16 +353,16 @@ struct TravelSearchView: View {
                                         .frame(width: geometry.size.width/2 - 20, height: 60)
                                         
                                     }
+                                    
                                     Spacer()
                                 }
-                                
                             }
+                            .position(x: geometry.size.width/2, y: 100)
+                            
                             Spacer()
                             
                         }
                     }
-                    .background(.green.opacity(0.1))
-                    .blur(radius: (dateTapped || dateReturnTapped) ? 2 : 0) // Sfoca tutto il contenuto sottostante
                     .allowsHitTesting(!(dateTapped || dateReturnTapped))
                     .mask {
                         AnimatedRectangle(size: geometry.size, cornerRadius: 48, t: CGFloat(0.0))
@@ -372,37 +373,21 @@ struct TravelSearchView: View {
                     
                     // Modale per il DatePicker "Outward date"
                     if dateTapped {
-                        DatePickerModalView(
-                            title: "Select Outward Date",
-                            date: $viewModel.datePicked,
-                            onConfirm: {
-                                dateTapped = false
-                            },
-                            onReset: {
-                                viewModel.datePicked = Date() // Imposta la data predefinita
-                                dateTapped = false
-                            }
-                        )
+                        DatePickerView(dateTapped: $dateTapped, title: "Select Outward Date", date: $viewModel.datePicked)
+                            .transition(.move(edge: .bottom))
                     }
                     
                     // Modale per il DatePicker "Return date"
                     if dateReturnTapped && !viewModel.oneWay {
-                        DatePickerModalView(
-                            title: "Select Return Date",
-                            date: $viewModel.dateReturnPicked,
-                            onConfirm: {
-                                dateReturnTapped = false
-                            },
-                            onReset: {
-                                viewModel.dateReturnPicked = Date() // Imposta la data predefinita
-                                dateReturnTapped = false
-                            }
-                        )
+                        DatePickerView(dateTapped: $dateReturnTapped, title: "Select Return Date", date: $viewModel.dateReturnPicked)
+                            .transition(.move(edge: .bottom))
                     }
                 }
-                
             }
+            .toolbar((triggerAI || dateTapped || dateReturnTapped) ? .hidden : .automatic, for: .tabBar)
+            .navigationBarBackButtonHidden(triggerAI || dateTapped || dateReturnTapped)
         }
+        
     }
     
     private func getColorDest () -> Color {
@@ -418,49 +403,92 @@ struct TravelSearchView: View {
     }
 }
 
-struct DatePickerModalView: View {
+
+struct DatePickerView: View {
+    @Binding var dateTapped: Bool
+    @State private var offsetY: CGFloat = 0
     var title: String
     @Binding var date: Date
     @Environment(\.colorScheme) var colorScheme
-    var onConfirm: () -> Void
-    var onReset: () -> Void
-    
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(colorScheme == .dark ? Color.white.opacity(0.4) : Color.black.opacity(0.4), lineWidth: 2)
-            
-            VStack(spacing: 20) {
-                Text(title)
-                    .font(.headline)
-                
-                DatePicker("", selection: $date, in: Date()...Date.distantFuture)
-                    .datePickerStyle(.graphical)
-                    .labelsHidden()
-                
-                HStack {
-                    Button("Reset") {
-                        onReset()
+            // background opacity
+            if dateTapped {
+                Color.black.opacity(0.3)
+                    .edgesIgnoringSafeArea(.all)
+                    .onTapGesture {
+                        withAnimation(.easeInOut) {
+                            dateTapped = false
+                        }
                     }
-                    .buttonStyle(.bordered)
-                    
-                    Spacer()
-                    
-                    Button("Confirm") {
-                        onConfirm()
-                    }
-                    .buttonStyle(.borderedProminent)
-                }
-                .padding(.horizontal)
             }
-            .padding()
-            .cornerRadius(12)
             
+            // pop-up view
+            VStack {
+                Spacer()
+                
+                VStack {
+                    Capsule()
+                        .frame(width: 40, height: 5)
+                        .foregroundColor(.gray)
+                        .padding(.top, 8)
+                    ZStack {
+                        Text(title)
+                            .font(.headline)
+                            .padding(.top, 10)
+                        
+                        Button("Done") {
+                            dateTapped = false
+                        }
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                        .padding(.trailing, 10)
+                        
+                    }
+                    
+                    DatePicker("", selection: $date, in: Date()...Date.distantFuture)
+                        .datePickerStyle(.wheel)
+                        .labelsHidden()
+                    Spacer()
+                    Button("Back") {
+                        withAnimation(.easeInOut) {
+                            date = Date()
+                            dateTapped = false
+                        }
+                    }
+                    .padding(.bottom, 20)
+                }
+                .frame(maxWidth: .infinity)
+                .frame(height: 350)
+                .background(Color.white)
+                .cornerRadius(20)
+                .shadow(radius: 10)
+                .offset(y: offsetY)
+                .gesture(
+                    DragGesture()
+                        .onChanged { gesture in
+                            if gesture.translation.height > 0 {
+                                offsetY = gesture.translation.height
+                            }
+                        }
+                        .onEnded { gesture in
+                            if gesture.translation.height > 150 {
+                                withAnimation(.spring()) {
+                                    dateTapped = false
+                                    offsetY = 0
+                                }
+                            } else {
+                                withAnimation(.spring()) {
+                                    offsetY = 0
+                                }
+                            }
+                        }
+                )
+                .transition(.move(edge: .bottom))
+            }
+            .animation(.easeInOut, value: dateTapped)
         }
-        .background(colorScheme == .dark ? Color.black : Color.white)
-        .shadow(radius: 10)
-        .frame(width: 330, height: 500)
-        .cornerRadius(12)
+        .ignoresSafeArea()
+        
     }
 }
 
