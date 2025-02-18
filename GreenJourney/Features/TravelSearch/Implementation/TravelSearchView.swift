@@ -488,7 +488,6 @@ struct DatePickerView: View {
             .animation(.easeInOut, value: dateTapped)
         }
         .ignoresSafeArea()
-        
     }
 }
 

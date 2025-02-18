@@ -337,7 +337,8 @@ final class CitiesReviewsViewModelTest {
         #expect(viewModel.getNumPages() == 0)
     }
    
-    @Test
+    //TODO no longer needed, now pageInput is a Int
+    /*@Test
     func testValidatePageInputNotANumber() {
         // the server returns 2 reviews, 1 page
         self.mockServerService.shouldSucceed = true
@@ -349,7 +350,7 @@ final class CitiesReviewsViewModelTest {
         viewModel.validatePageInput()
         
         #expect(viewModel.page == oldPage)
-    }
+    }*/
     
     @Test
     func testValidatePageInputNumberOutOfRange() {
@@ -358,7 +359,7 @@ final class CitiesReviewsViewModelTest {
         self.mockServerService.twoReviews = false
         self.mockServerService.tenReviews = true
         
-        viewModel.pageInput = "10"
+        viewModel.pageInput = 10
         let oldPage = viewModel.page
         viewModel.validatePageInput()
         
@@ -372,7 +373,7 @@ final class CitiesReviewsViewModelTest {
         self.mockServerService.twoReviews = false
         self.mockServerService.tenReviews = true
         
-        viewModel.pageInput = "1"
+        viewModel.pageInput = 1
         viewModel.validatePageInput()
         
         #expect(viewModel.page == 0)
