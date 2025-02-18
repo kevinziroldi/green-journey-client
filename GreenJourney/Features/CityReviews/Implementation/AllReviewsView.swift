@@ -20,7 +20,7 @@ struct AllReviewsView: View {
                     Spacer()
                     Button(action: {
                         viewModel.page = 0
-                        viewModel.pageInput = "\(viewModel.page + 1)"
+                        viewModel.pageInput = viewModel.page + 1
                     }) {
                         Text("First")
                     }
@@ -28,7 +28,7 @@ struct AllReviewsView: View {
                     Spacer()
                     Button(action: {
                         viewModel.page -= 1
-                        viewModel.pageInput = "\(viewModel.page + 1)"
+                        viewModel.pageInput = viewModel.page + 1
                     }) {
                         Text("Previous")
                     }
@@ -37,7 +37,7 @@ struct AllReviewsView: View {
                     Spacer()
                     HStack (spacing: 0){
                         Text("Page")
-                        TextField("", text: $viewModel.pageInput)
+                        TextField("", text: viewModel.binding(for: $viewModel.pageInput))
                             .frame(width: 20)
                             .multilineTextAlignment(.trailing)
                             .foregroundStyle(.blue)
@@ -61,7 +61,7 @@ struct AllReviewsView: View {
                     Spacer()
                     Button(action: {
                         viewModel.page += 1
-                        viewModel.pageInput = "\(viewModel.page + 1)"
+                        viewModel.pageInput = viewModel.page + 1
                     }) {
                         Text("Next")
                     }
@@ -69,7 +69,7 @@ struct AllReviewsView: View {
                     Spacer()
                     Button(action: {
                         viewModel.page = viewModel.getNumPages() - 1
-                        viewModel.pageInput = "\(viewModel.page + 1)"
+                        viewModel.pageInput = viewModel.page + 1
                     }) {
                         Text("Last")
                     }

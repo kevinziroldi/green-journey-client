@@ -88,6 +88,12 @@ class TravelDetails: Codable, Identifiable {
         return totalPrice
     }
     
+    func computeGreenPrice() -> Float64 {
+        var greenPrice = computeTotalPrice()
+        greenPrice += (ceil(computeCo2Emitted()/75) * 2)
+        return greenPrice
+    }
+    
     func computeTotalDistance() -> Float64 {
         var totalDistance = 0.0
         for segment in self.segments {

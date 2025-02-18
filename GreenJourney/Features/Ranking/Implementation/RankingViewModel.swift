@@ -36,9 +36,15 @@ class RankingViewModel: ObservableObject {
             self.errorMessage = "An error occurred retrieving rankings from server"
             return
         }
+        //TODO levare print
+        for user in users {
+            print(user.firstName, user.badges)
+        }
         // get ranking from server
         do {
             let rankingResponse = try await serverService.getRanking(userID: userID)
+            //TODO levare print
+            print(rankingResponse.longDistanceRanking.first!.firstName, rankingResponse.longDistanceRanking.first!.badges)
             self.shortDistanceRanking = rankingResponse.shortDistanceRanking
             self.longDistanceRanking = rankingResponse.longDistanceRanking
         }catch {

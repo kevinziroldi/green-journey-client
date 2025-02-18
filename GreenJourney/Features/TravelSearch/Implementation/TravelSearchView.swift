@@ -135,7 +135,8 @@ struct TravelSearchView: View {
                                                       onClick: { city in
                                             departureTapped = false
                                             viewModel.departure = city
-                                        })
+                                        },
+                                                      departure: true)
                                     }
                                     
                                     VStack{
@@ -177,7 +178,8 @@ struct TravelSearchView: View {
                                             destinationTapped = false
                                             triggerAI = false
                                             viewModel.arrival = city
-                                        }
+                                        },
+                                                      departure: false
                                         )
                                     }
                                 }

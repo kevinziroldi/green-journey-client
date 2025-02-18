@@ -572,7 +572,6 @@ class MyTravelsViewModel: ObservableObject {
     }
      */
     
-    // TODO mettere le costanti sopra
     func getNumTrees(_ travel: TravelDetails) -> Int {
         if travel.computeCo2Emitted() == 0 {
             return 0

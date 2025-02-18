@@ -75,7 +75,8 @@ struct CitiesReviewsView: View {
                     viewModel.searchedCity = city
                     // for details view
                     viewModel.selectedCity = viewModel.searchedCity
-                }
+                },
+                              departure: false
                 )
             }
             

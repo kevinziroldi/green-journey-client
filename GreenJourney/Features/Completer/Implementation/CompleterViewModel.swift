@@ -6,7 +6,7 @@ import Combine
 @MainActor
 class CompleterViewModel: ObservableObject {
     var modelContext: ModelContext
-    
+    var departure: Bool
     @Published var suggestions: [CityCompleterDataset] = []
     @Published var searchText: String {
         didSet {
@@ -16,8 +16,9 @@ class CompleterViewModel: ObservableObject {
     private var continent: String = ""
     private var country: String = ""
     
-    init(modelContext: ModelContext) {
+    init(modelContext: ModelContext, departure: Bool) {
         self.modelContext = modelContext
+        self.departure = departure
         self.searchText = ""
         self.continent = findContinent()
         self.country = findCountry()
@@ -26,7 +27,14 @@ class CompleterViewModel: ObservableObject {
     
     private func search() {
         guard !searchText.isEmpty else {
-            suggestions = []
+            if self.departure {
+                //TODO funzione che calcola mete da cui è partito
+                suggestions = []
+            }
+            else {
+                //TODO funzione che chiama machine learning
+                suggestions = []
+            }
             return
         }
         

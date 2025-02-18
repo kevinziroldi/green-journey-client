@@ -1,6 +1,7 @@
 import Combine
 import Foundation
 import SwiftData
+import SwiftUI
 
 @MainActor
 class CitiesReviewsViewModel: ObservableObject {
@@ -22,7 +23,7 @@ class CitiesReviewsViewModel: ObservableObject {
     
     @Published var userReview: Review?
     @Published var page: Int = 0
-    @Published var pageInput: String = "1" // Textfield input
+    @Published var pageInput: Int = 1 // Textfield input
     
     
     init(modelContext: ModelContext, serverService: ServerServiceProtocol) {
@@ -132,14 +133,28 @@ class CitiesReviewsViewModel: ObservableObject {
     }
     
     func validatePageInput() {
-        if let page = Int(self.pageInput) {
-            if page >= 1 && page <= getNumPages() {
-                self.page = page - 1
-            }
-            self.pageInput = "\(self.page + 1)" // go back on the previous page
+        if pageInput >= 1 && pageInput <= getNumPages() {
+            self.page = pageInput - 1
         }
+        self.pageInput = self.page + 1 // go back on the previous page
     }
+    
+    func binding(for value: Binding<Int>) -> Binding<String> {
+            Binding<String>(
+                get: {
+                    return String(value.wrappedValue)
+                },
+                set: { newValue in
+                    if let intValue = Int(newValue) {
+                        value.wrappedValue = intValue
+                    } else {
+                        value.wrappedValue = 0
+                    }
+                }
+            )
+        }
 }
+
 extension CitiesReviewsViewModel: Hashable {
     nonisolated static func == (lhs: CitiesReviewsViewModel, rhs: CitiesReviewsViewModel) -> Bool {
         return lhs.uuid == rhs.uuid
