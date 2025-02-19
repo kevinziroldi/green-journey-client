@@ -9,6 +9,8 @@ struct EmailVerificationView: View {
             Text("Email verification")
                 .font(.largeTitle)
                 .padding(.bottom, 32)
+                .accessibilityIdentifier("emailVerificationTitle")
+            
             Image("loginLogo")
                 .resizable()
                 .padding()

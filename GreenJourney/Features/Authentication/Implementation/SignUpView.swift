@@ -20,30 +20,38 @@ struct SignUpView: View {
                         .padding()
                         .background(Color.gray.opacity(0.2))
                         .cornerRadius(8)
+                        .accessibilityIdentifier("emailTextField")
                     
                     SecureField("Password", text: $viewModel.password)
                         .padding()
                         .background(Color.gray.opacity(0.2))
                         .cornerRadius(8)
+                        .accessibilityIdentifier("passwordSecureField")
+                    
                     SecureField("Repeat Password", text: $viewModel.repeatPassword)
                         .padding()
                         .background(Color.gray.opacity(0.2))
                         .cornerRadius(8)
+                        .accessibilityIdentifier("repeatPasswordSecureField")
                     
                     TextField("First name", text: $viewModel.firstName)
                         .padding()
                         .background(Color.gray.opacity(0.2))
                         .cornerRadius(8)
+                        .accessibilityIdentifier("firstName")
                     
                     TextField("Last name", text: $viewModel.lastName)
                         .padding()
                         .background(Color.gray.opacity(0.2))
                         .cornerRadius(8)
+                        .accessibilityIdentifier("lastName")
+                    
                     // error message
                     if let errorMessage = viewModel.errorMessage {
                         Text(errorMessage)
                             .foregroundColor(.red)
                             .font(.caption)
+                            .accessibilityIdentifier("errorMessageLabelSignup")
                     }
                     
                     VStack {
@@ -59,6 +67,7 @@ struct SignUpView: View {
                                 .background(Color.blue)
                                 .cornerRadius(30)
                         }
+                        .accessibilityIdentifier("createAccountButton")
                         
                         HStack {
                             Rectangle()
@@ -82,7 +91,6 @@ struct SignUpView: View {
                                 .fill(Color.white)
                                 .shadow(radius: 1)
                             
-                            
                             Button(action: {
                                 Task {
                                     await viewModel.signInWithGoogle()
@@ -104,6 +112,7 @@ struct SignUpView: View {
                                 .padding(EdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 0))
                                 
                             }
+                            .accessibilityIdentifier("googleSignInButton")
                         }
                         
                         VStack {
@@ -115,6 +124,7 @@ struct SignUpView: View {
                                     navigationPath.removeLast()
                                 }
                             }
+                            .accessibilityIdentifier("moveToLoginButton")
                         }
                         .padding(.top, 25)
                     }

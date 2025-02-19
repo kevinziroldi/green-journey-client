@@ -20,10 +20,10 @@ final class LoginViewUITests: XCTestCase {
         let passwordField = app.secureTextFields["passwordSecureField"]
         let resendEmailTextField = app.textFields["resendEmailLabel"]
         let resetPasswordButton = app.buttons["resetPasswordButton"]
-        let errorMessageTextField = app.textFields["errorMessageLabel"]
+        let errorMessageTextField = app.textFields["errorMessageLabelLogin"]
         let loginButton = app.buttons["loginButton"]
         let googleButton = app.buttons["googleSignInButton"]
-        let signUpButton = app.buttons["signUpButton"]
+        let signUpButton = app.buttons["moveToSignUpButton"]
         
         // check UI are elements present
         XCTAssertTrue(loginLogoImage.exists, "The logo image is not displayed")
@@ -68,7 +68,7 @@ final class LoginViewUITests: XCTestCase {
         let passwordField = app.secureTextFields["passwordSecureField"]
         let loginButton = app.buttons["loginButton"]
         let loginLogoImage = app.images["loginLogoImage"]
-        let errorMessageTextField = app.staticTexts["errorMessageLabel"]
+        let errorMessageTextField = app.staticTexts["errorMessageLabelLogin"]
         
         // check UI are elements present
         XCTAssertTrue(emailTextField.exists, "The email field is not displayed")
@@ -102,7 +102,7 @@ final class LoginViewUITests: XCTestCase {
     
     func testSignUpNavigation() {
         // UI elements
-        let signUpButton = app.buttons["signUpButton"]
+        let signUpButton = app.buttons["moveToSignUpButton"]
         let signupLogoImage = app.images["signupLogoImage"]
         
         XCTAssertTrue(signUpButton.exists, "The signup button is not displayed")
@@ -133,7 +133,7 @@ final class LoginViewUITests: XCTestCase {
         // UI elements
         let emailTextField = app.textFields["emailTextField"]
         let resetPasswordButton = app.buttons["resetPasswordButton"]
-        let errorMessageTextField = app.staticTexts["errorMessageLabel"]
+        let errorMessageTextField = app.staticTexts["errorMessageLabelLogin"]
         
         // check UI elements exist
         XCTAssertTrue(emailTextField.exists, "The email field is not displayed")

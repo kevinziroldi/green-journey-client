@@ -41,8 +41,6 @@ struct LoginView: View {
                         .cornerRadius(8)
                         .accessibilityIdentifier("passwordSecureField")
                     
-                    
-                    
                     Button("Reset password") {
                         Task {
                             await viewModel.resetPassword(email: viewModel.email)
@@ -55,7 +53,7 @@ struct LoginView: View {
                     if let errorMessage = viewModel.errorMessage {
                         Text(errorMessage)
                             .foregroundColor(.red)
-                            .accessibilityIdentifier("errorMessageLabel")
+                            .accessibilityIdentifier("errorMessageLabelLogin")
                     }
                     
                     if let resendMessage = viewModel.resendEmail {
@@ -138,7 +136,7 @@ struct LoginView: View {
                         viewModel.errorMessage = nil
                         navigationPath.append(NavigationDestination.SignupView(viewModel))
                     }
-                    .accessibilityIdentifier("signUpButton")
+                    .accessibilityIdentifier("moveToSignUpButton")
                 }
                 .padding(.top, 15)
             }
