@@ -26,12 +26,14 @@ class CompleterViewModel: ObservableObject {
     }
     
     private func search() {
-        guard !searchText.isEmpty else {
+        if searchText.isEmpty {
             if self.departure {
-                //TODO funzione che calcola mete da cui è partito
-                suggestions = []
+                print("dep")
+                suggestions = getDepartureHistory()
+                
             }
             else {
+                print("no dep")
                 //TODO funzione che chiama machine learning
                 suggestions = []
             }
@@ -126,4 +128,49 @@ class CompleterViewModel: ObservableObject {
         }
         return score
     }
+    
+    private func getDepartureHistory() -> [CityCompleterDataset] {
+        var history: [CityCompleterDataset] = []
+        do {
+            let travels = try modelContext.fetch(FetchDescriptor<Travel>())
+            let segments = try modelContext.fetch(FetchDescriptor<Segment>())
+            
+            let segmentsByTravelID = Dictionary(grouping: segments, by: { $0.travelID })
+            let travelDetailsList = travels.compactMap { travel in
+                if let travelID = travel.travelID {
+                    if let travelSegments = segmentsByTravelID[travelID] {
+                        return TravelDetails(travel: travel, segments: travelSegments)
+                    } else {
+                        return TravelDetails(travel: travel, segments: [])
+                    }
+                }
+                return nil
+            }
+            
+            for travel in travelDetailsList {
+                guard let country = travel.getDepartureSegment()?.departureCountry else {continue}
+                guard let city = travel.getDepartureSegment()?.departureCity else {continue}
+                print(country, city)
+                var fetchDescriptor = FetchDescriptor<CityCompleterDataset>(
+                    predicate: #Predicate<CityCompleterDataset> {
+                        $0.countryName == country &&
+                        $0.cityName == city }
+                )
+                fetchDescriptor.fetchLimit = 1
+                
+                if let cityHistory = try modelContext.fetch(fetchDescriptor).first {
+                    
+                    if !history.contains(cityHistory) {
+                        history.append(cityHistory)
+                        print(cityHistory.cityName)
+                    }
+                }
+            }
+        }
+        catch {
+            print("Error retrieving travels from SwiftData")
+        }
+        return history
+    }
+    
 }
