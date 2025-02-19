@@ -64,6 +64,7 @@ struct SignUpView: View {
                                 .background(Color.blue)
                                 .cornerRadius(30)
                         }
+                        .accessibilityIdentifier("createAccountButton")
                         
                         HStack {
                             Rectangle()
@@ -87,7 +88,6 @@ struct SignUpView: View {
                                 .fill(Color.white)
                                 .shadow(radius: 1)
                             
-                            
                             Button(action: {
                                 Task {
                                     await viewModel.signInWithGoogle()
@@ -109,6 +109,7 @@ struct SignUpView: View {
                                 .padding(EdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 0))
                                 
                             }
+                            .accessibilityIdentifier("googleSignInButton")
                         }
                         VStack {
                             Text("Already have an account?")
@@ -119,6 +120,7 @@ struct SignUpView: View {
                                     navigationPath.removeLast()
                                 }
                             }
+                            .accessibilityIdentifier("moveToLoginButton")
                         }
                         .padding(.top, 100)
                     }

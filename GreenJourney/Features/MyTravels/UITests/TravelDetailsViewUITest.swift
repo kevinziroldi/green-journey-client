@@ -8,6 +8,8 @@ final class TravelDetailsViewUITest: XCTestCase {
         continueAfterFailure = false
         app.launchArguments.append("ui_tests")
         app.launch()
+        
+        navigateToTravelDetailsView()
     }
     
     override func tearDownWithError() throws {
@@ -45,7 +47,7 @@ final class TravelDetailsViewUITest: XCTestCase {
         XCTAssertTrue(myTravelsTitle.waitForExistence(timeout: timer), "MyTravelsView not appeared after selecting it")
         
         // UI elements
-        let travelCardButton = app.buttons.matching(identifier: "travelCardButton_107").firstMatch
+        let travelCardButton = app.buttons.matching(identifier: "travelCardButton_115").firstMatch
         // check travel card present
         XCTAssertTrue(travelCardButton.waitForExistence(timeout: timer), "The travel card was not found")
         
@@ -57,78 +59,143 @@ final class TravelDetailsViewUITest: XCTestCase {
         XCTAssertTrue(headerView.waitForExistence(timeout: timer), "The travel details view was not displayed")
     }
     
-    func testEmpty() {
+    func testTravelDetailsViewElementsExist() {
+        // UI elements
+        let headerView = app.otherElements["headerView"]
+        let compensationSection = app.otherElements["compensationSection"]
+        let travelRecap = app.otherElements["travelRecap"]
+        let infoButton = app.buttons["infoButton"]
+        let plusTreesButton = app.buttons["plusButton"]
+        let minusTreesButton = app.buttons["minusButton"]
+        let compensateButton = app.buttons["compensateButton"]
+        let reviewButton = app.buttons["reviewButton"]
+        let trashButton = app.buttons["trashButton"]
+        let outwardSegmentsTitle = app.staticTexts["segmentsTitle"]
+        let outwardSegmentsView = app.otherElements["outwardSegmentsView"]
+        let returnSegmentsTitle = app.staticTexts["returnTitle"]
+        let returnSegmentsView = app.otherElements["returnSegmentsView"]
+        
+        // check elements present
+        XCTAssertTrue(headerView.exists, "headerView not displayed")
+        XCTAssertTrue(compensationSection.exists, "compensationSection not displayed")
+        XCTAssertTrue(travelRecap.exists, "travelRecap not displayed")
+       
+        XCTAssertTrue(infoButton.exists, "infoButton not displayed")
+        XCTAssertTrue(plusTreesButton.exists, "plusTreesButton not displayed")
+        XCTAssertTrue(minusTreesButton.exists, "minusTreesButton not displayed")
+        XCTAssertTrue(compensateButton.exists, "compensateButton not displayed")
+       
+        XCTAssertTrue(reviewButton.exists, "reviewButton not displayed")
+        XCTAssertTrue(trashButton.exists, "trashButton not displayed")
+        
+        app.swipeUp()
+        
+        XCTAssertTrue(outwardSegmentsTitle.exists, "outwardSegmentsTitle not displayed")
+        XCTAssertTrue(outwardSegmentsView.exists, "outwardSegmentsView not displayed")
+        XCTAssertTrue(returnSegmentsTitle.waitForExistence(timeout: timer), "HeaderView not displayed")
+        XCTAssertTrue(returnSegmentsView.exists, "HeaderView not displayed")
         
     }
     
     /*
+    // TODO non funziona, in teoria per via dell'area troppo picolla del bottone
     func testInfoButtonOpensAndClosesInfoView() {
-        // Trova e tocca il bottone info
+        // UI elements
         let infoButton = app.buttons["infoButton"]
-        XCTAssertTrue(infoButton.waitForExistence(timeout: 2), "Il bottone info dovrebbe esistere")
+        let infoCompensationView = app.otherElements["infoCompensationView"]
+        let infoCloseButton = app.buttons["infoCloseButton"]
+        
+        // check elements displayed
+        XCTAssertTrue(infoButton.exists, "infoCompensationView not displayed")
+        XCTAssertFalse(infoCompensationView.exists, "infoCompensationView already displayed")
+        XCTAssertFalse(infoCloseButton.exists, "infoCloseButton already displayed")
+        
+        // tap info button
         infoButton.tap()
         
-        // Verifica che la InfoCompensationView sia visualizzata
-        let infoView = app.otherElements["infoCompensationView"]
-        XCTAssertTrue(infoView.waitForExistence(timeout: 2), "La vista info dovrebbe apparire")
+        // check elements displayed
+        XCTAssertFalse(infoCompensationView.waitForExistence(timeout: timer), "infoCompensationView not displayed")
+        XCTAssertFalse(infoCloseButton.exists, "infoCloseButton not displayed")
         
-        // Chiude la vista
-        let closeButton = app.buttons["infoCloseButton"]
-        XCTAssertTrue(closeButton.exists, "Il bottone di chiusura dovrebbe esistere")
-        closeButton.tap()
-        XCTAssertFalse(infoView.exists, "La vista info dovrebbe essere chiusa")
+        // close info section
+        infoCloseButton.tap()
+        
+        // check elements displayed
+        XCTAssertTrue(infoButton.exists, "infoCompensationView not displayed")
+        XCTAssertFalse(infoCompensationView.exists, "infoCompensationView already displayed")
+        XCTAssertFalse(infoCloseButton.exists, "infoCloseButton already displayed")
     }
-    
+
+    // TODO non funziona, in teoria per via dell'area troppo picolla del bottone
     func testIncrementAndDecrementTrees() {
-        let plusButton = app.buttons["plusButton"]
-        let minusButton = app.buttons["minusButton"]
-        let treesCountLabel = app.staticTexts["treesCountLabel"]
+        let plusTreesButton = app.buttons["plusButton"]
+        let minusTreesButton = app.buttons["minusButton"]
+        let compensateButton = app.buttons["compensateButton"]
         
-        XCTAssertTrue(plusButton.waitForExistence(timeout: 2), "Il bottone '+' dovrebbe esistere")
-        XCTAssertTrue(minusButton.exists, "Il bottone '-' dovrebbe esistere")
-        XCTAssertTrue(treesCountLabel.exists, "La label del conteggio degli alberi dovrebbe esistere")
+        XCTAssertTrue(plusTreesButton.waitForExistence(timeout: timer), "The plus button is not displayed")
+        XCTAssertTrue(minusTreesButton.waitForExistence(timeout: timer), "The minus button is not displayed")
+        XCTAssertTrue(compensateButton.exists, "The compensate button is not displayed")
         
-        // Cattura il valore iniziale
-        let initialValue = treesCountLabel.label
+        plusTreesButton.tap()
+        minusTreesButton.tap()
+        compensateButton.tap()
         
-        plusButton.tap()
-        // Attendi il cambiamento (eventualmente con una pausa o aspettando un'animazione)
-        sleep(1)
-        let incrementedValue = treesCountLabel.label
-        XCTAssertNotEqual(initialValue, incrementedValue, "Il conteggio degli alberi dovrebbe incrementare")
-        
-        minusButton.tap()
-        sleep(1)
-        let decrementedValue = treesCountLabel.label
-        XCTAssertEqual(initialValue, decrementedValue, "Il conteggio degli alberi dovrebbe tornare al valore iniziale")
+        XCTAssertTrue(plusTreesButton.waitForExistence(timeout: timer), "The plus button is not displayed")
+        XCTAssertTrue(minusTreesButton.waitForExistence(timeout: timer), "The minus button is not displayed")
+        XCTAssertTrue(compensateButton.exists, "The compensate button is not displayed")
     }
     
-    func testCompensateButton() {
+    // TODO non funziona, in teoria per via dell'area troppo picolla del bottone
+    func testCompensateButtonTap() {
+        let plusTreesButton = app.buttons["plusButton"]
+        let minusTreesButton = app.buttons["minusButton"]
         let compensateButton = app.buttons["compensateButton"]
-        XCTAssertTrue(compensateButton.waitForExistence(timeout: 2), "Il bottone di compensazione dovrebbe esistere")
+        
+        XCTAssertTrue(plusTreesButton.waitForExistence(timeout: timer), "The plus button is not displayed")
+        XCTAssertTrue(minusTreesButton.waitForExistence(timeout: timer), "The minus button is not displayed")
+        XCTAssertTrue(compensateButton.exists, "The compensate button is not displayed")
+        
+        plusTreesButton.tap()
         compensateButton.tap()
-        // Aggiungi ulteriori verifiche se l'azione porta a cambiamenti visibili nell'UI
+        
+        XCTAssertTrue(plusTreesButton.waitForExistence(timeout: timer), "The plus button is not displayed")
+        XCTAssertTrue(minusTreesButton.waitForExistence(timeout: timer), "The minus button is not displayed")
+        XCTAssertTrue(compensateButton.exists, "The compensate button is not displayed")
     }
     
     func testReviewButton() {
+        let headerView = app.otherElements["headerView"]
         let reviewButton = app.buttons["reviewButton"]
-        XCTAssertTrue(reviewButton.waitForExistence(timeout: 2), "Il bottone review dovrebbe esistere")
+        
+        XCTAssertTrue(headerView.waitForExistence(timeout: timer), "The header view is not displayed")
+        XCTAssertTrue(reviewButton.exists, "The review button is not displayed")
+        
         reviewButton.tap()
-        // Aggiungi verifiche per l'azione di review se implementata
+        
+        // TODO manca view annidata
+        XCTAssertFalse(headerView.waitForExistence(timeout: timer), "The header view is still displayed")
+        // TODO check view annidata
     }
+     */
     
     func testTrashButtonAlert() {
         let trashButton = app.buttons["trashButton"]
-        XCTAssertTrue(trashButton.waitForExistence(timeout: 2), "Il bottone trash dovrebbe esistere")
+        XCTAssertTrue(trashButton.waitForExistence(timeout: timer), "The trash button is not displayed")
+        
+        app.swipeUp()
+        
         trashButton.tap()
         
         let deleteAlert = app.alerts.firstMatch
-        XCTAssertTrue(deleteAlert.waitForExistence(timeout: 2), "L'alert di cancellazione dovrebbe apparire")
+        XCTAssertTrue(deleteAlert.waitForExistence(timeout: timer), "The alert was not shown")
         
         let cancelButton = deleteAlert.buttons["Cancel"]
-        XCTAssertTrue(cancelButton.exists, "Il bottone Cancel dovrebbe esistere nell'alert")
+        let deleteButton = deleteAlert.buttons["Delete"]
+        XCTAssertTrue(cancelButton.exists, "The cancel button is not present")
+        XCTAssertTrue(deleteButton.exists, "The delete button is not present")
+        
         cancelButton.tap()
-        XCTAssertFalse(deleteAlert.exists, "L'alert dovrebbe essere chiuso dopo aver premuto Cancel")
+        
+        XCTAssertFalse(deleteAlert.exists, "The alert is displayed and should not")
     }
-     */
 }
