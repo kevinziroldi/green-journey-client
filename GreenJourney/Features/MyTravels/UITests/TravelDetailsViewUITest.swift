@@ -8,15 +8,45 @@ final class TravelDetailsViewUITest: XCTestCase {
         continueAfterFailure = false
         app.launchArguments.append("ui_tests")
         app.launch()
-        
-        navigateToTravelDetailsView()
     }
     
     override func tearDownWithError() throws {
         app.terminate()
     }
     
-    private func navigateToTravelDetailsView() {
+    private func navigateToTravelDetailsViewTravelNotConfirmed() {
+        navigateToMyTravelsView()
+        
+        // UI elements
+        let travelCardButton = app.buttons.matching(identifier: "travelCardButton_115").firstMatch
+        // check travel card present
+        XCTAssertTrue(travelCardButton.waitForExistence(timeout: timer), "The travel card was not found")
+        
+        // tap travel card
+        travelCardButton.tap()
+        
+        // check travel details view
+        let headerView = app.otherElements["headerView"]
+        XCTAssertTrue(headerView.waitForExistence(timeout: timer), "The travel details view was not displayed")
+    }
+    
+    private func navigateToTravelDetailsViewTravelConfirmed() {
+        navigateToMyTravelsView()
+        
+        // UI elements
+        let travelCardButton = app.buttons.matching(identifier: "travelCardButton_116").firstMatch
+        // check travel card present
+        XCTAssertTrue(travelCardButton.waitForExistence(timeout: timer), "The travel card was not found")
+        
+        // tap travel card
+        travelCardButton.tap()
+        
+        // check travel details view
+        let headerView = app.otherElements["headerView"]
+        XCTAssertTrue(headerView.waitForExistence(timeout: timer), "The travel details view was not displayed")
+    }
+    
+    private func navigateToMyTravelsView() {
         // UI elements
         let emailTextField = app.textFields["emailTextField"]
         let passwordField = app.secureTextFields["passwordSecureField"]
@@ -45,21 +75,11 @@ final class TravelDetailsViewUITest: XCTestCase {
         
         // check MyTravels page
         XCTAssertTrue(myTravelsTitle.waitForExistence(timeout: timer), "MyTravelsView not appeared after selecting it")
-        
-        // UI elements
-        let travelCardButton = app.buttons.matching(identifier: "travelCardButton_115").firstMatch
-        // check travel card present
-        XCTAssertTrue(travelCardButton.waitForExistence(timeout: timer), "The travel card was not found")
-        
-        // tap travel card
-        travelCardButton.tap()
-        
-        // check travel details view
-        let headerView = app.otherElements["headerView"]
-        XCTAssertTrue(headerView.waitForExistence(timeout: timer), "The travel details view was not displayed")
     }
     
-    func testTravelDetailsViewElementsExist() {
+    func testTravelDetailsViewElementsExistTravelConfirmed() {
+        navigateToTravelDetailsViewTravelConfirmed()
+        
         // UI elements
         let headerView = app.otherElements["headerView"]
         let compensationSection = app.otherElements["compensationSection"]
@@ -74,12 +94,14 @@ final class TravelDetailsViewUITest: XCTestCase {
         let outwardSegmentsView = app.otherElements["outwardSegmentsView"]
         let returnSegmentsTitle = app.staticTexts["returnTitle"]
         let returnSegmentsView = app.otherElements["returnSegmentsView"]
+        let emissionsRecapFutureTravel = app.otherElements["emissionsRecapFutureTravel"]
         
         // check elements present
         XCTAssertTrue(headerView.exists, "headerView not displayed")
         XCTAssertTrue(compensationSection.exists, "compensationSection not displayed")
         XCTAssertTrue(travelRecap.exists, "travelRecap not displayed")
-       
+        XCTAssertFalse(emissionsRecapFutureTravel.exists, "emission recap displyed for a confirmed travel")
+        
         XCTAssertTrue(infoButton.exists, "infoButton not displayed")
         XCTAssertTrue(plusTreesButton.exists, "plusTreesButton not displayed")
         XCTAssertTrue(minusTreesButton.exists, "minusTreesButton not displayed")
@@ -94,10 +116,53 @@ final class TravelDetailsViewUITest: XCTestCase {
         XCTAssertTrue(outwardSegmentsView.exists, "outwardSegmentsView not displayed")
         XCTAssertTrue(returnSegmentsTitle.waitForExistence(timeout: timer), "HeaderView not displayed")
         XCTAssertTrue(returnSegmentsView.exists, "HeaderView not displayed")
+    }
+    
+    func testTravelDetailsViewElementsExistTravelNotConfirmed() {
+        navigateToTravelDetailsViewTravelNotConfirmed()
         
+        // UI elements
+        let headerView = app.otherElements["headerView"]
+        let compensationSection = app.otherElements["compensationSection"]
+        let travelRecap = app.otherElements["travelRecap"]
+        let infoButton = app.buttons["infoButton"]
+        let plusTreesButton = app.buttons["plusButton"]
+        let minusTreesButton = app.buttons["minusButton"]
+        let compensateButton = app.buttons["compensateButton"]
+        let reviewButton = app.buttons["reviewButton"]
+        let trashButton = app.buttons["trashButton"]
+        let outwardSegmentsTitle = app.staticTexts["segmentsTitle"]
+        let outwardSegmentsView = app.otherElements["outwardSegmentsView"]
+        let returnSegmentsTitle = app.staticTexts["returnTitle"]
+        let returnSegmentsView = app.otherElements["returnSegmentsView"]
+        let emissionsRecapFutureTravel = app.otherElements["emissionsRecapFutureTravel"]
+        
+        // check emission section not present
+        XCTAssertFalse(compensationSection.exists, "compensationSection displayed")
+        XCTAssertFalse(infoButton.exists, "infoButton displayed")
+        XCTAssertFalse(plusTreesButton.exists, "plusTreesButton displayed")
+        XCTAssertFalse(minusTreesButton.exists, "minusTreesButton displayed")
+        XCTAssertFalse(compensateButton.exists, "compensateButton displayed")
+        XCTAssertFalse(reviewButton.exists, "reviewButton not displayed")
+        
+        // check elements present
+        XCTAssertTrue(headerView.exists, "headerView not displayed")
+        XCTAssertTrue(travelRecap.exists, "travelRecap not displayed")
+        XCTAssertTrue(emissionsRecapFutureTravel.exists, "emission recap displyed for a confirmed travel")
+        XCTAssertTrue(trashButton.exists, "trashButton not displayed")
+        
+        app.swipeUp()
+        
+        XCTAssertTrue(outwardSegmentsTitle.exists, "outwardSegmentsTitle not displayed")
+        XCTAssertTrue(outwardSegmentsView.exists, "outwardSegmentsView not displayed")
+        XCTAssertTrue(returnSegmentsTitle.waitForExistence(timeout: timer), "HeaderView not displayed")
+        XCTAssertTrue(returnSegmentsView.exists, "HeaderView not displayed")
     }
     
     /*
+     
+     // TODO, per tutti aggiungere navigation alla travel details view confirmed / not confirmed
+     
     // TODO non funziona, in teoria per via dell'area troppo picolla del bottone
     func testInfoButtonOpensAndClosesInfoView() {
         // UI elements
@@ -179,6 +244,8 @@ final class TravelDetailsViewUITest: XCTestCase {
      */
     
     func testTrashButtonAlert() {
+        navigateToTravelDetailsViewTravelConfirmed()
+        
         let trashButton = app.buttons["trashButton"]
         XCTAssertTrue(trashButton.waitForExistence(timeout: timer), "The trash button is not displayed")
         
