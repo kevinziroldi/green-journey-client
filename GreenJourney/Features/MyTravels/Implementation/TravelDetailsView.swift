@@ -12,23 +12,29 @@ struct TravelDetailsView: View {
     @State var totalTrees = 0
     
     var body : some View {
-        
         if let travelDetails = viewModel.selectedTravel {
             ZStack {
                 VStack (spacing:0){
                     HeaderView(from: travelDetails.getDepartureSegment()?.departureCity ?? "", to: travelDetails.getDestinationSegment()?.destinationCity ?? "", date: travelDetails.segments.first?.dateTime, dateArrival: travelDetails.segments.last?.getArrivalDateTime())
+                        .accessibilityElement(children: .ignore)
+                           .overlay(
+                               Color.clear
+                                   .accessibilityIdentifier("headerView")
+                           )
                     
                     Rectangle()
                         .frame(height: 1)
                         .foregroundStyle(.gray)
+                        .accessibilityIdentifier("divider")
+                    
                     ScrollView {
-                        
                         ZStack {
                             RoundedRectangle(cornerRadius: 20)
                                 .fill(colorScheme == .dark ? Color(red: 20/255, green: 20/255, blue: 20/255) : Color(red: 235/255, green: 235/255, blue: 235/255))
                                 .strokeBorder(
                                     LinearGradient(gradient: Gradient(colors: [.green, .mint, .cyan, .blue]),
                                                    startPoint: .topTrailing, endPoint: .bottomLeading), lineWidth: 4)
+                                .accessibilityIdentifier("backgroundRoundedRectangle")
                             HStack (spacing: 30){
                                 VStack {
                                     ZStack {
@@ -36,20 +42,24 @@ struct TravelDetailsView: View {
                                             .stroke(style: StrokeStyle(lineWidth: 10, lineCap: .round))
                                             .foregroundColor(.gray.opacity(0.6))
                                             .frame(width: 130, height: 110)
+                                            .accessibilityIdentifier("semiCircleBackground")
                                         
                                         // semiCircle filled
                                         SemiCircle(progress: progress)
                                             .stroke(style: StrokeStyle(lineWidth: 10, lineCap: .round))
                                             .foregroundStyle(LinearGradient(gradient: Gradient(colors: [.red, .orange, .yellow, .green, .mint]), startPoint: .leading, endPoint: .trailing))
                                             .frame(width: 130, height: 110)
+                                            .accessibilityIdentifier("semiCircleProgress")
                                         
                                         VStack (spacing: 15){
                                             Image(systemName: "carbon.dioxide.cloud")
                                                 .font(.largeTitle)
                                                 .scaleEffect(1.5)
+                                                .accessibilityIdentifier("co2Cloud")
                                             Text(String(format: "%.0f", progress * 100) + "%")
                                                 .font(.headline)
                                                 .fontWeight(.bold)
+                                                .accessibilityIdentifier("progressText")
                                         }
                                         .foregroundStyle(computeColor(progress))
                                         
@@ -58,8 +68,10 @@ struct TravelDetailsView: View {
                                     
                                     HStack {
                                         Text("  0 Kg       ")
+                                            .accessibilityIdentifier("minCo2Label")
                                         
                                         Text(String(format: "%.1f", travelDetails.computeCo2Emitted()) + " Kg")
+                                            .accessibilityIdentifier("maxCo2Label")
                                     }
                                     .font(.headline)
                                     
@@ -74,14 +86,17 @@ struct TravelDetailsView: View {
                                             .font(.title2)
                                             .foregroundStyle(.green.opacity(0.8))
                                             .fontWeight(.semibold)
+                                            .accessibilityIdentifier("compensationTitle")
                                         Spacer()
                                         HStack {
                                             Spacer()
                                             Text("\(plantedTrees) / \(totalTrees)")
                                                 .padding(.top, 5)
                                                 .font(.headline)
+                                                .accessibilityIdentifier("treesCountLabel")
                                             Image(systemName: "tree")
                                                 .font(.title2)
+                                                .accessibilityIdentifier("treeIcon")
                                             
                                             Button(action: {
                                                 infoTapped = true
@@ -89,7 +104,10 @@ struct TravelDetailsView: View {
                                                 Image(systemName: "info.circle")
                                                     .foregroundStyle(.gray)
                                             }
+                                            .accessibilityIdentifier("infoButton")
+                                            
                                             Spacer()
+                                            
                                             VStack (spacing: 5) {
                                                 Button(action: {
                                                     if plantedTrees < totalTrees {
@@ -99,6 +117,8 @@ struct TravelDetailsView: View {
                                                     Image(systemName: "plus.circle")
                                                         .foregroundStyle(.black)
                                                 }
+                                                .accessibilityIdentifier("plusButton")
+                                                
                                                 Button(action: {
                                                     if plantedTrees > 0 {
                                                         plantedTrees -= 1
@@ -107,12 +127,14 @@ struct TravelDetailsView: View {
                                                     Image(systemName: "minus.circle")
                                                         .foregroundStyle(.black)
                                                 }
+                                                .accessibilityIdentifier("minusButton")
                                             }
                                             
                                         }
                                         .padding(.trailing, 15)
                                         HStack {
                                             Text("Price: \(plantedTrees * 2) €")
+                                                .accessibilityIdentifier("priceLabel")
                                         }
                                         Spacer()
                                         Button(action: {
@@ -137,6 +159,7 @@ struct TravelDetailsView: View {
                                             .fixedSize()
                                         }
                                         .padding(.bottom, 15)
+                                        .accessibilityIdentifier("compensateButton")
                                     }
                                 }
                                 else {
@@ -144,10 +167,13 @@ struct TravelDetailsView: View {
                                         Text("Compensation 100%")
                                             .foregroundStyle(.green)
                                             .font(.headline)
+                                            .accessibilityIdentifier("compensationCompletedLabel")
                                         HStack (spacing: 0){
                                             Text("you planted: \(plantedTrees)")
+                                                .accessibilityIdentifier("plantedTreesLabel")
                                             Image(systemName: "tree")
                                                 .padding(.bottom, 5)
+                                                .accessibilityIdentifier("treeIconCompleted")
                                         }
                                         .padding()
                                         
@@ -168,7 +194,7 @@ struct TravelDetailsView: View {
                         
                         TravelRecapView(travelDetails: travelDetails)
                             .padding(.horizontal)
-                            
+                            .accessibilityIdentifier("travelRecapView")
                         
                         // if the user hasn't left a review yet
                         Button(action: {
@@ -182,49 +208,57 @@ struct TravelDetailsView: View {
                                     .padding()
                             }
                         }
+                        .accessibilityIdentifier("reviewButton")
+                        
                         HStack {
                             Text(travelDetails.isOneway() ? "Segments" : "Outward")
                                 .font(.title)
                                 .fontWeight(.semibold)
+                                .accessibilityIdentifier("segmentsTitle")
                             Spacer()
                             
-                                Button(action: {
-                                    showAlert = true
-                                }) {
-                                    Image(systemName: "trash.circle")
-                                        .font(.largeTitle)
-                                        .scaleEffect(1.2)
-                                        .fontWeight(.light)
-                                        .foregroundStyle(.red)
-                                }
-                                .alert(isPresented: $showAlert) {
-                                    Alert(
-                                        title: Text("Delete this travel?"),
-                                        message: Text("you cannot undo this action"),
-                                        primaryButton: .cancel(Text("Cancel")) {},
-                                        secondaryButton: .destructive(Text("Delete")) {
-                                            //delete travel
-                                            Task {
-                                                await viewModel.deleteTravel(travelToDelete: travelDetails.travel)
-                                                navigationPath.removeLast()
-                                            }
-                                        }
-                                    )
+                            Button(action: {
+                                showAlert = true
+                            }) {
+                                Image(systemName: "trash.circle")
+                                    .font(.largeTitle)
+                                    .scaleEffect(1.2)
+                                    .fontWeight(.light)
+                                    .foregroundStyle(.red)
                             }
+                            .alert(isPresented: $showAlert) {
+                                Alert(
+                                    title: Text("Delete this travel?"),
+                                    message: Text("you cannot undo this action"),
+                                    primaryButton: .cancel(Text("Cancel")) {},
+                                    secondaryButton: .destructive(Text("Delete")) {
+                                        //delete travel
+                                        Task {
+                                            await viewModel.deleteTravel(travelToDelete: travelDetails.travel)
+                                            navigationPath.removeLast()
+                                        }
+                                    }
+                                )
+                            }
+                            .accessibilityIdentifier("trashButton")
                         }
                         .padding(.horizontal, 15)
                         
                         SegmentsView(segments: travelDetails.getOutwardSegments())
+                            .accessibilityIdentifier("outwardSegmentsView")
                         
                         if !travelDetails.isOneway() {
                             HStack {
                                 Text("Return")
                                     .font(.title)
                                     .fontWeight(.semibold)
+                                    .accessibilityIdentifier("returnTitle")
                                 Spacer()
                             }
                             .padding()
+                            
                             SegmentsView(segments: travelDetails.getReturnSegments())
+                                .accessibilityIdentifier("returnSegmentsView")
                         }
                     }
                     .padding(10)
@@ -236,6 +270,7 @@ struct TravelDetailsView: View {
                 
                 if infoTapped {
                     InfoCompensationView(onBack: {infoTapped = false})
+                        .accessibilityIdentifier("infoCompensationView")
                 }
             }
             .background(colorScheme == .dark ? Color(red: 10/255, green: 10/255, blue: 10/255) : Color(red: 245/255, green: 245/255, blue: 245/255))
@@ -294,7 +329,6 @@ struct SemiCircle: Shape {
     }
 }
 
-
 struct InfoCompensationView: View {
     var onBack: () -> Void
     var body: some View {
@@ -307,6 +341,7 @@ legend compensation
             Button("Close") {
                 onBack()
             }
+            .accessibilityIdentifier("infoCloseButton")
         }
         .padding()
         .background(Color.white)

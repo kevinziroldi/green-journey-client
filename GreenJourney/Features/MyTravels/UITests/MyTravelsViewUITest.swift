@@ -140,7 +140,8 @@ final class MyTravelsUITests: XCTestCase {
         // tap travel card
         travelCardButton.tap()
         
-        let fromTravelHeader = app.staticTexts["fromTravelHeader"]
-        XCTAssertTrue(fromTravelHeader.waitForExistence(timeout: timer), "The travel details view was not displayed")
+        // check travel details view 
+        let headerView = app.otherElements["headerView"]
+        XCTAssertTrue(headerView.waitForExistence(timeout: timer), "The travel details view was not displayed")
     }
 }

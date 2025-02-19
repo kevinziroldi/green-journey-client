@@ -29,6 +29,7 @@ struct MyTravelsView: View {
                     .font(.title)
                     .padding()
                     .accessibilityIdentifier("myTravelsTitle")
+                
                 Spacer()
                 
                 NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)) {
