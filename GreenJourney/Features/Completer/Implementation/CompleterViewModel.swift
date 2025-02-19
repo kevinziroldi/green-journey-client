@@ -28,12 +28,10 @@ class CompleterViewModel: ObservableObject {
     private func search() {
         if searchText.isEmpty {
             if self.departure {
-                print("dep")
                 suggestions = getDepartureHistory()
                 
             }
             else {
-                print("no dep")
                 //TODO funzione che chiama machine learning
                 suggestions = []
             }
@@ -150,7 +148,6 @@ class CompleterViewModel: ObservableObject {
             for travel in travelDetailsList {
                 guard let country = travel.getDepartureSegment()?.departureCountry else {continue}
                 guard let city = travel.getDepartureSegment()?.departureCity else {continue}
-                print(country, city)
                 var fetchDescriptor = FetchDescriptor<CityCompleterDataset>(
                     predicate: #Predicate<CityCompleterDataset> {
                         $0.countryName == country &&
@@ -162,7 +159,6 @@ class CompleterViewModel: ObservableObject {
                     
                     if !history.contains(cityHistory) {
                         history.append(cityHistory)
-                        print(cityHistory.cityName)
                     }
                 }
             }

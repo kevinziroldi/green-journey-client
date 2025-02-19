@@ -11,7 +11,7 @@ class DashboardViewModel: ObservableObject {
     @Published var treesPlanted: Int = 0
     @Published var co2Compensated: Float64 = 0.0
     @Published var totalDistance: Float64 = 0.0
-    @Published var mostChosenVehicle: String = ""
+    @Published var mostChosenVehicle: String = "car"
     @Published var visitedContinents: Int = 0
     @Published var totalDurationString: String = ""
     @Published var distances = [2022: 0, 2023: 0, 2024: 0, 2025: 0]
@@ -148,7 +148,7 @@ class DashboardViewModel: ObservableObject {
         co2Compensated = 0.0
         totalDistance = 0.0
         totalDuration = 0
-        mostChosenVehicle = ""
+        mostChosenVehicle = "car"
         visitedContinents = 0
         totalTripsMade = 0
         distances = [2022: 0, 2023: 0, 2024: 0, 2025: 0]

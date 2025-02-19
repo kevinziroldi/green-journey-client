@@ -44,11 +44,19 @@ struct CompleterView: View {
             
             
             List(viewModel.suggestions, id: \.id) { city in
-                VStack(alignment: .leading) {
-                    Text(city.cityName).font(.headline)
-                    Text("\(city.countryName) (\(city.countryCode))")
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
+                HStack{
+                    VStack(alignment: .leading) {
+                        Text(city.cityName).font(.headline)
+                        Text("\(city.countryName) (\(city.countryCode))")
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                    }
+                    Spacer()
+                    if viewModel.departure && viewModel.searchText == "" {
+                        Image(systemName: "clock.arrow.trianglehead.counterclockwise.rotate.90")
+                            .font(.title2)
+                            .padding()
+                    }
                 }
                 .onTapGesture {
                     onClick(city)
