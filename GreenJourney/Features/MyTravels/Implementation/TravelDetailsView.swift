@@ -203,7 +203,7 @@ struct TravelDetailsView: View {
                                     HStack {
                                         Text("Emission: " + String(format: "%.1f", travelDetails.computeCo2Emitted()) + " Kg")
                                         Spacer()
-                                        Text("#10")
+                                        Text("#\(viewModel.getNumTrees(travelDetails))")
                                         Image(systemName: "tree")
                                     }
                                     .font(.title2)
@@ -222,7 +222,7 @@ struct TravelDetailsView: View {
                                 Color.clear
                                     .accessibilityIdentifier("travelRecap")
                             )
-                        
+                        if travelDetails.travel.confirmed {
                         // if the user hasn't left a review yet
                         Button(action: {
                             //review
@@ -236,6 +236,7 @@ struct TravelDetailsView: View {
                             }
                         }
                         .accessibilityIdentifier("reviewButton")
+                    }
                         
                         HStack {
                             Text(travelDetails.isOneway() ? "Segments" : "Outward")
