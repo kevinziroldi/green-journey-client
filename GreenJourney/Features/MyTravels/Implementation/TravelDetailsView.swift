@@ -27,164 +27,193 @@ struct TravelDetailsView: View {
                         .foregroundStyle(.gray)
                     
                     ScrollView {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 20)
-                                .fill(colorScheme == .dark ? Color(red: 20/255, green: 20/255, blue: 20/255) : Color(red: 235/255, green: 235/255, blue: 235/255))
-                                .strokeBorder(
-                                    LinearGradient(gradient: Gradient(colors: [.green, .mint, .cyan, .blue]),
-                                                   startPoint: .topTrailing, endPoint: .bottomLeading), lineWidth: 4)
-                            HStack (spacing: 30){
-                                VStack {
-                                    ZStack {
-                                        SemiCircle()
-                                            .stroke(style: StrokeStyle(lineWidth: 10, lineCap: .round))
-                                            .foregroundColor(.gray.opacity(0.6))
-                                            .frame(width: 130, height: 110)
-                                        
-                                        // semiCircle filled
-                                        SemiCircle(progress: progress)
-                                            .stroke(style: StrokeStyle(lineWidth: 10, lineCap: .round))
-                                            .foregroundStyle(LinearGradient(gradient: Gradient(colors: [.red, .orange, .yellow, .green, .mint]), startPoint: .leading, endPoint: .trailing))
-                                            .frame(width: 130, height: 110)
-                                        
-                                        VStack (spacing: 15){
-                                            Image(systemName: "carbon.dioxide.cloud")
-                                                .font(.largeTitle)
-                                                .scaleEffect(1.5)
-                                            Text(String(format: "%.0f", progress * 100) + "%")
-                                                .font(.headline)
-                                                .fontWeight(.bold)
-                                        }
-                                        .foregroundStyle(computeColor(progress))
-                                        
-                                    }
-                                    .padding(.top, 30)
-                                    
-                                    HStack {
-                                        Text("  0 Kg       ")
-                                        Text(String(format: "%.1f", travelDetails.computeCo2Emitted()) + " Kg")
-                                    }
-                                    .font(.headline)
-                                    
-                                    
-                                }
-                                .padding(EdgeInsets(top: 0, leading: 15, bottom: 15, trailing: 0))
-                                
-                                if (travelDetails.computeCo2Emitted() > 0.0 && travelDetails.travel.CO2Compensated < travelDetails.computeCo2Emitted()) {
+                        if travelDetails.travel.confirmed {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 20)
+                                    .fill(colorScheme == .dark ? Color(red: 20/255, green: 20/255, blue: 20/255) : Color(red: 235/255, green: 235/255, blue: 235/255))
+                                    .strokeBorder(
+                                        LinearGradient(gradient: Gradient(colors: [.green, .mint, .cyan, .blue]),
+                                                       startPoint: .topTrailing, endPoint: .bottomLeading), lineWidth: 4)
+                                HStack (spacing: 30){
                                     VStack {
-                                        Spacer()
-                                        Text("Compensation")
-                                            .font(.title2)
-                                            .foregroundStyle(.green.opacity(0.8))
-                                            .fontWeight(.semibold)
-                                        Spacer()
-                                        HStack {
-                                            Spacer()
-                                            Text("\(plantedTrees) / \(totalTrees)")
-                                                .padding(.top, 5)
-                                                .font(.headline)
-                                            Image(systemName: "tree")
-                                                .font(.title2)
+                                        ZStack {
+                                            SemiCircle()
+                                                .stroke(style: StrokeStyle(lineWidth: 10, lineCap: .round))
+                                                .foregroundColor(.gray.opacity(0.6))
+                                                .frame(width: 130, height: 110)
                                             
-                                            Button(action: {
-                                                infoTapped = true
-                                            }) {
-                                                Image(systemName: "info.circle")
-                                                    .foregroundStyle(.gray)
+                                            // semiCircle filled
+                                            SemiCircle(progress: progress)
+                                                .stroke(style: StrokeStyle(lineWidth: 10, lineCap: .round))
+                                                .foregroundStyle(LinearGradient(gradient: Gradient(colors: [.red, .orange, .yellow, .green, .mint]), startPoint: .leading, endPoint: .trailing))
+                                                .frame(width: 130, height: 110)
+                                            
+                                            VStack (spacing: 15){
+                                                Image(systemName: "carbon.dioxide.cloud")
+                                                    .font(.largeTitle)
+                                                    .scaleEffect(1.5)
+                                                Text(String(format: "%.0f", progress * 100) + "%")
+                                                    .font(.headline)
+                                                    .fontWeight(.bold)
                                             }
-                                            .accessibilityIdentifier("infoButton")
-                                            .frame(minWidth: 44, minHeight: 44)
-                                            .id("infoButton")
+                                            .foregroundStyle(computeColor(progress))
                                             
+                                        }
+                                        .padding(.top, 30)
+                                        
+                                        HStack {
+                                            Text("  0 Kg       ")
+                                            Text(String(format: "%.1f", travelDetails.computeCo2Emitted()) + " Kg")
+                                        }
+                                        .font(.headline)
+                                        
+                                        
+                                    }
+                                    .padding(EdgeInsets(top: 0, leading: 15, bottom: 15, trailing: 0))
+                                    
+                                    if (travelDetails.computeCo2Emitted() > 0.0 && travelDetails.travel.CO2Compensated < travelDetails.computeCo2Emitted()) {
+                                        VStack {
                                             Spacer()
-                                            
-                                            VStack (spacing: 5) {
-                                                Button(action: {
-                                                    if plantedTrees < totalTrees {
-                                                        plantedTrees += 1
-                                                    }
-                                                }) {
-                                                    Image(systemName: "plus.circle")
-                                                        .foregroundStyle(.black)
-                                                }
-                                                .accessibilityIdentifier("plusButton")
+                                            Text("Compensation")
+                                                .font(.title2)
+                                                .foregroundStyle(.green.opacity(0.8))
+                                                .fontWeight(.semibold)
+                                            Spacer()
+                                            HStack {
+                                                Spacer()
+                                                Text("\(plantedTrees) / \(totalTrees)")
+                                                    .padding(.top, 5)
+                                                    .font(.headline)
+                                                Image(systemName: "tree")
+                                                    .font(.title2)
                                                 
                                                 Button(action: {
-                                                    if plantedTrees > 0 {
-                                                        plantedTrees -= 1
-                                                    }
+                                                    infoTapped = true
                                                 }) {
-                                                    Image(systemName: "minus.circle")
-                                                        .foregroundStyle(.black)
+                                                    Image(systemName: "info.circle")
+                                                        .foregroundStyle(.gray)
                                                 }
-                                                .accessibilityIdentifier("minusButton")
+                                                .accessibilityIdentifier("infoButton")
+                                                .frame(minWidth: 44, minHeight: 44)
+                                                .id("infoButton")
+                                                
+                                                Spacer()
+                                                
+                                                VStack (spacing: 5) {
+                                                    Button(action: {
+                                                        if plantedTrees < totalTrees {
+                                                            plantedTrees += 1
+                                                        }
+                                                    }) {
+                                                        Image(systemName: "plus.circle")
+                                                            .foregroundStyle(.black)
+                                                    }
+                                                    .accessibilityIdentifier("plusButton")
+                                                    
+                                                    Button(action: {
+                                                        if plantedTrees > 0 {
+                                                            plantedTrees -= 1
+                                                        }
+                                                    }) {
+                                                        Image(systemName: "minus.circle")
+                                                            .foregroundStyle(.black)
+                                                    }
+                                                    .accessibilityIdentifier("minusButton")
+                                                }
+                                                
+                                            }
+                                            .padding(.trailing, 15)
+                                            
+                                            HStack {
+                                                Text("Price: \(plantedTrees * 2) €")
                                             }
                                             
-                                        }
-                                        .padding(.trailing, 15)
-                                        
-                                        HStack {
-                                            Text("Price: \(plantedTrees * 2) €")
-                                        }
-                                        
-                                        Spacer()
-                                        
-                                        Button(action: {
-                                            compensationTapped = true
-                                        }) {
-                                            ZStack {
-                                                RoundedRectangle(cornerRadius: 30)
-                                                    .fill(.green)
-                                                    .stroke(Color(red: 1/255, green: 150/255, blue: 1/255), lineWidth: 2)
-                                                HStack (spacing: 3) {
-                                                    Image(systemName: "leaf")
-                                                        .font(.title3)
-                                                        .fontWeight(.semibold)
-                                                        .fontWeight(.light)
-                                                        .foregroundStyle(.white)
-                                                    Text("Compensate")
-                                                        .foregroundStyle(.white)
-                                                        .fontWeight(.semibold)
+                                            Spacer()
+                                            
+                                            Button(action: {
+                                                compensationTapped = true
+                                            }) {
+                                                ZStack {
+                                                    RoundedRectangle(cornerRadius: 30)
+                                                        .fill(.green)
+                                                        .stroke(Color(red: 1/255, green: 150/255, blue: 1/255), lineWidth: 2)
+                                                    HStack (spacing: 3) {
+                                                        Image(systemName: "leaf")
+                                                            .font(.title3)
+                                                            .fontWeight(.semibold)
+                                                            .fontWeight(.light)
+                                                            .foregroundStyle(.white)
+                                                        Text("Compensate")
+                                                            .foregroundStyle(.white)
+                                                            .fontWeight(.semibold)
+                                                    }
+                                                    .padding(5)
                                                 }
-                                                .padding(5)
+                                                .fixedSize()
                                             }
-                                            .fixedSize()
+                                            .padding(.bottom, 15)
+                                            .accessibilityIdentifier("compensateButton")
                                         }
-                                        .padding(.bottom, 15)
-                                        .accessibilityIdentifier("compensateButton")
+                                    }
+                                    else {
+                                        VStack {
+                                            Text("Compensation 100%")
+                                                .foregroundStyle(.green)
+                                                .font(.headline)
+                                            HStack (spacing: 0){
+                                                Text("you planted: \(plantedTrees)")
+                                                Image(systemName: "tree")
+                                                    .padding(.bottom, 5)
+                                            }
+                                            .padding()
+                                            
+                                            HStack {
+                                                Image(systemName: "leaf")
+                                                    .fontWeight(.semibold)
+                                                    .foregroundStyle(.green)
+                                                
+                                                Text("Thank you")
+                                                    .fontWeight(.light)
+                                            }
+                                            .padding()
+                                        }
                                     }
                                 }
-                                else {
-                                    VStack {
-                                        Text("Compensation 100%")
-                                            .foregroundStyle(.green)
-                                            .font(.headline)
-                                        HStack (spacing: 0){
-                                            Text("you planted: \(plantedTrees)")
-                                            Image(systemName: "tree")
-                                                .padding(.bottom, 5)
-                                        }
-                                        .padding()
-                                        
-                                        HStack {
-                                            Image(systemName: "leaf")
-                                                .fontWeight(.semibold)
-                                                .foregroundStyle(.green)
-                                            
-                                            Text("Thank you")
-                                                .fontWeight(.light)
-                                        }
-                                        .padding()
+                                .accessibilityElement(children: .contain)
+                                .overlay(
+                                    Color.clear
+                                        .accessibilityIdentifier("compensationSection")
+                                )
+                            }
+                            .padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
+                        }
+                        else {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 15)
+                                    .fill(Color(uiColor: .systemBackground))
+                                    .shadow(color: Color(hue: 0.309, saturation: 1.0, brightness: 0.665).opacity(0.3), radius: 5, x: 0, y: 3)
+                                VStack (spacing:0){
+                                    Text("Co2")
+                                        .font(.title)
+                                        .foregroundStyle(Color(hue: 0.309, saturation: 1.0, brightness: 0.665).opacity(0.8))
+                                        .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 0))
+                                        .fontWeight(.semibold)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                    
+                                    HStack {
+                                        Text("Emission: " + String(format: "%.1f", travelDetails.computeCo2Emitted()) + " Kg")
+                                        Spacer()
+                                        Text("#10")
+                                        Image(systemName: "tree")
                                     }
+                                    .font(.title2)
+                                    .fontWeight(.semibold)
+                                    .padding()
+                                    .foregroundStyle(Color(hue: 0.309, saturation: 1.0, brightness: 0.665).opacity(1))
                                 }
                             }
-                            .accessibilityElement(children: .contain)
-                            .overlay(
-                               Color.clear
-                                   .accessibilityIdentifier("compensationSection")
-                            )
+                            .padding(EdgeInsets(top: 10, leading: 15, bottom: 5, trailing: 15))
                         }
-                        .padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
                         
                         TravelRecapView(travelDetails: travelDetails)
                             .padding(.horizontal)
