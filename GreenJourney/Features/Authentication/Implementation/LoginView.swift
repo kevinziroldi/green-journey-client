@@ -63,7 +63,7 @@ struct LoginView: View {
                             .accessibilityIdentifier("resendEmailLabel")
                     }
                     
-                    VStack(spacing: 20) {
+                    VStack {
                         Button(action: {
                             Task {
                                 viewModel.errorMessage = nil

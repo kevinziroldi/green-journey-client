@@ -8,44 +8,49 @@ struct SignUpView: View {
         VStack {
             ScrollView {
                 VStack {
-                    Image("login_logo")
+                    /*Image("login_logo")
                         .resizable()
                         .padding()
                         .aspectRatio(contentMode: .fit)
-                        .accessibilityIdentifier("signupLogoImage")
-                    
-                    TextField("Email", text: $viewModel.email)
-                        .autocapitalization(.none)
-                        .keyboardType(.emailAddress)
+                        .accessibilityIdentifier("signupLogoImage")*/
+                    Text("Signup")
+                        .font(.system(size: 32).bold())
                         .padding()
-                        .background(Color.gray.opacity(0.2))
-                        .cornerRadius(8)
-                    
-                    SecureField("Password", text: $viewModel.password)
-                        .padding()
-                        .background(Color.gray.opacity(0.2))
-                        .cornerRadius(8)
-                    SecureField("Repeat Password", text: $viewModel.repeatPassword)
-                        .padding()
-                        .background(Color.gray.opacity(0.2))
-                        .cornerRadius(8)
-                    
-                    TextField("First name", text: $viewModel.firstName)
-                        .padding()
-                        .background(Color.gray.opacity(0.2))
-                        .cornerRadius(8)
-                    
-                    TextField("Last name", text: $viewModel.lastName)
-                        .padding()
-                        .background(Color.gray.opacity(0.2))
-                        .cornerRadius(8)
-                    // error message
-                    if let errorMessage = viewModel.errorMessage {
-                        Text(errorMessage)
-                            .foregroundColor(.red)
-                            .font(.caption)
+                        .fontWeight(.semibold)
+                    VStack (spacing: 10) {
+                        TextField("Email", text: $viewModel.email)
+                            .autocapitalization(.none)
+                            .keyboardType(.emailAddress)
+                            .padding()
+                            .background(Color.gray.opacity(0.2))
+                            .cornerRadius(8)
+                        
+                        SecureField("Password", text: $viewModel.password)
+                            .padding()
+                            .background(Color.gray.opacity(0.2))
+                            .cornerRadius(8)
+                        SecureField("Repeat Password", text: $viewModel.repeatPassword)
+                            .padding()
+                            .background(Color.gray.opacity(0.2))
+                            .cornerRadius(8)
+                        
+                        TextField("First name", text: $viewModel.firstName)
+                            .padding()
+                            .background(Color.gray.opacity(0.2))
+                            .cornerRadius(8)
+                        
+                        TextField("Last name", text: $viewModel.lastName)
+                            .padding()
+                            .background(Color.gray.opacity(0.2))
+                            .cornerRadius(8)
+                        // error message
+                        if let errorMessage = viewModel.errorMessage {
+                            Text(errorMessage)
+                                .foregroundColor(.red)
+                                .font(.caption)
+                        }
                     }
-                    
+                    .padding(.top, 20)
                     VStack {
                         Button(action: {
                             Task {
@@ -105,7 +110,6 @@ struct SignUpView: View {
                                 
                             }
                         }
-                        
                         VStack {
                             Text("Already have an account?")
                                 .fontWeight(.light)
@@ -116,7 +120,7 @@ struct SignUpView: View {
                                 }
                             }
                         }
-                        .padding(.top, 25)
+                        .padding(.top, 100)
                     }
                     .padding(.top, 20)
                 }
@@ -140,3 +144,4 @@ struct SignUpView: View {
         .navigationBarHidden(true)
     }
 }
+
