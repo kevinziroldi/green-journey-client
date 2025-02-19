@@ -14,11 +14,12 @@ struct LoginView: View {
     
     var body: some View {
         VStack{
-            Image("login_logo_map")
+            Image("login_logo")
                 .resizable()
                 .padding()
                 .aspectRatio(contentMode: .fit)
                 .accessibilityIdentifier("loginLogoImage")
+                .padding(.top, 50)
             ScrollView {
                 VStack {
                     Spacer()
@@ -39,32 +40,34 @@ struct LoginView: View {
                         .background(Color.gray.opacity(0.2))
                         .cornerRadius(8)
                         .accessibilityIdentifier("passwordSecureField")
-
-                    HStack {
-                        if let resendMessage = viewModel.resendEmail {
-                            Text(resendMessage)
-                                .accessibilityIdentifier("resendEmailLabel")
+                    
+                    
+                    
+                    Button("Reset password") {
+                        Task {
+                            await viewModel.resetPassword(email: viewModel.email)
                         }
-                        Button("Reset password") {
-                            Task {
-                                await viewModel.resetPassword(email: viewModel.email)
-                            }
-                        }
-                        .accessibilityIdentifier("resetPasswordButton")
-
                     }
+                    .accessibilityIdentifier("resetPasswordButton")
+                    .padding(.vertical, 10)
+                    
                     // error message
                     if let errorMessage = viewModel.errorMessage {
                         Text(errorMessage)
                             .foregroundColor(.red)
-                            .font(.caption)
                             .accessibilityIdentifier("errorMessageLabel")
-
+                    }
+                    
+                    if let resendMessage = viewModel.resendEmail {
+                        Text(resendMessage)
+                            .accessibilityIdentifier("resendEmailLabel")
                     }
                     
                     VStack(spacing: 20) {
                         Button(action: {
                             Task {
+                                viewModel.errorMessage = nil
+                                viewModel.resendEmail = nil
                                 await viewModel.login()
                             }
                         }) {
@@ -91,6 +94,7 @@ struct LoginView: View {
                                 .frame(height: 1)
                                 .foregroundColor(.gray)
                         }
+                        .padding(.vertical, 10)
                         .padding(.horizontal, 16)
                         
                         ZStack {
@@ -127,13 +131,18 @@ struct LoginView: View {
                     }
                 }
                 .padding()
+                VStack {
+                    Text("Haven't signed up yet?")
+                        .fontWeight(.light)
+                    Button ("Sign up") {
+                        viewModel.errorMessage = nil
+                        navigationPath.append(NavigationDestination.SignupView(viewModel))
+                    }
+                    .accessibilityIdentifier("signUpButton")
+                }
+                .padding(.top, 15)
             }
             .scrollDismissesKeyboard(.interactively)
-            
-            Button ("Sign up") {
-                navigationPath.append(NavigationDestination.SignupView(viewModel))
-            }
-            .accessibilityIdentifier("signUpButton")
         }
         .onAppear() {
             viewModel.isEmailVerificationActiveLogin = false

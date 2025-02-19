@@ -8,7 +8,7 @@ struct SignUpView: View {
         VStack {
             ScrollView {
                 VStack {
-                    Image("login_logo_map")
+                    Image("login_logo")
                         .resizable()
                         .padding()
                         .aspectRatio(contentMode: .fit)
@@ -46,7 +46,7 @@ struct SignUpView: View {
                             .font(.caption)
                     }
                     
-                    VStack (spacing: 20) {
+                    VStack {
                         Button(action: {
                             Task {
                                 await viewModel.signUp()
@@ -73,6 +73,7 @@ struct SignUpView: View {
                                 .frame(height: 1)
                                 .foregroundColor(.gray)
                         }
+                        .padding(.vertical, 10)
                         .padding(.horizontal, 16)
                         
                         ZStack {
@@ -105,14 +106,19 @@ struct SignUpView: View {
                             }
                         }
                         
-                        Spacer()
-                        
-                        Button ("Login") {
-                            if !navigationPath.isEmpty {
-                                navigationPath.removeLast()
+                        VStack {
+                            Text("Already have an account?")
+                                .fontWeight(.light)
+                            Button ("Login") {
+                                if !navigationPath.isEmpty {
+                                    viewModel.errorMessage = nil
+                                    navigationPath.removeLast()
+                                }
                             }
                         }
+                        .padding(.top, 25)
                     }
+                    .padding(.top, 20)
                 }
                 .padding()
             }
