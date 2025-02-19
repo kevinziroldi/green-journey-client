@@ -213,6 +213,11 @@ struct TravelDetailsView: View {
                                 }
                             }
                             .padding(EdgeInsets(top: 10, leading: 15, bottom: 5, trailing: 15))
+                            .accessibilityElement(children: .contain)
+                            .overlay(
+                                Color.clear
+                                    .accessibilityIdentifier("emissionsRecapFutureTravel")
+                            )
                         }
                         
                         TravelRecapView(travelDetails: travelDetails)
