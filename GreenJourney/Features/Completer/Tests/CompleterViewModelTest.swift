@@ -5,22 +5,27 @@ import Testing
 
 @MainActor
 final class CompleterViewModelTest {
-    /*
     private var mockModelContext: ModelContext
     private var mockModelContainer: ModelContainer
-    private var viewModel: CompleterViewModel
+    private var mockServerService: MockServerService
     
-    init() throws {
+    init() async throws {
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: User.self, Travel.self, Segment.self, CityFeatures.self, CityCompleterDataset.self, configurations: configuration)
-        self.viewModel = CompleterViewModel(modelContext: container.mainContext)
         self.mockModelContext = container.mainContext
         self.mockModelContainer = container
         
+        // add travels to SwiftData
+        self.mockServerService = MockServerService()
+        self.mockServerService.shouldSucceed = true
+        let myTravelsViewModel = MyTravelsViewModel(modelContext: mockModelContext, serverService: mockServerService)
+        await myTravelsViewModel.getUserTravels()
+        
+        // add cities to SwiftData
         try addCitiesToSwiftData()
     }
     
-    func addCitiesToSwiftData() throws {
+    private func addCitiesToSwiftData() throws {
         let cityMilan = CityCompleterDataset(
             cityName: "Milan",
             countryName: "Italy",
@@ -66,35 +71,76 @@ final class CompleterViewModelTest {
     }
     
     @Test
-    func testEmptySearch() {
+    func testEmptySearchDeparture() {
+        let viewModel = CompleterViewModel(modelContext: self.mockModelContext, departure: true)
         viewModel.searchText = ""
         #expect(viewModel.suggestions.isEmpty)
     }
     
     @Test
-    func testExactSearch() {
+    func testExactSearchDeparture() {
+        let viewModel = CompleterViewModel(modelContext: self.mockModelContext, departure: true)
         viewModel.searchText = "Milan"
         #expect(!viewModel.suggestions.isEmpty)
         #expect(viewModel.suggestions.first?.cityName == "Milan")
     }
     
     @Test
-    func testSearchStartingLetter() {
+    func testSearchStartingLetterDeparture() {
+        let viewModel = CompleterViewModel(modelContext: self.mockModelContext, departure: true)
         viewModel.searchText = "M"
         #expect(!viewModel.suggestions.isEmpty)
     }
     
     @Test
-    func testSearchSubstring() {
+    func testSearchSubstringDeparture() {
+        let viewModel = CompleterViewModel(modelContext: self.mockModelContext, departure: true)
         // should find New York
         viewModel.searchText = "y"
         #expect(!viewModel.suggestions.isEmpty)
     }
     
     @Test
-    func testSearchRandom() {
+    func testSearchRandomDeparture() {
+        let viewModel = CompleterViewModel(modelContext: self.mockModelContext, departure: true)
         viewModel.searchText = "a"
         #expect(!viewModel.suggestions.isEmpty)
     }
-     */
+    
+    @Test
+    func testEmptySearchDestination() {
+        let viewModel = CompleterViewModel(modelContext: self.mockModelContext, departure: false)
+        viewModel.searchText = ""
+        #expect(viewModel.suggestions.isEmpty)
+    }
+    
+    @Test
+    func testExactSearchDestination() {
+        let viewModel = CompleterViewModel(modelContext: self.mockModelContext, departure: false)
+        viewModel.searchText = "Milan"
+        #expect(!viewModel.suggestions.isEmpty)
+        #expect(viewModel.suggestions.first?.cityName == "Milan")
+    }
+    
+    @Test
+    func testSearchStartingLetterDestination() {
+        let viewModel = CompleterViewModel(modelContext: self.mockModelContext, departure: false)
+        viewModel.searchText = "M"
+        #expect(!viewModel.suggestions.isEmpty)
+    }
+    
+    @Test
+    func testSearchSubstringDestination() {
+        let viewModel = CompleterViewModel(modelContext: self.mockModelContext, departure: false)
+        // should find New York
+        viewModel.searchText = "y"
+        #expect(!viewModel.suggestions.isEmpty)
+    }
+    
+    @Test
+    func testSearchRandomDestination() {
+        let viewModel = CompleterViewModel(modelContext: self.mockModelContext, departure: false)
+        viewModel.searchText = "a"
+        #expect(!viewModel.suggestions.isEmpty)
+    }
 }

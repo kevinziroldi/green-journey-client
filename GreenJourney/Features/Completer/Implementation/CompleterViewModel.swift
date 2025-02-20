@@ -156,7 +156,6 @@ class CompleterViewModel: ObservableObject {
                 fetchDescriptor.fetchLimit = 1
                 
                 if let cityHistory = try modelContext.fetch(fetchDescriptor).first {
-                    
                     if !history.contains(cityHistory) {
                         history.append(cityHistory)
                     }
