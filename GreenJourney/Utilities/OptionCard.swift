@@ -8,7 +8,7 @@ struct OptionCard: View {
     var body: some View {
         ZStack{
             RoundedRectangle(cornerRadius: 20)
-                .stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 2)
+                .stroke(computeTravelColor(option: option), lineWidth: 5)
                 .fill(colorScheme == .dark ? Color(red: 48/255, green: 48/255, blue: 48/255) : Color.white)
             VStack{
                 HStack{
@@ -80,6 +80,26 @@ struct OptionCard: View {
             .padding()
         }
         .padding(EdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10))
+        
+    }
+    
+    func computeTravelColor(option : [Segment]) -> Color {
+        var co2Emitted = 0.0
+        var distance = 0.0
+        for segment in option {
+            distance += segment.distance
+            co2Emitted += segment.co2Emitted
+        }
+        if co2Emitted == 0.0 {
+            return AppColors.ecoGreenTravel
+        }
+        if distance/co2Emitted > 30 {
+            return AppColors.ecoGreenTravel
+        }
+        if distance/co2Emitted > 20 {
+            return AppColors.ecoYellowTravel
+        }
+        return AppColors.ecoRedTravel
         
     }
 }
