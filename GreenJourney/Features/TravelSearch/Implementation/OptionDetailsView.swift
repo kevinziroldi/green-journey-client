@@ -197,25 +197,11 @@ struct OptionDetailsView: View {
         return distance
     }
     func computeTotalDuration (_ travelOption: [Segment]) -> String {
-        var hours: Int = 0
-        var minutes: Int = 0
+        var duration = 0
         for segment in travelOption {
-            hours += durationToHoursAndMinutes(duration: segment.duration).hours
-            minutes += durationToHoursAndMinutes(duration: segment.duration).minutes
+            duration += segment.duration/1000000000
         }
-        while (minutes >= 60) {
-            hours += 1
-            minutes -= 60
-        }
-        return "\(hours) h, \(minutes) min"
-    }
-    
-    func durationToHoursAndMinutes(duration: Int) -> (hours: Int, minutes: Int) {
-        let hours = duration / (3600 * 1000000000)       // 1 hour = 3600 secsecondsondi
-        let remainingSeconds = (duration / 1000000000) % (3600)
-        let minutes = remainingSeconds / 60  // 1 minute = 60 seconds
-        
-        return (hours, minutes)
+        return UtilitiesFunctions.convertTotalDurationToString(totalDuration: duration)
     }
 }
 

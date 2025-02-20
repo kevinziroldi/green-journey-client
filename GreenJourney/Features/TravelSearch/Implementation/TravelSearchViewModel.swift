@@ -138,34 +138,11 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
     }
     
     func computeTotalDuration (_ travelOption: [Segment]) -> String {
-        var hours: Int = 0
-        var minutes: Int = 0
-        var days: Int = 0
-        
-        var totalDurationSeconds: Int = 0
+        var duration = 0
         for segment in travelOption {
-            totalDurationSeconds += (segment.duration / 1000000000)
+            duration += segment.duration/1000000000
         }
-        (hours, minutes) = durationToHoursAndMinutes(duration: totalDurationSeconds)
-        
-        while (hours >= 24) {
-            days += 1
-            hours -= 24
-        }
-        if (days == 0) {
-            return "\(hours) h, \(minutes) min"
-        }
-        return "\(days) d, \(hours) h, \(minutes) min"
-    }
-    
-    private func durationToHoursAndMinutes(duration: Int) -> (hours: Int, minutes: Int) {
-        // 1 hour = 3600 seconds
-        let hours = duration / 3600
-        let remainingSeconds = duration % 3600
-        // 1 minute = 60 seconds
-        let minutes = remainingSeconds / 60
-        
-        return (hours, minutes)
+        return UtilitiesFunctions.convertTotalDurationToString(totalDuration: duration)
     }
     
     func getOptionDeparture (_ travelOption: [Segment]) -> String {
