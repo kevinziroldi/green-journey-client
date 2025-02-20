@@ -186,7 +186,7 @@ struct TravelCard: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 20)
-                .stroke(colorScheme == .dark ? Color.white : Color.black)
+                .stroke(computeTravelColor(travel: travelDetails), lineWidth: 5)
                 .fill(colorScheme == .dark ? Color(red: 35/255, green: 35/255, blue: 35/255) : Color.white)
             
             VStack {
@@ -305,5 +305,21 @@ struct TravelCard: View {
             .padding()
             .foregroundStyle(colorScheme == .dark ? Color.white : Color.black)
         }
+    }
+    
+    func computeTravelColor(travel : TravelDetails) -> Color {
+        let co2Emitted = travel.computeCo2Emitted()
+        let distance = travel.computeTotalDistance()
+        if co2Emitted == 0.0 {
+            return AppColors.ecoGreenTravel
+        }
+        if distance/co2Emitted > 30 {
+            return AppColors.ecoGreenTravel
+        }
+        if distance/co2Emitted > 20 {
+            return AppColors.ecoYellowTravel
+        }
+        return AppColors.ecoRedTravel
+        
     }
 }
