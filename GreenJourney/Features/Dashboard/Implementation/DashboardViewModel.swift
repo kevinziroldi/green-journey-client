@@ -14,8 +14,9 @@ class DashboardViewModel: ObservableObject {
     @Published var mostChosenVehicle: String = "car"
     @Published var visitedContinents: Int = 0
     @Published var totalDurationString: String = ""
-    @Published var distances = [2022: 0, 2023: 0, 2024: 0, 2025: 0]
-    @Published var tripsMade = [2022: 0, 2023: 0, 2024: 0, 2025: 0]
+    @Published var distances: [Int: Int] = [:]
+    @Published var tripsMade: [Int: Int] = [:]
+
     @Published var totalTripsMade: Int = 0
     var totalDuration: Int = 0
     
@@ -23,6 +24,9 @@ class DashboardViewModel: ObservableObject {
     init(modelContext: ModelContext, serverService: ServerServiceProtocol) {
         self.modelContext = modelContext
         self.serverService = serverService
+        self.distances = [getCurrentYear()-3: 0, getCurrentYear()-2: 0, getCurrentYear()-1: 0, getCurrentYear(): 0]
+        self.tripsMade = [getCurrentYear()-3: 0, getCurrentYear()-2: 0, getCurrentYear()-1: 0, getCurrentYear(): 0]
+
     }
     
     func getUserBadges() {
@@ -106,40 +110,9 @@ class DashboardViewModel: ObservableObject {
             return ""
         }
     }
+    
     private func convertTotalDuration() -> String {
-        var hours: Int = 0
-        var minutes: Int = 0
-        var days: Int = 0
-        var months: Int = 0
-        var years: Int = 0
-        
-        // 1 hour = 3600 seconds
-        hours = totalDuration / (3600)
-        let remainingSeconds = (totalDuration) % (3600)
-        minutes = remainingSeconds / 60
-        while (hours >= 24) {
-            days += 1
-            hours -= 24
-        }
-        while (days >= 30) {
-            months += 1
-            days -= 30
-        }
-        while (months >= 12) {
-            years += 1
-            months -= 12
-        }
-        if years > 0 {
-            return "\(years) y, \(months) m, \(days) d, \(hours) h, \(minutes) min"
-        }
-        if years == 0 && months > 0 {
-            return "\(months) m, \(days) d, \(hours) h, \(minutes) min"
-        }
-        if months == 0 && days > 0 {
-            return "\(days) d, \(hours) h, \(minutes) min"
-        }
-        return "\(hours) h, \(minutes) min"
-        
+        return UtilitiesFunctions.convertTotalDurationToString(totalDuration: totalDuration)
     }
     
     private func resetParameters() {
@@ -151,8 +124,8 @@ class DashboardViewModel: ObservableObject {
         mostChosenVehicle = "car"
         visitedContinents = 0
         totalTripsMade = 0
-        distances = [2022: 0, 2023: 0, 2024: 0, 2025: 0]
-        tripsMade = [2022: 0, 2023: 0, 2024: 0, 2025: 0]
+        distances = [getCurrentYear()-3: 0, getCurrentYear()-2: 0, getCurrentYear()-1: 0, getCurrentYear(): 0]
+        tripsMade = [getCurrentYear()-3: 0, getCurrentYear()-2: 0, getCurrentYear()-1: 0, getCurrentYear(): 0]
     }
     
     func keysToString(keys :[Int]) -> [String] {
@@ -164,5 +137,10 @@ class DashboardViewModel: ObservableObject {
             stringKeys.append(formatter.string(from: NSNumber(value: k)) ?? "")
         }
         return stringKeys
+    }
+    
+    private func getCurrentYear() -> Int {
+        let calendar = Calendar(identifier: .gregorian)
+        return calendar.component(.year, from: Date())
     }
 }
