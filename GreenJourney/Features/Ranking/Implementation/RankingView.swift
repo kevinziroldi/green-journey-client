@@ -22,8 +22,10 @@ struct RankingView: View {
             VStack {
                 HStack {
                     Text("Ranking")
-                        .font(.title)
+                        .font(.system(size: 32).bold())
                         .padding()
+                        .fontWeight(.semibold)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     
                     Spacer()
                     

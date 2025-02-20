@@ -25,8 +25,10 @@ struct CitiesReviewsView: View {
             // header
             HStack {
                 Text("City reviews")
-                    .font(.title)
+                    .font(.system(size: 32).bold())
                     .padding()
+                    .fontWeight(.semibold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 Spacer()
                 
                 NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)) {

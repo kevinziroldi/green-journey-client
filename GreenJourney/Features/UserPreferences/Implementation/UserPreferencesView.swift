@@ -30,7 +30,9 @@ struct UserPreferencesView : View {
             VStack(spacing: 0) {
                 HStack {
                     Text("Profile")
-                        .font(.title)
+                        .font(.system(size: 32).bold())
+                        .fontWeight(.semibold)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.leading)
                         .padding(.bottom, 15)
                     Spacer()

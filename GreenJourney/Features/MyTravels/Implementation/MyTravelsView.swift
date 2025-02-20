@@ -26,8 +26,10 @@ struct MyTravelsView: View {
         VStack {
             HStack {
                 Text("My Travels")
-                    .font(.title)
+                    .font(.system(size: 32).bold())
                     .padding()
+                    .fontWeight(.semibold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityIdentifier("myTravelsTitle")
                 
                 Spacer()

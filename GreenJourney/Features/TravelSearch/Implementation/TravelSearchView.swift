@@ -54,8 +54,10 @@ struct TravelSearchView: View {
                         VStack {
                             HStack {
                                 Text("Next journey")
-                                    .font(.title)
+                                    .font(.system(size: 32).bold())
                                     .padding()
+                                    .fontWeight(.semibold)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
                                     .accessibilityIdentifier("travelSearchViewTitle")
                                 
                                 Spacer()

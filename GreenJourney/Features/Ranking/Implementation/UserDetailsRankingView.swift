@@ -12,9 +12,10 @@ struct UserDetailsRankingView: View {
         ZStack {
             VStack {
                 Text("User Details")
-                    .font(.largeTitle)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .font(.system(size: 32).bold())
                     .padding()
+                    .fontWeight(.semibold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 
                 
                 Text(user.firstName + " " + user.lastName)
