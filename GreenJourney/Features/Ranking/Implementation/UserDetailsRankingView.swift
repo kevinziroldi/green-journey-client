@@ -120,8 +120,6 @@ struct UserDetailsRankingView: View {
                                     .font(.system(size: 22).bold())
                                     .bold()
                                     .foregroundColor(.blue.opacity(0.8))
-                                    //.frame(width: 180, alignment: .leading)
-                                // TODO remove????
                                 
                                 Text("in travel")
                                     .font(.system(size: 20).bold())
@@ -149,8 +147,6 @@ struct UserDetailsRankingView: View {
                                     .font(.system(size: 22).bold())
                                     .bold()
                                     .foregroundColor(.red.opacity(0.8))
-                                    //.frame(width: 110, alignment: .leading)
-                                // TODO remove ????
                                 
                                 Text("Co2 emitted")
                                     .font(.system(size: 20).bold())
@@ -177,8 +173,6 @@ struct UserDetailsRankingView: View {
                                     .font(.system(size: 20).bold())
                                     .bold()
                                     .foregroundColor(.green.opacity(0.8))
-                                    //.frame(width: 110, alignment: .leading)
-                                // TODO remove????
 
                                 Text("Co2 compensated")
                                     .font(.system(size: 20).bold())
@@ -192,93 +186,7 @@ struct UserDetailsRankingView: View {
                     }
                     .padding(EdgeInsets(top: 5, leading: 15, bottom: 7, trailing: 15))
                     .overlay(Color.clear.accessibilityIdentifier("userTravelsRecap"))
-
-                    /*
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 20)
-                            .stroke(colorScheme == .dark ? .white : .black, lineWidth: 2)
-                            .shadow(radius: 10)
-                        
-                        VStack {
-                            HStack {
-                                Image (systemName: "road.lanes")
-                                    .font(.largeTitle)
-                                    .frame(maxWidth: 40)
-                                
-                                Spacer()
-                                
-                                Text(String(format: "%.1f", user.totalDistance) + " Km")
-                                    .font(.title2)
-                                    .fontWeight(.semibold)
-                                Text("traveled")
-                                    .font(.title2)
-                                
-                                Spacer()
-                            }
-                            .padding(.vertical, 7)
-                            
-                            HStack {
-                                Image(systemName: "clock")
-                                    .font(.largeTitle)
-                                    .frame(maxWidth: 40)
-                                    .foregroundStyle(.cyan)
-                                
-                                Spacer()
-                                
-                                Text(viewModel.computeTotalDuration(duration: user.totalDuration))
-                                    .font(.title2)
-                                    .fontWeight(.semibold)
-                                Text("in travel")
-                                    .font(.title2)
-                                
-                                Spacer()
-                            }
-                            .padding(.vertical, 7)
-                        }
-                        .padding()
-                    }
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(EdgeInsets(top: 10, leading: 15, bottom: 30, trailing: 15))
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 20)
-                            .stroke(colorScheme == .dark ? .white : .black, lineWidth: 2)
-                            .shadow(radius: 10)
-                        
-                        VStack {
-                            HStack {
-                                Image(systemName: "carbon.dioxide.cloud")
-                                    .font(.largeTitle)
-                                    .frame(maxWidth: 40)
-                                    .foregroundStyle(.red)
-                                Spacer()
-                                Text(String(format: "%.1f", user.totalCo2Emitted) + " Kg")
-                                    .font(.title2)
-                                    .fontWeight(.semibold)
-                                Text("CO2 emitted")
-                                    .font(.title2)
-                                Spacer()
-                            }
-                            .padding(.vertical, 7)
-                            
-                            HStack {
-                                Image(systemName: "leaf")
-                                    .font(.largeTitle)
-                                    .frame(maxWidth: 40)
-                                    .foregroundStyle(.green)
-                                Spacer()
-                                Text(String(format: "%.1f", user.totalCo2Compensated) + " Kg")
-                                    .font(.title2)
-                                    .fontWeight(.semibold)
-                                Text("CO2 compensated")
-                                    .font(.title2)
-                                Spacer()
-                            }
-                            .padding(.vertical, 7)
-                        }
-                        .padding()
-                    }
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(EdgeInsets(top: 10, leading: 15, bottom: 30, trailing: 15))*/
+                    
                     Spacer()
                 }
             }

@@ -67,6 +67,7 @@ struct TravelSearchView: View {
                                         .font(.title)
                                         .accessibilityIdentifier("userPreferencesLink")
                                 }
+                                .accessibilityIdentifier("userPreferencesButton")
                             }
                             .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
                             

@@ -42,13 +42,15 @@ struct UserPreferencesView : View {
                 
                 Text("Hi, \(user.firstName) \(user.lastName)")
                     .font(.title)
+                    .accessibilityIdentifier("greetingMessage")
                 
-                
-                Text("Do you want to get better predictions about your future travels? Complete your profile!")
+                Text("Help us know you better, complete your profile!")
                     .font(.subheadline)
                     .fontWeight(.light)
                     .padding(.vertical)
                     .frame(height: 80)
+                    .accessibilityIdentifier("completeProfileMessage")
+                
                 HStack {
                     if editTapped {
                         Button("Cancel") {
@@ -57,7 +59,10 @@ struct UserPreferencesView : View {
                             }
                             userPreferencesViewModel.cancelModifications()
                         }
+                        .accessibilityIdentifier("cancelButton")
+                        
                         Spacer()
+                        
                         Button("Save") {
                             Task {
                                 withAnimation(.default) {
@@ -66,6 +71,7 @@ struct UserPreferencesView : View {
                                 await userPreferencesViewModel.saveModifications()
                             }
                         }
+                        .accessibilityIdentifier("saveButton")
                     }
                     else {
                         Spacer()
@@ -74,6 +80,7 @@ struct UserPreferencesView : View {
                                 editTapped = true
                             }
                         }
+                        .accessibilityIdentifier("editButton")
                     }
                 }
                 .padding(EdgeInsets(top: 0, leading: 25, bottom: 10, trailing: 25))
@@ -84,33 +91,39 @@ struct UserPreferencesView : View {
                             Text("First Name")
                             TextField("Not set", text: $userPreferencesViewModel.firstName)
                                 .multilineTextAlignment(.trailing)
+                                .accessibilityIdentifier("firstNameTextField")
                         }
                         
                         HStack {
                             Text("Last Name")
                             TextField("Not set", text: $userPreferencesViewModel.lastName)
                                 .multilineTextAlignment(.trailing)
+                                .accessibilityIdentifier("lastNameTextField")
                         }
                         
                         DatePicker("Birth date", selection: $userPreferencesViewModel.birthDate.toNonOptional(), in: Date.distantPast...Date(), displayedComponents: .date)
+                            .accessibilityIdentifier("birthDatePicker")
                         
                         Picker("Gender", selection: $userPreferencesViewModel.gender) {
                             ForEach(Gender.allCases, id: \.self) { gender in
                                 Text(gender.rawValue).tag(gender)
                             }
                         }
-                        .pickerStyle(.automatic)
+                        .pickerStyle(.wheel)
+                        .accessibilityIdentifier("genderPicker")
                         
                         HStack {
                             Text("City")
                             TextField("Not set", text: $userPreferencesViewModel.city.toNonOptional())
                                 .multilineTextAlignment(.trailing)
+                                .accessibilityIdentifier("cityTextField")
                         }
                         
                         HStack {
                             Text("Street Name")
                             TextField("Not set", text: $userPreferencesViewModel.streetName.toNonOptional())
                                 .multilineTextAlignment(.trailing)
+                                .accessibilityIdentifier("streetNameTextField")
                         }
                         
                         HStack {
@@ -118,6 +131,7 @@ struct UserPreferencesView : View {
                             TextField("Not set", text: userPreferencesViewModel.binding(for: $userPreferencesViewModel.houseNumber))
                                 .multilineTextAlignment(.trailing)
                                 .keyboardType(.numberPad)
+                                .accessibilityIdentifier("houseNumberTextField")
                         }
                         
                         HStack {
@@ -125,14 +139,17 @@ struct UserPreferencesView : View {
                             TextField("Not set", text: userPreferencesViewModel.binding(for: $userPreferencesViewModel.zipCode))
                                 .multilineTextAlignment(.trailing)
                                 .keyboardType(.numberPad)
+                                .accessibilityIdentifier("zipCodeTextField")
                         }
                     }
                     .disabled(!editTapped)
+                    
                     Section {
                         HStack {
                             Text("Email")
                             Spacer()
                             Text(email)
+                                .accessibilityIdentifier("email")
                         }
                     }
                 }
@@ -140,6 +157,7 @@ struct UserPreferencesView : View {
                 .contentMargins(.vertical, 0, for: .scrollContent)
                 .scrollContentBackground(.hidden)
                 .scrollDismissesKeyboard(.immediately)
+                
                 HStack {
                     Spacer()
                     if let resendEmail = authenticationViewModel.resendEmail {
@@ -147,8 +165,8 @@ struct UserPreferencesView : View {
                             Text(resendEmail)
                                 .font(.subheadline)
                                 .fontWeight(.light)
+                                .accessibilityIdentifier("emailSentMessage")
                         }
-                        
                     }
                     Button ("Modify password") {
                         withAnimation() {
@@ -163,6 +181,7 @@ struct UserPreferencesView : View {
                             }
                         }
                     }
+                    .accessibilityIdentifier("modifyPasswordButton")
                 }
                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 20, trailing: 25))
                 
@@ -170,7 +189,9 @@ struct UserPreferencesView : View {
                     Text(errorMessage)
                         .font(.caption)
                         .foregroundStyle(.red)
+                        .accessibilityIdentifier("errorMessage")
                 }
+                
                 // logout button
                 Button(action: {
                     authenticationViewModel.logout()
@@ -183,6 +204,7 @@ struct UserPreferencesView : View {
                 }
                 .buttonStyle(.bordered)
                 .padding(EdgeInsets(top: 30, leading: 0, bottom: 10, trailing: 0))
+                .accessibilityIdentifier("logoutButton")
                 
                 Spacer()
             }
@@ -193,9 +215,6 @@ struct UserPreferencesView : View {
                 
             }
             .background(colorScheme == .dark ? Color(red: 10/255, green: 10/255, blue: 10/255) : Color(red: 245/255, green: 245/255, blue: 245/255))
-            
-            
-            
         } else {
             LoginView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
                 .transition(.opacity.animation(.easeInOut(duration: 0.2)))
