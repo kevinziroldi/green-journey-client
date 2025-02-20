@@ -109,6 +109,7 @@ struct MyTravelsView: View {
                                         
                                         Button(action: {
                                             showConfirm = true
+                                            viewModel.selectedTravel = travelDetails
                                         }) {
                                             Image(systemName: "checkmark.circle")
                                                 .font(.largeTitle)
@@ -124,7 +125,7 @@ struct MyTravelsView: View {
                                                 secondaryButton: .default(Text("Confirm")) {
                                                     //confirm travel
                                                     Task {
-                                                        await viewModel.confirmTravel(travel: travelDetails.travel)
+                                                        await viewModel.confirmTravel()
                                                     }
                                                 }
                                             )
@@ -133,6 +134,7 @@ struct MyTravelsView: View {
                                         
                                         Button(action: {
                                             showAlert = true
+                                            viewModel.selectedTravel = travelDetails
                                         }) {
                                             Image(systemName: "trash.circle")
                                                 .font(.largeTitle)
@@ -149,7 +151,7 @@ struct MyTravelsView: View {
                                                 secondaryButton: .destructive(Text("Delete")) {
                                                     //delete travel
                                                     Task {
-                                                        await viewModel.deleteTravel(travelToDelete: travelDetails.travel)
+                                                        await viewModel.deleteTravel()
                                                     }
                                                 }
                                             )

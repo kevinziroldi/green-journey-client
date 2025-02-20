@@ -245,7 +245,9 @@ class MyTravelsViewModel: ObservableObject {
         
     }
     
-    func confirmTravel(travel: Travel) async {
+    func confirmTravel() async {
+        guard let selectedTravel else {return}
+        let travel = selectedTravel.travel
         if travel.confirmed {
             print("Travel already confirmed")
             return
@@ -290,7 +292,9 @@ class MyTravelsViewModel: ObservableObject {
         }
     }
     
-    func deleteTravel(travelToDelete: Travel) async {
+    func deleteTravel() async {
+        guard let selectedTravel else {return}
+        let travelToDelete = selectedTravel.travel
         do {
             guard let travelID = travelToDelete.travelID else {
                 print("Travel id for deletion is nil")

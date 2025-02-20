@@ -247,6 +247,7 @@ struct TravelDetailsView: View {
                             
                             Button(action: {
                                 showAlert = true
+                                viewModel.selectedTravel = travelDetails
                             }) {
                                 Image(systemName: "trash.circle")
                                     .font(.largeTitle)
@@ -262,7 +263,7 @@ struct TravelDetailsView: View {
                                     secondaryButton: .destructive(Text("Delete")) {
                                         //delete travel
                                         Task {
-                                            await viewModel.deleteTravel(travelToDelete: travelDetails.travel)
+                                            await viewModel.deleteTravel()
                                             navigationPath.removeLast()
                                         }
                                     }

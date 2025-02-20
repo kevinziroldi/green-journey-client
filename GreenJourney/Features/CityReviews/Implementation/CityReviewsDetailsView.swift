@@ -126,16 +126,19 @@ struct CityReviewsDetailsView: View {
                                                     .fill(Color(uiColor: .systemBackground))
                                                     .shadow(color: .blue.opacity(0.3), radius: 5, x: 0, y: 3)
                                                 HStack{
-                                                    Text("add your review")
-                                                        .padding()
-                                                        .foregroundStyle(.blue.opacity(0.8))
-                                                        .font(.headline)
-                                                    Spacer()
-                                                    FiveStarView(rating: 5, dim: 20, color: .white.opacity(0.5))
+                                                    Button(action: {
+                                                        editTapped = true
+                                                    }) {
+                                                        Text("add your review")
+                                                            .padding()
+                                                            .foregroundStyle(.blue.opacity(0.8))
+                                                            .font(.headline)
+                                                        Spacer()
+                                                    }
+                                                    .padding(.horizontal)
                                                 }
-                                                .padding(.horizontal)
+                                                .padding()
                                             }
-                                            .padding()
                                         } else {
                                             if let userReview = viewModel.userReview {
                                                 ZStack{
@@ -214,7 +217,7 @@ struct CityReviewsDetailsView: View {
                 .blur(radius: (editTapped || infoTapped) ? 5 : 0)
                 .allowsHitTesting(!(editTapped || infoTapped))
                 if editTapped {
-                    InsertReviewView()
+                    InsertReviewView(isPresented: $editTapped)
                 }
             }
             .onAppear(){
@@ -261,7 +264,7 @@ struct SnapperView: View {
             ForEach(cards) { card in
                 CardView(review: card, width: cardWidth)
                     .offset(x: isDragging ? totalDrag : 0)
-                    .animation(.bouncy(duration: 0.4, extraBounce: 0.0), value: isDragging)
+                    .animation(.bouncy(duration: 1, extraBounce: 0.0), value: isDragging)
             }
         }
         .padding(.horizontal, padding)
@@ -369,8 +372,142 @@ struct CardView: View {
 }
 
 struct InsertReviewView: View {
+    @Binding var isPresented: Bool
+    @State private var rating1: Int = 0
+    @State private var rating2: Int = 0
+    @State private var rating3: Int = 0
+    @State private var comment: String = ""
+    @State private var offsetY: CGFloat = 0
+    @FocusState private var isFocused: Bool
+
+
+    //var onSubmit: (Int, Int, Int, String) -> Void
     
     var body: some View {
-        Text("InsertReviewView")
+        ZStack {
+            if isPresented {
+                Color.black.opacity(0.3)
+                    .edgesIgnoringSafeArea(.all)
+                    .onTapGesture {
+                        withAnimation(.easeInOut) {
+                            isPresented = false
+                        }
+                    }
+                    .transition(.opacity)
+                    .animation(.easeIn(duration: 0.2), value: isPresented)
+            }
+
+            VStack {
+                Spacer()
+                
+                VStack(spacing: 15) {
+                    Capsule()
+                        .frame(width: 40, height: 5)
+                        .foregroundColor(.gray)
+                        .padding(.top, 8)
+
+                    Text("Leave a review")
+                        .font(.headline)
+                        .padding(.top, 10)
+
+                    ReviewStarRating(title: "Puntualità", rating: $rating1)
+                    ReviewStarRating(title: "Confort", rating: $rating2)
+                    ReviewStarRating(title: "Esperienza", rating: $rating3)
+
+                    TextField("Leave a review...", text: $comment, axis: .vertical)
+                        .padding()
+                        .lineLimit(8, reservesSpace: true)
+                        .focused($isFocused)
+                        .background(Color(.systemGray6))
+                        .cornerRadius(10)
+                        .toolbar {
+                            ToolbarItemGroup(placement: .keyboard) {
+                                Spacer()
+                                Button("Done") {
+                                    isFocused = false
+                                }
+                            }
+                        }
+                    Spacer()
+                    
+                    Button(action: {
+                        //onSubmit(rating1, rating2, rating3, comment)
+                        withAnimation(.easeInOut) {
+                            isPresented = false
+                        }
+                    }) {
+                        Text("Done")
+                            .padding()
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                    }
+                    .padding(.bottom, 20)
+                }
+                .padding(.horizontal, 15)
+                .frame(maxWidth: .infinity)
+                .frame(height: 600)
+                .background(Color.white)
+                .cornerRadius(20)
+                .shadow(radius: 10)
+                .offset(y: offsetY)
+                .gesture(
+                    DragGesture()
+                        .onChanged { gesture in
+                            if gesture.translation.height > 0 {
+                                offsetY = gesture.translation.height
+                            }
+                        }
+                        .onEnded { gesture in
+                            if gesture.translation.height > 150 {
+                                withAnimation(.spring()) {
+                                    isPresented = false
+                                    offsetY = 0
+                                }
+                            } else {
+                                withAnimation(.spring()) {
+                                    offsetY = 0
+                                }
+                            }
+                        }
+                )
+                .transition(.move(edge: .bottom))
+            }
+            .padding()
+            .animation(.easeInOut, value: isPresented)
+            
+        }
+    }
+}
+
+// Componente per la valutazione con stelle
+struct ReviewStarRating: View {
+    let title: String
+    @Binding var rating: Int
+    
+    var body: some View {
+        HStack (spacing: 15){
+            Spacer()
+            Text(title)
+                .font(.subheadline)
+                .bold()
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
+            HStack {
+                ForEach(1..<6, id: \.self) { index in
+                    Image(systemName: index <= rating ? "star.fill" : "star")
+                        .foregroundColor(.yellow)
+                        .font(.title2)
+                        .onTapGesture {
+                            withAnimation(Animation.easeInOut(duration: 0.2)) {
+                                rating = index
+                            }
+                        }
+                }
+            }
+            Spacer()
+            
+        }
+        .padding(.vertical, 5)
     }
 }
