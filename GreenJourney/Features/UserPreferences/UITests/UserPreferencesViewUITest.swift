@@ -98,18 +98,113 @@ final class UserPreferencesViewUITest: XCTestCase {
     }
     
     func testEditFieldAndCancel() {
+        // UI elements
+        let userPreferencesTitle = app.staticTexts["userPreferencesTitle"]
+        let editButton = app.buttons["editButton"]
+        let cancelButton = app.buttons["cancelButton"]
+        let saveButton = app.buttons["saveButton"]
+        let firstNameTextField = app.textFields["firstNameTextField"]
+        
+        // check UI elements present
+        XCTAssertTrue(userPreferencesTitle.exists, "userPreferencesTitle is not displayed")
+        XCTAssertTrue(editButton.exists, "editButton is not displayed")
+        XCTAssertTrue(firstNameTextField.exists, "lastNameTextField is not displayed")
+        XCTAssertFalse(cancelButton.exists, "cancelButton is not displayed")
+        XCTAssertFalse(saveButton.exists, "saveButton is not displayed")
+        
+        // tap edit button and edit the text field
+        editButton.tap()
+        firstNameTextField.tap()
+        firstNameTextField.typeText("new name")
+        
+        // check save button and cancel button present
+        XCTAssertTrue(cancelButton.exists, "cancelButton is not displayed")
+        XCTAssertTrue(saveButton.exists, "saveButton is not displayed")
+        
+        // tap cancel button
+        cancelButton.tap()
+        
+        // check UI elements
+        XCTAssertTrue(userPreferencesTitle.exists, "userPreferencesTitle is not displayed")
+        XCTAssertTrue(editButton.exists, "editButton is not displayed")
+        XCTAssertTrue(firstNameTextField.exists, "lastNameTextField is not displayed")
+        XCTAssertFalse(cancelButton.exists, "cancelButton is not displayed")
+        XCTAssertFalse(saveButton.exists, "saveButton is not displayed")
         
     }
     
     func testEditFieldAndSave() {
+        // UI elements
+        let userPreferencesTitle = app.staticTexts["userPreferencesTitle"]
+        let editButton = app.buttons["editButton"]
+        let cancelButton = app.buttons["cancelButton"]
+        let saveButton = app.buttons["saveButton"]
+        let firstNameTextField = app.textFields["firstNameTextField"]
         
+        // check UI elements present
+        XCTAssertTrue(userPreferencesTitle.exists, "userPreferencesTitle is not displayed")
+        XCTAssertTrue(editButton.exists, "editButton is not displayed")
+        XCTAssertTrue(firstNameTextField.exists, "lastNameTextField is not displayed")
+        XCTAssertFalse(cancelButton.exists, "cancelButton is not displayed")
+        XCTAssertFalse(saveButton.exists, "saveButton is not displayed")
+        
+        // tap edit button and edit the text field
+        editButton.tap()
+        firstNameTextField.tap()
+        firstNameTextField.typeText("new name")
+        
+        // check save button and cancel button present
+        XCTAssertTrue(cancelButton.exists, "cancelButton is not displayed")
+        XCTAssertTrue(saveButton.exists, "saveButton is not displayed")
+        
+        // tap cancel button
+        saveButton.tap()
+        
+        // check UI elements
+        XCTAssertTrue(userPreferencesTitle.exists, "userPreferencesTitle is not displayed")
+        XCTAssertTrue(editButton.exists, "editButton is not displayed")
+        XCTAssertTrue(firstNameTextField.exists, "lastNameTextField is not displayed")
+        XCTAssertFalse(cancelButton.exists, "cancelButton is not displayed")
+        XCTAssertFalse(saveButton.exists, "saveButton is not displayed")
     }
     
     func testModifyPassword() {
+        // UI elements
+        let userPreferencesTitle = app.staticTexts["userPreferencesTitle"]
+        let modifyPasswordButton = app.buttons["modifyPasswordButton"]
+        let emailSentMessage = app.staticTexts["emailSentMessage"]
+        let errorMessage = app.staticTexts["errorMessage"]
         
+        // check UI elements present
+        XCTAssertTrue(userPreferencesTitle.exists, "userPreferencesTitle is not displayed")
+        XCTAssertTrue(modifyPasswordButton.exists, "modifyPasswordButton is not displayed")
+        XCTAssertFalse(emailSentMessage.exists, "emailSentMessage is displayed")
+        XCTAssertFalse(errorMessage.exists, "errorMessage is displayed")
+        
+        // tap modify password button
+        modifyPasswordButton.tap()
+        
+        // check UI elements
+        XCTAssertTrue(userPreferencesTitle.exists, "userPreferencesTitle is not displayed")
+        XCTAssertTrue(modifyPasswordButton.exists, "modifyPasswordButton is not displayed")
+        XCTAssertTrue(emailSentMessage.exists, "emailSentMessage is displayed")
+        XCTAssertFalse(errorMessage.exists, "errorMessage is displayed")
     }
     
     func testLogout() {
+        // UI elements UserPreferencesView
+        let userPreferencesTitle = app.staticTexts["userPreferencesTitle"]
+        let logoutButton = app.buttons["logoutButton"]
         
+        // check UI elements present
+        XCTAssertTrue(userPreferencesTitle.exists, "userPreferencesTitle is not displayed")
+        XCTAssertTrue(logoutButton.exists, "logoutButton is not displayed")
+        
+        // tap logout button
+        logoutButton.tap()
+        
+        // UI elements LoginView
+        let loginLogoImage = app.images["loginLogoImage"]
+        XCTAssertTrue(loginLogoImage.exists, "loginLogoImage is not displayed")
     }
 }

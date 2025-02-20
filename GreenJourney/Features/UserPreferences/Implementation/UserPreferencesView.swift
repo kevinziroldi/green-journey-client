@@ -160,14 +160,14 @@ struct UserPreferencesView : View {
                 
                 HStack {
                     Spacer()
-                    if let resendEmail = authenticationViewModel.resendEmail {
-                        if showResendMessage {
-                            Text(resendEmail)
-                                .font(.subheadline)
-                                .fontWeight(.light)
-                                .accessibilityIdentifier("emailSentMessage")
-                        }
+                    
+                    if showResendMessage {
+                        Text("Email sent, check your inbox")
+                            .font(.subheadline)
+                            .fontWeight(.light)
+                            .accessibilityIdentifier("emailSentMessage")
                     }
+                
                     Button ("Modify password") {
                         withAnimation() {
                             showResendMessage = true
