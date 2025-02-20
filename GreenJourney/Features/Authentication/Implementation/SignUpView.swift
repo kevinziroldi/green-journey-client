@@ -117,6 +117,9 @@ struct SignUpView: View {
                             Button ("Login") {
                                 if !navigationPath.isEmpty {
                                     viewModel.errorMessage = nil
+                                    viewModel.email = ""
+                                    viewModel.password = ""
+                                    viewModel.repeatPassword = ""
                                     navigationPath.removeLast()
                                 }
                             }

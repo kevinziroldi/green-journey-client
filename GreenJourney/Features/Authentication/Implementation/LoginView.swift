@@ -134,6 +134,8 @@ struct LoginView: View {
                         .fontWeight(.light)
                     Button ("Sign up") {
                         viewModel.errorMessage = nil
+                        viewModel.email = ""
+                        viewModel.password = ""
                         navigationPath.append(NavigationDestination.SignupView(viewModel))
                     }
                     .accessibilityIdentifier("moveToSignUpButton")
