@@ -68,7 +68,7 @@ final class RankingViewModelTest {
         self.mockServerService.shouldSucceed = true
         await viewModel.fecthRanking()
         
-        #expect(viewModel.longDistanceRanking.count == 3)
+        #expect(viewModel.longDistanceRanking.count == 11)
         #expect(viewModel.shortDistanceRanking.count == 3)
         #expect(viewModel.errorMessage == nil)
     }

@@ -54,6 +54,23 @@ final class MyTravelsUITests: XCTestCase {
         XCTAssertTrue(sortByButton.exists, "The sort by button is not present")
     }
     
+    func testNavigationToUserPreferences() {
+        // UI elements
+        let myTravelsTitle = app.staticTexts["myTravelsTitle"]
+        let userPreferencesButton = app.buttons["userPreferencesButton"]
+        
+        // check elements exist
+        XCTAssertTrue(myTravelsTitle.waitForExistence(timeout: timer), "The rankingTitle is not displayed")
+        XCTAssertTrue(userPreferencesButton.exists, "The userPreferencesButton is not displayed")
+        
+        // tap user preference button
+        userPreferencesButton.tap()
+        
+        // check change of view
+        let userPreferencesTitle = app.staticTexts["userPreferencesTitle"]
+        XCTAssertTrue(userPreferencesTitle.waitForExistence(timeout: timer), "The userPreferencesTitle is not displayed")
+    }
+    
     func testSortByButtonShowsActionSheetTapCancelButton() {
         // UI elements
         let myTravelsTitle = app.staticTexts["myTravelsTitle"]

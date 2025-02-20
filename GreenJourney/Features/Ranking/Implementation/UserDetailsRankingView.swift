@@ -17,6 +17,7 @@ struct UserDetailsRankingView: View {
                         .padding()
                         .fontWeight(.semibold)
                         .frame(maxWidth: .infinity, alignment: .leading)
+                        .accessibilityIdentifier("userDetailsTitle")
                     
                     
                     Text(user.firstName + " " + user.lastName)

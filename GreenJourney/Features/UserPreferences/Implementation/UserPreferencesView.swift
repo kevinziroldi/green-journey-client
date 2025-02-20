@@ -35,6 +35,8 @@ struct UserPreferencesView : View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.leading)
                         .padding(.bottom, 15)
+                        .accessibilityIdentifier("userPreferencesTitle")
+                    
                     Spacer()
                 }
                 

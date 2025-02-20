@@ -26,6 +26,7 @@ struct RankingView: View {
                         .padding()
                         .fontWeight(.semibold)
                         .frame(maxWidth: .infinity, alignment: .leading)
+                        .accessibilityIdentifier("rankingTitle")
                     
                     Spacer()
                     
@@ -33,6 +34,7 @@ struct RankingView: View {
                         Image(systemName: "person")
                             .font(.title)
                     }
+                    .accessibilityIdentifier("userPreferencesButton")
                 }
                 .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
                 
@@ -42,6 +44,7 @@ struct RankingView: View {
                 }
                 .pickerStyle(.segmented)
                 .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
+                .accessibilityIdentifier("shortLongDistanceControl")
                 
                 Spacer()
                 VStack{
@@ -50,6 +53,7 @@ struct RankingView: View {
                             .font(.headline)
                             .fontWeight(.light)
                             .foregroundStyle(.red)
+                            .accessibilityIdentifier("errorMessage")
                     }
                     else {
                         ZStack {
@@ -66,19 +70,22 @@ struct RankingView: View {
                                 }
                             }
                             .padding(EdgeInsets(top: 0, leading: 10, bottom: 5, trailing: 10))
+                            .accessibilityElement(children: .contain)
+                            .accessibilityIdentifier("leaderboard")
                         }
                     }
                     
                     if viewModel.leaderboardSelected && viewModel.longDistanceRanking.count == 11 {
                         LeaderBoardUserView(userRanking: viewModel.longDistanceRanking[10])
+                            .accessibilityElement(children: .contain)
+                            .accessibilityIdentifier("leaderboardUserLongDistance")
                     }
                     
                     if !viewModel.leaderboardSelected && viewModel.shortDistanceRanking.count == 11 {
                         LeaderBoardUserView(userRanking: viewModel.shortDistanceRanking[10])
+                            .accessibilityElement(children: .contain)
+                            .accessibilityIdentifier("leaderboardUserShortDistance")
                     }
-                    
-                    
-                    
                 }.fixedSize(horizontal: false, vertical: true)
                 
                 Spacer()
@@ -104,8 +111,8 @@ struct LeaderBoardView: View {
     @Binding var navigationPath: NavigationPath
     
     @Environment(\.colorScheme) var colorScheme: ColorScheme
-    @Query var users: [User]
     
+    @Query var users: [User]
     var leaderboard: [RankingElement]
     
     var body: some View {
@@ -138,15 +145,23 @@ struct LeaderBoardView: View {
                 Color(red: 167/255, green: 214/255, blue: 165/255)
                     .clipShape(TopRoundedCorners(cornerRadius: 20))
             )
+            .overlay(
+                Color.clear
+                    .accessibilityIdentifier("tableHeader")
+            )
+            
             Rectangle()
                 .frame(height: 1)
                 .foregroundColor(colorScheme == .dark ? Color.gray : Color.black)
                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 5, trailing: 0))
+            
             ForEach (leaderboard.indices, id: \.self) { index in
                 NavigationLink (destination: UserDetailsRankingView(viewModel: viewModel, navigationPath: $navigationPath, user: leaderboard[index])) {
                     VStack (spacing: 5){
                         HStack {
-                            // Colonna Nome Utente
+                            // row of the table
+                            
+                            //position in the ranking
                             ZStack {
                                 Circle()
                                     .stroke(LinearGradient(gradient: Gradient(colors: [.green, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing), lineWidth: 2)
@@ -158,15 +173,20 @@ struct LeaderBoardView: View {
                                         leaderboard[index].userID == users.first?.userID ?? -1 ? .blue : colorScheme == .dark ? .white : .black)
                                     .fontWeight(.semibold)
                             }
+                            
                             Spacer()
+                            
+                            // name
                             Text(leaderboard[index].firstName + " " + leaderboard[index].lastName.prefix(1) + ".")
                                 .frame(alignment: .leading)
                                 .foregroundStyle(leaderboard[index].userID == users.first?.userID ?? -1 ? .blue : colorScheme == .dark ? .white : .black)
                                 .fontWeight(.semibold)
                             Spacer()
-                            // Colonna Badge
+                            
+                            // badges
                             BadgeView(badges: leaderboard[index].badges, dim: 40, inline: false)
-                            // Colonna Punteggio
+                            
+                            // score
                             Text(String(format: "%.1f", leaderboard[index].score))
                                 .frame(maxWidth: 90, alignment: .trailing)
                                 .foregroundStyle(LinearGradient(gradient: Gradient(colors: [.green, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing))
@@ -182,6 +202,7 @@ struct LeaderBoardView: View {
                         }
                     }
                 }
+                .accessibilityIdentifier("rankingRow_\(index)")
             }
         }
         .padding(EdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 0))
@@ -218,15 +239,16 @@ struct LeaderBoardUserView: View {
                     }
                     
                     Spacer()
+                    
                     Text(userRanking.firstName + " " + userRanking.lastName.prefix(1) + ".")
                         .frame(alignment: .leading)
                         .foregroundStyle(LinearGradient(gradient: Gradient(colors: [.green, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing))
                         .fontWeight(.semibold)
                     
                     Spacer()
-                    // Colonna Badge
+                    
                     BadgeView(badges: userRanking.badges, dim: 40, inline: false)
-                    // Colonna Punteggio
+                    
                     Text(String(format: "%.1f", userRanking.score))
                         .frame(maxWidth: 90, alignment: .trailing)
                         .foregroundStyle(LinearGradient(gradient: Gradient(colors: [.green, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing))
