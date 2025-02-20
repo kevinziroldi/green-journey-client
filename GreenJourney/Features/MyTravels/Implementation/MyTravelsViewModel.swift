@@ -1,6 +1,7 @@
 import Combine
 import Foundation
 import SwiftData
+import SwiftUI
 
 // 37.5 kg/€
 let co2CompensatedPerEuro = 37.5
@@ -589,6 +590,7 @@ class MyTravelsViewModel: ObservableObject {
         }
         return Int(ceil(travel.travel.CO2Compensated / (pricePerTree * co2CompensatedPerEuro)))
     }
+    
 }
 extension MyTravelsViewModel: Hashable {
     nonisolated static func == (lhs: MyTravelsViewModel, rhs: MyTravelsViewModel) -> Bool {
