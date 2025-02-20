@@ -60,7 +60,7 @@ final class UserPreferencesViewUITest: XCTestCase {
         let firstNameTextField = app.textFields["firstNameTextField"]
         let lastNameTextField = app.textFields["lastNameTextField"]
         let datePicker = app.datePickers["birthDatePicker"]
-        let genderPicker = app.pickers["genderPicker"]
+        let genderPicker = app.descendants(matching: .any).matching(identifier: "genderPicker").firstMatch  
         let cityTextField = app.textFields["cityTextField"]
         let streetNameTextField = app.textFields["streetNameTextField"]
         let houseNumberTextField = app.textFields["houseNumberTextField"]
@@ -72,12 +72,16 @@ final class UserPreferencesViewUITest: XCTestCase {
         let logoutButton = app.buttons["logoutButton"]
  
         // check presence of UI elements
+        XCTAssertTrue(editButton.exists, "editButton is not displayed")
+        
+        // tap edit button
+        editButton.tap()
+        
         XCTAssertTrue(userPreferencesTitle.exists, "userPreferencesTitle is not displayed")
         XCTAssertTrue(greetingMessage.exists, "greetingMessage is not displayed")
         XCTAssertTrue(completeProfileMessage.exists, "completeProfileMessage is not displayed")
-        XCTAssertTrue(editButton.exists, "editButton is not displayed")
-        XCTAssertFalse(cancelButton.exists, "cancelButton is already displayed")
-        XCTAssertFalse(saveButton.exists, "saveButton is already displayed")
+        XCTAssertTrue(cancelButton.exists, "cancelButton is not displayed")
+        XCTAssertTrue(saveButton.exists, "saveButton is not displayed")
         XCTAssertTrue(firstNameTextField.exists, "firstNameTextField is not displayed")
         XCTAssertTrue(lastNameTextField.exists, "lastNameTextField is not displayed")
         XCTAssertTrue(datePicker.exists, "datePicker is not displayed")

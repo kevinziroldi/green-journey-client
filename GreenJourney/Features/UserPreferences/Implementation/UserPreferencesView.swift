@@ -109,7 +109,7 @@ struct UserPreferencesView : View {
                                 Text(gender.rawValue).tag(gender)
                             }
                         }
-                        .pickerStyle(.wheel)
+                        .pickerStyle(.automatic)
                         .accessibilityIdentifier("genderPicker")
                         
                         HStack {
