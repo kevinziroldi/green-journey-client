@@ -146,12 +146,13 @@ struct TravelDetailsView: View {
                                                 }
                                             }
                                         }
+                                        .frame(maxWidth: .infinity)
                                         VStack {
                                             ZStack {
                                                 SemiCircle()
                                                     .stroke(style: StrokeStyle(lineWidth: 10, lineCap: .round))
                                                     .foregroundColor(.gray.opacity(0.6))
-                                                    .frame(width: 140, height: 110)
+                                                    .frame(width: 130, height: 110)
                                                 
                                                 // semiCircle filled
                                                 SemiCircle(progress: progress)
