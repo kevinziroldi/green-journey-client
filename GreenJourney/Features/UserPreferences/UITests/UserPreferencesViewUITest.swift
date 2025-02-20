@@ -60,7 +60,7 @@ final class UserPreferencesViewUITest: XCTestCase {
         let firstNameTextField = app.textFields["firstNameTextField"]
         let lastNameTextField = app.textFields["lastNameTextField"]
         let datePicker = app.datePickers["birthDatePicker"]
-        let genderPicker = app.descendants(matching: .any).matching(identifier: "genderPicker").firstMatch  
+        let genderPicker = app.descendants(matching: .any).matching(identifier: "genderPicker").firstMatch
         let cityTextField = app.textFields["cityTextField"]
         let streetNameTextField = app.textFields["streetNameTextField"]
         let houseNumberTextField = app.textFields["houseNumberTextField"]
@@ -95,5 +95,21 @@ final class UserPreferencesViewUITest: XCTestCase {
         XCTAssertFalse(emailSentMessage.exists, "emailSentMessage is displayed")
         XCTAssertFalse(errorMessage.exists, "errorMessage is displayed")
         XCTAssertTrue(logoutButton.exists, "logoutButton is not displayed")
+    }
+    
+    func testEditFieldAndCancel() {
+        
+    }
+    
+    func testEditFieldAndSave() {
+        
+    }
+    
+    func testModifyPassword() {
+        
+    }
+    
+    func testLogout() {
+        
     }
 }

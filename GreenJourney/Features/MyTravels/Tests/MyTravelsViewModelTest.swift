@@ -240,12 +240,14 @@ final class MyTravelsViewModelTest {
         // initialize server and ViewModel
         self.mockServerService.shouldSucceed = true
         await viewModel.getUserTravels()
-        let travel = viewModel.travelDetailsList.first!.travel
+        let travelDetails = viewModel.travelDetailsList.first!
+        viewModel.selectedTravel = travelDetails
+        let travel = travelDetails.travel
         #expect(travel.confirmed == false)
         
         // initialize server and compensate co2
         self.mockServerService.shouldSucceed = true
-        await viewModel.confirmTravel(travel: travel)
+        await viewModel.confirmTravel()
         
         #expect(travel.confirmed == true)
     }
@@ -255,12 +257,14 @@ final class MyTravelsViewModelTest {
         // initialize server and ViewModel
         self.mockServerService.shouldSucceed = true
         await viewModel.getUserTravels()
-        let travel = viewModel.travelDetailsList.first!.travel
+        let travelDetails = viewModel.travelDetailsList.first!
+        viewModel.selectedTravel = travelDetails
+        let travel = travelDetails.travel
         #expect(travel.confirmed == false)
         
         // initialize server and compensate co2
         self.mockServerService.shouldSucceed = false
-        await viewModel.confirmTravel(travel: travel)
+        await viewModel.confirmTravel()
         
         #expect(travel.confirmed == false)
     }
@@ -270,11 +274,13 @@ final class MyTravelsViewModelTest {
         // initialize server and ViewModel
         self.mockServerService.shouldSucceed = true
         await viewModel.getUserTravels()
-        let travel = viewModel.travelDetailsList.first!.travel
+        let travelDetails = viewModel.travelDetailsList.first!
+        viewModel.selectedTravel = travelDetails
+        let travel = travelDetails.travel
         
         // initialize server and delete travel
         self.mockServerService.shouldSucceed = true
-        await viewModel.deleteTravel(travelToDelete: travel)
+        await viewModel.deleteTravel()
         
         // check travel not present anymore
         for td in viewModel.travelDetailsList {
@@ -287,11 +293,13 @@ final class MyTravelsViewModelTest {
         // initialize server and ViewModel
         self.mockServerService.shouldSucceed = true
         await viewModel.getUserTravels()
-        let travel = viewModel.travelDetailsList.first!.travel
+        let travelDetails = viewModel.travelDetailsList.first!
+        viewModel.selectedTravel = travelDetails
+        let travel = travelDetails.travel
         
         // initialize server and delete travel
         self.mockServerService.shouldSucceed = false
-        await viewModel.deleteTravel(travelToDelete: travel)
+        await viewModel.deleteTravel()
         
         // check travel not present anymore
         var foundTravel = false
@@ -300,7 +308,6 @@ final class MyTravelsViewModelTest {
                 foundTravel = true
             }
         }
-        
         #expect(foundTravel)
     }
 }
