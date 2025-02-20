@@ -18,8 +18,8 @@ class DashboardViewModel: ObservableObject {
     @Published var tripsMade = [2022: 0, 2023: 0, 2024: 0, 2025: 0]
     @Published var totalTripsMade: Int = 0
     var totalDuration: Int = 0
-    
     var travelDetailsList: [TravelDetails] = []
+    
     init(modelContext: ModelContext, serverService: ServerServiceProtocol) {
         self.modelContext = modelContext
         self.serverService = serverService
@@ -55,6 +55,7 @@ class DashboardViewModel: ObservableObject {
                 }
                 return nil
             }
+           
             var continents: [String] = []
             var vehicles = ["car": 0, "bicycle": 0, "airplane": 0, "bus": 0, "tram": 0]
             for travel in travelDetailsList {
@@ -155,7 +156,7 @@ class DashboardViewModel: ObservableObject {
         tripsMade = [2022: 0, 2023: 0, 2024: 0, 2025: 0]
     }
     
-    func keysToString(keys :[Int]) -> [String] {
+    func keysToString(keys: [Int]) -> [String] {
         var stringKeys: [String] = []
         
         let formatter = NumberFormatter()

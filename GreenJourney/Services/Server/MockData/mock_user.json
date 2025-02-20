@@ -11,5 +11,5 @@
   "city": null,
   "score_short_distance": 0,
   "score_long_distance": 0,
-  "badges": []
+  "badges": ["badge_distance_low", "badge_compensation_high", "badge_travels_number_mid"]
 }
