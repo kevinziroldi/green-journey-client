@@ -43,7 +43,7 @@ final class RankingViewUITest: XCTestCase {
         // tap tab button
         rankingTabButton.tap()
         
-        // check MyTravels page
+        // check ranking page
         XCTAssertTrue(rankingTitle.waitForExistence(timeout: timer), "RankingView not appeared after selecting it")
     }
     

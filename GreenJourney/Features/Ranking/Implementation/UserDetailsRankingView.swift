@@ -25,6 +25,7 @@ struct UserDetailsRankingView: View {
                         .frame(maxWidth: .infinity, alignment: .topLeading)
                         .padding(EdgeInsets(top: 30, leading: 15, bottom: 5, trailing: 15))
                         .fontWeight(.semibold)
+                        .accessibilityIdentifier("userName")
                     
                     //badges
                     ZStack {
@@ -37,6 +38,7 @@ struct UserDetailsRankingView: View {
                                     .font(.title)
                                     .foregroundStyle(.blue.opacity(0.8))
                                     .fontWeight(.semibold)
+                                
                                 Button(action: {
                                     legendTapped = true
                                 }) {
@@ -44,14 +46,17 @@ struct UserDetailsRankingView: View {
                                         .font(.title3)
                                         .foregroundStyle(.gray)
                                 }
+                                .accessibilityIdentifier("badgesInfoButton")
+                                
                                 Spacer()
                             }
                             .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 0))
+                            
                             HStack{
                                 BadgeView(badges: user.badges, dim: 80, inline: true)
                                     .padding()
-                                
                             }
+                            .overlay(Color.clear.accessibilityIdentifier("userBadges"))
                         }
                     }
                     .padding(EdgeInsets(top: 5, leading: 15, bottom: 7, trailing: 15))
@@ -116,6 +121,8 @@ struct UserDetailsRankingView: View {
                                     .bold()
                                     .foregroundColor(.blue.opacity(0.8))
                                     //.frame(width: 180, alignment: .leading)
+                                // TODO remove????
+                                
                                 Text("in travel")
                                     .font(.system(size: 20).bold())
                                     .foregroundColor(.blue.opacity(0.8))
@@ -143,6 +150,7 @@ struct UserDetailsRankingView: View {
                                     .bold()
                                     .foregroundColor(.red.opacity(0.8))
                                     //.frame(width: 110, alignment: .leading)
+                                // TODO remove ????
                                 
                                 Text("Co2 emitted")
                                     .font(.system(size: 20).bold())
@@ -170,6 +178,7 @@ struct UserDetailsRankingView: View {
                                     .bold()
                                     .foregroundColor(.green.opacity(0.8))
                                     //.frame(width: 110, alignment: .leading)
+                                // TODO remove????
 
                                 Text("Co2 compensated")
                                     .font(.system(size: 20).bold())
@@ -182,6 +191,7 @@ struct UserDetailsRankingView: View {
                         }
                     }
                     .padding(EdgeInsets(top: 5, leading: 15, bottom: 7, trailing: 15))
+                    .overlay(Color.clear.accessibilityIdentifier("userTravelsRecap"))
 
                     /*
                     ZStack {
@@ -274,8 +284,6 @@ struct UserDetailsRankingView: View {
             }
             .padding()
             .blur(radius: (legendTapped) ? 1 : 0)
-            
-            
             
             if legendTapped {
                 LegendBadgeView(onClose: {

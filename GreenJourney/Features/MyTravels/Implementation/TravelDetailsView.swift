@@ -20,10 +20,7 @@ struct TravelDetailsView: View {
                     ScrollView {
                         HeaderView(from: travelDetails.getDepartureSegment()?.departureCity ?? "", to: travelDetails.getDestinationSegment()?.destinationCity ?? "", date: travelDetails.segments.first?.dateTime, dateArrival: travelDetails.segments.last?.getArrivalDateTime())
                             .accessibilityElement(children: .contain)
-                            .overlay(
-                                Color.clear
-                                    .accessibilityIdentifier("headerView")
-                            )
+                            .overlay(Color.clear.accessibilityIdentifier("headerView"))
                         
                         Rectangle()
                             .frame(height: 1)
@@ -187,10 +184,7 @@ struct TravelDetailsView: View {
                                     .padding(.trailing, 25)
                                 
                                 .accessibilityElement(children: .contain)
-                                .overlay(
-                                    Color.clear
-                                        .accessibilityIdentifier("compensationSection")
-                                )
+                                .overlay(Color.clear.accessibilityIdentifier("compensationSection"))
                             }
                             .padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
                         }
@@ -221,19 +215,13 @@ struct TravelDetailsView: View {
                             }
                             .padding(EdgeInsets(top: 10, leading: 15, bottom: 5, trailing: 15))
                             .accessibilityElement(children: .contain)
-                            .overlay(
-                                Color.clear
-                                    .accessibilityIdentifier("emissionsRecapFutureTravel")
-                            )
+                            .overlay(Color.clear.accessibilityIdentifier("emissionsRecapFutureTravel"))
                         }
                         
                         TravelRecapView(travelDetails: travelDetails)
                             .padding(.horizontal)
                             .accessibilityElement(children: .contain)
-                            .overlay(
-                                Color.clear
-                                    .accessibilityIdentifier("travelRecap")
-                            )
+                            .overlay(Color.clear.accessibilityIdentifier("travelRecap"))
                         if travelDetails.travel.confirmed {
                         // if the user hasn't left a review yet
                         Button(action: {
@@ -286,10 +274,7 @@ struct TravelDetailsView: View {
                         
                         SegmentsView(segments: travelDetails.getOutwardSegments())
                             .accessibilityElement(children: .contain)
-                            .overlay(
-                                Color.clear
-                                    .accessibilityIdentifier("outwardSegmentsView")
-                            )
+                            .overlay(Color.clear.accessibilityIdentifier("outwardSegmentsView"))
                         
                         if !travelDetails.isOneway() {
                             HStack {
@@ -303,10 +288,7 @@ struct TravelDetailsView: View {
                             
                             SegmentsView(segments: travelDetails.getReturnSegments())
                                 .accessibilityElement(children: .contain)
-                                .overlay(
-                                    Color.clear
-                                        .accessibilityIdentifier("returnSegmentsView")
-                                )
+                                .overlay(Color.clear.accessibilityIdentifier("returnSegmentsView"))
                         }
                     }
                     .padding(10)

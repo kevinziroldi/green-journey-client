@@ -23,6 +23,8 @@ struct LegendBadgeView: View {
                     Text("how much distance a user has traveled")
                     Spacer()
                 }
+                .overlay(Color.clear.accessibilityIdentifier("badgeDistanceDescription"))
+                
                 HStack {
                     Image(Badge.badgeEcologicalChoiceLow.rawValue)
                         .resizable()
@@ -34,6 +36,8 @@ struct LegendBadgeView: View {
                     Text("how much a user has been ecofriendly")
                     Spacer()
                 }
+                .overlay(Color.clear.accessibilityIdentifier("badgeEcologicalChoiceDescription"))
+                
                 HStack {
                     Image(Badge.badgeTravelsNumberLow.rawValue)
                         .resizable()
@@ -45,6 +49,8 @@ struct LegendBadgeView: View {
                     Text("how many travels a user has done")
                     Spacer()
                 }
+                .overlay(Color.clear.accessibilityIdentifier("badgeTravelsNumberDescription"))
+               
                 HStack {
                     Image(Badge.badgeCompensationLow.rawValue)
                         .resizable()
@@ -56,20 +62,22 @@ struct LegendBadgeView: View {
                     Text("how much a user has compensated")
                     Spacer()
                 }
-                
+                .overlay(Color.clear.accessibilityIdentifier("badgeCompensationDescription"))
                 
                 Spacer()
+
                 Button("Close") {
                     onClose()
                 }
                 .buttonStyle(.bordered)
+                .accessibilityIdentifier("closeBadgesInfoButton")
+                
                 Spacer()
             }
             .padding()
 
         }
-        .frame(width: 330, height: 400)
-        
+        .frame(width: 330, height: 400)    
     }
 }
 

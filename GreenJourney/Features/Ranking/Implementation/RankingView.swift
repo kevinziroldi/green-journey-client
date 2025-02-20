@@ -145,10 +145,7 @@ struct LeaderBoardView: View {
                 Color(red: 167/255, green: 214/255, blue: 165/255)
                     .clipShape(TopRoundedCorners(cornerRadius: 20))
             )
-            .overlay(
-                Color.clear
-                    .accessibilityIdentifier("tableHeader")
-            )
+            .overlay(Color.clear.accessibilityIdentifier("tableHeader"))
             
             Rectangle()
                 .frame(height: 1)
