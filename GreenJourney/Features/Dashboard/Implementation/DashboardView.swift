@@ -92,7 +92,7 @@ struct DashboardView: View {
                         
                         InfoRow(title: "Most chosen vehicle", value: "", icon: "figure.wave", color: .indigo, imageValue: true, imageValueString: viewModel.mostChosenVehicle)
                         
-                        InfoRow(title: "Continents visited", value: "\(viewModel.visitedContinents) / 7", icon: "globe", color: .indigo, imageValue: false, imageValueString: nil)
+                        InfoRow(title: "Continents visited", value: "\(viewModel.visitedContinents) / 5", icon: "globe", color: .indigo, imageValue: false, imageValueString: nil)
                         
                     }
                 }
