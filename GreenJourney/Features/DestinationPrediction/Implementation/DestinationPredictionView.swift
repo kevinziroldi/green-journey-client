@@ -34,5 +34,6 @@ struct DestinationPredictionView: View {
             }
             .fixedSize()
         }
+        .accessibilityIdentifier("getRecommendationButton")
     }
 }
