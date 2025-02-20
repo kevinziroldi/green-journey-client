@@ -5,12 +5,13 @@ import SwiftData
 class Travel: Codable {
     var travelID: Int?
     var CO2Compensated: Float64 = 0
-    var confirmed = false
+    var confirmed: Bool
     var userID: Int
  
-    init(travelID: Int? = nil, userID: Int) {
+    init(travelID: Int? = nil, userID: Int, confirmed: Bool? = false) {
         self.travelID = travelID
         self.userID = userID
+        self.confirmed = confirmed ?? false
     }
     
     init(travelCopy: Travel) {
