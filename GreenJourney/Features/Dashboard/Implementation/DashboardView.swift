@@ -3,19 +3,20 @@ import SwiftData
 import Charts
 
 struct DashboardView: View {
+    @StateObject var viewModel: DashboardViewModel
     @Binding var navigationPath: NavigationPath
     private var serverService: ServerServiceProtocol
     private var firebaseAuthService: FirebaseAuthServiceProtocol
     
+    @State private var legendTapped: Bool = false
+    
     init(modelContext: ModelContext, navigationPath: Binding<NavigationPath>, serverService: ServerServiceProtocol, firebaseAuthService: FirebaseAuthServiceProtocol) {
-        _navigationPath = navigationPath
         _viewModel = StateObject(wrappedValue: DashboardViewModel(modelContext: modelContext, serverService: serverService))
+        _navigationPath = navigationPath
         self.serverService = serverService
         self.firebaseAuthService = firebaseAuthService
     }
     
-    @State private var legendTapped: Bool = false
-    @StateObject var viewModel: DashboardViewModel
     var body: some View {
         ZStack {
             ScrollView {
@@ -24,6 +25,8 @@ struct DashboardView: View {
                     .padding()
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityIdentifier("dashboardTitle")
+                
                 ZStack {
                     RoundedRectangle(cornerRadius: 15)
                         .fill(Color(uiColor: .systemBackground))
@@ -52,7 +55,7 @@ struct DashboardView: View {
                     }
                 }
                 .padding(EdgeInsets(top: 5, leading: 15, bottom: 7, trailing: 15))
-                
+                .overlay(Color.clear.accessibilityIdentifier("userBadges"))
                 
                 ZStack {
                     RoundedRectangle(cornerRadius: 15)
@@ -75,6 +78,7 @@ struct DashboardView: View {
                     }
                 }
                 .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
+                .overlay(Color.clear.accessibilityIdentifier("co2Tracker"))
                 
                 ZStack {
                     RoundedRectangle(cornerRadius: 15)
@@ -97,6 +101,7 @@ struct DashboardView: View {
                     }
                 }
                 .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
+                .overlay(Color.clear.accessibilityIdentifier("travelsRecap"))
                 
                 ZStack {
                     RoundedRectangle(cornerRadius: 15)
@@ -115,12 +120,16 @@ struct DashboardView: View {
                     }
                 }
                 .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
-                
+                .overlay(Color.clear.accessibilityIdentifier("travelTime"))
                 
                 BarChartView(title: "Trips completed", value: "\(viewModel.totalTripsMade)", data: viewModel.tripsMade.keys.sorted().map{viewModel.tripsMade[$0]!}, labels: viewModel.keysToString(keys: viewModel.tripsMade.keys.sorted()) , color: .pink.opacity(0.8))
                     .padding()
-                BarChartView(title: "Distance made (Km)", value: "", data: viewModel.distances.keys.sorted().map{viewModel.distances[$0]!}, labels: viewModel.keysToString(keys: viewModel.distances.keys.sorted()), color: .indigo.opacity(0.8))
+                    .overlay(Color.clear.accessibilityIdentifier("tripsCompleted"))
+                
+                BarChartView(title: "Distance traveled (Km)", value: "", data: viewModel.distances.keys.sorted().map{viewModel.distances[$0]!}, labels: viewModel.keysToString(keys: viewModel.distances.keys.sorted()), color: .indigo.opacity(0.8))
                     .padding()
+                    .overlay(Color.clear.accessibilityIdentifier("distanceTraveled"))
+                
             }
             .padding()
             .blur(radius: (legendTapped) ? 1 : 0)
