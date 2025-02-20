@@ -103,12 +103,12 @@ final class LoginViewUITests: XCTestCase {
     func testSignUpNavigation() {
         // UI elements
         let signUpButton = app.buttons["moveToSignUpButton"]
-        let signupLogoImage = app.images["signupLogoImage"]
+        let signupTitle = app.staticTexts["signupTitle"]
         
         XCTAssertTrue(signUpButton.exists, "The signup button is not displayed")
         signUpButton.tap()
         
-        XCTAssertTrue(signupLogoImage.waitForExistence(timeout: timer), "Signup view did not appear after clicking signup button")
+        XCTAssertTrue(signupTitle.waitForExistence(timeout: timer), "Signup view did not appear after clicking signup button")
     }
     
     func testResetPasswordWithEmail() {

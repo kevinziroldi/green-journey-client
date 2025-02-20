@@ -8,15 +8,12 @@ struct SignUpView: View {
         VStack {
             ScrollView {
                 VStack {
-                    /*Image("login_logo")
-                        .resizable()
-                        .padding()
-                        .aspectRatio(contentMode: .fit)
-                        .accessibilityIdentifier("signupLogoImage")*/
                     Text("Signup")
                         .font(.system(size: 32).bold())
                         .padding()
                         .fontWeight(.semibold)
+                        .accessibilityIdentifier("signupTitle")
+                    
                     VStack (spacing: 10) {
                         TextField("Email", text: $viewModel.email)
                             .autocapitalization(.none)
@@ -24,30 +21,38 @@ struct SignUpView: View {
                             .padding()
                             .background(Color.gray.opacity(0.2))
                             .cornerRadius(8)
+                            .accessibilityIdentifier("emailTextField")
                         
                         SecureField("Password", text: $viewModel.password)
                             .padding()
                             .background(Color.gray.opacity(0.2))
                             .cornerRadius(8)
+                            .accessibilityIdentifier("passwordSecureField")
+                        
                         SecureField("Repeat Password", text: $viewModel.repeatPassword)
                             .padding()
                             .background(Color.gray.opacity(0.2))
                             .cornerRadius(8)
+                            .accessibilityIdentifier("repeatPasswordSecureField")
                         
                         TextField("First name", text: $viewModel.firstName)
                             .padding()
                             .background(Color.gray.opacity(0.2))
                             .cornerRadius(8)
+                            .accessibilityIdentifier("firstName")
                         
                         TextField("Last name", text: $viewModel.lastName)
                             .padding()
                             .background(Color.gray.opacity(0.2))
                             .cornerRadius(8)
+                            .accessibilityIdentifier("lastName")
+                        
                         // error message
                         if let errorMessage = viewModel.errorMessage {
                             Text(errorMessage)
                                 .foregroundColor(.red)
                                 .font(.caption)
+                                .accessibilityIdentifier("errorMessageLabelSignup")
                         }
                     }
                     .padding(.top, 20)

@@ -10,16 +10,15 @@ struct EmailVerificationView: View {
                 .font(.largeTitle)
                 .padding(.bottom, 32)
                 .accessibilityIdentifier("emailVerificationTitle")
-            
-            Image("loginLogo")
-                .resizable()
-                .padding()
-                .aspectRatio(contentMode: .fit)
+        
             HStack {
                 Text("""
 We’ve sent a verification email to your inbox. Please check and verify your account. 
-If you didn’t get it, tap 'Resend Email'.
-""")
+If you didn’t receive it, tap 'Resend Email'.
+"""
+                )
+                .accessibilityIdentifier("emailSentText")
+                
                 Button ("resend email") {
                     Task {
                         await viewModel.sendEmailVerification()
@@ -27,19 +26,24 @@ If you didn’t get it, tap 'Resend Email'.
                     }
                 }
                 .buttonStyle(.borderedProminent)
+                .accessibilityIdentifier("resendEmailButton")
             }
+            
             Button ("Proceed") {
                 Task {
                     await viewModel.verifyEmail()
                 }
             }
             .buttonStyle(.borderedProminent)
+            .accessibilityIdentifier("proceedButton")
             
             if let errorMessage = viewModel.errorMessage {
                 Text(errorMessage)
                     .foregroundColor(.red)
                     .font(.caption)
+                    .accessibilityIdentifier("errorMessage")
             }
+            
             Spacer()
         }
         .onChange(of: viewModel.emailVerified, {

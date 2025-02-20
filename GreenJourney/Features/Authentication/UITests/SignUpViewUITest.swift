@@ -22,7 +22,7 @@ final class SignUpViewUITest: XCTestCase {
         let passwordField = app.secureTextFields["passwordSecureField"]
         let loginButton = app.buttons["loginButton"]
         let moveToSignUpButton = app.buttons["moveToSignUpButton"]
-        let signupLogo = app.images["signupLogoImage"]
+        let signupTitle = app.staticTexts["signupTitle"]
         
         XCTAssertTrue(emailTextField.exists, "The email field is not displayed")
         XCTAssertTrue(passwordField.exists, "The password field is not displayed")
@@ -31,12 +31,12 @@ final class SignUpViewUITest: XCTestCase {
         
         moveToSignUpButton.tap()
         
-        XCTAssertTrue(signupLogo.exists, "The signup page is not displayed")
+        XCTAssertTrue(signupTitle.exists, "The signup page is not displayed")
     }
     
     func testSignUpElementsPresent() {
         // UI elements
-        let signupLogo = app.images["signupLogoImage"]
+        let signupTitle = app.staticTexts["signupTitle"]
         let emailField = app.textFields["emailTextField"]
         let passwordSecureField = app.secureTextFields["passwordSecureField"]
         let repeatPasswordSecureField = app.secureTextFields["repeatPasswordSecureField"]
@@ -44,7 +44,7 @@ final class SignUpViewUITest: XCTestCase {
         let lastName = app.textFields["lastName"]
         
         // check elements present
-        XCTAssertTrue(signupLogo.exists, "The signup page is not displayed")
+        XCTAssertTrue(signupTitle.exists, "The signup page is not displayed")
         XCTAssertTrue(emailField.exists, "The email field is not displayed")
         XCTAssertTrue(passwordSecureField.exists, "The password field is not displayed")
         XCTAssertTrue(repeatPasswordSecureField.exists, "The repeat password field is not displayed")
@@ -54,7 +54,7 @@ final class SignUpViewUITest: XCTestCase {
     
     func testSignUpFailure() {
         // UI elements
-        let signupLogo = app.images["signupLogoImage"]
+        let signupTitle = app.staticTexts["signupTitle"]
         let emailField = app.textFields["emailTextField"]
         let passwordSecureField = app.secureTextFields["passwordSecureField"]
         let repeatPasswordSecureField = app.secureTextFields["repeatPasswordSecureField"]
@@ -64,7 +64,7 @@ final class SignUpViewUITest: XCTestCase {
         let errorMessage = app.staticTexts["errorMessageLabelSignup"]
         
         // check elements present
-        XCTAssertTrue(signupLogo.exists, "The signup page is not displayed")
+        XCTAssertTrue(signupTitle.exists, "The signup page is not displayed")
         XCTAssertTrue(emailField.exists, "The email field is not displayed")
         XCTAssertTrue(passwordSecureField.exists, "The password field is not displayed")
         XCTAssertTrue(repeatPasswordSecureField.exists, "The repeat password field is not displayed")
@@ -81,13 +81,13 @@ final class SignUpViewUITest: XCTestCase {
         createAccountButton.tap()
         
         // check signup page and error message
-        XCTAssertTrue(signupLogo.exists, "The signup logo image is not displayed")
+        XCTAssertTrue(signupTitle.exists, "The signup title image is not displayed")
         XCTAssertTrue(errorMessage.waitForExistence(timeout: timer), "The error message was not displayed")
     }
     
     func testSignUpSuccessful() {
         // UI elements
-        let signupLogo = app.images["signupLogoImage"]
+        let signupTitle = app.staticTexts["signupTitle"]
         let emailField = app.textFields["emailTextField"]
         let passwordSecureField = app.secureTextFields["passwordSecureField"]
         let repeatPasswordSecureField = app.secureTextFields["repeatPasswordSecureField"]
@@ -96,14 +96,14 @@ final class SignUpViewUITest: XCTestCase {
         let createAccountButton = app.buttons["createAccountButton"]
         
         // check elements present
-        XCTAssertTrue(signupLogo.exists, "The signup page is not displayed")
+        XCTAssertTrue(signupTitle.exists, "The signup title is not displayed")
         XCTAssertTrue(emailField.exists, "The email field is not displayed")
         XCTAssertTrue(passwordSecureField.exists, "The password field is not displayed")
         XCTAssertTrue(repeatPasswordSecureField.exists, "The repeat password field is not displayed")
         XCTAssertTrue(firstName.exists, "The first name field is not displayed")
         XCTAssertTrue(lastName.exists, "The last name field is not displayed")
         
-        // insert email and password, not repeat password
+        // insert all required data
         emailField.tap()
         emailField.typeText("test@example.com")
         passwordSecureField.tap()
@@ -115,6 +115,7 @@ final class SignUpViewUITest: XCTestCase {
         lastName.tap()
         lastName.typeText("last name")
         
+        // tap button
         createAccountButton.tap()
         
         // check email verification page and error message
