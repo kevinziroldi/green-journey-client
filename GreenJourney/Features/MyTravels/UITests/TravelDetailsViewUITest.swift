@@ -82,7 +82,6 @@ final class TravelDetailsViewUITest: XCTestCase {
         
         // UI elements
         let headerView = app.otherElements["headerView"]
-        let compensationSection = app.otherElements["compensationSection"]
         let travelRecap = app.otherElements["travelRecap"]
         let infoButton = app.buttons["infoButton"]
         let plusTreesButton = app.buttons["plusButton"]
@@ -98,7 +97,6 @@ final class TravelDetailsViewUITest: XCTestCase {
         
         // check elements present
         XCTAssertTrue(headerView.exists, "headerView not displayed")
-        XCTAssertTrue(compensationSection.exists, "compensationSection not displayed")
         XCTAssertTrue(travelRecap.exists, "travelRecap not displayed")
         XCTAssertFalse(emissionsRecapFutureTravel.exists, "emission recap displyed for a confirmed travel")
         
@@ -123,7 +121,6 @@ final class TravelDetailsViewUITest: XCTestCase {
         
         // UI elements
         let headerView = app.otherElements["headerView"]
-        let compensationSection = app.otherElements["compensationSection"]
         let travelRecap = app.otherElements["travelRecap"]
         let infoButton = app.buttons["infoButton"]
         let plusTreesButton = app.buttons["plusButton"]
@@ -138,7 +135,6 @@ final class TravelDetailsViewUITest: XCTestCase {
         let emissionsRecapFutureTravel = app.otherElements["emissionsRecapFutureTravel"]
         
         // check emission section not present
-        XCTAssertFalse(compensationSection.exists, "compensationSection displayed")
         XCTAssertFalse(infoButton.exists, "infoButton displayed")
         XCTAssertFalse(plusTreesButton.exists, "plusTreesButton displayed")
         XCTAssertFalse(minusTreesButton.exists, "minusTreesButton displayed")
@@ -159,28 +155,28 @@ final class TravelDetailsViewUITest: XCTestCase {
         XCTAssertTrue(returnSegmentsView.exists, "HeaderView not displayed")
     }
     
-    /*
-     
-     // TODO, per tutti aggiungere navigation alla travel details view confirmed / not confirmed
-     
-    // TODO non funziona, in teoria per via dell'area troppo picolla del bottone
     func testInfoButtonOpensAndClosesInfoView() {
+        navigateToTravelDetailsViewTravelConfirmed()
+        
         // UI elements
         let infoButton = app.buttons["infoButton"]
         let infoCompensationView = app.otherElements["infoCompensationView"]
+        let infoText = app.staticTexts["infoText"]
         let infoCloseButton = app.buttons["infoCloseButton"]
         
         // check elements displayed
         XCTAssertTrue(infoButton.exists, "infoCompensationView not displayed")
         XCTAssertFalse(infoCompensationView.exists, "infoCompensationView already displayed")
+        XCTAssertFalse(infoText.exists, "infoText already displayed")
         XCTAssertFalse(infoCloseButton.exists, "infoCloseButton already displayed")
         
         // tap info button
         infoButton.tap()
         
         // check elements displayed
-        XCTAssertFalse(infoCompensationView.waitForExistence(timeout: timer), "infoCompensationView not displayed")
-        XCTAssertFalse(infoCloseButton.exists, "infoCloseButton not displayed")
+        XCTAssertTrue(infoCompensationView.waitForExistence(timeout: timer), "infoCompensationView not displayed")
+        XCTAssertTrue(infoText.exists, "infoText not displayed")
+        XCTAssertTrue(infoCloseButton.exists, "infoCloseButton not displayed")
         
         // close info section
         infoCloseButton.tap()
@@ -188,11 +184,12 @@ final class TravelDetailsViewUITest: XCTestCase {
         // check elements displayed
         XCTAssertTrue(infoButton.exists, "infoCompensationView not displayed")
         XCTAssertFalse(infoCompensationView.exists, "infoCompensationView already displayed")
+        XCTAssertFalse(infoText.exists, "infoText already displayed")
         XCTAssertFalse(infoCloseButton.exists, "infoCloseButton already displayed")
     }
 
-    // TODO non funziona, in teoria per via dell'area troppo picolla del bottone
     func testIncrementAndDecrementTrees() {
+        navigateToTravelDetailsViewTravelConfirmed()
         let plusTreesButton = app.buttons["plusButton"]
         let minusTreesButton = app.buttons["minusButton"]
         let compensateButton = app.buttons["compensateButton"]
@@ -200,6 +197,8 @@ final class TravelDetailsViewUITest: XCTestCase {
         XCTAssertTrue(plusTreesButton.waitForExistence(timeout: timer), "The plus button is not displayed")
         XCTAssertTrue(minusTreesButton.waitForExistence(timeout: timer), "The minus button is not displayed")
         XCTAssertTrue(compensateButton.exists, "The compensate button is not displayed")
+        
+        app.swipeUp()
         
         plusTreesButton.tap()
         minusTreesButton.tap()
@@ -210,8 +209,9 @@ final class TravelDetailsViewUITest: XCTestCase {
         XCTAssertTrue(compensateButton.exists, "The compensate button is not displayed")
     }
     
-    // TODO non funziona, in teoria per via dell'area troppo picolla del bottone
     func testCompensateButtonTap() {
+        navigateToTravelDetailsViewTravelConfirmed()
+     
         let plusTreesButton = app.buttons["plusButton"]
         let minusTreesButton = app.buttons["minusButton"]
         let compensateButton = app.buttons["compensateButton"]
@@ -228,7 +228,10 @@ final class TravelDetailsViewUITest: XCTestCase {
         XCTAssertTrue(compensateButton.exists, "The compensate button is not displayed")
     }
     
+    /*
     func testReviewButton() {
+        navigateToTravelDetailsViewTravelConfirmed()
+     
         let headerView = app.otherElements["headerView"]
         let reviewButton = app.buttons["reviewButton"]
         

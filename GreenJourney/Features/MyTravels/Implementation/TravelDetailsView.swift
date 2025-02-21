@@ -91,7 +91,6 @@ struct TravelDetailsView: View {
                                                                 .font(.title3)
                                                         }
                                                         .accessibilityIdentifier("infoButton")
-                                                        .id("infoButton")
                                                         
                                                         Spacer()
                                                     }
@@ -183,9 +182,6 @@ struct TravelDetailsView: View {
                                         
                                     }
                                     .padding(.trailing, 25)
-                                
-                                .accessibilityElement(children: .contain)
-                                .overlay(Color.clear.accessibilityIdentifier("compensationSection"))
                             }
                             .padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
                         }
@@ -302,6 +298,7 @@ struct TravelDetailsView: View {
                 
                 if infoTapped {
                     InfoCompensationView(onBack: {infoTapped = false})
+                        .accessibilityElement(children: .contain)
                         .accessibilityIdentifier("infoCompensationView")
                 }
             }
@@ -367,7 +364,10 @@ struct InfoCompensationView: View {
                 long
 text
 legend compensation
-""")
+"""
+            )
+            .accessibilityIdentifier("infoText")
+            
             Button("Close") {
                 onBack()
             }
