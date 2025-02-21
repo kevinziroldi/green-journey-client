@@ -116,6 +116,8 @@ class MockServerService: ServerServiceProtocol {
     
     func uploadReview(review: Review) async throws -> Review {
         if shouldSucceed {
+            // set an id 
+            review.reviewID = 1
             return review
         } else {
             throw ServerServiceError.uploadReviewFailed
@@ -131,9 +133,7 @@ class MockServerService: ServerServiceProtocol {
     }
     
     func deleteReview(reviewID: Int) async throws {
-        if shouldSucceed {
-            return
-        } else {
+        if !shouldSucceed {
             throw ServerServiceError.deleteReviewFailed
         }
     }

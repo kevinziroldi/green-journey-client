@@ -1,5 +1,5 @@
-import Foundation
 import SwiftData
+import SwiftUI
 import Testing
 
 @testable import GreenJourney
@@ -283,6 +283,316 @@ final class CitiesReviewsViewModelTest {
     }
     
     @Test
+    func testUploadReviewNoUser() async throws {
+        // remove users if present
+        let users = try self.mockModelContext.fetch(FetchDescriptor<User>())
+        for user in users {
+            self.mockModelContext.delete(user)
+        }
+        try self.mockModelContext.save()
+        
+        // call method
+        await viewModel.uploadReview()
+        
+        // check error message not null
+        #expect(viewModel.userReview == nil)
+        #expect(viewModel.errorMessage != nil)
+    }
+    
+    @Test
+    func testUploadReviewUserNoUserID() async throws {
+        // remove users if present
+        let users = try self.mockModelContext.fetch(FetchDescriptor<User>())
+        for user in users {
+            self.mockModelContext.delete(user)
+        }
+        try self.mockModelContext.save()
+        
+        // add user with no user id
+        let user = User(
+            userID: nil,
+            firstName: "MockUser",
+            lastName: "MockUser",
+            firebaseUID: "mock_firebase_uid",
+            scoreShortDistance: 50,
+            scoreLongDistance: 100
+        )
+        self.mockModelContext.insert(user)
+        try self.mockModelContext.save()
+        
+        // call method
+        await viewModel.uploadReview()
+        
+        // check failure
+        #expect(viewModel.userReview == nil)
+        #expect(viewModel.errorMessage != nil)
+    }
+    
+    @Test
+    func testUploadReviewServerFails() async {
+        // a user is already present
+        
+        // set server behaviour
+        self.mockServerService.shouldSucceed = false
+        
+        // set review data
+        viewModel.reviewText = "text"
+        viewModel.localTransportRating = 1
+        viewModel.greenSpacesRating = 2
+        viewModel.wasteBinsRating = 3
+        
+        // call method
+        await viewModel.uploadReview()
+        
+        // check failure
+        #expect(viewModel.userReview == nil)
+        #expect(viewModel.errorMessage != nil)
+    }
+    
+    @Test
+    func testUploadReviewSuccessful() async {
+        // a user is already present
+        
+        // set server behaviour
+        self.mockServerService.shouldSucceed = true
+        
+        // set review data
+        viewModel.reviewText = "text"
+        viewModel.localTransportRating = 1
+        viewModel.greenSpacesRating = 2
+        viewModel.wasteBinsRating = 3
+        
+        // call method
+        await viewModel.uploadReview()
+        
+        // check success
+        #expect(viewModel.userReview != nil)
+        #expect(viewModel.userReview?.reviewText == "text")
+        #expect(viewModel.userReview?.localTransportRating == 1)
+        #expect(viewModel.userReview?.greenSpacesRating == 2)
+        #expect(viewModel.userReview?.wasteBinsRating == 3)
+        #expect(viewModel.errorMessage == nil)
+    }
+    
+    @Test
+    func testModifyReviewNoReview() async {
+        // no review present
+        #expect(viewModel.userReview == nil)
+        
+        // call method
+        await viewModel.modifyReview()
+        
+        // check failure
+        #expect(viewModel.userReview == nil)
+        #expect(viewModel.errorMessage != nil)
+    }
+    
+    @Test
+    func testModifyReviewServerFails() async {
+        // no review present
+        #expect(viewModel.userReview == nil)
+        
+        // insert review
+        
+        // set server behaviour
+        self.mockServerService.shouldSucceed = true
+        
+        // set review data
+        viewModel.reviewText = "text"
+        viewModel.localTransportRating = 1
+        viewModel.greenSpacesRating = 2
+        viewModel.wasteBinsRating = 3
+
+        // call method
+        await viewModel.uploadReview()
+        
+        // check success
+        #expect(viewModel.userReview != nil)
+        #expect(viewModel.userReview?.reviewText == "text")
+        #expect(viewModel.userReview?.localTransportRating == 1)
+        #expect(viewModel.userReview?.greenSpacesRating == 2)
+        #expect(viewModel.userReview?.wasteBinsRating == 3)
+        #expect(viewModel.errorMessage == nil)
+        
+        // set server behaviour
+        self.mockServerService.shouldSucceed = false
+        
+        // call method
+        await viewModel.modifyReview()
+        
+        // check failure
+        #expect(viewModel.errorMessage != nil)
+    }
+    
+    @Test
+    func testModifyReviewSuccessful() async {
+        // no review present
+        #expect(viewModel.userReview == nil)
+        
+        // insert review
+        
+        // set server behaviour
+        self.mockServerService.shouldSucceed = true
+        
+        // set review data
+        viewModel.reviewText = "text"
+        viewModel.localTransportRating = 1
+        viewModel.greenSpacesRating = 2
+        viewModel.wasteBinsRating = 3
+
+        // call method
+        await viewModel.uploadReview()
+        
+        // check success
+        #expect(viewModel.userReview != nil)
+        #expect(viewModel.userReview?.reviewText == "text")
+        #expect(viewModel.userReview?.localTransportRating == 1)
+        #expect(viewModel.userReview?.greenSpacesRating == 2)
+        #expect(viewModel.userReview?.wasteBinsRating == 3)
+        #expect(viewModel.errorMessage == nil)
+        
+        // initially set userReview values
+        viewModel.modifiedReviewText = viewModel.userReview!.reviewText
+        viewModel.modifiedLocalTransportRating = viewModel.userReview!.localTransportRating
+        viewModel.modifiedGreenSpacesRating = viewModel.userReview!.greenSpacesRating
+        viewModel.modifiedWasteBinsRating = viewModel.userReview!.wasteBinsRating
+        
+        // modify review
+        viewModel.modifiedReviewText = "modified text"
+        
+        // call method
+        await viewModel.modifyReview()
+        
+        // check success
+        #expect(viewModel.userReview != nil)
+        #expect(viewModel.userReview?.reviewText == "modified text")
+        #expect(viewModel.userReview?.localTransportRating == 1)
+        #expect(viewModel.userReview?.greenSpacesRating == 2)
+        #expect(viewModel.userReview?.wasteBinsRating == 3)
+        #expect(viewModel.errorMessage == nil)
+    }
+    
+    @Test
+    func testDeleteReviewNoReview() async {
+        // no review present
+        #expect(viewModel.userReview == nil)
+        
+        // call method
+        await viewModel.deleteReview()
+        
+        // check failure
+        #expect(viewModel.userReview == nil)
+        #expect(viewModel.errorMessage != nil)
+    }
+    
+    @Test
+    func testDeleteReviewWithNullId() async throws {
+        // no review present
+        #expect(viewModel.userReview == nil)
+        
+        // insert review with nyll id
+        viewModel.userReview = Review(
+            reviewID: nil,
+            cityID: nil,
+            userID: 1,
+            reviewText: "",
+            localTransportRating: 0,
+            greenSpacesRating: 1,
+            wasteBinsRating: 1,
+            cityIata: "iata",
+            countryCode: "country code",
+            firstName: "name",
+            lastName: "name",
+            scoreShortDistance: 1,
+            scoreLongDistance: 1,
+            badges: []
+        )
+        
+        // set server behaviour
+        self.mockServerService.shouldSucceed = true
+        
+        // call method
+        await viewModel.deleteReview()
+        
+        // check failure
+        #expect(viewModel.userReview != nil)
+        #expect(viewModel.errorMessage != nil)
+    }
+    
+    @Test
+    func testDeleteReviewServerFails() async {
+        // no review present
+        #expect(viewModel.userReview == nil)
+        
+        // insert review
+        
+        // set server behaviour
+        self.mockServerService.shouldSucceed = true
+        
+        // set review data
+        viewModel.reviewText = "text"
+        viewModel.localTransportRating = 1
+        viewModel.greenSpacesRating = 2
+        viewModel.wasteBinsRating = 3
+
+        // call method
+        await viewModel.uploadReview()
+        
+        // check success
+        #expect(viewModel.userReview != nil)
+        #expect(viewModel.userReview?.reviewText == "text")
+        #expect(viewModel.userReview?.localTransportRating == 1)
+        #expect(viewModel.userReview?.greenSpacesRating == 2)
+        #expect(viewModel.userReview?.wasteBinsRating == 3)
+        #expect(viewModel.errorMessage == nil)
+        
+        // set server behaviour
+        self.mockServerService.shouldSucceed = false
+        
+        // call method
+        await viewModel.deleteReview()
+        
+        // check failure
+        #expect(viewModel.userReview != nil)
+        #expect(viewModel.errorMessage != nil)
+    }
+    
+    @Test
+    func testDeleteReviewSuccessful() async {
+        // no review present
+        #expect(viewModel.userReview == nil)
+        
+        // insert review
+        
+        // set server behaviour
+        self.mockServerService.shouldSucceed = true
+        
+        // set review data
+        viewModel.reviewText = "text"
+        viewModel.localTransportRating = 1
+        viewModel.greenSpacesRating = 2
+        viewModel.wasteBinsRating = 3
+
+        // call method
+        await viewModel.uploadReview()
+        
+        // check success
+        #expect(viewModel.userReview != nil)
+        #expect(viewModel.userReview?.reviewText == "text")
+        #expect(viewModel.userReview?.localTransportRating == 1)
+        #expect(viewModel.userReview?.greenSpacesRating == 2)
+        #expect(viewModel.userReview?.wasteBinsRating == 3)
+        #expect(viewModel.errorMessage == nil)
+        
+        // call method
+        await viewModel.deleteReview()
+        
+        // check failure
+        #expect(viewModel.userReview == nil)
+        #expect(viewModel.errorMessage == nil)
+    }
+    
+    @Test
     func testGetNumPagesWithRest() async {
         self.mockServerService.shouldSucceed = true
         self.mockServerService.twoReviews = true
@@ -364,4 +674,57 @@ final class CitiesReviewsViewModelTest {
         #expect(viewModel.page == 0)
     }
     
+    class BindingWrapper: ObservableObject {
+        @Published var value: Int = 0
+    }
+    
+    @Test
+    func testBindingGet() {
+        let wrapper = BindingWrapper()
+        
+        wrapper.value = 42
+        
+        let intBinding = Binding<Int>(
+            get: { wrapper.value },
+            set: { wrapper.value = $0 }
+        )
+        
+        let stringBinding = viewModel.binding(for: intBinding)
+        
+        #expect(stringBinding.wrappedValue == "42")
+    }
+    
+    @Test
+    func testBindingSetValidInteger() {
+        let wrapper = BindingWrapper()
+        wrapper.value = 0
+        
+        let intBinding = Binding<Int>(
+            get: { wrapper.value },
+            set: { wrapper.value = $0 }
+        )
+        
+        let stringBinding = viewModel.binding(for: intBinding)
+        
+        stringBinding.wrappedValue = "100"
+        
+        #expect(wrapper.value == 100)
+    }
+    
+    @Test
+    func testBindingSetInvalidInteger() {
+        let wrapper = BindingWrapper()
+        wrapper.value = 10
+        
+        let intBinding = Binding<Int>(
+            get: { wrapper.value },
+            set: { wrapper.value = $0 }
+        )
+        
+        let stringBinding = viewModel.binding(for: intBinding)
+        
+        stringBinding.wrappedValue = "abc"
+        
+        #expect(wrapper.value == 0)
+    }
 }
