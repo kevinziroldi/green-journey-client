@@ -35,7 +35,7 @@ final class CompleterViewUITest: XCTestCase {
         loginButton.tap()
         
         let travelSearchViewTitle = app.staticTexts["travelSearchViewTitle"]
-        let departureButton = app.otherElements["departureButton"]
+        let departureButton = app.buttons["departureButton"]
         
         // check page change after login
         XCTAssertTrue(travelSearchViewTitle.waitForExistence(timeout: timer), "TravelSearchView not appeared after login")
@@ -76,7 +76,7 @@ final class CompleterViewUITest: XCTestCase {
         
         // UI elements
         let travelSearchViewTitle = app.staticTexts["travelSearchViewTitle"]
-        let departureButton = app.otherElements["departureButton"]
+        let departureButton = app.buttons["departureButton"]
         
         // check TravelSearchView displayed
         XCTAssertTrue(travelSearchViewTitle.waitForExistence(timeout: timer), "TravelSearchView not appeared")
@@ -95,7 +95,7 @@ final class CompleterViewUITest: XCTestCase {
         
         // UI elements
         let travelSearchViewTitle = app.staticTexts["travelSearchViewTitle"]
-        let departureButton = app.otherElements["departureButton"]
+        let departureButton = app.buttons["departureButton"]
         
         // check TravelSearchView displayed
         XCTAssertTrue(travelSearchViewTitle.waitForExistence(timeout: timer), "TravelSearchView not appeared")
@@ -114,7 +114,7 @@ final class CompleterViewUITest: XCTestCase {
         
         // UI elements
         let travelSearchViewTitle = app.staticTexts["travelSearchViewTitle"]
-        let departureButton = app.otherElements["departureButton"]
+        let departureButton = app.buttons["departureButton"]
         
         // check TravelSearchView displayed
         XCTAssertTrue(travelSearchViewTitle.waitForExistence(timeout: timer), "TravelSearchView not appeared")
@@ -140,7 +140,7 @@ final class CompleterViewUITest: XCTestCase {
         
         // UI elements
         let travelSearchViewTitle = app.staticTexts["travelSearchViewTitle"]
-        let departureButton = app.otherElements["departureButton"]
+        let departureButton = app.buttons["departureButton"]
         
         // check TravelSearchView displayed
         XCTAssertTrue(travelSearchViewTitle.waitForExistence(timeout: timer), "TravelSearchView not appeared")

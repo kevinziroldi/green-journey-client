@@ -54,6 +54,8 @@ struct CompleterView: View {
                             .font(.subheadline)
                             .foregroundColor(.gray)
                     }
+                    .overlay(Color.clear.accessibilityIdentifier("listElement_\(city.iata)_\(city.countryCode)"))
+                    
                     Spacer()
                     if viewModel.departure && viewModel.searchText == "" {
                         Image(systemName: "clock.arrow.trianglehead.counterclockwise.rotate.90")
@@ -64,7 +66,6 @@ struct CompleterView: View {
                 .onTapGesture {
                     onClick(city)
                 }
-                .overlay(Color.clear.accessibilityIdentifier("listElement_\(city.iata)_\(city.countryCode)"))
             }
             .scrollDismissesKeyboard(.interactively)
             

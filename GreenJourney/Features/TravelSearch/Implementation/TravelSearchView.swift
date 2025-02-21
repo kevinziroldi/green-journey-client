@@ -37,7 +37,6 @@ struct TravelSearchView: View {
                         .scaleEffect(1.3) // avoids clipping
                         .opacity(triggerAI ? 1 : 0)
                         .ignoresSafeArea()
-                        .accessibilityIdentifier("meshGradientView")
                     
                     // Brightness rim on edges
                     if triggerAI {
@@ -65,7 +64,6 @@ struct TravelSearchView: View {
                                 NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)) {
                                     Image(systemName: "person")
                                         .font(.title)
-                                        .accessibilityIdentifier("userPreferencesLink")
                                 }
                                 .accessibilityIdentifier("userPreferencesButton")
                             }
@@ -125,14 +123,12 @@ struct TravelSearchView: View {
                                                     .font(.title2)
                                                     .fontWeight(viewModel.departure.cityName == "" ? .light : .semibold)
                                             }
-                                            .overlay(Color.clear.accessibilityIdentifier("departureButton"))
+                                            .accessibilityIdentifier("departureButton")
                                         }
                                         .background(colorScheme == .dark ? Color(red: 48/255, green: 48/255, blue: 48/255) : Color.white)
                                         .cornerRadius(10)
                                         .shadow(radius: 5)
                                         .padding(EdgeInsets(top: 0, leading: 50, bottom: 20, trailing: 50))
-                                        
-                                        
                                     }
                                     .fullScreenCover(isPresented: $departureTapped ) {
                                         CompleterView(modelContext: modelContext, searchText: viewModel.departure.cityName,
@@ -205,20 +201,18 @@ struct TravelSearchView: View {
                                             Text(viewModel.datePicked.formatted(date: .numeric, time: .shortened))
                                                 .font(.subheadline)
                                                 .padding(.top, 5)
-                                            
                                         }
                                         .foregroundStyle(colorScheme == .dark ? .white : .black)
-                                        
                                     }
                                     .padding(EdgeInsets(top: 10, leading: 25, bottom: 10, trailing: 25))
                                     .accessibilityIdentifier("outwardDateButton")
+                                    
                                     Rectangle()
                                         .frame(width: 2)
                                         .foregroundStyle(.gray)
                                     
                                     Button(action:  {
                                         dateReturnTapped = true
-                                        
                                     }) {
                                         VStack {
                                             Text("Return date")
@@ -238,6 +232,7 @@ struct TravelSearchView: View {
                             .fixedSize()
                             
                             Spacer()
+                            
                             Button(action: {
                                 Task {
                                     await viewModel.computeRoutes()
@@ -279,7 +274,8 @@ struct TravelSearchView: View {
                                             } else {
                                                 showAlertPrediction = true
                                             }
-                                        })
+                                        }
+                                    )
                                     .alert(isPresented: $showAlertPrediction) {
                                         Alert(
                                             title: Text("An error occurred while computing the prediction, try again later"),
@@ -289,6 +285,7 @@ struct TravelSearchView: View {
                                 }
                                 else {
                                     Spacer()
+                                    
                                     //button for avoid using AI
                                     Button (action: {
                                         viewModel.arrival = CityCompleterDataset()
@@ -311,7 +308,7 @@ struct TravelSearchView: View {
                                                         .frame(width: 30, height: 30)
                                                 }
                                                 .frame(height: 50)
-                                                Text("Do not use AI")
+                                                Text("Dismiss AI")
                                                     .foregroundStyle(.gray)
                                             }
                                             .padding(5)
@@ -319,7 +316,10 @@ struct TravelSearchView: View {
                                         }
                                         .frame(width: geometry.size.width/2 - 20, height: 60)
                                     }
+                                    .accessibilityIdentifier("dismissAIButton")
+                                    
                                     Spacer()
+                                    
                                     //button for see another prediction
                                     Button (action: {
                                         if viewModel.predictedCities.count == viewModel.predictionShown + 1 {
@@ -347,15 +347,15 @@ struct TravelSearchView: View {
                                                         .frame(width: 40, height: 40)
                                                 }
                                                 .frame(height: 50)
-                                                Text("New generation")
+                                                Text("New destination")
                                                     .foregroundStyle(.gray)
                                             }
                                             .padding(5)
                                             .padding(.horizontal, 5)
                                         }
                                         .frame(width: geometry.size.width/2 - 20, height: 60)
-                                        
                                     }
+                                    .accessibilityIdentifier("newGenerationButton")
                                     
                                     Spacer()
                                 }
@@ -374,16 +374,16 @@ struct TravelSearchView: View {
                             .blur(radius: triggerAI ? 28 : 8)
                     }
                     
-                    // Modale per il DatePicker "Outward date"
                     if dateTapped {
                         DatePickerView(dateTapped: $dateTapped, title: "Select Outward Date", date: $viewModel.datePicked)
                             .transition(.move(edge: .bottom))
+                            .accessibilityElement(children: .contain)
                     }
                     
-                    // Modale per il DatePicker "Return date"
                     if dateReturnTapped && !viewModel.oneWay {
                         DatePickerView(dateTapped: $dateReturnTapped, title: "Select Return Date", date: $viewModel.dateReturnPicked)
                             .transition(.move(edge: .bottom))
+                            .accessibilityElement(children: .contain)
                     }
                 }
             }
@@ -413,6 +413,7 @@ struct DatePickerView: View {
     var title: String
     @Binding var date: Date
     @Environment(\.colorScheme) var colorScheme
+    
     var body: some View {
         ZStack {
             // background opacity
@@ -439,19 +440,23 @@ struct DatePickerView: View {
                         Text(title)
                             .font(.headline)
                             .padding(.top, 10)
+                            .accessibilityIdentifier("datePickerTitle")
                         
                         Button("Done") {
                             dateTapped = false
                         }
                         .frame(maxWidth: .infinity, alignment: .trailing)
                         .padding(.trailing, 10)
-                        
+                        .accessibilityIdentifier("datePickerDoneButton")
                     }
                     
                     DatePicker("", selection: $date, in: Date()...Date.distantFuture)
                         .datePickerStyle(.wheel)
                         .labelsHidden()
+                        .accessibilityIdentifier("datePickerElement")
+                    
                     Spacer()
+                    
                     Button("Back") {
                         withAnimation(.easeInOut) {
                             date = Date()
@@ -459,6 +464,7 @@ struct DatePickerView: View {
                         }
                     }
                     .padding(.bottom, 20)
+                    .accessibilityIdentifier("datePickerBackButton")
                 }
                 .frame(maxWidth: .infinity)
                 .frame(height: 350)
