@@ -51,7 +51,7 @@ class PersistenceHandler {
     
     private func addCitiesCompleterDatasetToSwiftData() throws {
         let cityMilan = CityCompleterDataset(
-            cityName: "Milan",
+            cityName: "Milano",
             countryName: "Italy",
             iata: "MIL",
             countryCode: "IT",

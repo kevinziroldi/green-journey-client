@@ -32,11 +32,14 @@ struct CompleterView: View {
                             .font(.title2)
                             .foregroundStyle(.gray)
                     }
+                    .accessibilityIdentifier("backButtonTop")
+                    
                     TextField("Search City", text: $viewModel.searchText)
                         .font(.title2)
                         .textInputAutocapitalization(.words)
                         .focused($textfieldOpen)
                         .padding()
+                        .accessibilityIdentifier("searchedCityTextField")
                 }
                 .padding()
             }
@@ -61,8 +64,10 @@ struct CompleterView: View {
                 .onTapGesture {
                     onClick(city)
                 }
+                .overlay(Color.clear.accessibilityIdentifier("listElement_\(city.iata)_\(city.countryCode)"))
             }
             .scrollDismissesKeyboard(.interactively)
+            
             HStack {
                 Button("Back") {
                     onBack()
@@ -70,6 +75,7 @@ struct CompleterView: View {
                 .buttonStyle(.bordered)
             }
             .padding()
+            .accessibilityIdentifier("backButtonBottom")
         }
         .onAppear(){
             viewModel.searchText = self.searchText

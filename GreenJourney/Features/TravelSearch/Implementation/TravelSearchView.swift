@@ -125,7 +125,7 @@ struct TravelSearchView: View {
                                                     .font(.title2)
                                                     .fontWeight(viewModel.departure.cityName == "" ? .light : .semibold)
                                             }
-                                            .accessibilityIdentifier("departureButton")
+                                            .overlay(Color.clear.accessibilityIdentifier("departureButton"))
                                         }
                                         .background(colorScheme == .dark ? Color(red: 48/255, green: 48/255, blue: 48/255) : Color.white)
                                         .cornerRadius(10)
