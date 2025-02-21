@@ -44,21 +44,21 @@ struct CityReviewsDetailsView: View {
                                             HStack {
                                                 ZStack {
                                                     Circle()
-                                                        .fill(.green.opacity(0.2))
+                                                        .fill(.blue.opacity(0.2))
                                                         .frame(width: 40, height: 40)
                                                     
                                                     Image(systemName: "bus")
                                                         .resizable()
                                                         .scaledToFit()
                                                         .frame(width: 25, height: 25)
-                                                        .foregroundColor(.green)
+                                                        .foregroundColor(.blue)
                                                 }
                                                 .padding(.trailing)
                                                 Text(String(format: "%.1f", selectedCityReviewElement.averageLocalTransportRating))
                                                     .font(.title3)
                                                     .fontWeight(.semibold)
                                                     .padding(EdgeInsets(top: 4, leading: 0, bottom: 0, trailing: 10))
-                                                FiveStarView(rating: selectedCityReviewElement.averageLocalTransportRating, dim: 20, color: .yellow.opacity(0.8))
+                                                FiveStarView(rating: selectedCityReviewElement.averageLocalTransportRating, dim: 20, color: .blue.opacity(0.8))
                                             }
                                             
                                             HStack {
@@ -78,26 +78,26 @@ struct CityReviewsDetailsView: View {
                                                     .font(.title3)
                                                     .fontWeight(.semibold)
                                                     .padding(EdgeInsets(top: 4, leading: 0, bottom: 0, trailing: 10))
-                                                FiveStarView(rating: selectedCityReviewElement.averageGreenSpacesRating, dim: 20, color: .yellow.opacity(0.8))
+                                                FiveStarView(rating: selectedCityReviewElement.averageGreenSpacesRating, dim: 20, color: .green.opacity(0.8))
                                             }
                                             HStack {
                                                 ZStack {
                                                     Circle()
-                                                        .fill(.green.opacity(0.2))
+                                                        .fill(.brown.opacity(0.2))
                                                         .frame(width: 40, height: 40)
                                                     
                                                     Image(systemName: "trash")
                                                         .resizable()
                                                         .scaledToFit()
                                                         .frame(width: 25, height: 25)
-                                                        .foregroundColor(.green)
+                                                        .foregroundColor(.brown)
                                                 }
                                                 .padding(.trailing)
                                                 Text(String(format: "%.1f", selectedCityReviewElement.averageWasteBinsRating))
                                                     .font(.title3)
                                                     .fontWeight(.semibold)
                                                     .padding(EdgeInsets(top: 4, leading: 0, bottom: 0, trailing: 10))
-                                                FiveStarView(rating: selectedCityReviewElement.averageWasteBinsRating, dim: 20, color: .yellow.opacity(0.8))
+                                                FiveStarView(rating: selectedCityReviewElement.averageWasteBinsRating, dim: 20, color: .brown.opacity(0.8))
                                             }
                                         }
                                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -210,6 +210,7 @@ struct CityReviewsDetailsView: View {
                                         .padding(.top, 40)
                                 }
                             }
+                            .padding(EdgeInsets(top: 5, leading: 10, bottom: 0, trailing: 10))
                         }
                         .padding()
                     }
@@ -320,17 +321,17 @@ struct CardView: View {
                     HStack {
                         ZStack {
                             Circle()
-                                .fill(.green.opacity(0.2))
+                                .fill(.blue.opacity(0.2))
                                 .frame(width: 27, height: 27)
                             
                             Image(systemName: "bus")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 18, height: 18)
-                                .foregroundColor(.green)
+                                .foregroundColor(.blue)
                         }
                         .padding(.trailing)
-                        FiveStarView(rating: Float64(review.localTransportRating), dim: 15, color: .yellow.opacity(0.8))
+                        FiveStarView(rating: Float64(review.localTransportRating), dim: 15, color: .blue.opacity(0.8))
                     }
                     HStack {
                         ZStack {
@@ -345,22 +346,22 @@ struct CardView: View {
                                 .foregroundColor(.green)
                         }
                         .padding(.trailing)
-                        FiveStarView(rating: Float64(review.greenSpacesRating), dim: 15, color: .yellow.opacity(0.8))
+                        FiveStarView(rating: Float64(review.greenSpacesRating), dim: 15, color: .green.opacity(0.8))
                     }
                     HStack {
                         ZStack {
                             Circle()
-                                .fill(.green.opacity(0.2))
+                                .fill(.brown.opacity(0.2))
                                 .frame(width: 27, height: 27)
                             
                             Image(systemName: "trash")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 18, height: 18)
-                                .foregroundColor(.green)
+                                .foregroundColor(.brown)
                         }
                         .padding(.trailing)
-                        FiveStarView(rating: Float64(review.wasteBinsRating), dim: 15, color: .yellow.opacity(0.8))
+                        FiveStarView(rating: Float64(review.wasteBinsRating), dim: 15, color: .brown.opacity(0.8))
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
