@@ -14,7 +14,7 @@ class CitiesReviewsViewModel: ObservableObject {
     @Published var bestCities: [CityCompleterDataset] = []
     
     // searched city
-    @Published var searchedCity: CityCompleterDataset = CityCompleterDataset()
+    //@Published var searchedCity: CityCompleterDataset = CityCompleterDataset()
     @Published var searchedCityAvailable: Bool = false
     
     // selected city
@@ -23,8 +23,22 @@ class CitiesReviewsViewModel: ObservableObject {
     
     @Published var userReview: Review?
     @Published var page: Int = 0
-    @Published var pageInput: Int = 1 // Textfield input
+    // Textfield input
+    @Published var pageInput: Int = 1
     
+    // upload review
+    @Published var reviewText: String = ""
+    @Published var localTransportRating: Int = 0
+    @Published var greenSpacesRating: Int = 0
+    @Published var wasteBinsRating: Int = 0
+    
+    // modify review
+    @Published var modifiedReviewText: String = ""
+    @Published var modifiedLocalTransportRating: Int = 0
+    @Published var modifiedGreenSpacesRating: Int = 0
+    @Published var modifiedWasteBinsRating: Int = 0
+    
+    @Published var errorMessage: String? = nil
     
     init(modelContext: ModelContext, serverService: ServerServiceProtocol) {
         self.modelContext = modelContext
@@ -33,7 +47,7 @@ class CitiesReviewsViewModel: ObservableObject {
     
     func getReviewsForSearchedCity() async {
         do {
-            let cityReviewElement = try await serverService.getReviewsForCity(iata: searchedCity.iata, countryCode: searchedCity.countryCode)
+            let cityReviewElement = try await serverService.getReviewsForCity(iata: selectedCity.iata, countryCode: selectedCity.countryCode)
             self.selectedCityReviewElement = cityReviewElement
             self.searchedCityAvailable = true
             
@@ -101,7 +115,7 @@ class CitiesReviewsViewModel: ObservableObject {
                 SortDescriptor(\Segment.numSegment, order: .reverse)
             ]
         )
-
+        
         do {
             let segments = try modelContext.fetch(fetchRequest)
             let filteredSegments = Dictionary(grouping: segments, by: \.travelID)
@@ -140,26 +154,123 @@ class CitiesReviewsViewModel: ObservableObject {
     }
     
     func binding(for value: Binding<Int>) -> Binding<String> {
-            Binding<String>(
-                get: {
-                    return String(value.wrappedValue)
-                },
-                set: { newValue in
-                    if let intValue = Int(newValue) {
-                        value.wrappedValue = intValue
-                    } else {
-                        value.wrappedValue = 0
-                    }
+        Binding<String>(
+            get: {
+                return String(value.wrappedValue)
+            },
+            set: { newValue in
+                if let intValue = Int(newValue) {
+                    value.wrappedValue = intValue
+                } else {
+                    value.wrappedValue = 0
                 }
-            )
+            }
+        )
+    }
+    
+    func uploadReview() async {
+        let users: [User]
+        do {
+            users = try modelContext.fetch(FetchDescriptor<User>())
+        } catch {
+            print("No user found")
+            self.errorMessage = "An error occurred while saving the review"
+            return
         }
+        guard let user = users.first else {
+            print("No user found")
+            self.errorMessage = "An error occurred while saving the review"
+            return
+        }
+        guard let userID = users.first?.userID else {
+            print("No user found")
+            self.errorMessage = "An error occurred while saving the review"
+            return
+        }
+        
+        let review = Review(
+            reviewID: nil,
+            cityID: nil,
+            userID: userID,
+            reviewText: self.reviewText,
+            localTransportRating: self.localTransportRating,
+            greenSpacesRating: self.greenSpacesRating,
+            wasteBinsRating: self.wasteBinsRating,
+            cityIata: selectedCity.iata,
+            countryCode: selectedCity.countryCode,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            scoreShortDistance: user.scoreShortDistance,
+            scoreLongDistance: user.scoreLongDistance,
+            badges: user.badges
+        )
+        
+        do {
+            let userReview = try await serverService.uploadReview(review: review)
+            self.userReview = userReview
+        } catch {
+            self.errorMessage = "An error occurred while saving the review"
+            return
+        }
+    }
+    
+    func modifyReview() async {
+        guard let userReview = self.userReview else {
+            self.errorMessage = "Error while modifying the review"
+            return
+        }
+        
+        let modifiedReview = Review(
+            reviewID: userReview.reviewID,
+            cityID: userReview.cityID,
+            userID: userReview.userID,
+            reviewText: modifiedReviewText,
+            localTransportRating: modifiedLocalTransportRating,
+            greenSpacesRating: modifiedGreenSpacesRating,
+            wasteBinsRating: modifiedWasteBinsRating,
+            cityIata: userReview.cityIata,
+            countryCode: userReview.countryCode,
+            firstName: userReview.firstName,
+            lastName: userReview.lastName,
+            scoreShortDistance: userReview.scoreShortDistance,
+            scoreLongDistance: userReview.scoreLongDistance,
+            badges: userReview.badges
+        )
+        
+        do {
+            let modifiedReview = try await serverService.modifyReview(modifiedReview: modifiedReview)
+            self.userReview = modifiedReview
+        } catch {
+            
+        }
+    }
+    
+    func deleteReview(reviewID: Int) async {
+        guard let userReview = self.userReview else {
+            self.errorMessage = "Error while deleting the review"
+            return
+        }
+        
+        guard let reviewID = userReview.reviewID else {
+            self.errorMessage = "Error while deleting the review"
+            return
+        }
+        
+        do {
+            try await serverService.deleteReview(reviewID: reviewID)
+            self.userReview = nil
+        } catch {
+            self.errorMessage = "Error while deleting the review"
+            return
+        }
+    }
 }
 
 extension CitiesReviewsViewModel: Hashable {
     nonisolated static func == (lhs: CitiesReviewsViewModel, rhs: CitiesReviewsViewModel) -> Bool {
         return lhs.uuid == rhs.uuid
     }
-
+    
     nonisolated func hash(into hasher: inout Hasher) {
         hasher.combine(uuid)
     }

@@ -23,8 +23,16 @@ struct CityReviewElementTest {
             reviewText: "review text",
             localTransportRating: 1,
             greenSpacesRating: 2,
-            wasteBinsRating: 3
+            wasteBinsRating: 3,
+            cityIata: "PAR",
+            countryCode: "FR",
+            firstName: "John",
+            lastName: "Doe",
+            scoreShortDistance: 50,
+            scoreLongDistance: 100,
+            badges: []
         )
+        
         let city = CityReviewElement(
             reviews: [review],
             averageLocalTransportRating: 1.0,
@@ -48,8 +56,16 @@ struct CityReviewElementTest {
             reviewText: "review text",
             localTransportRating: 1,
             greenSpacesRating: 2,
-            wasteBinsRating: 3
+            wasteBinsRating: 3,
+            cityIata: "PAR",
+            countryCode: "FR",
+            firstName: "John",
+            lastName: "Doe",
+            scoreShortDistance: 50,
+            scoreLongDistance: 100,
+            badges: []
         )
+        
         let city = CityReviewElement(
             reviews: [review],
             averageLocalTransportRating: 1.0,
@@ -95,8 +111,16 @@ struct CityReviewElementTest {
             reviewText: "review text",
             localTransportRating: 1,
             greenSpacesRating: 2,
-            wasteBinsRating: 3
+            wasteBinsRating: 3,
+            cityIata: "PAR",
+            countryCode: "FR",
+            firstName: "John",
+            lastName: "Doe",
+            scoreShortDistance: 50,
+            scoreLongDistance: 100,
+            badges: []
         )
+        
         let city = CityReviewElement(
             reviews: [review],
             averageLocalTransportRating: 1.0,
@@ -119,7 +143,14 @@ struct CityReviewElementTest {
             reviewText: "review text",
             localTransportRating: 1,
             greenSpacesRating: 2,
-            wasteBinsRating: 3
+            wasteBinsRating: 3,
+            cityIata: "PAR",
+            countryCode: "FR",
+            firstName: "John",
+            lastName: "Doe",
+            scoreShortDistance: 50,
+            scoreLongDistance: 100,
+            badges: []
         )
         let review2 = Review(
             reviewID: 2,
@@ -128,7 +159,14 @@ struct CityReviewElementTest {
             reviewText: "review text",
             localTransportRating: 1,
             greenSpacesRating: 2,
-            wasteBinsRating: 3
+            wasteBinsRating: 3,
+            cityIata: "PAR",
+            countryCode: "FR",
+            firstName: "John",
+            lastName: "Doe",
+            scoreShortDistance: 50,
+            scoreLongDistance: 100,
+            badges: []
         )
         let review3 = Review(
             reviewID: 3,
@@ -137,7 +175,14 @@ struct CityReviewElementTest {
             reviewText: "review text",
             localTransportRating: 1,
             greenSpacesRating: 2,
-            wasteBinsRating: 3
+            wasteBinsRating: 3,
+            cityIata: "PAR",
+            countryCode: "FR",
+            firstName: "John",
+            lastName: "Doe",
+            scoreShortDistance: 50,
+            scoreLongDistance: 100,
+            badges: []
         )
         let review4 = Review(
             reviewID: 4,
@@ -146,7 +191,14 @@ struct CityReviewElementTest {
             reviewText: "review text",
             localTransportRating: 1,
             greenSpacesRating: 2,
-            wasteBinsRating: 3
+            wasteBinsRating: 3,
+            cityIata: "PAR",
+            countryCode: "FR",
+            firstName: "John",
+            lastName: "Doe",
+            scoreShortDistance: 50,
+            scoreLongDistance: 100,
+            badges: []
         )
         let review5 = Review(
             reviewID: 5,
@@ -155,7 +207,14 @@ struct CityReviewElementTest {
             reviewText: "review text",
             localTransportRating: 1,
             greenSpacesRating: 2,
-            wasteBinsRating: 3
+            wasteBinsRating: 3,
+            cityIata: "PAR",
+            countryCode: "FR",
+            firstName: "John",
+            lastName: "Doe",
+            scoreShortDistance: 50,
+            scoreLongDistance: 100,
+            badges: []
         )
         let review6 = Review(
             reviewID: 6,
@@ -164,8 +223,16 @@ struct CityReviewElementTest {
             reviewText: "review text",
             localTransportRating: 1,
             greenSpacesRating: 2,
-            wasteBinsRating: 3
+            wasteBinsRating: 3,
+            cityIata: "PAR",
+            countryCode: "FR",
+            firstName: "John",
+            lastName: "Doe",
+            scoreShortDistance: 50,
+            scoreLongDistance: 100,
+            badges: []
         )
+        
         let city = CityReviewElement(
             reviews: [review1, review2, review3, review4, review5, review6],
             averageLocalTransportRating: 1.0,

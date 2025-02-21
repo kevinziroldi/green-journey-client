@@ -53,12 +53,12 @@ struct CitiesReviewsView: View {
                     Button(action: {
                         searchTapped = true
                     }) {
-                        Text(viewModel.searchedCity.cityName == "" ? "Search city" : viewModel.searchedCity.cityName)
-                            .foregroundColor(viewModel.searchedCity.cityName == "" ? .secondary : .blue)
+                        Text(viewModel.selectedCity.cityName == "" ? "Search city" : viewModel.selectedCity.cityName)
+                            .foregroundColor(viewModel.selectedCity.cityName == "" ? .secondary : .blue)
                             .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 0))
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .font(.title2)
-                            .fontWeight(viewModel.searchedCity.cityName == "" ? .light : .semibold)
+                            .fontWeight(viewModel.selectedCity.cityName == "" ? .light : .semibold)
                     }
                 }
                 .background(colorScheme == .dark ? Color(red: 48/255, green: 48/255, blue: 48/255) : Color.white)
@@ -67,16 +67,16 @@ struct CitiesReviewsView: View {
                 .padding(EdgeInsets(top: 0, leading: 50, bottom: 20, trailing: 50))
             }
             .fullScreenCover(isPresented: $searchTapped ) {
-                CompleterView(modelContext: modelContext, searchText: viewModel.searchedCity.cityName,
+                CompleterView(modelContext: modelContext, searchText: viewModel.selectedCity.cityName,
                               onBack: {
                     searchTapped = false
                 },
                               onClick: { city in
                     searchTapped = false
                     // for server call
-                    viewModel.searchedCity = city
+                    viewModel.selectedCity = city
                     // for details view
-                    viewModel.selectedCity = viewModel.searchedCity
+                    viewModel.selectedCity = viewModel.selectedCity
                 },
                               departure: false
                 )
@@ -91,7 +91,7 @@ struct CitiesReviewsView: View {
                     .font(.title3)
                     .foregroundStyle(.white)
             }
-            .disabled(viewModel.searchedCity.cityName == "")
+            .disabled(viewModel.selectedCity.cityName == "")
             .buttonStyle(.borderedProminent)
             
             Spacer()
@@ -120,6 +120,7 @@ struct CitiesReviewsView: View {
             Task {
                 await viewModel.getBestReviewedCities()
             }
+            viewModel.selectedCity = CityCompleterDataset()
         }
         .onChange(of: viewModel.searchedCityAvailable) {
             if viewModel.searchedCityAvailable {

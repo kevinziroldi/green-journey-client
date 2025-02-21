@@ -2,7 +2,7 @@ import Foundation
 
 class Review: Codable, Identifiable {
     var reviewID: Int?
-    var cityID: Int
+    var cityID: Int?
     var userID: Int
     var reviewText: String
     var localTransportRating: Int
@@ -16,7 +16,7 @@ class Review: Codable, Identifiable {
     var scoreLongDistance: Float64
     var badges: [Badge]
     
-    init(reviewID: Int?, cityID: Int, userID: Int, reviewText: String, localTransportRating: Int, greenSpacesRating: Int, wasteBinsRating: Int, cityIata: String, countryCode: String, firstName: String, lastName: String, scoreShortDistance: Float64, scoreLongDistance: Float64, badges: [Badge]) {
+    init(reviewID: Int?, cityID: Int?, userID: Int, reviewText: String, localTransportRating: Int, greenSpacesRating: Int, wasteBinsRating: Int, cityIata: String, countryCode: String, firstName: String, lastName: String, scoreShortDistance: Float64, scoreLongDistance: Float64, badges: [Badge]) {
         self.reviewID = reviewID
         self.cityID = cityID
         self.userID = userID
@@ -31,25 +31,6 @@ class Review: Codable, Identifiable {
         self.scoreShortDistance = scoreShortDistance
         self.scoreLongDistance = scoreLongDistance
         self.badges = badges
-    }
-    
-    init(reviewID: Int?, cityID: Int, userID: Int, reviewText: String, localTransportRating: Int, greenSpacesRating: Int, wasteBinsRating: Int) {
-        self.reviewID = reviewID
-        self.cityID = cityID
-        self.userID = userID
-        self.reviewText = reviewText
-        self.localTransportRating = localTransportRating
-        self.greenSpacesRating = greenSpacesRating
-        self.wasteBinsRating = wasteBinsRating
-        
-        // injected data is empty
-        self.cityIata = ""
-        self.countryCode = ""
-        self.firstName = ""
-        self.lastName = ""
-        self.scoreShortDistance = 0
-        self.scoreLongDistance = 0
-        self.badges = []
     }
     
     enum CodingKeys: String, CodingKey {
