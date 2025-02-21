@@ -41,37 +41,6 @@ struct ReviewTest {
     }
     
     @Test
-    func testInitializerWithMainAttributes() {
-        let review = Review(
-            reviewID: 1,
-            cityID: 10,
-            userID: 1,
-            reviewText: "review text",
-            localTransportRating: 1,
-            greenSpacesRating: 2,
-            wasteBinsRating: 3
-        )
-        
-        // manually initialized attributes
-        #expect(review.reviewID == 1)
-        #expect(review.cityID == 10)
-        #expect(review.userID == 1)
-        #expect(review.reviewText == "review text")
-        #expect(review.localTransportRating == 1)
-        #expect(review.greenSpacesRating == 2)
-        #expect(review.wasteBinsRating == 3)
-        
-        // automatically initialized attributes
-        #expect(review.cityIata == "")
-        #expect(review.countryCode == "")
-        #expect(review.firstName == "")
-        #expect(review.lastName == "")
-        #expect(review.scoreShortDistance == 0)
-        #expect(review.scoreLongDistance == 0)
-        #expect(review.badges == [])
-    }
-    
-    @Test
     func testEncodingDecoding() throws {
         let review = Review(
             reviewID: 1,
@@ -123,7 +92,14 @@ struct ReviewTest {
             reviewText: "review text",
             localTransportRating: 1,
             greenSpacesRating: 2,
-            wasteBinsRating: 3
+            wasteBinsRating: 3,
+            cityIata: "PAR",
+            countryCode: "FR",
+            firstName: "John",
+            lastName: "Doe",
+            scoreShortDistance: 50,
+            scoreLongDistance: 100,
+            badges: []
         )
         
         let average = review.computeRating()
@@ -140,8 +116,16 @@ struct ReviewTest {
             reviewText: "review text",
             localTransportRating: 0,
             greenSpacesRating: 0,
-            wasteBinsRating: 0
+            wasteBinsRating: 0,
+            cityIata: "PAR",
+            countryCode: "FR",
+            firstName: "John",
+            lastName: "Doe",
+            scoreShortDistance: 50,
+            scoreLongDistance: 100,
+            badges: []
         )
+        
         
         let average = review.computeRating()
         

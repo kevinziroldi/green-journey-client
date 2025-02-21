@@ -110,7 +110,7 @@ final class CitiesReviewsViewModelTest {
     func testGetReviewsForSearchedCitySuccessful() async {
         self.mockServerService.shouldSucceed = true
         
-        viewModel.searchedCity = CityCompleterDataset(
+        viewModel.selectedCity = CityCompleterDataset(
             cityName: "Paris",
             countryName: "France",
             iata: "PAR",
@@ -130,13 +130,13 @@ final class CitiesReviewsViewModelTest {
         #expect(reviewElement.averageLocalTransportRating >= 0 && reviewElement.averageLocalTransportRating <= 5)
         
         for review in reviewElement.reviews {
-            #expect(review.cityIata == viewModel.searchedCity.iata)
-            #expect(review.countryCode == viewModel.searchedCity.countryCode)
+            #expect(review.cityIata == viewModel.selectedCity.iata)
+            #expect(review.countryCode == viewModel.selectedCity.countryCode)
             #expect(review.localTransportRating >= 0 && review.localTransportRating <= 5)
             #expect(review.greenSpacesRating >= 0 && review.greenSpacesRating <= 5)
             #expect(review.wasteBinsRating >= 0 && review.wasteBinsRating <= 5)
-            #expect(review.cityIata == viewModel.searchedCity.iata)
-            #expect(review.countryCode == viewModel.searchedCity.countryCode)
+            #expect(review.cityIata == viewModel.selectedCity.iata)
+            #expect(review.countryCode == viewModel.selectedCity.countryCode)
             #expect(review.scoreShortDistance >= 0)
             #expect(review.scoreLongDistance >= 0)
         }
@@ -146,7 +146,7 @@ final class CitiesReviewsViewModelTest {
     func testGetReviewsForSearchedCityUnsuccessful() async {
         self.mockServerService.shouldSucceed = false
         
-        viewModel.searchedCity = CityCompleterDataset(
+        viewModel.selectedCity = CityCompleterDataset(
             cityName: "Paris",
             countryName: "France",
             iata: "PAR",
@@ -202,7 +202,7 @@ final class CitiesReviewsViewModelTest {
         self.mockServerService.shouldSucceed = true
         
         // retrieve reviews for Paris
-        viewModel.searchedCity = CityCompleterDataset(
+        viewModel.selectedCity = CityCompleterDataset(
             cityName: "Paris",
             countryName: "France",
             iata: "PAR",
@@ -224,7 +224,7 @@ final class CitiesReviewsViewModelTest {
         self.mockServerService.shouldSucceed = false
 
         // retrieve reviews for Paris
-        viewModel.searchedCity = CityCompleterDataset(
+        viewModel.selectedCity = CityCompleterDataset(
             cityName: "Paris",
             countryName: "France",
             iata: "PAR",
@@ -269,7 +269,7 @@ final class CitiesReviewsViewModelTest {
         viewModel.getUserReview(userID: userID)
         
         // retrieve reviews for Berlin
-        viewModel.searchedCity = CityCompleterDataset(
+        viewModel.selectedCity = CityCompleterDataset(
             cityName: "Berlin",
             countryName: "Germany",
             iata: "BER",
@@ -289,7 +289,7 @@ final class CitiesReviewsViewModelTest {
         self.mockServerService.tenReviews = false
         
         // retrieve reviews for Paris
-        viewModel.searchedCity = CityCompleterDataset(
+        viewModel.selectedCity = CityCompleterDataset(
             cityName: "Paris",
             countryName: "France",
             iata: "PAR",
@@ -308,7 +308,7 @@ final class CitiesReviewsViewModelTest {
         self.mockServerService.tenReviews = true
         
         // retrieve reviews for Paris
-        viewModel.searchedCity = CityCompleterDataset(
+        viewModel.selectedCity = CityCompleterDataset(
             cityName: "Berlin",
             countryName: "Germany",
             iata: "BER",
@@ -325,7 +325,7 @@ final class CitiesReviewsViewModelTest {
         self.mockServerService.shouldSucceed = false
         
         // retrieve reviews for Paris
-        viewModel.searchedCity = CityCompleterDataset(
+        viewModel.selectedCity = CityCompleterDataset(
             cityName: "Paris",
             countryName: "France",
             iata: "PAR",

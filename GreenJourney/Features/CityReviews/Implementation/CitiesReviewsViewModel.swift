@@ -38,6 +38,8 @@ class CitiesReviewsViewModel: ObservableObject {
     @Published var modifiedGreenSpacesRating: Int = 0
     @Published var modifiedWasteBinsRating: Int = 0
     
+    @Published var errorMessage: String? = nil
+    
     init(modelContext: ModelContext, serverService: ServerServiceProtocol) {
         self.modelContext = modelContext
         self.serverService = serverService
@@ -166,240 +168,102 @@ class CitiesReviewsViewModel: ObservableObject {
         )
     }
     
-    /*
-    func uploadReview() {
+    func uploadReview() async {
+        let users: [User]
+        do {
+            users = try modelContext.fetch(FetchDescriptor<User>())
+        } catch {
+            print("No user found")
+            self.errorMessage = "An error occurred while saving the review"
+            return
+        }
+        guard let user = users.first else {
+            print("No user found")
+            self.errorMessage = "An error occurred while saving the review"
+            return
+        }
+        guard let userID = users.first?.userID else {
+            print("No user found")
+            self.errorMessage = "An error occurred while saving the review"
+            return
+        }
         
-        let review = Review(reviewID: nil, cityID: destinationSegment.destinationID, userID: selectedTravel.travel.userID, reviewText: strongSelf.reviewText, localTransportRating: strongSelf.localTransportRating, greenSpacesRating: strongSelf.greenSpacesRating, wasteBinsRating: strongSelf.wasteBinsRating)
-            
+        let review = Review(
+            reviewID: nil,
+            cityID: nil,
+            userID: userID,
+            reviewText: self.reviewText,
+            localTransportRating: self.localTransportRating,
+            greenSpacesRating: self.greenSpacesRating,
+            wasteBinsRating: self.wasteBinsRating,
+            cityIata: selectedCity.iata,
+            countryCode: selectedCity.countryCode,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            scoreShortDistance: user.scoreShortDistance,
+            scoreLongDistance: user.scoreLongDistance,
+            badges: user.badges
+        )
         
-        if let selectedTravel = selectedTravel {
-            if let destinationSegment = selectedTravel.getLastSegment() {
-                // make POST request
-                if let firebaseUser = Auth.auth().currentUser {
-                    firebaseUser.getIDToken { [weak self] token, error in
-                        guard let strongSelf = self else { return }
-                        if let error = error {
-                            print("error getting firebase token: \(error.localizedDescription)")
-                            return
-                        } else if let firebaseToken = token {
-                            // create review
-                            let review = Review(reviewID: nil, cityID: destinationSegment.destinationID, userID: selectedTravel.travel.userID, reviewText: strongSelf.reviewText, localTransportRating: strongSelf.localTransportRating, greenSpacesRating: strongSelf.greenSpacesRating, wasteBinsRating: strongSelf.wasteBinsRating)
-                            
-                            // JSON encoding
-                            let encoder = JSONEncoder()
-                            let decoder = JSONDecoder()
-                            guard let body = try? encoder.encode(review) else {
-                                print("Error encoding review data")
-                                return
-                            }
-                            
-                            // build URL
-                            let baseURL = NetworkHandler.shared.getBaseURL()
-                            guard let url = URL(string: "\(baseURL)/reviews") else {
-                                print("Invalid URL for posting user data to DB")
-                                return
-                            }
-                            
-                            // create POST request
-                            var request = URLRequest(url: url)
-                            request.httpMethod = "POST"
-                            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-                            request.setValue("Bearer \(firebaseToken)", forHTTPHeaderField: "Authorization")
-                            request.httpBody = body
-                            
-                            URLSession.shared.dataTaskPublisher(for: request)
-                                .retry(2)
-                                .tryMap {
-                                    result -> Data in
-                                    // check status of response
-                                    guard let httpResponse = result.response as? HTTPURLResponse,
-                                          (200...299).contains(httpResponse.statusCode) else {
-                                        throw URLError(.badServerResponse)
-                                    }
-                                    return result.data
-                                }
-                                .receive(on: DispatchQueue.main)
-                                .decode(type: Review.self, decoder: decoder)
-                                .sink(receiveCompletion: { completion in
-                                    switch completion {
-                                    case .finished:
-                                        print("Travel data posted successfully.")
-                                    case .failure(let error):
-                                        print("Error posting travel data: \(error.localizedDescription)")
-                                        return
-                                    }
-                                }, receiveValue: { [weak self] review in
-                                    guard let strongSelf = self else { return }
-                                    strongSelf.travelReviews.append(review)
-                                })
-                                .store(in: &strongSelf.cancellables)
-                        }
-                    }
-                }else {
-                    // TODO
-                    print("Firebase error")
-                    return
-                }
-            }else {
-                // TODO
-                print("Error")
-                return
-            }
-        }else {
-            // TODO
-            print("Error")
+        do {
+            let userReview = try await serverService.uploadReview(review: review)
+            self.userReview = userReview
+        } catch {
+            self.errorMessage = "An error occurred while saving the review"
             return
         }
     }
     
-    func modifyReview() {
-        if let firebaseUser = Auth.auth().currentUser {
-            firebaseUser.getIDToken { [weak self] token, error in
-                guard let strongSelf = self else { return }
-                if let error = error {
-                    print("error getting firebase token: \(error.localizedDescription)")
-                    return
-                } else if let firebaseToken = token {
-                    // get review
-                    var reviewToModify: Review? = nil
-                    for review in strongSelf.travelReviews {
-                        if review.reviewID == strongSelf.modifiedReviewID {
-                            reviewToModify = review
-                        }
-                    }
-                    if let reviewToModify = reviewToModify {
-                        if let reviewID  = reviewToModify.reviewID {
-                            // create modified review
-                            let modifiedReview = Review(reviewID: reviewToModify.reviewID, cityID: reviewToModify.cityID, userID: reviewToModify.userID, reviewText: strongSelf.modifiedReviewText, localTransportRating: strongSelf.modifiedLocalTransportRating, greenSpacesRating: strongSelf.modifiedGreenSpacesRating, wasteBinsRating: strongSelf.modifiedWasteBinsRating)
-                            
-                            // JSON encoding
-                            let encoder = JSONEncoder()
-                            let decoder = JSONDecoder()
-                            guard let body = try? encoder.encode(modifiedReview) else {
-                                print("Error encoding user data for PUT")
-                                return
-                            }
-                            
-                            // create URL
-                            let baseURL = NetworkHandler.shared.getBaseURL()
-                            guard let url = URL(string: "\(baseURL)/reviews/\(reviewID)") else {
-                                print("Invalid URL for posting user data to DB")
-                                return
-                            }
-                            // create PUT request
-                            var request = URLRequest(url: url)
-                            request.httpMethod = "PUT"
-                            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-                            request.setValue("Bearer \(firebaseToken)", forHTTPHeaderField: "Authorization")
-                            request.httpBody = body
-                            
-                            URLSession.shared.dataTaskPublisher(for: request)
-                                .retry(2)
-                                .tryMap {
-                                    result -> Data in
-                                    guard let httpResponse = result.response as? HTTPURLResponse,
-                                          (200...299).contains(httpResponse.statusCode) else {
-                                        throw URLError(.badServerResponse)
-                                    }
-                                    return result.data
-                                }
-                                .decode(type: Review.self, decoder: decoder)
-                                .receive(on: DispatchQueue.main)
-                                .sink(receiveCompletion: { completion in
-                                    switch completion {
-                                    case .finished:
-                                        print("User data posted successfully.")
-                                    case .failure(let error):
-                                        print("Error posting user data: \(error.localizedDescription)")
-                                    }
-                                }, receiveValue: { [weak self] updatedReview in
-                                    guard let strongSelf = self else { return }
-                                    // remove old review and add new one
-                                    var travelReviewsUpdated: [Review] = []
-                                    
-                                    for review in strongSelf.travelReviews {
-                                        if review.reviewID != reviewID {
-                                            travelReviewsUpdated.append(review)
-                                        } else {
-                                            travelReviewsUpdated.append(updatedReview)
-                                        }
-                                    }
-                                    
-                                    strongSelf.travelReviews = travelReviewsUpdated
-                                })
-                                .store(in: &strongSelf.cancellables)
-                        }
-                    }else {
-                        print("Review to modify not found")
-                        return
-                    }
-                }
-            }
-        }else {
-            print("Firebase error")
+    func modifyReview() async {
+        guard let userReview = self.userReview else {
+            self.errorMessage = "Error while modifying the review"
+            return
+        }
+        
+        let modifiedReview = Review(
+            reviewID: userReview.reviewID,
+            cityID: userReview.cityID,
+            userID: userReview.userID,
+            reviewText: modifiedReviewText,
+            localTransportRating: modifiedLocalTransportRating,
+            greenSpacesRating: modifiedGreenSpacesRating,
+            wasteBinsRating: modifiedWasteBinsRating,
+            cityIata: userReview.cityIata,
+            countryCode: userReview.countryCode,
+            firstName: userReview.firstName,
+            lastName: userReview.lastName,
+            scoreShortDistance: userReview.scoreShortDistance,
+            scoreLongDistance: userReview.scoreLongDistance,
+            badges: userReview.badges
+        )
+        
+        do {
+            let modifiedReview = try await serverService.modifyReview(modifiedReview: modifiedReview)
+            self.userReview = modifiedReview
+        } catch {
+            
         }
     }
     
-    func deleteReview(reviewID: Int) {
-        if let firebaseUser = Auth.auth().currentUser {
-            firebaseUser.getIDToken { [weak self] token, error in
-                guard let strongSelf = self else { return }
-                if let error = error {
-                    print("error getting firebase token: \(error.localizedDescription)")
-                    return
-                } else if let firebaseToken = token {
-                    // build URL
-                    let baseURL = NetworkHandler.shared.getBaseURL()
-                    guard let url = URL(string:"\(baseURL)/reviews/\(reviewID)") else {
-                        print("Invalid URL used to retrieve travels from DB")
-                        return
-                    }
-                    
-                    // build request
-                    var request = URLRequest(url: url)
-                    request.httpMethod = "DELETE"
-                    request.setValue("Bearer \(firebaseToken)", forHTTPHeaderField: "Authorization")
-                    
-                    // send DELETE request
-                    URLSession.shared.dataTaskPublisher(for: request)
-                        .retry(2)
-                        .tryMap {
-                            result -> Data in
-                            // check status of response
-                            guard let httpResponse = result.response as? HTTPURLResponse,
-                                  (200...299).contains(httpResponse.statusCode) else {
-                                throw URLError(.badServerResponse)
-                            }
-                            return result.data
-                        }
-                        .receive(on: DispatchQueue.main)
-                        .sink(receiveCompletion: { completion in
-                            switch completion {
-                            case .finished:
-                                print("Review successfully deleted.")
-                            case .failure(let error):
-                                print("Error deleting review: \(error.localizedDescription)")
-                                return
-                            }
-                        }, receiveValue: { [weak self] _ in
-                            guard let strongSelf = self else { return }
-                            // remove from travelReviews
-                            var travelReviewsUpdated: [Review] = []
-                            for travelReview in strongSelf.travelReviews {
-                                if travelReview.reviewID != reviewID {
-                                    travelReviewsUpdated.append(travelReview)
-                                }
-                            }
-                            strongSelf.travelReviews = travelReviewsUpdated
-                        })
-                        .store(in: &strongSelf.cancellables)
-                }
-            }
-        }else {
-            print("Firebase error")
+    func deleteReview(reviewID: Int) async {
+        guard let userReview = self.userReview else {
+            self.errorMessage = "Error while deleting the review"
+            return
+        }
+        
+        guard let reviewID = userReview.reviewID else {
+            self.errorMessage = "Error while deleting the review"
+            return
+        }
+        
+        do {
+            try await serverService.deleteReview(reviewID: reviewID)
+            self.userReview = nil
+        } catch {
+            self.errorMessage = "Error while deleting the review"
+            return
         }
     }
-     */
 }
 
 extension CitiesReviewsViewModel: Hashable {
