@@ -33,15 +33,30 @@ struct TravelDetailsView: View {
                                         LinearGradient(gradient: Gradient(colors: [.blue, .cyan, .mint, .green]),
                                                        startPoint: .topTrailing, endPoint: .bottomLeading), lineWidth: 6)
                                     .shadow(color: .green.opacity(0.3), radius: 5, x: 0, y: 3)
-
-                                    HStack{
-                                        VStack {
+                                
+                                ZStack {
+                                    VStack {
+                                        HStack {
                                             Text("Compensation")
                                                 .font(.title)
                                                 .foregroundStyle(.green.opacity(0.8))
                                                 .padding(EdgeInsets(top: 15, leading: 15, bottom: 10, trailing: 0))
                                                 .fontWeight(.semibold)
-                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                                //.frame(maxWidth: .infinity, alignment: .leading)
+                                            Button(action: {
+                                                infoTapped = true
+                                            }) {
+                                                Image(systemName: "info.circle")
+                                                    .foregroundStyle(.gray)
+                                                    .font(.title3)
+                                            }
+                                            .accessibilityIdentifier("infoButton")
+                                            Spacer()
+                                        }
+                                        Spacer()
+                                    }
+                                    HStack{
+                                        VStack {
                                             if (travelDetails.computeCo2Emitted() > 0.0 && travelDetails.travel.CO2Compensated < travelDetails.computeCo2Emitted()) {
                                                 VStack (spacing: 0){
                                                     HStack {
@@ -55,7 +70,7 @@ struct TravelDetailsView: View {
                                                                     .font(.system(size: 24))
                                                                     .fontWeight(.light)
                                                                     .foregroundStyle(colorScheme == .dark ? .white : .black)
-
+                                                                
                                                             }
                                                             .disabled(plantedTrees == totalTrees)
                                                             .accessibilityIdentifier("plusButton")
@@ -83,15 +98,6 @@ struct TravelDetailsView: View {
                                                             .font(.system(size: 25))
                                                             .padding(.bottom, 5)
                                                         
-                                                        Button(action: {
-                                                            infoTapped = true
-                                                        }) {
-                                                            Image(systemName: "info.circle")
-                                                                .foregroundStyle(.gray)
-                                                                .font(.title3)
-                                                        }
-                                                        .accessibilityIdentifier("infoButton")
-                                                        
                                                         Spacer()
                                                     }
                                                     .padding(.trailing, 15)
@@ -99,7 +105,7 @@ struct TravelDetailsView: View {
                                                     Text("Price: \(plantedTrees * 2) €")
                                                         .padding()
                                                         .font(.system(size: 17))
-                                                                                                        
+                                                    
                                                     Button(action: {
                                                         compensationTapped = true
                                                     }) {
@@ -145,6 +151,7 @@ struct TravelDetailsView: View {
                                                 }
                                             }
                                         }
+                                        .padding(.top, 40)
                                         .frame(maxWidth: .infinity)
                                         VStack {
                                             ZStack {
@@ -157,7 +164,7 @@ struct TravelDetailsView: View {
                                                 SemiCircle(progress: progress)
                                                     .stroke(style: StrokeStyle(lineWidth: 10, lineCap: .round))
                                                     .foregroundStyle(LinearGradient(gradient: Gradient(colors: [.red, .orange, .yellow, .green, .mint]), startPoint: .leading, endPoint: .trailing))
-                                                    .frame(width: 140, height: 110)
+                                                    .frame(width: 130, height: 110)
                                                 
                                                 VStack (spacing: 15){
                                                     Image(systemName: "carbon.dioxide.cloud")
@@ -181,7 +188,9 @@ struct TravelDetailsView: View {
                                         }
                                         
                                     }
-                                    .padding(.trailing, 25)
+                                    .padding(EdgeInsets(top: 15, leading: 0, bottom: 5, trailing: 20))
+                                    
+                                }
                             }
                             .padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
                         }
