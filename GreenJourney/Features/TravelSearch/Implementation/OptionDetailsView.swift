@@ -8,9 +8,11 @@ struct OptionDetailsView: View {
     
     var body: some View {
         HeaderView(from: getOptionDeparture(segments), to: getOptionDestination(segments), date: segments.first?.dateTime)
+        
         Rectangle()
             .frame(height: 1)
             .foregroundColor(.gray)
+        
         ScrollView {
             HStack {
                 VStack {
@@ -30,11 +32,11 @@ struct OptionDetailsView: View {
                                 Text(String(format: "%.1f", computeTotalDistance(segments)) + " Km")
                                     .font(.title3)
                                     .fontWeight(.semibold)
-                                
                             }
                         }
                         .padding()
                     }
+                    .overlay(Color.clear.accessibilityIdentifier("distanceBox"))
                     
                     ZStack {
                         RoundedRectangle(cornerRadius: 10)
@@ -57,6 +59,7 @@ struct OptionDetailsView: View {
                         }
                         .padding()
                     }
+                    .overlay(Color.clear.accessibilityIdentifier("priceBox"))
                 }
                 
                 VStack {
@@ -81,6 +84,7 @@ struct OptionDetailsView: View {
                         }
                         .padding()
                     }
+                    .overlay(Color.clear.accessibilityIdentifier("durationBox"))
                     
                     ZStack {
                         RoundedRectangle(cornerRadius: 10)
@@ -103,9 +107,11 @@ struct OptionDetailsView: View {
                         }
                         .padding()
                     }
+                    .overlay(Color.clear.accessibilityIdentifier("priceZeroEmissionBox"))
                 }
             }
             .padding(EdgeInsets(top: 10, leading: 10, bottom: 20, trailing: 10))
+            
             HStack (spacing: 50){
                 VStack {
                     Text("Total CO2 emitted")
@@ -120,8 +126,10 @@ struct OptionDetailsView: View {
                     .foregroundStyle(.red)
             }
             .padding(.bottom, 30)
+            .overlay(Color.clear.accessibilityIdentifier("co2EmittedBox"))
             
             SegmentsView(segments: segments)
+            
             Spacer()
         }
         if (!viewModel.oneWay) {
@@ -132,7 +140,6 @@ struct OptionDetailsView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .accessibilityIdentifier("proceedButton")
-
             }
             else {
                 Button ("Save travel") {

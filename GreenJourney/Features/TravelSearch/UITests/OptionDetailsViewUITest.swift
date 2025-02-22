@@ -13,4 +13,265 @@ final class OptionDetailsViewUITest: XCTestCase {
     override func tearDownWithError() throws {
         app.terminate()
     }
+    
+    private func navigateToOptionDetailsViewOneWay() {
+        // UI elements
+        let emailTextField = app.textFields["emailTextField"]
+        let passwordField = app.secureTextFields["passwordSecureField"]
+        let loginButton = app.buttons["loginButton"]
+        
+        XCTAssertTrue(emailTextField.exists, "The email field is not displayed")
+        XCTAssertTrue(passwordField.exists, "The password field is not displayed")
+        XCTAssertTrue(loginButton.exists, "The login button is not displayed")
+        
+        // insert data
+        emailTextField.tap()
+        emailTextField.typeText("test@example.com")
+        passwordField.tap()
+        passwordField.typeText("test_password")
+        // tap login button
+        loginButton.tap()
+        
+        // UI elements TravelSearch
+        let travelSearchViewTitle = app.staticTexts["travelSearchViewTitle"]
+        let departureButton = app.buttons["departureButton"]
+        let destinationButton = app.buttons["destinationButton"]
+        let searchedCityTextField = app.textFields["searchedCityTextField"]
+        let listElementMilano = app.otherElements["listElement_MIL_IT"]
+        let listElementRoma = app.otherElements["listElement_ROM_IT"]
+        let searchButton = app.buttons["searchButton"]
+        
+        XCTAssertTrue(travelSearchViewTitle.exists, "travelSearchViewTitle not displayed")
+        
+        // check departure button
+        XCTAssertTrue(departureButton.exists, "departureButton not appeared after login")
+        // tap departure button
+        departureButton.tap()
+        // check completer displayed
+        XCTAssertTrue(searchedCityTextField.waitForExistence(timeout: timer), "completer view not displayed")
+        // check element Milano
+        XCTAssertTrue(listElementMilano.exists, "listElementMilano is not displayed")
+        // tap button
+        listElementMilano.tap()
+        
+        // tap destination button
+        destinationButton.tap()
+        // check completer displayed
+        XCTAssertTrue(searchedCityTextField.waitForExistence(timeout: timer), "completer view not displayed")
+        // type text
+        searchedCityTextField.typeText("R")
+        // check Roma displayed
+        XCTAssertTrue(listElementRoma.exists, "listElementRoma is not displayed")
+        // tap Roma
+        listElementRoma.tap()
+        
+        XCTAssertTrue(travelSearchViewTitle.exists, "travelSearchViewTitle not displayed")
+        
+        searchButton.tap()
+        
+        // UI elements
+        let outwardOption_0 = app.buttons["outwardOption_0"]
+        
+        XCTAssertTrue(outwardOption_0.exists, "outwardOption_0 not displayed")
+        
+        // tap option
+        outwardOption_0.tap()
+    }
+    
+    private func navigateToOptionDetailsViewTwoWays() {
+        // UI elements
+        let emailTextField = app.textFields["emailTextField"]
+        let passwordField = app.secureTextFields["passwordSecureField"]
+        let loginButton = app.buttons["loginButton"]
+        
+        XCTAssertTrue(emailTextField.exists, "The email field is not displayed")
+        XCTAssertTrue(passwordField.exists, "The password field is not displayed")
+        XCTAssertTrue(loginButton.exists, "The login button is not displayed")
+        
+        // insert data
+        emailTextField.tap()
+        emailTextField.typeText("test@example.com")
+        passwordField.tap()
+        passwordField.typeText("test_password")
+        // tap login button
+        loginButton.tap()
+        
+        // UI elements TravelSearch
+        let travelSearchViewTitle = app.staticTexts["travelSearchViewTitle"]
+        let departureButton = app.buttons["departureButton"]
+        let destinationButton = app.buttons["destinationButton"]
+        let searchedCityTextField = app.textFields["searchedCityTextField"]
+        let listElementMilano = app.otherElements["listElement_MIL_IT"]
+        let listElementRoma = app.otherElements["listElement_ROM_IT"]
+        let searchButton = app.buttons["searchButton"]
+        let tripTypePicker = app.segmentedControls["tripTypePicker"]
+        
+        XCTAssertTrue(travelSearchViewTitle.exists, "travelSearchViewTitle not displayed")
+        
+        let oneWayOption = tripTypePicker.buttons["One way"]
+        let roundTripOption = tripTypePicker.buttons["Round trip"]
+        
+        // check picker present
+        XCTAssertTrue(tripTypePicker.exists, "tripTypePicker not displayed")
+        
+        // one way should be default
+        XCTAssertTrue(oneWayOption.isSelected, "One way should be default")
+               
+        // tap button
+        tripTypePicker.tap()
+        
+        XCTAssertTrue(roundTripOption.isSelected, "Round trip should be selected")
+        
+        // check departure button
+        XCTAssertTrue(departureButton.exists, "departureButton not appeared after login")
+        // tap departure button
+        departureButton.tap()
+        // check completer displayed
+        XCTAssertTrue(searchedCityTextField.waitForExistence(timeout: timer), "completer view not displayed")
+        // check element Milano
+        XCTAssertTrue(listElementMilano.exists, "listElementMilano is not displayed")
+        // tap button
+        listElementMilano.tap()
+        
+        // tap destination button
+        destinationButton.tap()
+        // check completer displayed
+        XCTAssertTrue(searchedCityTextField.waitForExistence(timeout: timer), "completer view not displayed")
+        // type text
+        searchedCityTextField.typeText("R")
+        // check Roma displayed
+        XCTAssertTrue(listElementRoma.exists, "listElementRoma is not displayed")
+        // tap Roma
+        listElementRoma.tap()
+        
+        XCTAssertTrue(travelSearchViewTitle.exists, "travelSearchViewTitle not displayed")
+        
+        searchButton.tap()
+        
+        // UI elements
+        let outwardOption_0 = app.buttons["outwardOption_0"]
+        
+        XCTAssertTrue(outwardOption_0.waitForExistence(timeout: timer), "outwardOption_0 not displayed")
+        
+        // tap option
+        outwardOption_0.tap()
+    }
+    
+    func testOptionDetailsViewElementsPresent() {
+        navigateToOptionDetailsViewOneWay()
+        
+        let distanceBox = app.otherElements["distanceBox"]
+        let priceBox = app.otherElements["priceBox"]
+        let durationBox = app.otherElements["durationBox"]
+        let priceZeroEmissionBox = app.otherElements["priceZeroEmissionBox"]
+        let co2EmittedBox = app.otherElements["co2EmittedBox"]
+       
+        let proceedButton = app.buttons["proceedButton"]
+        let saveTravelButtonTwoWays = app.buttons["saveTravelButtonTwoWays"]
+        let saveTravelButtonOneWay = app.buttons["saveTravelButtonOneWay"]
+        
+        XCTAssertTrue(distanceBox.waitForExistence(timeout: timer), "distanceBox not displayed")
+        XCTAssertTrue(priceBox.exists, "priceBox not displayed")
+        XCTAssertTrue(durationBox.exists, "priceBox not displayed")
+        XCTAssertTrue(priceZeroEmissionBox.exists, "priceBox not displayed")
+        XCTAssertTrue(co2EmittedBox.exists, "priceBox not displayed")
+        
+        XCTAssertTrue(saveTravelButtonOneWay.exists, "saveTravelButtonOneWay not displayed")
+        
+        XCTAssertFalse(proceedButton.exists, "proceedButton displayed")
+        XCTAssertFalse(saveTravelButtonTwoWays.exists, "saveTravelButtonTwoWays displayed")
+    }
+    
+    func testSaveTravelOneWayTap() {
+        navigateToOptionDetailsViewOneWay()
+        
+        // UI elements
+        let saveTravelButtonOneWay = app.buttons["saveTravelButtonOneWay"]
+        
+        XCTAssertTrue(saveTravelButtonOneWay.exists, "saveTravelButtonOneWay not displayed")
+        
+        // tap button
+        saveTravelButtonOneWay.tap()
+        
+        // check TravelSearch page
+        let travelSearchViewTitle = app.staticTexts["travelSearchViewTitle"]
+        
+        XCTAssertTrue(travelSearchViewTitle.waitForExistence(timeout: timer), "TravelSearch page not displayed after saving travel")
+    }
+    
+    func testSaveTravelTwoWays() {
+        navigateToOptionDetailsViewTwoWays()
+        
+        // UI elements OptionDetails
+        let proceedButton = app.buttons["proceedButton"]
+        
+        XCTAssertTrue(proceedButton.waitForExistence(timeout: timer), "proceedButton not displayed")
+        
+        // tap save button
+        proceedButton.tap()
+        
+        // UI elements
+        let returnOption_0 = app.buttons["returnOption_0"]
+        
+        XCTAssertTrue(returnOption_0.exists, "outwardOption_0 not displayed")
+        
+        // tap option
+        returnOption_0.tap()
+        
+        // UI elements OptionDetails
+        let saveTravelButton = app.buttons["saveTravelButtonTwoWays"]
+        
+        XCTAssertTrue(saveTravelButton.exists, "saveTravelButton not displayed")
+        
+        // tap save travel
+        saveTravelButton.tap()
+        
+        // check TravelSearch page
+        let travelSearchViewTitle = app.staticTexts["travelSearchViewTitle"]
+        
+        XCTAssertTrue(travelSearchViewTitle.waitForExistence(timeout: timer), "TravelSearch page not displayed after saving travel")
+    }
+    
+    func testSegmentDetails() {
+        navigateToOptionDetailsViewOneWay()
+        
+        // UI elements
+        let segmentLine = app.otherElements["segmentLine"]
+        let segmentDeparture = app.staticTexts["segmentDeparture"]
+        let vehicleImage = app.otherElements["vehicleImage"]
+        let openDetailsButton = app.buttons["openDetailsButton"]
+        let detailsBox = app.otherElements["detailsBox"]
+        let segmentDestination = app.staticTexts["segmentDestination"]
+        let departureDate = app.staticTexts["departureDate"]
+        let arrivalDate = app.staticTexts["arrivalDate"]
+        let segmentInfo = app.otherElements["segmentInfo"]
+        
+        // check elements present before opening details
+        XCTAssertTrue(segmentLine.exists, "segmentLine not displayed")
+        XCTAssertTrue(segmentDeparture.exists, "segmentDeparture not displayed")
+        XCTAssertTrue(vehicleImage.exists, "vehicleImage not displayed")
+        XCTAssertTrue(openDetailsButton.exists, "openDetailsButton not displayed")
+        XCTAssertTrue(segmentDestination.exists, "segmentDestination not displayed")
+        XCTAssertTrue(departureDate.exists, "departureDate not displayed")
+        XCTAssertTrue(arrivalDate.exists, "arrivalDate not displayed")
+    
+        XCTAssertFalse(detailsBox.exists, "detailsBox displayed")
+        XCTAssertFalse(segmentInfo.exists, "segmentInfo displayed")
+        
+        // tap button to expand details
+        openDetailsButton.tap()
+        
+        // check elements present before opening details
+        XCTAssertTrue(segmentLine.exists, "segmentLine not displayed")
+        XCTAssertTrue(segmentDeparture.exists, "segmentDeparture not displayed")
+        XCTAssertTrue(vehicleImage.exists, "vehicleImage not displayed")
+        XCTAssertTrue(openDetailsButton.exists, "openDetailsButton not displayed")
+        XCTAssertTrue(segmentDestination.exists, "segmentDestination not displayed")
+        XCTAssertTrue(departureDate.exists, "departureDate not displayed")
+        XCTAssertTrue(arrivalDate.exists, "arrivalDate not displayed")
+    
+        XCTAssertTrue(detailsBox.exists, "detailsBox not displayed")
+        XCTAssertTrue(segmentInfo.exists, "segmentInfo not displayed")
+    }
 }
+

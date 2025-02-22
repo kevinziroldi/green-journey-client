@@ -7,7 +7,6 @@ struct SegmentsView: View {
         ForEach(segments) { segment in
             SegmentDetailView(segment: segment)
         }
-        
     }
 }
 
@@ -22,7 +21,6 @@ struct SegmentDetailView: View {
             GeometryReader { geometry in
                 ZStack {
                     Path { path in
-                        // Punto iniziale in alto a sinistra
                         path.move(to: CGPoint(x: 0, y: 10))
                         
                         path.addLine(to: CGPoint(x: 0, y: geometry.size.height - 10))
@@ -35,7 +33,6 @@ struct SegmentDetailView: View {
                         .frame(width: 10, height: 10)
                         .position(x: 0, y: 10)
                     
-                    // Cerchio alla fine del path
                     Circle()
                         .stroke(colorScheme == .dark ? Color.white : Color.black, lineWidth: 5)
                         .fill(colorScheme == .dark ? Color.black : Color.white)
@@ -45,15 +42,19 @@ struct SegmentDetailView: View {
                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
             }
             .frame(width: 20, height: lenght)
+            .accessibilityIdentifier("segmentLine")
             
             HStack{
                 VStack {
                     Text(segment.departureCity)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .font(.headline)
+                        .accessibilityIdentifier("segmentDeparture")
+                    
                     if !detailsOpen{
                         Spacer()
                     }
+                    
                     HStack {
                         ZStack{
                             Circle()
@@ -61,8 +62,8 @@ struct SegmentDetailView: View {
                                 .frame(width: 40, height: 40)
                             Image(systemName: findVehicle(segment))
                                 .font(.title2)
-                            
                         }
+                        .overlay(Color.clear.accessibilityIdentifier("vehicleImage"))
                         
                         Button(action: {
                             detailsOpen.toggle()
@@ -78,16 +79,18 @@ struct SegmentDetailView: View {
                             Image(systemName: arrowImage)
                                 .font(.title2)
                         }
+                        .accessibilityIdentifier("openDetailsButton")
                         
                         Spacer()
                     }
+                    
                     if detailsOpen {
                         Spacer()
                         ZStack {
                             RoundedRectangle(cornerRadius: 15)
                                 .stroke(lineWidth: 1)
                                 
-                            VStack{
+                            VStack {
                                 Text(String(format: "%.1f", segment.distance) + " Km")
                                     .font(.callout)
                                     .fontWeight(.semibold)
@@ -110,13 +113,17 @@ struct SegmentDetailView: View {
                         }
                         .fixedSize(horizontal: false, vertical: true)
                         .frame(maxWidth: .infinity, alignment: .leading)
-
+                        .overlay(Color.clear.accessibilityIdentifier("detailsBox"))
                     }
+                    
                     Spacer()
+                    
                     Text(segment.destinationCity)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .font(.headline)
+                        .accessibilityIdentifier("segmentDestination")
                 }
+                
                 Spacer()
             }
             
@@ -125,35 +132,38 @@ struct SegmentDetailView: View {
                     .font(.callout)
                     .fontWeight(.light)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityIdentifier("departureDate")
                 
                 Spacer()
                 
                 if detailsOpen {
-                    VStack{
+                    VStack {
                         Spacer()
-                        HStack (spacing: 5){
+                        HStack (spacing: 5) {
                             VStack{
                                 Text("Info:")
                                     .font(.subheadline)
                                     .fontWeight(.bold)
                                 Spacer()
                             }
-                            VStack{
+                            VStack {
                                 Text(segment.segmentDescription)
                                     .font(.subheadline)
                                 Spacer()
                             }
                         }
-                        
                         Spacer()
                     }
+                    .overlay(Color.clear.accessibilityIdentifier("segmentInfo"))
                 }
+                
                 Spacer()
+                
                 Text(segment.getArrivalDateTime().formatted(date: .numeric, time: .shortened))
                     .font(.callout)
                     .fontWeight(.light)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                
+                    .accessibilityIdentifier("arrivalDate")
             }
             Spacer()
             Spacer()
@@ -161,6 +171,7 @@ struct SegmentDetailView: View {
         .padding(.horizontal, 30)
         .padding(.vertical, 5)
     }
+    
     func findVehicle(_ segment: Segment) -> String {
         var vehicle: String
         switch segment.vehicle {
