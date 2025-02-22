@@ -37,6 +37,7 @@ struct TravelSearchView: View {
                         .scaleEffect(1.3) // avoids clipping
                         .opacity(triggerAI ? 1 : 0)
                         .ignoresSafeArea()
+                        .disabled(!triggerAI)
                     
                     // Brightness rim on edges
                     if triggerAI {
@@ -56,7 +57,7 @@ struct TravelSearchView: View {
                                     .font(.system(size: 32).bold())
                                     .padding()
                                     .fontWeight(.semibold)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    //.frame(maxWidth: .infinity, alignment: .leading)
                                     .accessibilityIdentifier("travelSearchViewTitle")
                                 
                                 Spacer()

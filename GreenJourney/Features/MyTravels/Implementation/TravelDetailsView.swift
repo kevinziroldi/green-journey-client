@@ -4,7 +4,7 @@ struct TravelDetailsView: View {
     @ObservedObject var viewModel: MyTravelsViewModel
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @Binding var navigationPath: NavigationPath
-    @State var compensationTapped: Bool = false
+    @State var reviewTapped: Bool = false
     @State var infoTapped: Bool = false
     @State var progress: Float64 = 0
     @State var showAlert = false
@@ -15,8 +15,6 @@ struct TravelDetailsView: View {
         if let travelDetails = viewModel.selectedTravel {
             ZStack {
                 VStack (spacing:0){
-                    
-                    
                     ScrollView {
                         HeaderView(from: travelDetails.getDepartureSegment()?.departureCity ?? "", to: travelDetails.getDestinationSegment()?.destinationCity ?? "", date: travelDetails.segments.first?.dateTime, dateArrival: travelDetails.segments.last?.getArrivalDateTime())
                             .accessibilityElement(children: .contain)
@@ -107,7 +105,7 @@ struct TravelDetailsView: View {
                                                         .font(.system(size: 17))
                                                     
                                                     Button(action: {
-                                                        compensationTapped = true
+                                                        // func compensation in viewmodel
                                                     }) {
                                                         ZStack {
                                                             RoundedRectangle(cornerRadius: 30)
@@ -231,7 +229,7 @@ struct TravelDetailsView: View {
                         if travelDetails.travel.confirmed {
                         // if the user hasn't left a review yet
                         Button(action: {
-                            //review
+                            reviewTapped = true
                         }) {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 10)
@@ -302,6 +300,7 @@ struct TravelDetailsView: View {
                     
                     Spacer()
                 }
+                .padding(.top, 50)
                 .blur(radius: (infoTapped) ? 2 : 0)
                 .allowsHitTesting(!infoTapped)
                 
@@ -310,7 +309,11 @@ struct TravelDetailsView: View {
                         .accessibilityElement(children: .contain)
                         .accessibilityIdentifier("infoCompensationView")
                 }
+                if reviewTapped {
+                    InsertReviewView(isPresented: $reviewTapped)
+                }
             }
+            .ignoresSafeArea()
             .background(colorScheme == .dark ? Color(red: 10/255, green: 10/255, blue: 10/255) : Color(red: 245/255, green: 245/255, blue: 245/255))
             .onAppear() {
                 if (travelDetails.computeCo2Emitted() >= 0.0) {
