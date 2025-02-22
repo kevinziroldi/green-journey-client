@@ -389,6 +389,9 @@ struct TravelSearchView: View {
             }
             .toolbar((triggerAI || dateTapped || dateReturnTapped) ? .hidden : .automatic, for: .tabBar)
             .navigationBarBackButtonHidden(triggerAI || dateTapped || dateReturnTapped)
+            .onAppear() {
+                viewModel.resetParameters()
+            }
         }
         
     }

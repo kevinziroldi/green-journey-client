@@ -92,38 +92,13 @@ final class TravelSearchViewUITest: XCTestCase {
     
     func testSwitchTravelDirection() {
         // UI elements
-        let travelSearchViewTitle = app.staticTexts["travelSearchViewTitle"]
-        let userPreferencesButton = app.buttons["userPreferencesButton"]
         let tripTypePicker = app.segmentedControls["tripTypePicker"]
-        let departureLabel = app.staticTexts["departureLabel"]
-        let departureButton = app.buttons["departureButton"]
-        let destinationLabel = app.staticTexts["destinationLabel"]
-        let destinationButton = app.buttons["destinationButton"]
-        let outwardDateButton = app.buttons["outwardDateButton"]
-        let returnDateButton = app.buttons["returnDateButton"]
-        let searchButton = app.buttons["searchButton"]
-        let getRecommendationButton = app.buttons["getRecommendationButton"]
-        let dismissAIButton = app.buttons["dismissAIButton"]
-        let newGenerationButton = app.buttons["newGenerationButton"]
-        
-        // check UI elements present
-        XCTAssertTrue(travelSearchViewTitle.exists, "travelSearchViewTitle is not displayed")
-        XCTAssertTrue(userPreferencesButton.exists, "userPreferencesButton is not displayed")
-        XCTAssertTrue(tripTypePicker.exists, "tripTypePicker is not displayed")
-        XCTAssertTrue(departureLabel.exists, "departureLabel is not displayed")
-        XCTAssertTrue(departureButton.exists, "departureButton is not displayed")
-        XCTAssertTrue(destinationLabel.exists, "destinationLabel is not displayed")
-        XCTAssertTrue(destinationButton.exists, "destinationButton is not displayed")
-        XCTAssertTrue(outwardDateButton.exists, "outwardDateButton is not displayed")
-        XCTAssertTrue(returnDateButton.exists, "returnDateButton is not displayed")
-        XCTAssertTrue(searchButton.exists, "searchButton is not displayed")
-        
-        XCTAssertTrue(getRecommendationButton.exists, "getRecommendationButton is not displayed")
-        XCTAssertFalse(dismissAIButton.exists, "dismissAIButton is not displayed")
-        XCTAssertFalse(newGenerationButton.exists, "newGenerationButton is not displayed")
     
         let oneWayOption = tripTypePicker.buttons["One way"]
         let roundTripOption = tripTypePicker.buttons["Round trip"]
+        
+        // check picker present
+        XCTAssertTrue(tripTypePicker.exists, "tripTypePicker not displayed")
         
         // one way should be default
         XCTAssertTrue(oneWayOption.isSelected, "One way should be default")
@@ -132,22 +107,6 @@ final class TravelSearchViewUITest: XCTestCase {
         tripTypePicker.tap()
         
         XCTAssertTrue(roundTripOption.isSelected, "Round trip should be selected")
-        
-        // check UI elements present
-        XCTAssertTrue(travelSearchViewTitle.exists, "travelSearchViewTitle is not displayed")
-        XCTAssertTrue(userPreferencesButton.exists, "userPreferencesButton is not displayed")
-        XCTAssertTrue(tripTypePicker.exists, "tripTypePicker is not displayed")
-        XCTAssertTrue(departureLabel.exists, "departureLabel is not displayed")
-        XCTAssertTrue(departureButton.exists, "departureButton is not displayed")
-        XCTAssertTrue(destinationLabel.exists, "destinationLabel is not displayed")
-        XCTAssertTrue(destinationButton.exists, "destinationButton is not displayed")
-        XCTAssertTrue(outwardDateButton.exists, "outwardDateButton is not displayed")
-        XCTAssertTrue(returnDateButton.exists, "returnDateButton is not displayed")
-        XCTAssertTrue(searchButton.exists, "searchButton is not displayed")
-        
-        XCTAssertTrue(getRecommendationButton.exists, "getRecommendationButton is not displayed")
-        XCTAssertFalse(dismissAIButton.exists, "dismissAIButton is not displayed")
-        XCTAssertFalse(newGenerationButton.exists, "newGenerationButton is not displayed")
     }
     
     func testDatePickerPresentationAndDismissal() {

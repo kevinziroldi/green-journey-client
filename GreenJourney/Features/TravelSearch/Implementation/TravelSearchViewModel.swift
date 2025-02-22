@@ -32,7 +32,7 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
     }
     
     // used after a travel search
-    private func resetParameters() {
+    func resetParameters() {
         self.arrival = CityCompleterDataset()
         self.departure = CityCompleterDataset()
         self.datePicked = Date()
@@ -94,9 +94,6 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
             
             let travel = Travel(userID: userID)
             let travelDetails = TravelDetails(travel: travel, segments: selectedOption)
-            
-            // after building travel details, I can reset
-            resetParameters()
             
             // save on server
             let returnedTravelDetails = try await serverService.saveTravel(travelDetails: travelDetails)

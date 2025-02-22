@@ -7,15 +7,17 @@ struct OutwardOptionsView: View {
     var body: some View {
         VStack (spacing: 0){
             HStack {
+                // departure label
                 Text(viewModel.departure.cityName)
                     .font(.title2)
                     .fontWeight(.semibold)
                     .padding()
+                    .accessibilityIdentifier("departureLabel")
                 
-                    GeometryReader { geometry in
-                        ZStack {
+                // line departure - destination
+                GeometryReader { geometry in
+                    ZStack {
                         Path { path in
-                            // Punto iniziale in alto a sinistra
                             path.move(to: CGPoint(x: 0, y: geometry.size.height/2))
                             
                             path.addQuadCurve(
@@ -23,15 +25,15 @@ struct OutwardOptionsView: View {
                                 control: CGPoint(x: geometry.size.width/2, y: 0)
                             )
                         }
-                        .stroke(style: StrokeStyle(lineWidth: 4, dash: [15, 8])) // Stile tratteggiato
-                        .foregroundColor(.primary) // Colore della linea
+                        .stroke(style: StrokeStyle(lineWidth: 4, dash: [15, 8]))
+                        .foregroundColor(.primary)
+                        
                         Circle()
-                                .stroke(Color.black, lineWidth: 5)
-                                .fill(Color.white)
-                                .frame(width: 10, height: 10)
+                            .stroke(Color.black, lineWidth: 5)
+                            .fill(Color.white)
+                            .frame(width: 10, height: 10)
                             .position(x: geometry.size.width, y: geometry.size.height/2)
                         
-                        // Cerchio alla fine del path
                         Circle()
                             .stroke(Color.black, lineWidth: 5)
                             .fill(Color.white)
@@ -41,13 +43,20 @@ struct OutwardOptionsView: View {
                     .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                 }
                 .frame(width: 180, height: 75, alignment: .top)
+                .accessibilityIdentifier("fromToLine")
+                
+                // destination label
                 Text(viewModel.arrival.cityName)
                     .font(.title2)
                     .fontWeight(.semibold)
                     .padding()
+                    .accessibilityIdentifier("destinationLabel")
             }
+            
             Text(viewModel.datePicked.formatted(date: .numeric, time: .shortened))
+                .accessibilityIdentifier("datePicked")
         }
+        
         Rectangle()
             .frame(height: 1)
             .foregroundColor(.gray)
@@ -67,6 +76,7 @@ struct OutwardOptionsView: View {
                         NavigationLink (destination: OptionDetailsView(segments: viewModel.outwardOptions[option], viewModel: viewModel, navigationPath: $navigationPath)){
                             OptionCard(option: viewModel.outwardOptions[option], viewModel: viewModel)
                         }
+                        .accessibilityIdentifier("outwardOption_\(option)")
                     }
                     .buttonStyle(.plain)
                 }

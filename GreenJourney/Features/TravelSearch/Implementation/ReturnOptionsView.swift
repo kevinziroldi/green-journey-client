@@ -10,11 +10,11 @@ struct ReturnOptionsView: View {
                     .font(.title2)
                     .fontWeight(.semibold)
                     .padding()
+                    .accessibilityIdentifier("arrivalLabel")
                 
                 GeometryReader { geometry in
                     ZStack {
                         Path { path in
-                            // Punto iniziale in alto a sinistra
                             path.move(to: CGPoint(x: 0, y: geometry.size.height/2))
                             
                             path.addQuadCurve(
@@ -22,15 +22,15 @@ struct ReturnOptionsView: View {
                                 control: CGPoint(x: geometry.size.width/2, y: 0)
                             )
                         }
-                        .stroke(style: StrokeStyle(lineWidth: 4, dash: [15, 8])) // Stile tratteggiato
-                        .foregroundColor(.primary) // Colore della linea
+                        .stroke(style: StrokeStyle(lineWidth: 4, dash: [15, 8]))
+                        .foregroundColor(.primary)
+                        
                         Circle()
                             .stroke(Color.black, lineWidth: 5)
                             .fill(Color.white)
                             .frame(width: 10, height: 10)
                             .position(x: geometry.size.width, y: geometry.size.height/2)
                         
-                        // Cerchio alla fine del path
                         Circle()
                             .stroke(Color.black, lineWidth: 5)
                             .fill(Color.white)
@@ -40,13 +40,18 @@ struct ReturnOptionsView: View {
                     .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                 }
                 .frame(width: 180, height: 75, alignment: .top)
+                .accessibilityIdentifier("fromToLine")
+                
                 Text(viewModel.departure.cityName)
                     .font(.title2)
                     .fontWeight(.semibold)
                     .padding()
+                    .accessibilityIdentifier("departureLabel")
             }
+            
             Text(viewModel.dateReturnPicked.formatted(date: .numeric, time: .shortened))
-        } 
+                .accessibilityIdentifier("datePicked")
+        }
         Rectangle()
             .frame(height: 1)
             .foregroundColor(.gray)
@@ -62,10 +67,11 @@ struct ReturnOptionsView: View {
         else{
             ScrollView {
                 VStack {
-                    ForEach (viewModel.outwardOptions.indices, id: \.self) { option in
+                    ForEach (viewModel.returnOptions.indices, id: \.self) { option in
                         NavigationLink (destination: OptionDetailsView(segments: viewModel.returnOptions[option], viewModel: viewModel, navigationPath: $navigationPath)){
                             OptionCard(option: viewModel.returnOptions[option], viewModel: viewModel)
                         }
+                        .accessibilityIdentifier("returnOption_\(option)")
                     }
                     .buttonStyle(.plain)
                 }

@@ -126,15 +126,16 @@ struct OptionDetailsView: View {
         }
         if (!viewModel.oneWay) {
             if (viewModel.selectedOption.isEmpty) {
-                Button ("proceed"){
+                Button ("Proceed"){
                     viewModel.selectedOption.append(contentsOf: segments)
                     navigationPath.append(NavigationDestination.ReturnOptionsView(viewModel))
                 }
                 .buttonStyle(.borderedProminent)
+                .accessibilityIdentifier("proceedButton")
 
             }
             else {
-                Button ("save travel") {
+                Button ("Save travel") {
                     Task {
                         viewModel.selectedOption.append(contentsOf: segments)
                         await viewModel.saveTravel()
@@ -142,10 +143,11 @@ struct OptionDetailsView: View {
                     }
                 }
                 .buttonStyle(.borderedProminent)
+                .accessibilityIdentifier("saveTravelButtonTwoWays")
             }
         }
         else {
-            Button ("save travel") {
+            Button ("Save travel") {
                 Task {
                     viewModel.selectedOption.append(contentsOf: segments)
                     await viewModel.saveTravel()
@@ -153,6 +155,7 @@ struct OptionDetailsView: View {
                 }
             }
             .buttonStyle(.borderedProminent)
+            .accessibilityIdentifier("saveTravelButtonOneWay")
         }
     }
     
