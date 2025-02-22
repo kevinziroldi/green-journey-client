@@ -40,7 +40,6 @@ struct TravelDetailsView: View {
                                                 .foregroundStyle(.green.opacity(0.8))
                                                 .padding(EdgeInsets(top: 15, leading: 15, bottom: 10, trailing: 0))
                                                 .fontWeight(.semibold)
-                                                //.frame(maxWidth: .infinity, alignment: .leading)
                                             Button(action: {
                                                 infoTapped = true
                                             }) {
@@ -310,7 +309,8 @@ struct TravelDetailsView: View {
                         .accessibilityIdentifier("infoCompensationView")
                 }
                 if reviewTapped {
-                    InsertReviewView(isPresented: $reviewTapped)
+                    //TODO
+                    //InsertReviewView(isPresented: $reviewTapped)
                 }
             }
             .ignoresSafeArea()

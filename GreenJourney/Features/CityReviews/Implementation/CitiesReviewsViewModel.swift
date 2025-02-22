@@ -26,7 +26,7 @@ class CitiesReviewsViewModel: ObservableObject {
     // Textfield input
     @Published var pageInput: Int = 1
     
-    // upload review
+    // upload/modify review
     @Published var reviewText: String = ""
     @Published var localTransportRating: Int = 0
     @Published var greenSpacesRating: Int = 0
@@ -34,12 +34,6 @@ class CitiesReviewsViewModel: ObservableObject {
     
     
     // TODO to be set to userReview values !!!
-    
-    // modify review
-    @Published var modifiedReviewText: String = ""
-    @Published var modifiedLocalTransportRating: Int = 0
-    @Published var modifiedGreenSpacesRating: Int = 0
-    @Published var modifiedWasteBinsRating: Int = 0
     
     @Published var errorMessage: String? = nil
     
@@ -195,10 +189,10 @@ class CitiesReviewsViewModel: ObservableObject {
             reviewID: userReview.reviewID,
             cityID: userReview.cityID,
             userID: userReview.userID,
-            reviewText: modifiedReviewText,
-            localTransportRating: modifiedLocalTransportRating,
-            greenSpacesRating: modifiedGreenSpacesRating,
-            wasteBinsRating: modifiedWasteBinsRating,
+            reviewText: self.reviewText,
+            localTransportRating: self.localTransportRating,
+            greenSpacesRating: self.greenSpacesRating,
+            wasteBinsRating: self.wasteBinsRating,
             cityIata: userReview.cityIata,
             countryCode: userReview.countryCode,
             firstName: userReview.firstName,

@@ -123,21 +123,21 @@ struct CityReviewsDetailsView: View {
                                         if viewModel.userReview == nil {
                                             ZStack{
                                                 RoundedRectangle(cornerRadius: 20)
-                                                    .fill(Color(uiColor: .systemBackground))
+                                                    .fill(Color.blue)
                                                     .shadow(color: .blue.opacity(0.3), radius: 5, x: 0, y: 3)
                                                 HStack{
                                                     Button(action: {
                                                         editTapped = true
                                                     }) {
-                                                        Text("add your review")
-                                                            .padding()
-                                                            .foregroundStyle(.blue.opacity(0.8))
-                                                            .font(.headline)
-                                                        Spacer()
+                                                        HStack{
+                                                            Text("add your review for \(viewModel.selectedCity.cityName)")
+                                                                .padding()
+                                                                .foregroundStyle(.white)
+                                                                .font(.system(size: 22).bold())
+                                                        }
                                                     }
                                                     .padding(.horizontal)
                                                 }
-                                                .padding()
                                             }
                                         } else {
                                             if let userReview = viewModel.userReview {
@@ -178,6 +178,7 @@ struct CityReviewsDetailsView: View {
                                             }
                                         }
                                     }
+                                    .padding(EdgeInsets(top: 5, leading: 20, bottom: 0, trailing: 20))
                                 }
                                 if !selectedCityReviewElement.reviews.isEmpty {
                                     Text("Latest Reviews for " + viewModel.selectedCity.cityName + ", " + viewModel.selectedCity.countryName)
@@ -218,7 +219,7 @@ struct CityReviewsDetailsView: View {
                 .blur(radius: (editTapped || infoTapped) ? 5 : 0)
                 .allowsHitTesting(!(editTapped || infoTapped))
                 if editTapped {
-                    InsertReviewView(isPresented: $editTapped)
+                    InsertReviewView(isPresented: $editTapped, viewModel: viewModel)
                 }
             }
             .onAppear(){
@@ -265,7 +266,7 @@ struct SnapperView: View {
             ForEach(cards) { card in
                 CardView(review: card, width: cardWidth)
                     .offset(x: isDragging ? totalDrag : 0)
-                    .animation(.bouncy(duration: 1, extraBounce: 0.0), value: isDragging)
+                    .animation(.bouncy(duration: 1.5), value: isDragging)
             }
         }
         .padding(.horizontal, padding)
@@ -374,15 +375,10 @@ struct CardView: View {
 
 struct InsertReviewView: View {
     @Binding var isPresented: Bool
-    @State private var rating1: Int = 0
-    @State private var rating2: Int = 0
-    @State private var rating3: Int = 0
-    @State private var comment: String = ""
+    @ObservedObject var viewModel: CitiesReviewsViewModel
     @State private var offsetY: CGFloat = 0
+    @State var editTapped: Bool = false
     @FocusState private var isFocused: Bool
-
-
-    //var onSubmit: (Int, Int, Int, String) -> Void
     
     var body: some View {
         ZStack {
@@ -406,21 +402,42 @@ struct InsertReviewView: View {
                         .frame(width: 40, height: 5)
                         .foregroundColor(.gray)
                         .padding(.top, 8)
+                    ZStack {
+                        HStack {
+                            Spacer()
+                            if viewModel.userReview != nil {
+                                if editTapped {
+                                    Button(action: {
+                                        editTapped = false
+                                    }) {
+                                        Text("Cancel")
+                                    }
+                                }
+                                else {
+                                    Button(action: {
+                                        editTapped = true
+                                    }) {
+                                        Text("Edit")
+                                    }
+                                }
+                            }
+                        }
+                        Text("Leave a review")
+                            .font(.headline)
+                            .padding(.top, 10)
+                    }
 
-                    Text("Leave a review")
-                        .font(.headline)
-                        .padding(.top, 10)
+                    ReviewStarRating(icon: "bus", color: Color.blue, rating: $viewModel.modifiedLocalTransportRating, editTapped: (editTapped || (viewModel.userReview == nil )))
+                    ReviewStarRating(icon: "tree",color: Color.green, rating: $viewModel.modifiedGreenSpacesRating, editTapped: (editTapped || (viewModel.userReview == nil )))
+                    ReviewStarRating(icon: "trash", color: Color.orange, rating: $viewModel.modifiedWasteBinsRating, editTapped: (editTapped || (viewModel.userReview == nil )))
 
-                    ReviewStarRating(title: "Puntualità", rating: $rating1)
-                    ReviewStarRating(title: "Confort", rating: $rating2)
-                    ReviewStarRating(title: "Esperienza", rating: $rating3)
-
-                    TextField("Leave a review...", text: $comment, axis: .vertical)
+                    TextField("Leave a review...", text: $viewModel.modifiedReviewText , axis: .vertical)
                         .padding()
                         .lineLimit(8, reservesSpace: true)
                         .focused($isFocused)
                         .background(Color(.systemGray6))
                         .cornerRadius(10)
+                        .disabled(!editTapped && viewModel.userReview != nil)
                         .toolbar {
                             ToolbarItemGroup(placement: .keyboard) {
                                 Spacer()
@@ -432,12 +449,21 @@ struct InsertReviewView: View {
                     Spacer()
                     
                     Button(action: {
-                        //onSubmit(rating1, rating2, rating3, comment)
                         withAnimation(.easeInOut) {
                             isPresented = false
+                            if viewModel.userReview == nil {
+                                Task {
+                                    await viewModel.uploadReview()
+                                }
+                            }
+                            else {
+                                Task {
+                                    await viewModel.modifyReview()
+                                }
+                            }
                         }
                     }) {
-                        Text("Done")
+                        Text("Save review")
                             .padding()
                             .background(Color.blue)
                             .foregroundColor(.white)
@@ -447,7 +473,7 @@ struct InsertReviewView: View {
                 }
                 .padding(.horizontal, 15)
                 .frame(maxWidth: .infinity)
-                .frame(height: 600)
+                .fixedSize(horizontal: false, vertical: true)
                 .background(Color.white)
                 .cornerRadius(20)
                 .shadow(radius: 10)
@@ -474,34 +500,51 @@ struct InsertReviewView: View {
                 )
                 .transition(.move(edge: .bottom))
             }
-            .padding()
+            .padding(.horizontal)
             .animation(.easeInOut, value: isPresented)
             
+        }
+        .onAppear() {
+            viewModel.reviewText = viewModel.userReview?.reviewText ?? ""
+            viewModel.wasteBinsRating = viewModel.userReview?.wasteBinsRating ?? 0
+            viewModel.greenSpacesRating = viewModel.userReview?.greenSpacesRating ?? 0
+            viewModel.localTransportRating = viewModel.userReview?.localTransportRating ?? 0
         }
     }
 }
 
-// Componente per la valutazione con stelle
 struct ReviewStarRating: View {
-    let title: String
+    let icon: String
+    let color: Color
     @Binding var rating: Int
+    let editTapped: Bool
     
     var body: some View {
         HStack (spacing: 15){
             Spacer()
-            Text(title)
-                .font(.subheadline)
-                .bold()
-                .frame(maxWidth: .infinity, alignment: .leading)
             
+            ZStack {
+                Circle()
+                    .fill(color.opacity(0.2))
+                    .frame(width: 50, height: 50)
+                
+                Image(systemName: icon)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 30, height: 30)
+                    .foregroundColor(color)
+            }
+            Spacer()
             HStack {
                 ForEach(1..<6, id: \.self) { index in
                     Image(systemName: index <= rating ? "star.fill" : "star")
                         .foregroundColor(.yellow)
-                        .font(.title2)
+                        .font(.title)
                         .onTapGesture {
-                            withAnimation(Animation.easeInOut(duration: 0.2)) {
-                                rating = index
+                            if editTapped {
+                                withAnimation(Animation.easeInOut(duration: 0.2)) {
+                                    rating = index
+                                }
                             }
                         }
                 }
