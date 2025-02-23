@@ -174,7 +174,7 @@ struct CityReviewsDetailsView: View {
                                                     }
                                                     .padding()
                                                 }
-                                                .padding()
+                                                //.padding()
                                             }
                                         }
                                     }
@@ -266,7 +266,7 @@ struct SnapperView: View {
             ForEach(cards) { card in
                 CardView(review: card, width: cardWidth)
                     .offset(x: isDragging ? totalDrag : 0)
-                    .animation(.bouncy(duration: 1.5), value: isDragging)
+                    //.animation(.bouncy(duration: 1.5), value: isDragging)
             }
         }
         .padding(.horizontal, padding)
@@ -427,11 +427,11 @@ struct InsertReviewView: View {
                             .padding(.top, 10)
                     }
 
-                    ReviewStarRating(icon: "bus", color: Color.blue, rating: $viewModel.modifiedLocalTransportRating, editTapped: (editTapped || (viewModel.userReview == nil )))
-                    ReviewStarRating(icon: "tree",color: Color.green, rating: $viewModel.modifiedGreenSpacesRating, editTapped: (editTapped || (viewModel.userReview == nil )))
-                    ReviewStarRating(icon: "trash", color: Color.orange, rating: $viewModel.modifiedWasteBinsRating, editTapped: (editTapped || (viewModel.userReview == nil )))
+                    ReviewStarRating(icon: "bus", color: Color.blue, rating: $viewModel.localTransportRating, editTapped: (editTapped || (viewModel.userReview == nil )))
+                    ReviewStarRating(icon: "tree",color: Color.green, rating: $viewModel.greenSpacesRating, editTapped: (editTapped || (viewModel.userReview == nil )))
+                    ReviewStarRating(icon: "trash", color: Color.orange, rating: $viewModel.wasteBinsRating, editTapped: (editTapped || (viewModel.userReview == nil )))
 
-                    TextField("Leave a review...", text: $viewModel.modifiedReviewText , axis: .vertical)
+                    TextField("Leave a review...", text: $viewModel.reviewText , axis: .vertical)
                         .padding()
                         .lineLimit(8, reservesSpace: true)
                         .focused($isFocused)
