@@ -107,6 +107,9 @@ class User: Codable {
         try container.encode(city, forKey: .city)
         try container.encode(scoreShortDistance, forKey: .scoreShortDistance)
         try container.encode(scoreLongDistance, forKey: .scoreLongDistance)
-        try container.encode(badges, forKey: .badges)
+        
+        // send badges that are not base
+        let filteredBadges = badges.filter {$0 != $0.baseBadge}
+        try container.encode(filteredBadges, forKey: .badges)
     }
 }

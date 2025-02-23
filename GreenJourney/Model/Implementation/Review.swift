@@ -85,7 +85,10 @@ class Review: Codable, Identifiable {
         try container.encode(lastName, forKey: .lastName)
         try container.encode(scoreShortDistance, forKey: .scoreShortDistance)
         try container.encode(scoreLongDistance, forKey: .scoreLongDistance)
-        try container.encode(badges, forKey: .badges)
+        
+        // send badges that are not base
+        let filteredBadges = badges.filter {$0 != $0.baseBadge}
+        try container.encode(filteredBadges, forKey: .badges)
     }
     
     func computeRating() -> Float64 {

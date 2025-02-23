@@ -45,4 +45,17 @@ enum Badge: String, Encodable, Decodable {
             [.badgeTravelsNumberLow, .badgeTravelsNumberMid, .badgeTravelsNumberHigh]
         ]
     }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        
+        // if base badge, don't send to server
+        switch self {
+        case .badgeDistanceBase, .badgeEcologicalChoiceBase, .badgeCompensationBase, .badgeTravelsNumberBase:
+            // Ad esempio, codifica come stringa vuota oppure potresti decidere di non includere affatto il campo nel JSON
+            try container.encode("")
+        default:
+            try container.encode(self.rawValue)
+        }
+    }
 }
