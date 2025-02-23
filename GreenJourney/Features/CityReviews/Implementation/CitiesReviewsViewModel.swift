@@ -14,7 +14,6 @@ class CitiesReviewsViewModel: ObservableObject {
     @Published var bestCities: [CityCompleterDataset] = []
     
     // searched city
-    //@Published var searchedCity: CityCompleterDataset = CityCompleterDataset()
     @Published var searchedCityAvailable: Bool = false
     
     // selected city
@@ -23,7 +22,7 @@ class CitiesReviewsViewModel: ObservableObject {
     
     @Published var userReview: Review?
     @Published var page: Int = 0
-    // Textfield input
+    // TextField input
     @Published var pageInput: Int = 1
     
     // upload/modify review
@@ -31,10 +30,7 @@ class CitiesReviewsViewModel: ObservableObject {
     @Published var localTransportRating: Int = 0
     @Published var greenSpacesRating: Int = 0
     @Published var wasteBinsRating: Int = 0
-    
-    
-    // TODO to be set to userReview values !!!
-    
+        
     @Published var errorMessage: String? = nil
     
     init(modelContext: ModelContext, serverService: ServerServiceProtocol) {

@@ -452,13 +452,13 @@ final class CitiesReviewsViewModelTest {
         #expect(viewModel.errorMessage == nil)
         
         // initially set userReview values
-        viewModel.modifiedReviewText = viewModel.userReview!.reviewText
-        viewModel.modifiedLocalTransportRating = viewModel.userReview!.localTransportRating
-        viewModel.modifiedGreenSpacesRating = viewModel.userReview!.greenSpacesRating
-        viewModel.modifiedWasteBinsRating = viewModel.userReview!.wasteBinsRating
+        viewModel.reviewText = viewModel.userReview!.reviewText
+        viewModel.localTransportRating = viewModel.userReview!.localTransportRating
+        viewModel.greenSpacesRating = viewModel.userReview!.greenSpacesRating
+        viewModel.wasteBinsRating = viewModel.userReview!.wasteBinsRating
         
         // modify review
-        viewModel.modifiedReviewText = "modified text"
+        viewModel.reviewText = "modified text"
         
         // call method
         await viewModel.modifyReview()
