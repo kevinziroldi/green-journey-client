@@ -18,6 +18,7 @@ struct CityReviewsDetailsView: View {
                                 .padding(.horizontal)
                                 .fontWeight(.semibold)
                                 .frame(maxWidth: .infinity, alignment: .leading)
+                                .accessibilityIdentifier("selecteCityTitle")
                             
                             ZStack {
                                 RoundedRectangle(cornerRadius: 20)

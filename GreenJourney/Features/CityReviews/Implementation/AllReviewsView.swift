@@ -6,12 +6,13 @@ struct AllReviewsView: View {
     
     @FocusState private var isFocused: Bool
     
-    
     var body: some View {
         VStack {
             if let selectedCity = viewModel.selectedCityReviewElement {
                 Text(viewModel.selectedCity.cityName)
                     .font(.title)
+                    .accessibilityIdentifier("cityName")
+                
                 Spacer()
                 
                 ReviewsListView(reviews: selectedCity.reviews, page: viewModel.page)
@@ -25,7 +26,10 @@ struct AllReviewsView: View {
                         Text("First")
                     }
                     .disabled(!(viewModel.page > 0))
+                    .accessibilityIdentifier("buttonFirst")
+                    
                     Spacer()
+                    
                     Button(action: {
                         viewModel.page -= 1
                         viewModel.pageInput = viewModel.page + 1
@@ -33,8 +37,10 @@ struct AllReviewsView: View {
                         Text("Previous")
                     }
                     .disabled(!(viewModel.page > 0))
+                    .accessibilityIdentifier("buttonPrevious")
                     
                     Spacer()
+                    
                     HStack (spacing: 0){
                         Text("Page")
                         TextField("", text: viewModel.binding(for: $viewModel.pageInput))
@@ -51,14 +57,19 @@ struct AllReviewsView: View {
                                         isFocused = false
                                         viewModel.validatePageInput()
                                     }
+                                    .accessibilityIdentifier("doneButton")
                                 }
                             }
+                            .accessibilityIdentifier("pageTextField")
+                        
                         Text("/\(viewModel.getNumPages())")
                             .foregroundStyle(.blue)
                             .fontWeight(.semibold)
                         
                     }
+                    
                     Spacer()
+                    
                     Button(action: {
                         viewModel.page += 1
                         viewModel.pageInput = viewModel.page + 1
@@ -66,7 +77,10 @@ struct AllReviewsView: View {
                         Text("Next")
                     }
                     .disabled(!(viewModel.page + 1 < viewModel.getNumPages()))
+                    .accessibilityIdentifier("buttonNext")
+                    
                     Spacer()
+                    
                     Button(action: {
                         viewModel.page = viewModel.getNumPages() - 1
                         viewModel.pageInput = viewModel.page + 1
@@ -74,6 +88,7 @@ struct AllReviewsView: View {
                         Text("Last")
                     }
                     .disabled(!(viewModel.page + 1 < viewModel.getNumPages()))
+                    .accessibilityIdentifier("buttonLast")
                     
                     Spacer()
                 }
@@ -97,7 +112,7 @@ struct ReviewsListView: View {
             VStack {
                 ForEach (paginatedReview) { review in
                     SingleReviewView(review: review)
-                    
+                        .overlay(Color.clear.accessibilityIdentifier("reviewView_\(review.reviewID ?? -1)"))
                 }
             }
             .padding()
@@ -106,8 +121,6 @@ struct ReviewsListView: View {
     }
     
 }
-
-
 
 struct SingleReviewView: View {
     let review: Review
