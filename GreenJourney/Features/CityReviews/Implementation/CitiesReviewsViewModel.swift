@@ -16,6 +16,8 @@ class CitiesReviewsViewModel: ObservableObject {
     // searched city
     @Published var searchedCityAvailable: Bool = false
     
+    @Published var refreshAvailable: Bool = false
+    
     // selected city
     @Published var selectedCity: CityCompleterDataset = CityCompleterDataset()
     @Published var selectedCityReviewElement: CityReviewElement?
@@ -169,6 +171,7 @@ class CitiesReviewsViewModel: ObservableObject {
         do {
             let userReview = try await serverService.uploadReview(review: review)
             self.userReview = userReview
+            self.selectedCityReviewElement?.addUserReview(userReview: userReview)
         } catch {
             self.errorMessage = "An error occurred while saving the review"
             return
@@ -200,6 +203,7 @@ class CitiesReviewsViewModel: ObservableObject {
         
         do {
             let modifiedReview = try await serverService.modifyReview(modifiedReview: modifiedReview)
+            self.selectedCityReviewElement?.modifyUserReview(oldReview: userReview, newReview: modifiedReview)
             self.userReview = modifiedReview
         } catch {
             self.errorMessage = "Error while modifying the review"

@@ -308,11 +308,13 @@ struct TravelDetailsView: View {
                         .accessibilityElement(children: .contain)
                         .accessibilityIdentifier("infoCompensationView")
                 }
-                if reviewTapped {
-                    //TODO
-                    //InsertReviewView(isPresented: $reviewTapped)
-                }
             }
+            /*.sheet(isPresented: $reviewTapped) {
+                InsertReviewView(isPresented: $reviewTapped, viewModel: viewModel)
+                    .presentationDetents([.fraction(0.85)])
+                    .presentationCornerRadius(30)
+                    }*/
+
             .ignoresSafeArea()
             .background(colorScheme == .dark ? Color(red: 10/255, green: 10/255, blue: 10/255) : Color(red: 245/255, green: 245/255, blue: 245/255))
             .onAppear() {

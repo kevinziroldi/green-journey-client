@@ -373,6 +373,7 @@ struct TravelSearchView: View {
                             .scaleEffect(triggerAI ? 1 : 1.2)
                             .frame(width: geometry.size.width, height: geometry.size.height)
                             .blur(radius: triggerAI ? 28 : 8)
+                        
                     }
                     
                     if dateTapped {

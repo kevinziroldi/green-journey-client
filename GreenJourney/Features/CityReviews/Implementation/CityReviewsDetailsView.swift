@@ -147,23 +147,22 @@ struct CityReviewsDetailsView: View {
                                                         .fill(Color(uiColor: .systemBackground))
                                                         .shadow(color: .blue.opacity(0.3), radius: 5, x: 0, y: 3)
                                                     VStack {
-                                                        Text("Your review")
-                                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                                            .font(.title3)
-                                                            .fontWeight(.semibold)
-                                                        Text(userReview.firstName + " " + userReview.lastName)
-                                                            .font(.headline)
-                                                            .fontWeight(.semibold)
-                                                            .foregroundStyle(.green.opacity(0.6))
-                                                        
-                                                        FiveStarView(rating: userReview.computeRating(), dim: 20, color: .green.opacity(0.8))
-                                                        
+                                                        HStack {
+                                                            Text("Your review")
+                                                                .font(.title3)
+                                                                .fontWeight(.semibold)
+                                                            Spacer()
+                                                            
+                                                            FiveStarView(rating: userReview.computeRating(), dim: 20, color: .green.opacity(0.8))
+                                                            Spacer()
+                                                            Spacer()
+                                                            Spacer()
+                                                        }
                                                         Text(userReview.reviewText)
                                                             .frame(maxWidth: .infinity, alignment: .leading)
                                                         Spacer()
                                                     }
                                                     .padding()
-                                                    
                                                 }
                                                 .onTapGesture() {
                                                     reviewTapped = true
@@ -210,12 +209,14 @@ struct CityReviewsDetailsView: View {
                 }
                 .sheet(isPresented: $reviewTapped) {
                     InsertReviewView(isPresented: $reviewTapped, viewModel: viewModel)
-                        .presentationDetents([.fraction(0.85)])
+                        .presentationDetents([.height(680)])
                         .presentationCornerRadius(30)
                         }
             }
             .onAppear(){
-                viewModel.getUserReview(userID: users.first?.userID ?? -1)
+                Task {
+                    viewModel.getUserReview(userID: users.first?.userID ?? -1)
+                }
             }
         }
     }
