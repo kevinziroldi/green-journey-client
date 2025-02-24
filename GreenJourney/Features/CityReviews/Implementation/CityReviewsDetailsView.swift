@@ -6,7 +6,7 @@ struct CityReviewsDetailsView: View {
     @StateObject var viewModel: CitiesReviewsViewModel
     @Binding var navigationPath: NavigationPath
     @State var infoTapped = false
-    @State var editTapped = false
+    @State var reviewTapped = false
     var body: some View {
         if let selectedCityReviewElement = viewModel.selectedCityReviewElement {
             ZStack {
@@ -127,7 +127,7 @@ struct CityReviewsDetailsView: View {
                                                     .shadow(color: .blue.opacity(0.3), radius: 5, x: 0, y: 3)
                                                 HStack{
                                                     Button(action: {
-                                                        editTapped = true
+                                                        reviewTapped = true
                                                     }) {
                                                         HStack{
                                                             Text("add your review for \(viewModel.selectedCity.cityName)")
@@ -150,31 +150,23 @@ struct CityReviewsDetailsView: View {
                                                             .frame(maxWidth: .infinity, alignment: .leading)
                                                             .font(.title3)
                                                             .fontWeight(.semibold)
-                                                        HStack {
-                                                            FiveStarView(rating: userReview.computeRating(), dim: 20, color: .green.opacity(0.8))
-                                                            Text(userReview.firstName + " " + userReview.lastName)
-                                                                .font(.headline)
-                                                                .fontWeight(.semibold)
-                                                                .foregroundStyle(.green.opacity(0.6))
-                                                                .padding(EdgeInsets(top: 3, leading: 5, bottom: 0, trailing: 0))
-                                                            Spacer()
-                                                        }
+                                                        Text(userReview.firstName + " " + userReview.lastName)
+                                                            .font(.headline)
+                                                            .fontWeight(.semibold)
+                                                            .foregroundStyle(.green.opacity(0.6))
+                                                        
+                                                        FiveStarView(rating: userReview.computeRating(), dim: 20, color: .green.opacity(0.8))
+                                                        
                                                         Text(userReview.reviewText)
                                                             .frame(maxWidth: .infinity, alignment: .leading)
                                                         Spacer()
-                                                        HStack{
-                                                            Spacer()
-                                                            Button(action: {
-                                                                editTapped = true
-                                                            }) {
-                                                                Text("Edit")
-                                                            }
-                                                        }
-                                                        .padding(.horizontal)
                                                     }
                                                     .padding()
+                                                    
                                                 }
-                                                //.padding()
+                                                .onTapGesture() {
+                                                    reviewTapped = true
+                                                }
                                             }
                                         }
                                     }
@@ -189,20 +181,19 @@ struct CityReviewsDetailsView: View {
                                     CarouselView(cards: selectedCityReviewElement.getLastFiveReviews())
                                         .frame(height: 250)
                                     
-                                    if selectedCityReviewElement.reviews.count > 5 {
-                                        // Button to see all reviews
-                                        Button (action: {
-                                            navigationPath.append(NavigationDestination.AllReviewsView(viewModel))
-                                        }){
-                                            Text("See all reviews")
-                                                .font(.headline)
-                                                .padding(10)
-                                                .background(Color.blue)
-                                                .foregroundColor(.white)
-                                                .cornerRadius(10)
-                                        }
-                                        .padding()
+                                    // Button to see all reviews
+                                    Button (action: {
+                                        navigationPath.append(NavigationDestination.AllReviewsView(viewModel))
+                                    }){
+                                        Text("See all reviews")
+                                            .font(.headline)
+                                            .padding(10)
+                                            .background(Color.blue)
+                                            .foregroundColor(.white)
+                                            .cornerRadius(10)
                                     }
+                                    .padding()
+                                    
                                 }
                                 else {
                                     Text("There are no reviews yet for " + viewModel.selectedCity.cityName + ", " + viewModel.selectedCity.countryName + ".")
@@ -216,11 +207,11 @@ struct CityReviewsDetailsView: View {
                         .padding()
                     }
                 }
-                .blur(radius: (editTapped || infoTapped) ? 5 : 0)
-                .allowsHitTesting(!(editTapped || infoTapped))
-                if editTapped {
-                    InsertReviewView(isPresented: $editTapped, viewModel: viewModel)
-                }
+                .sheet(isPresented: $reviewTapped) {
+                    InsertReviewView(isPresented: $reviewTapped, viewModel: viewModel)
+                        .presentationDetents([.fraction(0.85)])
+                        .presentationCornerRadius(30)
+                        }
             }
             .onAppear(){
                 viewModel.getUserReview(userID: users.first?.userID ?? -1)
@@ -373,185 +364,3 @@ struct CardView: View {
     }
 }
 
-struct InsertReviewView: View {
-    @Binding var isPresented: Bool
-    @ObservedObject var viewModel: CitiesReviewsViewModel
-    @State private var offsetY: CGFloat = 0
-    @State var editTapped: Bool = false
-    @FocusState private var isFocused: Bool
-    
-    var body: some View {
-        ZStack {
-            if isPresented {
-                Color.black.opacity(0.3)
-                    .edgesIgnoringSafeArea(.all)
-                    .onTapGesture {
-                        withAnimation(.easeInOut) {
-                            isPresented = false
-                        }
-                    }
-                    .transition(.opacity)
-                    .animation(.easeIn(duration: 0.2), value: isPresented)
-            }
-
-            VStack {
-                Spacer()
-                
-                VStack(spacing: 15) {
-                    Capsule()
-                        .frame(width: 40, height: 5)
-                        .foregroundColor(.gray)
-                        .padding(.top, 8)
-                    ZStack {
-                        HStack {
-                            Spacer()
-                            if viewModel.userReview != nil {
-                                if editTapped {
-                                    Button(action: {
-                                        editTapped = false
-                                    }) {
-                                        Text("Cancel")
-                                    }
-                                }
-                                else {
-                                    Button(action: {
-                                        editTapped = true
-                                    }) {
-                                        Text("Edit")
-                                    }
-                                }
-                            }
-                        }
-                        Text("Leave a review")
-                            .font(.headline)
-                            .padding(.top, 10)
-                    }
-
-                    ReviewStarRating(icon: "bus", color: Color.blue, rating: $viewModel.localTransportRating, editTapped: (editTapped || (viewModel.userReview == nil )))
-                    ReviewStarRating(icon: "tree",color: Color.green, rating: $viewModel.greenSpacesRating, editTapped: (editTapped || (viewModel.userReview == nil )))
-                    ReviewStarRating(icon: "trash", color: Color.orange, rating: $viewModel.wasteBinsRating, editTapped: (editTapped || (viewModel.userReview == nil )))
-
-                    TextField("Leave a review...", text: $viewModel.reviewText , axis: .vertical)
-                        .padding()
-                        .lineLimit(8, reservesSpace: true)
-                        .focused($isFocused)
-                        .background(Color(.systemGray6))
-                        .cornerRadius(10)
-                        .disabled(!editTapped && viewModel.userReview != nil)
-                        .toolbar {
-                            ToolbarItemGroup(placement: .keyboard) {
-                                Spacer()
-                                Button("Done") {
-                                    isFocused = false
-                                }
-                            }
-                        }
-                    Spacer()
-                    
-                    Button(action: {
-                        withAnimation(.easeInOut) {
-                            isPresented = false
-                            if viewModel.userReview == nil {
-                                Task {
-                                    await viewModel.uploadReview()
-                                }
-                            }
-                            else {
-                                Task {
-                                    await viewModel.modifyReview()
-                                }
-                            }
-                        }
-                    }) {
-                        Text("Save review")
-                            .padding()
-                            .background(Color.blue)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                    }
-                    .padding(.bottom, 20)
-                }
-                .padding(.horizontal, 15)
-                .frame(maxWidth: .infinity)
-                .fixedSize(horizontal: false, vertical: true)
-                .background(Color.white)
-                .cornerRadius(20)
-                .shadow(radius: 10)
-                .offset(y: offsetY)
-                .gesture(
-                    DragGesture()
-                        .onChanged { gesture in
-                            if gesture.translation.height > 0 {
-                                offsetY = gesture.translation.height
-                            }
-                        }
-                        .onEnded { gesture in
-                            if gesture.translation.height > 150 {
-                                withAnimation(.spring()) {
-                                    isPresented = false
-                                    offsetY = 0
-                                }
-                            } else {
-                                withAnimation(.spring()) {
-                                    offsetY = 0
-                                }
-                            }
-                        }
-                )
-                .transition(.move(edge: .bottom))
-            }
-            .padding(.horizontal)
-            .animation(.easeInOut, value: isPresented)
-            
-        }
-        .onAppear() {
-            viewModel.reviewText = viewModel.userReview?.reviewText ?? ""
-            viewModel.wasteBinsRating = viewModel.userReview?.wasteBinsRating ?? 0
-            viewModel.greenSpacesRating = viewModel.userReview?.greenSpacesRating ?? 0
-            viewModel.localTransportRating = viewModel.userReview?.localTransportRating ?? 0
-        }
-    }
-}
-
-struct ReviewStarRating: View {
-    let icon: String
-    let color: Color
-    @Binding var rating: Int
-    let editTapped: Bool
-    
-    var body: some View {
-        HStack (spacing: 15){
-            Spacer()
-            
-            ZStack {
-                Circle()
-                    .fill(color.opacity(0.2))
-                    .frame(width: 50, height: 50)
-                
-                Image(systemName: icon)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 30, height: 30)
-                    .foregroundColor(color)
-            }
-            Spacer()
-            HStack {
-                ForEach(1..<6, id: \.self) { index in
-                    Image(systemName: index <= rating ? "star.fill" : "star")
-                        .foregroundColor(.yellow)
-                        .font(.title)
-                        .onTapGesture {
-                            if editTapped {
-                                withAnimation(Animation.easeInOut(duration: 0.2)) {
-                                    rating = index
-                                }
-                            }
-                        }
-                }
-            }
-            Spacer()
-            
-        }
-        .padding(.vertical, 5)
-    }
-}
