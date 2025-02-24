@@ -21,7 +21,6 @@ struct CitiesReviewsView: View {
     
     var body: some View {
         VStack {
-            
             // header
             HStack {
                 Text("City reviews")
@@ -29,12 +28,15 @@ struct CitiesReviewsView: View {
                     .padding()
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityIdentifier("citiesReviewsTitle")
+                
                 Spacer()
                 
                 NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)) {
                     Image(systemName: "person")
                         .font(.title)
                 }
+                .accessibilityIdentifier("userPreferencesButton")
             }
             .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
             
@@ -45,6 +47,8 @@ struct CitiesReviewsView: View {
                     .padding(EdgeInsets(top: 10, leading: 50, bottom: 0, trailing: 50))
                     .frame(alignment: .top)
                     .font(.title)
+                    .accessibilityIdentifier("selectCityText")
+                
                 ZStack {
                     RoundedRectangle(cornerRadius: 10)
                         .stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 3)
@@ -60,6 +64,7 @@ struct CitiesReviewsView: View {
                             .font(.title2)
                             .fontWeight(viewModel.selectedCity.cityName == "" ? .light : .semibold)
                     }
+                    .accessibilityIdentifier("searchCityReviews")
                 }
                 .background(colorScheme == .dark ? Color(red: 48/255, green: 48/255, blue: 48/255) : Color.white)
                 .cornerRadius(10)
@@ -93,15 +98,17 @@ struct CitiesReviewsView: View {
             }
             .disabled(viewModel.selectedCity.cityName == "")
             .buttonStyle(.borderedProminent)
+            .accessibilityIdentifier("searchButton")
             
             Spacer()
-            // list of cities
             
+            // list of cities
             Text("Top Cities")
                 .font(.title2)
                 .fontWeight(.semibold)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 30)
+                .accessibilityIdentifier("topCitiesTitle")
             
             ForEach(viewModel.bestCities.indices, id: \.self) { index in
                 BestCityView(city: viewModel.bestCities[index], cityReview: viewModel.bestCitiesReviewElements[index])
@@ -111,7 +118,7 @@ struct CitiesReviewsView: View {
                         viewModel.selectedCityReviewElement = viewModel.bestCitiesReviewElements[index]
                         navigationPath.append(NavigationDestination.CityReviewsDetailsView(viewModel))
                     }
-                
+                    .overlay(Color.clear.accessibilityIdentifier("bestCityView_\(index)"))
             }
             
             Spacer()

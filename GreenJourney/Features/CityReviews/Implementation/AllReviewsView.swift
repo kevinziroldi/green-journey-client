@@ -107,8 +107,6 @@ struct ReviewsListView: View {
     
 }
 
-
-
 struct SingleReviewView: View {
     let review: Review
     var body: some View {
