@@ -60,9 +60,6 @@ struct AllReviewsView: View {
                                     .accessibilityIdentifier("doneButton")
                                 }
                             }
-                            .onTapGesture {
-                                // TODO ??
-                            }
                             .accessibilityIdentifier("pageTextField")
                         
                         Text("/\(viewModel.getNumPages())")
