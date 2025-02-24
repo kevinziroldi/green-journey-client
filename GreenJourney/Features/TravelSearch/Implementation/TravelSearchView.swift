@@ -367,7 +367,6 @@ struct TravelSearchView: View {
                             
                         }
                     }
-                    .allowsHitTesting(!(dateTapped || dateReturnTapped))
                     .mask {
                         AnimatedRectangle(size: geometry.size, cornerRadius: 48, t: CGFloat(0.0))
                             .scaleEffect(triggerAI ? 1 : 1.2)
@@ -375,22 +374,21 @@ struct TravelSearchView: View {
                             .blur(radius: triggerAI ? 28 : 8)
                         
                     }
-                    
-                    if dateTapped {
-                        DatePickerView(dateTapped: $dateTapped, title: "Select Outward Date", date: $viewModel.datePicked)
-                            .transition(.move(edge: .bottom))
-                            .accessibilityElement(children: .contain)
-                    }
-                    
-                    if dateReturnTapped && !viewModel.oneWay {
-                        DatePickerView(dateTapped: $dateReturnTapped, title: "Select Return Date", date: $viewModel.dateReturnPicked)
-                            .transition(.move(edge: .bottom))
-                            .accessibilityElement(children: .contain)
-                    }
                 }
+                .sheet(isPresented: $dateTapped) {
+                    DatePickerView(dateTapped: $dateTapped, title: "Select Outward Date", date: $viewModel.datePicked)
+                        .presentationDetents([.height(340)])
+                        .presentationCornerRadius(30)
+                        }
+                .sheet(isPresented: $dateReturnTapped) {
+                    DatePickerView(dateTapped: $dateReturnTapped, title: "Select Return Date", date: $viewModel.dateReturnPicked)
+                        .presentationDetents([.height(330)])
+                        .presentationCornerRadius(30)
+                        }
+                
             }
-            .toolbar((triggerAI || dateTapped || dateReturnTapped) ? .hidden : .automatic, for: .tabBar)
-            .navigationBarBackButtonHidden(triggerAI || dateTapped || dateReturnTapped)
+            .toolbar((triggerAI) ? .hidden : .automatic, for: .tabBar)
+            .navigationBarBackButtonHidden(triggerAI)
             .onAppear() {
                 viewModel.resetParameters()
             }
@@ -420,88 +418,40 @@ struct DatePickerView: View {
     @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
-        ZStack {
-            // background opacity
-            if dateTapped {
-                Color.black.opacity(0.3)
-                    .edgesIgnoringSafeArea(.all)
-                    .onTapGesture {
-                        withAnimation(.easeInOut) {
-                            dateTapped = false
-                        }
-                    }
-            }
-            
-            // pop-up view
-            VStack {
-                Spacer()
-                
-                VStack {
-                    Capsule()
-                        .frame(width: 40, height: 5)
-                        .foregroundColor(.gray)
-                        .padding(.top, 8)
-                    ZStack {
-                        Text(title)
-                            .font(.headline)
-                            .padding(.top, 10)
-                            .accessibilityIdentifier("datePickerTitle")
-                        
-                        Button("Done") {
-                            dateTapped = false
-                        }
-                        .frame(maxWidth: .infinity, alignment: .trailing)
-                        .padding(.trailing, 10)
-                        .accessibilityIdentifier("datePickerDoneButton")
-                    }
-                    
-                    DatePicker("", selection: $date, in: Date()...Date.distantFuture)
-                        .datePickerStyle(.wheel)
-                        .labelsHidden()
-                        .accessibilityIdentifier("datePickerElement")
-                    
+        VStack (spacing: 0){
+            Capsule()
+                .frame(width: 40, height: 5)
+                .foregroundColor(.gray)
+                .padding(.top, 8)
+            ZStack {
+                HStack {
                     Spacer()
-                    
-                    Button("Back") {
-                        withAnimation(.easeInOut) {
-                            date = Date()
-                            dateTapped = false
-                        }
+                    Button("Done") {
+                        dateTapped = false
                     }
-                    .padding(.bottom, 20)
-                    .accessibilityIdentifier("datePickerBackButton")
+                    .fontWeight(.bold)
+                    .padding(.trailing, 15)
+                    .padding(.bottom, 15)
+                    .accessibilityIdentifier("datePickerDoneButton")
                 }
-                .frame(maxWidth: .infinity)
-                .frame(height: 350)
-                .background(Color.white)
-                .cornerRadius(20)
-                .shadow(radius: 10)
-                .offset(y: offsetY)
-                .gesture(
-                    DragGesture()
-                        .onChanged { gesture in
-                            if gesture.translation.height > 0 {
-                                offsetY = gesture.translation.height
-                            }
-                        }
-                        .onEnded { gesture in
-                            if gesture.translation.height > 150 {
-                                withAnimation(.spring()) {
-                                    dateTapped = false
-                                    offsetY = 0
-                                }
-                            } else {
-                                withAnimation(.spring()) {
-                                    offsetY = 0
-                                }
-                            }
-                        }
-                )
-                .transition(.move(edge: .bottom))
-            }
-            .animation(.easeInOut, value: dateTapped)
+            
+            Text(title)
+                .font(.system(size: 22).bold())
+                .padding(.top, 30)
+                .accessibilityIdentifier("datePickerTitle")
+        }
+            //Spacer()
+            DatePicker("", selection: $date, in: Date()...Date.distantFuture)
+                .datePickerStyle(.wheel)
+                .labelsHidden()
+                .accessibilityIdentifier("datePickerElement")
+                .padding(.top, 20)
+            Spacer()
         }
         .ignoresSafeArea()
+        .frame(maxWidth: .infinity)
+        .background(Color.white)
+        
     }
 }
 
