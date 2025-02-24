@@ -147,11 +147,6 @@
 			path = GreenJourney;
 			sourceTree = "<group>";
 		};
-		0AB2AA7E2D63E08000FDF38D /* GreenJourneyUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = GreenJourneyUITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -189,7 +184,6 @@
 			isa = PBXGroup;
 			children = (
 				0A1576822CA459AC00EE99BC /* GreenJourney */,
-				0AB2AA7E2D63E08000FDF38D /* GreenJourneyUITests */,
 				0AB2A9602D63B6DB00FDF38D /* Frameworks */,
 				0A1576812CA459AC00EE99BC /* Products */,
 			);
@@ -253,9 +247,6 @@
 			);
 			dependencies = (
 				0AB2AA842D63E08000FDF38D /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				0AB2AA7E2D63E08000FDF38D /* GreenJourneyUITests */,
 			);
 			name = GreenJourneyUITests;
 			packageProductDependencies = (
