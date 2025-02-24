@@ -203,6 +203,7 @@ struct CityReviewsDetailsView: View {
                                                 .cornerRadius(10)
                                         }
                                         .padding()
+                                        .accessibilityIdentifier("allReviewsButton")
                                     }
                                 }
                                 else {

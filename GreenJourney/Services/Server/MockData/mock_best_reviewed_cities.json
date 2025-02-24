@@ -99,7 +99,208 @@
         "last_name" : "Ziroldi",
         "country_code" : "IT",
         "waste_bins_rating" : 2
+      },
+      {
+        "green_spaces_rating" : 3,
+        "score_short_distance" : 100.11276627381579,
+        "badges" : [
+          "badge_distance_high",
+          "badge_ecological_choice_high",
+          "badge_travels_number_mid"
+        ],
+        "user_id" : 53,
+        "review_id" : 12,
+        "review_text" : "Rome is a beatiful city, but not very clean...",
+        "city_id" : 284188,
+        "local_transport_rating" : 3,
+        "first_name" : "Kevin",
+        "score_long_distance" : 433.60000000000002,
+        "city_iata" : "ROM",
+        "last_name" : "Ziroldi",
+        "country_code" : "IT",
+        "waste_bins_rating" : 2
+      },
+      {
+        "green_spaces_rating" : 3,
+        "score_short_distance" : 100.11276627381579,
+        "badges" : [
+          "badge_distance_high",
+          "badge_ecological_choice_high",
+          "badge_travels_number_mid"
+        ],
+        "user_id" : 53,
+        "review_id" : 13,
+        "review_text" : "Rome is a beatiful city, but not very clean...",
+        "city_id" : 284188,
+        "local_transport_rating" : 3,
+        "first_name" : "Kevin",
+        "score_long_distance" : 433.60000000000002,
+        "city_iata" : "ROM",
+        "last_name" : "Ziroldi",
+        "country_code" : "IT",
+        "waste_bins_rating" : 2
+      },
+      {
+        "green_spaces_rating" : 3,
+        "score_short_distance" : 100.11276627381579,
+        "badges" : [
+          "badge_distance_high",
+          "badge_ecological_choice_high",
+          "badge_travels_number_mid"
+        ],
+        "user_id" : 53,
+        "review_id" : 14,
+        "review_text" : "Rome is a beatiful city, but not very clean...",
+        "city_id" : 284188,
+        "local_transport_rating" : 3,
+        "first_name" : "Kevin",
+        "score_long_distance" : 433.60000000000002,
+        "city_iata" : "ROM",
+        "last_name" : "Ziroldi",
+        "country_code" : "IT",
+        "waste_bins_rating" : 2
+      },
+      {
+        "green_spaces_rating" : 3,
+        "score_short_distance" : 100.11276627381579,
+        "badges" : [
+          "badge_distance_high",
+          "badge_ecological_choice_high",
+          "badge_travels_number_mid"
+        ],
+        "user_id" : 53,
+        "review_id" : 15,
+        "review_text" : "Rome is a beatiful city, but not very clean...",
+        "city_id" : 284188,
+        "local_transport_rating" : 3,
+        "first_name" : "Kevin",
+        "score_long_distance" : 433.60000000000002,
+        "city_iata" : "ROM",
+        "last_name" : "Ziroldi",
+        "country_code" : "IT",
+        "waste_bins_rating" : 2
+      },
+      {
+        "green_spaces_rating" : 3,
+        "score_short_distance" : 100.11276627381579,
+        "badges" : [
+          "badge_distance_high",
+          "badge_ecological_choice_high",
+          "badge_travels_number_mid"
+        ],
+        "user_id" : 53,
+        "review_id" : 16,
+        "review_text" : "Rome is a beatiful city, but not very clean...",
+        "city_id" : 284188,
+        "local_transport_rating" : 3,
+        "first_name" : "Kevin",
+        "score_long_distance" : 433.60000000000002,
+        "city_iata" : "ROM",
+        "last_name" : "Ziroldi",
+        "country_code" : "IT",
+        "waste_bins_rating" : 2
+      },
+      {
+        "green_spaces_rating" : 3,
+        "score_short_distance" : 100.11276627381579,
+        "badges" : [
+          "badge_distance_high",
+          "badge_ecological_choice_high",
+          "badge_travels_number_mid"
+        ],
+        "user_id" : 53,
+        "review_id" : 17,
+        "review_text" : "Rome is a beatiful city, but not very clean...",
+        "city_id" : 284188,
+        "local_transport_rating" : 3,
+        "first_name" : "Kevin",
+        "score_long_distance" : 433.60000000000002,
+        "city_iata" : "ROM",
+        "last_name" : "Ziroldi",
+        "country_code" : "IT",
+        "waste_bins_rating" : 2
+      },
+      {
+        "green_spaces_rating" : 3,
+        "score_short_distance" : 100.11276627381579,
+        "badges" : [
+          "badge_distance_high",
+          "badge_ecological_choice_high",
+          "badge_travels_number_mid"
+        ],
+        "user_id" : 53,
+        "review_id" : 18,
+        "review_text" : "Rome is a beatiful city, but not very clean...",
+        "city_id" : 284188,
+        "local_transport_rating" : 3,
+        "first_name" : "Kevin",
+        "score_long_distance" : 433.60000000000002,
+        "city_iata" : "ROM",
+        "last_name" : "Ziroldi",
+        "country_code" : "IT",
+        "waste_bins_rating" : 2
+      },
+      {
+        "green_spaces_rating" : 3,
+        "score_short_distance" : 100.11276627381579,
+        "badges" : [
+          "badge_distance_high",
+          "badge_ecological_choice_high",
+          "badge_travels_number_mid"
+        ],
+        "user_id" : 53,
+        "review_id" : 19,
+        "review_text" : "Rome is a beatiful city, but not very clean...",
+        "city_id" : 284188,
+        "local_transport_rating" : 3,
+        "first_name" : "Kevin",
+        "score_long_distance" : 433.60000000000002,
+        "city_iata" : "ROM",
+        "last_name" : "Ziroldi",
+        "country_code" : "IT",
+        "waste_bins_rating" : 2
+      },
+      {
+        "green_spaces_rating" : 3,
+        "score_short_distance" : 100.11276627381579,
+        "badges" : [
+          "badge_distance_high",
+          "badge_ecological_choice_high",
+          "badge_travels_number_mid"
+        ],
+        "user_id" : 53,
+        "review_id" : 20,
+        "review_text" : "Rome is a beatiful city, but not very clean...",
+        "city_id" : 284188,
+        "local_transport_rating" : 3,
+        "first_name" : "Kevin",
+        "score_long_distance" : 433.60000000000002,
+        "city_iata" : "ROM",
+        "last_name" : "Ziroldi",
+        "country_code" : "IT",
+        "waste_bins_rating" : 2
+      },
+      {
+        "green_spaces_rating" : 3,
+        "score_short_distance" : 100.11276627381579,
+        "badges" : [
+          "badge_distance_high",
+          "badge_ecological_choice_high",
+          "badge_travels_number_mid"
+        ],
+        "user_id" : 53,
+        "review_id" : 21,
+        "review_text" : "Rome is a beatiful city, but not very clean...",
+        "city_id" : 284188,
+        "local_transport_rating" : 3,
+        "first_name" : "Kevin",
+        "score_long_distance" : 433.60000000000002,
+        "city_iata" : "ROM",
+        "last_name" : "Ziroldi",
+        "country_code" : "IT",
+        "waste_bins_rating" : 2
       }
+      
     ],
     "average_waste_bins_rating" : 2,
     "average_local_transport_rating" : 3,

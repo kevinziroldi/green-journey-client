@@ -45,7 +45,7 @@ final class CitiesReviewsViewUITest: XCTestCase {
         // tap tab button
         citiesReviewsTabButton.tap()
         
-        // check MyTravels page
+        // check CitiesReviews page
         XCTAssertTrue(citiesReviewsTitle.waitForExistence(timeout: timer), "CitiesReviewsVoiew not appeared after selecting it")
     }
     
