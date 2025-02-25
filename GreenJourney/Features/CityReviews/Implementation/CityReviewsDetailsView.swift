@@ -118,6 +118,8 @@ struct CityReviewsDetailsView: View {
                             }
                             .fixedSize()
                             .padding(EdgeInsets(top: 5, leading: 10, bottom: 0, trailing: 10))
+                            .overlay(Color.clear.accessibilityIdentifier("averageRatingSection"))
+                            
                             VStack{
                                 if viewModel.isReviewable(userID: users.first?.userID ?? -1) {
                                     VStack {
@@ -138,6 +140,7 @@ struct CityReviewsDetailsView: View {
                                                         }
                                                     }
                                                     .padding(.horizontal)
+                                                    .accessibilityIdentifier("addReviewButton")
                                                 }
                                             }
                                         } else {
@@ -151,15 +154,22 @@ struct CityReviewsDetailsView: View {
                                                             Text("Your review")
                                                                 .font(.title3)
                                                                 .fontWeight(.semibold)
+                                                                .accessibilityIdentifier("yourReviewTitle")
+                                                            
                                                             Spacer()
                                                             
                                                             FiveStarView(rating: userReview.computeRating(), dim: 20, color: .green.opacity(0.8))
+                                                                .overlay(Color.clear.accessibilityIdentifier("userReviewRating"))
+                                                            
                                                             Spacer()
                                                             Spacer()
                                                             Spacer()
                                                         }
+                                                        
                                                         Text(userReview.reviewText)
                                                             .frame(maxWidth: .infinity, alignment: .leading)
+                                                            .overlay(Color.clear.accessibilityIdentifier("userReviewText"))
+                                                        
                                                         Spacer()
                                                     }
                                                     .padding()
@@ -176,7 +186,7 @@ struct CityReviewsDetailsView: View {
                                     Text("Latest Reviews for " + viewModel.selectedCity.cityName + ", " + viewModel.selectedCity.countryName)
                                         .font(.headline)
                                         .padding(.top, 5)
-                                    
+                                        .accessibilityIdentifier("latestReviewsTitle")
                                     
                                     CarouselView(cards: selectedCityReviewElement.getLastFiveReviews())
                                         .frame(height: 250)
@@ -193,6 +203,7 @@ struct CityReviewsDetailsView: View {
                                             .cornerRadius(10)
                                     }
                                     .padding()
+                                    .accessibilityIdentifier("allReviewsButton")
                                     
                                 }
                                 else {
@@ -200,6 +211,7 @@ struct CityReviewsDetailsView: View {
                                         .font(.system(size: 15))
                                         .fontWeight(.light)
                                         .padding(.top, 40)
+                                        .accessibilityIdentifier("noReviewsText")
                                 }
                             }
                             .padding(EdgeInsets(top: 5, leading: 10, bottom: 0, trailing: 10))
@@ -211,7 +223,7 @@ struct CityReviewsDetailsView: View {
                     InsertReviewView(isPresented: $reviewTapped, viewModel: viewModel)
                         .presentationDetents([.height(680)])
                         .presentationCornerRadius(30)
-                        }
+                }
             }
             .onAppear(){
                 Task {
@@ -221,8 +233,6 @@ struct CityReviewsDetailsView: View {
         }
     }
 }
-
-
 
 struct CarouselView: View {
     var cards: [Review]
@@ -259,7 +269,7 @@ struct SnapperView: View {
             ForEach(cards) { card in
                 CardView(review: card, width: cardWidth)
                     .offset(x: isDragging ? totalDrag : 0)
-                    //.animation(.bouncy(duration: 1.5), value: isDragging)
+                    .overlay(Color.clear.accessibilityIdentifier("reviewElement_\(card.reviewID ?? -1)"))
             }
         }
         .padding(.horizontal, padding)

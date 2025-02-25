@@ -22,6 +22,7 @@ struct InsertReviewView: View {
                                 Text("Edit")
                                     .padding(.top, 20)
                             }
+                            .accessibilityIdentifier("editButton")
                         }
                         
                         Spacer()
@@ -32,7 +33,7 @@ struct InsertReviewView: View {
                             Text("Cancel")
                                 .padding(.top, 20)
                         }
-                        
+                        .accessibilityIdentifier("cancelButton")
                     }
                 }
                 .position(x: geometry.size.width/2, y: 15)
@@ -41,6 +42,7 @@ struct InsertReviewView: View {
                 Text(viewModel.userReview != nil ? "Your review" : "Leave a review")
                     .font(.system(size: 25).bold())
                     .position(x: geometry.size.width/2, y: 50)
+                    .accessibilityIdentifier("personalReviewTitle")
                 
                 VStack {
                     ReviewStarRating(icon: "bus", color: Color.blue, rating: $viewModel.localTransportRating, editTapped: (editTapped || (viewModel.userReview == nil )))
@@ -48,6 +50,7 @@ struct InsertReviewView: View {
                     ReviewStarRating(icon: "trash", color: Color.orange, rating: $viewModel.wasteBinsRating, editTapped: (editTapped || (viewModel.userReview == nil )))
                 }
                 .position(x: geometry.size.width/2, y: 190)
+                .overlay(Color.clear.accessibilityIdentifier("userRatings"))
                 
                 VStack {
                     TextField("Leave a review...", text: $viewModel.reviewText , axis: .vertical)
@@ -57,6 +60,7 @@ struct InsertReviewView: View {
                         .background(Color(.systemGray6))
                         .cornerRadius(10)
                         .disabled(!editTapped && viewModel.userReview != nil)
+                        .accessibilityIdentifier("userText")
                 }
                 .padding(10)
                 .position(x: geometry.size.width/2, y: 400)
@@ -84,6 +88,7 @@ struct InsertReviewView: View {
                         .cornerRadius(10)
                 }
                 .position(x: geometry.size.width/2, y: 580)
+                .accessibilityIdentifier("saveButton")
                 
                 //delete button
                 if viewModel.userReview != nil {
@@ -110,6 +115,7 @@ struct InsertReviewView: View {
                             }
                         )
                     }
+                    .accessibilityIdentifier("deleteButton")
                 }
             }
         }
@@ -156,6 +162,7 @@ struct ReviewStarRating: View {
                                     rating = index
                             }
                         }
+                        .accessibilityIdentifier("star_\(index)")
                 }
             }
             Spacer()
