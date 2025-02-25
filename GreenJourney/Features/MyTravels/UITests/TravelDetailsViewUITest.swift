@@ -198,8 +198,6 @@ final class TravelDetailsViewUITest: XCTestCase {
         XCTAssertTrue(minusTreesButton.waitForExistence(timeout: timer), "The minus button is not displayed")
         XCTAssertTrue(compensateButton.exists, "The compensate button is not displayed")
         
-        app.swipeUp()
-        
         plusTreesButton.tap()
         minusTreesButton.tap()
         compensateButton.tap()
