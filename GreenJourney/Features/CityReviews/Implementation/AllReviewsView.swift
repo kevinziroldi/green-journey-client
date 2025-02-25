@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct AllReviewsView: View {
-    @StateObject var viewModel: CitiesReviewsViewModel
+    @ObservedObject var viewModel: CitiesReviewsViewModel
     @Binding var navigationPath: NavigationPath
     
     @FocusState private var isFocused: Bool

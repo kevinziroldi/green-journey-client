@@ -3,7 +3,7 @@ import SwiftData
 
 struct CityReviewsDetailsView: View {
     @Query var users: [User]
-    @StateObject var viewModel: CitiesReviewsViewModel
+    @ObservedObject var viewModel: CitiesReviewsViewModel
     @Binding var navigationPath: NavigationPath
     @State var infoTapped = false
     @State var reviewTapped = false
