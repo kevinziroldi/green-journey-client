@@ -85,12 +85,20 @@ class PersistenceHandler {
             countryCode: "GB",
             continent: "Europe"
         )
+        let cityFirenze = CityCompleterDataset(
+            cityName: "Firenze",
+            countryName: "Italy",
+            iata: "FLR",
+            countryCode: "IT",
+            continent: "Europe"
+        )
         
         self.container.mainContext.insert(cityMilan)
         self.container.mainContext.insert(cityBerlin)
         self.container.mainContext.insert(cityParis)
         self.container.mainContext.insert(cityRome)
         self.container.mainContext.insert(cityLondon)
+        self.container.mainContext.insert(cityFirenze)
         try self.container.mainContext.save()
     }
     

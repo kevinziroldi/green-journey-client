@@ -168,7 +168,7 @@ struct CityReviewsDetailsView: View {
                                                         
                                                         Text(userReview.reviewText)
                                                             .frame(maxWidth: .infinity, alignment: .leading)
-                                                            .overlay(Color.clear.accessibilityIdentifier("userReviewText"))
+                                                            .accessibilityIdentifier("userReviewText")
                                                         
                                                         Spacer()
                                                     }

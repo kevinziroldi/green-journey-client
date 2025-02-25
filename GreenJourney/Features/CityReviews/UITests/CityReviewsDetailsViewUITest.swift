@@ -115,7 +115,7 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
         let addReviewButton = app.buttons["addReviewButton"]
         let yourReviewTitle = app.staticTexts["yourReviewTitle"]
         let userReviewRating = app.otherElements["userReviewRating"]
-        let userReviewText = app.staticTexts["userReviewRating"]
+        let userReviewText = app.staticTexts["userReviewText"]
         let lastReviewsTitle = app.staticTexts["latestReviewsTitle"]
         let firstReviewElement = app.otherElements["reviewElement_17"]
         let secondReviewElement = app.otherElements["reviewElement_18"]
@@ -198,7 +198,7 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
         let addReviewButton = app.buttons["addReviewButton"]
         let yourReviewTitle = app.staticTexts["yourReviewTitle"]
         let userReviewRating = app.otherElements["userReviewRating"]
-        let userReviewText = app.otherElements["userReviewRating"]
+        let userReviewText = app.staticTexts["userReviewText"]
         
         // check and tap button to add a review
         XCTAssertTrue(addReviewButton.exists, "addReviewButton not displayed")
@@ -250,42 +250,156 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
         XCTAssertTrue(userReviewText.exists, "userReviewText not displayed")
     }
     
-    /*
-    func testModifyReview() {
+    func testModifyAndSaveReview() {
         // add a review
         addReviewToRoma()
         
         // UI elements CityReviewsDetails
+        let selecteCityTitle = app.staticTexts["selecteCityTitle"]
         let yourReviewTitle = app.staticTexts["yourReviewTitle"]
         let userReviewRating = app.otherElements["userReviewRating"]
-        let userReviewText = app.staticTexts["userReviewRating"]
+        let userReviewText = app.staticTexts["userReviewText"]
         
-        XCTAssertFalse(yourReviewTitle.exists, "yourReviewTitle displayed")
-        XCTAssertFalse(userReviewRating.exists, "userReviewRating displayed")
-        XCTAssertFalse(userReviewText.exists, "userReviewText displayed")
+        XCTAssertTrue(selecteCityTitle.waitForExistence(timeout: timer), "selecteCityTitle not displayed")
+        XCTAssertTrue(yourReviewTitle.exists, "yourReviewTitle not displayed")
+        XCTAssertTrue(userReviewRating.exists, "userReviewRating not displayed")
+        XCTAssertTrue(userReviewText.exists, "userReviewText not displayed")
         
         yourReviewTitle.tap()
         
         // UI element InsertReviewView
         let personalReviewTitle = app.staticTexts["personalReviewTitle"]
         let editButton = app.buttons["editButton"]
-        let cancelButton = app.buttons["cancelButton"]
         let userRatings = app.otherElements["userRatings"]
         let userText = app.textFields["userText"]
         let saveButton = app.buttons["saveButton"]
-        let deleteButton = app.buttons["deleteButton"]
-    }
-    */
-     
-    func testDeleteReview() {
         
+        XCTAssertTrue(personalReviewTitle.waitForExistence(timeout: timer), "personalReviewTitle not displayed")
+        XCTAssertTrue(editButton.exists, "editButton not displayed")
+        XCTAssertTrue(userRatings.exists, "userRatings not displayed")
+        XCTAssertTrue(userText.exists, "userText not displayed")
+        XCTAssertTrue(saveButton.exists, "saveButton not displayed")
+        
+        // tap edit button
+        let editButtonCenter = editButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        editButtonCenter.tap()
+        
+        // modify review text
+        userText.tap()
+        userText.typeText("add some text")
+        
+        // click save button
+        saveButton.tap()
+        
+        // check view
+        XCTAssertTrue(selecteCityTitle.waitForExistence(timeout: timer), "selecteCityTitle not displayed")
+    }
+     
+    func testModifyAndCancelReview() {
+        // add a review
+        addReviewToRoma()
+        
+        // UI elements CityReviewsDetails
+        let selecteCityTitle = app.staticTexts["selecteCityTitle"]
+        let yourReviewTitle = app.staticTexts["yourReviewTitle"]
+        let userReviewRating = app.otherElements["userReviewRating"]
+        let userReviewText = app.staticTexts["userReviewText"]
+        
+        XCTAssertTrue(selecteCityTitle.waitForExistence(timeout: timer), "selecteCityTitle not displayed")
+        XCTAssertTrue(yourReviewTitle.exists, "yourReviewTitle displayed")
+        XCTAssertTrue(userReviewRating.exists, "userReviewRating displayed")
+        XCTAssertTrue(userReviewText.exists, "userReviewText displayed")
+        
+        yourReviewTitle.tap()
+        
+        // UI element InsertReviewView
+        let personalReviewTitle = app.staticTexts["personalReviewTitle"]
+        let editButton = app.buttons["editButton"]
+        let userRatings = app.otherElements["userRatings"]
+        let userText = app.textFields["userText"]
+        let cancelButton = app.buttons["cancelButton"]
+        
+        XCTAssertTrue(personalReviewTitle.waitForExistence(timeout: timer), "personalReviewTitle not displayed")
+        XCTAssertTrue(editButton.exists, "editButton not displayed")
+        XCTAssertTrue(userRatings.exists, "userRatings not displayed")
+        XCTAssertTrue(userText.exists, "userText not displayed")
+        XCTAssertTrue(cancelButton.exists, "saveButton not displayed")
+        
+        // tap edit button
+        // tap edit button
+        let editButtonCenter = editButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        editButtonCenter.tap()
+        
+        // modify review text
+        userText.tap()
+        userText.typeText("add some text")
+        
+        // click save button
+        let cancelButtonCenter = cancelButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        cancelButtonCenter.tap()
+        
+        // check view
+        XCTAssertTrue(selecteCityTitle.waitForExistence(timeout: timer), "selecteCityTitle not displayed")
+    }
+    
+    func testDeleteReview() {
+        // add a review
+        addReviewToRoma()
+        
+        // UI elements CityReviewsDetails
+        let selecteCityTitle = app.staticTexts["selecteCityTitle"]
+        let yourReviewTitle = app.staticTexts["yourReviewTitle"]
+        let userReviewRating = app.otherElements["userReviewRating"]
+        let userReviewText = app.staticTexts["userReviewText"]
+        
+        XCTAssertTrue(selecteCityTitle.waitForExistence(timeout: timer), "selecteCityTitle not displayed")
+        XCTAssertTrue(yourReviewTitle.exists, "yourReviewTitle displayed")
+        XCTAssertTrue(userReviewRating.exists, "userReviewRating displayed")
+        XCTAssertTrue(userReviewText.exists, "userReviewText displayed")
+        
+        yourReviewTitle.tap()
+        
+        // UI element InsertReviewView
+        let personalReviewTitle = app.staticTexts["personalReviewTitle"]
+        let deleteButton = app.buttons["deleteButton"]
+        
+        XCTAssertTrue(personalReviewTitle.waitForExistence(timeout: timer), "personalReviewTitle not displayed")
+        XCTAssertTrue(deleteButton.exists, "deleteButton not displayed")
+        
+        // tap delete button
+        deleteButton.tap()
+        
+        let deleteAlert = app.alerts.firstMatch
+        XCTAssertTrue(deleteAlert.waitForExistence(timeout: timer), "The alert was not shown")
+        
+        let cancelButtonAlert = deleteAlert.buttons["Cancel"]
+        let deleteButtonAlert = deleteAlert.buttons["Delete"]
+        XCTAssertTrue(cancelButtonAlert.exists, "The cancel button is not present")
+        XCTAssertTrue(deleteButtonAlert.exists, "The delete button is not present")
+        
+        deleteButtonAlert.tap()
+        
+        // check view update
+        XCTAssertFalse(deleteAlert.exists, "The alert is displayed and should not")
+        XCTAssertTrue(selecteCityTitle.waitForExistence(timeout: timer), "selecteCityTitle not displayed")
     }
     
     func testSeeAllReviews() {
+        // UI elements
+        let selecteCityTitle = app.staticTexts["selecteCityTitle"]
+        let allReviewsButton = app.buttons["allReviewsButton"]
         
-    }
-    
-    func testNoReviewsPresent() {
+        // check existence
+        XCTAssertTrue(selecteCityTitle.exists, "selecteCityTitle not displayed")
+        XCTAssertTrue(allReviewsButton.exists, "allReviewsButton not displayed")
         
+        // tap all reviews button
+        allReviewsButton.tap()
+        
+        // check page
+        let cityName = app.staticTexts["cityName"]
+        
+        // check page
+        XCTAssertTrue(cityName.waitForExistence(timeout: timer), "cityName not displayed")
     }
 }
