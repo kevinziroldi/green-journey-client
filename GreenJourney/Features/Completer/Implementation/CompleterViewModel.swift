@@ -42,7 +42,7 @@ class CompleterViewModel: ObservableObject {
             predicate: #Predicate { cityCompleter in
                 cityCompleter.cityName.localizedStandardContains(searchText)
             })
-        fetchRequest.fetchLimit = 300
+        fetchRequest.fetchLimit = 150
         
         do {
             let result = try modelContext.fetch(fetchRequest)
