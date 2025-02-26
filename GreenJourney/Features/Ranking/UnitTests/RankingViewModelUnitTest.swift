@@ -4,7 +4,7 @@ import Testing
 @testable import GreenJourney
 
 @MainActor
-final class RankingViewModelTest {
+final class RankingViewModelUnitTest {
     private var mockModelContainer: ModelContainer
     private var mockModelContext: ModelContext
     private var viewModel: RankingViewModel

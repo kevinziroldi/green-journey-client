@@ -5,7 +5,7 @@ import Testing
 @testable import GreenJourney
 
 @MainActor
-final class MyTravelsViewModelTest {
+final class MyTravelsViewModelUnitTest {
     private var viewModel: MyTravelsViewModel
     private var mockModelContainer: ModelContainer
     private var mockModelContext: ModelContext

@@ -1,0 +1,25 @@
+{
+  "configurations" : [
+    {
+      "id" : "64FF4C83-AF23-41D3-A865-0BAAD428CC19",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : false,
+      "target" : {
+        "containerPath" : "container:GreenJourney.xcodeproj",
+        "identifier" : "0ACDE0DC2D6F0A1300BF912B",
+        "name" : "GreenJourneyIntegrationTests"
+      }
+    }
+  ],
+  "version" : 1
+}

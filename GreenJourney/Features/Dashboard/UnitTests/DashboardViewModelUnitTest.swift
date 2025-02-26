@@ -5,7 +5,7 @@ import Testing
 @testable import GreenJourney
 
 @MainActor
-final class DashboardViewModelTest {
+final class DashboardViewModelUnitTest {
     private var mockModelContext: ModelContext
     private var mockModelContainer: ModelContainer
     private var mockServerService: MockServerService

@@ -3,7 +3,7 @@ import Testing
 
 @testable import GreenJourney
 
-struct RankingResponseTest {
+struct RankingResponseUnitTest {
     @Test
     func testEmptyInitializer() {
         let rankingResponse = RankingResponse()

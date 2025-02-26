@@ -4,7 +4,7 @@ import Testing
 @testable import GreenJourney
 
 @MainActor
-final class CompleterViewModelTest {
+final class CompleterViewModelUnitTest {
     private var mockModelContext: ModelContext
     private var mockModelContainer: ModelContainer
     private var mockServerService: MockServerService

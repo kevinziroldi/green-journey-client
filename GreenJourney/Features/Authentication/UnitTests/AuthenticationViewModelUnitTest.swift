@@ -4,7 +4,7 @@ import Testing
 @testable import GreenJourney
 
 @MainActor
-final class AuthenticationViewModelTest {
+final class AuthenticationViewModelUnitTest {
     private var viewModel: AuthenticationViewModel
     private var mockModelContext: ModelContext
     private var mockModelContainer: ModelContainer

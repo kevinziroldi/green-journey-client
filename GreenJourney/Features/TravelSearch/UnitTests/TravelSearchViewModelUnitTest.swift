@@ -5,7 +5,7 @@ import Testing
 @testable import GreenJourney
 
 @MainActor
-final class TravelSearchViewModelTest {
+final class TravelSearchViewModelUnitTest {
     private var viewModel: TravelSearchViewModel
     private var mockServerService: MockServerService
     private var mockFirebaseAuthService: MockFirebaseAuthService

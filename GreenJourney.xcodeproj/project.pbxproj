@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		0AB2AA892D63E08A00FDF38D /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 0AB2AA882D63E08A00FDF38D /* FirebaseAuth */; };
 		0AB2AA8B2D63E09000FDF38D /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 0AB2AA8A2D63E09000FDF38D /* GoogleSignIn */; };
+		0ACDE0F22D6F0B2000BF912B /* IntegrationTestPlan.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 0ACDE0F12D6F0B2000BF912B /* IntegrationTestPlan.xctestplan */; };
+		0ACDE0F42D6F0C5200BF912B /* UnitUITestPlan.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 0ACDE0F32D6F0C5200BF912B /* UnitUITestPlan.xctestplan */; };
 		428DEFB62CCB95220054AB9C /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 428DEFB52CCB95220054AB9C /* FirebaseAnalytics */; };
 		42B7F6BE2CDA1169006AB516 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 42B7F6BD2CDA1169006AB516 /* GoogleSignIn */; };
 		42B7F6C02CDA1169006AB516 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 42B7F6BF2CDA1169006AB516 /* GoogleSignInSwift */; };
@@ -17,6 +19,13 @@
 
 /* Begin PBXContainerItemProxy section */
 		0AB2AA832D63E08000FDF38D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0A1576782CA459AC00EE99BC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0A15767F2CA459AC00EE99BC;
+			remoteInfo = GreenJourney;
+		};
+		0ACDE0E12D6F0A1300BF912B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0A1576782CA459AC00EE99BC /* Project object */;
 			proxyType = 1;
@@ -35,7 +44,10 @@
 /* Begin PBXFileReference section */
 		0A1576802CA459AC00EE99BC /* GreenJourney.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GreenJourney.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AB2AA7D2D63E08000FDF38D /* GreenJourneyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GreenJourneyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		0AD1F04A2D099709001A8464 /* GreenJourneyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GreenJourneyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		0ACDE0DD2D6F0A1300BF912B /* GreenJourneyIntegrationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GreenJourneyIntegrationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		0ACDE0F12D6F0B2000BF912B /* IntegrationTestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = IntegrationTestPlan.xctestplan; sourceTree = "<group>"; };
+		0ACDE0F32D6F0C5200BF912B /* UnitUITestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = UnitUITestPlan.xctestplan; sourceTree = "<group>"; };
+		0AD1F04A2D099709001A8464 /* GreenJourneyUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GreenJourneyUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -63,19 +75,34 @@
 			);
 			target = 0AB2AA7C2D63E08000FDF38D /* GreenJourneyUITests */;
 		};
-		0AD1F0572D099766001A8464 /* Exceptions for "GreenJourney" folder in "GreenJourneyTests" target */ = {
+		0ACDE0E72D6F0A2800BF912B /* Exceptions for "GreenJourney" folder in "GreenJourneyIntegrationTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Features/Authentication/Tests/AuthenticationViewModelTest.swift,
-				Features/CityReviews/Tests/CitiesReviewsViewModelTest.swift,
-				Features/Completer/Tests/CompleterViewModelTest.swift,
-				Features/Dashboard/Tests/DashboardViewModelTest.swift,
-				Features/DestinationPrediction/Tests/DestinationPredictionViewModelTest.swift,
-				Features/MyTravels/Tests/MyTravelsViewModelTest.swift,
-				Features/Ranking/Tests/RankingResponseTest.swift,
-				Features/Ranking/Tests/RankingViewModelTest.swift,
-				Features/TravelSearch/Tests/TravelSearchViewModelTest.swift,
-				Features/UserPreferences/Tests/UserPreferencesViewModelTest.swift,
+				Features/Authentication/IntegrationTests/AuthenticationViewModelIntegrationTest.swift,
+				Features/CityReviews/IntegrationTests/CitiesReviewsViewModelIntegrationTest.swift,
+				Features/Completer/IntegrationTests/CompleterViewModelIntegrationTest.swift,
+				Features/Dashboard/IntegrationTests/DashboardViewModelIntegrationTest.swift,
+				Features/DestinationPrediction/IntegrationTests/DestinationPredictionViewModelIntegrationTest.swift,
+				Features/MyTravels/IntegrationTests/MyTravelsViewModelIntegrationTest.swift,
+				Features/Ranking/IntegrationTests/RankingViewModelIntegrationTest.swift,
+				Features/TravelSearch/IntegrationTests/TravelSearchViewModelIntegrationTest.swift,
+				Features/UserPreferences/IntegrationTests/UserPreferencesViewModelIntegrationTest.swift,
+			);
+			target = 0ACDE0DC2D6F0A1300BF912B /* GreenJourneyIntegrationTests */;
+		};
+		0AD1F0572D099766001A8464 /* Exceptions for "GreenJourney" folder in "GreenJourneyUnitTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Features/Authentication/UnitTests/AuthenticationViewModelUnitTest.swift,
+				Features/CityReviews/UnitTests/CitiesReviewsViewModelUnitTest.swift,
+				Features/Completer/UnitTests/CompleterViewModelUnitTest.swift,
+				Features/Dashboard/UnitTests/DashboardViewModelUnitTest.swift,
+				Features/DestinationPrediction/UnitTests/DestinationPredictionViewModelUnitTest.swift,
+				Features/MyTravels/UnitTests/MyTravelsViewModelUnitTest.swift,
+				Features/Ranking/UnitTests/RankingResponseUnitTest.swift,
+				Features/Ranking/UnitTests/RankingViewModelUnitTest.swift,
+				Features/TravelSearch/UnitTests/TravelSearchViewModelUnitTest.swift,
+				Features/UserPreferences/UnitTests/UserPreferencesViewModelUnitTest.swift,
 				Model/Tests/BadgeTest.swift,
 				Model/Tests/CityCompleterDatasetTest.swift,
 				Model/Tests/CityFeaturesTest.swift,
@@ -87,39 +114,48 @@
 				Model/Tests/UserTest.swift,
 				NavigationHandler/Tests/NavigationDestinationTest.swift,
 			);
-			target = 0AD1F0492D099709001A8464 /* GreenJourneyTests */;
+			target = 0AD1F0492D099709001A8464 /* GreenJourneyUnitTests */;
 		};
 		422A00902CD188B200EF280D /* Exceptions for "GreenJourney" folder in "GreenJourney" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Features/Authentication/Tests/AuthenticationViewModelTest.swift,
+				Features/Authentication/IntegrationTests/AuthenticationViewModelIntegrationTest.swift,
 				Features/Authentication/UITests/EmailVerificationViewUITest.swift,
 				Features/Authentication/UITests/LoginViewUITest.swift,
 				Features/Authentication/UITests/SignUpViewUITest.swift,
-				Features/CityReviews/Tests/CitiesReviewsViewModelTest.swift,
+				Features/Authentication/UnitTests/AuthenticationViewModelUnitTest.swift,
+				Features/CityReviews/IntegrationTests/CitiesReviewsViewModelIntegrationTest.swift,
 				Features/CityReviews/UITests/AllReviewsViewUITest.swift,
 				Features/CityReviews/UITests/CitiesReviewsViewUITest.swift,
 				Features/CityReviews/UITests/CityReviewsDetailsViewUITest.swift,
-				Features/Completer/Tests/CompleterViewModelTest.swift,
+				Features/CityReviews/UnitTests/CitiesReviewsViewModelUnitTest.swift,
+				Features/Completer/IntegrationTests/CompleterViewModelIntegrationTest.swift,
 				Features/Completer/UITests/CompleterViewUITest.swift,
-				Features/Dashboard/Tests/DashboardViewModelTest.swift,
+				Features/Completer/UnitTests/CompleterViewModelUnitTest.swift,
+				Features/Dashboard/IntegrationTests/DashboardViewModelIntegrationTest.swift,
 				Features/Dashboard/UITests/DashboardViewUITest.swift,
-				Features/DestinationPrediction/Tests/DestinationPredictionViewModelTest.swift,
+				Features/Dashboard/UnitTests/DashboardViewModelUnitTest.swift,
+				Features/DestinationPrediction/IntegrationTests/DestinationPredictionViewModelIntegrationTest.swift,
 				Features/DestinationPrediction/UITests/DestinationPredictionUITest.swift,
-				Features/MyTravels/Tests/MyTravelsViewModelTest.swift,
+				Features/DestinationPrediction/UnitTests/DestinationPredictionViewModelUnitTest.swift,
+				Features/MyTravels/IntegrationTests/MyTravelsViewModelIntegrationTest.swift,
 				Features/MyTravels/UITests/MyTravelsViewUITest.swift,
 				Features/MyTravels/UITests/TravelDetailsViewUITest.swift,
-				Features/Ranking/Tests/RankingResponseTest.swift,
-				Features/Ranking/Tests/RankingViewModelTest.swift,
+				Features/MyTravels/UnitTests/MyTravelsViewModelUnitTest.swift,
+				Features/Ranking/IntegrationTests/RankingViewModelIntegrationTest.swift,
 				Features/Ranking/UITests/RankingViewUITest.swift,
 				Features/Ranking/UITests/UserDetailsRankingViewUITest.swift,
-				Features/TravelSearch/Tests/TravelSearchViewModelTest.swift,
+				Features/Ranking/UnitTests/RankingResponseUnitTest.swift,
+				Features/Ranking/UnitTests/RankingViewModelUnitTest.swift,
+				Features/TravelSearch/IntegrationTests/TravelSearchViewModelIntegrationTest.swift,
 				Features/TravelSearch/UITests/OptionDetailsViewUITest.swift,
 				Features/TravelSearch/UITests/OutwardOptionsViewUITest.swift,
 				Features/TravelSearch/UITests/ReturnOptionsViewUITest.swift,
 				Features/TravelSearch/UITests/TravelSearchViewUITest.swift,
-				Features/UserPreferences/Tests/UserPreferencesViewModelTest.swift,
+				Features/TravelSearch/UnitTests/TravelSearchViewModelUnitTest.swift,
+				Features/UserPreferences/IntegrationTests/UserPreferencesViewModelIntegrationTest.swift,
 				Features/UserPreferences/UITests/UserPreferencesViewUITest.swift,
+				Features/UserPreferences/UnitTests/UserPreferencesViewModelUnitTest.swift,
 				Info.plist,
 				Model/Tests/BadgeTest.swift,
 				Model/Tests/CityCompleterDatasetTest.swift,
@@ -141,8 +177,9 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				422A00902CD188B200EF280D /* Exceptions for "GreenJourney" folder in "GreenJourney" target */,
-				0AD1F0572D099766001A8464 /* Exceptions for "GreenJourney" folder in "GreenJourneyTests" target */,
+				0AD1F0572D099766001A8464 /* Exceptions for "GreenJourney" folder in "GreenJourneyUnitTests" target */,
 				0AB2AA8D2D63E0A500FDF38D /* Exceptions for "GreenJourney" folder in "GreenJourneyUITests" target */,
+				0ACDE0E72D6F0A2800BF912B /* Exceptions for "GreenJourney" folder in "GreenJourneyIntegrationTests" target */,
 			);
 			path = GreenJourney;
 			sourceTree = "<group>";
@@ -170,6 +207,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		0ACDE0DA2D6F0A1300BF912B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		0AD1F0472D099709001A8464 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -183,6 +227,8 @@
 		0A1576772CA459AC00EE99BC = {
 			isa = PBXGroup;
 			children = (
+				0ACDE0F12D6F0B2000BF912B /* IntegrationTestPlan.xctestplan */,
+				0ACDE0F32D6F0C5200BF912B /* UnitUITestPlan.xctestplan */,
 				0A1576822CA459AC00EE99BC /* GreenJourney */,
 				0AB2A9602D63B6DB00FDF38D /* Frameworks */,
 				0A1576812CA459AC00EE99BC /* Products */,
@@ -193,8 +239,9 @@
 			isa = PBXGroup;
 			children = (
 				0A1576802CA459AC00EE99BC /* GreenJourney.app */,
-				0AD1F04A2D099709001A8464 /* GreenJourneyTests.xctest */,
+				0AD1F04A2D099709001A8464 /* GreenJourneyUnitTests.xctest */,
 				0AB2AA7D2D63E08000FDF38D /* GreenJourneyUITests.xctest */,
+				0ACDE0DD2D6F0A1300BF912B /* GreenJourneyIntegrationTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -257,9 +304,29 @@
 			productReference = 0AB2AA7D2D63E08000FDF38D /* GreenJourneyUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
-		0AD1F0492D099709001A8464 /* GreenJourneyTests */ = {
+		0ACDE0DC2D6F0A1300BF912B /* GreenJourneyIntegrationTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 0AD1F0502D099709001A8464 /* Build configuration list for PBXNativeTarget "GreenJourneyTests" */;
+			buildConfigurationList = 0ACDE0E32D6F0A1300BF912B /* Build configuration list for PBXNativeTarget "GreenJourneyIntegrationTests" */;
+			buildPhases = (
+				0ACDE0D92D6F0A1300BF912B /* Sources */,
+				0ACDE0DA2D6F0A1300BF912B /* Frameworks */,
+				0ACDE0DB2D6F0A1300BF912B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				0ACDE0E22D6F0A1300BF912B /* PBXTargetDependency */,
+			);
+			name = GreenJourneyIntegrationTests;
+			packageProductDependencies = (
+			);
+			productName = GreenJourneyIntegrationTests;
+			productReference = 0ACDE0DD2D6F0A1300BF912B /* GreenJourneyIntegrationTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		0AD1F0492D099709001A8464 /* GreenJourneyUnitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0AD1F0502D099709001A8464 /* Build configuration list for PBXNativeTarget "GreenJourneyUnitTests" */;
 			buildPhases = (
 				0AD1F0462D099709001A8464 /* Sources */,
 				0AD1F0472D099709001A8464 /* Frameworks */,
@@ -270,11 +337,11 @@
 			dependencies = (
 				0AD1F04F2D099709001A8464 /* PBXTargetDependency */,
 			);
-			name = GreenJourneyTests;
+			name = GreenJourneyUnitTests;
 			packageProductDependencies = (
 			);
 			productName = GreenJourneyTests;
-			productReference = 0AD1F04A2D099709001A8464 /* GreenJourneyTests.xctest */;
+			productReference = 0AD1F04A2D099709001A8464 /* GreenJourneyUnitTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -291,6 +358,10 @@
 						CreatedOnToolsVersion = 16.0;
 					};
 					0AB2AA7C2D63E08000FDF38D = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = 0A15767F2CA459AC00EE99BC;
+					};
+					0ACDE0DC2D6F0A1300BF912B = {
 						CreatedOnToolsVersion = 16.2;
 						TestTargetID = 0A15767F2CA459AC00EE99BC;
 					};
@@ -319,8 +390,9 @@
 			projectRoot = "";
 			targets = (
 				0A15767F2CA459AC00EE99BC /* GreenJourney */,
-				0AD1F0492D099709001A8464 /* GreenJourneyTests */,
+				0AD1F0492D099709001A8464 /* GreenJourneyUnitTests */,
 				0AB2AA7C2D63E08000FDF38D /* GreenJourneyUITests */,
+				0ACDE0DC2D6F0A1300BF912B /* GreenJourneyIntegrationTests */,
 			);
 		};
 /* End PBXProject section */
@@ -330,10 +402,19 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0ACDE0F42D6F0C5200BF912B /* UnitUITestPlan.xctestplan in Resources */,
+				0ACDE0F22D6F0B2000BF912B /* IntegrationTestPlan.xctestplan in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		0AB2AA7B2D63E08000FDF38D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0ACDE0DB2D6F0A1300BF912B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -364,6 +445,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		0ACDE0D92D6F0A1300BF912B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		0AD1F0462D099709001A8464 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -378,6 +466,11 @@
 			isa = PBXTargetDependency;
 			target = 0A15767F2CA459AC00EE99BC /* GreenJourney */;
 			targetProxy = 0AB2AA832D63E08000FDF38D /* PBXContainerItemProxy */;
+		};
+		0ACDE0E22D6F0A1300BF912B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0A15767F2CA459AC00EE99BC /* GreenJourney */;
+			targetProxy = 0ACDE0E12D6F0A1300BF912B /* PBXContainerItemProxy */;
 		};
 		0AD1F04F2D099709001A8464 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -623,6 +716,42 @@
 			};
 			name = Release;
 		};
+		0ACDE0E42D6F0A1300BF912B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = it.polimi.dima.GreenJourney.GreenJourneyIntegrationTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GreenJourney.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/GreenJourney";
+			};
+			name = Debug;
+		};
+		0ACDE0E52D6F0A1300BF912B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = it.polimi.dima.GreenJourney.GreenJourneyIntegrationTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GreenJourney.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/GreenJourney";
+			};
+			name = Release;
+		};
 		0AD1F0512D099709001A8464 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -691,7 +820,16 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		0AD1F0502D099709001A8464 /* Build configuration list for PBXNativeTarget "GreenJourneyTests" */ = {
+		0ACDE0E32D6F0A1300BF912B /* Build configuration list for PBXNativeTarget "GreenJourneyIntegrationTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0ACDE0E42D6F0A1300BF912B /* Debug */,
+				0ACDE0E52D6F0A1300BF912B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0AD1F0502D099709001A8464 /* Build configuration list for PBXNativeTarget "GreenJourneyUnitTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0AD1F0512D099709001A8464 /* Debug */,

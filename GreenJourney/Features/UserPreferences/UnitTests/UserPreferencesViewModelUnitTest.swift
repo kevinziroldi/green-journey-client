@@ -6,7 +6,7 @@ import Testing
 @testable import GreenJourney
 
 @MainActor
-final class UserPreferencesViewModelTest {
+final class UserPreferencesViewModelUnitTest {
     private var viewModel: UserPreferencesViewModel
     private var mockServerService: MockServerService
     private var mockFirebaseAuthService: MockFirebaseAuthService
