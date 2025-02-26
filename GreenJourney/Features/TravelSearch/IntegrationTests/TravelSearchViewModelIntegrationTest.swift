@@ -166,6 +166,8 @@ final class TravelSearchViewModelIntegrationTest {
         // 1 user travel
         travels = try mockModelContext.fetch(FetchDescriptor<Travel>())
         #expect(travels.count == 1)
+        
+        // clean database
+        try await serverService.resetTestDatabase()
     }
-    
 }

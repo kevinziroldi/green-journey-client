@@ -245,7 +245,7 @@ final class MyTravelsViewModelUnitTest {
         let travel = travelDetails.travel
         #expect(travel.confirmed == false)
         
-        // initialize server and compensate co2
+        // initialize server and confirm travel
         self.mockServerService.shouldSucceed = true
         await viewModel.confirmTravel()
         
@@ -262,7 +262,7 @@ final class MyTravelsViewModelUnitTest {
         let travel = travelDetails.travel
         #expect(travel.confirmed == false)
         
-        // initialize server and compensate co2
+        // initialize server and confirm travel
         self.mockServerService.shouldSucceed = false
         await viewModel.confirmTravel()
         
