@@ -21,9 +21,15 @@ struct AllReviewsView: View {
                     Spacer()
                     Button(action: {
                         viewModel.page = 0
-                        viewModel.pageInput = viewModel.page + 1
                     }) {
-                        Text("First")
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .frame(width: 50, height: 40)
+                                .foregroundStyle((viewModel.page > 0) ? Color.blue : Color.black.opacity(0.3))
+                            Image(systemName: "arrow.left.to.line")
+                                .foregroundStyle(.white)
+                                .font(.title2)
+                        }
                     }
                     .disabled(!(viewModel.page > 0))
                     .accessibilityIdentifier("buttonFirst")
@@ -32,49 +38,46 @@ struct AllReviewsView: View {
                     
                     Button(action: {
                         viewModel.page -= 1
-                        viewModel.pageInput = viewModel.page + 1
                     }) {
-                        Text("Previous")
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .frame(width: 115 ,height: 40)
+                                .foregroundStyle((viewModel.page > 0) ? Color.blue : Color.black.opacity(0.3))
+                            
+                            HStack {
+                                Image(systemName: "arrow.left")
+                                    .foregroundStyle(.white)
+                                    .font(.title3)
+                                Text("Previous")
+                                    .foregroundStyle(.white)
+                                    .font(.system(size: 18).bold())
+                            }
+                        }
                     }
                     .disabled(!(viewModel.page > 0))
                     .accessibilityIdentifier("buttonPrevious")
                     
                     Spacer()
                     
-                    HStack (spacing: 0){
-                        Text("Page")
-                        TextField("", text: viewModel.binding(for: $viewModel.pageInput))
-                            .frame(width: 20)
-                            .multilineTextAlignment(.trailing)
-                            .foregroundStyle(.blue)
-                            .keyboardType(.numberPad)
-                            .fontWeight(.semibold)
-                            .focused($isFocused)
-                            .toolbar {
-                                ToolbarItemGroup(placement: .keyboard) {
-                                    Spacer()
-                                    Button("Done") {
-                                        isFocused = false
-                                        viewModel.validatePageInput()
-                                    }
-                                    .accessibilityIdentifier("doneButton")
-                                }
-                            }
-                            .accessibilityIdentifier("pageTextField")
-                        
-                        Text("/\(viewModel.getNumPages())")
-                            .foregroundStyle(.blue)
-                            .fontWeight(.semibold)
-                        
-                    }
-                    
                     Spacer()
                     
                     Button(action: {
                         viewModel.page += 1
-                        viewModel.pageInput = viewModel.page + 1
                     }) {
-                        Text("Next")
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .frame(width: 115 ,height: 40)
+                                .foregroundStyle((viewModel.page + 1 < viewModel.getNumPages()) ? Color.blue : Color.black.opacity(0.3))
+                            HStack {
+                                Text("Next")
+                                    .foregroundStyle(.white)
+                                    .font(.system(size: 18).bold())
+                                Image(systemName: "arrow.right")
+                                    .foregroundStyle(.white)
+                                    .font(.title3)
+                            }
+                        }
+                       
                     }
                     .disabled(!(viewModel.page + 1 < viewModel.getNumPages()))
                     .accessibilityIdentifier("buttonNext")
@@ -83,9 +86,15 @@ struct AllReviewsView: View {
                     
                     Button(action: {
                         viewModel.page = viewModel.getNumPages() - 1
-                        viewModel.pageInput = viewModel.page + 1
                     }) {
-                        Text("Last")
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .frame(width: 50, height: 40)
+                                .foregroundStyle((viewModel.page + 1 < viewModel.getNumPages()) ? Color.blue : Color.black.opacity(0.3))
+                            Image(systemName: "arrow.right.to.line")
+                                .foregroundStyle(.white)
+                                .font(.title2)
+                        }
                     }
                     .disabled(!(viewModel.page + 1 < viewModel.getNumPages()))
                     .accessibilityIdentifier("buttonLast")
@@ -131,13 +140,19 @@ struct SingleReviewView: View {
                 .shadow(color: .blue.opacity(0.3), radius: 5, x: 0, y: 3)
             
             VStack {
+                Text(review.firstName + " " + review.lastName)
+                    .font(.headline)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.blue.opacity(0.8))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+
                 HStack {
-                    FiveStarView(rating: review.computeRating(), dim: 20, color: .yellow)
-                    Text(review.firstName + ", " + review.lastName)
-                        .font(.headline)
+                    Text(String(format: "%.1f", review.computeRating()))
+                        .font(.title3)
                         .fontWeight(.semibold)
-                        .foregroundStyle(.blue.opacity(0.8))
-                        .padding(EdgeInsets(top: 3, leading: 5, bottom: 0, trailing: 0))
+                        .padding(EdgeInsets(top: 4, leading: 0, bottom: 0, trailing: 5))
+                    FiveStarView(rating: review.computeRating(), dim: 20, color: .yellow)
+                    
                     Spacer()
                 }
                 .padding(.bottom, 5)
@@ -161,7 +176,7 @@ struct SingleReviewView: View {
                                 .foregroundColor(.green)
                         }
                         .padding(.trailing)
-                        FiveStarView(rating: Float64(review.localTransportRating), dim: 15, color: .yellow.opacity(0.8))
+                        FiveStarView(rating: Float64(review.localTransportRating), dim: 15, color: .blue.opacity(0.8))
                     }
                     HStack {
                         ZStack {
@@ -176,7 +191,7 @@ struct SingleReviewView: View {
                                 .foregroundColor(.green)
                         }
                         .padding(.trailing)
-                        FiveStarView(rating: Float64(review.greenSpacesRating), dim: 15, color: .yellow.opacity(0.8))
+                        FiveStarView(rating: Float64(review.greenSpacesRating), dim: 15, color: .green.opacity(0.8))
                     }
                     HStack {
                         ZStack {
@@ -191,7 +206,7 @@ struct SingleReviewView: View {
                                 .foregroundColor(.green)
                         }
                         .padding(.trailing)
-                        FiveStarView(rating: Float64(review.wasteBinsRating), dim: 15, color: .yellow.opacity(0.8))
+                        FiveStarView(rating: Float64(review.wasteBinsRating), dim: 15, color: .orange.opacity(0.8))
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)

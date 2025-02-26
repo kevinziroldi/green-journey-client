@@ -77,17 +77,20 @@ struct CitiesReviewsView: View {
                     searchTapped = false
                 },
                               onClick: { city in
-                    searchTapped = false
-                    // for server call
-                    viewModel.selectedCity = city
-                    // for details view
-                    viewModel.selectedCity = viewModel.selectedCity
+                    Task {
+                        // for server call
+                        viewModel.selectedCity = city
+                        // for details view
+                        viewModel.selectedCity = viewModel.selectedCity
+                        await viewModel.getReviewsForSearchedCity()
+                        searchTapped = false
+                    }
                 },
                               departure: false
                 )
             }
             
-            Button(action: {
+            /*Button(action: {
                 Task {
                     await viewModel.getReviewsForSearchedCity()
                 }
@@ -99,7 +102,7 @@ struct CitiesReviewsView: View {
             .disabled(viewModel.selectedCity.cityName == "")
             .buttonStyle(.borderedProminent)
             .accessibilityIdentifier("searchButton")
-            
+            */
             Spacer()
             
             // list of cities
