@@ -18,7 +18,7 @@ final class DashboardViewModelUnitTest {
         self.mockModelContainer = container
         
         self.mockServerService = MockServerService()
-        self.viewModel = DashboardViewModel(modelContext: mockModelContext, serverService: self.mockServerService)
+        self.viewModel = DashboardViewModel(modelContext: mockModelContext)
         
         try addUserToSwiftData()
         try addTravelsToSwiftData()

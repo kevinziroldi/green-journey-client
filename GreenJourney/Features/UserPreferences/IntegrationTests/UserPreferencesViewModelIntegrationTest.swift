@@ -22,6 +22,9 @@ final class UserPreferencesViewModelIntegrationTest {
         self.serverService = ServerService()
         self.mockFirebaseAuthService = MockFirebaseAuthService()
         self.viewModel = UserPreferencesViewModel(modelContext: container.mainContext, serverService: serverService)
+        
+        // clean database
+        try await serverService.resetTestDatabase()
     }
     
     private func loginUser() async throws {
@@ -78,9 +81,6 @@ final class UserPreferencesViewModelIntegrationTest {
         #expect(viewModel.houseNumber == nil)
         #expect(viewModel.zipCode == nil)
         #expect(viewModel.errorMessage == nil)
-        
-        // clean database
-        try await serverService.resetTestDatabase()
     }
     
     @Test
@@ -115,9 +115,6 @@ final class UserPreferencesViewModelIntegrationTest {
         #expect(viewModel.houseNumber == 10)
         #expect(viewModel.zipCode == 20)
         #expect(viewModel.errorMessage == nil)
-        
-        // clean database
-        try await serverService.resetTestDatabase()
     }
     
     @Test
@@ -143,8 +140,5 @@ final class UserPreferencesViewModelIntegrationTest {
         #expect(viewModel.houseNumber == nil)
         #expect(viewModel.zipCode == nil)
         #expect(viewModel.errorMessage == nil)
-        
-        // clean database
-        try await serverService.resetTestDatabase()
     }
 }

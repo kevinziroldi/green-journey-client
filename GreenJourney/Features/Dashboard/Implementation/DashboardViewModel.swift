@@ -4,7 +4,6 @@ import SwiftData
 @MainActor
 class DashboardViewModel: ObservableObject {
     private var modelContext: ModelContext
-    private var serverService: ServerServiceProtocol
 
     @Published var badges: [Badge] = []
     @Published var co2Emitted: Float64 = 0.0
@@ -21,12 +20,10 @@ class DashboardViewModel: ObservableObject {
     var totalDuration: Int = 0
     var travelDetailsList: [TravelDetails] = []
     
-    init(modelContext: ModelContext, serverService: ServerServiceProtocol) {
+    init(modelContext: ModelContext) {
         self.modelContext = modelContext
-        self.serverService = serverService
         self.distances = [getCurrentYear()-3: 0, getCurrentYear()-2: 0, getCurrentYear()-1: 0, getCurrentYear(): 0]
         self.tripsMade = [getCurrentYear()-3: 0, getCurrentYear()-2: 0, getCurrentYear()-1: 0, getCurrentYear(): 0]
-
     }
     
     func getUserBadges() {

@@ -12,7 +12,7 @@ final class TravelSearchViewModelIntegrationTest {
     private var mockModelContainer: ModelContainer
     private var mockModelContext: ModelContext
     
-    init() throws {
+    init() async throws {
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: User.self, Travel.self, Segment.self, CityFeatures.self, CityCompleterDataset.self, configurations: configuration)
         self.mockModelContainer = container
@@ -20,6 +20,9 @@ final class TravelSearchViewModelIntegrationTest {
         self.serverService = ServerService()
         self.mockFirebaseAuthService = MockFirebaseAuthService()
         self.viewModel = TravelSearchViewModel(modelContext: container.mainContext, serverService: serverService)
+        
+        // clean database
+        try await serverService.resetTestDatabase()
     }
     
     private func loginUser() async throws {
@@ -166,8 +169,5 @@ final class TravelSearchViewModelIntegrationTest {
         // 1 user travel
         travels = try mockModelContext.fetch(FetchDescriptor<Travel>())
         #expect(travels.count == 1)
-        
-        // clean database
-        try await serverService.resetTestDatabase()
     }
 }

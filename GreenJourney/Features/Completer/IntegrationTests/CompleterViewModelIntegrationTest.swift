@@ -5,5 +5,11 @@ import Testing
 
 @MainActor
 final class CompleterViewModelIntegrationTest {
+    private var serverService: ServerService
     
+    init() async throws {
+        self.serverService = ServerService()
+        // clean database
+        try await serverService.resetTestDatabase()
+    }
 }

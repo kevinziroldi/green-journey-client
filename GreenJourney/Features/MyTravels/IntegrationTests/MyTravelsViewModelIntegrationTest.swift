@@ -12,7 +12,7 @@ final class MyTravelsViewModelIntegrationTest {
     private var serverService: ServerService
     private var mockFirebaseAuthService: MockFirebaseAuthService
     
-    init() throws {
+    init() async throws {
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: User.self, Travel.self, Segment.self, CityFeatures.self, CityCompleterDataset.self, configurations: configuration)
         self.mockModelContainer = container
@@ -20,6 +20,9 @@ final class MyTravelsViewModelIntegrationTest {
         self.serverService = ServerService()
         self.mockFirebaseAuthService = MockFirebaseAuthService()
         self.viewModel = MyTravelsViewModel(modelContext: container.mainContext, serverService: serverService)
+        
+        // clean database
+        try await serverService.resetTestDatabase()
     }
     
     private func loginUser() async throws {
@@ -122,9 +125,6 @@ final class MyTravelsViewModelIntegrationTest {
         
         travels = try mockModelContext.fetch(FetchDescriptor<Travel>())
         #expect(travels.count == 1)
-        
-        // clean database
-        try await serverService.resetTestDatabase()
     }
     
     @Test
@@ -154,9 +154,6 @@ final class MyTravelsViewModelIntegrationTest {
         
         // check travel confirmed
         #expect(travel.confirmed == true)
-        
-        // clean database
-        try await serverService.resetTestDatabase()
     }
     
     @Test
@@ -193,9 +190,6 @@ final class MyTravelsViewModelIntegrationTest {
                 #expect(td.travel.CO2Compensated == co2Compensated)
             }
         }
-        
-        // clean database
-        try await serverService.resetTestDatabase()
     }
     
     @Test
@@ -244,9 +238,6 @@ final class MyTravelsViewModelIntegrationTest {
                 #expect(td.travel.CO2Compensated == co2Compensated + newCo2Compensated)
             }
         }
-        
-        // clean database
-        try await serverService.resetTestDatabase()
     }
     
     @Test
@@ -277,8 +268,5 @@ final class MyTravelsViewModelIntegrationTest {
         for td in viewModel.travelDetailsList {
             #expect(td.travel.travelID != travel.travelID)
         }
-        
-        // clean database
-        try await serverService.resetTestDatabase()
     }
 }
