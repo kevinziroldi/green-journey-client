@@ -24,4 +24,7 @@ protocol ServerServiceProtocol {
     func getTravels() async throws -> [TravelDetails]
     func updateTravel(modifiedTravel: Travel) async throws -> Travel
     func deleteTravel(travelID: Int) async throws
+    
+    // reset test database
+    func resetTestDatabase() async throws
 }

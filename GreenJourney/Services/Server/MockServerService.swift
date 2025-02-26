@@ -209,4 +209,8 @@ class MockServerService: ServerServiceProtocol {
             throw ServerServiceError.deleteTravelFailed
         }
     }
+    
+    func resetTestDatabase() async throws {
+        // nothing to do, the test database is used by the real server
+    }
 }

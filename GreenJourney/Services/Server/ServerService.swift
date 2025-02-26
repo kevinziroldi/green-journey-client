@@ -481,6 +481,28 @@ class ServerService: ServerServiceProtocol {
             throw error
         }
     }
+    
+    func resetTestDatabase() async throws {
+        // build request
+        let baseURL = URLHandler.shared.getBaseURL()
+        guard let url = URL(string:"\(baseURL)/resetTestDatabase") else {
+            print("Invalid URL used to retrieve travels from DB")
+            throw URLError(.badURL)
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        
+        // perform request
+        do {
+            let (_, response) = try await URLSession.shared.data(for: request)
+            guard let httpResponse = response as? HTTPURLResponse,
+                  (200...299).contains(httpResponse.statusCode) else {
+                throw URLError(.badServerResponse)
+            }
+        } catch {
+            throw error
+        }
+    }
 }
 extension Data {
     var prettyPrintedJSONString: NSString? {

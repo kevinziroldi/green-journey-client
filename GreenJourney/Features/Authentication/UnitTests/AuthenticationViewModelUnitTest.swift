@@ -288,7 +288,6 @@ final class AuthenticationViewModelUnitTest {
     func testVerifyEmailNotVerified() async {
         self.mockFirebaseAuthService.shouldSucceed = true
         self.mockFirebaseAuthService.emailVerified = false
-        self.mockFirebaseAuthService.shouldSucceed = true
         await viewModel.verifyEmail()
         #expect(viewModel.errorMessage != nil)
     }
@@ -297,7 +296,7 @@ final class AuthenticationViewModelUnitTest {
     func testVerifyEmailVerified() async {
         self.mockFirebaseAuthService.shouldSucceed = true
         self.mockFirebaseAuthService.emailVerified = true
-        self.mockFirebaseAuthService.shouldSucceed = true
+        
         await viewModel.verifyEmail()
         #expect(viewModel.errorMessage == nil)
     }
