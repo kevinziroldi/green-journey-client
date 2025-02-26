@@ -587,7 +587,7 @@ final class CitiesReviewsViewModelUnitTest {
         // call method
         await viewModel.deleteReview()
         
-        // check failure
+        // check deletion
         #expect(viewModel.userReview == nil)
         #expect(viewModel.errorMessage == nil)
     }

@@ -80,7 +80,6 @@
 			membershipExceptions = (
 				Features/Authentication/IntegrationTests/AuthenticationViewModelIntegrationTest.swift,
 				Features/CityReviews/IntegrationTests/CitiesReviewsViewModelIntegrationTest.swift,
-				Features/Completer/IntegrationTests/CompleterViewModelIntegrationTest.swift,
 				Features/Dashboard/IntegrationTests/DashboardViewModelIntegrationTest.swift,
 				Features/DestinationPrediction/IntegrationTests/DestinationPredictionViewModelIntegrationTest.swift,
 				Features/MyTravels/IntegrationTests/MyTravelsViewModelIntegrationTest.swift,
@@ -129,7 +128,6 @@
 				Features/CityReviews/UITests/CitiesReviewsViewUITest.swift,
 				Features/CityReviews/UITests/CityReviewsDetailsViewUITest.swift,
 				Features/CityReviews/UnitTests/CitiesReviewsViewModelUnitTest.swift,
-				Features/Completer/IntegrationTests/CompleterViewModelIntegrationTest.swift,
 				Features/Completer/UITests/CompleterViewUITest.swift,
 				Features/Completer/UnitTests/CompleterViewModelUnitTest.swift,
 				Features/Dashboard/IntegrationTests/DashboardViewModelIntegrationTest.swift,
