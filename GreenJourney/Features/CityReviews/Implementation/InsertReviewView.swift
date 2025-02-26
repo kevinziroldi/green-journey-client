@@ -83,10 +83,12 @@ struct InsertReviewView: View {
                 }) {
                     Text("Save review")
                         .padding()
-                        .background(Color.blue)
+                        .background((viewModel.reviewText.isEmpty) || (viewModel.greenSpacesRating == 0) || (viewModel.localTransportRating == 0) || (viewModel.wasteBinsRating == 0) ? .black.opacity(0.3): Color.blue)
                         .foregroundColor(.white)
                         .cornerRadius(10)
+                        
                 }
+                .disabled((viewModel.reviewText.isEmpty) || (viewModel.greenSpacesRating == 0) || (viewModel.localTransportRating == 0) || (viewModel.wasteBinsRating == 0))
                 .position(x: geometry.size.width/2, y: 580)
                 .accessibilityIdentifier("saveButton")
                 

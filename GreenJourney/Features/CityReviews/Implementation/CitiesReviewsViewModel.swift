@@ -24,8 +24,6 @@ class CitiesReviewsViewModel: ObservableObject {
     
     @Published var userReview: Review?
     @Published var page: Int = 0
-    // TextField input
-    @Published var pageInput: Int = 1
     
     // upload/modify review
     @Published var reviewText: String = ""
@@ -241,27 +239,6 @@ class CitiesReviewsViewModel: ObservableObject {
         }
     }
     
-    func validatePageInput() {
-        if pageInput >= 1 && pageInput <= getNumPages() {
-            self.page = pageInput - 1
-        }
-        self.pageInput = self.page + 1 // go back on the previous page
-    }
-    
-    func binding(for value: Binding<Int>) -> Binding<String> {
-        Binding<String>(
-            get: {
-                return String(value.wrappedValue)
-            },
-            set: { newValue in
-                if let intValue = Int(newValue) {
-                    value.wrappedValue = intValue
-                } else {
-                    value.wrappedValue = 0
-                }
-            }
-        )
-    }
 }
 
 extension CitiesReviewsViewModel: Hashable {

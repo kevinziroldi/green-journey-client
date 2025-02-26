@@ -140,7 +140,6 @@ struct DashboardView: View {
             }
             
         }
-        .background(.green.opacity(0.1))
         .onAppear() {
             viewModel.getUserBadges()
             viewModel.getUserTravels()

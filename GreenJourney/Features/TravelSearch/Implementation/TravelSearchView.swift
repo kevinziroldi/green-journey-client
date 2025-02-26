@@ -57,7 +57,7 @@ struct TravelSearchView: View {
                                     .font(.system(size: 32).bold())
                                     .padding()
                                     .fontWeight(.semibold)
-                                    //.frame(maxWidth: .infinity, alignment: .leading)
+                                    .opacity(triggerAI ? 0 : 1)
                                     .accessibilityIdentifier("travelSearchViewTitle")
                                 
                                 Spacer()
@@ -66,6 +66,8 @@ struct TravelSearchView: View {
                                     Image(systemName: "person")
                                         .font(.title)
                                 }
+                                .disabled(triggerAI)
+                                .opacity(triggerAI ? 0 : 1)
                                 .accessibilityIdentifier("userPreferencesButton")
                             }
                             .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
@@ -82,10 +84,9 @@ struct TravelSearchView: View {
                             ZStack {
                                 GeometryReader { geometry in
                                     Path { path in
-                                        // Punto iniziale in alto a sinistra
                                         path.move(to: CGPoint(x: geometry.size.width/2 - 10, y: 0))
                                         
-                                        // Prima curva della "S" verso destra e in basso
+                                        // first curve
                                         path.addQuadCurve(
                                             to: CGPoint(x: geometry.size.width/2, y: geometry.size.height/2),
                                             control: CGPoint(x: 0, y: geometry.size.height/4)
@@ -95,17 +96,16 @@ struct TravelSearchView: View {
                                             control: CGPoint(x: geometry.size.width, y: geometry.size.height * 3/4)
                                         )
                                     }
-                                    .stroke(style: StrokeStyle(lineWidth: 5, dash: [11, 6])) // Stile tratteggiato
-                                    .foregroundColor(.primary) // Colore della linea
+                                    .stroke(style: StrokeStyle(lineWidth: 5, dash: [11, 6]))
+                                    .foregroundColor(.primary)
                                 }
-                                .frame(width: 100, height: 110)
-                                .padding(EdgeInsets(top: 0, leading: 0, bottom: 80, trailing: 320))
-                                
+                                .frame(width: 90, height: 120)
+                                .position(x: 45, y: 100)
                                 VStack {
                                     VStack {
                                         Text("From")
                                             .frame(maxWidth: .infinity, alignment: .leading)
-                                            .padding(EdgeInsets(top: 10, leading: 50, bottom: 0, trailing: 50))
+                                            .padding(EdgeInsets(top: 10, leading: 40, bottom: 0, trailing: 40))
                                             .frame(alignment: .top)
                                             .font(.title)
                                             .accessibilityIdentifier("departureLabel")
@@ -128,8 +128,7 @@ struct TravelSearchView: View {
                                         }
                                         .background(colorScheme == .dark ? Color(red: 48/255, green: 48/255, blue: 48/255) : Color.white)
                                         .cornerRadius(10)
-                                        .shadow(radius: 5)
-                                        .padding(EdgeInsets(top: 0, leading: 50, bottom: 20, trailing: 50))
+                                        .padding(EdgeInsets(top: 0, leading: 40, bottom: 20, trailing: 40))
                                     }
                                     .fullScreenCover(isPresented: $departureTapped ) {
                                         CompleterView(modelContext: modelContext, searchText: viewModel.departure.cityName,
@@ -146,7 +145,7 @@ struct TravelSearchView: View {
                                     VStack{
                                         Text("To")
                                             .frame(maxWidth: .infinity, alignment: .leading)
-                                            .padding(EdgeInsets(top: 10, leading: 50, bottom: 0, trailing: 50))
+                                            .padding(EdgeInsets(top: 10, leading: 40, bottom: 0, trailing: 40))
                                             .frame(alignment: .top)
                                             .font(.title)
                                             .accessibilityIdentifier("destinationLabel")
@@ -171,8 +170,7 @@ struct TravelSearchView: View {
                                         }
                                         .background(triggerAI ? LinearGradient(gradient: Gradient(colors: [.green, .cyan, .blue, .cyan, .green]), startPoint: .bottomLeading, endPoint: .topTrailing) : LinearGradient(gradient: Gradient(colors: [colorScheme == .dark ? Color(red: 48/255, green: 48/255, blue: 48/255) : Color.white]), startPoint: .bottomLeading, endPoint: .topTrailing))
                                         .cornerRadius(10)
-                                        .shadow(radius: 5)
-                                        .padding(EdgeInsets(top: 0, leading: 50, bottom: 20, trailing: 50))
+                                        .padding(EdgeInsets(top: 0, leading: 40, bottom: 20, trailing: 40))
                                     }
                                     .fullScreenCover(isPresented: $destinationTapped ) {
                                         CompleterView(modelContext: modelContext, searchText: viewModel.arrival.cityName,
@@ -189,9 +187,10 @@ struct TravelSearchView: View {
                                     }
                                 }
                             }
+                            Spacer()
                             ZStack {
-                                RoundedRectangle(cornerRadius: 20)
-                                    .stroke()
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(Color.gray, lineWidth: 2)
                                 HStack (spacing: 0) {
                                     Button(action: {
                                         dateTapped = true
@@ -255,7 +254,7 @@ struct TravelSearchView: View {
                                 .fixedSize()
                             }
                             .disabled(viewModel.departure.iata == "" || viewModel.arrival.iata == "")
-                            .padding(.top, 20)
+                            .padding(.top, 30)
                             .accessibilityIdentifier("searchButton")
                             
                             Spacer()

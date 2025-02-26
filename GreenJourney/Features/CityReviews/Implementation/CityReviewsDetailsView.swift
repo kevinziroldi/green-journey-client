@@ -305,13 +305,17 @@ struct CardView: View {
                 .shadow(color: .blue.opacity(0.3), radius: 5, x: 0, y: 3)
             
             VStack {
+                Text(review.firstName + " " + review.lastName)
+                    .font(.headline)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.blue.opacity(0.8))
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 HStack {
-                    FiveStarView(rating: review.computeRating(), dim: 20, color: .yellow)
-                    Text(review.firstName + " " + review.lastName)
-                        .font(.headline)
+                    Text(String(format: "%.1f", review.computeRating()))
+                        .font(.title3)
                         .fontWeight(.semibold)
-                        .foregroundStyle(.blue.opacity(0.8))
-                        .padding(EdgeInsets(top: 3, leading: 5, bottom: 0, trailing: 0))
+                        .padding(EdgeInsets(top: 4, leading: 0, bottom: 0, trailing: 5))
+                    FiveStarView(rating: review.computeRating(), dim: 20, color: .yellow)
                     Spacer()
                 }
                 .padding(.bottom, 5)
