@@ -289,7 +289,6 @@ struct TravelSearchView: View {
                             .padding(.top, 20)
                             .accessibilityIdentifier("searchButton")
                             
-                            //Spacer()
                             
                             HStack {
                                 if !triggerAI {

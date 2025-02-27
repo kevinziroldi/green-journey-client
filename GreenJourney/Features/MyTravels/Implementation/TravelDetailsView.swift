@@ -13,9 +13,9 @@ struct TravelDetailsView: View {
     
     var body : some View {
         if let travelDetails = viewModel.selectedTravel {
-            ZStack {
-                VStack (spacing:0){
-                    ScrollView {
+            VStack {
+                ScrollView {
+                    VStack {
                         HeaderView(from: travelDetails.getDepartureSegment()?.departureCity ?? "", to: travelDetails.getDestinationSegment()?.destinationCity ?? "", date: travelDetails.segments.first?.dateTime, dateArrival: travelDetails.segments.last?.getArrivalDateTime())
                             .accessibilityElement(children: .contain)
                             .overlay(Color.clear.accessibilityIdentifier("headerView"))
@@ -226,20 +226,20 @@ struct TravelDetailsView: View {
                             .accessibilityElement(children: .contain)
                             .overlay(Color.clear.accessibilityIdentifier("travelRecap"))
                         if travelDetails.travel.confirmed {
-                        // if the user hasn't left a review yet
-                        Button(action: {
-                            reviewTapped = true
-                        }) {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke()
-                                    .frame(width: 90, height: 30)
-                                Text("Review")
-                                    .padding()
+                            // if the user hasn't left a review yet
+                            Button(action: {
+                                reviewTapped = true
+                            }) {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke()
+                                        .frame(width: 90, height: 30)
+                                    Text("Review")
+                                        .padding()
+                                }
                             }
+                            .accessibilityIdentifier("reviewButton")
                         }
-                        .accessibilityIdentifier("reviewButton")
-                    }
                         
                         HStack {
                             Text(travelDetails.isOneway() ? "Segments" : "Outward")
@@ -299,15 +299,6 @@ struct TravelDetailsView: View {
                     
                     Spacer()
                 }
-                .padding(.top, 50)
-                .blur(radius: (infoTapped) ? 2 : 0)
-                .allowsHitTesting(!infoTapped)
-                
-                if infoTapped {
-                    InfoCompensationView(onBack: {infoTapped = false})
-                        .accessibilityElement(children: .contain)
-                        .accessibilityIdentifier("infoCompensationView")
-                }
             }
             /*.sheet(isPresented: $reviewTapped) {
                 InsertReviewView(isPresented: $reviewTapped, viewModel: viewModel)
@@ -315,7 +306,7 @@ struct TravelDetailsView: View {
                     .presentationCornerRadius(30)
                     }*/
 
-            .ignoresSafeArea()
+            .ignoresSafeArea(edges: [.bottom, .horizontal])
             .background(colorScheme == .dark ? Color(red: 10/255, green: 10/255, blue: 10/255) : Color(red: 245/255, green: 245/255, blue: 245/255))
             .onAppear() {
                 if (travelDetails.computeCo2Emitted() >= 0.0) {

@@ -110,4 +110,23 @@ class Segment: Codable, Identifiable {
     func getArrivalDateTime() -> Date {
         return dateTime.addingTimeInterval(TimeInterval(duration/1000000000))
     }
+    
+    func findVehicle() -> String {
+        var vehicleString: String
+        switch vehicle {
+        case .car:
+            vehicleString = "car"
+        case .train:
+            vehicleString = "tram"
+        case .plane:
+            vehicleString = "airplane"
+        case .bus:
+            vehicleString = "bus"
+        case .walk:
+            vehicleString = "figure.walk"
+        case .bike:
+            vehicleString = "bicycle"
+        }
+        return vehicleString
+    }
 }

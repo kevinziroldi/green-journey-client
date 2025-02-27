@@ -14,140 +14,188 @@ struct OptionDetailsView: View {
             .foregroundColor(.gray)
         
         ScrollView {
-            HStack {
-                VStack {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color.black, lineWidth: 2)
-                            .frame(maxWidth: .infinity, maxHeight: 100)
-                            .shadow(radius: 10)
-                        
-                        VStack{
-                            Text("Distance")
-                                .font(.headline)
-                                .padding(.bottom, 5)
-                            HStack {
-                                Image(systemName: "road.lanes")
-                                    .font(.title)
-                                Text(String(format: "%.1f", computeTotalDistance(segments)) + " Km")
-                                    .font(.title3)
-                                    .fontWeight(.semibold)
-                            }
-                        }
-                        .padding()
-                    }
-                    .overlay(Color.clear.accessibilityIdentifier("distanceBox"))
-                    
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color.black, lineWidth: 2)
-                            .frame(maxWidth: .infinity, maxHeight: 100)
-                            .shadow(radius: 10)
-                        
-                        VStack{
-                            Text("Price")
-                                .font(.headline)
-                                .padding(.bottom, 5)
-                            HStack {
-                                Image(systemName: "eurosign.bank.building")
-                                    .font(.title)
-                                    .foregroundStyle(.red)
-                                Text(String(format: "%.1f", computeTotalPrice(segments)) + " €")
-                                    .font(.title3)
-                                    .fontWeight(.semibold)
-                            }
-                        }
-                        .padding()
-                    }
-                    .overlay(Color.clear.accessibilityIdentifier("priceBox"))
-                }
-                
-                VStack {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color.black, lineWidth: 2)
-                            .frame(maxWidth: .infinity, maxHeight: 100)
-                            .shadow(radius: 10)
-                        
-                        VStack {
-                            Text("Duration")
-                                .font(.headline)
-                                .padding(.bottom, 5)
-                            HStack{
-                                Image(systemName: "clock")
-                                    .font(.title)
-                                    .foregroundStyle(.cyan)
-                                Text(computeTotalDuration(segments))
-                                    .font(.title3)
-                                    .fontWeight(.semibold)
-                            }
-                        }
-                        .padding()
-                    }
-                    .overlay(Color.clear.accessibilityIdentifier("durationBox"))
-                    
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color.black, lineWidth: 2)
-                            .frame(maxWidth: .infinity, maxHeight: 100)
-                            .shadow(radius: 10)
-                        
-                        VStack{
-                            Text("Price 0-emission")
-                                .font(.headline)
-                                .padding(.bottom, 5)
-                            HStack {
-                                Image(systemName: "eurosign.bank.building")
-                                    .font(.title)
-                                    .foregroundStyle(.green)
-                                Text(String(format: "%.1f", computeTotalPrice(segments)) + " €")
-                                    .font(.title3)
-                                    .fontWeight(.semibold)
-                            }
-                        }
-                        .padding()
-                    }
-                    .overlay(Color.clear.accessibilityIdentifier("priceZeroEmissionBox"))
-                }
-            }
-            .padding(EdgeInsets(top: 10, leading: 10, bottom: 20, trailing: 10))
             
-            HStack (spacing: 50){
-                VStack {
-                    Text("Total CO2 emitted")
-                        .font(.headline)
-                        .padding(.bottom, 5)
-                    Text(String(format: "%.1f", computeCo2Emitted(segments)) + " Kg")
-                        .font(.title3)
+            ZStack {
+                RoundedRectangle(cornerRadius: 15)
+                    .fill(Color(uiColor: .systemBackground))
+                    .shadow(color: Color(hue: 0.309, saturation: 1.0, brightness: 0.665).opacity(0.3), radius: 5, x: 0, y: 3)
+                VStack (spacing:0){
+                    Text("Co2")
+                        .font(.title)
+                        .foregroundStyle(Color(hue: 0.309, saturation: 1.0, brightness: 0.665).opacity(0.8))
+                        .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 0))
                         .fontWeight(.semibold)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    HStack {
+                        Text("Emission: " + String(format: "%.1f", viewModel.computeCo2Emitted(segments)) + " Kg")
+                        Spacer()
+                        Text("#\(viewModel.getNumTrees(segments))")
+                        Image(systemName: "tree")
+                    }
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                    .padding()
+                    .foregroundStyle(Color(hue: 0.309, saturation: 1.0, brightness: 0.665).opacity(1))
                 }
-                Image(systemName: "tree.fill")
-                    .font(.largeTitle)
-                    .foregroundStyle(.red)
             }
-            .padding(.bottom, 30)
+            .padding(EdgeInsets(top: 10, leading: 15, bottom: 5, trailing: 15))
             .overlay(Color.clear.accessibilityIdentifier("co2EmittedBox"))
             
+            ZStack {
+                RoundedRectangle(cornerRadius: 15)
+                    .fill(Color(uiColor: .systemBackground))
+                    .shadow(color: .indigo.opacity(0.3), radius: 5, x: 0, y: 3)
+                VStack (spacing:0){
+                    Text("Recap")
+                        .font(.title)
+                        .foregroundStyle(.indigo.opacity(0.8))
+                        .padding(EdgeInsets(top: 15, leading: 15, bottom: 10, trailing: 0))
+                        .fontWeight(.semibold)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    HStack {
+                        ZStack {
+                            Circle()
+                                .fill(.indigo.opacity(0.2))
+                                .frame(width: 40, height: 40)
+                            
+                            Image(systemName: "road.lanes")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 25, height: 25)
+                                .foregroundColor(.indigo)
+                        }
+                        
+                        
+                        Text("Distance")
+                            .font(.system(size: 20).bold())
+                            .foregroundColor(.primary)
+                            .padding(.leading, 5)
+                            .frame(width: 120, alignment: .leading)
+                        Text(String(format: "%.1f", viewModel.computeTotalDistance(segments)) + " Km")
+                            .font(.system(size: 25).bold())
+                            .bold()
+                            .foregroundColor(.indigo.opacity(0.8))
+                        Spacer()
+                    }
+                    .padding(.horizontal)
+                    .padding(.vertical, 5)
+                    HStack {
+                        ZStack {
+                            Circle()
+                                .fill(.blue.opacity(0.2))
+                                .frame(width: 40, height: 40)
+                            
+                            Image(systemName: "clock")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 25, height: 25)
+                                .foregroundColor(.blue)
+                        }
+                        
+                        
+                        Text("Duration")
+                            .font(.system(size: 20).bold())
+                            .foregroundColor(.primary)
+                            .padding(.leading, 5)
+                            .frame(width: 120, alignment: .leading)
+
+                        Text(viewModel.computeTotalDuration(segments))
+                            .font(.system(size: 25).bold())
+                            .bold()
+                            .foregroundColor(.blue.opacity(0.8))
+                        Spacer()
+                    }
+                    .padding(.horizontal)
+                    .padding(.vertical, 5)
+                    
+                    HStack {
+                        ZStack {
+                            Circle()
+                                .fill(.red.opacity(0.2))
+                                .frame(width: 40, height: 40)
+                            
+                            Image("price_red")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 30, height: 30)
+                                .foregroundColor(.red)
+                        }
+                        
+                        
+                        Text("Price")
+                            .font(.system(size: 20).bold())
+                            .foregroundColor(.primary)
+                            .padding(.leading, 5)
+                            .frame(width: 120, alignment: .leading)
+
+                        Text(String(format: "%.2f", viewModel.computeTotalPrice(segments)) + " €")
+                            .font(.system(size: 25).bold())
+                            .bold()
+                            .foregroundColor(.red.opacity(0.8))
+                        Spacer()
+                    }
+                    .padding(.horizontal)
+                    .padding(.vertical, 5)
+                    HStack {
+                        ZStack {
+                            Circle()
+                                .fill(.green.opacity(0.2))
+                                .frame(width: 40, height: 40)
+                            
+                            Image("price_green")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 30, height: 30)
+                                .foregroundColor(.green)
+                        }
+                        
+                        
+                        Text("Green price")
+                            .font(.system(size: 20).bold())
+                            .foregroundColor(.primary)
+                            .padding(.leading, 5)
+                            .frame(width: 120, alignment: .leading)
+
+                        Text(String(format: "%.2f", viewModel.computeGreenPrice(segments)) + " €")
+                            .font(.system(size: 25).bold())
+                            .bold()
+                            .foregroundColor(.green.opacity(0.8))
+                        Spacer()
+                    }
+                    .padding(EdgeInsets(top: 5, leading: 15, bottom: 10, trailing: 15))
+                }
+            }
+            .padding()
+            //TODO manca questo box sopra nel testing
+            
             SegmentsView(segments: segments)
+                .padding(.top)
             
             Spacer()
         }
         if (!viewModel.oneWay) {
             if (viewModel.selectedOption.isEmpty) {
-                Button ("Proceed"){
+                Button (action: {
                     viewModel.selectedOption.append(contentsOf: segments)
                     navigationPath.append(NavigationDestination.ReturnOptionsView(viewModel))
+                }) {
+                    Text("Proceed")
+                        .font(.title2)
                 }
                 .buttonStyle(.borderedProminent)
                 .accessibilityIdentifier("proceedButton")
             }
             else {
-                Button ("Save travel") {
+                Button (action:  {
                     Task {
                         viewModel.selectedOption.append(contentsOf: segments)
                         await viewModel.saveTravel()
                         navigationPath = NavigationPath()
                     }
+                }) {
+                    Text("Save travel")
+                        .font(.title2)
                 }
                 .buttonStyle(.borderedProminent)
                 .accessibilityIdentifier("saveTravelButtonTwoWays")

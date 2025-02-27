@@ -25,7 +25,7 @@ struct MainView: View {
                 if users.first != nil {
                     RankingView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
                         .tabItem {
-                            Label("Ranking", systemImage: "star")
+                            Label("Ranking", systemImage: "trophy")
                                 .accessibilityElement(children: .contain)
                                 .accessibilityIdentifier("rankingTabViewElement")
                         }

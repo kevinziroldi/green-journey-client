@@ -10,6 +10,7 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
     
     private var modelContext: ModelContext
     private var serverService: ServerServiceProtocol
+    private var logic: TravelSearchLogic = TravelSearchLogic()
     
     @Published var departure: CityCompleterDataset = CityCompleterDataset()
     @Published var arrival: CityCompleterDataset = CityCompleterDataset()
@@ -119,65 +120,37 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
     }
     
     func computeCo2Emitted(_ travelOption: [Segment]) -> Float64 {
-        var co2Emitted: Float64 = 0.0
-        for segment in travelOption {
-            co2Emitted += segment.co2Emitted
-        }
-        return co2Emitted
+        return logic.computeCo2Emitted(travelOption)
     }
     
     func computeTotalPrice (_ travelOption: [Segment]) -> Float64 {
-        var price: Float64 = 0.0
-        for segment in travelOption {
-            price += segment.price
-        }
-        return price
+        return logic.computeTotalPrice(travelOption)
+    }
+    
+    func computeGreenPrice(_ travelOption: [Segment]) -> Float64 {
+        return logic.computeGreenPrice(travelOption)
     }
     
     func computeTotalDuration (_ travelOption: [Segment]) -> String {
-        var duration = 0
-        for segment in travelOption {
-            duration += segment.duration/1000000000
-        }
-        return UtilitiesFunctions.convertTotalDurationToString(totalDuration: duration)
+        return logic.computeTotalDuration(travelOption)
     }
     
     func getOptionDeparture (_ travelOption: [Segment]) -> String {
-        if let firstSegment = travelOption.first {
-            return firstSegment.departureCity
-        }
-        else {
-            return ""
-        }
+        return logic.getOptionDeparture(travelOption)
     }
     
     func getOptionDestination (_ travelOption: [Segment]) -> String {
-        if let lastSegment = travelOption.last {
-            return lastSegment.destinationCity
-        }
-        else {
-            return ""
-        }
+        return logic.getOptionDestination(travelOption)
     }
     
     func findVehicle(_ option: [Segment]) -> String {
-        var vehicle: String
-        switch option.first?.vehicle {
-        case .car:
-            vehicle = "car"
-        case .train:
-            vehicle = "tram"
-        case .plane:
-            vehicle = "airplane"
-        case .bus:
-            vehicle = "bus"
-        case .walk:
-            vehicle = "figure.walk"
-        case .bike:
-            vehicle = "bicycle"
-        default:
-            vehicle = ""
-        }
-        return vehicle
+        return logic.findVehicle(option)
+    }
+    
+    func getNumTrees(_ travelOption: [Segment]) -> Int {
+        return logic.getNumTrees(travelOption)
+    }
+    func computeTotalDistance(_ travelOption: [Segment]) -> Float64 {
+        return logic.computeTotalDistance(travelOption)
     }
 }

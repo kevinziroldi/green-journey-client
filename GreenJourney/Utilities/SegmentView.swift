@@ -60,7 +60,7 @@ struct SegmentDetailView: View {
                             Circle()
                                 .stroke(lineWidth: 2.5)
                                 .frame(width: 40, height: 40)
-                            Image(systemName: findVehicle(segment))
+                            Image(systemName: segment.findVehicle())
                                 .font(.title2)
                         }
                         .overlay(Color.clear.accessibilityIdentifier("vehicleImage"))
@@ -170,24 +170,5 @@ struct SegmentDetailView: View {
         }
         .padding(.horizontal, 30)
         .padding(.vertical, 5)
-    }
-    
-    func findVehicle(_ segment: Segment) -> String {
-        var vehicle: String
-        switch segment.vehicle {
-        case .car:
-            vehicle = "car"
-        case .train:
-            vehicle = "tram"
-        case .plane:
-            vehicle = "airplane"
-        case .bus:
-            vehicle = "bus"
-        case .walk:
-            vehicle = "figure.walk"
-        case .bike:
-            vehicle = "bicycle"
-        }
-        return vehicle
     }
 }
