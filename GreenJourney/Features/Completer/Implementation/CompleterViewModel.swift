@@ -7,6 +7,7 @@ import Combine
 class CompleterViewModel: ObservableObject {
     var modelContext: ModelContext
     var departure: Bool
+    var logic: DestinationPredictionLogic
     @Published var suggestions: [CityCompleterDataset] = []
     @Published var searchText: String {
         didSet {
@@ -18,6 +19,7 @@ class CompleterViewModel: ObservableObject {
     
     init(modelContext: ModelContext, departure: Bool) {
         self.modelContext = modelContext
+        self.logic = DestinationPredictionLogic(modelContext: modelContext)
         self.departure = departure
         self.searchText = ""
         self.continent = findContinent()
@@ -32,8 +34,7 @@ class CompleterViewModel: ObservableObject {
                 
             }
             else {
-                //TODO funzione che chiama machine learning
-                suggestions = []
+                suggestions = Array(logic.getRecommendation(predictionSize: 10)).suffix(5)
             }
             return
         }

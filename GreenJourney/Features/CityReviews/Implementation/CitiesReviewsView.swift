@@ -73,7 +73,7 @@ struct CitiesReviewsView: View {
                     .padding(EdgeInsets(top: 0, leading: 30, bottom: 50, trailing: 30))
                 }
                 .fullScreenCover(isPresented: $searchTapped ) {
-                    CompleterView(modelContext: modelContext, searchText: viewModel.selectedCity.cityName,
+                    CompleterView(modelContext: modelContext, searchText: "",
                                   onBack: {
                         searchTapped = false
                     },

@@ -59,8 +59,13 @@ struct CompleterView: View {
                     Spacer()
                     if viewModel.departure && viewModel.searchText == "" {
                         Image(systemName: "clock.arrow.trianglehead.counterclockwise.rotate.90")
-                            .font(.title2)
-                            .padding()
+                            .font(.title3)
+                            .padding(.trailing, 10)
+                    }
+                    else if !viewModel.departure && viewModel.searchText == "" {
+                        Text("🔥")
+                            .font(.title3)
+                            .padding(.trailing, 10)
                     }
                 }
                 .onTapGesture {
@@ -68,15 +73,6 @@ struct CompleterView: View {
                 }
             }
             .scrollDismissesKeyboard(.interactively)
-            
-            HStack {
-                Button("Back") {
-                    onBack()
-                }
-                .buttonStyle(.bordered)
-            }
-            .padding()
-            .accessibilityIdentifier("backButtonBottom")
         }
         .onAppear(){
             viewModel.searchText = self.searchText
