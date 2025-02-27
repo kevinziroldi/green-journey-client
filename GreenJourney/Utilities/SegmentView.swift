@@ -88,22 +88,24 @@ struct SegmentDetailView: View {
                         Spacer()
                     }
                     if detailsOpen {
-                        VStack {
-                            HStack (spacing: 5) {
-                                VStack{
-                                    Text("Info:")
-                                        .font(.subheadline)
-                                        .fontWeight(.bold)
-                                    Spacer()
-                                }
-                                VStack {
-                                    Text(segment.segmentDescription)
-                                        .font(.subheadline)
-                                    Spacer()
+                        if segment.segmentDescription != "" {
+                            VStack {
+                                HStack (spacing: 5) {
+                                    VStack{
+                                        Text("Info:")
+                                            .font(.subheadline)
+                                            .fontWeight(.bold)
+                                        Spacer()
+                                    }
+                                    VStack {
+                                        Text(segment.segmentDescription)
+                                            .font(.subheadline)
+                                        Spacer()
+                                    }
                                 }
                             }
+                            .overlay(Color.clear.accessibilityIdentifier("segmentInfo"))
                         }
-                        .overlay(Color.clear.accessibilityIdentifier("segmentInfo"))
                     }
                     if detailsOpen {
                         VStack {
