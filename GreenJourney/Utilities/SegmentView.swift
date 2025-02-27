@@ -25,8 +25,8 @@ struct SegmentDetailView: View {
                         
                         path.addLine(to: CGPoint(x: 0, y: geometry.size.height - 10))
                     }
-                    .stroke(colorScheme == .dark ? Color.white : Color.black, lineWidth: 3) // Stile tratteggiato
-                    .foregroundColor(colorScheme == .dark ? Color.white : Color.black) // Colore della linea
+                    .stroke(colorScheme == .dark ? Color.white : Color.black, lineWidth: 3)
+                    .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
                     Circle()
                         .stroke(colorScheme == .dark ? Color.white : Color.black, lineWidth: 5)
                         .fill(colorScheme == .dark ? Color.black : Color.white)
@@ -41,17 +41,21 @@ struct SegmentDetailView: View {
                 }
                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
             }
-            .frame(width: 20, height: lenght)
+            .frame(width: 20)
             .accessibilityIdentifier("segmentLine")
             
             HStack{
                 VStack {
-                    Text(segment.departureCity)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .font(.headline)
-                        .accessibilityIdentifier("segmentDeparture")
-                    
-                    if !detailsOpen{
+                    HStack{
+                        Text(segment.departureCity)
+                            .frame(width: 130, alignment: .leading)
+                            .font(.headline)
+                            .accessibilityIdentifier("segmentDeparture")
+                        Text(segment.dateTime.formatted(date: .numeric, time: .shortened))
+                            .font(.callout)
+                            .fontWeight(.light)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .accessibilityIdentifier("departureDate")
                         Spacer()
                     }
                     
@@ -83,90 +87,113 @@ struct SegmentDetailView: View {
                         
                         Spacer()
                     }
-                    
                     if detailsOpen {
-                        Spacer()
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 15)
-                                .stroke(lineWidth: 1)
-                                
-                            VStack {
-                                Text(String(format: "%.1f", segment.distance) + " Km")
-                                    .font(.callout)
-                                    .fontWeight(.semibold)
-                                    .padding(EdgeInsets(top: 10, leading: 10, bottom: 5, trailing: 10))
-                                Rectangle()
-                                    .frame(height: 1)
-                                Text(String(format: "%.2f", segment.price) + " €")
-                                    .font(.callout)
-                                    .fontWeight(.semibold)
-                                    .foregroundStyle(.green)
-                                    .padding(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
-                                Rectangle()
-                                    .frame(height: 1)
-                                Text(String(format: "%.1f", segment.co2Emitted) + " Kg CO2")
-                                    .font(.callout)
-                                    .fontWeight(.semibold)
-                                    .foregroundStyle(.red)
-                                    .padding(EdgeInsets(top: 5, leading: 10, bottom: 10, trailing: 10))
+                        VStack {
+                            HStack (spacing: 5) {
+                                VStack{
+                                    Text("Info:")
+                                        .font(.subheadline)
+                                        .fontWeight(.bold)
+                                    Spacer()
+                                }
+                                VStack {
+                                    Text(segment.segmentDescription)
+                                        .font(.subheadline)
+                                    Spacer()
+                                }
                             }
                         }
-                        .fixedSize(horizontal: false, vertical: true)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .overlay(Color.clear.accessibilityIdentifier("segmentInfo"))
+                    }
+                    if detailsOpen {
+                        VStack {
+                            HStack {
+                                ZStack {
+                                    Circle()
+                                        .fill(.indigo.opacity(0.2))
+                                        .frame(width: 40, height: 40)
+                                    
+                                    Image(systemName: "road.lanes")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 25, height: 25)
+                                        .foregroundColor(.indigo)
+                                }
+                                Text("Distance")
+                                    .foregroundStyle(.indigo)
+                                    .frame(width: 80, alignment: .leading)
+                                    .padding(.leading)
+                                Text(String(format: "%.1f", segment.distance) + " Km")
+                                    .foregroundStyle(.indigo)
+                                    .fontWeight(.semibold)
+                                Spacer()
+                            }
+                            HStack {
+                                ZStack {
+                                    Circle()
+                                        .fill(.green.opacity(0.2))
+                                        .frame(width: 40, height: 40)
+                                    
+                                    Image("price_green")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 30, height: 30)
+                                        .foregroundColor(.green)
+                                }
+                                
+                                Text("Price")
+                                    .frame(width: 80, alignment: .leading)
+                                    .foregroundStyle(.green)
+                                    .padding(.leading)
+                                Text(String(format: "%.2f", segment.price) + " €")
+                                    .fontWeight(.semibold)
+                                    .foregroundStyle(.green)
+                                Spacer()
+                            }
+                            HStack {
+                                
+                                ZStack {
+                                    Circle()
+                                        .fill(.red.opacity(0.2))
+                                        .frame(width: 40, height: 40)
+                                    
+                                    Image(systemName: "carbon.dioxide.cloud")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 25, height: 25)
+                                        .foregroundColor(.red)
+                                }
+                                
+                                Text("Emission")
+                                    .frame(width: 80, alignment: .leading)
+                                    .foregroundStyle(.red)
+                                    .padding(.leading)
+                                Text(String(format: "%.1f", segment.co2Emitted) + " Kg CO2")
+                                    .foregroundStyle(.red)
+                                    .fontWeight(.semibold)
+                                Spacer()
+                            }
+                        }
                         .overlay(Color.clear.accessibilityIdentifier("detailsBox"))
                     }
                     
                     Spacer()
-                    
-                    Text(segment.destinationCity)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .font(.headline)
-                        .accessibilityIdentifier("segmentDestination")
-                }
-                
-                Spacer()
-            }
-            
-            VStack {
-                Text(segment.dateTime.formatted(date: .numeric, time: .shortened))
-                    .font(.callout)
-                    .fontWeight(.light)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .accessibilityIdentifier("departureDate")
-                
-                Spacer()
-                
-                if detailsOpen {
-                    VStack {
-                        Spacer()
-                        HStack (spacing: 5) {
-                            VStack{
-                                Text("Info:")
-                                    .font(.subheadline)
-                                    .fontWeight(.bold)
-                                Spacer()
-                            }
-                            VStack {
-                                Text(segment.segmentDescription)
-                                    .font(.subheadline)
-                                Spacer()
-                            }
-                        }
+                    HStack {
+                        Text(segment.destinationCity)
+                            .frame(width: 130, alignment: .leading)
+                            .font(.headline)
+                            .accessibilityIdentifier("segmentDestination")
+                        
+                        Text(segment.getArrivalDateTime().formatted(date: .numeric, time: .shortened))
+                            .font(.callout)
+                            .fontWeight(.light)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .accessibilityIdentifier("arrivalDate")
                         Spacer()
                     }
-                    .overlay(Color.clear.accessibilityIdentifier("segmentInfo"))
                 }
-                
                 Spacer()
-                
-                Text(segment.getArrivalDateTime().formatted(date: .numeric, time: .shortened))
-                    .font(.callout)
-                    .fontWeight(.light)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .accessibilityIdentifier("arrivalDate")
             }
-            Spacer()
-            Spacer()
         }
         .padding(.horizontal, 30)
         .padding(.vertical, 5)
