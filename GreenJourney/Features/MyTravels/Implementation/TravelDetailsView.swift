@@ -1,7 +1,9 @@
 import SwiftUI
+import SwiftData
 
 struct TravelDetailsView: View {
     @ObservedObject var viewModel: MyTravelsViewModel
+    @StateObject var reviewViewModel: CitiesReviewsViewModel
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @Binding var navigationPath: NavigationPath
     @State var reviewTapped: Bool = false
@@ -10,6 +12,12 @@ struct TravelDetailsView: View {
     @State var showAlert = false
     @State var plantedTrees = 0
     @State var totalTrees = 0
+    
+    init(viewModel: MyTravelsViewModel ,modelContext: ModelContext, navigationPath: Binding<NavigationPath>, serverService: ServerServiceProtocol, firebaseAuthService: FirebaseAuthServiceProtocol) {
+        self.viewModel = viewModel
+        _reviewViewModel = StateObject(wrappedValue: CitiesReviewsViewModel(modelContext: modelContext, serverService: serverService))
+        _navigationPath = navigationPath
+    }
     
     var body : some View {
         if let travelDetails = viewModel.selectedTravel {
@@ -227,17 +235,9 @@ struct TravelDetailsView: View {
                             .overlay(Color.clear.accessibilityIdentifier("travelRecap"))
                         if travelDetails.travel.confirmed {
                             // if the user hasn't left a review yet
-                            Button(action: {
-                                reviewTapped = true
-                            }) {
-                                ZStack {
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .stroke()
-                                        .frame(width: 90, height: 30)
-                                    Text("Review")
-                                        .padding()
-                                }
-                            }
+                            let city = travelDetails.getDestinationSegment()?.destinationCity
+                            let country = travelDetails.getDestinationSegment()?.destinationCountry
+                            InsertReviewButton(viewModel: reviewViewModel, reviewTapped: $reviewTapped, city: city, country: country)
                             .accessibilityIdentifier("reviewButton")
                         }
                         
@@ -300,11 +300,11 @@ struct TravelDetailsView: View {
                     Spacer()
                 }
             }
-            /*.sheet(isPresented: $reviewTapped) {
-                InsertReviewView(isPresented: $reviewTapped, viewModel: viewModel)
-                    .presentationDetents([.fraction(0.85)])
+            .sheet(isPresented: $reviewTapped) {
+                InsertReviewView(isPresented: $reviewTapped, viewModel: reviewViewModel)
+                    .presentationDetents([.height(680)])
                     .presentationCornerRadius(30)
-                    }*/
+                    }
 
             .ignoresSafeArea(edges: [.bottom, .horizontal])
             .background(colorScheme == .dark ? Color(red: 10/255, green: 10/255, blue: 10/255) : Color(red: 245/255, green: 245/255, blue: 245/255))

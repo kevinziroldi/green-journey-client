@@ -92,7 +92,7 @@ struct MainView: View {
                 case .CityReviewsDetailsView(let viewModel):
                     CityReviewsDetailsView(viewModel: viewModel, navigationPath: $navigationPath)
                 case .TravelDetailsView(let viewModel):
-                    TravelDetailsView(viewModel: viewModel, navigationPath: $navigationPath)
+                    TravelDetailsView(viewModel: viewModel, modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
                 case .AllReviewsView(let viewModel):
                     AllReviewsView(viewModel: viewModel, navigationPath: $navigationPath)
                 }

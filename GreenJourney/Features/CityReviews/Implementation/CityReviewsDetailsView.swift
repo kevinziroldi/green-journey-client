@@ -120,67 +120,9 @@ struct CityReviewsDetailsView: View {
                             .padding(EdgeInsets(top: 5, leading: 10, bottom: 0, trailing: 10))
                             .overlay(Color.clear.accessibilityIdentifier("averageRatingSection"))
                             
-                            VStack{
+                            VStack {
                                 if viewModel.isReviewable(userID: users.first?.userID ?? -1) {
-                                    VStack {
-                                        if viewModel.userReview == nil {
-                                            ZStack{
-                                                RoundedRectangle(cornerRadius: 20)
-                                                    .fill(Color.blue)
-                                                    .shadow(color: .blue.opacity(0.3), radius: 5, x: 0, y: 3)
-                                                HStack{
-                                                    Button(action: {
-                                                        reviewTapped = true
-                                                    }) {
-                                                        HStack{
-                                                            Text("add your review for \(viewModel.selectedCity.cityName)")
-                                                                .padding()
-                                                                .foregroundStyle(.white)
-                                                                .font(.system(size: 22).bold())
-                                                        }
-                                                    }
-                                                    .padding(.horizontal)
-                                                    .accessibilityIdentifier("addReviewButton")
-                                                }
-                                            }
-                                        } else {
-                                            if let userReview = viewModel.userReview {
-                                                ZStack{
-                                                    RoundedRectangle(cornerRadius: 20)
-                                                        .fill(Color(uiColor: .systemBackground))
-                                                        .shadow(color: .blue.opacity(0.3), radius: 5, x: 0, y: 3)
-                                                    VStack {
-                                                        HStack {
-                                                            Text("Your review")
-                                                                .font(.title3)
-                                                                .fontWeight(.semibold)
-                                                                .accessibilityIdentifier("yourReviewTitle")
-                                                            
-                                                            Spacer()
-                                                            
-                                                            FiveStarView(rating: userReview.computeRating(), dim: 20, color: .green.opacity(0.8))
-                                                                .overlay(Color.clear.accessibilityIdentifier("userReviewRating"))
-                                                            
-                                                            Spacer()
-                                                            Spacer()
-                                                            Spacer()
-                                                        }
-                                                        
-                                                        Text(userReview.reviewText)
-                                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                                            .accessibilityIdentifier("userReviewText")
-                                                        
-                                                        Spacer()
-                                                    }
-                                                    .padding()
-                                                }
-                                                .onTapGesture() {
-                                                    reviewTapped = true
-                                                }
-                                            }
-                                        }
-                                    }
-                                    .padding(EdgeInsets(top: 5, leading: 20, bottom: 0, trailing: 20))
+                                    InsertReviewButton(viewModel: viewModel, reviewTapped: $reviewTapped)
                                 }
                                 if !selectedCityReviewElement.reviews.isEmpty {
                                     Text("Latest Reviews for " + viewModel.selectedCity.cityName + ", " + viewModel.selectedCity.countryName)

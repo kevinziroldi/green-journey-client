@@ -239,6 +239,22 @@ class CitiesReviewsViewModel: ObservableObject {
         }
     }
     
+    func getDestinationCity(city: String, country: String) {
+        do {
+            var fetchDescriptor = FetchDescriptor<CityCompleterDataset>(
+                predicate: #Predicate<CityCompleterDataset> {
+                    $0.countryName == country &&
+                    $0.cityName == city }
+            )
+            fetchDescriptor.fetchLimit = 1
+            if let destinationCity = try modelContext.fetch(fetchDescriptor).first {
+                selectedCity = destinationCity
+            }
+        }catch {
+            print("Error retrieving destination city from SwiftData")
+        }
+    }
+    
 }
 
 extension CitiesReviewsViewModel: Hashable {
