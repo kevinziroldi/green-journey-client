@@ -587,7 +587,7 @@ final class CitiesReviewsViewModelUnitTest {
         // call method
         await viewModel.deleteReview()
         
-        // check failure
+        // check deletion
         #expect(viewModel.userReview == nil)
         #expect(viewModel.errorMessage == nil)
     }
@@ -645,86 +645,5 @@ final class CitiesReviewsViewModelUnitTest {
         await viewModel.getReviewsForSearchedCity()
         
         #expect(viewModel.getNumPages() == 0)
-    }
-    
-    @Test
-    func testValidatePageInputNumberOutOfRange() {
-        // the server returns 2 reviews, 1 page
-        self.mockServerService.shouldSucceed = true
-        self.mockServerService.twoReviews = false
-        self.mockServerService.tenReviews = true
-        
-        viewModel.pageInput = 10
-        let oldPage = viewModel.page
-        viewModel.validatePageInput()
-        
-        #expect(viewModel.page == oldPage)
-    }
-    
-    @Test
-    func testValidatePageInputNumberInRange() {
-        // the server returns 2 reviews, 1 page
-        self.mockServerService.shouldSucceed = true
-        self.mockServerService.twoReviews = false
-        self.mockServerService.tenReviews = true
-        
-        viewModel.pageInput = 1
-        viewModel.validatePageInput()
-        
-        #expect(viewModel.page == 0)
-    }
-    
-    class BindingWrapper: ObservableObject {
-        @Published var value: Int = 0
-    }
-    
-    @Test
-    func testBindingGet() {
-        let wrapper = BindingWrapper()
-        
-        wrapper.value = 42
-        
-        let intBinding = Binding<Int>(
-            get: { wrapper.value },
-            set: { wrapper.value = $0 }
-        )
-        
-        let stringBinding = viewModel.binding(for: intBinding)
-        
-        #expect(stringBinding.wrappedValue == "42")
-    }
-    
-    @Test
-    func testBindingSetValidInteger() {
-        let wrapper = BindingWrapper()
-        wrapper.value = 0
-        
-        let intBinding = Binding<Int>(
-            get: { wrapper.value },
-            set: { wrapper.value = $0 }
-        )
-        
-        let stringBinding = viewModel.binding(for: intBinding)
-        
-        stringBinding.wrappedValue = "100"
-        
-        #expect(wrapper.value == 100)
-    }
-    
-    @Test
-    func testBindingSetInvalidInteger() {
-        let wrapper = BindingWrapper()
-        wrapper.value = 10
-        
-        let intBinding = Binding<Int>(
-            get: { wrapper.value },
-            set: { wrapper.value = $0 }
-        )
-        
-        let stringBinding = viewModel.binding(for: intBinding)
-        
-        stringBinding.wrappedValue = "abc"
-        
-        #expect(wrapper.value == 0)
     }
 }

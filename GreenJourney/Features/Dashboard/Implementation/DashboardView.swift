@@ -11,7 +11,7 @@ struct DashboardView: View {
     @State private var legendTapped: Bool = false
     
     init(modelContext: ModelContext, navigationPath: Binding<NavigationPath>, serverService: ServerServiceProtocol, firebaseAuthService: FirebaseAuthServiceProtocol) {
-        _viewModel = StateObject(wrappedValue: DashboardViewModel(modelContext: modelContext, serverService: serverService))
+        _viewModel = StateObject(wrappedValue: DashboardViewModel(modelContext: modelContext))
         _navigationPath = navigationPath
         self.serverService = serverService
         self.firebaseAuthService = firebaseAuthService

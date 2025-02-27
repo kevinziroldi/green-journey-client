@@ -30,14 +30,11 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:GreenJourney.xctestplan"
-            default = "YES">
-         </TestPlanReference>
-         <TestPlanReference
             reference = "container:IntegrationTestPlan.xctestplan">
          </TestPlanReference>
          <TestPlanReference
-            reference = "container:UnitUITestPlan.xctestplan">
+            reference = "container:UnitUITestPlan.xctestplan"
+            default = "YES">
          </TestPlanReference>
       </TestPlans>
       <Testables>

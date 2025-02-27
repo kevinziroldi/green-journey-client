@@ -11,7 +11,7 @@ final class AuthenticationViewModelIntegrationTest {
     private var serverService: ServerService
     private var mockFirebaseAuthService: MockFirebaseAuthService
     
-    init() throws {
+    init() async throws {
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
         let mockContainer = try ModelContainer(for: User.self, Travel.self, Segment.self, CityFeatures.self, CityCompleterDataset.self, configurations: configuration)
         self.mockModelContainer = mockContainer
@@ -20,6 +20,9 @@ final class AuthenticationViewModelIntegrationTest {
         self.serverService = ServerService()
         self.mockFirebaseAuthService = MockFirebaseAuthService()
         self.viewModel = AuthenticationViewModel(modelContext: mockContainer.mainContext, serverService: serverService, firebaseAuthService: mockFirebaseAuthService)
+        
+        // clean database
+        try await serverService.resetTestDatabase()
     }
     
     @Test
@@ -35,8 +38,6 @@ final class AuthenticationViewModelIntegrationTest {
         #expect(viewModel.isLogged == false)
         let users = try mockModelContext.fetch(FetchDescriptor<User>())
         #expect(users.count == 0)
-        
-        // don't reach the server and database
     }
     
     @Test
@@ -57,9 +58,6 @@ final class AuthenticationViewModelIntegrationTest {
         let users = try mockModelContext.fetch(FetchDescriptor<User>())
         #expect(users.count == 0)
         #expect(viewModel.isEmailVerificationActiveSignup == true)
-    
-        // clean database
-        try await serverService.resetTestDatabase()
     }
     
     @Test
@@ -96,9 +94,6 @@ final class AuthenticationViewModelIntegrationTest {
         // check the user is in SwiftData
         users = try mockModelContext.fetch(FetchDescriptor<User>())
         #expect(users.count == 1)
-        
-        // clean database
-        try await serverService.resetTestDatabase()
     }
     
     @Test
@@ -142,9 +137,6 @@ final class AuthenticationViewModelIntegrationTest {
         // check no user in SwiftData
         users = try mockModelContext.fetch(FetchDescriptor<User>())
         #expect(users.count == 0)
-        
-        // clean database
-        try await serverService.resetTestDatabase()
     }
     
     @Test
@@ -218,9 +210,6 @@ final class AuthenticationViewModelIntegrationTest {
         #expect(viewModel.errorMessage == nil)
         users = try mockModelContext.fetch(FetchDescriptor<User>())
         #expect(users.count == 1)
-        
-        // clean database
-        try await serverService.resetTestDatabase()
     }
     
     @Test
@@ -236,9 +225,6 @@ final class AuthenticationViewModelIntegrationTest {
         // check user in SwiftData
         let users = try mockModelContext.fetch(FetchDescriptor<User>())
         #expect(users.count == 1)
-        
-        // clean database
-        try await serverService.resetTestDatabase()
     }
     
     @Test
@@ -275,9 +261,6 @@ final class AuthenticationViewModelIntegrationTest {
         // check user in SwiftData
         users = try mockModelContext.fetch(FetchDescriptor<User>())
         #expect(users.count == 1)
-        
-        // clean database
-        try await serverService.resetTestDatabase()
     }
 }
 
