@@ -23,7 +23,6 @@ struct DestinationPredictionView: View {
                 HStack{
                     Text("Don't know where to go? Ask AI.")
                         .foregroundColor(.gray)
-                        //.padding(.leading, 5)
                     Spacer()
                     Image(systemName: "apple.intelligence")
                         .font(.title)

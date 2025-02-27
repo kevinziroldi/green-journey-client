@@ -210,48 +210,58 @@ struct TravelSearchView: View {
                                 }
                             }
                             Spacer()
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(Color.gray, lineWidth: 2)
-                                HStack (spacing: 0) {
+                            VStack {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 1.5)
                                     Button(action: {
                                         dateTapped = true
                                     }) {
-                                        VStack{
-                                            Text("Outward date")
+                                        HStack{
+                                            Image(systemName: "calendar")
+                                                .font(.title2)
+                                                .padding(.leading, 8)
+                                            Text("Outward")
                                                 .font(.headline)
+                                                .frame(width: 100, alignment: .leading)
                                             Text(viewModel.datePicked.formatted(date: .numeric, time: .shortened))
-                                                .font(.subheadline)
-                                                .padding(.top, 5)
+                                            Spacer()
+                                            
                                         }
                                         .foregroundStyle(colorScheme == .dark ? .white : .black)
                                     }
-                                    .padding(EdgeInsets(top: 10, leading: 25, bottom: 10, trailing: 25))
+                                    .padding(.vertical, 10)
                                     .accessibilityIdentifier("outwardDateButton")
-                                    
-                                    Rectangle()
-                                        .frame(width: 2)
-                                        .foregroundStyle(.gray)
-                                    
+                                }
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 1.5)
+                                        .fill(viewModel.oneWay ? .gray.opacity(0.5) : Color.clear.opacity(0.0))
                                     Button(action:  {
                                         dateReturnTapped = true
                                     }) {
-                                        VStack {
-                                            Text("Return date")
+                                        HStack {
+                                            Image(systemName: "calendar")
+                                                .font(.title2)
+                                            .padding(.leading, 8)
+                                            Text("Return")
                                                 .font(.headline)
+                                                .frame(width: 100, alignment: .leading)
+
                                             Text(viewModel.dateReturnPicked.formatted(date: .numeric, time: .shortened))
                                                 .opacity(viewModel.oneWay ? 0 : 1)
-                                                .font(.subheadline)
-                                                .padding(.top, 5)
+                                            Spacer()
+                                            
                                         }
                                         .foregroundStyle(viewModel.oneWay ? Color.secondary : colorScheme == .dark ? Color.white : Color.black)
                                     }
-                                    .padding(EdgeInsets(top: 10, leading: 25, bottom: 10, trailing: 25))
+                                    .padding(.vertical, 10)
                                     .disabled(viewModel.oneWay)
                                     .accessibilityIdentifier("returnDateButton")
                                 }
                             }
-                            .fixedSize()
+                            .fixedSize(horizontal: false, vertical: true)
+                            .padding(.horizontal, 45)
                             
                             Spacer()
                             
@@ -322,7 +332,7 @@ struct TravelSearchView: View {
                                     }) {
                                         ZStack {
                                             RoundedRectangle(cornerRadius: 20)
-                                                .stroke(.linearGradient(Gradient(colors: [.blue, .green]), startPoint: .bottomLeading, endPoint: .topTrailing), lineWidth: 2)
+                                                .stroke(.linearGradient(Gradient(colors: [.green, .blue]), startPoint: .bottomLeading, endPoint: .topTrailing), lineWidth: 2)
                                             HStack {
                                                 Text("Generate a new prediction")
                                                     .foregroundStyle(.gray)
@@ -358,12 +368,12 @@ struct TravelSearchView: View {
                 }
                 .sheet(isPresented: $dateTapped) {
                     DatePickerView(dateTapped: $dateTapped, title: "Select Outward Date", date: $viewModel.datePicked)
-                        .presentationDetents([.height(340)])
+                        .presentationDetents([.height(530)])
                         .presentationCornerRadius(30)
                         }
                 .sheet(isPresented: $dateReturnTapped) {
                     DatePickerView(dateTapped: $dateReturnTapped, title: "Select Return Date", date: $viewModel.dateReturnPicked)
-                        .presentationDetents([.height(330)])
+                        .presentationDetents([.height(530)])
                         .presentationCornerRadius(30)
                         }
                 
@@ -421,9 +431,8 @@ struct DatePickerView: View {
                 .padding(.top, 30)
                 .accessibilityIdentifier("datePickerTitle")
         }
-            //Spacer()
             DatePicker("", selection: $date, in: Date()...Date.distantFuture)
-                .datePickerStyle(.wheel)
+                .datePickerStyle(.graphical)
                 .labelsHidden()
                 .accessibilityIdentifier("datePickerElement")
                 .padding(.top, 20)
