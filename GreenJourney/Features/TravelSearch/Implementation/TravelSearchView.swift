@@ -52,23 +52,45 @@ struct TravelSearchView: View {
                             .ignoresSafeArea()
                         
                         VStack {
-                            HStack {
-                                Text("Next journey")
-                                    .font(.system(size: 32).bold())
-                                    .padding()
-                                    .fontWeight(.semibold)
-                                    .opacity(triggerAI ? 0 : 1)
-                                    .accessibilityIdentifier("travelSearchViewTitle")
-                                
-                                Spacer()
-                                
-                                NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)) {
-                                    Image(systemName: "person")
-                                        .font(.title)
+                            ZStack {
+                                //button for avoid using AI
+                                if triggerAI {
+                                    Button (action: {
+                                        viewModel.arrival = CityCompleterDataset()
+                                        withAnimation(.bouncy(duration: 0.5)) {
+                                            triggerAI = false
+                                        }
+                                    }) {
+                                        HStack {
+                                            Spacer()
+                                            Image(systemName: "xmark.circle")
+                                                .resizable()
+                                                .foregroundStyle(.red.opacity(0.8))
+                                                .frame(width: 35, height: 35)
+                                        }
+                                        .padding(.top, 30)
+                                        .padding(.horizontal, 30)
+                                        .accessibilityIdentifier("dismissAIButton")
+                                    }
                                 }
-                                .disabled(triggerAI)
-                                .opacity(triggerAI ? 0 : 1)
-                                .accessibilityIdentifier("userPreferencesButton")
+                                HStack {
+                                    Text("Next journey")
+                                        .font(.system(size: 32).bold())
+                                        .padding()
+                                        .fontWeight(.semibold)
+                                        .opacity(triggerAI ? 0 : 1)
+                                        .accessibilityIdentifier("travelSearchViewTitle")
+                                    
+                                    Spacer()
+                                    
+                                    NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)) {
+                                        Image(systemName: "person")
+                                            .font(.title)
+                                    }
+                                    .disabled(triggerAI)
+                                    .opacity(triggerAI ? 0 : 1)
+                                    .accessibilityIdentifier("userPreferencesButton")
+                                }
                             }
                             .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
                             
@@ -254,10 +276,10 @@ struct TravelSearchView: View {
                                 .fixedSize()
                             }
                             .disabled(viewModel.departure.iata == "" || viewModel.arrival.iata == "")
-                            .padding(.top, 30)
+                            .padding(.top, 20)
                             .accessibilityIdentifier("searchButton")
                             
-                            Spacer()
+                            //Spacer()
                             
                             HStack {
                                 if !triggerAI {
@@ -268,7 +290,7 @@ struct TravelSearchView: View {
                                                 viewModel.predictionShown = 0
                                                 viewModel.arrival = firstCity
                                                 viewModel.predictedCities = predictedCities
-                                                withAnimation(.bouncy(duration: 1)) {
+                                                withAnimation(.bouncy(duration: 0.5)) {
                                                     self.triggerAI = true
                                                 }
                                             } else {
@@ -286,40 +308,6 @@ struct TravelSearchView: View {
                                 else {
                                     Spacer()
                                     
-                                    //button for avoid using AI
-                                    Button (action: {
-                                        viewModel.arrival = CityCompleterDataset()
-                                        withAnimation(.bouncy(duration: 1)) {
-                                            triggerAI = false
-                                        }
-                                    }) {
-                                        ZStack {
-                                            RoundedRectangle(cornerRadius: 20)
-                                                .stroke(.gray)
-                                            HStack {
-                                                ZStack{
-                                                    Image(systemName: "apple.intelligence")
-                                                        .resizable()
-                                                        .foregroundStyle(.gray)
-                                                        .frame(width: 30, height: 30)
-                                                    Image(systemName: "xmark")
-                                                        .resizable()
-                                                        .foregroundStyle(.red.opacity(0.8))
-                                                        .frame(width: 30, height: 30)
-                                                }
-                                                .frame(height: 50)
-                                                Text("Dismiss AI")
-                                                    .foregroundStyle(.gray)
-                                            }
-                                            .padding(5)
-                                            .padding(.horizontal, 5)
-                                        }
-                                        .frame(width: geometry.size.width/2 - 20, height: 60)
-                                    }
-                                    .accessibilityIdentifier("dismissAIButton")
-                                    
-                                    Spacer()
-                                    
                                     //button for see another prediction
                                     Button (action: {
                                         if viewModel.predictedCities.count == viewModel.predictionShown + 1 {
@@ -328,7 +316,7 @@ struct TravelSearchView: View {
                                         else {
                                             viewModel.predictionShown += 1
                                         }
-                                        withAnimation(.bouncy(duration: 1)) {
+                                        withAnimation(.bouncy(duration: 0.5)) {
                                             viewModel.arrival = viewModel.predictedCities[viewModel.predictionShown]
                                         }
                                     }) {
@@ -353,14 +341,14 @@ struct TravelSearchView: View {
                                             .padding(5)
                                             .padding(.horizontal, 5)
                                         }
-                                        .frame(width: geometry.size.width/2 - 20, height: 60)
+                                        .frame(width: geometry.size.width/2, height: 60)
                                     }
                                     .accessibilityIdentifier("newGenerationButton")
                                     
                                     Spacer()
                                 }
                             }
-                            .position(x: geometry.size.width/2, y: 100)
+                            .position(x: geometry.size.width/2, y: 50)
                             
                             Spacer()
                             
@@ -429,7 +417,7 @@ struct DatePickerView: View {
                         dateTapped = false
                     }
                     .fontWeight(.bold)
-                    .padding(.trailing, 15)
+                    .padding(.trailing, 20)
                     .padding(.bottom, 15)
                     .accessibilityIdentifier("datePickerDoneButton")
                 }

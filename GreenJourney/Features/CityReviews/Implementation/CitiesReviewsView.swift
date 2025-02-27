@@ -45,9 +45,8 @@ struct CitiesReviewsView: View {
                 VStack {
                     Text("Select a city")
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(EdgeInsets(top: 10, leading: 50, bottom: 0, trailing: 50))
-                        .frame(alignment: .top)
-                        .font(.title2)
+                        .padding(EdgeInsets(top: 10, leading: 30, bottom: 0, trailing: 30))
+                        .font(.title)
                         .fontWeight(.semibold)
                         .accessibilityIdentifier("selectCityText")
                     
@@ -95,7 +94,7 @@ struct CitiesReviewsView: View {
                 
                 // list of cities
                 Text("Top Cities")
-                    .font(.title2)
+                    .font(.title)
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 30)
@@ -111,7 +110,6 @@ struct CitiesReviewsView: View {
                         }
                         .overlay(Color.clear.accessibilityIdentifier("bestCityView_\(index)"))
                 }
-                
                 Spacer()
             }
             .onAppear {
