@@ -322,33 +322,27 @@ struct TravelSearchView: View {
                                     }) {
                                         ZStack {
                                             RoundedRectangle(cornerRadius: 20)
-                                                .stroke(.gray)
+                                                .stroke(.linearGradient(Gradient(colors: [.blue, .green]), startPoint: .bottomLeading, endPoint: .topTrailing), lineWidth: 2)
                                             HStack {
-                                                ZStack{
-                                                    Image(systemName: "apple.intelligence")
-                                                        .resizable()
-                                                        .foregroundStyle(.linearGradient(Gradient(colors: [.blue, .green]), startPoint: .bottomLeading, endPoint: .topTrailing))
-                                                        .frame(width: 25, height: 25)
-                                                    Image(systemName: "arrow.trianglehead.2.clockwise")
-                                                        .resizable()
-                                                        .foregroundStyle(.gray.opacity(0.7))
-                                                        .frame(width: 40, height: 40)
-                                                }
-                                                .frame(height: 50)
-                                                Text("New destination")
+                                                Text("Generate a new prediction")
                                                     .foregroundStyle(.gray)
+                                                    .padding(.leading, 5)
+                                                Spacer()
+                                                Image(systemName: "apple.intelligence")
+                                                    .font(.title)
+                                                    .foregroundStyle(.linearGradient(Gradient(colors: [.blue, .green]), startPoint: .bottomLeading, endPoint: .topTrailing))
                                             }
                                             .padding(5)
                                             .padding(.horizontal, 5)
                                         }
-                                        .frame(width: geometry.size.width/2, height: 60)
+                                        .frame(width: 340, height: 60)
                                     }
                                     .accessibilityIdentifier("newGenerationButton")
                                     
                                     Spacer()
                                 }
                             }
-                            .position(x: geometry.size.width/2, y: 50)
+                            .position(x: geometry.size.width/2, y: 60)
                             
                             Spacer()
                             

@@ -6,50 +6,88 @@ struct EmailVerificationView: View {
     
     var body: some View {
         VStack {
-            Text("Email verification")
-                .font(.largeTitle)
-                .padding(.bottom, 32)
-                .accessibilityIdentifier("emailVerificationTitle")
-        
+            
+            Image("login_logo")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .padding(.top, 50)
+            Text("Verify your email")
+                .font(.system(size: 32).bold())
+                .padding(.horizontal)
+                .fontWeight(.semibold)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
+            VStack {
+                Text("Please, Check your inbox and follow the verification link.")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Text("Once verified, return here to continue.")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityIdentifier("emailSentText")
+            }
+            .padding(.top)
+            .padding(.horizontal)
+            .font(.title3)
+            .fontWeight(.light)
             HStack {
-                Text("""
-We’ve sent a verification email to your inbox. Please check and verify your account. 
-If you didn’t receive it, tap 'Resend Email'.
-"""
-                )
-                .accessibilityIdentifier("emailSentText")
-                
-                Button ("resend email") {
+                Text("Haven't received any email?")
+                    .fontWeight(.thin)
+                Button (action: {
                     Task {
                         await viewModel.sendEmailVerification()
-                        viewModel.resendEmail = "email re-send correctly"
+                        withAnimation() {
+                            viewModel.resendEmail = "email re-send correctly"
+                        }
                     }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                        withAnimation() {
+                            viewModel.resendEmail = nil
+                        }
+                    }
+                }) {
+                    Text("Resend email")
+                        .font(.headline)
+                        .underline()
                 }
-                .buttonStyle(.borderedProminent)
                 .accessibilityIdentifier("resendEmailButton")
             }
+            .padding(.top)
             
-            Button ("Proceed") {
-                Task {
-                    await viewModel.verifyEmail()
-                }
+            if let resendMessage = viewModel.resendEmail {
+                Text(resendMessage)
+                    .padding(.top, 15)
+                    .font(.subheadline)
+                    .fontWeight(.light)
+                    .accessibilityIdentifier("emailSentMessage")
             }
-            .buttonStyle(.borderedProminent)
-            .accessibilityIdentifier("proceedButton")
+            
+            Spacer()
             
             if let errorMessage = viewModel.errorMessage {
                 Text(errorMessage)
                     .foregroundColor(.red)
-                    .font(.caption)
                     .accessibilityIdentifier("errorMessage")
             }
             
-            Spacer()
-        }
-        .onChange(of: viewModel.emailVerified, {
-            if viewModel.emailVerified {
-                navigationPath = NavigationPath()
+            Button (action: {
+                Task {
+                    await viewModel.verifyEmail()
+                }
+            }) {
+                Text("Proceed")
+                    .font(.title2)
+                    .fontWeight(.semibold)
             }
-        })
+            .buttonStyle(.borderedProminent)
+            .accessibilityIdentifier("proceedButton")
+            
+            
+            
+        }
+        .padding(.horizontal)
+        .onChange(of: viewModel.emailVerified, {
+         if viewModel.emailVerified {
+         navigationPath = NavigationPath()
+         }
+         })
     }
 }
