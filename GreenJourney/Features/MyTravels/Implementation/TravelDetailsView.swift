@@ -48,6 +48,7 @@ struct TravelDetailsView: View {
                                                 .foregroundStyle(.green.opacity(0.8))
                                                 .padding(EdgeInsets(top: 15, leading: 15, bottom: 10, trailing: 0))
                                                 .fontWeight(.semibold)
+                                            Spacer()
                                             Button(action: {
                                                 infoTapped = true
                                             }) {
@@ -55,9 +56,9 @@ struct TravelDetailsView: View {
                                                     .foregroundStyle(.gray)
                                                     .font(.title3)
                                             }
+                                            .padding(.trailing)
                                             .accessibilityIdentifier("infoButton")
                                             
-                                            Spacer()
                                         }
                                         Spacer()
                                     }
@@ -136,7 +137,7 @@ struct TravelDetailsView: View {
                                                     .padding(.bottom, 15)
                                                     .accessibilityIdentifier("compensateButton")
                                                 }
-                                                .padding(.top, 10)
+                                                .padding(.vertical)
                                             }
                                             else {
                                                 VStack {
@@ -225,7 +226,7 @@ struct TravelDetailsView: View {
                                     .foregroundStyle(Color(hue: 0.309, saturation: 1.0, brightness: 0.665).opacity(1))
                                 }
                             }
-                            .padding(EdgeInsets(top: 10, leading: 15, bottom: 5, trailing: 15))
+                            .padding()
                             .accessibilityElement(children: .contain)
                             .overlay(Color.clear.accessibilityIdentifier("emissionsRecapFutureTravel"))
                         }
@@ -234,52 +235,29 @@ struct TravelDetailsView: View {
                             .padding(.horizontal)
                             .accessibilityElement(children: .contain)
                             .overlay(Color.clear.accessibilityIdentifier("travelRecap"))
+                            .padding(.vertical)
+                        
                         if travelDetails.travel.confirmed {
                             // if the user hasn't left a review yet
                             let city = travelDetails.getDestinationSegment()?.destinationCity
                             let country = travelDetails.getDestinationSegment()?.destinationCountry
                             InsertReviewButton(viewModel: reviewViewModel, reviewTapped: $reviewTapped, city: city, country: country)
+                                .padding(.vertical)
                             .accessibilityIdentifier("reviewButton")
                         }
-                        
                         HStack {
                             Text(travelDetails.isOneway() ? "Segments" : "Outward")
                                 .font(.title)
                                 .fontWeight(.semibold)
                                 .accessibilityIdentifier("segmentsTitle")
+                                .padding(.horizontal, 15)
                             Spacer()
-                            
-                            Button(action: {
-                                showAlert = true
-                                viewModel.selectedTravel = travelDetails
-                            }) {
-                                Image(systemName: "trash.circle")
-                                    .font(.largeTitle)
-                                    .scaleEffect(1.2)
-                                    .fontWeight(.light)
-                                    .foregroundStyle(.red)
-                            }
-                            .alert(isPresented: $showAlert) {
-                                Alert(
-                                    title: Text("Delete this travel?"),
-                                    message: Text("you cannot undo this action"),
-                                    primaryButton: .cancel(Text("Cancel")) {},
-                                    secondaryButton: .destructive(Text("Delete")) {
-                                        //delete travel
-                                        Task {
-                                            await viewModel.deleteTravel()
-                                            navigationPath.removeLast()
-                                        }
-                                    }
-                                )
-                            }
-                            .accessibilityIdentifier("trashButton")
                         }
-                        .padding(.horizontal, 15)
-                        
+                            
                         SegmentsView(segments: travelDetails.getOutwardSegments())
                             .accessibilityElement(children: .contain)
                             .overlay(Color.clear.accessibilityIdentifier("outwardSegmentsView"))
+                            .padding(.vertical)
                         
                         if !travelDetails.isOneway() {
                             HStack {
@@ -295,6 +273,41 @@ struct TravelDetailsView: View {
                                 .accessibilityElement(children: .contain)
                                 .overlay(Color.clear.accessibilityIdentifier("returnSegmentsView"))
                         }
+                        Button(action: {
+                            showAlert = true
+                            viewModel.selectedTravel = travelDetails
+                        }) {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 20)
+                                    .fill(Color.red.opacity(0.3))
+                                HStack {
+                                    Image(systemName: "trash")
+                                        .font(.headline)
+                                        .foregroundStyle(.red)
+                                    Text("Delete travel")
+                                        .foregroundStyle(.red)
+                                        .font(.headline)
+                                }
+                                .padding()
+                            }
+                            .padding(.bottom)
+                            .fixedSize()
+                        }
+                        .alert(isPresented: $showAlert) {
+                            Alert(
+                                title: Text("Delete this travel?"),
+                                message: Text("you cannot undo this action"),
+                                primaryButton: .cancel(Text("Cancel")) {},
+                                secondaryButton: .destructive(Text("Delete")) {
+                                    //delete travel
+                                    Task {
+                                        await viewModel.deleteTravel()
+                                        navigationPath.removeLast()
+                                    }
+                                }
+                            )
+                        }
+                        .accessibilityIdentifier("trashButton")
                     }
                     .padding(10)
                     
