@@ -167,7 +167,7 @@ struct OptionDetailsView: View {
                 }
             }
             .padding()
-            //TODO manca questo box sopra nel testing
+            .overlay(Color.clear.accessibilityIdentifier("travelRecap"))
             
             SegmentsView(segments: segments)
                 .padding(.top)

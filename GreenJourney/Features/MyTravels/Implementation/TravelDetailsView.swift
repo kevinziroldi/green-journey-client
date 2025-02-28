@@ -56,6 +56,7 @@ struct TravelDetailsView: View {
                                                     .font(.title3)
                                             }
                                             .accessibilityIdentifier("infoButton")
+                                            
                                             Spacer()
                                         }
                                         Spacer()

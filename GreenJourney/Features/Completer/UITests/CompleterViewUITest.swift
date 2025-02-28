@@ -55,13 +55,11 @@ final class CompleterViewUITest: XCTestCase {
         let backButtonTop = app.buttons["backButtonTop"]
         let searchedCityTextField = app.textFields["searchedCityTextField"]
         let listElementMilano = app.otherElements["listElement_MIL_IT"]
-        let backButtonBottom = app.buttons["backButtonBottom"]
         
         // check existence
         XCTAssertTrue(backButtonTop.exists, "backButtonTop is not displayed")
         XCTAssertTrue(searchedCityTextField.exists, "searchedCityTextField is not displayed")
         XCTAssertTrue(listElementMilano.exists, "listElementMilano is not displayed")
-        XCTAssertTrue(backButtonBottom.exists, "backButtonBottom is not displayed")
     }
     
     func testTapBackButtonTop() {
@@ -73,25 +71,6 @@ final class CompleterViewUITest: XCTestCase {
         
         // tap button
         backButtonTop.tap()
-        
-        // UI elements
-        let travelSearchViewTitle = app.staticTexts["travelSearchViewTitle"]
-        let departureButton = app.buttons["departureButton"]
-        
-        // check TravelSearchView displayed
-        XCTAssertTrue(travelSearchViewTitle.waitForExistence(timeout: timer), "TravelSearchView not appeared")
-        XCTAssertTrue(departureButton.exists, "departureButton not appeared")
-    }
-    
-    func testBackButtonBottom() {
-        // UI elements
-        let backButtonBottom = app.buttons["backButtonBottom"]
-        
-        // check existence
-        XCTAssertTrue(backButtonBottom.exists, "backButtonBottom is not displayed")
-        
-        // tap button
-        backButtonBottom.tap()
         
         // UI elements
         let travelSearchViewTitle = app.staticTexts["travelSearchViewTitle"]

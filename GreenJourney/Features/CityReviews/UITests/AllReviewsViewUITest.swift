@@ -68,7 +68,6 @@ final class AllReviewsViewUITest: XCTestCase {
         let buttonPrevious = app.buttons["buttonPrevious"]
         let buttonNext = app.buttons["buttonNext"]
         let buttonLast = app.buttons["buttonLast"]
-        let pageTextField = app.textFields["pageTextField"]
         let doneButton = app.buttons["doneButton"]
         let firstPageReview = app.otherElements["reviewView_11"]
         let secondPageReview = app.otherElements["reviewView_21"]
@@ -80,7 +79,6 @@ final class AllReviewsViewUITest: XCTestCase {
         XCTAssertTrue(buttonPrevious.exists, "buttonPrevious not displayed")
         XCTAssertTrue(buttonNext.exists, "buttonNext not displayed")
         XCTAssertTrue(buttonLast.exists, "buttonLast not displayed")
-        XCTAssertTrue(pageTextField.exists, "pageTextField not displayed")
         XCTAssertFalse(doneButton.exists, "doneButton already displayed")
         
         XCTAssertTrue(firstPageReview.exists, "firstPageReview not displayed")
@@ -174,41 +172,4 @@ final class AllReviewsViewUITest: XCTestCase {
         // check first page
         XCTAssertTrue(firstPageReview.exists, "firstPageReview not displayed")
     }
-    
-    // TODO fix number in text field
-    /*
-    func testMovePageWithNumber() {
-        // UI elements
-        let pageTextField = app.textFields["pageTextField"]
-        let doneButton = app.buttons["doneButton"]
-        let firstPageReview = app.otherElements["reviewView_11"]
-        let secondPageReview = app.otherElements["reviewView_21"]
-        
-        
-        // check first page and text field present
-        XCTAssertTrue(firstPageReview.exists, "firstPageReview not displayed")
-        XCTAssertTrue(pageTextField.exists, "pageTextField not displayed")
-        
-        // type 2 in the text field
-        pageTextField.tap()
-        
-        
-        
-        // TODO clear textfield
-        // or fix tex field
-        
-        
-        
-        pageTextField.typeText("2")
-        
-        // tap done button
-        XCTAssertTrue(doneButton.exists, "doneButton not displayed")
-        
-        // tap done button
-        doneButton.tap()
-        
-        // check page
-        //XCTAssertTrue(secondPageReview.waitForExistence(timeout: timer), "secondPageReview not displayed")
-    }
-     */
 }

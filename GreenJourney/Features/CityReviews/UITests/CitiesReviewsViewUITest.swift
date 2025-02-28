@@ -55,7 +55,6 @@ final class CitiesReviewsViewUITest: XCTestCase {
         let userPreferencesButton = app.buttons["userPreferencesButton"]
         let selectCityText = app.staticTexts["selectCityText"]
         let searchCityReviews = app.buttons["searchCityReviews"]
-        let searchButton = app.buttons["searchButton"]
         let topCitiesTitle = app.staticTexts["topCitiesTitle"]
         let bestCity_0 = app.otherElements["bestCityView_0"]
         let bestCity_1 = app.otherElements["bestCityView_1"]
@@ -66,7 +65,6 @@ final class CitiesReviewsViewUITest: XCTestCase {
         XCTAssertTrue(userPreferencesButton.exists, "userPreferencesButton is not displayed")
         XCTAssertTrue(selectCityText.exists, "selectCityText is not displayed")
         XCTAssertTrue(searchCityReviews.exists, "searchCityReviews is not displayed")
-        XCTAssertTrue(searchButton.exists, "searchButton is not displayed")
         XCTAssertTrue(topCitiesTitle.exists, "topCitiesTitle is not displayed")
         XCTAssertTrue(bestCity_0.exists, "bestCity_0 is not displayed")
         XCTAssertTrue(bestCity_1.exists, "bestCity_1 is not displayed")
@@ -111,7 +109,6 @@ final class CitiesReviewsViewUITest: XCTestCase {
         // UI elements
         let citiesReviewsTitle = app.staticTexts["citiesReviewsTitle"]
         let searchCityReviews = app.buttons["searchCityReviews"]
-        let searchButton = app.buttons["searchButton"]
         
         XCTAssertTrue(citiesReviewsTitle.waitForExistence(timeout: timer), "The citiesReviewsTitle is not displayed")
         XCTAssertTrue(searchCityReviews.exists, "searchCityTextField is not displayed")
@@ -132,11 +129,6 @@ final class CitiesReviewsViewUITest: XCTestCase {
 
         // select Milano
         listElementMilano.tap()
-        
-        XCTAssertTrue(searchButton.waitForExistence(timeout: timer), "searchButton is not displayed")
-        
-        // tap search button
-        searchButton.tap()
         
         // new view
         let selecteCityTitle = app.staticTexts["selecteCityTitle"]
