@@ -16,7 +16,7 @@ struct MainView: View {
     
     // tab for NavigationSplitView (iPad)
     @State private var navigationSplitViewElement: TabViewElement? = TabViewElement.SearchTravel
-    @State private var visibility: NavigationSplitViewVisibility = .all
+    @State private var visibility: NavigationSplitViewVisibility = .detailOnly
     
     init(modelContext: ModelContext, serverService: ServerServiceProtocol, firebaseAuthService: FirebaseAuthServiceProtocol) {
         self.modelContext = modelContext
@@ -105,6 +105,9 @@ struct MainView: View {
                         } else {
                             LoginView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
                                 .onAppear() {
+                                    // remove side bar 
+                                    visibility = .detailOnly
+                                    
                                     // reset tab after logout+login
                                     selectedTab = .SearchTravel
                                 }
