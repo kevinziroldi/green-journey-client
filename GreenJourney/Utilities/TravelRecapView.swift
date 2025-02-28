@@ -1,7 +1,11 @@
 import SwiftUI
 
 struct TravelRecapView: View {
-    let travelDetails: TravelDetails
+    let distance: Float64
+    let duration: String
+    let price: Float64
+    let greenPrice: Float64
+    
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 15)
@@ -33,7 +37,7 @@ struct TravelRecapView: View {
                         .foregroundColor(.primary)
                         .padding(.leading, 5)
                         .frame(width: 120, alignment: .leading)
-                    Text(String(format: "%.1f", travelDetails.computeTotalDistance()) + " Km")
+                    Text(String(format: "%.1f", distance) + " Km")
                         .font(.system(size: 25).bold())
                         .bold()
                         .foregroundColor(.indigo.opacity(0.8))
@@ -61,7 +65,7 @@ struct TravelRecapView: View {
                         .padding(.leading, 5)
                         .frame(width: 120, alignment: .leading)
 
-                    Text(travelDetails.computeTotalDuration())
+                    Text(duration)
                         .font(.system(size: 25).bold())
                         .bold()
                         .foregroundColor(.blue.opacity(0.8))
@@ -90,7 +94,7 @@ struct TravelRecapView: View {
                         .padding(.leading, 5)
                         .frame(width: 120, alignment: .leading)
 
-                    Text(String(format: "%.2f", travelDetails.computeTotalPrice()) + " €")
+                    Text(String(format: "%.2f", price) + " €")
                         .font(.system(size: 25).bold())
                         .bold()
                         .foregroundColor(.red.opacity(0.8))
@@ -118,7 +122,7 @@ struct TravelRecapView: View {
                         .padding(.leading, 5)
                         .frame(width: 120, alignment: .leading)
 
-                    Text(String(format: "%.2f", travelDetails.computeGreenPrice()) + " €")
+                        Text(String(format: "%.2f", greenPrice) + " €")
                         .font(.system(size: 25).bold())
                         .bold()
                         .foregroundColor(.green.opacity(0.8))

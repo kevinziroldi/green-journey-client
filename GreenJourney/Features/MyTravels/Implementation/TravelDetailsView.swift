@@ -229,7 +229,7 @@ struct TravelDetailsView: View {
                             .overlay(Color.clear.accessibilityIdentifier("emissionsRecapFutureTravel"))
                         }
                         
-                        TravelRecapView(travelDetails: travelDetails)
+                        TravelRecapView(distance: travelDetails.computeTotalDistance(), duration: travelDetails.computeTotalDuration(), price: travelDetails.computeTotalPrice(), greenPrice: travelDetails.computeGreenPrice())
                             .padding(.horizontal)
                             .accessibilityElement(children: .contain)
                             .overlay(Color.clear.accessibilityIdentifier("travelRecap"))
