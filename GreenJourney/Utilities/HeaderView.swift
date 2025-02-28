@@ -11,6 +11,7 @@ struct HeaderView: View {
                 Text(from)
                     .font(.title2)
                     .fontWeight(.semibold)
+                    .frame(maxWidth: .infinity)
                     .padding()
                     .accessibilityIdentifier("fromTravelHeader")
                 
@@ -45,6 +46,7 @@ struct HeaderView: View {
                 
                 Text(to)
                     .font(.title2)
+                    .frame(maxWidth: .infinity)
                     .fontWeight(.semibold)
                     .padding()
                     .accessibilityIdentifier("toTravelHeader")

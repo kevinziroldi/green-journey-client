@@ -79,12 +79,15 @@ struct OptionDetailsView: View {
             }
         }
         else {
-            Button ("Save travel") {
+            Button (action: {
                 Task {
                     viewModel.selectedOption.append(contentsOf: segments)
                     await viewModel.saveTravel()
                     navigationPath = NavigationPath()
                 }
+            }) {
+                Text("Save travel")
+                    .font(.title2)
             }
             .buttonStyle(.borderedProminent)
             .accessibilityIdentifier("saveTravelButtonOneWay")

@@ -116,6 +116,7 @@ struct SignUpView: View {
                             }
                             .accessibilityIdentifier("googleSignInButton")
                         }
+                        
                         VStack {
                             Text("Already have an account?")
                                 .fontWeight(.light)
@@ -130,7 +131,7 @@ struct SignUpView: View {
                             }
                             .accessibilityIdentifier("moveToLoginButton")
                         }
-                        .padding(.top, 100)
+                        .padding(.top, 45)
                     }
                     .padding(.top, 20)
                 }
