@@ -226,7 +226,6 @@ final class TravelDetailsViewUITest: XCTestCase {
         XCTAssertTrue(compensateButton.exists, "The compensate button is not displayed")
     }
     
-    /*
     func testReviewButton() {
         navigateToTravelDetailsViewTravelConfirmed()
      
@@ -238,11 +237,9 @@ final class TravelDetailsViewUITest: XCTestCase {
         
         reviewButton.tap()
         
-        // TODO manca view annidata
-        XCTAssertFalse(headerView.waitForExistence(timeout: timer), "The header view is still displayed")
-        // TODO check view annidata
+        let personalReviewTitle = app.staticTexts["personalReviewTitle"]
+        XCTAssertTrue(personalReviewTitle.waitForExistence(timeout: timer), "Review page didn't appear")
     }
-     */
     
     func testTrashButtonAlert() {
         navigateToTravelDetailsViewTravelConfirmed()
