@@ -7,7 +7,7 @@ struct OptionDetailsView: View {
     @Binding var navigationPath: NavigationPath
     
     var body: some View {
-        HeaderView(from: getOptionDeparture(segments), to: getOptionDestination(segments), date: segments.first?.dateTime)
+        HeaderView(from: viewModel.getOptionDeparture(segments), to: viewModel.getOptionDestination(segments), date: segments.first?.dateTime)
         
         Rectangle()
             .frame(height: 1)
@@ -89,54 +89,6 @@ struct OptionDetailsView: View {
             .buttonStyle(.borderedProminent)
             .accessibilityIdentifier("saveTravelButtonOneWay")
         }
-    }
-    
-    func getOptionDeparture (_ travelOption: [Segment]) -> String {
-        if let firstSegment = travelOption.first {
-            return firstSegment.departureCity
-        }
-        else {
-            return ""
-        }
-    }
-    
-    func getOptionDestination (_ travelOption: [Segment]) -> String {
-        if let lastSegment = travelOption.last {
-            return lastSegment.destinationCity
-        }
-        else {
-            return ""
-        }
-    }
-    func computeCo2Emitted(_ travelOption: [Segment]) -> Float64 {
-        var co2Emitted: Float64 = 0.0
-        for segment in travelOption {
-            co2Emitted += segment.co2Emitted
-        }
-        return co2Emitted
-    }
-    
-    func computeTotalPrice (_ travelOption: [Segment]) -> Float64 {
-        var price: Float64 = 0.0
-        for segment in travelOption {
-            price += segment.price
-        }
-        return price
-    }
-    
-    func computeTotalDistance(_ travelOption: [Segment]) -> Float64 {
-        var distance: Float64 = 0.0
-        for segment in travelOption {
-            distance += segment.distance
-        }
-        return distance
-    }
-    func computeTotalDuration (_ travelOption: [Segment]) -> String {
-        var duration = 0
-        for segment in travelOption {
-            duration += segment.duration/1000000000
-        }
-        return UtilitiesFunctions.convertTotalDurationToString(totalDuration: duration)
     }
 }
 
