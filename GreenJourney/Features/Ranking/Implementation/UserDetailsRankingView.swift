@@ -199,6 +199,5 @@ struct UserDetailsRankingView: View {
                 })
             }
         }
-        .background(.green.opacity(0.1))
     }
 }

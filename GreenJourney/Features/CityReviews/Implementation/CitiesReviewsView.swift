@@ -24,7 +24,7 @@ struct CitiesReviewsView: View {
         VStack {
             // header
             HStack {
-                Text("City reviews")
+                Text("Reviews")
                     .font(.system(size: 32).bold())
                     .padding()
                     .fontWeight(.semibold)

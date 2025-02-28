@@ -25,7 +25,7 @@ struct MyTravelsView: View {
     var body: some View {
         VStack {
             HStack {
-                Text("My Travels")
+                Text("My travels")
                     .font(.system(size: 32).bold())
                     .padding()
                     .fontWeight(.semibold)
