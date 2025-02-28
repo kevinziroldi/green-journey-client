@@ -11,11 +11,13 @@ struct EmailVerificationView: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .padding(.top, 50)
+            
             Text("Verify your email")
                 .font(.system(size: 32).bold())
                 .padding(.horizontal)
                 .fontWeight(.semibold)
                 .frame(maxWidth: .infinity, alignment: .leading)
+                .accessibilityIdentifier("emailVerificationTitle")
             
             VStack {
                 Text("Please, Check your inbox and follow the verification link.")
@@ -28,6 +30,7 @@ struct EmailVerificationView: View {
             .padding(.horizontal)
             .font(.title3)
             .fontWeight(.light)
+            
             HStack {
                 Text("Haven't received any email?")
                     .fontWeight(.thin)

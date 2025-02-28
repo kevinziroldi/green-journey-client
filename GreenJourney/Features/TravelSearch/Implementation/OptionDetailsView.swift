@@ -45,6 +45,7 @@ struct OptionDetailsView: View {
             TravelRecapView(distance: viewModel.computeTotalDistance(segments), duration: viewModel.computeTotalDuration(segments), price: viewModel.computeTotalPrice(segments), greenPrice: viewModel.computeGreenPrice(segments))
                 .padding()
                 
+                
             SegmentsView(segments: segments)
                 .padding(.top)
             
