@@ -5,15 +5,18 @@ enum TabViewElement: Hashable, CaseIterable, Identifiable {
     case MyTravels
     case Dashboard
 
-    var id: Self { self } 
+    case UserPreferences
+    
+    var id: Self { self }
 
     var title: String {
         switch self {
         case .Ranking:      return "Ranking"
         case .Reviews:      return "Reviews"
         case .SearchTravel: return "From-To"
-        case .MyTravels:    return "My Travels"
+        case .MyTravels:    return "My travels"
         case .Dashboard:    return "Dashboard"
+        case .UserPreferences: return "User preferences"
         }
     }
     
@@ -24,6 +27,7 @@ enum TabViewElement: Hashable, CaseIterable, Identifiable {
         case .SearchTravel: return "location"
         case .MyTravels:    return "airplane"
         case .Dashboard:    return "house"
+        case .UserPreferences: return "person"
         }
     }
     
@@ -34,6 +38,7 @@ enum TabViewElement: Hashable, CaseIterable, Identifiable {
         case .SearchTravel: return "travelSearchTabViewElement"
         case .MyTravels:    return "myTravelsTabViewElement"
         case .Dashboard:    return "dashboardTabViewElement"
+        case .UserPreferences: return "userPreferencesTabViewElement"
         }
     }
 }
