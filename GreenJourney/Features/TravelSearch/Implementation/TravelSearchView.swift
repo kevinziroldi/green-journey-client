@@ -86,6 +86,7 @@ struct TravelSearchView: View {
                                     NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)) {
                                         Image(systemName: "person")
                                             .font(.title)
+                                            .foregroundStyle(AppColors.mainGreen)
                                     }
                                     .disabled(triggerAI)
                                     .opacity(triggerAI ? 0 : 1)
@@ -140,7 +141,7 @@ struct TravelSearchView: View {
                                                 departureTapped = true
                                             }) {
                                                 Text(viewModel.departure.cityName == "" ? "Insert departure" : viewModel.departure.cityName)
-                                                    .foregroundColor(viewModel.departure.cityName == "" ? .secondary : .blue)
+                                                    .foregroundColor(viewModel.departure.cityName == "" ? .secondary : AppColors.mainGreen)
                                                     .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 0))
                                                     .frame(maxWidth: .infinity, alignment: .leading)
                                                     .font(.title2)
@@ -182,7 +183,7 @@ struct TravelSearchView: View {
                                                 }
                                             }) {
                                                 Text(viewModel.arrival.cityName == "" ? "Insert destination" : viewModel.arrival.cityName)
-                                                    .foregroundColor (getColorDest())
+                                                    .foregroundColor (viewModel.arrival.cityName == "" ? Color.secondary : triggerAI ? Color.white : AppColors.mainGreen)
                                                     .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 0))
                                                     .frame(maxWidth: .infinity, alignment: .leading)
                                                     .font(.title2)
@@ -214,6 +215,7 @@ struct TravelSearchView: View {
                                 ZStack {
                                     RoundedRectangle(cornerRadius: 10)
                                         .stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 1.5)
+                                        .fill(AppColors.mainGreen.opacity(0.4))
                                     Button(action: {
                                         dateTapped = true
                                     }) {
@@ -225,6 +227,7 @@ struct TravelSearchView: View {
                                                 .font(.headline)
                                                 .frame(width: 100, alignment: .leading)
                                             Text(viewModel.datePicked.formatted(date: .numeric, time: .shortened))
+
                                             Spacer()
                                             
                                         }
@@ -236,7 +239,7 @@ struct TravelSearchView: View {
                                 ZStack {
                                     RoundedRectangle(cornerRadius: 10)
                                         .stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 1.5)
-                                        .fill(viewModel.oneWay ? .gray.opacity(0.5) : Color.clear.opacity(0.0))
+                                        .fill(viewModel.oneWay ? Color.gray.opacity(0.5) : AppColors.mainGreen.opacity(0.4))
                                     Button(action:  {
                                         dateReturnTapped = true
                                     }) {
@@ -275,7 +278,7 @@ struct TravelSearchView: View {
                             }) {
                                 ZStack {
                                     RoundedRectangle(cornerRadius: 10)
-                                        .fill((viewModel.departure.iata == "" || viewModel.arrival.iata == "") ? .black.opacity(0.3): .blue)
+                                        .fill((viewModel.departure.iata == "" || viewModel.arrival.iata == "") ? .black.opacity(0.3) : AppColors.mainGreen)
                                     HStack{
                                         Text("Search")
                                             .font(.title)
@@ -382,19 +385,6 @@ struct TravelSearchView: View {
             .onAppear() {
                 viewModel.resetParameters()
             }
-        }
-        
-    }
-    
-    private func getColorDest () -> Color {
-        if viewModel.arrival.cityName == "" {
-            return .secondary
-        }
-        else if triggerAI {
-            return .white
-        }
-        else {
-            return .blue
         }
     }
 }

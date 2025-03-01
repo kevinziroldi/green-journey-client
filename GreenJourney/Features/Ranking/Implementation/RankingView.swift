@@ -33,6 +33,7 @@ struct RankingView: View {
                     NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)) {
                         Image(systemName: "person")
                             .font(.title)
+                            .foregroundStyle(AppColors.mainGreen)
                     }
                     .accessibilityIdentifier("userPreferencesButton")
                 }
@@ -58,8 +59,8 @@ struct RankingView: View {
                     else {
                         ZStack {
                             RoundedRectangle(cornerRadius: 20)
-                                .stroke(colorScheme == .dark ? Color.gray : Color.black, lineWidth: 3)
-                                .fill(colorScheme == .dark ? Color(red: 20/255, green: 20/255, blue: 20/255) : Color(red: 235/255, green: 235/255, blue: 235/255))
+                                .stroke(AppColors.mainGreen, lineWidth: 3)
+                                .fill(Color(uiColor: .systemBackground))
                                 .padding(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
                             VStack{
                                 if viewModel.leaderboardSelected {
@@ -89,12 +90,7 @@ struct RankingView: View {
                 }.fixedSize(horizontal: false, vertical: true)
                 
                 Spacer()
-                Spacer()
-                Spacer()
-                Spacer()
-                Spacer()
-                Spacer()
-                Spacer()
+                
             }
         }
         .onAppear {
@@ -140,16 +136,9 @@ struct LeaderBoardView: View {
             }
             .padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
             .foregroundStyle(.black)
-            .background(
-                Color(red: 167/255, green: 214/255, blue: 165/255)
-                    .clipShape(TopRoundedCorners(cornerRadius: 20))
-            )
+            .background(AppColors.mainGreen.opacity(0.8).clipShape(TopRoundedCorners(cornerRadius: 20)))
             .overlay(Color.clear.accessibilityIdentifier("tableHeader"))
             
-            Rectangle()
-                .frame(height: 1)
-                .foregroundColor(colorScheme == .dark ? Color.gray : Color.black)
-                .padding(EdgeInsets(top: 0, leading: 0, bottom: 5, trailing: 0))
             
             ForEach (leaderboard.indices, id: \.self) { index in
                 NavigationLink (destination: UserDetailsRankingView(viewModel: viewModel, navigationPath: $navigationPath, user: leaderboard[index])) {
@@ -173,10 +162,18 @@ struct LeaderBoardView: View {
                             Spacer()
                             
                             // name
-                            Text(leaderboard[index].firstName + " " + leaderboard[index].lastName.prefix(1) + ".")
-                                .frame(alignment: .leading)
-                                .foregroundStyle(leaderboard[index].userID == users.first?.userID ?? -1 ? .blue : colorScheme == .dark ? .white : .black)
-                                .fontWeight(.semibold)
+                            VStack {
+                                Text(leaderboard[index].firstName)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .foregroundStyle(leaderboard[index].userID == users.first?.userID ?? -1 ? .blue : colorScheme == .dark ? .white : .black)
+                                    .fontWeight(.semibold)
+                                Text(leaderboard[index].lastName)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .foregroundStyle(leaderboard[index].userID == users.first?.userID ?? -1 ? .blue : colorScheme == .dark ? .white : .black)
+                                    .fontWeight(.semibold)
+                            }
+                            .padding(.leading, 30)
+
                             Spacer()
                             
                             // badges
@@ -235,12 +232,18 @@ struct LeaderBoardUserView: View {
                     }
                     
                     Spacer()
-                    
-                    Text(userRanking.firstName + " " + userRanking.lastName.prefix(1) + ".")
-                        .frame(alignment: .leading)
-                        .foregroundStyle(LinearGradient(gradient: Gradient(colors: [.green, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing))
-                        .fontWeight(.semibold)
-                    
+                    VStack {
+                        Text(userRanking.firstName)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .foregroundStyle(LinearGradient(gradient: Gradient(colors: [.green, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing))
+                            .fontWeight(.semibold)
+                        Text(userRanking.lastName)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .foregroundStyle(LinearGradient(gradient: Gradient(colors: [.green, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing))
+                            .fontWeight(.semibold)
+                    }
+                    .padding(.leading, 30)
+
                     Spacer()
                     
                     BadgeView(badges: userRanking.badges, dim: 40, inline: false)
