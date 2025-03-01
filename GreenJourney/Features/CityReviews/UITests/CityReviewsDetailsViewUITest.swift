@@ -102,6 +102,9 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
         userText.tap()
         userText.typeText("This is the review text")
         
+        // close keyboard
+        app.swipeDown()
+        
         // save review
         saveButton.tap()
         
@@ -238,10 +241,11 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
         userText.tap()
         userText.typeText("This is the review text")
         
+        // close keyboard
+        app.swipeDown()
+        
         // save review
-        let saveButtonCenter = saveButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
-        saveButtonCenter.tap()
-        //saveButton.tap()
+        saveButton.tap()
         
         // check page change
         XCTAssertTrue(selecteCityTitle.waitForExistence(timeout: timer), "selectedCityTitle didn't appear")
@@ -290,6 +294,9 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
         userText.tap()
         userText.typeText("add some text")
         
+        // close keyboard
+        app.swipeDown()
+        
         // click save button
         saveButton.tap()
         
@@ -336,7 +343,10 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
         userText.tap()
         userText.typeText("add some text")
         
-        // click save button
+        // close keyboard
+        app.swipeDown()
+        
+        // click cancel button
         let cancelButtonCenter = cancelButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
         cancelButtonCenter.tap()
         
