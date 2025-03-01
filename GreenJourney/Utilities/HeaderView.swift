@@ -7,51 +7,50 @@ struct HeaderView: View {
     var dateArrival: Date?
     var body: some View {
         VStack (spacing: 0){
-            HStack {
-                Text(from)
-                    .font(.title2)
-                    .fontWeight(.semibold)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .accessibilityIdentifier("fromTravelHeader")
-                
-                GeometryReader { geometry in
-                    ZStack {
-                        Path { path in
-                            path.move(to: CGPoint(x: 0, y: geometry.size.height/2))
+                    HStack {
+                    Text(from)
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                        .padding(.horizontal, 5)
+                        .accessibilityIdentifier("fromTravelHeader")
+                    
+                    GeometryReader { geometry in
+                        ZStack {
+                            Path { path in
+                                path.move(to: CGPoint(x: 0, y: geometry.size.height/2))
+                                
+                                path.addQuadCurve(
+                                    to: CGPoint(x: geometry.size.width, y: geometry.size.height/2),
+                                    control: CGPoint(x: geometry.size.width/2, y: -15)
+                                )
+                            }
+                            .stroke(style: StrokeStyle(lineWidth: 4, dash: [15, 8]))
+                            .foregroundColor(.primary)
+                            Circle()
+                                .stroke(Color.black, lineWidth: 5)
+                                .fill(Color.white)
+                                .frame(width: 10, height: 10)
+                                .position(x: geometry.size.width, y: geometry.size.height/2)
                             
-                            path.addQuadCurve(
-                                to: CGPoint(x: geometry.size.width, y: geometry.size.height/2),
-                                control: CGPoint(x: geometry.size.width/2, y: 0)
-                            )
+                            Circle()
+                                .stroke(Color.black, lineWidth: 5)
+                                .fill(Color.white)
+                                .frame(width: 10, height: 10)
+                                .position(x: 0, y: geometry.size.height/2)
                         }
-                        .stroke(style: StrokeStyle(lineWidth: 4, dash: [15, 8]))
-                        .foregroundColor(.primary)
-                        Circle()
-                            .stroke(Color.black, lineWidth: 5)
-                            .fill(Color.white)
-                            .frame(width: 10, height: 10)
-                            .position(x: geometry.size.width, y: geometry.size.height/2)
-                        
-                        Circle()
-                            .stroke(Color.black, lineWidth: 5)
-                            .fill(Color.white)
-                            .frame(width: 10, height: 10)
-                            .position(x: 0, y: geometry.size.height/2)
                     }
-                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                    .frame(minWidth: 100, maxHeight: 50, alignment: .top)
+                    .accessibilityIdentifier("fromToLine")
+                    
+                    Text(to)
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 5)
+                        .accessibilityIdentifier("toTravelHeader")
                 }
-                .frame(height: 75, alignment: .top)
-                .accessibilityIdentifier("fromToLine")
-                
-                Text(to)
-                    .font(.title2)
-                    .frame(maxWidth: .infinity)
-                    .fontWeight(.semibold)
-                    .padding()
-                    .accessibilityIdentifier("toTravelHeader")
-            }
-            .padding(.horizontal, 10)
+            
             
             HStack {
                 if let date = date {
@@ -69,4 +68,6 @@ struct HeaderView: View {
         }
     }
 }
+
+
 
