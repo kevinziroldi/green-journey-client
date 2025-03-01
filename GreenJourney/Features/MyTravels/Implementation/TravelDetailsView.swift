@@ -71,12 +71,13 @@ struct TravelDetailsView: View {
                                                             Button(action: {
                                                                 if plantedTrees < totalTrees {
                                                                     plantedTrees += 1
+                                                                    viewModel.compensatedPrice += 2
                                                                 }
                                                             }) {
                                                                 Image(systemName: "plus.circle")
-                                                                    .font(.system(size: 24))
+                                                                    .font(.system(size: 26))
                                                                     .fontWeight(.light)
-                                                                    .foregroundStyle(colorScheme == .dark ? .white : .black)
+                                                                    .foregroundStyle(plantedTrees == totalTrees ? .secondary : AppColors.mainGreen)
                                                                 
                                                             }
                                                             .disabled(plantedTrees == totalTrees)
@@ -85,17 +86,18 @@ struct TravelDetailsView: View {
                                                             Button(action: {
                                                                 if plantedTrees > 0 {
                                                                     plantedTrees -= 1
+                                                                    viewModel.compensatedPrice -= 2
                                                                 }
                                                             }) {
                                                                 Image(systemName: "minus.circle")
-                                                                    .font(.system(size: 24))
+                                                                    .font(.system(size: 26))
                                                                     .fontWeight(.light)
-                                                                    .foregroundStyle(colorScheme == .dark ? .white : .black)
+                                                                    .foregroundStyle(plantedTrees==viewModel.getPlantedTrees(travelDetails) ? .secondary : AppColors.mainGreen)
                                                             }
                                                             .disabled(plantedTrees==viewModel.getPlantedTrees(travelDetails))
                                                             .accessibilityIdentifier("minusButton")
                                                         }
-                                                        .padding(.leading)
+                                                        .padding(.leading, 20)
                                                         
                                                         Spacer()
                                                         
@@ -109,12 +111,23 @@ struct TravelDetailsView: View {
                                                     }
                                                     .padding(.trailing, 15)
                                                     
-                                                    Text("Price: \(plantedTrees * 2) €")
+                                                    Text("Price: \(viewModel.compensatedPrice) €")
                                                         .padding()
                                                         .font(.system(size: 17))
                                                     
                                                     Button(action: {
-                                                        // func compensation in viewmodel
+                                                        Task {
+                                                            viewModel.compensatedPrice = (plantedTrees-viewModel.getPlantedTrees(travelDetails)) * 2
+                                                            await viewModel.compensateCO2()
+                                                            if (travelDetails.travel.CO2Compensated >= travelDetails.computeCo2Emitted()) {
+                                                                progress = 1.0
+                                                            }
+                                                            else {
+                                                                progress = travelDetails.travel.CO2Compensated / travelDetails.computeCo2Emitted()
+                                                            }
+                                                            totalTrees = viewModel.getNumTrees(travelDetails)
+                                                            plantedTrees = viewModel.getPlantedTrees(travelDetails)
+                                                        }
                                                     }) {
                                                         ZStack {
                                                             RoundedRectangle(cornerRadius: 30)
@@ -165,13 +178,13 @@ struct TravelDetailsView: View {
                                                 SemiCircle()
                                                     .stroke(style: StrokeStyle(lineWidth: 10, lineCap: .round))
                                                     .foregroundColor(.gray.opacity(0.6))
-                                                    .frame(width: 130, height: 110)
+                                                    .frame(width: 140, height: 120)
                                                 
                                                 // semiCircle filled
                                                 SemiCircle(progress: progress)
                                                     .stroke(style: StrokeStyle(lineWidth: 10, lineCap: .round))
                                                     .foregroundStyle(LinearGradient(gradient: Gradient(colors: [.red, .orange, .yellow, .green, .mint]), startPoint: .leading, endPoint: .trailing))
-                                                    .frame(width: 130, height: 110)
+                                                    .frame(width: 140, height: 120)
                                                 
                                                 VStack (spacing: 15){
                                                     Image(systemName: "carbon.dioxide.cloud")
@@ -184,15 +197,16 @@ struct TravelDetailsView: View {
                                                 .foregroundStyle(computeColor(progress))
                                                 
                                             }
-                                            .padding(.top, 30)
+                                            .padding(.top, 25)
                                             
                                             HStack {
                                                 Text(" 0 Kg       ")
                                                 Text(String(format: "%.1f", travelDetails.computeCo2Emitted()) + " Kg")
                                             }
-                                            .padding(.bottom, 5)
+                                            .padding(.bottom, 10)
                                             .font(.headline)
                                         }
+                                        .padding(.trailing, 5)
                                         
                                     }
                                     .padding(EdgeInsets(top: 15, leading: 0, bottom: 5, trailing: 20))

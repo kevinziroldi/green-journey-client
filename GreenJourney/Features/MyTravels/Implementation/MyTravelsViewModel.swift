@@ -36,7 +36,7 @@ class MyTravelsViewModel: ObservableObject {
     
     // selected travel
     @Published var selectedTravel: TravelDetails?
-    @Published var compensatedPrice: Float64 = 0
+    @Published var compensatedPrice: Int = 0
     @Published var travelReviews: [Review] = []
         
     init(modelContext: ModelContext, serverService: ServerServiceProtocol) {
@@ -213,7 +213,7 @@ class MyTravelsViewModel: ObservableObject {
     }
     
     func compensateCO2() async {
-        let newCo2Compensated = co2CompensatedPerEuro * self.compensatedPrice
+        let newCo2Compensated = co2CompensatedPerEuro * Double(self.compensatedPrice)
         
         if let selectedTravel = self.selectedTravel {
             let modifiedTravel = Travel(travelCopy: selectedTravel.travel)
