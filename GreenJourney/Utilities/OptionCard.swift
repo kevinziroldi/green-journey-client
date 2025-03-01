@@ -24,15 +24,16 @@ struct OptionCard: View {
                         Text(viewModel.getOptionDeparture(option))
                             .font(.title3)
                         ZStack {
-                            if (option.count > 1){
-                                if (option.count == 2){
-                                    Text("\(option.count) change")
+                            let changes = viewModel.countChanges(option)
+                            if (changes > 1){
+                                if (changes == 2){
+                                    Text("\(changes) change")
                                         .foregroundStyle(.blue)
                                         .font(.subheadline)
                                         .fontWeight(.semibold)
                                 }
                                 else {
-                                    Text("\(option.count - 1) changes")
+                                    Text("\(changes - 1) changes")
                                         .foregroundStyle(.blue)
                                         .font(.subheadline)
                                         .fontWeight(.semibold)

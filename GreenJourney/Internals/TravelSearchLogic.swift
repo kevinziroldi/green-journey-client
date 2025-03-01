@@ -86,4 +86,14 @@ struct TravelSearchLogic {
         }
         return distance
     }
+    
+    func countChanges(_ option: [Segment]) -> Int {
+        var changes = 0
+        for segment in option {
+            if segment.vehicle != .walk {
+                changes += 1
+            }
+        }
+        return changes
+    }
 }
