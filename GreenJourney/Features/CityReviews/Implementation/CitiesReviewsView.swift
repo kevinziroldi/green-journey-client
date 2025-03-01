@@ -44,12 +44,12 @@ struct CitiesReviewsView: View {
             ScrollView {
                 // city search
                 VStack {
-                    Text("Select a city")
+                    /*Text("Select a city")
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(EdgeInsets(top: 10, leading: 30, bottom: 0, trailing: 30))
                         .font(.title)
                         .fontWeight(.semibold)
-                        .accessibilityIdentifier("selectCityText")
+                        .accessibilityIdentifier("selectCityText")*/
                     
                     ZStack {
                         RoundedRectangle(cornerRadius: 10)
@@ -102,7 +102,7 @@ struct CitiesReviewsView: View {
                     .accessibilityIdentifier("topCitiesTitle")
                 
                 ForEach(viewModel.bestCities.indices, id: \.self) { index in
-                    BestCityView(city: viewModel.bestCities[index], cityReview: viewModel.bestCitiesReviewElements[index])
+                    BestCityView(city: viewModel.bestCities[index], cityReview: viewModel.bestCitiesReviewElements[index], pos: index+1)
                         .padding(.horizontal)
                         .onTapGesture {
                             viewModel.selectedCity = viewModel.bestCities[index]
@@ -134,22 +134,39 @@ struct CitiesReviewsView: View {
 struct BestCityView: View {
     var city: CityCompleterDataset
     var cityReview: CityReviewElement
+    let pos: Int
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)
                 .fill(Color(uiColor: .systemBackground))
                 .shadow(color: .green.opacity(0.3), radius: 5, x: 0, y: 3)
             HStack {
-                Text(city.cityName)
-                    .font(.system(size: 17))
-                    .fontWeight(.semibold)
-                Spacer()
-                Text(String(format: "%.1f", cityReview.getAverageRating()))
-                    .fontWeight(.bold)
-                FiveStarView(rating: cityReview.getAverageRating(), dim: 20, color: .yellow)
+                
+                ZStack {
+                    Circle()
+                        .fill(AppColors.mainGreen.opacity(0.3))
+                        .frame(width: 45, height: 45)
+                    Text("\(pos)")
+                        .foregroundStyle(AppColors.mainGreen)
+                        .font(.system(size: 24))
+                        .fontWeight(.semibold)
+                }
+                VStack {
+                    Text(city.cityName + ", " + city.countryName)
+                        .font(.system(size: 18))
+                        .fontWeight(.semibold)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    HStack {
+                        Text(String(format: "%.1f", cityReview.getAverageRating()))
+                            .fontWeight(.bold)
+                        FiveStarView(rating: cityReview.getAverageRating(), dim: 20, color: .yellow)
+                        Spacer()
+                    }
+                    Spacer()
+                }
+                .padding(.leading, 30)
             }
             .padding()
-            
         }
         .fixedSize(horizontal: false, vertical: true)
         .padding(.horizontal)
