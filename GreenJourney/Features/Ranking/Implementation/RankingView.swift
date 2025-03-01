@@ -177,7 +177,7 @@ struct LeaderBoardView: View {
                             Spacer()
                             
                             // badges
-                            BadgeView(badges: leaderboard[index].badges, dim: 40, inline: false)
+                            BadgeView(badges: leaderboard[index].badges, dim: 40)
                             
                             // score
                             Text(String(format: "%.1f", leaderboard[index].score))
@@ -246,7 +246,7 @@ struct LeaderBoardUserView: View {
 
                     Spacer()
                     
-                    BadgeView(badges: userRanking.badges, dim: 40, inline: false)
+                    BadgeView(badges: userRanking.badges, dim: 40)
                     
                     Text(String(format: "%.1f", userRanking.score))
                         .frame(maxWidth: 90, alignment: .trailing)

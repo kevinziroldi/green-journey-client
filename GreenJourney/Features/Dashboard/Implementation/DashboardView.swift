@@ -62,7 +62,7 @@ struct DashboardView: View {
                             }
                             .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 0))
                             HStack{
-                                BadgeView(badges: viewModel.badges, dim: 80, inline: true)
+                                BadgeView(badges: viewModel.badges, dim: 130)
                                     .padding()
                                 
                             }
