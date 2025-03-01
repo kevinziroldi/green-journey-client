@@ -239,7 +239,9 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
         userText.typeText("This is the review text")
         
         // save review
-        saveButton.tap()
+        let saveButtonCenter = saveButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        saveButtonCenter.tap()
+        //saveButton.tap()
         
         // check page change
         XCTAssertTrue(selecteCityTitle.waitForExistence(timeout: timer), "selectedCityTitle didn't appear")
