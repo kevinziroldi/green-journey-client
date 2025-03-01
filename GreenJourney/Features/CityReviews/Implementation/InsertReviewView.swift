@@ -20,6 +20,7 @@ struct InsertReviewView: View {
                                 editTapped = true
                             }) {
                                 Text("Edit")
+                                    .font(.headline)
                                     .padding(.top, 20)
                             }
                             .accessibilityIdentifier("editButton")
@@ -31,10 +32,12 @@ struct InsertReviewView: View {
                             isPresented = false
                         }) {
                             Text("Cancel")
+                                .font(.headline)
                                 .padding(.top, 20)
                         }
                         .accessibilityIdentifier("cancelButton")
                     }
+                    .padding(.horizontal, 5)
                 }
                 .position(x: geometry.size.width/2, y: 15)
                 
