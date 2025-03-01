@@ -153,4 +153,7 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
     func computeTotalDistance(_ travelOption: [Segment]) -> Float64 {
         return logic.computeTotalDistance(travelOption)
     }
+    func countChanges(_ option: [Segment]) -> Int {
+        return logic.countChanges(option)
+    }
 }
