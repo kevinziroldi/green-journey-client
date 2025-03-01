@@ -83,6 +83,48 @@ struct MainView: View {
                         .accessibilityIdentifier(element.accessibilityIdentifier)
                 }
                 .listStyle(.sidebar)
+                
+                /*
+                 ZStack {
+                     Color(UIColor.systemGroupedBackground)
+                         .edgesIgnoringSafeArea(.all)
+                     
+                     VStack(spacing: 0) {
+                         ScrollView {
+                             VStack(alignment: .leading, spacing: 16) {
+                                 ForEach(TabViewElement.allCases.filter { $0 != .UserPreferences }, id: \.self) { element in
+                                     Button {
+                                         navigationSplitViewElement = element
+                                     } label: {
+                                         Label(element.title, systemImage: element.systemImage)
+                                             .frame(maxWidth: .infinity, alignment: .leading)
+                                             .padding()
+                                             .overlay(
+                                                 RoundedRectangle(cornerRadius: 8)
+                                                     .stroke(Color.secondary, lineWidth: 1)
+                                             )
+                                     }
+                                     .padding(.horizontal)
+                                 }
+                             }
+                             .scrollContentBackground(.hidden)
+                         }
+                         
+                         Spacer()
+                         
+                         Button {
+                             navigationSplitViewElement = .UserPreferences
+                         } label: {
+                             HStack {
+                                 Image(systemName: TabViewElement.UserPreferences.systemImage)
+                                 Text(TabViewElement.UserPreferences.title)
+                             }
+                             .padding()
+                             .frame(maxWidth: .infinity, alignment: .leading)
+                         }
+                     }
+                 }
+                 */
             } detail: {
                 NavigationStack(path: $navigationPath) {
                     Group {
