@@ -5,6 +5,7 @@ import Charts
 struct DashboardView: View {
     @StateObject var viewModel: DashboardViewModel
     @Binding var navigationPath: NavigationPath
+    private var modelContext: ModelContext
     private var serverService: ServerServiceProtocol
     private var firebaseAuthService: FirebaseAuthServiceProtocol
     
@@ -14,6 +15,7 @@ struct DashboardView: View {
         _viewModel = StateObject(wrappedValue: DashboardViewModel(modelContext: modelContext))
         _navigationPath = navigationPath
         self.serverService = serverService
+        self.modelContext = modelContext
         self.firebaseAuthService = firebaseAuthService
     }
     
@@ -21,13 +23,23 @@ struct DashboardView: View {
         ZStack {
             ScrollView {
                 VStack {
-                    Text("Dashboard")
-                        .font(.system(size: 32).bold())
-                        .padding()
-                        .fontWeight(.semibold)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .accessibilityIdentifier("dashboardTitle")
-                    
+                    HStack {
+                        Text("Dashboard")
+                            .font(.system(size: 32).bold())
+                            .padding()
+                            .fontWeight(.semibold)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .accessibilityIdentifier("dashboardTitle")
+                        Spacer()
+                        
+                        NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)) {
+                            Image(systemName: "person")
+                                .font(.title)
+                        }
+                        .accessibilityIdentifier("userPreferencesButton")
+                    }
+                    .padding(5)
+
                     ZStack {
                         RoundedRectangle(cornerRadius: 15)
                             .fill(Color(uiColor: .systemBackground))
