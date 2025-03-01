@@ -84,7 +84,7 @@ struct DashboardView: View {
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             
                             
-                            InfoRow(title: "Co2 emitted", value: String(format: "%.1f", viewModel.co2Emitted) + " Kg", icon: "carbon.dioxide.cloud", color: .red, imageValue: false, imageValueString: nil)
+                            InfoRow(title: "Co2 emitted", value: String(format: "%.0f", viewModel.co2Emitted) + " Kg", icon: "carbon.dioxide.cloud", color: .red, imageValue: false, imageValueString: nil)
                             
                             InfoRow(title: "Co2 compensated", value: String(format: "%.0f", viewModel.co2Compensated) + " Kg", icon: "leaf", color: .green, imageValue: false, imageValueString: nil)
                             

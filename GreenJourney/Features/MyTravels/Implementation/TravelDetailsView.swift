@@ -9,7 +9,8 @@ struct TravelDetailsView: View {
     @State var reviewTapped: Bool = false
     @State var infoTapped: Bool = false
     @State var progress: Float64 = 0
-    @State var showAlert = false
+    @State var showAlertDelete = false
+    @State var showAlertCompensation = false
     @State var plantedTrees = 0
     @State var totalTrees = 0
     
@@ -116,23 +117,12 @@ struct TravelDetailsView: View {
                                                         .font(.system(size: 17))
                                                     
                                                     Button(action: {
-                                                        Task {
-                                                            viewModel.compensatedPrice = (plantedTrees-viewModel.getPlantedTrees(travelDetails)) * 2
-                                                            await viewModel.compensateCO2()
-                                                            if (travelDetails.travel.CO2Compensated >= travelDetails.computeCo2Emitted()) {
-                                                                progress = 1.0
-                                                            }
-                                                            else {
-                                                                progress = travelDetails.travel.CO2Compensated / travelDetails.computeCo2Emitted()
-                                                            }
-                                                            totalTrees = viewModel.getNumTrees(travelDetails)
-                                                            plantedTrees = viewModel.getPlantedTrees(travelDetails)
-                                                        }
+                                                        showAlertCompensation = true
                                                     }) {
                                                         ZStack {
-                                                            RoundedRectangle(cornerRadius: 30)
-                                                                .fill(.green)
-                                                                .stroke(Color(red: 1/255, green: 150/255, blue: 1/255), lineWidth: 2)
+                                                            RoundedRectangle(cornerRadius: 10)
+                                                                .fill(plantedTrees==viewModel.getPlantedTrees(travelDetails) ? Color.secondary.opacity(0.6) : AppColors.mainGreen)
+                                                                .stroke(plantedTrees==viewModel.getPlantedTrees(travelDetails) ? Color.secondary : Color(red: 1/255, green: 150/255, blue: 1/255), lineWidth: 2)
                                                             HStack (spacing: 3) {
                                                                 Image(systemName: "leaf")
                                                                     .font(.title3)
@@ -147,7 +137,31 @@ struct TravelDetailsView: View {
                                                         }
                                                         .fixedSize()
                                                     }
+                                                    .disabled(plantedTrees==viewModel.getPlantedTrees(travelDetails))
                                                     .padding(.bottom, 15)
+                                                    .alert(isPresented: $showAlertCompensation) {
+                                                        Alert(
+                                                            title: Text("Compensate \(viewModel.compensatedPrice)€ for this travel?"),
+                                                            message: Text("you cannot undo this action"),
+                                                            primaryButton: .cancel(Text("Cancel")) {},
+                                                            secondaryButton: .default(Text("Confirm")) {
+                                                                //compensate travel
+                                                                Task {
+                                                                    viewModel.compensatedPrice = (plantedTrees-viewModel.getPlantedTrees(travelDetails)) * 2
+                                                                    await viewModel.compensateCO2()
+                                                                    if (travelDetails.travel.CO2Compensated >= travelDetails.computeCo2Emitted()) {
+                                                                        progress = 1.0
+                                                                    }
+                                                                    else {
+                                                                        progress = travelDetails.travel.CO2Compensated / travelDetails.computeCo2Emitted()
+                                                                    }
+                                                                    totalTrees = viewModel.getNumTrees(travelDetails)
+                                                                    plantedTrees = viewModel.getPlantedTrees(travelDetails)
+                                                                    
+                                                                }
+                                                            }
+                                                        )
+                                                    }
                                                     .accessibilityIdentifier("compensateButton")
                                                 }
                                                 .padding(.vertical)
@@ -288,7 +302,7 @@ struct TravelDetailsView: View {
                                 .overlay(Color.clear.accessibilityIdentifier("returnSegmentsView"))
                         }
                         Button(action: {
-                            showAlert = true
+                            showAlertDelete = true
                             viewModel.selectedTravel = travelDetails
                         }) {
                             ZStack {
@@ -307,7 +321,7 @@ struct TravelDetailsView: View {
                             .padding(.bottom)
                             .fixedSize()
                         }
-                        .alert(isPresented: $showAlert) {
+                        .alert(isPresented: $showAlertDelete) {
                             Alert(
                                 title: Text("Delete this travel?"),
                                 message: Text("you cannot undo this action"),

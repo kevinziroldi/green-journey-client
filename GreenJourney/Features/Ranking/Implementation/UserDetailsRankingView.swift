@@ -143,7 +143,7 @@ struct UserDetailsRankingView: View {
                                         .foregroundColor(.red)
                                 }
                                 
-                                Text(String(format: "%.2f", user.totalCo2Emitted) + " Kg")
+                                Text(String(format: "%.0f", user.totalCo2Emitted) + " Kg")
                                     .font(.system(size: 22).bold())
                                     .bold()
                                     .foregroundColor(.red.opacity(0.8))
@@ -169,7 +169,7 @@ struct UserDetailsRankingView: View {
                                         .foregroundColor(.green)
                                 }
                                 
-                                Text(String(format: "%.2f", user.totalCo2Compensated) + " Kg")
+                                Text(String(format: "%.0f", user.totalCo2Compensated) + " Kg")
                                     .font(.system(size: 20).bold())
                                     .bold()
                                     .foregroundColor(.green.opacity(0.8))
