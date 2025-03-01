@@ -234,23 +234,30 @@ struct TravelDetailsView: View {
                                 RoundedRectangle(cornerRadius: 15)
                                     .fill(Color(uiColor: .systemBackground))
                                     .shadow(color: Color(hue: 0.309, saturation: 1.0, brightness: 0.665).opacity(0.3), radius: 5, x: 0, y: 3)
-                                VStack (spacing:0){
-                                    Text("Co2")
-                                        .font(.title)
-                                        .foregroundStyle(Color(hue: 0.309, saturation: 1.0, brightness: 0.665).opacity(0.8))
-                                        .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 0))
-                                        .fontWeight(.semibold)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                    
-                                    HStack {
+                                HStack (spacing:0){
+                                    VStack {
+                                        Text("Co2")
+                                            .font(.title)
+                                            .foregroundStyle(Color(hue: 0.309, saturation: 1.0, brightness: 0.665).opacity(0.8))
+                                            .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 0))
+                                            .fontWeight(.semibold)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                        
                                         Text("Emission: " + String(format: "%.1f", travelDetails.computeCo2Emitted()) + " Kg")
-                                        Spacer()
+                                            .font(.title2)
+                                            .fontWeight(.semibold)
+                                            .padding()
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .foregroundStyle(Color(hue: 0.309, saturation: 1.0, brightness: 0.665).opacity(1))
+                                    }
+                                    HStack {
                                         Text("#\(viewModel.getNumTrees(travelDetails))")
                                         Image(systemName: "tree")
                                     }
-                                    .font(.title2)
+                                    .font(.title)
                                     .fontWeight(.semibold)
                                     .padding()
+                                    .padding(.trailing)
                                     .foregroundStyle(Color(hue: 0.309, saturation: 1.0, brightness: 0.665).opacity(1))
                                 }
                             }

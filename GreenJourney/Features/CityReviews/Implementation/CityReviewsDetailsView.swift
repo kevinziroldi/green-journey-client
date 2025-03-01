@@ -140,7 +140,7 @@ struct CityReviewsDetailsView: View {
                                         Text("See all reviews")
                                             .font(.headline)
                                             .padding(10)
-                                            .background(Color.blue)
+                                            .background(AppColors.mainGreen)
                                             .foregroundColor(.white)
                                             .cornerRadius(10)
                                     }

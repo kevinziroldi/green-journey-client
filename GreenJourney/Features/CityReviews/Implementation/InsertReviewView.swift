@@ -84,12 +84,14 @@ struct InsertReviewView: View {
                         }
                     }
                 }) {
-                    Text("Save review")
-                        .padding()
-                        .background((viewModel.reviewText.isEmpty) || (viewModel.greenSpacesRating == 0) || (viewModel.localTransportRating == 0) || (viewModel.wasteBinsRating == 0) ? .black.opacity(0.3): Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                        
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill((viewModel.reviewText.isEmpty) || (viewModel.greenSpacesRating == 0) || (viewModel.localTransportRating == 0) || (viewModel.wasteBinsRating == 0) ? .black.opacity(0.3): AppColors.mainGreen)
+                        Text("Save review")
+                            .padding(10)
+                            .foregroundColor(.white)
+                    }
+                    .fixedSize()
                 }
                 .disabled((viewModel.reviewText.isEmpty) || (viewModel.greenSpacesRating == 0) || (viewModel.localTransportRating == 0) || (viewModel.wasteBinsRating == 0))
                 .position(x: geometry.size.width/2, y: 580)

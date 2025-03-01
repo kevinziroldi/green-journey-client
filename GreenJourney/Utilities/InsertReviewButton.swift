@@ -11,8 +11,8 @@ struct InsertReviewButton: View {
             if viewModel.userReview == nil {
                 ZStack{
                     RoundedRectangle(cornerRadius: 20)
-                        .fill(Color.blue)
-                        .shadow(color: .blue.opacity(0.3), radius: 5, x: 0, y: 3)
+                        .fill(AppColors.mainGreen)
+                        .shadow(color: AppColors.mainGreen.opacity(0.3), radius: 5, x: 0, y: 3)
                     HStack{
                         Button(action: {
                             reviewTapped = true
