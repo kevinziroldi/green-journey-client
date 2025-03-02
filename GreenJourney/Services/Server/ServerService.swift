@@ -24,14 +24,11 @@ class ServerService: ServerServiceProtocol {
         request.setValue("Bearer \(firebaseToken)", forHTTPHeaderField: "Authorization")
         request.httpBody = body
         
-        do {
-            let (_, response) = try await URLSession.shared.data(for: request)
-            guard let httpResponse = response as? HTTPURLResponse,
-                  (200...299).contains(httpResponse.statusCode) else {
-                throw URLError(.badServerResponse)
-            }
-        } catch {
-            throw error
+        let session = URLHandler.shared.getURLSession()
+        let (_, response) = try await session.data(for: request)
+        guard let httpResponse = response as? HTTPURLResponse,
+              (200...299).contains(httpResponse.statusCode) else {
+            throw URLError(.badServerResponse)
         }
     }
     
@@ -53,7 +50,8 @@ class ServerService: ServerServiceProtocol {
         decoder.dateDecodingStrategy = .iso8601
         
         // perform request
-        let (data, response) = try await URLSession.shared.data(for: request)
+        let session = URLHandler.shared.getURLSession()
+        let (data, response) = try await session.data(for: request)
         guard let httpResponse = response as? HTTPURLResponse,
                 (200...299).contains(httpResponse.statusCode) else {
             throw URLError(.badServerResponse)
@@ -93,7 +91,8 @@ class ServerService: ServerServiceProtocol {
         request.httpBody = body
         
         // perform request
-        let (data, response) = try await URLSession.shared.data(for: request)
+        let session = URLHandler.shared.getURLSession()
+        let (data, response) = try await session.data(for: request)
         guard let httpResponse = response as? HTTPURLResponse,
                 (200...299).contains(httpResponse.statusCode) else {
             throw URLError(.badServerResponse)
@@ -123,7 +122,8 @@ class ServerService: ServerServiceProtocol {
         let decoder = JSONDecoder()
         
         // perform request
-        let (data, response) = try await URLSession.shared.data(for: request)
+        let session = URLHandler.shared.getURLSession()
+        let (data, response) = try await session.data(for: request)
         guard let httpResponse = response as? HTTPURLResponse,
                 (200...299).contains(httpResponse.statusCode) else {
             throw URLError(.badServerResponse)
@@ -156,7 +156,8 @@ class ServerService: ServerServiceProtocol {
         decoder.dateDecodingStrategy = .iso8601
         
         // perform request
-        let (data, response) = try await URLSession.shared.data(for: request)
+        let session = URLHandler.shared.getURLSession()
+        let (data, response) = try await session.data(for: request)
         guard let httpResponse = response as? HTTPURLResponse,
                 (200...299).contains(httpResponse.statusCode) else {
             throw URLError(.badServerResponse)
@@ -187,7 +188,8 @@ class ServerService: ServerServiceProtocol {
         decoder.dateDecodingStrategy = .iso8601
         
         // perform request
-        let (data, response) = try await URLSession.shared.data(for: request)
+        let session = URLHandler.shared.getURLSession()
+        let (data, response) = try await session.data(for: request)
         guard let httpResponse = response as? HTTPURLResponse,
                 (200...299).contains(httpResponse.statusCode) else {
             throw URLError(.badServerResponse)
@@ -227,7 +229,8 @@ class ServerService: ServerServiceProtocol {
         request.httpBody = body
         
         // perform request
-        let (data, response) = try await URLSession.shared.data(for: request)
+        let session = URLHandler.shared.getURLSession()
+        let (data, response) = try await session.data(for: request)
         guard let httpResponse = response as? HTTPURLResponse,
                 (200...299).contains(httpResponse.statusCode) else {
             throw URLError(.badServerResponse)
@@ -273,7 +276,8 @@ class ServerService: ServerServiceProtocol {
         request.httpBody = body
         
         // perform request
-        let (data, response) = try await URLSession.shared.data(for: request)
+        let session = URLHandler.shared.getURLSession()
+        let (data, response) = try await session.data(for: request)
         guard let httpResponse = response as? HTTPURLResponse,
                 (200...299).contains(httpResponse.statusCode) else {
             throw URLError(.badServerResponse)
@@ -303,7 +307,8 @@ class ServerService: ServerServiceProtocol {
         request.setValue("Bearer \(firebaseToken)", forHTTPHeaderField: "Authorization")
         
         // perform request
-        let (_, response) = try await URLSession.shared.data(for: request)
+        let session = URLHandler.shared.getURLSession()
+        let (_, response) = try await session.data(for: request)
         guard let httpResponse = response as? HTTPURLResponse,
                 (200...299).contains(httpResponse.statusCode) else {
             throw URLError(.badServerResponse)
@@ -326,7 +331,8 @@ class ServerService: ServerServiceProtocol {
         decoder.dateDecodingStrategy = .iso8601
         
         // perform request
-        let (data, response) = try await URLSession.shared.data(for: request)
+        let session = URLHandler.shared.getURLSession()
+        let (data, response) = try await session.data(for: request)
         guard let httpResponse = response as? HTTPURLResponse,
                 (200...299).contains(httpResponse.statusCode) else {
             throw URLError(.badServerResponse)
@@ -368,7 +374,8 @@ class ServerService: ServerServiceProtocol {
         request.httpBody = body
         
         // perform request
-        let (data, response) = try await URLSession.shared.data(for: request)
+        let session = URLHandler.shared.getURLSession()
+        let (data, response) = try await session.data(for: request)
         guard let httpResponse = response as? HTTPURLResponse,
                 (200...299).contains(httpResponse.statusCode) else {
             throw URLError(.badServerResponse)
@@ -402,7 +409,8 @@ class ServerService: ServerServiceProtocol {
         decoder.dateDecodingStrategy = .iso8601
                 
         // perform request
-        let (data, response) = try await URLSession.shared.data(for: request)
+        let session = URLHandler.shared.getURLSession()
+        let (data, response) = try await session.data(for: request)
         guard let httpResponse = response as? HTTPURLResponse,
                 (200...299).contains(httpResponse.statusCode) else {
             throw URLError(.badServerResponse)
@@ -441,7 +449,8 @@ class ServerService: ServerServiceProtocol {
         request.httpBody = body
         
         // perform request
-        let (data, response) = try await URLSession.shared.data(for: request)
+        let session = URLHandler.shared.getURLSession()
+        let (data, response) = try await session.data(for: request)
         guard let httpResponse = response as? HTTPURLResponse,
                 (200...299).contains(httpResponse.statusCode) else {
             throw URLError(.badServerResponse)
@@ -471,14 +480,11 @@ class ServerService: ServerServiceProtocol {
         request.setValue("Bearer \(firebaseToken)", forHTTPHeaderField: "Authorization")
         
         // perform request
-        do {
-            let (_, response) = try await URLSession.shared.data(for: request)
-            guard let httpResponse = response as? HTTPURLResponse,
-                  (200...299).contains(httpResponse.statusCode) else {
-                throw URLError(.badServerResponse)
-            }
-        } catch {
-            throw error
+        let session = URLHandler.shared.getURLSession()
+        let (_, response) = try await session.data(for: request)
+        guard let httpResponse = response as? HTTPURLResponse,
+              (200...299).contains(httpResponse.statusCode) else {
+            throw URLError(.badServerResponse)
         }
     }
     
@@ -493,14 +499,11 @@ class ServerService: ServerServiceProtocol {
         request.httpMethod = "POST"
         
         // perform request
-        do {
-            let (_, response) = try await URLSession.shared.data(for: request)
-            guard let httpResponse = response as? HTTPURLResponse,
-                  (200...299).contains(httpResponse.statusCode) else {
-                throw URLError(.badServerResponse)
-            }
-        } catch {
-            throw error
+        let session = URLHandler.shared.getURLSession()
+        let (_, response) = try await session.data(for: request)
+        guard let httpResponse = response as? HTTPURLResponse,
+              (200...299).contains(httpResponse.statusCode) else {
+            throw URLError(.badServerResponse)
         }
     }
 }
