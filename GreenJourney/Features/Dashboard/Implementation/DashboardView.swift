@@ -179,7 +179,10 @@ struct DashboardView: View {
             
         }
         .onAppear() {
-            viewModel.getUserTravels()
+            Task {
+                await viewModel.getUserFromServer()
+                viewModel.getUserTravels()
+            }
         }
     }
 }
