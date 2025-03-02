@@ -40,29 +40,30 @@ struct Co2DetailsView: View {
                         SemicircleCo2Chart(progress: viewModel.computeProgress(), height: 170, width: 200, lineWidth: 16)
                             .padding(.top, 30)
                         HStack {
-                            Spacer()
                             VStack {
                                 Text("Compensated")
                                     .font(.title2)
                                     .fontWeight(.semibold)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
                                 Text(String(format: "%.0f", viewModel.co2Compensated) + " Kg")
                                     .font(.title3)
                                     .fontWeight(.semibold)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
                             }
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.leading, 20)
                             .foregroundStyle(.green)
-                            Spacer()
                             VStack {
                                 Text("Emitted")
                                     .font(.title2)
                                     .fontWeight(.semibold)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
                                 Text(String(format: "%.0f", viewModel.co2Emitted) + " Kg")
                                     .font(.title3)
                                     .fontWeight(.semibold)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
                             }
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.leading, 40)
                             .foregroundStyle(.red)
-                            Spacer()
                         }
                     }
                     .padding()
