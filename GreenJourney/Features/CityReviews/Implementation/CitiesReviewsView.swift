@@ -20,7 +20,6 @@ struct CitiesReviewsView: View {
     }
     
     var body: some View {
-        
         VStack {
             // header
             HStack {
@@ -44,13 +43,6 @@ struct CitiesReviewsView: View {
             ScrollView {
                 // city search
                 VStack {
-                    /*Text("Select a city")
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(EdgeInsets(top: 10, leading: 30, bottom: 0, trailing: 30))
-                        .font(.title)
-                        .fontWeight(.semibold)
-                        .accessibilityIdentifier("selectCityText")*/
-                    
                     ZStack {
                         RoundedRectangle(cornerRadius: 10)
                             .stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 3)
@@ -100,16 +92,20 @@ struct CitiesReviewsView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 30)
                     .accessibilityIdentifier("topCitiesTitle")
-                
-                ForEach(viewModel.bestCities.indices, id: \.self) { index in
-                    BestCityView(city: viewModel.bestCities[index], cityReview: viewModel.bestCitiesReviewElements[index], pos: index+1)
-                        .padding(.horizontal)
-                        .onTapGesture {
-                            viewModel.selectedCity = viewModel.bestCities[index]
-                            viewModel.selectedCityReviewElement = viewModel.bestCitiesReviewElements[index]
-                            navigationPath.append(NavigationDestination.CityReviewsDetailsView(viewModel))
-                        }
-                        .overlay(Color.clear.accessibilityIdentifier("bestCityView_\(index)"))
+                if viewModel.bestCities.isEmpty {
+                    CircularProgressView()
+                }
+                else {
+                    ForEach(viewModel.bestCities.indices, id: \.self) { index in
+                        BestCityView(city: viewModel.bestCities[index], cityReview: viewModel.bestCitiesReviewElements[index], pos: index+1)
+                            .padding(.horizontal)
+                            .onTapGesture {
+                                viewModel.selectedCity = viewModel.bestCities[index]
+                                viewModel.selectedCityReviewElement = viewModel.bestCitiesReviewElements[index]
+                                navigationPath.append(NavigationDestination.CityReviewsDetailsView(viewModel))
+                            }
+                            .overlay(Color.clear.accessibilityIdentifier("bestCityView_\(index)"))
+                    }
                 }
                 Spacer()
             }

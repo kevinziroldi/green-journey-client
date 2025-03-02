@@ -75,17 +75,26 @@ struct RankingView: View {
                         }
                         .padding(10)
                     }
-                    
                     if viewModel.leaderboardSelected && viewModel.longDistanceRanking.count == 11 {
-                        LeaderBoardUserView(userRanking: viewModel.longDistanceRanking[10])
-                            .accessibilityElement(children: .contain)
-                            .accessibilityIdentifier("leaderboardUserLongDistance")
+                        if viewModel.longDistanceRanking.isEmpty {
+                            CircularProgressView()
+                        }
+                        else {
+                            LeaderBoardUserView(userRanking: viewModel.longDistanceRanking[10])
+                                .accessibilityElement(children: .contain)
+                                .accessibilityIdentifier("leaderboardUserLongDistance")
+                        }
                     }
                     
                     if !viewModel.leaderboardSelected && viewModel.shortDistanceRanking.count == 11 {
-                        LeaderBoardUserView(userRanking: viewModel.shortDistanceRanking[10])
-                            .accessibilityElement(children: .contain)
-                            .accessibilityIdentifier("leaderboardUserShortDistance")
+                        if viewModel.shortDistanceRanking.isEmpty {
+                            CircularProgressView()
+                        }
+                        else {
+                            LeaderBoardUserView(userRanking: viewModel.shortDistanceRanking[10])
+                                .accessibilityElement(children: .contain)
+                                .accessibilityIdentifier("leaderboardUserShortDistance")
+                        }
                     }
                 }.fixedSize(horizontal: false, vertical: true)
                 
