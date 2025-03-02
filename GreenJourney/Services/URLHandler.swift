@@ -1,3 +1,5 @@
+import Foundation
+
 class URLHandler {
     static let shared = URLHandler()
     private var baseURL = ""
@@ -5,7 +7,7 @@ class URLHandler {
     private init() {
         if let serverIP = ConfigReader.serverIP {
             if let serverPort = ConfigReader.serverPort {
-                baseURL = "http://" + serverIP + ":" + serverPort
+                baseURL = "https://" + serverIP + ":" + serverPort
             }else {
                 print("Error loading server port from Config")
             }
@@ -16,5 +18,9 @@ class URLHandler {
     
     func getBaseURL() -> String {
         return baseURL
+    }
+    
+    func getURLSession() -> URLSession {
+        return URLSession(configuration: .default, delegate: InsecureSessionDelegate(), delegateQueue: nil)
     }
 }
