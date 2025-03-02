@@ -230,37 +230,7 @@ struct TravelDetailsView: View {
                             .padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
                         }
                         else {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 15)
-                                    .fill(Color(uiColor: .systemBackground))
-                                    .shadow(color: Color(hue: 0.309, saturation: 1.0, brightness: 0.665).opacity(0.3), radius: 5, x: 0, y: 3)
-                                HStack (spacing:0){
-                                    VStack {
-                                        Text("Co2")
-                                            .font(.title)
-                                            .foregroundStyle(Color(hue: 0.309, saturation: 1.0, brightness: 0.665).opacity(0.8))
-                                            .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 0))
-                                            .fontWeight(.semibold)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                        
-                                        Text("Emission: " + String(format: "%.1f", travelDetails.computeCo2Emitted()) + " Kg")
-                                            .font(.title2)
-                                            .fontWeight(.semibold)
-                                            .padding()
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                            .foregroundStyle(Color(hue: 0.309, saturation: 1.0, brightness: 0.665).opacity(1))
-                                    }
-                                    HStack {
-                                        Text("#\(viewModel.getNumTrees(travelDetails))")
-                                        Image(systemName: "tree")
-                                    }
-                                    .font(.title)
-                                    .fontWeight(.semibold)
-                                    .padding()
-                                    .padding(.trailing)
-                                    .foregroundStyle(Color(hue: 0.309, saturation: 1.0, brightness: 0.665).opacity(1))
-                                }
-                            }
+                            Co2RecapView(co2Emitted: travelDetails.computeCo2Emitted(), numTrees: viewModel.getNumTrees(travelDetails), distance: travelDetails.computeTotalDistance())
                             .padding()
                             .accessibilityElement(children: .contain)
                             .overlay(Color.clear.accessibilityIdentifier("emissionsRecapFutureTravel"))
@@ -277,8 +247,7 @@ struct TravelDetailsView: View {
                             let city = travelDetails.getDestinationSegment()?.destinationCity
                             let country = travelDetails.getDestinationSegment()?.destinationCountry
                             InsertReviewButton(viewModel: reviewViewModel, reviewTapped: $reviewTapped, city: city, country: country)
-                                .padding(.vertical)
-                            .accessibilityIdentifier("reviewButton")
+                                .accessibilityIdentifier("reviewButton")
                         }
                         HStack {
                             Text(travelDetails.isOneway() ? "Segments" : "Outward")
@@ -288,11 +257,11 @@ struct TravelDetailsView: View {
                                 .padding(.horizontal, 15)
                             Spacer()
                         }
+                        .padding(.top)
                             
                         SegmentsView(segments: travelDetails.getOutwardSegments())
                             .accessibilityElement(children: .contain)
                             .overlay(Color.clear.accessibilityIdentifier("outwardSegmentsView"))
-                            .padding(.vertical)
                         
                         if !travelDetails.isOneway() {
                             HStack {

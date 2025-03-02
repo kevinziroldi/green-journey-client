@@ -15,30 +15,7 @@ struct OptionDetailsView: View {
         
         ScrollView {
             
-            ZStack {
-                RoundedRectangle(cornerRadius: 15)
-                    .fill(Color(uiColor: .systemBackground))
-                    .shadow(color: Color(hue: 0.309, saturation: 1.0, brightness: 0.665).opacity(0.3), radius: 5, x: 0, y: 3)
-                VStack (spacing:0){
-                    Text("Co2")
-                        .font(.title)
-                        .foregroundStyle(Color(hue: 0.309, saturation: 1.0, brightness: 0.665).opacity(0.8))
-                        .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 0))
-                        .fontWeight(.semibold)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                    HStack {
-                        Text("Emission: " + String(format: "%.1f", viewModel.computeCo2Emitted(segments)) + " Kg")
-                        Spacer()
-                        Text("#\(viewModel.getNumTrees(segments))")
-                        Image(systemName: "tree")
-                    }
-                    .font(.title2)
-                    .fontWeight(.semibold)
-                    .padding()
-                    .foregroundStyle(Color(hue: 0.309, saturation: 1.0, brightness: 0.665).opacity(1))
-                }
-            }
+            Co2RecapView(co2Emitted: viewModel.computeCo2Emitted(segments), numTrees: viewModel.getNumTrees(segments), distance: viewModel.computeTotalDistance(segments))
             .padding(EdgeInsets(top: 10, leading: 15, bottom: 5, trailing: 15))
             .overlay(Color.clear.accessibilityIdentifier("co2EmittedBox"))
             

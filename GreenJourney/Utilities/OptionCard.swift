@@ -9,7 +9,7 @@ struct OptionCard: View {
         ZStack{
             RoundedRectangle(cornerRadius: 20)
                 .stroke(computeTravelColor(option: option), lineWidth: 5)
-                .fill(colorScheme == .dark ? Color(red: 48/255, green: 48/255, blue: 48/255) : Color.white)
+                .fill(colorScheme == .dark ? Color(red: 48/255, green: 48/255, blue: 48/255) : Color.clear)
             VStack{
                 HStack{
                     Image(systemName: viewModel.findVehicle(option))
@@ -84,7 +84,7 @@ struct OptionCard: View {
         
     }
     
-    func computeTravelColor(option : [Segment]) -> Color {
+    func computeTravelColor(option : [Segment]) -> LinearGradient {
         var co2Emitted = 0.0
         var distance = 0.0
         for segment in option {

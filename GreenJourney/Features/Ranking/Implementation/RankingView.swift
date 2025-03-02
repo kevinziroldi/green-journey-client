@@ -60,8 +60,8 @@ struct RankingView: View {
                         ZStack {
                             RoundedRectangle(cornerRadius: 20)
                                 .stroke(AppColors.mainGreen, lineWidth: 3)
-                                .fill(Color(uiColor: .systemBackground))
-                                .padding(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
+                                //.fill(Color(uiColor: .systemBackground))
+                                .padding(.top, 5)
                             VStack{
                                 if viewModel.leaderboardSelected {
                                     LeaderBoardView(viewModel: viewModel, navigationPath: $navigationPath, leaderboard: Array(viewModel.longDistanceRanking.prefix(10)))
@@ -70,10 +70,10 @@ struct RankingView: View {
                                     LeaderBoardView(viewModel: viewModel, navigationPath: $navigationPath, leaderboard: Array(viewModel.shortDistanceRanking.prefix(10)))
                                 }
                             }
-                            .padding(EdgeInsets(top: 0, leading: 10, bottom: 5, trailing: 10))
                             .accessibilityElement(children: .contain)
                             .accessibilityIdentifier("leaderboard")
                         }
+                        .padding(10)
                     }
                     
                     if viewModel.leaderboardSelected && viewModel.longDistanceRanking.count == 11 {
@@ -217,7 +217,7 @@ struct LeaderBoardUserView: View {
             }
             ZStack {
                 RoundedRectangle(cornerRadius: 20)
-                    .stroke(Color.black, lineWidth: 1.5)
+                    .stroke(AppColors.mainGreen, lineWidth: 3)
                     .shadow(radius: 10)
                 
                 HStack {

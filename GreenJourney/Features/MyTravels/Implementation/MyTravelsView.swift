@@ -187,7 +187,7 @@ struct TravelCard: View {
         ZStack {
             RoundedRectangle(cornerRadius: 20)
                 .stroke(computeTravelColor(travel: travelDetails), lineWidth: 5)
-                .fill(colorScheme == .dark ? Color(red: 35/255, green: 35/255, blue: 35/255) : Color.white)
+                .fill(computeTravelBackColor(travel: travelDetails))
             
             VStack {
                 HStack{
@@ -307,11 +307,14 @@ struct TravelCard: View {
         }
     }
     
-    func computeTravelColor(travel : TravelDetails) -> Color {
+    func computeTravelColor(travel : TravelDetails) -> LinearGradient {
         let co2Emitted = travel.computeCo2Emitted()
         let distance = travel.computeTotalDistance()
         if co2Emitted == 0.0 {
-            return AppColors.ecoGreenTravel
+            return LinearGradient(colors: [.green.opacity(0.7), .blue.opacity(0.7)], startPoint: .bottomLeading, endPoint: .topTrailing)
+        }
+        if travel.travel.CO2Compensated >= travel.computeCo2Emitted() {
+            return LinearGradient(colors: [.green.opacity(0.7), .blue.opacity(0.7)], startPoint: .bottomLeading, endPoint: .topTrailing)
         }
         if distance/co2Emitted > 30 {
             return AppColors.ecoGreenTravel
@@ -320,6 +323,14 @@ struct TravelCard: View {
             return AppColors.ecoYellowTravel
         }
         return AppColors.ecoRedTravel
-        
+    }
+    
+    func computeTravelBackColor(travel: TravelDetails) -> LinearGradient{
+        if travel.travel.CO2Compensated >= travel.computeCo2Emitted() {
+            return LinearGradient(colors: [.green.opacity(0.3), .blue.opacity(0.3)], startPoint: .bottomLeading, endPoint: .topTrailing)
+        }
+        else {
+            return LinearGradient(colors: [.clear], startPoint: .bottomLeading, endPoint: .topTrailing)
+        }
     }
 }
