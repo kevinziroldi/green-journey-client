@@ -67,7 +67,6 @@ class DashboardViewModel: ObservableObject {
                         modelContext.delete(user)
                     }
                     try modelContext.save()
-                    print("Some user is already logged and is being removed, new user loaded to SwiftData")
                 }
             } catch {
                 print("Error while checking number of users: \(error)")
@@ -80,7 +79,6 @@ class DashboardViewModel: ObservableObject {
             // save user in SwiftData
             do {
                 try modelContext.save()
-                print("Saved user (firebaseUID " + user.firebaseUID + ") in SwiftData")
             } catch {
                 print("Error while saving user to SwiftData: \(error)")
                 return
