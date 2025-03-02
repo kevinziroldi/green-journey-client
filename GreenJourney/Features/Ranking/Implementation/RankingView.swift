@@ -64,10 +64,20 @@ struct RankingView: View {
                                 .padding(.top, 5)
                             VStack{
                                 if viewModel.leaderboardSelected {
-                                    LeaderBoardView(viewModel: viewModel, navigationPath: $navigationPath, leaderboard: Array(viewModel.longDistanceRanking.prefix(10)))
+                                    if viewModel.longDistanceRanking.isEmpty {
+                                        CircularProgressView()
+                                            .padding(30)
+                                    } else {
+                                        LeaderBoardView(viewModel: viewModel, navigationPath: $navigationPath, leaderboard: Array(viewModel.longDistanceRanking.prefix(10)))
+                                    }
                                 }
                                 else {
-                                    LeaderBoardView(viewModel: viewModel, navigationPath: $navigationPath, leaderboard: Array(viewModel.shortDistanceRanking.prefix(10)))
+                                    if viewModel.longDistanceRanking.isEmpty {
+                                        CircularProgressView()
+                                            .padding(30)
+                                    } else {
+                                        LeaderBoardView(viewModel: viewModel, navigationPath: $navigationPath, leaderboard: Array(viewModel.shortDistanceRanking.prefix(10)))
+                                    }
                                 }
                             }
                             .accessibilityElement(children: .contain)
