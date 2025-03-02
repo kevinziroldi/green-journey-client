@@ -18,6 +18,10 @@ class DashboardViewModel: ObservableObject {
     @Published var totalDurationString: String = ""
     @Published var distances: [Int: Int] = [:]
     @Published var tripsMade: [Int: Int] = [:]
+    @Published var co2EmittedPerYear: [Int: Double] = [:]
+    @Published var co2CompensatedPerYear: [Int: Double] = [:]
+    @Published var co2PerTransport: [String: Float64] = ["car": 0, "plane": 0, "bus": 0, "train": 0]
+    @Published var distancePerTransport: [String: Float64] = ["car": 0, "bike": 0, "plane": 0, "bus": 0, "train": 0]
     
 
     @Published var totalTripsMade: Int = 0
@@ -29,6 +33,8 @@ class DashboardViewModel: ObservableObject {
         self.serverService = serverService
         self.distances = [getCurrentYear()-3: 0, getCurrentYear()-2: 0, getCurrentYear()-1: 0, getCurrentYear(): 0]
         self.tripsMade = [getCurrentYear()-3: 0, getCurrentYear()-2: 0, getCurrentYear()-1: 0, getCurrentYear(): 0]
+        self.co2EmittedPerYear = [getCurrentYear()-3: 0, getCurrentYear()-2: 0, getCurrentYear()-1: 0, getCurrentYear(): 0]
+        self.co2CompensatedPerYear = [getCurrentYear()-3: 0, getCurrentYear()-2: 0, getCurrentYear()-1: 0, getCurrentYear(): 0]
     }
     
     func getUserBadges() {
@@ -114,6 +120,14 @@ class DashboardViewModel: ObservableObject {
                     totalDistance += travel.computeTotalDistance()
                     for segment in travel.segments {
                         totalDuration += segment.duration/1000000000
+                        if segment.vehicle != Vehicle.walk {
+                            if let currentCo2Emitted = co2PerTransport[segment.vehicle.rawValue] {
+                                co2PerTransport[segment.vehicle.rawValue] = currentCo2Emitted + segment.co2Emitted
+                            }
+                            if let currentDistance = distancePerTransport[segment.vehicle.rawValue] {
+                                distancePerTransport[segment.vehicle.rawValue] = currentDistance + segment.distance
+                            }
+                        }
                     }
                     let continent = getDestContinent(country: travel.getDepartureSegment()?.destinationCountry ?? "")
                     if (!continents.contains(continent)) {
@@ -128,6 +142,12 @@ class DashboardViewModel: ObservableObject {
                     if let currentDistance = distances[travel.getYear()] {
                         distances[travel.getYear()] = currentDistance + Int(travel.computeTotalDistance())
                     }
+                    if let currentCo2Emitted = co2EmittedPerYear[travel.getYear()] {
+                        co2EmittedPerYear[travel.getYear()] = currentCo2Emitted + travel.computeCo2Emitted()
+                    }
+                    if let currentCo2Compensated = co2CompensatedPerYear[travel.getYear()] {
+                        co2CompensatedPerYear[travel.getYear()] = currentCo2Compensated + travel.travel.CO2Compensated
+                    }
                 }
             }
             visitedContinents = continents.count
@@ -140,6 +160,14 @@ class DashboardViewModel: ObservableObject {
         }
     }
     
+    func computeProgress() -> Double {
+        if co2Compensated/co2Emitted > 1 {
+            return 1
+        }
+        else {
+            return co2Compensated/co2Emitted
+        }
+    }
     private func getDestContinent(country: String) -> String {
         var fetchDescriptor = FetchDescriptor<CityCompleterDataset>(
             predicate: #Predicate<CityCompleterDataset> {
@@ -171,6 +199,8 @@ class DashboardViewModel: ObservableObject {
         totalTripsMade = 0
         distances = [getCurrentYear()-3: 0, getCurrentYear()-2: 0, getCurrentYear()-1: 0, getCurrentYear(): 0]
         tripsMade = [getCurrentYear()-3: 0, getCurrentYear()-2: 0, getCurrentYear()-1: 0, getCurrentYear(): 0]
+        co2EmittedPerYear = [getCurrentYear()-3: 0, getCurrentYear()-2: 0, getCurrentYear()-1: 0, getCurrentYear(): 0]
+        co2CompensatedPerYear = [getCurrentYear()-3: 0, getCurrentYear()-2: 0, getCurrentYear()-1: 0, getCurrentYear(): 0]
     }
     
     func keysToString(keys: [Int]) -> [String] {
@@ -188,4 +218,5 @@ class DashboardViewModel: ObservableObject {
         let calendar = Calendar(identifier: .gregorian)
         return calendar.component(.year, from: Date())
     }
+    
 }

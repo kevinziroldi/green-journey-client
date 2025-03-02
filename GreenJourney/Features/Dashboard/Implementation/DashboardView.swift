@@ -40,7 +40,7 @@ struct DashboardView: View {
                         .accessibilityIdentifier("userPreferencesButton")
                     }
                     .padding(5)
-
+                    
                     ZStack {
                         RoundedRectangle(cornerRadius: 15)
                             .fill(Color(uiColor: .systemBackground))
@@ -64,7 +64,6 @@ struct DashboardView: View {
                             HStack{
                                 BadgeView(badges: viewModel.badges, dim: 130)
                                     .padding()
-                                
                             }
                         }
                     }
@@ -102,6 +101,10 @@ struct DashboardView: View {
                                         .foregroundStyle(.teal.opacity(0.8))
                                         .fontWeight(.semibold)
                                     Spacer()
+                                    Image(systemName: "chart.bar.xaxis.ascending")
+                                        .foregroundColor(.teal.opacity(0.8))
+                                        .font(.title2)
+                                        .fontWeight(.bold)
                                     Image(systemName: "chevron.right")
                                         .foregroundColor(.blue)
                                         .font(.title2)
