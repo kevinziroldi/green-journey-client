@@ -44,7 +44,7 @@ class AuthenticationViewModel: ObservableObject {
             if emailVerified == true {
                 let firebaseToken = try await firebaseAuthService.getFirebaseToken()
                 self.errorMessage = nil
-                try await self.getUserFromServer(firebaseToken: firebaseToken)
+                try await self.getUserFromServer()
             } else {
                 self.isEmailVerificationActiveLogin = true
             }
@@ -160,7 +160,7 @@ class AuthenticationViewModel: ObservableObject {
                 
                 // save user to swift data
                 let firebaseToken = try await firebaseAuthService.getFirebaseToken()
-                try await self.getUserFromServer(firebaseToken: firebaseToken)
+                try await self.getUserFromServer()
             } else {
                 self.errorMessage = "Email has not been verified yet"
                 print("Email not verified")
@@ -172,7 +172,7 @@ class AuthenticationViewModel: ObservableObject {
         }
     }
     
-    private func getUserFromServer(firebaseToken: String) async throws {
+    private func getUserFromServer() async throws {
         let user = try await serverService.getUser()
         self.saveUserToSwiftData(serverUser: user)
     }
@@ -230,7 +230,7 @@ class AuthenticationViewModel: ObservableObject {
                     let firebaseUID = try await firebaseAuthService.getFirebaseUID()
                     try await serverService.saveUser(firstName: self.firstName, lastName: self.lastName, firebaseUID: firebaseUID)
                     print("User data posted successfully.")
-                    try await self.getUserFromServer(firebaseToken: firebaseToken)
+                    try await self.getUserFromServer()
                 } catch {
                     self.errorMessage = "Error signing in with Google"
                     print("Error posting user data: \(error.localizedDescription)")
@@ -250,7 +250,7 @@ class AuthenticationViewModel: ObservableObject {
                 }
             } else {
                 // if not new, get from server (login)
-                try await self.getUserFromServer(firebaseToken: firebaseToken)
+                try await self.getUserFromServer()
             }
         } catch {
             self.errorMessage = "Error signing in with Google"

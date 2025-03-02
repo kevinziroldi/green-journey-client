@@ -12,7 +12,7 @@ struct DashboardView: View {
     @State private var legendTapped: Bool = false
     
     init(modelContext: ModelContext, navigationPath: Binding<NavigationPath>, serverService: ServerServiceProtocol, firebaseAuthService: FirebaseAuthServiceProtocol) {
-        _viewModel = StateObject(wrappedValue: DashboardViewModel(modelContext: modelContext))
+        _viewModel = StateObject(wrappedValue: DashboardViewModel(modelContext: modelContext, serverService: serverService))
         _navigationPath = navigationPath
         self.serverService = serverService
         self.modelContext = modelContext
@@ -74,26 +74,48 @@ struct DashboardView: View {
                     ZStack {
                         RoundedRectangle(cornerRadius: 15)
                             .fill(Color(uiColor: .systemBackground))
-                            .shadow(color: .teal.opacity(0.3), radius: 5, x: 0, y: 3)
+                            .shadow(color: .pink.opacity(0.3), radius: 5, x: 0, y: 3)
                         VStack (spacing:0){
-                            Text("Co2 tracker")
+                            Text("Scores")
                                 .font(.title)
-                                .foregroundStyle(.teal.opacity(0.8))
+                                .foregroundStyle(.pink.opacity(0.8))
                                 .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 0))
                                 .fontWeight(.semibold)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             
+                            InfoRow(title: "Short distance", value: String(format: "%.1f", viewModel.shortDistanceScore), icon: "trophy", color: .blue, imageValue: false, imageValueString: nil)
                             
-                            InfoRow(title: "Co2 emitted", value: String(format: "%.0f", viewModel.co2Emitted) + " Kg", icon: "carbon.dioxide.cloud", color: .red, imageValue: false, imageValueString: nil)
-                            
-                            InfoRow(title: "Co2 compensated", value: String(format: "%.0f", viewModel.co2Compensated) + " Kg", icon: "leaf", color: .green, imageValue: false, imageValueString: nil)
-                            
-                            InfoRow(title: "Trees planted", value: "\(viewModel.treesPlanted)", icon: "tree", color: Color(hue: 0.309, saturation: 1.0, brightness: 0.665), imageValue: false, imageValueString: nil)
+                            InfoRow(title: "Long distance", value: String(format: "%.1f", viewModel.longDistanceScore), icon: "trophy", color: .pink, imageValue: false, imageValueString: nil)
                         }
                     }
                     .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
-                    .overlay(Color.clear.accessibilityIdentifier("co2Tracker"))
                     
+                    NavigationLink(destination: Co2DetailsView(viewModel: viewModel)) {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 15)
+                                .fill(Color(uiColor: .systemBackground))
+                                .shadow(color: .teal.opacity(0.3), radius: 5, x: 0, y: 3)
+                            VStack (spacing:0){
+                                HStack {
+                                    Text("Co2 tracker")
+                                        .font(.title)
+                                        .foregroundStyle(.teal.opacity(0.8))
+                                        .fontWeight(.semibold)
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                        .foregroundColor(.blue)
+                                        .font(.title2)
+                                        .fontWeight(.bold)
+                                }
+                                .padding()
+                                InfoRow(title: "Co2 emitted", value: String(format: "%.0f", viewModel.co2Emitted) + " Kg", icon: "carbon.dioxide.cloud", color: .red, imageValue: false, imageValueString: nil)
+                                
+                                InfoRow(title: "Co2 compensated", value: String(format: "%.0f", viewModel.co2Compensated) + " Kg", icon: "leaf", color: .green, imageValue: false, imageValueString: nil)
+                            }
+                        }
+                        .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
+                        .overlay(Color.clear.accessibilityIdentifier("co2Tracker"))
+                    }
                     ZStack {
                         RoundedRectangle(cornerRadius: 15)
                             .fill(Color(uiColor: .systemBackground))
@@ -132,6 +154,7 @@ struct DashboardView: View {
                             InfoRow(title: "", value: viewModel.totalDurationString, icon: "clock", color: .blue, imageValue: false, imageValueString: nil)
                             
                         }
+                        
                     }
                     .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
                     .overlay(Color.clear.accessibilityIdentifier("travelTime"))
@@ -156,7 +179,6 @@ struct DashboardView: View {
             
         }
         .onAppear() {
-            viewModel.getUserBadges()
             viewModel.getUserTravels()
         }
     }
@@ -212,7 +234,8 @@ struct InfoRow: View {
             }
             Spacer()
         }
-        .padding()
+        .padding(.horizontal)
+        .padding(.vertical, 5)
         
     }
 }
