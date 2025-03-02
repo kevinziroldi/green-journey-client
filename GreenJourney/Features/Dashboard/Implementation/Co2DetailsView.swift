@@ -23,7 +23,7 @@ struct Co2DetailsView: View {
                         
                         InfoRow(title: "Co2 compensated", value: String(format: "%.0f", viewModel.co2Compensated) + " Kg", icon: "leaf", color: .green, imageValue: false, imageValueString: nil)
                         
-                        InfoRow(title: "Trees planted", value: "\(viewModel.treesPlanted)", icon: "tree", color: Color(hue: 0.309, saturation: 1.0, brightness: 0.665), imageValue: false, imageValueString: nil)
+                        //InfoRow(title: "Trees planted", value: "\(viewModel.treesPlanted)", icon: "tree", color: Color(hue: 0.309, saturation: 1.0, brightness: 0.665), imageValue: false, imageValueString: nil)
                     }
                 }
                 .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
@@ -41,13 +41,27 @@ struct Co2DetailsView: View {
                             .padding(.top, 30)
                         HStack {
                             Spacer()
-                            Text(String(format: "%.0f", viewModel.co2Compensated) + " Kg")
-                                .font(.title3)
-                                .fontWeight(.semibold)
+                            VStack {
+                                Text("Compensated")
+                                    .font(.title2)
+                                    .fontWeight(.semibold)
+                                Text(String(format: "%.0f", viewModel.co2Compensated) + " Kg")
+                                    .font(.title3)
+                                    .fontWeight(.semibold)
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .foregroundStyle(.green)
                             Spacer()
-                            Text(String(format: "%.0f", viewModel.co2Emitted) + " Kg")
-                                .font(.title3)
-                                .fontWeight(.semibold)
+                            VStack {
+                                Text("Emitted")
+                                    .font(.title2)
+                                    .fontWeight(.semibold)
+                                Text(String(format: "%.0f", viewModel.co2Emitted) + " Kg")
+                                    .font(.title3)
+                                    .fontWeight(.semibold)
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .foregroundStyle(.red)
                             Spacer()
                         }
                     }
@@ -57,12 +71,13 @@ struct Co2DetailsView: View {
                 
                 HorizontalBarChart(keys: viewModel.co2PerTransport.keys.sorted(), data: viewModel.co2PerTransport.keys.sorted().map{viewModel.co2PerTransport[$0]!}, title: "Co2 emitted per vehicle", color: .mint)
                     .padding()
-                DoubleBarChart(element1: "Co2Emitted", keys: viewModel.keysToString(keys: viewModel.co2CompensatedPerYear.keys.sorted()), data1: viewModel.co2EmittedPerYear.keys.sorted().map{viewModel.co2EmittedPerYear[$0]!}, element2: "Co2Compensated", data2: viewModel.co2CompensatedPerYear.keys.sorted().map{viewModel.co2CompensatedPerYear[$0]!}, title: "Co2 emitted/compensated", measureunit: "Kg of CO2")
+                DoubleBarChart(element1: "Co2 Emitted", keys: viewModel.keysToString(keys: viewModel.co2CompensatedPerYear.keys.sorted()), data1: viewModel.co2EmittedPerYear.keys.sorted().map{viewModel.co2EmittedPerYear[$0]!}, element2: "Co2 Compensated", data2: viewModel.co2CompensatedPerYear.keys.sorted().map{viewModel.co2CompensatedPerYear[$0]!}, title: "Co2 per year", measureunit: "Kg of CO2")
                     .padding()
                 
-                BarChartView(title: "Trees planted per year", value: "\(viewModel.treesPlanted)", data: viewModel.co2CompensatedPerYear.keys.sorted().map{Int(viewModel.co2CompensatedPerYear[$0]!/75)}, labels: viewModel.keysToString(keys: viewModel.co2CompensatedPerYear.keys.sorted()), color: AppColors.mainGreen)
+                BarChartView(title: "Planted trees", value: "\(viewModel.treesPlanted)", data: viewModel.co2CompensatedPerYear.keys.sorted().map{Int(viewModel.co2CompensatedPerYear[$0]!/75)}, labels: viewModel.keysToString(keys: viewModel.co2CompensatedPerYear.keys.sorted()), color: AppColors.mainGreen)
                     .padding()
             }
+            .padding(.horizontal)
         }
     }
 }

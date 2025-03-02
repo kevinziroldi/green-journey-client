@@ -106,42 +106,49 @@ struct DashboardView: View {
                                         .font(.title2)
                                         .fontWeight(.bold)
                                     Image(systemName: "chevron.right")
-                                        .foregroundColor(.blue)
+                                        .foregroundColor(.teal.opacity(0.8))
                                         .font(.title2)
                                         .fontWeight(.bold)
                                 }
                                 .padding()
-                                InfoRow(title: "Co2 emitted", value: String(format: "%.0f", viewModel.co2Emitted) + " Kg", icon: "carbon.dioxide.cloud", color: .red, imageValue: false, imageValueString: nil)
+                                InfoRow(title: "Co2 emitted", value: String(format: "%.0f", viewModel.co2Emitted) + " Kg", icon: "carbon.dioxide.cloud", color: .teal, imageValue: false, imageValueString: nil)
                                 
-                                InfoRow(title: "Co2 compensated", value: String(format: "%.0f", viewModel.co2Compensated) + " Kg", icon: "leaf", color: .green, imageValue: false, imageValueString: nil)
+                                InfoRow(title: "Co2 compensated", value: String(format: "%.0f", viewModel.co2Compensated) + " Kg", icon: "leaf", color: .teal, imageValue: false, imageValueString: nil)
                             }
                         }
                         .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
                         .overlay(Color.clear.accessibilityIdentifier("co2Tracker"))
                     }
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 15)
-                            .fill(Color(uiColor: .systemBackground))
-                            .shadow(color: .indigo.opacity(0.3), radius: 5, x: 0, y: 3)
-                        VStack (spacing:0){
-                            Text("Recap")
-                                .font(.title)
-                                .foregroundStyle(.indigo.opacity(0.8))
-                                .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 0))
-                                .fontWeight(.semibold)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            
-                            InfoRow(title: "Distance made", value: String(format: "%.0f", viewModel.totalDistance) + " Km", icon: "road.lanes", color: .indigo, imageValue: false, imageValueString: nil)
-                            
-                            InfoRow(title: "Most chosen vehicle", value: "", icon: "figure.wave", color: .indigo, imageValue: true, imageValueString: viewModel.mostChosenVehicle)
-                            
-                            InfoRow(title: "Continents visited", value: "\(viewModel.visitedContinents) / 5", icon: "globe", color: .indigo, imageValue: false, imageValueString: nil)
-                            
+                    NavigationLink(destination: GeneralDetailsView(viewModel: viewModel)) {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 15)
+                                .fill(Color(uiColor: .systemBackground))
+                                .shadow(color: .indigo.opacity(0.3), radius: 5, x: 0, y: 3)
+                            VStack (spacing:0){
+                                HStack {
+                                    Text("Recap")
+                                        .font(.title)
+                                        .foregroundStyle(.indigo.opacity(0.8))
+                                        .fontWeight(.semibold)
+                                    Spacer()
+                                    Image(systemName: "chart.bar.xaxis.ascending")
+                                        .foregroundColor(.indigo.opacity(0.8))
+                                        .font(.title2)
+                                        .fontWeight(.bold)
+                                    Image(systemName: "chevron.right")
+                                        .foregroundColor(.indigo.opacity(0.8))
+                                        .font(.title2)
+                                        .fontWeight(.bold)
+                                }
+                                .padding()
+                                InfoRow(title: "Distance made", value: String(format: "%.0f", viewModel.totalDistance) + " Km", icon: "road.lanes", color: .indigo, imageValue: false, imageValueString: nil)
+                                InfoRow(title: "", value: viewModel.totalDurationString, icon: "clock", color: .indigo, imageValue: false, imageValueString: nil)
+                                
+                            }
                         }
+                        .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
+                        .overlay(Color.clear.accessibilityIdentifier("travelsRecap"))
                     }
-                    .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
-                    .overlay(Color.clear.accessibilityIdentifier("travelsRecap"))
-                    
                     ZStack {
                         RoundedRectangle(cornerRadius: 15)
                             .fill(Color(uiColor: .systemBackground))
@@ -154,21 +161,14 @@ struct DashboardView: View {
                                 .fontWeight(.semibold)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             
-                            InfoRow(title: "", value: viewModel.totalDurationString, icon: "clock", color: .blue, imageValue: false, imageValueString: nil)
-                            
+                            InfoRow(title: "Continents visited", value: "\(viewModel.visitedContinents) / 5", icon: "globe", color: .indigo, imageValue: false, imageValueString: nil)
+
                         }
                         
                     }
                     .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
                     .overlay(Color.clear.accessibilityIdentifier("travelTime"))
                     
-                    BarChartView(title: "Trips completed", value: "\(viewModel.totalTripsMade)", data: viewModel.tripsMade.keys.sorted().map{viewModel.tripsMade[$0]!}, labels: viewModel.keysToString(keys: viewModel.tripsMade.keys.sorted()) , color: .pink.opacity(0.8))
-                        .padding()
-                        .overlay(Color.clear.accessibilityIdentifier("tripsCompleted"))
-                    
-                    BarChartView(title: "Distance traveled (Km)", value: "", data: viewModel.distances.keys.sorted().map{viewModel.distances[$0]!}, labels: viewModel.keysToString(keys: viewModel.distances.keys.sorted()), color: .indigo.opacity(0.8))
-                        .padding()
-                        .overlay(Color.clear.accessibilityIdentifier("distanceTraveled"))
                     
                 }
                 .padding(.horizontal)

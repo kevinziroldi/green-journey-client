@@ -189,8 +189,8 @@ struct UserDetailsRankingView: View {
                     
                     Spacer()
                 }
+                .padding()
             }
-            .padding()
             .blur(radius: (legendTapped) ? 1 : 0)
             
             if legendTapped {
