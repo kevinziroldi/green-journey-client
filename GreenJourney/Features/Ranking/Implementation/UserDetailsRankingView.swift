@@ -53,7 +53,7 @@ struct UserDetailsRankingView: View {
                             .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 0))
                             
                             HStack{
-                                BadgeView(badges: user.badges, dim: 130)
+                                BadgeView(badges: user.badges, dim: 130, inline: false)
                                     .padding()
                             }
                             .overlay(Color.clear.accessibilityIdentifier("userBadges"))

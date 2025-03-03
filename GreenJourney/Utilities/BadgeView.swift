@@ -3,11 +3,15 @@ import SwiftUI
 struct BadgeView: View {
     var badges: [Badge]
     var dim: CGFloat
+    var inline: Bool
     
     var body: some View {
         let allBadges = getBestBadges(badges: badges)
-        VStack(spacing: 5) { // Due righe
-            HStack(spacing: 5) { // Prima riga
+        
+        if inline {
+            // display on 1 row
+            
+            HStack(spacing: 5) {
                 Image(allBadges[0].rawValue)
                     .resizable()
                     .scaledToFit()
@@ -16,8 +20,6 @@ struct BadgeView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: dim, height: dim)
-            }
-            HStack(spacing: 5) { // Seconda riga
                 Image(allBadges[2].rawValue)
                     .resizable()
                     .scaledToFit()
@@ -26,6 +28,31 @@ struct BadgeView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: dim, height: dim)
+            }
+        } else {
+            // display on 2 rows
+            
+            VStack(spacing: 5) {
+                HStack(spacing: 5) {
+                    Image(allBadges[0].rawValue)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: dim, height: dim)
+                    Image(allBadges[1].rawValue)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: dim, height: dim)
+                }
+                HStack(spacing: 5) { // Seconda riga
+                    Image(allBadges[2].rawValue)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: dim, height: dim)
+                    Image(allBadges[3].rawValue)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: dim, height: dim)
+                }
             }
         }
     }

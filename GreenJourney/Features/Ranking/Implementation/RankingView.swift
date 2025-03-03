@@ -20,106 +20,56 @@ struct RankingView: View {
     }
     
     var body: some View {
-        ScrollView {
-            VStack {
+        if horizontalSizeClass == .compact {
+            ScrollView {
                 HStack {
-                    Text("Ranking")
-                        .font(.system(size: 32).bold())
-                        .padding()
-                        .fontWeight(.semibold)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .accessibilityIdentifier("rankingTitle")
+                    // title
+                    RankingTitleView()
                     
                     Spacer()
                     
-                    NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)) {
-                        Image(systemName: "person")
-                            .font(.title)
-                            .foregroundStyle(AppColors.mainGreen)
-                    }
-                    .accessibilityIdentifier("userPreferencesButton")
+                    // user preferences button
+                    UserPreferencesButton(navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
                 }
                 .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
                 
-                Picker("", selection: $viewModel.leaderboardSelected) {
-                    Text("Long distance").tag(true)
-                    Text("Short distance").tag(false)
-                }
-                .pickerStyle(.segmented)
-                .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
-                .accessibilityIdentifier("shortLongDistanceControl")
-                
-                Spacer()
-                VStack{
-                    if let errorMessage = viewModel.errorMessage {
-                        Text(errorMessage)
-                            .font(.headline)
-                            .fontWeight(.light)
-                            .foregroundStyle(.red)
-                            .accessibilityIdentifier("errorMessage")
-                    }
-                    else {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 20)
-                                .stroke(AppColors.mainGreen, lineWidth: 3)
-                                //.fill(Color(uiColor: .systemBackground))
-                                .padding(.top, 5)
-                            VStack{
-                                if viewModel.leaderboardSelected {
-                                    if viewModel.longDistanceRanking.isEmpty {
-                                        CircularProgressView()
-                                            .padding(30)
-                                    } else {
-                                        LeaderBoardView(viewModel: viewModel, navigationPath: $navigationPath, leaderboard: Array(viewModel.longDistanceRanking.prefix(10)))
-                                    }
-                                }
-                                else {
-                                    if viewModel.longDistanceRanking.isEmpty {
-                                        CircularProgressView()
-                                            .padding(30)
-                                    } else {
-                                        LeaderBoardView(viewModel: viewModel, navigationPath: $navigationPath, leaderboard: Array(viewModel.shortDistanceRanking.prefix(10)))
-                                    }
-                                }
-                            }
-                            .accessibilityElement(children: .contain)
-                            .accessibilityIdentifier("leaderboard")
-                        }
-                        .padding(10)
-                        .frame(maxWidth: horizontalSizeClass == .regular ? 600 : .infinity)
-                    }
-                    if viewModel.leaderboardSelected && viewModel.longDistanceRanking.count == 11 {
-                        if viewModel.longDistanceRanking.isEmpty {
-                            CircularProgressView()
-                        }
-                        else {
-                            LeaderBoardUserView(userRanking: viewModel.longDistanceRanking[10])
-                                .accessibilityElement(children: .contain)
-                                .accessibilityIdentifier("leaderboardUserLongDistance")
-                                .frame(maxWidth: horizontalSizeClass == .regular ? 600 : .infinity)
-                        }
-                    }
-                    
-                    if !viewModel.leaderboardSelected && viewModel.shortDistanceRanking.count == 11 {
-                        if viewModel.shortDistanceRanking.isEmpty {
-                            CircularProgressView()
-                        }
-                        else {
-                            LeaderBoardUserView(userRanking: viewModel.shortDistanceRanking[10])
-                                .accessibilityElement(children: .contain)
-                                .accessibilityIdentifier("leaderboardUserShortDistance")
-                                .frame(maxWidth: horizontalSizeClass == .regular ? 600 : .infinity)
-                        }
-                    }
-                }.fixedSize(horizontal: false, vertical: true)
+                // picker
+                LeaderBoardPickerView(viewModel: viewModel)
                 
                 Spacer()
                 
+                
+                LeaderBoardsView(viewModel: viewModel, navigationPath: $navigationPath)
+                
+                Spacer()
             }
-        }
-        .onAppear {
-            Task {
-                await viewModel.fecthRanking()
+            .onAppear {
+                Task {
+                    await viewModel.fecthRanking()
+                }
+            }
+        } else {
+            ScrollView {
+                // title
+                RankingTitleView()
+                    .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
+                
+                // picker
+                LeaderBoardPickerView(viewModel: viewModel)
+                    .frame(maxWidth: 300)
+                
+                Spacer()
+                
+                // LeaderBoards
+                LeaderBoardsView(viewModel: viewModel, navigationPath: $navigationPath)
+                    .frame(maxWidth: 700)
+                
+                Spacer()
+            }
+            .onAppear {
+                Task {
+                    await viewModel.fecthRanking()
+                }
             }
         }
     }
@@ -201,7 +151,7 @@ struct LeaderBoardView: View {
                             Spacer()
                             
                             // badges
-                            BadgeView(badges: leaderboard[index].badges, dim: 40)
+                            BadgeView(badges: leaderboard[index].badges, dim: 40, inline: false)
                             
                             // score
                             Text(String(format: "%.1f", leaderboard[index].score))
@@ -270,7 +220,7 @@ struct LeaderBoardUserView: View {
 
                     Spacer()
                     
-                    BadgeView(badges: userRanking.badges, dim: 40)
+                    BadgeView(badges: userRanking.badges, dim: 40, inline: false)
                     
                     Text(String(format: "%.1f", userRanking.score))
                         .frame(maxWidth: 90, alignment: .trailing)
@@ -314,3 +264,114 @@ struct TopRoundedCorners: Shape {
     }
 }
 
+struct RankingTitleView: View {
+    var body: some View {
+        Text("Ranking")
+            .font(.system(size: 32).bold())
+            .padding()
+            .fontWeight(.semibold)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .accessibilityIdentifier("rankingTitle")
+    }
+}
+
+struct UserPreferencesButton: View {
+    @Environment(\.modelContext) private var modelContext
+    @Binding var navigationPath: NavigationPath
+    var serverService: ServerServiceProtocol
+    var firebaseAuthService: FirebaseAuthServiceProtocol
+    
+    var body: some View {
+        NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)) {
+            Image(systemName: "person")
+                .font(.title)
+                .foregroundStyle(AppColors.mainGreen)
+        }
+        .accessibilityIdentifier("userPreferencesButton")
+    }
+}
+
+struct LeaderBoardPickerView: View {
+    @ObservedObject var viewModel: RankingViewModel
+    
+    var body: some View {
+        Picker("", selection: $viewModel.leaderboardSelected) {
+            Text("Long distance").tag(true)
+            Text("Short distance").tag(false)
+        }
+        .pickerStyle(.segmented)
+        .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
+        .accessibilityIdentifier("shortLongDistanceControl")
+    }
+}
+
+struct LeaderBoardsView: View {
+    @ObservedObject var viewModel: RankingViewModel
+    @Binding var navigationPath: NavigationPath
+    
+    var body: some View {
+        VStack{
+            if let errorMessage = viewModel.errorMessage {
+                Text(errorMessage)
+                    .font(.headline)
+                    .fontWeight(.light)
+                    .foregroundStyle(.red)
+                    .accessibilityIdentifier("errorMessage")
+            }
+            else {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 20)
+                        .stroke(AppColors.mainGreen, lineWidth: 3)
+                        //.fill(Color(uiColor: .systemBackground))
+                        .padding(.top, 5)
+                    VStack{
+                        if viewModel.leaderboardSelected {
+                            if viewModel.longDistanceRanking.isEmpty {
+                                CircularProgressView()
+                                    .padding(30)
+                            } else {
+                                LeaderBoardView(viewModel: viewModel, navigationPath: $navigationPath, leaderboard: Array(viewModel.longDistanceRanking.prefix(10)))
+                            }
+                        }
+                        else {
+                            if viewModel.longDistanceRanking.isEmpty {
+                                CircularProgressView()
+                                    .padding(30)
+                            } else {
+                                LeaderBoardView(viewModel: viewModel, navigationPath: $navigationPath, leaderboard: Array(viewModel.shortDistanceRanking.prefix(10)))
+                            }
+                        }
+                    }
+                    .accessibilityElement(children: .contain)
+                    .accessibilityIdentifier("leaderboard")
+                }
+                .padding(10)
+                //.frame(maxWidth: horizontalSizeClass == .regular ? 600 : .infinity)
+            }
+            if viewModel.leaderboardSelected && viewModel.longDistanceRanking.count == 11 {
+                if viewModel.longDistanceRanking.isEmpty {
+                    CircularProgressView()
+                }
+                else {
+                    LeaderBoardUserView(userRanking: viewModel.longDistanceRanking[10])
+                        .accessibilityElement(children: .contain)
+                        .accessibilityIdentifier("leaderboardUserLongDistance")
+                        //.frame(maxWidth: horizontalSizeClass == .regular ? 600 : .infinity)
+                }
+            }
+            
+            if !viewModel.leaderboardSelected && viewModel.shortDistanceRanking.count == 11 {
+                if viewModel.shortDistanceRanking.isEmpty {
+                    CircularProgressView()
+                }
+                else {
+                    LeaderBoardUserView(userRanking: viewModel.shortDistanceRanking[10])
+                        .accessibilityElement(children: .contain)
+                        .accessibilityIdentifier("leaderboardUserShortDistance")
+                        //.frame(maxWidth: horizontalSizeClass == .regular ? 600 : .infinity)
+                }
+            }
+        }.fixedSize(horizontal: false, vertical: true)
+        
+    }
+}

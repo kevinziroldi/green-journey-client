@@ -17,6 +17,7 @@ struct LoginView: View {
     var body: some View {
         if horizontalSizeClass == .compact {
             // iOS
+            
             ScrollView {
                 VStack {
                     // logo
