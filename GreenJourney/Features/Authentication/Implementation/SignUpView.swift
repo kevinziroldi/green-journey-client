@@ -153,7 +153,8 @@ struct SignupButtonsView: View {
                     .foregroundColor(.white)
                     .padding()
                     .frame(maxWidth: .infinity)
-                    .background(Color.blue)
+                    //.background(Color.blue)
+                    .background(AppColors.mainGreen)
                     .cornerRadius(30)
             }
             .accessibilityIdentifier("createAccountButton")

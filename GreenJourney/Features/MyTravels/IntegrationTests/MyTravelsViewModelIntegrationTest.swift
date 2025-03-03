@@ -234,7 +234,7 @@ final class MyTravelsViewModelIntegrationTest {
         // check co2 compensated
         for td in viewModel.travelDetailsList {
             if td.travel.travelID == travelId {
-                let newCo2Compensated = co2CompensatedPerEuro * compensatedPrice
+                let newCo2Compensated = co2CompensatedPerEuro * Double(compensatedPrice)
                 #expect(td.travel.CO2Compensated == co2Compensated + newCo2Compensated)
             }
         }

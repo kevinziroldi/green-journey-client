@@ -20,7 +20,7 @@ final class DashboardViewModelIntegrationTest {
         
         self.serverService = ServerService()
         self.mockFirebaseAuthService = MockFirebaseAuthService()
-        self.viewModel = DashboardViewModel(modelContext: mockModelContext)
+        self.viewModel = DashboardViewModel(modelContext: mockModelContext, serverService: serverService)
         
         // clean database
         try await serverService.resetTestDatabase()
