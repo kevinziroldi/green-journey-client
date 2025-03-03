@@ -2,6 +2,8 @@ import SwiftUI
 import SwiftData
 
 struct RankingView: View {
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    
     @Binding var navigationPath: NavigationPath
     @StateObject var viewModel: RankingViewModel
     @Environment(\.colorScheme) var colorScheme: ColorScheme
@@ -84,6 +86,7 @@ struct RankingView: View {
                             .accessibilityIdentifier("leaderboard")
                         }
                         .padding(10)
+                        .frame(maxWidth: horizontalSizeClass == .regular ? 600 : .infinity)
                     }
                     if viewModel.leaderboardSelected && viewModel.longDistanceRanking.count == 11 {
                         if viewModel.longDistanceRanking.isEmpty {
@@ -93,6 +96,7 @@ struct RankingView: View {
                             LeaderBoardUserView(userRanking: viewModel.longDistanceRanking[10])
                                 .accessibilityElement(children: .contain)
                                 .accessibilityIdentifier("leaderboardUserLongDistance")
+                                .frame(maxWidth: horizontalSizeClass == .regular ? 600 : .infinity)
                         }
                     }
                     
@@ -104,6 +108,7 @@ struct RankingView: View {
                             LeaderBoardUserView(userRanking: viewModel.shortDistanceRanking[10])
                                 .accessibilityElement(children: .contain)
                                 .accessibilityIdentifier("leaderboardUserShortDistance")
+                                .frame(maxWidth: horizontalSizeClass == .regular ? 600 : .infinity)
                         }
                     }
                 }.fixedSize(horizontal: false, vertical: true)

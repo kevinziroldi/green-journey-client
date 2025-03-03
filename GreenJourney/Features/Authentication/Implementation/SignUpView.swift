@@ -56,6 +56,7 @@ struct SignUpView: View {
                         }
                     }
                     .padding(.top, 20)
+                    .padding(.horizontal, 30)
                     VStack {
                         Button(action: {
                             Task {
@@ -98,25 +99,22 @@ struct SignUpView: View {
                                     await viewModel.signInWithGoogle()
                                 }
                             }) {
-                                HStack(spacing: 10) {
-                                    Image("googleLogo")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 60)
-                                        .safeAreaPadding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 0))
-                                    Spacer()
+                                ZStack {
+                                    HStack{
+                                        Image("googleLogo")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 60)
+                                            .padding(.leading, 20)
+                                        Spacer()
+                                    }
                                     Text("Sign in with Google")
                                         .foregroundStyle(.black)
-                                    Spacer()
-                                    Spacer()
-                                    Spacer()
                                 }
-                                .padding(EdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 0))
-                                
+                                .padding(.vertical, 5)
                             }
                             .accessibilityIdentifier("googleSignInButton")
                         }
-                        
                         VStack {
                             Text("Already have an account?")
                                 .fontWeight(.light)
@@ -133,6 +131,7 @@ struct SignUpView: View {
                         }
                         .padding(.top, 45)
                     }
+                    .frame(maxWidth: 600)
                     .padding(.top, 20)
                 }
                 .padding()

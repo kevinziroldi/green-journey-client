@@ -27,7 +27,7 @@ struct UserPreferencesView : View {
     
     var body: some View {
         if let user = users.first {
-            VStack(spacing: 0) {
+            ScrollView {
                 HStack {
                     Text("Profile")
                         .font(.system(size: 32).bold())
@@ -156,7 +156,6 @@ struct UserPreferencesView : View {
                 .frame(height: 440)
                 .contentMargins(.vertical, 0, for: .scrollContent)
                 .scrollContentBackground(.hidden)
-                .scrollDismissesKeyboard(.immediately)
                 
                 HStack {
                     Spacer()
@@ -208,6 +207,7 @@ struct UserPreferencesView : View {
                 
                 Spacer()
             }
+            .scrollDismissesKeyboard(.immediately)
             .frame(maxWidth: .infinity)
             .padding()
             .onAppear(){

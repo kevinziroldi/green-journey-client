@@ -14,32 +14,35 @@ struct LoginView: View {
     
     var body: some View {
         VStack{
-            Image("login_logo")
-                .resizable()
-                .padding()
-                .aspectRatio(contentMode: .fit)
-                .accessibilityIdentifier("loginLogoImage")
-                .padding(.top, 50)
             ScrollView {
                 VStack {
+                    Image("login_logo")
+                        .resizable()
+                        .padding()
+                        .aspectRatio(contentMode: .fit)
+                        .accessibilityIdentifier("loginLogoImage")
+                        .padding(.top, 50)
+                        .frame(maxWidth: 500)
+                    
                     Spacer()
                     
-                    TextField("Email", text: $viewModel.email)
-                        .textInputAutocapitalization(.never)
-                        .autocapitalization(.none)
-                        .keyboardType(.emailAddress)
-                        .padding()
-                        .frame(maxWidth: 300)
-                        .background(Color.gray.opacity(0.2))
-                        .cornerRadius(8)
-                        .accessibilityIdentifier("emailTextField")
-                    
-                    SecureField("Password", text: $viewModel.password)
-                        .padding()
-                        .frame(maxWidth: 300)
-                        .background(Color.gray.opacity(0.2))
-                        .cornerRadius(8)
-                        .accessibilityIdentifier("passwordSecureField")
+                    VStack {
+                        TextField("Email", text: $viewModel.email)
+                            .textInputAutocapitalization(.never)
+                            .autocapitalization(.none)
+                            .keyboardType(.emailAddress)
+                            .padding()
+                            .background(Color.gray.opacity(0.2))
+                            .cornerRadius(8)
+                            .accessibilityIdentifier("emailTextField")
+                        
+                        SecureField("Password", text: $viewModel.password)
+                            .padding()
+                            .background(Color.gray.opacity(0.2))
+                            .cornerRadius(8)
+                            .accessibilityIdentifier("passwordSecureField")
+                    }
+                    .padding(.horizontal, 30)
                     
                     Button("Reset password") {
                         Task {
@@ -107,26 +110,25 @@ struct LoginView: View {
                                     await viewModel.signInWithGoogle()
                                 }
                             }) {
-                                HStack(spacing: 10) {
-                                    Image("googleLogo")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 60)
-                                        .safeAreaPadding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 0))
-                                    Spacer()
+                                ZStack {
+                                    HStack{
+                                        Image("googleLogo")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 60)
+                                            .padding(.leading, 20)
+                                        Spacer()
+                                    }
                                     Text("Sign in with Google")
                                         .foregroundStyle(.black)
-                                    Spacer()
-                                    Spacer()
-                                    Spacer()
                                 }
-                                .padding(EdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 0))
-                                
+                                .padding(.vertical, 5)
                             }
                             .accessibilityIdentifier("googleSignInButton")
                         }
                         Spacer()
                     }
+                    .frame(maxWidth: 600)
                 }
                 .padding()
                 VStack {
