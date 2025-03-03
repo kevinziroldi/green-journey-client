@@ -2,163 +2,261 @@ import SwiftUI
 import SwiftData
 
 struct LoginView: View {
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    
     @StateObject var viewModel: AuthenticationViewModel
     private var modelContext: ModelContext
     @Binding var navigationPath: NavigationPath
-   
+    
     init(modelContext: ModelContext, navigationPath: Binding<NavigationPath>, serverService: ServerServiceProtocol, firebaseAuthService: FirebaseAuthServiceProtocol) {
         self.modelContext = modelContext
         _navigationPath = navigationPath
         _viewModel = StateObject(wrappedValue: AuthenticationViewModel(modelContext: modelContext, serverService: serverService, firebaseAuthService: firebaseAuthService))
-      }
+    }
     
     var body: some View {
-        VStack{
+        if horizontalSizeClass == .compact {
+            // iOS
             ScrollView {
                 VStack {
-                    Image("login_logo")
-                        .resizable()
-                        .padding()
-                        .aspectRatio(contentMode: .fit)
-                        .accessibilityIdentifier("loginLogoImage")
-                        .padding(.top, 50)
+                    // logo
+                    LogoView()
+                    
+                    Spacer()
+                    
+                    // email+password TextFields
+                    LoginTextFieldsView(viewModel: viewModel)
+                    
+                    // reset password button
+                    ResetPasswordButtonView(viewModel: viewModel)
+                    
+                    // error message and resend email message
+                    MessagesView(viewModel: viewModel)
+                    
+                    // login buttons
+                    LoginButtonsView(viewModel: viewModel)
+                    
+                    // move to signup
+                    MoveToSignupView(viewModel: viewModel, navigationPath: $navigationPath)
+                }
+                .padding()
+            }
+            .scrollDismissesKeyboard(.interactively)
+            .onAppear() {
+                viewModel.isEmailVerificationActiveLogin = false
+            }
+            .onChange(of: viewModel.isLogged, {
+                if viewModel.isLogged {
+                    navigationPath = NavigationPath()
+                }
+            })
+            .onChange(of: viewModel.isEmailVerificationActiveLogin, {
+                if viewModel.isEmailVerificationActiveLogin {
+                    navigationPath.append(NavigationDestination.EmailVerificationView(viewModel))
+                }
+            })
+            .navigationBarHidden(true)
+        } else {
+            // iPadOS
+            
+            ScrollView {
+                VStack {
+                    // logo
+                    LogoView()
                         .frame(maxWidth: 500)
                     
                     Spacer()
                     
-                    VStack {
-                        TextField("Email", text: $viewModel.email)
-                            .textInputAutocapitalization(.never)
-                            .autocapitalization(.none)
-                            .keyboardType(.emailAddress)
-                            .padding()
-                            .background(Color.gray.opacity(0.2))
-                            .cornerRadius(8)
-                            .accessibilityIdentifier("emailTextField")
-                        
-                        SecureField("Password", text: $viewModel.password)
-                            .padding()
-                            .background(Color.gray.opacity(0.2))
-                            .cornerRadius(8)
-                            .accessibilityIdentifier("passwordSecureField")
-                    }
-                    .padding(.horizontal, 30)
+                    // email+password TextFields
+                    LoginTextFieldsView(viewModel: viewModel)
+                        .padding(.horizontal, 50)
                     
-                    Button("Reset password") {
-                        Task {
-                            await viewModel.resetPassword(email: viewModel.email)
-                        }
-                    }
-                    .accessibilityIdentifier("resetPasswordButton")
-                    .padding(.vertical, 10)
+                    // reset password button
+                    ResetPasswordButtonView(viewModel: viewModel)
                     
-                    // error message
-                    if let errorMessage = viewModel.errorMessage {
-                        Text(errorMessage)
-                            .foregroundColor(.red)
-                            .accessibilityIdentifier("errorMessageLabelLogin")
-                    }
+                    // error message and resend email message
+                    MessagesView(viewModel: viewModel)
                     
-                    if let resendMessage = viewModel.resendEmail {
-                        Text(resendMessage)
-                            .accessibilityIdentifier("resendEmailLabel")
-                    }
+                    // login buttons
+                    LoginButtonsView(viewModel: viewModel)
+                        .frame(maxWidth: 600)
                     
-                    VStack {
-                        Button(action: {
-                            Task {
-                                viewModel.errorMessage = nil
-                                viewModel.resendEmail = nil
-                                await viewModel.login()
-                            }
-                        }) {
-                            Text("Login")
-                                .foregroundColor(.white)
-                                .padding()
-                                .frame(maxWidth: .infinity)
-                                .background(Color.blue)
-                                .cornerRadius(30)
-                        }
-                        .accessibilityIdentifier("loginButton")
-
-                        
-                        HStack {
-                            Rectangle()
-                                .frame(height: 1)
-                                .foregroundColor(.gray)
-                            
-                            Text("OR")
-                                .font(.caption)
-                                .foregroundColor(.gray)
-                            
-                            Rectangle()
-                                .frame(height: 1)
-                                .foregroundColor(.gray)
-                        }
-                        .padding(.vertical, 10)
-                        .padding(.horizontal, 16)
-                        
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 30)
-                                .stroke(Color.gray, lineWidth: 1)
-                                .fill(Color.white)
-                                .shadow(radius: 1)
-                            
-                            
-                            Button(action: {
-                                Task {
-                                    await viewModel.signInWithGoogle()
-                                }
-                            }) {
-                                ZStack {
-                                    HStack{
-                                        Image("googleLogo")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: 60)
-                                            .padding(.leading, 20)
-                                        Spacer()
-                                    }
-                                    Text("Sign in with Google")
-                                        .foregroundStyle(.black)
-                                }
-                                .padding(.vertical, 5)
-                            }
-                            .accessibilityIdentifier("googleSignInButton")
-                        }
-                        Spacer()
-                    }
-                    .frame(maxWidth: 600)
+                    // move to signup
+                    MoveToSignupView(viewModel: viewModel, navigationPath: $navigationPath)
                 }
-                .padding()
-                VStack {
-                    Text("Haven't signed up yet?")
-                        .fontWeight(.light)
-                    Button ("Sign up") {
-                        viewModel.errorMessage = nil
-                        viewModel.email = ""
-                        viewModel.password = ""
-                        navigationPath.append(NavigationDestination.SignupView(viewModel))
-                    }
-                    .accessibilityIdentifier("moveToSignUpButton")
-                }
-                .padding(.top, 15)
             }
             .scrollDismissesKeyboard(.interactively)
-        }
-        .onAppear() {
-            viewModel.isEmailVerificationActiveLogin = false
-        }
-        .onChange(of: viewModel.isLogged, {
-            if viewModel.isLogged {
-                navigationPath = NavigationPath()
+            .onAppear() {
+                viewModel.isEmailVerificationActiveLogin = false
             }
-        })
-        .onChange(of: viewModel.isEmailVerificationActiveLogin, {
-            if viewModel.isEmailVerificationActiveLogin {
-                navigationPath.append(NavigationDestination.EmailVerificationView(viewModel))
+            .onChange(of: viewModel.isLogged, {
+                if viewModel.isLogged {
+                    navigationPath = NavigationPath()
+                }
+            })
+            .onChange(of: viewModel.isEmailVerificationActiveLogin, {
+                if viewModel.isEmailVerificationActiveLogin {
+                    navigationPath.append(NavigationDestination.EmailVerificationView(viewModel))
+                }
+            })
+            .navigationBarHidden(true)
+        }
+    }
+}
+
+struct LogoView: View {
+    var body: some View {
+        Image("login_logo")
+            .resizable()
+            .padding()
+            .aspectRatio(contentMode: .fit)
+            .accessibilityIdentifier("loginLogoImage")
+            .padding(.top, 50)
+    }
+}
+
+struct LoginTextFieldsView: View {
+    @ObservedObject var viewModel: AuthenticationViewModel
+    
+    var body: some View {
+        VStack {
+            TextField("Email", text: $viewModel.email)
+                .textInputAutocapitalization(.never)
+                .autocapitalization(.none)
+                .keyboardType(.emailAddress)
+                .padding()
+                .background(Color.gray.opacity(0.2))
+                .cornerRadius(8)
+                .accessibilityIdentifier("emailTextField")
+            
+            SecureField("Password", text: $viewModel.password)
+                .padding()
+                .background(Color.gray.opacity(0.2))
+                .cornerRadius(8)
+                .accessibilityIdentifier("passwordSecureField")
+        }
+    }
+}
+
+struct ResetPasswordButtonView: View {
+    @ObservedObject var viewModel: AuthenticationViewModel
+    
+    var body: some View {
+        Button("Reset password") {
+            Task {
+                await viewModel.resetPassword(email: viewModel.email)
             }
-        })
-        .navigationBarHidden(true)
+        }
+        .accessibilityIdentifier("resetPasswordButton")
+        .padding(.vertical, 10)
+    }
+}
+
+struct MessagesView: View {
+    @ObservedObject var viewModel: AuthenticationViewModel
+    
+    var body: some View {
+        // error message
+        if let errorMessage = viewModel.errorMessage {
+            Text(errorMessage)
+                .foregroundColor(.red)
+                .accessibilityIdentifier("errorMessageLabelLogin")
+        }
+        
+        if let resendMessage = viewModel.resendEmail {
+            Text(resendMessage)
+                .accessibilityIdentifier("resendEmailLabel")
+        }
+    }
+}
+
+struct LoginButtonsView: View {
+    @ObservedObject var viewModel: AuthenticationViewModel
+    
+    var body: some View {
+        VStack {
+            Button(action: {
+                Task {
+                    viewModel.errorMessage = nil
+                    viewModel.resendEmail = nil
+                    await viewModel.login()
+                }
+            }) {
+                Text("Login")
+                    .foregroundColor(.white)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(Color.blue)
+                    .cornerRadius(30)
+            }
+            .accessibilityIdentifier("loginButton")
+            
+            
+            HStack {
+                Rectangle()
+                    .frame(height: 1)
+                    .foregroundColor(.gray)
+                
+                Text("OR")
+                    .font(.caption)
+                    .foregroundColor(.gray)
+                
+                Rectangle()
+                    .frame(height: 1)
+                    .foregroundColor(.gray)
+            }
+            .padding(.vertical, 10)
+            .padding(.horizontal, 16)
+            
+            ZStack {
+                RoundedRectangle(cornerRadius: 30)
+                    .stroke(Color.gray, lineWidth: 1)
+                    .fill(Color.white)
+                    .shadow(radius: 1)
+                
+                
+                Button(action: {
+                    Task {
+                        await viewModel.signInWithGoogle()
+                    }
+                }) {
+                    ZStack {
+                        HStack{
+                            Image("googleLogo")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 60)
+                                .padding(.leading, 20)
+                            Spacer()
+                        }
+                        Text("Sign in with Google")
+                            .foregroundStyle(.black)
+                    }
+                    .padding(.vertical, 5)
+                }
+                .accessibilityIdentifier("googleSignInButton")
+            }
+            Spacer()
+        }
+    }
+}
+
+struct MoveToSignupView: View {
+    @ObservedObject var viewModel: AuthenticationViewModel
+    @Binding var navigationPath: NavigationPath
+    
+    var body: some View {
+        VStack {
+            Text("Haven't signed up yet?")
+                .fontWeight(.light)
+            Button ("Sign up") {
+                viewModel.errorMessage = nil
+                viewModel.email = ""
+                viewModel.password = ""
+                navigationPath.append(NavigationDestination.SignupView(viewModel))
+            }
+            .accessibilityIdentifier("moveToSignUpButton")
+        }
+        .padding(.top, 15)
     }
 }
