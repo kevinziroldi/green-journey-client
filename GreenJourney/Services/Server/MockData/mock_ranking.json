@@ -2,20 +2,22 @@
     "long_distance_ranking" : [
         {
             "total_distance" : 573.37099999999998,
-            "score" : 10,
+            "score_short_distance" : 1000000,
+            "score_long_distance" : 1000000,
             "total_co_2_compensated" : 0,
             "badges" : [
                 "badge_ecological_choice_high"
             ],
             "total_duration" : 21620000000000,
-            "last_name" : "MockUser2",
+            "last_name" : "Gianpaolo Guidobaldo",
             "user_id" : 2,
             "total_co_2_emitted" : 114.60000000000001,
-            "first_name" : "MockUser2"
+            "first_name" : "Franceschini"
         },
         {
             "total_distance" : 573.37099999999998,
-            "score" : 20,
+            "score_short_distance" : 20,
+            "score_long_distance" : 20,
             "total_co_2_compensated" : 0,
             "badges" : [
                 "badge_ecological_choice_high"
@@ -28,7 +30,8 @@
         },
         {
             "total_distance" : 573.37099999999998,
-            "score" : 300,
+            "score_short_distance" : 300,
+            "score_long_distance" : 300,
             "total_co_2_compensated" : 0,
             "badges" : [
                 "badge_ecological_choice_high"
@@ -41,7 +44,8 @@
         },
         {
             "total_distance" : 0,
-            "score" : 10000,
+            "score_short_distance" : 10,
+            "score_long_distance" : 10,
             "total_co_2_compensated" : 0,
             "badges" : [
                 
@@ -54,7 +58,8 @@
         },
         {
             "total_distance" : 0,
-            "score" : 100,
+            "score_short_distance" : 100,
+            "score_long_distance" : 100,
             "total_co_2_compensated" : 0,
             "badges" : [
                 
@@ -67,7 +72,8 @@
         },
         {
             "total_distance" : 0,
-            "score" : 1000,
+            "score_short_distance" : 1000,
+            "score_long_distance" : 1000,
             "total_co_2_compensated" : 0,
             "badges" : [
                 
@@ -80,7 +86,8 @@
         },
         {
             "total_distance" : 0,
-            "score" : 10,
+            "score_short_distance" : 10,
+            "score_long_distance" : 10,
             "total_co_2_compensated" : 0,
             "badges" : [
                 
@@ -93,7 +100,8 @@
         },
         {
             "total_distance" : 0,
-            "score" : 20,
+            "score_short_distance" : 20,
+            "score_long_distance" : 20,
             "total_co_2_compensated" : 0,
             "badges" : [
                 
@@ -106,7 +114,8 @@
         },
         {
             "total_distance" : 0,
-            "score" : 20,
+            "score_short_distance" : 10,
+            "score_long_distance" : 10,
             "total_co_2_compensated" : 0,
             "badges" : [
                 
@@ -119,7 +128,8 @@
         },
         {
             "total_distance" : 0,
-            "score" : 2200,
+            "score_short_distance" : 100,
+            "score_long_distance" : 100,
             "total_co_2_compensated" : 0,
             "badges" : [
                 
@@ -132,7 +142,8 @@
         },
         {
             "total_distance" : 5773.3509999999997,
-            "score" : 433.60000000000002,
+            "score_short_distance" : 10,
+            "score_long_distance" : 10,
             "total_co_2_compensated" : 0,
             "badges" : [
                 "badge_distance_high",
@@ -149,7 +160,8 @@
     "short_distance_ranking" : [
         {
             "total_distance" : 5773.3509999999997,
-            "score" : 100000.1127662,
+            "score_short_distance" : 100000,
+            "score_long_distance" : 10000,
             "total_co_2_compensated" : 0,
             "badges" : [
                 "badge_distance_high",
@@ -164,7 +176,8 @@
         },
         {
             "total_distance" : 573.37099999999998,
-            "score" : 0,
+            "score_short_distance" : 10,
+            "score_long_distance" : 10,
             "total_co_2_compensated" : 0,
             "badges" : [
                 "badge_ecological_choice_high"
@@ -177,7 +190,8 @@
         },
         {
             "total_distance" : 0,
-            "score" : 0,
+            "score_short_distance" : 10,
+            "score_long_distance" : 10,
             "total_co_2_compensated" : 0,
             "badges" : [
                 

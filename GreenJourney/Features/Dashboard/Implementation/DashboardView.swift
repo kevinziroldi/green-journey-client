@@ -70,24 +70,7 @@ struct DashboardView: View {
                     .padding(EdgeInsets(top: 5, leading: 15, bottom: 7, trailing: 15))
                     .overlay(Color.clear.accessibilityIdentifier("userBadges"))
                     
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 15)
-                            .fill(Color(uiColor: .systemBackground))
-                            .shadow(color: .pink.opacity(0.3), radius: 5, x: 0, y: 3)
-                        VStack (spacing:0){
-                            Text("Scores")
-                                .font(.title)
-                                .foregroundStyle(.pink.opacity(0.8))
-                                .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 0))
-                                .fontWeight(.semibold)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            
-                            InfoRow(title: "Short distance", value: String(format: "%.1f", viewModel.shortDistanceScore), icon: "trophy", color: .blue, imageValue: false, imageValueString: nil)
-                            
-                            InfoRow(title: "Long distance", value: String(format: "%.1f", viewModel.longDistanceScore), icon: "trophy", color: .pink, imageValue: false, imageValueString: nil)
-                        }
-                    }
-                    .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
+                    ScoresView(scoreLongDistance: viewModel.longDistanceScore, scoreShortDistance: viewModel.shortDistanceScore)
                     
                     NavigationLink(destination: Co2DetailsView(viewModel: viewModel)) {
                         ZStack {
