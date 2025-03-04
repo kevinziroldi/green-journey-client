@@ -99,6 +99,10 @@ class CitiesReviewsViewModel: ObservableObject {
     }
     
     func isReviewable(userID: Int) -> Bool {
+        return hasVisited(city: selectedCity)
+    }
+    
+    func hasVisited(city: CityCompleterDataset) -> Bool {
         let fetchRequest = FetchDescriptor<Segment>(
             predicate: #Predicate { segment in
                 segment.isOutward == true
@@ -117,8 +121,8 @@ class CitiesReviewsViewModel: ObservableObject {
             
             // cityName + countryName uniquely identifies a city in the dataset
             for segment in filteredSegments {
-                if selectedCity.cityName == segment.destinationCity {
-                    if selectedCity.countryName == segment.destinationCountry {
+                if city.cityName == segment.destinationCity {
+                    if city.countryName == segment.destinationCountry {
                         return true
                     }
                 }
@@ -126,6 +130,7 @@ class CitiesReviewsViewModel: ObservableObject {
         } catch {
             print("Error during segments fetch")
         }
+        
         return false
     }
         

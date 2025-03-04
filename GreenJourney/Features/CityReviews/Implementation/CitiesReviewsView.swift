@@ -25,20 +25,19 @@ struct CitiesReviewsView: View {
         if horizontalSizeClass == .compact {
             // iOS
             
-            // header
-            HStack {
-                // title
-                CitiesReviewsTitleView()
-                
-                Spacer()
-                
-                // user preferences button
-                UserPreferencesButtonView(navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
-            }
-            .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
-            
-            
             ScrollView {
+                // header
+                HStack {
+                    // title
+                    CitiesReviewsTitleView()
+                    
+                    Spacer()
+                    
+                    // user preferences button
+                    UserPreferencesButtonView(navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
+                }
+                .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
+                
                 // city search
                 CitySearchView(viewModel: viewModel)
                 
@@ -66,11 +65,11 @@ struct CitiesReviewsView: View {
         } else {
             // iPadOS
             
-            // header
-            CitiesReviewsTitleView()
-                .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
-            
             ScrollView {
+                // header
+                CitiesReviewsTitleView()
+                    .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
+                
                 // city search
                 CitySearchView(viewModel: viewModel)
                     .padding(.horizontal, 80)
@@ -124,7 +123,7 @@ struct BestCitiesView: View {
         }
         else {
             ForEach(viewModel.bestCities.indices, id: \.self) { index in
-                BestCityView(city: viewModel.bestCities[index], cityReview: viewModel.bestCitiesReviewElements[index], pos: index+1)
+                BestCityView(city: viewModel.bestCities[index], cityReview: viewModel.bestCitiesReviewElements[index], pos: index+1, viewModel: viewModel)
                     .padding(.horizontal)
                     .onTapGesture {
                         viewModel.selectedCity = viewModel.bestCities[index]
@@ -138,44 +137,107 @@ struct BestCitiesView: View {
 }
 
 struct BestCityView: View {
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    
     var city: CityCompleterDataset
     var cityReview: CityReviewElement
     let pos: Int
+    
+    @ObservedObject var viewModel: CitiesReviewsViewModel
+    @Query var users: [User]
+    
     var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 10)
-                .fill(Color(uiColor: .systemBackground))
-                .shadow(color: .green.opacity(0.3), radius: 5, x: 0, y: 3)
-            HStack {
+        if horizontalSizeClass == .compact {
+            // iOS
+            
+            ZStack {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color(uiColor: .systemBackground))
+                    .shadow(color: .green.opacity(0.3), radius: 5, x: 0, y: 3)
                 
-                ZStack {
-                    Circle()
-                        .fill(AppColors.mainGreen.opacity(0.3))
-                        .frame(width: 45, height: 45)
-                    Text("\(pos)")
-                        .foregroundStyle(AppColors.mainGreen)
-                        .font(.system(size: 24))
-                        .fontWeight(.semibold)
-                }
-                VStack {
-                    Text(city.cityName + ", " + city.countryName)
-                        .font(.system(size: 18))
-                        .fontWeight(.semibold)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    HStack {
-                        Text(String(format: "%.1f", cityReview.getAverageRating()))
-                            .fontWeight(.bold)
-                        FiveStarView(rating: cityReview.getAverageRating(), dim: 20, color: .yellow)
+                HStack {
+                    ZStack {
+                        Circle()
+                            .fill(AppColors.mainGreen.opacity(0.3))
+                            .frame(width: 45, height: 45)
+                        Text("\(pos)")
+                            .foregroundStyle(AppColors.mainGreen)
+                            .font(.system(size: 24))
+                            .fontWeight(.semibold)
+                    }
+                    VStack {
+                        Text(city.cityName + ", " + city.countryName)
+                            .font(.system(size: 18))
+                            .fontWeight(.semibold)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        HStack {
+                            Text(String(format: "%.1f", cityReview.getAverageRating()))
+                                .fontWeight(.bold)
+                            FiveStarView(rating: cityReview.getAverageRating(), dim: 20, color: .yellow)
+                            Spacer()
+                        }
                         Spacer()
                     }
-                    Spacer()
+                    .padding(.leading, 30)
                 }
-                .padding(.leading, 30)
+                .padding()
             }
-            .padding()
+            .fixedSize(horizontal: false, vertical: true)
+            .padding(.horizontal)
+        } else {
+            // iPadOS
+            
+            ZStack {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color(uiColor: .systemBackground))
+                    .shadow(color: .green.opacity(0.3), radius: 5, x: 0, y: 3)
+                
+                HStack {
+                    ZStack {
+                        Circle()
+                            .fill(AppColors.mainGreen.opacity(0.3))
+                            .frame(width: 45, height: 45)
+                        Text("\(pos)")
+                            .foregroundStyle(AppColors.mainGreen)
+                            .font(.system(size: 24))
+                            .fontWeight(.semibold)
+                    }
+                    
+                    VStack {
+                        Text(city.cityName + ", " + city.countryName)
+                            .font(.system(size: 18))
+                            .fontWeight(.semibold)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .padding(.leading, 30)
+                    
+                    VStack {
+                        HStack {
+                            Text(String(format: "%.1f", cityReview.getAverageRating()))
+                                .fontWeight(.bold)
+                            FiveStarView(rating: cityReview.getAverageRating(), dim: 20, color: .yellow)
+                            Spacer()
+                        }
+                        
+                        Text("\(cityReview.reviews.count) reviews")
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    
+                    Spacer()
+                    
+                    VStack {
+                        if viewModel.hasVisited(city: city) {
+                            Image(systemName: "checkmark.circle")
+                                .foregroundColor(.green)
+                        }
+                    }
+                   
+                }
+                .padding()
+            }
+            .fixedSize(horizontal: false, vertical: true)
+            .padding(.horizontal)
         }
-        .fixedSize(horizontal: false, vertical: true)
-        .padding(.horizontal)
     }
 }
 

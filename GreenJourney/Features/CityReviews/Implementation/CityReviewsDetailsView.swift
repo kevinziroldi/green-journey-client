@@ -7,6 +7,7 @@ struct CityReviewsDetailsView: View {
     @Binding var navigationPath: NavigationPath
     @State var infoTapped = false
     @State var reviewTapped = false
+    
     var body: some View {
         if let selectedCityReviewElement = viewModel.selectedCityReviewElement {
             ZStack {
