@@ -18,7 +18,8 @@ struct RankingElement: Decodable {
     var firstName: String
     var lastName: String
     var totalDistance: Float64
-    var score: Float64
+    var scoreShortDistance: Float64
+    var scoreLongDistance: Float64
     var totalDuration: Int
     var totalCo2Emitted: Float64
     var totalCo2Compensated: Float64
@@ -29,7 +30,8 @@ struct RankingElement: Decodable {
         case firstName = "first_name"
         case lastName = "last_name"
         case totalDistance = "total_distance"
-        case score = "score"
+        case scoreShortDistance = "score_short_distance"
+        case scoreLongDistance = "score_long_distance"
         case totalDuration = "total_duration"
         case totalCo2Emitted = "total_co_2_emitted"
         case totalCo2Compensated = "total_co_2_compensated"
