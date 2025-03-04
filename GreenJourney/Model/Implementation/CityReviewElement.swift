@@ -42,8 +42,8 @@ class CityReviewElement: Codable {
         try container.encode(averageWasteBinsRating, forKey: .averageWasteBinsRating)
     }
     
-    func getLastFiveReviews() -> [Review] {
-        return reviews.suffix(5)
+    func getLastReviews(num: Int) -> [Review] {
+        return reviews.suffix(num)
     }
     func getAverageRating() -> Float64 {
         return (averageWasteBinsRating + averageGreenSpacesRating + averageLocalTransportRating)/3

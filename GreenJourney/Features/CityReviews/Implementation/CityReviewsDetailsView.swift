@@ -10,34 +10,36 @@ struct CityReviewsDetailsView: View {
     
     var body: some View {
         if let selectedCityReviewElement = viewModel.selectedCityReviewElement {
-            ScrollView {
-                VStack {
-                    // title
-                    CityReviewsTitleView(viewModel: viewModel)
-                    
-                    // reviews average
-                    ReviewsAverageView(selectedCityReviewElement: selectedCityReviewElement)
-                    
-                    // button or user review
-                    if viewModel.isReviewable(userID: users.first?.userID ?? -1) {
-                        InsertReviewButton(viewModel: viewModel, reviewTapped: $reviewTapped)
+                ScrollView {
+                    VStack {
+                        // title
+                        CityReviewsTitleView(viewModel: viewModel)
+                        
+                        // reviews average
+                        ReviewsAverageView(selectedCityReviewElement: selectedCityReviewElement)
+                        
+                        // button or user review
+                        if viewModel.isReviewable(userID: users.first?.userID ?? -1) {
+                            InsertReviewButton(viewModel: viewModel, reviewTapped: $reviewTapped)
+                        }
+                        
+                        // latest reviews, if present
+                        VStack {
+                            LatestReviewsView(viewModel: viewModel, selectedCityReviewElement: selectedCityReviewElement, navigationPath: $navigationPath)
+                        }
                     }
-                    
-                    // latest reviews, if present
-                    LatestReviewsView(viewModel: viewModel, selectedCityReviewElement: selectedCityReviewElement, navigationPath: $navigationPath)
+                    .padding()
                 }
-                .padding()
-            }
-            .sheet(isPresented: $reviewTapped) {
-                InsertReviewView(isPresented: $reviewTapped, viewModel: viewModel)
-                    .presentationDetents([.height(680)])
-                    .presentationCornerRadius(30)
-            }
-            .onAppear(){
-                Task {
-                    viewModel.getUserReview(userID: users.first?.userID ?? -1)
+                .sheet(isPresented: $reviewTapped) {
+                    InsertReviewView(isPresented: $reviewTapped, viewModel: viewModel)
+                        .presentationDetents([.height(680)])
+                        .presentationCornerRadius(30)
                 }
-            }
+                .onAppear(){
+                    Task {
+                        viewModel.getUserReview(userID: users.first?.userID ?? -1)
+                    }
+                }
         }
     }
 }
@@ -293,6 +295,8 @@ struct ReviewsAverageView: View {
 }
 
 struct LatestReviewsView: View {
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    
     var viewModel: CitiesReviewsViewModel
     var selectedCityReviewElement: CityReviewElement
     @Binding var navigationPath: NavigationPath
@@ -305,10 +309,17 @@ struct LatestReviewsView: View {
                     .padding(.top, 5)
                     .accessibilityIdentifier("latestReviewsTitle")
                 
-                CarouselView(cards: selectedCityReviewElement.getLastFiveReviews())
-                    .frame(height: 250)
-                
-                // Button to see all reviews
+                // latest reviews
+                if horizontalSizeClass == .compact {
+                    CarouselView(cards: selectedCityReviewElement.getLastReviews(num: 5))
+                        .frame(height: 250)
+                } else {
+                    VStack {
+                        ReviewsBlocksView(reviews: selectedCityReviewElement.getLastReviews(num: 6))
+                    }
+                }
+                 
+                // button to see all reviews
                 Button (action: {
                     navigationPath.append(NavigationDestination.AllReviewsView(viewModel))
                 }){
@@ -399,6 +410,7 @@ struct SnapperView: View {
 struct CardView: View {
     let review: Review
     let width: CGFloat
+    
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 20)
@@ -420,7 +432,6 @@ struct CardView: View {
                     Spacer()
                 }
                 .padding(.bottom, 5)
-                
                 
                 Text(review.reviewText)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -477,7 +488,41 @@ struct CardView: View {
             }
             .padding()
         }
-        .frame(width: width)
+        .frame(maxWidth: width)
     }
 }
 
+struct ReviewsBlocksView: View {
+    var reviews: [Review]
+    @State private var availableWidth: CGFloat = 0
+
+    var body: some View {
+        LazyVGrid(
+            columns: Array(
+                repeating: GridItem(.flexible(), spacing: 10),
+                count: availableWidth > 800 ? 3 : 2
+            ),
+            spacing: 10
+        ) {
+            ForEach(reviews.prefix(6), id: \.id) { review in
+                let spacing: CGFloat = 10
+                let columnsCount = availableWidth > 800 ? 3 : 2
+                let cardWidth = (availableWidth - 40 - spacing * CGFloat(columnsCount)) / CGFloat(columnsCount)
+                // ternary operator needed because at start width is 0
+                CardView(review: review, width: cardWidth > 0 ? cardWidth : 1)
+            }
+        }
+        .padding(.horizontal, 20)
+        .background(
+            GeometryReader { geo in
+                Color.clear
+                    .onAppear {
+                        availableWidth = geo.size.width
+                    }
+                    .onChange(of: geo.size.width) {
+                        availableWidth = geo.size.width
+                    }
+            }
+        )
+    }
+}

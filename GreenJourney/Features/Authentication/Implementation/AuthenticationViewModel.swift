@@ -42,7 +42,6 @@ class AuthenticationViewModel: ObservableObject {
             self.emailVerified = emailVerified
             
             if emailVerified == true {
-                let firebaseToken = try await firebaseAuthService.getFirebaseToken()
                 self.errorMessage = nil
                 try await self.getUserFromServer()
             } else {
@@ -159,7 +158,6 @@ class AuthenticationViewModel: ObservableObject {
                 self.isEmailVerificationActiveSignup = false
                 
                 // save user to swift data
-                let firebaseToken = try await firebaseAuthService.getFirebaseToken()
                 try await self.getUserFromServer()
             } else {
                 self.errorMessage = "Email has not been verified yet"
@@ -217,7 +215,6 @@ class AuthenticationViewModel: ObservableObject {
     func signInWithGoogle() async {
         do {
             let isNewUser = try await firebaseAuthService.signInWithGoogle()
-            let firebaseToken = try await firebaseAuthService.getFirebaseToken()
             
             if isNewUser {
                 // if new user, save to server (signup)
