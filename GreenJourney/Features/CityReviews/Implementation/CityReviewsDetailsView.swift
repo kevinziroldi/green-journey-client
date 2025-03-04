@@ -24,9 +24,7 @@ struct CityReviewsDetailsView: View {
                         }
                         
                         // latest reviews, if present
-                        VStack {
-                            LatestReviewsView(viewModel: viewModel, selectedCityReviewElement: selectedCityReviewElement, navigationPath: $navigationPath)
-                        }
+                        LatestReviewsView(viewModel: viewModel, selectedCityReviewElement: selectedCityReviewElement, navigationPath: $navigationPath)
                     }
                     .padding()
                 }
@@ -304,7 +302,7 @@ struct LatestReviewsView: View {
     var body: some View {
         VStack {
             if !selectedCityReviewElement.reviews.isEmpty {
-                Text("Latest Reviews for " + viewModel.selectedCity.cityName + ", " + viewModel.selectedCity.countryName)
+                Text("Latest reviews for " + viewModel.selectedCity.cityName + ", " + viewModel.selectedCity.countryName)
                     .font(.headline)
                     .padding(.top, 5)
                     .accessibilityIdentifier("latestReviewsTitle")
@@ -323,16 +321,29 @@ struct LatestReviewsView: View {
                 Button (action: {
                     navigationPath.append(NavigationDestination.AllReviewsView(viewModel))
                 }){
-                    Text("See all reviews")
-                        .font(.headline)
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(AppColors.mainGreen)
+                        
+                        HStack (spacing: 3) {
+                            Spacer()
+                            Text("See all reviews")
+                                .foregroundStyle(.white)
+                                .fontWeight(.semibold)
+                            Spacer()
+                            Image(systemName: "arrowshape.forward.circle")
+                                .font(.title3)
+                                .fontWeight(.semibold)
+                                .fontWeight(.light)
+                                .foregroundStyle(.white)
+                            Spacer()
+                        }
                         .padding(10)
-                        .background(AppColors.mainGreen)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
+                    }
+                    .fixedSize()
                 }
                 .padding()
                 .accessibilityIdentifier("allReviewsButton")
-                
             }
             else {
                 Text("There are no reviews yet for " + viewModel.selectedCity.cityName + ", " + viewModel.selectedCity.countryName + ".")
@@ -510,6 +521,7 @@ struct ReviewsBlocksView: View {
                 let cardWidth = (availableWidth - 40 - spacing * CGFloat(columnsCount)) / CGFloat(columnsCount)
                 // ternary operator needed because at start width is 0
                 CardView(review: review, width: cardWidth > 0 ? cardWidth : 1)
+                    .frame(maxHeight: 270)
             }
         }
         .padding(.horizontal, 20)

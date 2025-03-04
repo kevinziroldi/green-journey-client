@@ -21,6 +21,24 @@
         "last_name" : "K",
         "country_code" : "DE",
         "waste_bins_rating" : 5
+      },
+      {
+        "green_spaces_rating" : 4,
+        "score_short_distance" : 0,
+        "badges" : [
+          "badge_ecological_choice_high"
+        ],
+        "user_id" : 54,
+        "review_id" : 120,
+        "review_text" : "Very clean and very good transport 🔝",
+        "city_id" : 219536,
+        "local_transport_rating" : 5,
+        "first_name" : "K",
+        "score_long_distance" : 50.051408149013206,
+        "city_iata" : "BER",
+        "last_name" : "K",
+        "country_code" : "DE",
+        "waste_bins_rating" : 5
       }
     ],
     "average_waste_bins_rating" : 5,

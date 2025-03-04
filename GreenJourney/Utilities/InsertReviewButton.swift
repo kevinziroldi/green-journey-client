@@ -17,12 +17,27 @@ struct InsertReviewButton: View {
                         Button(action: {
                             reviewTapped = true
                         }) {
-                            HStack{
-                                Text("add your review for \(viewModel.selectedCity.cityName)")
-                                    .padding()
-                                    .foregroundStyle(.white)
-                                    .font(.system(size: 22).bold())
+                            
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .fill(AppColors.mainGreen)
+                                
+                                HStack (spacing: 3) {
+                                    Spacer()
+                                    Text("Leave a review")
+                                        .foregroundStyle(.white)
+                                        .fontWeight(.semibold)
+                                    Spacer()
+                                    Image(systemName: "pencil.and.scribble")
+                                        .font(.title3)
+                                        .fontWeight(.semibold)
+                                        .fontWeight(.light)
+                                        .foregroundStyle(.white)
+                                    Spacer()
+                                }
+                                .padding(10)
                             }
+                            .fixedSize()
                         }
                         .padding(.horizontal)
                         .accessibilityIdentifier("addReviewButton")
