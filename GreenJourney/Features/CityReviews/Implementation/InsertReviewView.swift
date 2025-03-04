@@ -134,6 +134,9 @@ struct InsertReviewView: View {
             viewModel.greenSpacesRating = viewModel.userReview?.greenSpacesRating ?? 0
             viewModel.localTransportRating = viewModel.userReview?.localTransportRating ?? 0
         }
+        .onTapGesture {
+            hideKeyboard()
+        }
     }
 }
 
@@ -178,5 +181,11 @@ struct ReviewStarRating: View {
             
         }
         .padding(.vertical, 5)
+    }
+}
+
+extension View {
+    func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }

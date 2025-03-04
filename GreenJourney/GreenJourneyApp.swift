@@ -7,6 +7,14 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         FirebaseApp.configure()
+        
+        // make the simulator start with software keyboard
+        #if targetEnvironment(simulator)
+            let setHardwareLayout = NSSelectorFromString("setHardwareLayout:")
+            UITextInputMode.activeInputModes
+                .filter { $0.responds(to: setHardwareLayout) }
+                .forEach { $0.perform(setHardwareLayout, with: nil) }
+        #endif
         return true
     }
 }

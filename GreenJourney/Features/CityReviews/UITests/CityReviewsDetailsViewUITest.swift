@@ -103,7 +103,8 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
         userText.typeText("This is the review text")
         
         // close keyboard
-        app.swipeDown()
+        let selecteCityTitleCenter = selecteCityTitle.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        selecteCityTitleCenter.tap()
         
         // save review
         saveButton.tap()
@@ -242,7 +243,8 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
         userText.typeText("This is the review text")
         
         // close keyboard
-        app.swipeDown()
+        let selecteCityTitleCenter = selecteCityTitle.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        selecteCityTitleCenter.tap()
         
         // save review
         saveButton.tap()
@@ -295,7 +297,8 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
         userText.typeText("add some text")
         
         // close keyboard
-        app.swipeDown()
+        let selecteCityTitleCenter = selecteCityTitle.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        selecteCityTitleCenter.tap()
         
         // click save button
         saveButton.tap()
@@ -344,7 +347,8 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
         userText.typeText("add some text")
         
         // close keyboard
-        app.swipeDown()
+        let selecteCityTitleCenter = selecteCityTitle.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        selecteCityTitleCenter.tap()
         
         // click cancel button
         let cancelButtonCenter = cancelButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
