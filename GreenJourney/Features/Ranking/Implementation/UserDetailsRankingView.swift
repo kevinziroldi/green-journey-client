@@ -21,7 +21,7 @@ struct UserDetailsRankingView: View {
                         RankingElementDetailsTitle(user: user)
                         
                         //badges
-                        UserDetailsBadgesView(inline: false, user: user, legendTapped: legendTapped)
+                        UserDetailsBadgesView(inline: false, user: user, legendTapped: $legendTapped)
                         
                         //user aggregate data
                         RecapViewCompactDevice(viewModel: viewModel, user: user)
@@ -48,7 +48,7 @@ struct UserDetailsRankingView: View {
                         RankingElementDetailsTitle(user: user)
                         
                         // badges
-                        UserDetailsBadgesView(inline: true, user: user, legendTapped: legendTapped)
+                        UserDetailsBadgesView(inline: true, user: user, legendTapped: $legendTapped)
                         
                         // user aggregate data
                         HStack {
@@ -104,7 +104,7 @@ struct RankingElementDetailsTitle: View {
 struct UserDetailsBadgesView: View {
     var inline: Bool
     var user: RankingElement
-    @State var legendTapped: Bool = false
+    @Binding var legendTapped: Bool
     
     var body: some View {
         ZStack {

@@ -39,7 +39,7 @@ struct CitiesReviewsView: View {
                 .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
                 
                 // city search
-                CitySearchView(viewModel: viewModel)
+                CitySearchView(viewModel: viewModel, searchTapped: $searchTapped)
                 
                 Spacer()
                 
@@ -71,7 +71,7 @@ struct CitiesReviewsView: View {
                     .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
                 
                 // city search
-                CitySearchView(viewModel: viewModel)
+                CitySearchView(viewModel: viewModel, searchTapped: $searchTapped)
                     .padding(.horizontal, 80)
                 
                 Spacer()
@@ -253,8 +253,8 @@ struct CitiesReviewsTitleView: View {
 }
 
 struct CitySearchView: View {
-    @StateObject var viewModel: CitiesReviewsViewModel
-    @State private var searchTapped: Bool = false
+    @ObservedObject var viewModel: CitiesReviewsViewModel
+    @Binding var searchTapped: Bool
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @Environment(\.modelContext) private var modelContext
     
