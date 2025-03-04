@@ -48,7 +48,7 @@ struct RankingView: View {
                     Spacer()
                     
                     // user preferences button
-                    UserPreferencesButton(navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
+                    UserPreferencesButtonView(navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
                 }
                 .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
                 
@@ -130,24 +130,8 @@ struct RankingTitleView: View {
             .font(.system(size: 32).bold())
             .padding()
             .fontWeight(.semibold)
-            .frame(maxWidth: .infinity, alignment: .center)
+            .frame(maxWidth: .infinity, alignment: .leading)
             .accessibilityIdentifier("rankingTitle")
-    }
-}
-
-struct UserPreferencesButton: View {
-    @Environment(\.modelContext) private var modelContext
-    @Binding var navigationPath: NavigationPath
-    var serverService: ServerServiceProtocol
-    var firebaseAuthService: FirebaseAuthServiceProtocol
-    
-    var body: some View {
-        NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)) {
-            Image(systemName: "person")
-                .font(.title)
-                .foregroundStyle(AppColors.mainGreen)
-        }
-        .accessibilityIdentifier("userPreferencesButton")
     }
 }
 
