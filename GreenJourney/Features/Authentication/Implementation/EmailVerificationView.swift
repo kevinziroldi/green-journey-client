@@ -88,9 +88,9 @@ struct EmailVerificationView: View {
         }
         .padding(.horizontal)
         .onChange(of: viewModel.emailVerified, {
-         if viewModel.emailVerified {
-         navigationPath = NavigationPath()
-         }
-         })
+            if viewModel.emailVerified {
+                navigationPath = NavigationPath()
+            }
+        })
     }
 }

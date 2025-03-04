@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "8CB9F341-EC46-447E-B0BF-CE853E7DFCF6",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:GreenJourney.xcodeproj",
+        "identifier" : "0AD1F0492D099709001A8464",
+        "name" : "GreenJourneyUnitTests"
+      }
+    }
+  ],
+  "version" : 1
+}

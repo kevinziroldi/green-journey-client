@@ -1,7 +1,7 @@
 {
   "configurations" : [
     {
-      "id" : "9C60397A-CE45-4643-A741-B771E5C8F85A",
+      "id" : "534CA7EB-1359-4698-8FAE-483618B32D18",
       "name" : "Configuration 1",
       "options" : {
 
@@ -13,19 +13,10 @@
   },
   "testTargets" : [
     {
-      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:GreenJourney.xcodeproj",
         "identifier" : "0AB2AA7C2D63E08000FDF38D",
-        "name" : "GreenJourneyUITests"
-      }
-    },
-    {
-      "parallelizable" : false,
-      "target" : {
-        "containerPath" : "container:GreenJourney.xcodeproj",
-        "identifier" : "0AD1F0492D099709001A8464",
-        "name" : "GreenJourneyUnitTests"
+        "name" : "GreenJourneyCompactDevicesUITests"
       }
     }
   ],
