@@ -219,7 +219,7 @@ struct BestCityView: View {
                             Spacer()
                         }
                         
-                        Text("\(cityReview.reviews.count) reviews")
+                        Text("\(cityReview.reviews.count) \(cityReview.reviews.count == 1 ? "review" : "review")")
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     
