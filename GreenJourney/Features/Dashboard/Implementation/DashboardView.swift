@@ -144,7 +144,7 @@ struct DashboardView: View {
                                 .fontWeight(.semibold)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             
-                            InfoRow(title: "Continents visited", value: "\(viewModel.visitedContinents) / 5", icon: "globe", color: .indigo, imageValue: false, imageValueString: nil)
+                            InfoRow(title: "Continents visited", value: "\(viewModel.visitedContinents) / 6", icon: "globe", color: .indigo, imageValue: false, imageValueString: nil)
 
                         }
                         
