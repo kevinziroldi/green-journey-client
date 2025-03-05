@@ -185,7 +185,7 @@ class DashboardViewModel: ObservableObject {
     }
     
     private func convertTotalDuration() -> String {
-        return UtilitiesFunctions.convertTotalDurationToString(totalDuration: totalDuration)
+        return DurationAsString.convertTotalDurationToString(totalDuration: totalDuration)
     }
     
     private func resetParameters() {

@@ -1,8 +1,7 @@
 import Foundation
 
 
-struct UtilitiesFunctions {
-    
+struct DurationAsString {
     static func convertTotalDurationToString(totalDuration: Int) -> String {
         var hours: Int = 0
         var minutes: Int = 0
@@ -36,6 +35,5 @@ struct UtilitiesFunctions {
             return "\(days) d, \(hours) h, \(minutes) min"
         }
         return "\(hours) h, \(minutes) min"
-        
     }
 }

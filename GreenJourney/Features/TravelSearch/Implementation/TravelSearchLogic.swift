@@ -32,7 +32,7 @@ struct TravelSearchLogic {
         for segment in travelOption {
             duration += segment.duration/1000000000
         }
-        return UtilitiesFunctions.convertTotalDurationToString(totalDuration: duration)
+        return DurationAsString.convertTotalDurationToString(totalDuration: duration)
     }
     
     func getOptionDeparture (_ travelOption: [Segment]) -> String {

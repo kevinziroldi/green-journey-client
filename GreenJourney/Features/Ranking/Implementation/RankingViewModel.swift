@@ -49,6 +49,6 @@ class RankingViewModel: ObservableObject {
     }
     
     func computeTotalDuration (duration: Int) -> String {
-        return UtilitiesFunctions.convertTotalDurationToString(totalDuration: duration/1000000000)
+        return DurationAsString.convertTotalDurationToString(totalDuration: duration/1000000000)
     }
 }
