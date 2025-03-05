@@ -260,6 +260,13 @@ struct CitySearchView: View {
     
     var body: some View {
         VStack {
+            Text("Select a city")
+                .font(.title)
+                .fontWeight(.semibold)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 30)
+                .accessibilityIdentifier("selectCityText")
+            
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
                     .stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 3)

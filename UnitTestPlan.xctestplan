@@ -13,6 +13,7 @@
   },
   "testTargets" : [
     {
+      "parallelizable" : false,
       "target" : {
         "containerPath" : "container:GreenJourney.xcodeproj",
         "identifier" : "0AD1F0492D099709001A8464",
