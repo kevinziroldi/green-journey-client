@@ -436,8 +436,8 @@ struct OutwardDatePickerView: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)
-                .stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 1.5)
-                .fill(AppColors.mainGreen.opacity(0.4))
+                //.stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 1.5)
+                .fill(AppColors.mainGreen)
             Button(action: {
                 dateTapped = true
             }) {
@@ -453,7 +453,7 @@ struct OutwardDatePickerView: View {
                     Spacer()
                     
                 }
-                .foregroundStyle(colorScheme == .dark ? .white : .black)
+                .foregroundStyle(Color.white)
             }
             .padding(.vertical, 10)
             .accessibilityIdentifier("outwardDateButton")
@@ -470,8 +470,8 @@ struct ReturnDatePickerView: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)
-                .stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 1.5)
-                .fill(viewModel.oneWay ? Color.gray.opacity(0.5) : AppColors.mainGreen.opacity(0.4))
+                //.stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 1.5)
+                .fill(viewModel.oneWay ? Color.gray.opacity(0.5) : AppColors.mainGreen)
             Button(action:  {
                 dateReturnTapped = true
             }) {
@@ -488,7 +488,7 @@ struct ReturnDatePickerView: View {
                     Spacer()
                     
                 }
-                .foregroundStyle(viewModel.oneWay ? Color.secondary : colorScheme == .dark ? Color.white : Color.black)
+                .foregroundStyle(viewModel.oneWay ? Color.secondary : Color.white)
             }
             .padding(.vertical, 10)
             .disabled(viewModel.oneWay)

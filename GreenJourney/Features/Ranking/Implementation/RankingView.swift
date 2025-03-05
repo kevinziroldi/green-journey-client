@@ -201,7 +201,7 @@ struct LeaderBoardsView: View {
                     LeaderBoardUserView(userRanking: currentRanking[10], gridItems: gridItems, leaderBoardSelected: viewModel.leaderboardSelected)
                         .accessibilityElement(children: .contain)
                         .accessibilityIdentifier("leaderboardUserLongDistance")
-                        .padding(10)
+                        .padding(.horizontal, 10)
                 }
             }
         }.fixedSize(horizontal: false, vertical: true)
@@ -338,6 +338,8 @@ struct LeaderBoardRow: View {
 }
 
 struct LeaderBoardUserView: View {
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+
     var userRanking: RankingElement
     var gridItems: [GridItem]
     var leaderBoardSelected: Bool
@@ -352,6 +354,7 @@ struct LeaderBoardUserView: View {
                 Circle()
                     .frame(width: 8, height: 8)
             }
+            .padding(.bottom, 10)
             
             ZStack {
                 RoundedRectangle(cornerRadius: 20)
@@ -387,8 +390,9 @@ struct LeaderBoardUserView: View {
                                 .fontWeight(.semibold)
                         }
                         
-                        BadgeView(badges: userRanking.badges, dim: 40, inline: false)
-                        
+                        if horizontalSizeClass != .compact {
+                            BadgeView(badges: userRanking.badges, dim: 40, inline: false)
+                        }
                         Text(String(format: "%.1f", leaderBoardSelected ? userRanking.scoreLongDistance : userRanking.scoreShortDistance))
                             .frame(maxWidth: 90, alignment: .center)
                             .foregroundStyle(LinearGradient(gradient: Gradient(colors: [.green, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing))
@@ -396,7 +400,6 @@ struct LeaderBoardUserView: View {
                     }
                     .padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
                 }
-                .padding(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
             }
         }
         .padding(EdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 0))

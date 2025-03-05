@@ -24,54 +24,55 @@ struct MyTravelsView: View {
     }
     var body: some View {
         VStack {
-            HStack {
-                Text("My travels")
-                    .font(.system(size: 32).bold())
-                    .padding()
-                    .fontWeight(.semibold)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .accessibilityIdentifier("myTravelsTitle")
-                
-                Spacer()
-                
-                NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)) {
-                    Image(systemName: "person")
-                        .font(.title)
-                        .foregroundStyle(AppColors.mainGreen)
-                }
-                .accessibilityIdentifier("userPreferencesButton")
-            }
-            .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
-            
-            Picker("", selection: $viewModel.showCompleted) {
-                Text("Completed").tag(true)
-                Text("Scheduled").tag(false)
-            }
-            .pickerStyle(SegmentedPickerStyle())
-            .padding()
-            .accessibilityIdentifier("travelCompletedControl")
-            
-            HStack {
-                Spacer()
-                Button(action: {
-                    showSortOptions.toggle()
-                }) {
-                    Text("Order by")
-                }
-                .padding(.trailing, 20)
-                .actionSheet(isPresented: $showSortOptions) {
-                    ActionSheet(title: Text("Sort by"), buttons: [
-                        .default(Text("Departure date")) {viewModel.sortOption = .departureDate},
-                        .default(Text("CO2 emitted")) {viewModel.sortOption = .co2Emitted},
-                        .default(Text("CO2 compensation rate")) {viewModel.sortOption = .co2CompensationRate},
-                        .default(Text("Price")) {viewModel.sortOption = .price},
-                        .cancel()
-                    ])
-                }
-                .accessibilityIdentifier("sortByButton")
-            }
-            
             ScrollView {
+                HStack {
+                    Text("My travels")
+                        .font(.system(size: 32).bold())
+                        .padding()
+                        .fontWeight(.semibold)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .accessibilityIdentifier("myTravelsTitle")
+                    
+                    Spacer()
+                    
+                    NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)) {
+                        Image(systemName: "person")
+                            .font(.title)
+                            .foregroundStyle(AppColors.mainGreen)
+                    }
+                    .accessibilityIdentifier("userPreferencesButton")
+                }
+                .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
+                
+                Picker("", selection: $viewModel.showCompleted) {
+                    Text("Completed").tag(true)
+                    Text("Scheduled").tag(false)
+                }
+                .pickerStyle(SegmentedPickerStyle())
+                .padding()
+                .accessibilityIdentifier("travelCompletedControl")
+                
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        showSortOptions.toggle()
+                    }) {
+                        Text("Order by")
+                    }
+                    .padding(.trailing, 20)
+                    .actionSheet(isPresented: $showSortOptions) {
+                        ActionSheet(title: Text("Sort by"), buttons: [
+                            .default(Text("Departure date")) {viewModel.sortOption = .departureDate},
+                            .default(Text("CO2 emitted")) {viewModel.sortOption = .co2Emitted},
+                            .default(Text("CO2 compensation rate")) {viewModel.sortOption = .co2CompensationRate},
+                            .default(Text("Price")) {viewModel.sortOption = .price},
+                            .cancel()
+                        ])
+                    }
+                    .accessibilityIdentifier("sortByButton")
+                }
+                
+                
                 if viewModel.filteredTravelDetailsList.count == 0 {
                     VStack {
                         if colorScheme == .dark {
