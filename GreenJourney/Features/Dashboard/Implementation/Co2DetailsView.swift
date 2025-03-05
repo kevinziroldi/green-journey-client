@@ -70,8 +70,10 @@ struct Co2DetailsView: View {
                 }
                 .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
                 
-                HorizontalBarChart(keys: viewModel.co2PerTransport.keys.sorted(), data: viewModel.co2PerTransport.keys.sorted().map{viewModel.co2PerTransport[$0]!}, title: "Co2 emitted per vehicle", color: .mint)
+                HorizontalBarChart(keys: viewModel.co2PerTransport.keys.sorted(), data: viewModel.co2PerTransport.keys.sorted().map{viewModel.co2PerTransport[$0]!}, title: "Co2 emitted per vehicle", color: .mint, measureUnit: "Kg")
                     .padding()
+                    .frame(height: 200)
+
                 DoubleBarChart(element1: "Co2 Emitted", keys: viewModel.keysToString(keys: viewModel.co2CompensatedPerYear.keys.sorted()), data1: viewModel.co2EmittedPerYear.keys.sorted().map{viewModel.co2EmittedPerYear[$0]!}, element2: "Co2 Compensated", data2: viewModel.co2CompensatedPerYear.keys.sorted().map{viewModel.co2CompensatedPerYear[$0]!}, title: "Co2 per year", measureunit: "Kg of CO2")
                     .padding()
                 
@@ -83,99 +85,3 @@ struct Co2DetailsView: View {
     }
 }
 
-
-struct HorizontalBarChart: View {
-    var keys: [String]
-    var data: [Float64]
-    var title: String
-    let color: Color
-    var body: some View {
-        VStack {
-            Text(title)
-                .font(.title)
-                .foregroundStyle(color.opacity(0.8))
-                .fontWeight(.semibold)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding()
-            Chart {
-                ForEach(data.indices, id: \..self) { index in
-                    BarMark(x: .value("Kg of Co2", data[index]), y: .value("Vehicle", keys[index]), width: .fixed(10))
-                        .annotation(position: .trailing) {
-                            Text(data[index].formatted() + " Kg")
-                                    .foregroundColor(.secondary)
-                                    .font(.caption)
-                            }
-                }
-                .foregroundStyle(color.gradient)
-                .cornerRadius(10)
-            }
-            .fixedSize(horizontal: false, vertical: true)
-            .chartYAxis {
-                AxisMarks(preset: .extended, position: .leading) { _ in
-                    AxisValueLabel(horizontalSpacing: 15)
-                        .font(.headline)
-                    
-                }
-            }
-            .padding()
-        }
-        .frame(height: 200)
-        .background(Color(UIColor.systemBackground))
-        .cornerRadius(15)
-        .shadow(radius: 5)
-    }
-}
-
-struct DoubleBarChart: View {
-    let element1: String
-    let data1: [String : Double]
-    let element2: String
-    let data2: [String : Double]
-    let seriesData: [(element: String, data: [String: Double])]
-    let title: String
-    let measureUnit: String
-    init(element1: String, keys: [String], data1: [Double], element2: String, data2: [Double], title: String, measureunit: String) {
-        self.element1 = element1
-        self.data1 = Dictionary(uniqueKeysWithValues: zip(keys, data1))
-        self.element2 = element2
-        self.data2 = Dictionary(uniqueKeysWithValues: zip(keys, data2))
-        self.seriesData = [(element1, self.data1), (element2, self.data2)]
-        self.title = title
-        self.measureUnit = measureunit
-    }
-    var body: some View {
-        VStack {
-            Text(title)
-                .font(.title)
-                .foregroundStyle(.green.opacity(0.8))
-                .fontWeight(.semibold)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding()
-            Chart {
-                ForEach(seriesData, id: \.0) { series in
-                    ForEach(series.data.sorted(by: { $0.key < $1.key }), id: \.key) { item in
-                        BarMark(x: .value("Year", item.key), y: .value("", item.value), width: .fixed(20))
-                            .cornerRadius(5)
-                            .annotation(position: .top) {
-                                   if item.value > 0 {
-                                    Text(String(format: "%.0f", item.value))
-                                        .foregroundColor(.secondary)
-                                        .font(.caption)
-                                }
-                            }
-                    }
-                    .foregroundStyle(by: .value("", series.element))
-                    .position(by: .value("Element", series.element))
-                }
-            }
-            .chartYAxisLabel {
-                Text(measureUnit)
-            }
-            .frame(height: 300)
-            .padding()
-        }
-        .background(Color(UIColor.systemBackground))
-        .cornerRadius(15)
-        .shadow(radius: 5)
-    }
-}

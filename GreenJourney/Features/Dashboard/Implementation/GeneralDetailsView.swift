@@ -21,9 +21,7 @@ struct GeneralDetailsView: View {
                         InfoRow(title: "Distance made", value: String(format: "%.0f", viewModel.totalDistance) + " Km", icon: "road.lanes", color: .indigo, imageValue: false, imageValueString: nil)
                         
                         InfoRow(title: "Travel time", value: viewModel.totalDurationString, icon: "clock", color: .blue, imageValue: false, imageValueString: nil)
-                        
-                        InfoRow(title: "Most chosen vehicle", value: "", icon: "figure.wave", color: .indigo, imageValue: true, imageValueString: viewModel.mostChosenVehicle)
-                        
+                                                
                         
                     }
                 }
@@ -37,61 +35,15 @@ struct GeneralDetailsView: View {
                     .padding()
                     .overlay(Color.clear.accessibilityIdentifier("distanceTraveled"))
                 
-                PieChartView(keys: viewModel.distancePerTransport.keys.sorted(), data: viewModel.travelsPerTransport.keys.sorted().map{viewModel.travelsPerTransport[$0]!}, title: "Most chosen Vehicle", color: .blue, icon: viewModel.mostChosenVehicle)
+                HorizontalBarChart(keys: viewModel.distancePerTransport.keys.sorted(), data: viewModel.distancePerTransport.keys.sorted().map{viewModel.distancePerTransport[$0]!}, title: "Distance per vehicle", color: .pink, measureUnit: "Km")
                     .padding()
-            }
-        }
-    }
-}
+                    .frame(height: 250)
 
-
-struct PieChartView: View {
-    var keys: [String]
-    var data: [Int]
-    var title: String
-    let color: Color
-    let icon: String
-    var body: some View {
-        VStack {
-            HStack {
-                Text(title)
-                    .font(.title)
-                    .foregroundStyle(color.opacity(0.8))
-                    .fontWeight(.semibold)
-                    .padding()
-                Spacer()
-                ZStack {
-                    Circle()
-                        .fill(color.opacity(0.2).gradient)
-                        .frame(width: 50, height: 50)
-                    Image(systemName: icon)
-                        .foregroundStyle(color)
-                        .font(.title)
-                }
-                Spacer()
-                Spacer()
-            }
-            Chart {
-                ForEach(data.indices, id: \..self) { index in
-                    SectorMark(angle: .value("Distance", data[index]), angularInset: 2)
-                        .foregroundStyle(by: .value("Vehicle", keys[index]))
-                        .cornerRadius(5)
-                        .annotation(position: .overlay) {
-                            if data[index] != 0 {
-                                Text("\(data[index])")
-                                    .font(.headline)
-                                    .foregroundStyle(.white)
-                            }
-                        }
-                }
                 
+                PieChartView(keys: viewModel.travelsPerTransport.keys.sorted(), data: viewModel.travelsPerTransport.keys.sorted().map{viewModel.travelsPerTransport[$0]!}, title: "Most chosen Vehicle", color: .orange, icon: viewModel.mostChosenVehicle)
+                    .padding()
             }
-            .padding()
-            .padding(.bottom)
         }
-        .frame(height: 350)
-        .background(Color(UIColor.systemBackground))
-        .cornerRadius(15)
-        .shadow(radius: 5)
     }
 }
+
