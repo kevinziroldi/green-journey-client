@@ -327,15 +327,14 @@ struct LatestReviewsView: View {
                         
                         HStack (spacing: 3) {
                             Spacer()
+                            Image(systemName: "arrowshape.forward.circle")
+                                .font(.title3)
+                                .fontWeight(.light)
+                                .foregroundStyle(.white)
+                            Spacer()
                             Text("See all reviews")
                                 .foregroundStyle(.white)
                                 .fontWeight(.semibold)
-                            Spacer()
-                            Image(systemName: "arrowshape.forward.circle")
-                                .font(.title3)
-                                .fontWeight(.semibold)
-                                .fontWeight(.light)
-                                .foregroundStyle(.white)
                             Spacer()
                         }
                         .padding(10)

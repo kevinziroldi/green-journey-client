@@ -24,15 +24,15 @@ struct InsertReviewButton: View {
                                 
                                 HStack (spacing: 3) {
                                     Spacer()
-                                    Text("Leave a review")
-                                        .foregroundStyle(.white)
-                                        .fontWeight(.semibold)
-                                    Spacer()
                                     Image(systemName: "pencil.and.scribble")
                                         .font(.title3)
                                         .fontWeight(.semibold)
                                         .fontWeight(.light)
                                         .foregroundStyle(.white)
+                                    Spacer()
+                                    Text("Leave a review")
+                                        .foregroundStyle(.white)
+                                        .fontWeight(.semibold)
                                     Spacer()
                                 }
                                 .padding(10)

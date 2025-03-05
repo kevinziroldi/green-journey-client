@@ -105,15 +105,24 @@ struct TravelSearchView: View {
                                 triggerAI = false
                                 
                             }) {
+                                
                                 ZStack {
                                     RoundedRectangle(cornerRadius: 10)
                                         .fill((viewModel.departure.iata == "" || viewModel.arrival.iata == "") ? .black.opacity(0.3) : AppColors.mainGreen)
-                                    HStack{
-                                        Text("Search")
-                                            .font(.title)
+                                    
+                                    HStack (spacing: 3) {
+                                        Spacer()
+                                        Image(systemName: "location.magnifyingglass")
+                                            .font(.title3)
+                                            .fontWeight(.light)
                                             .foregroundStyle(.white)
-                                            .padding(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
+                                        Spacer()
+                                        Text("Search")
+                                            .foregroundStyle(.white)
+                                            .fontWeight(.semibold)
+                                        Spacer()
                                     }
+                                    .padding(10)
                                 }
                                 .fixedSize()
                             }
@@ -173,16 +182,144 @@ struct TravelSearchHeaderView: View {
             
             if horizontalSizeClass == .compact {
                 // iOS
-                NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)) {
-                    Image(systemName: "person")
-                        .font(.title)
-                        .foregroundStyle(AppColors.mainGreen)
-                }
+                UserPreferencesButtonView(navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
                 .disabled(triggerAI)
                 .opacity(triggerAI ? 0 : 1)
-                .accessibilityIdentifier("userPreferencesButton")
             }
         }
+    }
+}
+
+struct TravelChoiceView: View {
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    
+    @ObservedObject var viewModel: TravelSearchViewModel
+    
+    @Binding var departureTapped: Bool
+    @Binding var destinationTapped: Bool
+    @Binding var dateTapped: Bool
+    @Binding var dateReturnTapped: Bool
+    @Binding var triggerAI: Bool
+    
+    var body: some View {
+        if horizontalSizeClass == .compact {
+            // iOS
+            
+            ZStack {
+                // path drawing
+                GeometryReader { geometry in
+                    Path { path in
+                        path.move(to: CGPoint(x: geometry.size.width/2 - 10, y: 0))
+                        
+                        // first curve
+                        path.addQuadCurve(
+                            to: CGPoint(x: geometry.size.width/2, y: geometry.size.height/2),
+                            control: CGPoint(x: 0, y: geometry.size.height/4)
+                        )
+                        path.addQuadCurve(
+                            to: CGPoint(x: geometry.size.width/2 + 25, y: geometry.size.height),
+                            control: CGPoint(x: geometry.size.width, y: geometry.size.height * 3/4)
+                        )
+                    }
+                    .stroke(style: StrokeStyle(lineWidth: 5, dash: [11, 6]))
+                    .foregroundColor(.primary)
+                }
+                .frame(width: 90, height: 120)
+                .position(x: 45, y: 100)
+                
+                VStack {
+                    // departure
+                    DepartureTitleView()
+                    DepartureCompleterView(viewModel: viewModel, departureTapped: $departureTapped, triggerAI: $triggerAI)
+                        .padding(EdgeInsets(top: 0, leading: 40, bottom: 20, trailing: 40))
+
+                    
+                    // destination
+                    DestinationTitleView()
+                    DestinationCompleterView(viewModel: viewModel, destinationTapped: $destinationTapped, triggerAI: $triggerAI)
+                        .padding(EdgeInsets(top: 0, leading: 40, bottom: 20, trailing: 40))
+
+                }
+            }
+            
+            Spacer()
+            
+            VStack {
+                // date pickers
+                OutwardDatePickerView(dateTapped: $dateTapped, viewModel: viewModel)
+                ReturnDatePickerView(dateReturnTapped: $dateReturnTapped, viewModel: viewModel)
+            }
+            .fixedSize(horizontal: false, vertical: true)
+            .padding(.horizontal, 45)
+        } else {
+            // iPadOS
+            
+            ZStack {
+                // path drawing
+                GeometryReader { geometry in
+                    Path { path in
+                        path.move(to: CGPoint(x: geometry.size.width/2 - 10, y: 0))
+                        
+                        // first curve
+                        path.addQuadCurve(
+                            to: CGPoint(x: geometry.size.width/2, y: geometry.size.height/2),
+                            control: CGPoint(x: 0, y: geometry.size.height/4)
+                        )
+                        path.addQuadCurve(
+                            to: CGPoint(x: geometry.size.width/2 + 25, y: geometry.size.height),
+                            control: CGPoint(x: geometry.size.width, y: geometry.size.height * 3/4)
+                        )
+                    }
+                    .stroke(style: StrokeStyle(lineWidth: 5, dash: [11, 6]))
+                    .foregroundColor(.primary)
+                }
+                .frame(width: 90, height: 120)
+                .position(x: 45, y: 100)
+                
+                VStack {
+                    // departure
+                    VStack {
+                        // tile
+                        DepartureTitleView()
+                        
+                        HStack {
+                            DepartureCompleterView(viewModel: viewModel, departureTapped: $departureTapped, triggerAI: $triggerAI)
+                            Spacer()
+                            OutwardDatePickerView(dateTapped: $dateTapped, viewModel: viewModel)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .padding(.horizontal, 45)
+                        }
+                        .padding(EdgeInsets(top: 0, leading: 40, bottom: 20, trailing: 40))
+                    }
+                    
+                    
+                    VStack {
+                        // title
+                        DestinationTitleView()
+                    
+                        HStack {
+                            DestinationCompleterView(viewModel: viewModel, destinationTapped: $destinationTapped, triggerAI: $triggerAI)
+                            Spacer()
+                            ReturnDatePickerView(dateReturnTapped: $dateReturnTapped, viewModel: viewModel)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .padding(.horizontal, 45)
+                        }
+                        .padding(EdgeInsets(top: 0, leading: 40, bottom: 20, trailing: 40))
+                    }
+                }
+            }
+        }
+    }
+}
+
+struct DepartureTitleView: View {
+    var body: some View {
+        Text("From")
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(EdgeInsets(top: 10, leading: 40, bottom: 0, trailing: 40))
+            .frame(alignment: .top)
+            .font(.title)
+            .accessibilityIdentifier("departureLabel")
     }
 }
 
@@ -196,12 +333,6 @@ struct DepartureCompleterView: View {
     
     var body: some View {
         VStack {
-            Text("From")
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(EdgeInsets(top: 10, leading: 40, bottom: 0, trailing: 40))
-                .frame(alignment: .top)
-                .font(.title)
-                .accessibilityIdentifier("departureLabel")
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
                     .stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 3)
@@ -221,7 +352,6 @@ struct DepartureCompleterView: View {
             }
             .background(colorScheme == .dark ? Color(red: 48/255, green: 48/255, blue: 48/255) : Color.white)
             .cornerRadius(10)
-            .padding(EdgeInsets(top: 0, leading: 40, bottom: 20, trailing: 40))
         }
         .fullScreenCover(isPresented: $departureTapped ) {
             CompleterView(modelContext: modelContext, searchText: viewModel.departure.cityName,
@@ -238,6 +368,17 @@ struct DepartureCompleterView: View {
     }
 }
 
+struct DestinationTitleView: View {
+    var body: some View {
+        Text("To")
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(EdgeInsets(top: 10, leading: 40, bottom: 0, trailing: 40))
+            .frame(alignment: .top)
+            .font(.title)
+            .accessibilityIdentifier("destinationLabel")
+    }
+}
+
 struct DestinationCompleterView: View {
     @Environment(\.modelContext) private var modelContext: ModelContext
     @Environment(\.colorScheme) var colorScheme: ColorScheme
@@ -248,12 +389,6 @@ struct DestinationCompleterView: View {
     
     var body: some View {
         VStack{
-            Text("To")
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(EdgeInsets(top: 10, leading: 40, bottom: 0, trailing: 40))
-                .frame(alignment: .top)
-                .font(.title)
-                .accessibilityIdentifier("destinationLabel")
             ZStack{
                 RoundedRectangle(cornerRadius: 10)
                     .stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 3)
@@ -275,7 +410,6 @@ struct DestinationCompleterView: View {
             }
             .background(triggerAI ? LinearGradient(gradient: Gradient(colors: [.green, .cyan, .blue, .cyan, .green]), startPoint: .bottomLeading, endPoint: .topTrailing) : LinearGradient(gradient: Gradient(colors: [colorScheme == .dark ? Color(red: 48/255, green: 48/255, blue: 48/255) : Color.white]), startPoint: .bottomLeading, endPoint: .topTrailing))
             .cornerRadius(10)
-            .padding(EdgeInsets(top: 0, leading: 40, bottom: 20, trailing: 40))
         }
         .fullScreenCover(isPresented: $destinationTapped ) {
             CompleterView(modelContext: modelContext, searchText: viewModel.arrival.cityName,
@@ -404,104 +538,6 @@ struct DatePickerView: View {
         .frame(maxWidth: .infinity)
         .background(Color.white)
         
-    }
-}
-
-struct TravelChoiceView: View {
-    @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    
-    @ObservedObject var viewModel: TravelSearchViewModel
-    
-    @Binding var departureTapped: Bool
-    @Binding var destinationTapped: Bool
-    @Binding var dateTapped: Bool
-    @Binding var dateReturnTapped: Bool
-    @Binding var triggerAI: Bool
-    
-    var body: some View {
-        if horizontalSizeClass == .compact {
-            // iOS
-            
-            ZStack {
-                // path drawing
-                GeometryReader { geometry in
-                    Path { path in
-                        path.move(to: CGPoint(x: geometry.size.width/2 - 10, y: 0))
-                        
-                        // first curve
-                        path.addQuadCurve(
-                            to: CGPoint(x: geometry.size.width/2, y: geometry.size.height/2),
-                            control: CGPoint(x: 0, y: geometry.size.height/4)
-                        )
-                        path.addQuadCurve(
-                            to: CGPoint(x: geometry.size.width/2 + 25, y: geometry.size.height),
-                            control: CGPoint(x: geometry.size.width, y: geometry.size.height * 3/4)
-                        )
-                    }
-                    .stroke(style: StrokeStyle(lineWidth: 5, dash: [11, 6]))
-                    .foregroundColor(.primary)
-                }
-                .frame(width: 90, height: 120)
-                .position(x: 45, y: 100)
-                
-                VStack {
-                    DepartureCompleterView(viewModel: viewModel, departureTapped: $departureTapped, triggerAI: $triggerAI)
-                    DestinationCompleterView(viewModel: viewModel, destinationTapped: $destinationTapped, triggerAI: $triggerAI)
-                }
-            }
-            
-            Spacer()
-            
-            VStack {
-                OutwardDatePickerView(dateTapped: $dateTapped, viewModel: viewModel)
-                ReturnDatePickerView(dateReturnTapped: $dateReturnTapped, viewModel: viewModel)
-            }
-            .fixedSize(horizontal: false, vertical: true)
-            .padding(.horizontal, 45)
-        } else {
-            // iPadOS
-            
-            ZStack {
-                // path drawing
-                GeometryReader { geometry in
-                    Path { path in
-                        path.move(to: CGPoint(x: geometry.size.width/2 - 10, y: 0))
-                        
-                        // first curve
-                        path.addQuadCurve(
-                            to: CGPoint(x: geometry.size.width/2, y: geometry.size.height/2),
-                            control: CGPoint(x: 0, y: geometry.size.height/4)
-                        )
-                        path.addQuadCurve(
-                            to: CGPoint(x: geometry.size.width/2 + 25, y: geometry.size.height),
-                            control: CGPoint(x: geometry.size.width, y: geometry.size.height * 3/4)
-                        )
-                    }
-                    .stroke(style: StrokeStyle(lineWidth: 5, dash: [11, 6]))
-                    .foregroundColor(.primary)
-                }
-                .frame(width: 90, height: 120)
-                .position(x: 45, y: 100)
-                
-                VStack {
-                    HStack {
-                        DepartureCompleterView(viewModel: viewModel, departureTapped: $departureTapped, triggerAI: $triggerAI)
-                        Spacer()
-                        OutwardDatePickerView(dateTapped: $dateTapped, viewModel: viewModel)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .padding(.horizontal, 45)
-                    }
-                    
-                    HStack {
-                        DestinationCompleterView(viewModel: viewModel, destinationTapped: $destinationTapped, triggerAI: $triggerAI)
-                        Spacer()
-                        ReturnDatePickerView(dateReturnTapped: $dateReturnTapped, viewModel: viewModel)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .padding(.horizontal, 45)
-                    }
-                }
-            }
-        }
     }
 }
 

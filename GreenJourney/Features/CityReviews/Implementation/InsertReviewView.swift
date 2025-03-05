@@ -111,7 +111,7 @@ struct InsertReviewView: View {
                     .alert(isPresented: $showAlert) {
                         Alert(
                             title: Text("Delete this review?"),
-                            message: Text("you cannot undo this action"),
+                            message: Text("You cannot undo this action"),
                             primaryButton: .cancel(Text("Cancel")) {},
                             secondaryButton: .destructive(Text("Delete")) {
                                 //delete review
