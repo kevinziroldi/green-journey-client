@@ -1,4 +1,5 @@
 import SwiftUI
+import Charts
 
 struct GeneralDetailsView: View {
     @ObservedObject var viewModel: DashboardViewModel
@@ -36,7 +37,61 @@ struct GeneralDetailsView: View {
                     .padding()
                     .overlay(Color.clear.accessibilityIdentifier("distanceTraveled"))
                 
+                PieChartView(keys: viewModel.distancePerTransport.keys.sorted(), data: viewModel.travelsPerTransport.keys.sorted().map{viewModel.travelsPerTransport[$0]!}, title: "Most chosen Vehicle", color: .blue, icon: viewModel.mostChosenVehicle)
+                    .padding()
             }
         }
+    }
+}
+
+
+struct PieChartView: View {
+    var keys: [String]
+    var data: [Int]
+    var title: String
+    let color: Color
+    let icon: String
+    var body: some View {
+        VStack {
+            HStack {
+                Text(title)
+                    .font(.title)
+                    .foregroundStyle(color.opacity(0.8))
+                    .fontWeight(.semibold)
+                    .padding()
+                Spacer()
+                ZStack {
+                    Circle()
+                        .fill(color.opacity(0.2).gradient)
+                        .frame(width: 50, height: 50)
+                    Image(systemName: icon)
+                        .foregroundStyle(color)
+                        .font(.title)
+                }
+                Spacer()
+                Spacer()
+            }
+            Chart {
+                ForEach(data.indices, id: \..self) { index in
+                    SectorMark(angle: .value("Distance", data[index]), angularInset: 2)
+                        .foregroundStyle(by: .value("Vehicle", keys[index]))
+                        .cornerRadius(5)
+                        .annotation(position: .overlay) {
+                            if data[index] != 0 {
+                                Text("\(data[index])")
+                                    .font(.headline)
+                                    .foregroundStyle(.white)
+                            }
+                        }
+                }
+                
+            }
+            .padding()
+            .padding(.bottom)
+        }
+        .frame(height: 350)
+        .background(Color(UIColor.systemBackground))
+        .cornerRadius(15)
+        .shadow(radius: 5)
     }
 }

@@ -22,7 +22,7 @@ class DashboardViewModel: ObservableObject {
     @Published var co2CompensatedPerYear: [Int: Double] = [:]
     @Published var co2PerTransport: [String: Float64] = ["car": 0, "plane": 0, "bus": 0, "train": 0]
     @Published var distancePerTransport: [String: Float64] = ["car": 0, "bike": 0, "plane": 0, "bus": 0, "train": 0]
-    
+    @Published var travelsPerTransport: [String: Int] = ["car": 0, "bike": 0, "plane": 0, "bus": 0, "train": 0]
 
     @Published var totalTripsMade: Int = 0
     var totalDuration: Int = 0
@@ -154,6 +154,11 @@ class DashboardViewModel: ObservableObject {
             treesPlanted = Int(co2Compensated/75)
             mostChosenVehicle = vehicles.max(by: { $0.value < $1.value })?.key ?? ""
             totalDurationString = convertTotalDuration()
+            travelsPerTransport["car"] = vehicles["car"]
+            travelsPerTransport["bike"] = vehicles["bicycle"]
+            travelsPerTransport["train"] = vehicles["tram"]
+            travelsPerTransport["plane"] = vehicles["airplane"]
+            travelsPerTransport["bus"] = vehicles["bus"]
         }
         catch {
             print("Error fetching user travels")
