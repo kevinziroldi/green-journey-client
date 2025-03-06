@@ -364,7 +364,6 @@ struct CarouselView: View {
             HStack {
                 ForEach(reviews) { review in
                     CardView(review: review, width: width)
-                        .padding()
                         .containerRelativeFrame(.horizontal, count: 1, spacing: 15)
                         .scrollTransition{ content, phase in
                             content
@@ -374,7 +373,7 @@ struct CarouselView: View {
             }
             .scrollTargetLayout()
         }
-        .contentMargins(50, for: .scrollContent)
+        .contentMargins(30, for: .scrollContent)
         .scrollTargetBehavior(.viewAligned)
     }
 }
