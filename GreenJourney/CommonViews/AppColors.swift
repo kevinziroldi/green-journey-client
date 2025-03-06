@@ -16,4 +16,7 @@ enum AppColors {
     
     // verde acceso
     //static let mainGreen = Color(red: 49/255, green: 113/255, blue: 50/255)
+    
+    //blu matteo
+    static let mainBlue = Color(red: 0/255, green: 75/255, blue: 200/255)
 }
