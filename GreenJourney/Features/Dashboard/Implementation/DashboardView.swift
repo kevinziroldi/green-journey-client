@@ -81,6 +81,9 @@ struct DashboardView: View {
                                         .font(.title)
                                         .foregroundStyle(.teal.opacity(0.8))
                                         .fontWeight(.semibold)
+                                        .scaledToFit()
+                                        .minimumScaleFactor(0.6)
+                                        .lineLimit(1)
                                     Spacer()
                                     Image(systemName: "chart.bar.xaxis.ascending")
                                         .foregroundColor(.teal.opacity(0.8))
@@ -143,6 +146,9 @@ struct DashboardView: View {
                                         .font(.title)
                                         .foregroundStyle(.red.opacity(0.6))
                                         .fontWeight(.semibold)
+                                        .scaledToFit()
+                                        .minimumScaleFactor(0.6)
+                                        .lineLimit(1)
                                     Spacer()
                                     Image(systemName: "chart.bar.xaxis.ascending")
                                         .foregroundColor(.red.opacity(0.8))
@@ -192,45 +198,49 @@ struct InfoRow: View {
     
     var body: some View {
         HStack {
-            ZStack {
-                Circle()
-                    .fill(color.opacity(0.2))
-                    .frame(width: 50, height: 50)
-                
-                Image(systemName: icon)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 30, height: 30)
-                    .foregroundColor(color)
-            }
-            
-           
+            HStack {
+                ZStack {
+                    Circle()
+                        .fill(color.opacity(0.2))
+                        .frame(width: 50, height: 50)
+                    
+                    Image(systemName: icon)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 30, height: 30)
+                        .foregroundColor(color)
+                }
                 Text(title)
                     .font(.system(size: 20).bold())
                     .foregroundColor(.primary)
-            if title != "" {
-                Spacer()
-            }
-                
+                if title != "" {
+                    Spacer()
+                }
                 if !imageValue {
                     Text(value)
                         .font(.system(size: 25).bold())
                         .bold()
                         .foregroundColor(color.opacity(0.8))
-            }
-            else {
-                if let imageValueString = imageValueString {
-                    Image(systemName: imageValueString)
-                        .resizable()
-                        .fontWeight(.semibold)
-                        .scaledToFit()
-                        .frame(width: 45, height: 45)
-                        .foregroundColor(color.opacity(0.8))
+                    
                 }
-                
+                else {
+                    if let imageValueString = imageValueString {
+                        Image(systemName: imageValueString)
+                            .resizable()
+                            .fontWeight(.semibold)
+                            .scaledToFit()
+                            .frame(width: 45, height: 45)
+                            .foregroundColor(color.opacity(0.8))
+                    }
+                    
+                }
             }
+            .scaledToFit()
+            .minimumScaleFactor(0.6)
+            .lineLimit(1)
             Spacer()
         }
+        
         .padding(.horizontal)
         .padding(.vertical, 5)
         

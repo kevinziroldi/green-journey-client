@@ -56,6 +56,9 @@ struct SegmentDetailView: View {
                             .fontWeight(.light)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .accessibilityIdentifier("departureDate")
+                            .scaledToFit()
+                            .minimumScaleFactor(0.6)
+                            .lineLimit(1)
                         Spacer()
                     }
                     
@@ -191,6 +194,9 @@ struct SegmentDetailView: View {
                             .fontWeight(.light)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .accessibilityIdentifier("arrivalDate")
+                            .scaledToFit()
+                            .minimumScaleFactor(0.6)
+                            .lineLimit(1)
                         Spacer()
                     }
                 }

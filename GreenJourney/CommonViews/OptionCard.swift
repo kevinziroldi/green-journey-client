@@ -21,8 +21,14 @@ struct OptionCard: View {
                         Text(option.first?.dateTime.formatted(date: .numeric, time: .shortened) ?? "")
                             .font(.subheadline)
                             .fontWeight(.light)
+                            .scaledToFit()
+                            .minimumScaleFactor(0.6)
+                            .lineLimit(1)
                         Text(viewModel.getOptionDeparture(option))
                             .font(.title3)
+                            .scaledToFit()
+                            .minimumScaleFactor(0.6)
+                            .lineLimit(1)
                         ZStack {
                             let changes = viewModel.countChanges(option)
                             if (changes > 1){
@@ -42,11 +48,17 @@ struct OptionCard: View {
                         }
                         Text(viewModel.getOptionDestination(option))
                             .font(.title3)
+                            .scaledToFit()
+                            .minimumScaleFactor(0.6)
+                            .lineLimit(1)
                         
                         let arrivalDate = option.last?.getArrivalDateTime()
                         Text(arrivalDate?.formatted(date: .numeric, time: .shortened) ?? "")
                             .font(.subheadline)
                             .fontWeight(.light)
+                            .scaledToFit()
+                            .minimumScaleFactor(0.6)
+                            .lineLimit(1)
                         
                     }
                     Spacer()

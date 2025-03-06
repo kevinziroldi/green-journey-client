@@ -98,15 +98,20 @@ struct TravelDetailsView: View {
                                                             .disabled(plantedTrees==viewModel.getPlantedTrees(travelDetails))
                                                             .accessibilityIdentifier("minusButton")
                                                         }
-                                                        .padding(.leading, 20)
+                                                        //.padding(.leading, 20)
                                                         
+                                             
                                                         Spacer()
                                                         
-                                                        Text("\(plantedTrees) / \(totalTrees)")
-                                                            .font(.system(size: 25))
-                                                        Image(systemName: "tree")
-                                                            .font(.system(size: 25))
-                                                            .padding(.bottom, 5)
+                                                        HStack {
+                                                            Text("\(plantedTrees) / \(totalTrees)")
+                                                                .font(.system(size: 25))
+                                                            Image(systemName: "tree")
+                                                                .font(.system(size: 25))
+                                                                .padding(.bottom, 5)
+                                                        }
+                                                        .scaledToFit()
+                                                        .minimumScaleFactor(0.6)
                                                         
                                                         Spacer()
                                                     }
@@ -133,12 +138,15 @@ struct TravelDetailsView: View {
                                                                     .foregroundStyle(.white)
                                                                     .fontWeight(.semibold)
                                                             }
+                                                            .scaledToFit()
+                                                            .minimumScaleFactor(0.6)
                                                             .padding(10)
                                                         }
                                                         .fixedSize()
                                                     }
                                                     .disabled(plantedTrees==viewModel.getPlantedTrees(travelDetails))
                                                     .padding(.bottom, 15)
+                                                    
                                                     .alert(isPresented: $showAlertCompensation) {
                                                         Alert(
                                                             title: Text("Compensate \(viewModel.compensatedPrice)€ for this travel?"),
@@ -164,6 +172,7 @@ struct TravelDetailsView: View {
                                                     }
                                                     .accessibilityIdentifier("compensateButton")
                                                 }
+                                                .padding(.leading, 15)
                                                 .padding(.vertical)
                                             }
                                             else {

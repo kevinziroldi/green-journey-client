@@ -453,6 +453,9 @@ struct OutwardDatePickerView: View {
                     Spacer()
                     
                 }
+                .scaledToFit()
+                .minimumScaleFactor(0.6)
+                .lineLimit(1)
                 .foregroundStyle(Color.white)
             }
             .padding(.vertical, 10)
@@ -488,6 +491,9 @@ struct ReturnDatePickerView: View {
                     Spacer()
                     
                 }
+                .scaledToFit()
+                .minimumScaleFactor(0.6)
+                .lineLimit(1)
                 .foregroundStyle(viewModel.oneWay ? Color.secondary : Color.white)
             }
             .padding(.vertical, 10)
