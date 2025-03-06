@@ -309,7 +309,7 @@ struct LatestReviewsView: View {
                 
                 // latest reviews
                 if horizontalSizeClass == .compact {
-                    CarouselView(cards: selectedCityReviewElement.getLastReviews(num: 5))
+                    CarouselView(reviews: selectedCityReviewElement.getLastReviews(num: 5))
                         .frame(height: 250)
                 } else {
                     VStack {
@@ -357,70 +357,31 @@ struct LatestReviewsView: View {
 }
 
 struct CarouselView: View {
-    var cards: [Review]
+    var reviews: [Review]
+    let width: CGFloat = UIScreen.main.bounds.width * 0.7
     var body: some View {
-        GeometryReader { reader in
-            SnapperView(size: reader.size, cards: cards)
-        }
-    }
-}
-
-struct SnapperView: View {
-    let size: CGSize
-    let cards: [Review]
-    private let padding: CGFloat
-    private let cardWidth: CGFloat
-    private let spacing: CGFloat = 15.0
-    private let maxSwipeDistance: CGFloat
-    
-    @State private var currentCardIndex: Int = 1
-    @State private var isDragging: Bool = false
-    @State private var totalDrag: CGFloat = 0.0
-    
-    init(size: CGSize, cards: [Review]) {
-        self.size = size
-        self.cards = cards
-        self.cardWidth = size.width * 0.85
-        self.padding = (size.width - cardWidth) / 2.0
-        self.maxSwipeDistance = cardWidth + spacing
-    }
-    
-    var body: some View {
-        let offset: CGFloat = maxSwipeDistance - (maxSwipeDistance * CGFloat(currentCardIndex))
-        LazyHStack(spacing: spacing) {
-            ForEach(cards) { card in
-                CardView(review: card, width: cardWidth)
-                    .offset(x: isDragging ? totalDrag : 0)
-                    .overlay(Color.clear.accessibilityIdentifier("reviewElement_\(card.reviewID ?? -1)"))
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack {
+                ForEach(reviews) { review in
+                    CardView(review: review, width: width)
+                        .padding()
+                        .containerRelativeFrame(.horizontal, count: 1, spacing: 15)
+                        .scrollTransition{ content, phase in
+                            content
+                                .opacity(phase.isIdentity ? 1 : 0.8)
+                        }
+                }
             }
+            .scrollTargetLayout()
         }
-        .padding(.horizontal, padding)
-        .offset(x: offset, y: 0)
-        .gesture(
-            DragGesture()
-                .onChanged { value in
-                    isDragging = true
-                    totalDrag = value.translation.width
-                }
-                .onEnded { value in
-                    totalDrag = 0.0
-                    isDragging = false
-                    
-                    if (value.translation.width < -(cardWidth / 3.0) && self.currentCardIndex < cards.count) {
-                        self.currentCardIndex = self.currentCardIndex + 1
-                    }
-                    if (value.translation.width > (cardWidth / 3.0) && self.currentCardIndex > 1) {
-                        self.currentCardIndex = self.currentCardIndex - 1
-                    }
-                }
-        )
+        .contentMargins(50, for: .scrollContent)
+        .scrollTargetBehavior(.viewAligned)
     }
 }
 
 struct CardView: View {
     let review: Review
     let width: CGFloat
-    
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 20)

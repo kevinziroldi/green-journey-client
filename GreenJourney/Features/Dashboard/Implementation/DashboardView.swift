@@ -291,7 +291,7 @@ struct BarChartView: View {
         }
         .background(Color(UIColor.systemBackground))
         .cornerRadius(15)
-        .shadow(radius: 5)
+        .shadow(color: color.opacity(0.3), radius: 5, x: 0, y: 3)
     }
 }
 
@@ -343,7 +343,7 @@ struct PieChartView: View {
         .frame(height: 350)
         .background(Color(UIColor.systemBackground))
         .cornerRadius(15)
-        .shadow(radius: 5)
+        .shadow(color: color.opacity(0.3), radius: 5, x: 0, y: 3)
     }
 }
 
@@ -387,7 +387,7 @@ struct HorizontalBarChart: View {
         }
         .background(Color(UIColor.systemBackground))
         .cornerRadius(15)
-        .shadow(radius: 5)
+        .shadow(color: color.opacity(0.3), radius: 5, x: 0, y: 3)
     }
 }
 
@@ -415,7 +415,8 @@ struct DoubleBarChart: View {
                 .foregroundStyle(.green.opacity(0.8))
                 .fontWeight(.semibold)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding()
+                .padding(.horizontal)
+                .padding(.top)
             Chart {
                 ForEach(seriesData, id: \.0) { series in
                     ForEach(series.data.sorted(by: { $0.key < $1.key }), id: \.key) { item in
@@ -436,12 +437,12 @@ struct DoubleBarChart: View {
             .chartYAxisLabel {
                 Text(measureUnit)
             }
-            .frame(height: 300)
+            .frame(height: 250)
             .padding()
         }
         .background(Color(UIColor.systemBackground))
         .cornerRadius(15)
-        .shadow(radius: 5)
+        .shadow(radius: 5, x: 0, y: 3)
     }
 }
 

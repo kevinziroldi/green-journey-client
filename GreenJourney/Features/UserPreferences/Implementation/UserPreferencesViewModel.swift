@@ -33,7 +33,7 @@ class UserPreferencesViewModel: ObservableObject {
     
     @Published var firstName: String = ""
     @Published var lastName: String = ""
-    @Published var birthDate: Date?
+    @Published var birthDate: Date = Date()
     @Published var gender: Gender = .notSpecified
     @Published var city: String?
     @Published var streetName: String?
@@ -54,7 +54,7 @@ class UserPreferencesViewModel: ObservableObject {
             if let user = users.first {
                 self.firstName = user.firstName
                 self.lastName = user.lastName
-                self.birthDate = user.birthDate
+                self.birthDate = user.birthDate ?? Date()
                 self.gender = Gender(from: user.gender)
                 self.city = user.city
                 self.streetName = user.streetName

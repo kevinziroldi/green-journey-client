@@ -37,6 +37,24 @@ struct WorldExplorationView: View {
                 HorizontalBarChart(keys: viewModel.countriesPerContinent.keys.sorted(), data: viewModel.countriesPerContinent.keys.sorted().map{Float64(viewModel.countriesPerContinent[$0]!)}, title: "Countries", color: .yellow, measureUnit: "")
                     .frame(height: 250)
                     .padding()
+                
+                ZStack {
+                    RoundedRectangle(cornerRadius: 15)
+                        .fill(Color(uiColor: .systemBackground))
+                        .shadow(color: .orange.opacity(0.3), radius: 5, x: 0, y: 3)
+                    VStack (spacing:0){
+                        Text("Visited countries")
+                            .font(.title)
+                            .foregroundStyle(.orange.opacity(0.8))
+                            .padding()
+                            .fontWeight(.semibold)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        InfoRow(title: "", value: "\(viewModel.visitedCountries) / 195", icon: "globe.europe.africa", color: .orange, imageValue: false, imageValueString: nil)
+                    }
+                    .padding(.bottom, 7)
+                }
+                .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
+                
             }
             .padding(.horizontal)
         }
