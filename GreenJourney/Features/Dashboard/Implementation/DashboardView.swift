@@ -69,9 +69,7 @@ struct DashboardView: View {
                     }
                     .padding(EdgeInsets(top: 5, leading: 15, bottom: 7, trailing: 15))
                     .overlay(Color.clear.accessibilityIdentifier("userBadges"))
-                    
-                    ScoresView(scoreLongDistance: viewModel.longDistanceScore, scoreShortDistance: viewModel.shortDistanceScore)
-                    
+                                        
                     NavigationLink(destination: Co2DetailsView(viewModel: viewModel)) {
                         ZStack {
                             RoundedRectangle(cornerRadius: 15)
@@ -94,10 +92,11 @@ struct DashboardView: View {
                                         .fontWeight(.bold)
                                 }
                                 .padding()
-                                InfoRow(title: "Co2 emitted", value: String(format: "%.0f", viewModel.co2Emitted) + " Kg", icon: "carbon.dioxide.cloud", color: .teal, imageValue: false, imageValueString: nil)
+                                InfoRow(title: "Emitted", value: String(format: "%.0f", viewModel.co2Emitted) + " Kg", icon: "carbon.dioxide.cloud", color: .teal, imageValue: false, imageValueString: nil)
                                 
-                                InfoRow(title: "Co2 compensated", value: String(format: "%.0f", viewModel.co2Compensated) + " Kg", icon: "leaf", color: .teal, imageValue: false, imageValueString: nil)
+                                InfoRow(title: "Compensated", value: String(format: "%.0f", viewModel.co2Compensated) + " Kg", icon: "leaf", color: .teal, imageValue: false, imageValueString: nil)
                             }
+                            .padding(.bottom, 7)
                         }
                         .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
                         .overlay(Color.clear.accessibilityIdentifier("co2Tracker"))
@@ -125,9 +124,10 @@ struct DashboardView: View {
                                 }
                                 .padding()
                                 InfoRow(title: "Distance made", value: String(format: "%.0f", viewModel.totalDistance) + " Km", icon: "road.lanes", color: .indigo, imageValue: false, imageValueString: nil)
-                                InfoRow(title: "", value: viewModel.totalDurationString, icon: "clock", color: .indigo, imageValue: false, imageValueString: nil)
+                                InfoRow(title: "Travel time", value: viewModel.totalDurationString, icon: "clock", color: .indigo, imageValue: false, imageValueString: nil)
                                 
                             }
+                            .padding(.bottom, 7)
                         }
                         .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
                         .overlay(Color.clear.accessibilityIdentifier("travelsRecap"))
@@ -157,10 +157,13 @@ struct DashboardView: View {
                                 
                                 InfoRow(title: "Continents visited", value: "\(viewModel.visitedContinents.count) / 6", icon: "globe", color: .red, imageValue: false, imageValueString: nil)
                             }
+                            .padding(.bottom, 7)
                         }
                         .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
                     }
                     
+                    ScoresView(scoreLongDistance: viewModel.longDistanceScore, scoreShortDistance: viewModel.shortDistanceScore)
+
                 }
                 .padding(.horizontal)
             }

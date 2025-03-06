@@ -26,13 +26,13 @@ struct DurationAsString {
             months -= 12
         }
         if years > 0 {
-            return "\(years) y, \(months) m, \(days) d, \(hours) h, \(minutes) min"
+            return "\(years) y, \(months) m"
         }
         if years == 0 && months > 0 {
-            return "\(months) m, \(days) d, \(hours) h, \(minutes) min"
+            return "\(months) m, \(days) d"
         }
         if months == 0 && days > 0 {
-            return "\(days) d, \(hours) h, \(minutes) min"
+            return "\(days) d, \(hours) h"
         }
         return "\(hours) h, \(minutes) min"
     }

@@ -6,6 +6,21 @@ struct GeneralDetailsView: View {
     var body: some View {
         ScrollView {
             VStack {
+                HorizontalBarChart(keys: viewModel.distancePerTransport.keys.sorted(), data: viewModel.distancePerTransport.keys.sorted().map{viewModel.distancePerTransport[$0]!}, title: "Distance per vehicle", color: .pink, measureUnit: "Km")
+                    .padding()
+                    .frame(height: 250)
+                
+                BarChartView(title: "Distance traveled (Km)", value: "", data: viewModel.distances.keys.sorted().map{viewModel.distances[$0]!}, labels: viewModel.keysToString(keys: viewModel.distances.keys.sorted()), color: .indigo.opacity(0.8))
+                    .padding()
+                    .overlay(Color.clear.accessibilityIdentifier("distanceTraveled"))
+                
+                PieChartView(keys: viewModel.travelsPerTransport.keys.sorted(), data: viewModel.travelsPerTransport.keys.sorted().map{viewModel.travelsPerTransport[$0]!}, title: "Most chosen Vehicle", color: .orange, icon: viewModel.mostChosenVehicle)
+                    .padding()
+                
+                BarChartView(title: "Trips completed", value: "\(viewModel.totalTripsMade)", data: viewModel.tripsMade.keys.sorted().map{viewModel.tripsMade[$0]!}, labels: viewModel.keysToString(keys: viewModel.tripsMade.keys.sorted()) , color: .pink.opacity(0.8))
+                    .padding()
+                    .overlay(Color.clear.accessibilityIdentifier("tripsCompleted"))
+
                 ZStack {
                     RoundedRectangle(cornerRadius: 15)
                         .fill(Color(uiColor: .systemBackground))
@@ -14,35 +29,17 @@ struct GeneralDetailsView: View {
                         Text("Recap")
                             .font(.title)
                             .foregroundStyle(.indigo.opacity(0.8))
-                            .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 0))
+                            .padding()
                             .fontWeight(.semibold)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                        
                         InfoRow(title: "Distance made", value: String(format: "%.0f", viewModel.totalDistance) + " Km", icon: "road.lanes", color: .indigo, imageValue: false, imageValueString: nil)
-                        
-                        InfoRow(title: "Travel time", value: viewModel.totalDurationString, icon: "clock", color: .blue, imageValue: false, imageValueString: nil)
-                                                
-                        
+                        InfoRow(title: "Travel time", value: viewModel.totalDurationString, icon: "clock", color: .indigo, imageValue: false, imageValueString: nil)
                     }
+                    .padding(.bottom, 7)
                 }
                 .padding()
-                
-                BarChartView(title: "Trips completed", value: "\(viewModel.totalTripsMade)", data: viewModel.tripsMade.keys.sorted().map{viewModel.tripsMade[$0]!}, labels: viewModel.keysToString(keys: viewModel.tripsMade.keys.sorted()) , color: .pink.opacity(0.8))
-                    .padding()
-                    .overlay(Color.clear.accessibilityIdentifier("tripsCompleted"))
-                
-                BarChartView(title: "Distance traveled (Km)", value: "", data: viewModel.distances.keys.sorted().map{viewModel.distances[$0]!}, labels: viewModel.keysToString(keys: viewModel.distances.keys.sorted()), color: .indigo.opacity(0.8))
-                    .padding()
-                    .overlay(Color.clear.accessibilityIdentifier("distanceTraveled"))
-                
-                HorizontalBarChart(keys: viewModel.distancePerTransport.keys.sorted(), data: viewModel.distancePerTransport.keys.sorted().map{viewModel.distancePerTransport[$0]!}, title: "Distance per vehicle", color: .pink, measureUnit: "Km")
-                    .padding()
-                    .frame(height: 250)
-
-                
-                PieChartView(keys: viewModel.travelsPerTransport.keys.sorted(), data: viewModel.travelsPerTransport.keys.sorted().map{viewModel.travelsPerTransport[$0]!}, title: "Most chosen Vehicle", color: .orange, icon: viewModel.mostChosenVehicle)
-                    .padding()
             }
+            .padding(.horizontal)
         }
     }
 }
