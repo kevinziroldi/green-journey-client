@@ -22,8 +22,6 @@ struct Co2DetailsView: View {
                         InfoRow(title: "Co2 emitted", value: String(format: "%.0f", viewModel.co2Emitted) + " Kg", icon: "carbon.dioxide.cloud", color: .red, imageValue: false, imageValueString: nil)
                         
                         InfoRow(title: "Co2 compensated", value: String(format: "%.0f", viewModel.co2Compensated) + " Kg", icon: "leaf", color: .green, imageValue: false, imageValueString: nil)
-                        
-                        //InfoRow(title: "Trees planted", value: "\(viewModel.treesPlanted)", icon: "tree", color: Color(hue: 0.309, saturation: 1.0, brightness: 0.665), imageValue: false, imageValueString: nil)
                     }
                 }
                 .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
@@ -72,7 +70,7 @@ struct Co2DetailsView: View {
                 
                 HorizontalBarChart(keys: viewModel.co2PerTransport.keys.sorted(), data: viewModel.co2PerTransport.keys.sorted().map{viewModel.co2PerTransport[$0]!}, title: "Co2 emitted per vehicle", color: .mint, measureUnit: "Kg")
                     .padding()
-                    .frame(height: 200)
+                    .frame(height: 250)
 
                 DoubleBarChart(element1: "Co2 Emitted", keys: viewModel.keysToString(keys: viewModel.co2CompensatedPerYear.keys.sorted()), data1: viewModel.co2EmittedPerYear.keys.sorted().map{viewModel.co2EmittedPerYear[$0]!}, element2: "Co2 Compensated", data2: viewModel.co2CompensatedPerYear.keys.sorted().map{viewModel.co2CompensatedPerYear[$0]!}, title: "Co2 per year", measureunit: "Kg of CO2")
                     .padding()

@@ -132,33 +132,38 @@ struct DashboardView: View {
                         .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
                         .overlay(Color.clear.accessibilityIdentifier("travelsRecap"))
                     }
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 15)
-                            .fill(Color(uiColor: .systemBackground))
-                            .shadow(color: .blue.opacity(0.3), radius: 5, x: 0, y: 3)
-                        VStack (spacing:0){
-                            Text("Travel time")
-                                .font(.title)
-                                .foregroundStyle(.blue.opacity(0.6))
-                                .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 0))
-                                .fontWeight(.semibold)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            
-                            InfoRow(title: "Continents visited", value: "\(viewModel.visitedContinents) / 6", icon: "globe", color: .indigo, imageValue: false, imageValueString: nil)
-
+                    NavigationLink(destination: WorldExplorationView(viewModel: viewModel)) {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 15)
+                                .fill(Color(uiColor: .systemBackground))
+                                .shadow(color: .red.opacity(0.3), radius: 5, x: 0, y: 3)
+                            VStack (spacing:0){
+                                HStack {
+                                    Text("World exploration")
+                                        .font(.title)
+                                        .foregroundStyle(.red.opacity(0.6))
+                                        .fontWeight(.semibold)
+                                    Spacer()
+                                    Image(systemName: "chart.bar.xaxis.ascending")
+                                        .foregroundColor(.red.opacity(0.8))
+                                        .font(.title2)
+                                        .fontWeight(.bold)
+                                    Image(systemName: "chevron.right")
+                                        .foregroundColor(.red.opacity(0.8))
+                                        .font(.title2)
+                                        .fontWeight(.bold)
+                                }
+                                .padding()
+                                
+                                InfoRow(title: "Continents visited", value: "\(viewModel.visitedContinents.count) / 6", icon: "globe", color: .red, imageValue: false, imageValueString: nil)
+                            }
                         }
-                        
+                        .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
                     }
-                    .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
-                    .overlay(Color.clear.accessibilityIdentifier("travelTime"))
-                    
                     
                 }
                 .padding(.horizontal)
             }
-            .blur(radius: (legendTapped) ? 1 : 0)
-            .allowsHitTesting(!legendTapped)
-            
             if legendTapped {
                 LegendBadgeView(onClose: {legendTapped = false})
             }
@@ -276,16 +281,8 @@ struct BarChartView: View {
                             .fontWeight(.bold)
                             .foregroundColor(.primary.opacity(0.8))
                     }
-                    .annotation(position: .bottom) {
-                                            Text("\(labels[index])")
-                                                .font(.caption)
-                                                .fontWeight(.light)
-                                                .foregroundColor(.secondary)
-                                        }
                 }
             }
-            .chartYAxis(.hidden)
-            .chartXAxis(.hidden)
             .frame(height: 250)
             .padding()
         }
@@ -360,20 +357,22 @@ struct HorizontalBarChart: View {
                 .foregroundStyle(color.opacity(0.8))
                 .fontWeight(.semibold)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding()
+                .padding(.horizontal)
+                .padding(.top)
             Chart {
                 ForEach(data.indices, id: \..self) { index in
-                    BarMark(x: .value("Value", data[index]), y: .value("Vehicle", keys[index]), width: .fixed(10))
+                    BarMark(x: .value("Value", data[index]), y: .value("Vehicle", keys[index]))
                         .annotation(position: .trailing) {
-                            Text(String(format: "%.1f", data[index]) + " " + measureUnit)
+                            if data[index] > 0 {
+                                Text(String(format: "%.0f", data[index]) + " " + measureUnit)
                                     .foregroundColor(.secondary)
                                     .font(.caption)
                             }
+                        }
                 }
                 .foregroundStyle(color.gradient)
                 .cornerRadius(10)
             }
-            .fixedSize(horizontal: false, vertical: true)
             .chartYAxis {
                 AxisMarks(preset: .extended, position: .leading) { _ in
                     AxisValueLabel(horizontalSpacing: 15)

@@ -14,17 +14,19 @@ class DashboardViewModel: ObservableObject {
     @Published var co2Compensated: Float64 = 0.0
     @Published var totalDistance: Float64 = 0.0
     @Published var mostChosenVehicle: String = "car"
-    @Published var visitedContinents: Int = 0
+    @Published var visitedContinents: [String] = []
     @Published var totalDurationString: String = ""
     @Published var distances: [Int: Int] = [:]
     @Published var tripsMade: [Int: Int] = [:]
+    @Published var countriesPerContinent: [String: Int] = ["Europe": 0, "Asia": 0, "Africa": 0, "North America": 0, "South America": 0, "Oceania": 0]
     @Published var co2EmittedPerYear: [Int: Double] = [:]
     @Published var co2CompensatedPerYear: [Int: Double] = [:]
     @Published var co2PerTransport: [String: Float64] = ["car": 0, "plane": 0, "bus": 0, "train": 0]
     @Published var distancePerTransport: [String: Float64] = ["car": 0, "bike": 0, "plane": 0, "bus": 0, "train": 0]
     @Published var travelsPerTransport: [String: Int] = ["car": 0, "bike": 0, "plane": 0, "bus": 0, "train": 0]
-
+    @Published var visitedCountries: Int = 0
     @Published var totalTripsMade: Int = 0
+    
     var totalDuration: Int = 0
     var travelDetailsList: [TravelDetails] = []
     
@@ -109,8 +111,7 @@ class DashboardViewModel: ObservableObject {
                 }
                 return nil
             }
-           
-            var continents: [String] = []
+            var countries: [String] = []
             var vehicles = ["car": 0, "bicycle": 0, "airplane": 0, "bus": 0, "tram": 0]
             for travel in travelDetailsList {
                 if travel.travel.confirmed {
@@ -130,8 +131,15 @@ class DashboardViewModel: ObservableObject {
                         }
                     }
                     let continent = getDestContinent(country: travel.getDepartureSegment()?.destinationCountry ?? "")
-                    if (!continents.contains(continent)) {
-                        continents.append(continent)
+                    if (!visitedContinents.contains(continent)) {
+                        visitedContinents.append(continent)
+                    }
+                    let country = travel.getDestinationSegment()?.destinationCountry ?? ""
+                    if (!countries.contains(country)) {
+                        countries.append(country)
+                        if let currentCountries = countriesPerContinent[continent] {
+                            countriesPerContinent[continent] = currentCountries + 1
+                        }
                     }
                     if let currentNumVehicle = vehicles[travel.findVehicle(outwardDirection: travel.isOneway())] {
                         vehicles[travel.findVehicle(outwardDirection: travel.isOneway())] = currentNumVehicle + 1
@@ -150,9 +158,9 @@ class DashboardViewModel: ObservableObject {
                     }
                 }
             }
-            visitedContinents = continents.count
             treesPlanted = Int(co2Compensated/75)
             mostChosenVehicle = vehicles.max(by: { $0.value < $1.value })?.key ?? ""
+            visitedCountries = countries.count
             totalDurationString = convertTotalDuration()
             travelsPerTransport["car"] = vehicles["car"]
             travelsPerTransport["bike"] = vehicles["bicycle"]
@@ -200,12 +208,17 @@ class DashboardViewModel: ObservableObject {
         totalDistance = 0.0
         totalDuration = 0
         mostChosenVehicle = "car"
-        visitedContinents = 0
+        visitedContinents = []
+        visitedCountries = 0
         totalTripsMade = 0
         distances = [getCurrentYear()-3: 0, getCurrentYear()-2: 0, getCurrentYear()-1: 0, getCurrentYear(): 0]
         tripsMade = [getCurrentYear()-3: 0, getCurrentYear()-2: 0, getCurrentYear()-1: 0, getCurrentYear(): 0]
         co2EmittedPerYear = [getCurrentYear()-3: 0, getCurrentYear()-2: 0, getCurrentYear()-1: 0, getCurrentYear(): 0]
         co2CompensatedPerYear = [getCurrentYear()-3: 0, getCurrentYear()-2: 0, getCurrentYear()-1: 0, getCurrentYear(): 0]
+        co2PerTransport = ["car": 0, "plane": 0, "bus": 0, "train": 0]
+        distancePerTransport = ["car": 0, "bike": 0, "plane": 0, "bus": 0, "train": 0]
+        travelsPerTransport = ["car": 0, "bike": 0, "plane": 0, "bus": 0, "train": 0]
+        countriesPerContinent = ["Europe": 0, "Asia": 0, "Africa": 0, "North America": 0, "South America": 0, "Oceania": 0]
     }
     
     func keysToString(keys: [Int]) -> [String] {
