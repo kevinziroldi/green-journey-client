@@ -276,6 +276,9 @@ struct BarChartView: View {
                 Spacer()
                 Spacer()
             }
+            .scaledToFit()
+            .minimumScaleFactor(0.6)
+            .lineLimit(1)
             .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 0))
 
             Chart {
@@ -332,6 +335,9 @@ struct PieChartView: View {
                 Spacer()
                 Spacer()
             }
+            .scaledToFit()
+            .minimumScaleFactor(0.6)
+            .lineLimit(1)
             Chart {
                 ForEach(data.indices, id: \..self) { index in
                     SectorMark(angle: .value("Distance", data[index]), angularInset: 2)
@@ -369,6 +375,9 @@ struct HorizontalBarChart: View {
                 .font(.title)
                 .foregroundStyle(color.opacity(0.8))
                 .fontWeight(.semibold)
+                .scaledToFit()
+                .minimumScaleFactor(0.6)
+                .lineLimit(1)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal)
                 .padding(.top)
@@ -424,6 +433,9 @@ struct DoubleBarChart: View {
                 .font(.title)
                 .foregroundStyle(.green.opacity(0.8))
                 .fontWeight(.semibold)
+                .scaledToFit()
+                .minimumScaleFactor(0.6)
+                .lineLimit(1)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal)
                 .padding(.top)
