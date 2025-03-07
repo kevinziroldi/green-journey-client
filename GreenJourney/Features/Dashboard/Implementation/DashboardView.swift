@@ -20,169 +20,168 @@ struct DashboardView: View {
     }
     
     var body: some View {
-        ZStack {
-            ScrollView {
-                VStack {
-                    HStack {
-                        Text("Dashboard")
-                            .font(.system(size: 32).bold())
-                            .padding()
-                            .fontWeight(.semibold)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .accessibilityIdentifier("dashboardTitle")
-                        Spacer()
-                        
-                        NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)) {
-                            Image(systemName: "person")
-                                .font(.title)
-                                .foregroundStyle(AppColors.mainGreen)
-                        }
-                        .accessibilityIdentifier("userPreferencesButton")
-                    }
-                    .padding(5)
+        ScrollView {
+            VStack {
+                HStack {
+                    Text("Dashboard")
+                        .font(.system(size: 32).bold())
+                        .padding()
+                        .fontWeight(.semibold)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .accessibilityIdentifier("dashboardTitle")
+                    Spacer()
                     
+                    NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)) {
+                        Image(systemName: "person")
+                            .font(.title)
+                            .foregroundStyle(AppColors.mainGreen)
+                    }
+                    .accessibilityIdentifier("userPreferencesButton")
+                }
+                .padding(5)
+                
+                ZStack {
+                    RoundedRectangle(cornerRadius: 15)
+                        .fill(Color(uiColor: .systemBackground))
+                        .shadow(color: .blue.opacity(0.3), radius: 5, x: 0, y: 3)
+                    VStack (spacing:0){
+                        HStack {
+                            Text("Badges")
+                                .font(.title)
+                                .foregroundStyle(.blue.opacity(0.8))
+                                .fontWeight(.semibold)
+                            Button(action: {
+                                legendTapped = true
+                            }) {
+                                Image(systemName: "info.circle")
+                                    .font(.title3)
+                                    .foregroundStyle(.gray)
+                            }
+                            Spacer()
+                        }
+                        .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 0))
+                        HStack{
+                            BadgeView(badges: viewModel.badges, dim: 130, inline: false)
+                                .padding()
+                        }
+                    }
+                }
+                .padding(EdgeInsets(top: 5, leading: 15, bottom: 7, trailing: 15))
+                .overlay(Color.clear.accessibilityIdentifier("userBadges"))
+                
+                NavigationLink(destination: Co2DetailsView(viewModel: viewModel)) {
                     ZStack {
                         RoundedRectangle(cornerRadius: 15)
                             .fill(Color(uiColor: .systemBackground))
-                            .shadow(color: .blue.opacity(0.3), radius: 5, x: 0, y: 3)
+                            .shadow(color: .teal.opacity(0.3), radius: 5, x: 0, y: 3)
                         VStack (spacing:0){
                             HStack {
-                                Text("Badges")
+                                Text("Co2 tracker")
                                     .font(.title)
-                                    .foregroundStyle(.blue.opacity(0.8))
+                                    .foregroundStyle(.teal.opacity(0.8))
                                     .fontWeight(.semibold)
-                                Button(action: {
-                                    legendTapped = true
-                                }) {
-                                    Image(systemName: "info.circle")
-                                        .font(.title3)
-                                        .foregroundStyle(.gray)
-                                }
+                                    .scaledToFit()
+                                    .minimumScaleFactor(0.6)
+                                    .lineLimit(1)
                                 Spacer()
+                                Image(systemName: "chart.bar.xaxis.ascending")
+                                    .foregroundColor(.teal.opacity(0.8))
+                                    .font(.title2)
+                                    .fontWeight(.bold)
+                                Image(systemName: "chevron.right")
+                                    .foregroundColor(.teal.opacity(0.8))
+                                    .font(.title2)
+                                    .fontWeight(.bold)
                             }
-                            .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 0))
-                            HStack{
-                                BadgeView(badges: viewModel.badges, dim: 130, inline: false)
-                                    .padding()
-                            }
+                            .padding()
+                            InfoRow(title: "Emitted", value: String(format: "%.0f", viewModel.co2Emitted) + " Kg", icon: "carbon.dioxide.cloud", color: .teal, imageValue: false, imageValueString: nil)
+                            
+                            InfoRow(title: "Compensated", value: String(format: "%.0f", viewModel.co2Compensated) + " Kg", icon: "leaf", color: .teal, imageValue: false, imageValueString: nil)
                         }
+                        .padding(.bottom, 7)
                     }
-                    .padding(EdgeInsets(top: 5, leading: 15, bottom: 7, trailing: 15))
-                    .overlay(Color.clear.accessibilityIdentifier("userBadges"))
-                                        
-                    NavigationLink(destination: Co2DetailsView(viewModel: viewModel)) {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 15)
-                                .fill(Color(uiColor: .systemBackground))
-                                .shadow(color: .teal.opacity(0.3), radius: 5, x: 0, y: 3)
-                            VStack (spacing:0){
-                                HStack {
-                                    Text("Co2 tracker")
-                                        .font(.title)
-                                        .foregroundStyle(.teal.opacity(0.8))
-                                        .fontWeight(.semibold)
-                                        .scaledToFit()
-                                        .minimumScaleFactor(0.6)
-                                        .lineLimit(1)
-                                    Spacer()
-                                    Image(systemName: "chart.bar.xaxis.ascending")
-                                        .foregroundColor(.teal.opacity(0.8))
-                                        .font(.title2)
-                                        .fontWeight(.bold)
-                                    Image(systemName: "chevron.right")
-                                        .foregroundColor(.teal.opacity(0.8))
-                                        .font(.title2)
-                                        .fontWeight(.bold)
-                                }
-                                .padding()
-                                InfoRow(title: "Emitted", value: String(format: "%.0f", viewModel.co2Emitted) + " Kg", icon: "carbon.dioxide.cloud", color: .teal, imageValue: false, imageValueString: nil)
-                                
-                                InfoRow(title: "Compensated", value: String(format: "%.0f", viewModel.co2Compensated) + " Kg", icon: "leaf", color: .teal, imageValue: false, imageValueString: nil)
-                            }
-                            .padding(.bottom, 7)
-                        }
-                        .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
-                        .overlay(Color.clear.accessibilityIdentifier("co2Tracker"))
-                    }
-                    NavigationLink(destination: GeneralDetailsView(viewModel: viewModel)) {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 15)
-                                .fill(Color(uiColor: .systemBackground))
-                                .shadow(color: .indigo.opacity(0.3), radius: 5, x: 0, y: 3)
-                            VStack (spacing:0){
-                                HStack {
-                                    Text("Recap")
-                                        .font(.title)
-                                        .foregroundStyle(.indigo.opacity(0.8))
-                                        .fontWeight(.semibold)
-                                    Spacer()
-                                    Image(systemName: "chart.bar.xaxis.ascending")
-                                        .foregroundColor(.indigo.opacity(0.8))
-                                        .font(.title2)
-                                        .fontWeight(.bold)
-                                    Image(systemName: "chevron.right")
-                                        .foregroundColor(.indigo.opacity(0.8))
-                                        .font(.title2)
-                                        .fontWeight(.bold)
-                                }
-                                .padding()
-                                InfoRow(title: "Distance made", value: String(format: "%.0f", viewModel.totalDistance) + " Km", icon: "road.lanes", color: .indigo, imageValue: false, imageValueString: nil)
-                                InfoRow(title: "Travel time", value: viewModel.totalDurationString, icon: "clock", color: .indigo, imageValue: false, imageValueString: nil)
-                                
-                            }
-                            .padding(.bottom, 7)
-                        }
-                        .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
-                        .overlay(Color.clear.accessibilityIdentifier("travelsRecap"))
-                    }
-                    NavigationLink(destination: WorldExplorationView(viewModel: viewModel)) {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 15)
-                                .fill(Color(uiColor: .systemBackground))
-                                .shadow(color: .red.opacity(0.3), radius: 5, x: 0, y: 3)
-                            VStack (spacing:0){
-                                HStack {
-                                    Text("World exploration")
-                                        .font(.title)
-                                        .foregroundStyle(.red.opacity(0.6))
-                                        .fontWeight(.semibold)
-                                        .scaledToFit()
-                                        .minimumScaleFactor(0.6)
-                                        .lineLimit(1)
-                                    Spacer()
-                                    Image(systemName: "chart.bar.xaxis.ascending")
-                                        .foregroundColor(.red.opacity(0.8))
-                                        .font(.title2)
-                                        .fontWeight(.bold)
-                                    Image(systemName: "chevron.right")
-                                        .foregroundColor(.red.opacity(0.8))
-                                        .font(.title2)
-                                        .fontWeight(.bold)
-                                }
-                                .padding()
-                                
-                                InfoRow(title: "Continents visited", value: "\(viewModel.visitedContinents.count) / 6", icon: "globe", color: .red, imageValue: false, imageValueString: nil)
-                            }
-                            .padding(.bottom, 7)
-                        }
-                        .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
-                    }
-                    
-                    ScoresView(scoreLongDistance: viewModel.longDistanceScore, scoreShortDistance: viewModel.shortDistanceScore)
-
+                    .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
+                    .overlay(Color.clear.accessibilityIdentifier("co2Tracker"))
                 }
-                .padding(.horizontal)
+                NavigationLink(destination: GeneralDetailsView(viewModel: viewModel)) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 15)
+                            .fill(Color(uiColor: .systemBackground))
+                            .shadow(color: .indigo.opacity(0.3), radius: 5, x: 0, y: 3)
+                        VStack (spacing:0){
+                            HStack {
+                                Text("Recap")
+                                    .font(.title)
+                                    .foregroundStyle(.indigo.opacity(0.8))
+                                    .fontWeight(.semibold)
+                                Spacer()
+                                Image(systemName: "chart.bar.xaxis.ascending")
+                                    .foregroundColor(.indigo.opacity(0.8))
+                                    .font(.title2)
+                                    .fontWeight(.bold)
+                                Image(systemName: "chevron.right")
+                                    .foregroundColor(.indigo.opacity(0.8))
+                                    .font(.title2)
+                                    .fontWeight(.bold)
+                            }
+                            .padding()
+                            InfoRow(title: "Distance made", value: String(format: "%.0f", viewModel.totalDistance) + " Km", icon: "road.lanes", color: .indigo, imageValue: false, imageValueString: nil)
+                            InfoRow(title: "Travel time", value: viewModel.totalDurationString, icon: "clock", color: .indigo, imageValue: false, imageValueString: nil)
+                            
+                        }
+                        .padding(.bottom, 7)
+                    }
+                    .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
+                    .overlay(Color.clear.accessibilityIdentifier("travelsRecap"))
+                }
+                NavigationLink(destination: WorldExplorationView(viewModel: viewModel)) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 15)
+                            .fill(Color(uiColor: .systemBackground))
+                            .shadow(color: .red.opacity(0.3), radius: 5, x: 0, y: 3)
+                        VStack (spacing:0){
+                            HStack {
+                                Text("World exploration")
+                                    .font(.title)
+                                    .foregroundStyle(.red.opacity(0.6))
+                                    .fontWeight(.semibold)
+                                    .scaledToFit()
+                                    .minimumScaleFactor(0.6)
+                                    .lineLimit(1)
+                                Spacer()
+                                Image(systemName: "chart.bar.xaxis.ascending")
+                                    .foregroundColor(.red.opacity(0.8))
+                                    .font(.title2)
+                                    .fontWeight(.bold)
+                                Image(systemName: "chevron.right")
+                                    .foregroundColor(.red.opacity(0.8))
+                                    .font(.title2)
+                                    .fontWeight(.bold)
+                            }
+                            .padding()
+                            
+                            InfoRow(title: "Continents visited", value: "\(viewModel.visitedContinents.count) / 6", icon: "globe", color: .red, imageValue: false, imageValueString: nil)
+                        }
+                        .padding(.bottom, 7)
+                    }
+                    .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
+                }
+                
+                ScoresView(scoreLongDistance: viewModel.longDistanceScore, scoreShortDistance: viewModel.shortDistanceScore)
+                
             }
-            if legendTapped {
-                LegendBadgeView(onClose: {legendTapped = false})
-            }
-            
+            .padding(.horizontal)
         }
         .onAppear() {
             Task {
                 await viewModel.getUserFromServer()
                 viewModel.getUserTravels()
             }
+        }
+        .sheet(isPresented: $legendTapped) {
+            LegendBadgeView(isPresented: $legendTapped)
+                .presentationDetents([.large])
+                .presentationCornerRadius(30)
         }
     }
 }
