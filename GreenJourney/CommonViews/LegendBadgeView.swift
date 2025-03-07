@@ -1,83 +1,84 @@
 import SwiftUI
 
 struct LegendBadgeView: View {
-    @Environment(\.colorScheme) var colorScheme: ColorScheme
-    var onClose: () -> Void
+    @Binding var isPresented: Bool
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 20)
-                .stroke(Color.gray, lineWidth: 2)
-                .fill(colorScheme == .dark ? Color.black : Color.white)
-                .shadow(radius: 10)
-            VStack {
+            Text("Legend")
+                .font(.largeTitle)
+                .padding(.bottom)
+            HStack {
                 Spacer()
-                HStack {
-                    Image(Badge.badgeDistanceLow.rawValue)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 65, height: 65)
-                        .shadow(radius: 10)
-                    Image(systemName: "arrowshape.right")
-                        .frame(width: 20, height: 20)
-                    
-                    Text("how much distance a user has traveled")
-                    Spacer()
+                Button(action: {
+                    isPresented = false
+                }) {
+                    Text("Done")
+                        .fontWeight(.bold)
                 }
-                .overlay(Color.clear.accessibilityIdentifier("badgeDistanceDescription"))
-                
-                HStack {
-                    Image(Badge.badgeEcologicalChoiceLow.rawValue)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 65, height: 65)
-                        .shadow(radius: 10)
-                    Image(systemName: "arrowshape.right")
-                        .frame(width: 20, height: 20)
-                    Text("how much a user has been ecofriendly")
-                    Spacer()
-                }
-                .overlay(Color.clear.accessibilityIdentifier("badgeEcologicalChoiceDescription"))
-                
-                HStack {
-                    Image(Badge.badgeTravelsNumberLow.rawValue)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 65, height: 65)
-                        .shadow(radius: 10)
-                    Image(systemName: "arrowshape.right")
-                        .frame(width: 20, height: 20)
-                    Text("how many travels a user has done")
-                    Spacer()
-                }
-                .overlay(Color.clear.accessibilityIdentifier("badgeTravelsNumberDescription"))
-               
-                HStack {
-                    Image(Badge.badgeCompensationLow.rawValue)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 65, height: 65)
-                        .shadow(radius: 10)
-                    Image(systemName: "arrowshape.right")
-                        .frame(width: 20, height: 20)
-                    Text("how much a user has compensated")
-                    Spacer()
-                }
-                .overlay(Color.clear.accessibilityIdentifier("badgeCompensationDescription"))
-                
-                Spacer()
-
-                Button("Close") {
-                    onClose()
-                }
-                .buttonStyle(.bordered)
-                .accessibilityIdentifier("closeBadgesInfoButton")
-                
-                Spacer()
+                .padding(.bottom, 30)
             }
-            .padding()
-
+            .padding(.horizontal, 30)
         }
-        .frame(width: 330, height: 400)    
+        .padding(.top)
+        ScrollView {
+            VStack {
+                Text("Co2 compensator")
+                    .font(.title)
+                    .fontWeight(.semibold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .scaledToFit()
+                    .lineLimit(1)
+                HStack {
+                    BadgeView(badges: [Badge.badgeCompensationBase, Badge.badgeCompensationLow, Badge.badgeCompensationMid, Badge.badgeCompensationHigh], dim: 90, inline: true)
+                        .scaledToFit()
+                }
+                Text("description of the badges...")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                
+                Text("Kilometer hunter")
+                    .padding(.top, 30)
+                    .font(.title)
+                    .fontWeight(.semibold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .scaledToFit()
+                    .lineLimit(1)
+                HStack {
+                    BadgeView(badges: [Badge.badgeDistanceBase, Badge.badgeDistanceLow, Badge.badgeDistanceMid, Badge.badgeDistanceHigh], dim: 90, inline: true)
+                        .scaledToFit()
+                }
+                Text("description of the badges...")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                
+                Text("Planet saver")
+                    .padding(.top, 30)
+                    .font(.title)
+                    .fontWeight(.semibold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .scaledToFit()
+                    .lineLimit(1)
+                HStack {
+                    BadgeView(badges: [Badge.badgeEcologicalChoiceBase, Badge.badgeEcologicalChoiceLow, Badge.badgeEcologicalChoiceMid, Badge.badgeEcologicalChoiceHigh], dim: 90, inline: true)
+                        .scaledToFit()
+                }
+                Text("description of the badges...")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                
+                Text("Serial traveller")
+                    .padding(.top, 30)
+                    .font(.title)
+                    .fontWeight(.semibold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .scaledToFit()
+                    .lineLimit(1)
+                HStack {
+                    BadgeView(badges: [Badge.badgeTravelsNumberBase, Badge.badgeTravelsNumberLow, Badge.badgeTravelsNumberMid, Badge.badgeTravelsNumberHigh], dim: 90, inline: true)
+                        .scaledToFit()
+                }
+                Text("description of the badges...")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            
+            .padding(.horizontal)
+        }
     }
 }
-
