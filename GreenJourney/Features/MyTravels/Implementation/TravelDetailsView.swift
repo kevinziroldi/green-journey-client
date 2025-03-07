@@ -358,6 +358,7 @@ struct InfoCompensationView: View {
                     .padding(.bottom, 5)
                 
                 Text("Traveling has an environmental impact, but you can take action to reduce it. Every trip you take produces carbon emissions, contributing to climate change. By offsetting your Co2 footprint, you help balance these emissions and make your journeys more sustainable.")
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 
                 Text("How We Offset Carbon")
                     .font(.title)
@@ -375,6 +376,7 @@ struct InfoCompensationView: View {
                 Planting a tree costs only €2, making carbon offsetting both affordable and effective.
                 Join us in making travel greener
                 """)
+                .frame(maxWidth: .infinity, alignment: .leading)
                 Text("Small actions lead to big changes!")
                     .font(.headline)
                     .padding(.top)
