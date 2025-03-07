@@ -302,6 +302,8 @@ struct ErrorMessageView: View {
 }
 
 struct LogoutButtonView: View {
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    
     @ObservedObject var authenticationViewModel: AuthenticationViewModel
     @Binding var navigationPath: NavigationPath
     
@@ -310,6 +312,11 @@ struct LogoutButtonView: View {
         Button(action: {
             authenticationViewModel.logout()
             navigationPath = NavigationPath()
+            
+            if horizontalSizeClass == .compact {
+                // compact devices use TabView, which has not UserPreferences inside
+                navigationPath.append(NavigationDestination.LoginView)
+            }
         }) {
             Text("Logout")
                 .font(.title3)
