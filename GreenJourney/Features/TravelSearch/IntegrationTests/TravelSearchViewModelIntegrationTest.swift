@@ -162,7 +162,7 @@ final class TravelSearchViewModelIntegrationTest {
         #expect(viewModel.returnOptions.isEmpty)
         
         // select an option
-        viewModel.selectedOption = viewModel.outwardOptions[0]
+        viewModel.selectedOption = viewModel.outwardOptions[0].segments
         // save travel
         await viewModel.saveTravel()
         

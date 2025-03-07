@@ -2,6 +2,8 @@ import SwiftUI
 import SwiftData
 
 struct TravelSearchView: View {
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    
     @Environment(\.modelContext) private var modelContext: ModelContext
     private var serverService: ServerServiceProtocol
     private var firebaseAuthService: FirebaseAuthServiceProtocol
@@ -39,16 +41,15 @@ struct TravelSearchView: View {
                         .ignoresSafeArea()
                         .disabled(!triggerAI)
                     
-                    // TODO penso non serva
-                    // Brightness rim on edges
-                    /*
-                     if triggerAI {
-                     RoundedRectangle(cornerRadius: 52, style: .continuous)
-                     .stroke(Color.white, style: .init(lineWidth: 4))
-                     .blur(radius: 4)
-                     .ignoresSafeArea()
-                     }
-                     */
+                    if horizontalSizeClass == .compact {
+                        if triggerAI {
+                            // brighness on edges
+                            RoundedRectangle(cornerRadius: 52, style: .continuous)
+                                .stroke(Color.white, style: .init(lineWidth: 4))
+                                .blur(radius: 4)
+                                .ignoresSafeArea()
+                        }
+                    }
                     
                     ZStack {
                         Rectangle()

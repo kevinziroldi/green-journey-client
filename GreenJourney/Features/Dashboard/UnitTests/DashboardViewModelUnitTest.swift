@@ -91,7 +91,7 @@ final class DashboardViewModelUnitTest {
         #expect(viewModel.co2Compensated == 0)
         #expect(viewModel.totalDistance == 700)
         #expect(viewModel.mostChosenVehicle == "car")
-        #expect(viewModel.visitedContinents == 1)
+        #expect(viewModel.visitedContinents.count == 1)
         #expect(viewModel.totalDurationString == "0 h, 3 min")
         let currYear = Calendar.current.component(.year, from: Date())
         for distance in viewModel.distances {

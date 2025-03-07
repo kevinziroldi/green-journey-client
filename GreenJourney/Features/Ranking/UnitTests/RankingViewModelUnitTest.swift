@@ -83,21 +83,21 @@ final class RankingViewModelUnitTest {
     func testComputeTotalDurationYear() {
         let durationYear = 3600 * 1000000000 * 24 * 30 * 12
         let durationString = viewModel.computeTotalDuration(duration: durationYear)
-        #expect(durationString == "1 y, 0 m, 0 d, 0 h, 0 min")
+        #expect(durationString == "1 y, 0 m")
     }
     
     @Test
     func testComputeTotalDurationOneMonthOneDay() {
         let durationOneMontOneDay = 3600 * 1000000000 * 24 * 30 + 3600 * 1000000000 * 24
         let durationString = viewModel.computeTotalDuration(duration: durationOneMontOneDay)
-        #expect(durationString == "1 m, 1 d, 0 h, 0 min")
+        #expect(durationString == "1 m, 1 d")
     }
     
     @Test
     func testComputeTotalDurationFiveDaysOneHourOneMinute() {
         let duration = 3600 * 1000000000 * 24 * 5 + 3600 * 1000000000 + 60 * 1000000000
         let durationString = viewModel.computeTotalDuration(duration: duration)
-        #expect(durationString == "5 d, 1 h, 1 min")
+        #expect(durationString == "5 d, 1 h")
     }
     
     @Test

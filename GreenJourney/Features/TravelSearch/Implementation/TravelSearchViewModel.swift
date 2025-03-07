@@ -10,7 +10,6 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
     
     private var modelContext: ModelContext
     private var serverService: ServerServiceProtocol
-    private var logic: TravelSearchLogic = TravelSearchLogic()
     
     @Published var departure: CityCompleterDataset = CityCompleterDataset()
     @Published var arrival: CityCompleterDataset = CityCompleterDataset()
