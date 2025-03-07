@@ -108,23 +108,25 @@ struct TravelSearchView: View {
                                 
                                 ZStack {
                                     RoundedRectangle(cornerRadius: 10)
-                                        .fill((viewModel.departure.iata == "" || viewModel.arrival.iata == "") ? .black.opacity(0.3) : AppColors.mainColor)
+                                        .fill(AppColors.mainColor)
                                     
                                     HStack (spacing: 3) {
                                         Spacer()
-                                        Image(systemName: "location.magnifyingglass")
+                                        /*Image(systemName: "location.magnifyingglass")
                                             .font(.title3)
                                             .fontWeight(.light)
                                             .foregroundStyle(.white)
-                                        Spacer()
+                                        Spacer()*/
                                         Text("Search")
                                             .foregroundStyle(.white)
+                                            .font(.title3)
                                             .fontWeight(.semibold)
                                         Spacer()
                                     }
                                     .padding(10)
                                 }
-                                .fixedSize()
+                                .padding(.horizontal, 45)
+                                .fixedSize(horizontal: false, vertical: true)
                             }
                             .disabled(viewModel.departure.iata == "" || viewModel.arrival.iata == "")
                             .padding(.top, 20)
@@ -250,7 +252,7 @@ struct TravelChoiceView: View {
                 ReturnDatePickerView(dateReturnTapped: $dateReturnTapped, viewModel: viewModel)
             }
             .fixedSize(horizontal: false, vertical: true)
-            .padding(.horizontal, 45)
+            .padding(.horizontal, 60)
         } else {
             // iPadOS
             
@@ -302,7 +304,7 @@ struct TravelChoiceView: View {
                             Spacer()
                             ReturnDatePickerView(dateReturnTapped: $dateReturnTapped, viewModel: viewModel)
                                 .fixedSize(horizontal: false, vertical: true)
-                                .padding(.horizontal, 45)
+                                .padding(.horizontal, 60)
                         }
                         .padding(EdgeInsets(top: 0, leading: 40, bottom: 20, trailing: 40))
                     }
@@ -317,8 +319,8 @@ struct DepartureTitleView: View {
         Text("From")
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(EdgeInsets(top: 10, leading: 40, bottom: 0, trailing: 40))
-            .frame(alignment: .top)
             .font(.title)
+            .fontWeight(.bold)
             .accessibilityIdentifier("departureLabel")
     }
 }
@@ -335,7 +337,7 @@ struct DepartureCompleterView: View {
         VStack {
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
-                    .stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 3)
+                    .stroke(AppColors.mainColor, lineWidth: 6)
                     .frame(height: 50)
                 
                 Button(action: {
@@ -373,8 +375,8 @@ struct DestinationTitleView: View {
         Text("To")
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(EdgeInsets(top: 10, leading: 40, bottom: 0, trailing: 40))
-            .frame(alignment: .top)
             .font(.title)
+            .fontWeight(.bold)
             .accessibilityIdentifier("destinationLabel")
     }
 }
@@ -391,7 +393,7 @@ struct DestinationCompleterView: View {
         VStack{
             ZStack{
                 RoundedRectangle(cornerRadius: 10)
-                    .stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 3)
+                    .stroke(AppColors.mainColor, lineWidth: 6)
                     .frame(height: 50)
                 
                 Button(action: {
@@ -436,27 +438,24 @@ struct OutwardDatePickerView: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)
-                //.stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 1.5)
-                .fill(AppColors.mainColor)
+                .stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 1.5)
+                .fill(colorScheme == .dark ? .black : .white)
             Button(action: {
                 dateTapped = true
             }) {
                 HStack{
                     Image(systemName: "calendar")
                         .font(.title2)
-                        .padding(.leading, 8)
                     Text("Outward")
                         .font(.headline)
-                        .frame(width: 100, alignment: .leading)
+                        .frame(width: 80, alignment: .leading)
                     Text(viewModel.datePicked.formatted(date: .numeric, time: .shortened))
-                    
                     Spacer()
-                    
                 }
                 .scaledToFit()
                 .minimumScaleFactor(0.6)
                 .lineLimit(1)
-                .foregroundStyle(Color.white)
+                .foregroundStyle(colorScheme == .dark ? .white : .black)
             }
             .padding(.vertical, 10)
             .accessibilityIdentifier("outwardDateButton")
@@ -473,18 +472,17 @@ struct ReturnDatePickerView: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)
-                //.stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 1.5)
-                .fill(viewModel.oneWay ? Color.gray.opacity(0.5) : AppColors.mainColor)
+                .stroke(viewModel.oneWay ? .clear : colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 1.5)
+                .fill(viewModel.oneWay ? Color.gray.opacity(0.5) : colorScheme == .dark ? .black : .white)
             Button(action:  {
                 dateReturnTapped = true
             }) {
                 HStack {
                     Image(systemName: "calendar")
                         .font(.title2)
-                        .padding(.leading, 8)
                     Text("Return")
                         .font(.headline)
-                        .frame(width: 100, alignment: .leading)
+                        .frame(width: 80, alignment: .leading)
                     
                     Text(viewModel.dateReturnPicked.formatted(date: .numeric, time: .shortened))
                         .opacity(viewModel.oneWay ? 0 : 1)
@@ -494,7 +492,7 @@ struct ReturnDatePickerView: View {
                 .scaledToFit()
                 .minimumScaleFactor(0.6)
                 .lineLimit(1)
-                .foregroundStyle(viewModel.oneWay ? Color.secondary : Color.white)
+                .foregroundStyle(viewModel.oneWay ? Color.secondary : colorScheme == .dark ? Color.white : Color.black)
             }
             .padding(.vertical, 10)
             .disabled(viewModel.oneWay)

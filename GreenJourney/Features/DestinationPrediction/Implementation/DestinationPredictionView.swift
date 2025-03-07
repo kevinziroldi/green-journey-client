@@ -19,7 +19,7 @@ struct DestinationPredictionView: View {
         }){
             ZStack {
                 RoundedRectangle(cornerRadius: 20)
-                    .stroke(.linearGradient(Gradient(colors: [.green, .blue]), startPoint: .bottomLeading, endPoint: .topTrailing), lineWidth: 2)
+                    .stroke(.linearGradient(Gradient(colors: [.green, .blue]), startPoint: .bottomLeading, endPoint: .topTrailing), lineWidth: 3)
                 HStack{
                     Text("Don't know where to go? Ask AI.")
                         .foregroundColor(.gray)
