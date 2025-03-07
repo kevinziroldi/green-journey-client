@@ -51,7 +51,7 @@ struct MainView: View {
                         DashboardView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
                             .tabItem {TabItemView(tabElement: TabViewElement.Dashboard)}
                             .tag(TabViewElement.Dashboard)
-                    }else {
+                    } else {
                         LoginView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
                             .onAppear() {
                                 // reset tab after logout+login
@@ -162,6 +162,8 @@ struct MainView: View {
             TravelDetailsView(viewModel: viewModel, modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
         case .AllReviewsView(let viewModel):
             AllReviewsView(viewModel: viewModel, navigationPath: $navigationPath)
+        case .UserPreferencesView:
+            UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
         }
     }
 }

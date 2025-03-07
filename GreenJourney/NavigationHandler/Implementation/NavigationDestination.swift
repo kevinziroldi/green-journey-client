@@ -7,4 +7,5 @@ enum NavigationDestination: Hashable {
     case TravelDetailsView(MyTravelsViewModel)
     case CityReviewsDetailsView(CitiesReviewsViewModel)
     case AllReviewsView(CitiesReviewsViewModel)
+    case UserPreferencesView
 }

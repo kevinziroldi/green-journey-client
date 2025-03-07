@@ -7,7 +7,9 @@ struct UserPreferencesButtonView: View {
     var firebaseAuthService: FirebaseAuthServiceProtocol
     
     var body: some View {
-        NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)) {
+        Button (action: {
+            navigationPath.append(NavigationDestination.UserPreferencesView)
+        }) {
             Image(systemName: "person")
                 .font(.title)
                 .foregroundStyle(AppColors.mainColor)
