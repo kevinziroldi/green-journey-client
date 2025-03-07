@@ -117,11 +117,11 @@ struct MainView: View {
                         } else {
                             LoginView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
                                 .onAppear() {
-                                    // remove side bar 
+                                    // remove side bar
                                     visibility = .detailOnly
                                     
                                     // reset tab after logout+login
-                                    selectedTab = .SearchTravel
+                                    navigationSplitViewElement = .SearchTravel
                                 }
                                 .onDisappear() {
                                     // get travels from server
