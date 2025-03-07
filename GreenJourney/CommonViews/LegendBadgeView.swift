@@ -32,7 +32,7 @@ struct LegendBadgeView: View {
                     BadgeView(badges: [Badge.badgeCompensationBase, Badge.badgeCompensationLow, Badge.badgeCompensationMid, Badge.badgeCompensationHigh], dim: 90, inline: true)
                         .scaledToFit()
                 }
-                Text("description of the badges...")
+                Text("This badge reflects your efforts to compensate for your carbon footprint. The more you offset, the bigger your impact!")
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
                 Text("Kilometer hunter")
@@ -46,7 +46,7 @@ struct LegendBadgeView: View {
                     BadgeView(badges: [Badge.badgeDistanceBase, Badge.badgeDistanceLow, Badge.badgeDistanceMid, Badge.badgeDistanceHigh], dim: 90, inline: true)
                         .scaledToFit()
                 }
-                Text("description of the badges...")
+                Text("See how far you’ve gone! This badge records the total distance you’ve traveled in kilometers.")
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
                 Text("Planet saver")
@@ -60,7 +60,7 @@ struct LegendBadgeView: View {
                     BadgeView(badges: [Badge.badgeEcologicalChoiceBase, Badge.badgeEcologicalChoiceLow, Badge.badgeEcologicalChoiceMid, Badge.badgeEcologicalChoiceHigh], dim: 90, inline: true)
                         .scaledToFit()
                 }
-                Text("description of the badges...")
+                Text("Earn this badge by making sustainable travel choices. The greener your trips, the higher your score!")
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
                 Text("Serial traveller")
@@ -74,7 +74,7 @@ struct LegendBadgeView: View {
                     BadgeView(badges: [Badge.badgeTravelsNumberBase, Badge.badgeTravelsNumberLow, Badge.badgeTravelsNumberMid, Badge.badgeTravelsNumberHigh], dim: 90, inline: true)
                         .scaledToFit()
                 }
-                Text("description of the badges...")
+                Text("This badge tracks the total number of trips you have taken. Keep exploring and watch your count grow!")
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             
