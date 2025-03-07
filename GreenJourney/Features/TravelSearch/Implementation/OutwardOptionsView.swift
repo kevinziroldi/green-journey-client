@@ -24,14 +24,20 @@ struct OutwardOptionsView: View {
             ScrollView {
                 VStack {
                     ForEach (viewModel.outwardOptions.indices, id: \.self) { option in
-                        NavigationLink (destination: OptionDetailsView(option: viewModel.outwardOptions[option], viewModel: viewModel, navigationPath: $navigationPath)){
-                            OptionCardView(option: viewModel.outwardOptions[option], viewModel: viewModel)
-                                .padding(.horizontal, 10)
+                        HStack {
+                            NavigationLink (
+                                destination: OptionDetailsView(option: viewModel.outwardOptions[option], viewModel: viewModel, navigationPath: $navigationPath)) {
+                                OptionCardView(option: viewModel.outwardOptions[option], viewModel: viewModel)
+                                    .contentShape(Rectangle())
+                            }
+                            .accessibilityIdentifier("outwardOption_\(option)")
                         }
-                        .accessibilityIdentifier("outwardOption_\(option)")
+                        .padding(.horizontal, 10)
+                        .frame(maxWidth: 800)
+                        .buttonStyle(.plain)
                     }
-                    .buttonStyle(.plain)
                 }
+                .frame(maxWidth: .infinity)
             }
         }
     }

@@ -191,4 +191,14 @@ class TravelDetails: Codable, Identifiable {
         let calendar = Calendar.current
         return calendar.component(.year, from: getLastSegment()?.dateTime ?? Date())
     }
+    
+    func countChanges(outwardDirection: Bool) -> Int {
+        var changes = 0
+        for segment in self.segments {
+            if segment.isOutward == outwardDirection && segment.vehicle != .walk {
+                changes += 1
+            }
+        }
+        return changes
+    }
 }

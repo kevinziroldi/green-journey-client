@@ -147,7 +147,7 @@ struct MyTravelsView: View {
                                         .alert(isPresented: $showAlert) {
                                             Alert(
                                                 title: Text("Delete this travel?"),
-                                                message: Text("you cannot undo this action"),
+                                                message: Text("You cannot undo this action"),
                                                 primaryButton: .cancel(Text("Cancel")) {},
                                                 secondaryButton: .destructive(Text("Delete")) {
                                                     //delete travel
@@ -161,6 +161,7 @@ struct MyTravelsView: View {
                                     }
                                 }
                             }
+                            .frame(maxWidth: 800)
                             .padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
                         }
                     }
@@ -174,163 +175,6 @@ struct MyTravelsView: View {
                 viewModel.showRequestedTravels()
             }
             // else empty page
-        }
-    }
-}
-
-struct TravelCardView: View {
-    let travelDetails: TravelDetails
-    @EnvironmentObject var viewModel: MyTravelsViewModel
-    @Environment(\.colorScheme) var colorScheme: ColorScheme
-
-    var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 20)
-                .stroke(computeTravelColor(travel: travelDetails), lineWidth: 5)
-                .fill(computeTravelBackColor(travel: travelDetails))
-            
-            VStack {
-                HStack{
-                    VStack {
-                        ZStack{
-                            Circle()
-                                .stroke(lineWidth: 2)
-                                .frame(width: 45, height: 45)
-                            Image(systemName: travelDetails.findVehicle(outwardDirection: true))
-                                .font(.title2)
-                            
-                        }
-                        if !travelDetails.isOneway() {
-                            ZStack{
-                                Circle()
-                                    .stroke(lineWidth: 2)
-                                    .frame(width: 45, height: 45)
-                                Image(systemName: travelDetails.findVehicle(outwardDirection: false))
-                                    .font(.title2)
-                                
-                            }
-                        }
-                    }
-                    .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0))
-                    Spacer()
-                    VStack {
-                        HStack (spacing: 10){
-                            Text(travelDetails.getDepartureSegment()?.departureCity ?? "")
-                                .font(.headline)
-                            Text("-")
-                                .font(.headline)
-                            Text(travelDetails.getDestinationSegment()?.destinationCity ?? "")
-                                .font(.headline)
-                        }
-                        HStack{
-                            Text(travelDetails.getOutwardSegments().first?.dateTime.formatted(date: .numeric, time: .omitted) ?? "")
-                                .font(.subheadline)
-                                .fontWeight(.light)
-                            Text("-")
-                                .font(.subheadline)
-                            let arrivalDate = travelDetails.getOutwardSegments().last?.getArrivalDateTime()
-                            Text(arrivalDate?.formatted(date: .numeric, time: .omitted) ?? "")
-                                .font(.subheadline)
-                                .fontWeight(.light)
-                        }
-                        if !travelDetails.isOneway() {
-                            HStack (spacing: 10){
-                                Text(travelDetails.getDestinationSegment()?.destinationCity ?? "")
-                                    .font(.headline)
-                                Text("-")
-                                    .font(.headline)
-                                Text(travelDetails.getDepartureSegment()?.departureCity ?? "")
-                                    .font(.headline)
-                            }
-                            HStack{
-                                Text(travelDetails.getReturnSegments().first?.dateTime.formatted(date: .numeric, time: .omitted) ?? "")
-                                    .font(.subheadline)
-                                    .fontWeight(.light)
-                                Text("-")
-                                    .font(.subheadline)
-                                let arrivalDate = travelDetails.getReturnSegments().last?.getArrivalDateTime()
-                                Text(arrivalDate?.formatted(date: .numeric, time: .omitted) ?? "")
-                                    .font(.subheadline)
-                                    .fontWeight(.light)
-                            }
-                        }
-                    }
-                    Spacer()
-                    VStack {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 20)
-                                .stroke()
-                            if travelDetails.isOneway() {
-                                Text("One way")
-                                    .font(.caption)
-                                    .fontWeight(.bold)
-                                    .padding(5)
-                            }
-                            else {
-                                Text("Round trip")
-                                    .font(.caption)
-                                    .fontWeight(.bold)
-                                    .padding(5)
-                            }
-                        }
-                        .fixedSize()
-                        Spacer()
-                    }
-                    
-                    Spacer()
-                    Image(systemName: "chevron.forward")
-                        .font(.title2)
-                        .foregroundStyle(.blue)
-                    
-                }
-                GeometryReader { geometry in
-                    Path { path in
-                        path.move(to: CGPoint(x: 0, y: 0))
-                        path.addLine(to: CGPoint(x: geometry.size.width, y: 0))
-                    }
-                    .stroke(style: StrokeStyle(lineWidth: 1, dash: [20, 10]))
-                    .foregroundStyle(colorScheme == .dark ? Color.white : Color.black)
-                }
-                .padding(EdgeInsets(top: 7, leading: 5, bottom: 0, trailing: 0))
-                
-                HStack {
-                    Image(systemName: "carbon.dioxide.cloud")
-                        .scaleEffect(1.5)
-                        .padding(.bottom, 5)
-                        .padding(.trailing, 10)
-                    Text("Compensation:" )
-                    Text(String(format: "%.2f", travelDetails.travel.CO2Compensated) + " / " + String(format: "%.2f", travelDetails.computeCo2Emitted()) + " Kg")
-                }
-            }
-            .padding()
-            .foregroundStyle(colorScheme == .dark ? Color.white : Color.black)
-        }
-    }
-    
-    func computeTravelColor(travel : TravelDetails) -> LinearGradient {
-        let co2Emitted = travel.computeCo2Emitted()
-        let distance = travel.computeTotalDistance()
-        if co2Emitted == 0.0 {
-            return LinearGradient(colors: [.green.opacity(0.7), .blue.opacity(0.7)], startPoint: .bottomLeading, endPoint: .topTrailing)
-        }
-        if travel.travel.CO2Compensated >= travel.computeCo2Emitted() {
-            return LinearGradient(colors: [.green.opacity(0.7), .blue.opacity(0.7)], startPoint: .bottomLeading, endPoint: .topTrailing)
-        }
-        if distance/co2Emitted > 30 {
-            return AppColors.ecoGreenTravel
-        }
-        if distance/co2Emitted > 20 {
-            return AppColors.ecoYellowTravel
-        }
-        return AppColors.ecoRedTravel
-    }
-    
-    func computeTravelBackColor(travel: TravelDetails) -> LinearGradient{
-        if travel.travel.CO2Compensated >= travel.computeCo2Emitted() {
-            return LinearGradient(colors: [.green.opacity(0.3), .blue.opacity(0.3)], startPoint: .bottomLeading, endPoint: .topTrailing)
-        }
-        else {
-            return LinearGradient(colors: [.clear], startPoint: .bottomLeading, endPoint: .topTrailing)
         }
     }
 }

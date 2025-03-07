@@ -66,9 +66,14 @@ struct OptionCardView: View {
                 
                 HStack {
                     // vehicle
-                    Image(systemName: option.findVehicle())
-                        .font(.title2)
-                        .padding(.leading, 10)
+                    ZStack{
+                        Circle()
+                            .stroke(lineWidth: 2)
+                            .frame(width: 45, height: 45)
+                        Image(systemName: option.findVehicle())
+                            .font(.title2)
+                    }
+                    .padding(.leading, 10)
                     
                     Spacer()
                     

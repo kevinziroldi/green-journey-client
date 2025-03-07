@@ -23,14 +23,19 @@ struct ReturnOptionsView: View {
             ScrollView {
                 VStack {
                     ForEach (viewModel.returnOptions.indices, id: \.self) { option in
-                        NavigationLink (destination: OptionDetailsView(option: viewModel.returnOptions[option], viewModel: viewModel, navigationPath: $navigationPath)){
-                            OptionCardView(option: viewModel.returnOptions[option], viewModel: viewModel)
-                                .padding(.horizontal, 10)
+                        HStack {
+                            NavigationLink (destination: OptionDetailsView(option: viewModel.returnOptions[option], viewModel: viewModel, navigationPath: $navigationPath)){
+                                OptionCardView(option: viewModel.returnOptions[option], viewModel: viewModel)
+                                    .contentShape(Rectangle())
+                            }
+                            .accessibilityIdentifier("returnOption_\(option)")
                         }
-                        .accessibilityIdentifier("returnOption_\(option)")
+                        .padding(.horizontal, 10)
+                        .frame(maxWidth: 800)
+                        .buttonStyle(.plain)
                     }
-                    .buttonStyle(.plain)
                 }
+                .frame(maxWidth: .infinity)
             }
         }
     }
