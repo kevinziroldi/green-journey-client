@@ -308,6 +308,11 @@ struct TravelDetailsView: View {
                     .presentationDetents([.height(680)])
                     .presentationCornerRadius(30)
                     }
+            .sheet(isPresented: $infoTapped) {
+                InfoCompensationView(isPresented: $infoTapped)
+                    .presentationDetents([.medium])
+                    .presentationCornerRadius(30)
+                    }
 
             .ignoresSafeArea(edges: [.bottom, .horizontal])
             .background(colorScheme == .dark ? Color(red: 10/255, green: 10/255, blue: 10/255) : Color(red: 245/255, green: 245/255, blue: 245/255))
@@ -328,26 +333,53 @@ struct TravelDetailsView: View {
 }
 
 struct InfoCompensationView: View {
-    var onBack: () -> Void
+    @Binding var isPresented: Bool
     var body: some View {
-        VStack {
-            Text("""
-                long
-text
-legend compensation
-"""
-            )
-            .accessibilityIdentifier("infoText")
-            
-            Button("Close") {
-                onBack()
+        
+        HStack {
+            Spacer()
+            Button(action: {
+                isPresented = false
+            }) {
+                Text("Done")
+                    .fontWeight(.bold)
             }
-            .accessibilityIdentifier("infoCloseButton")
+            .padding(.horizontal, 30)
         }
-        .padding()
-        .background(Color.white)
-        .cornerRadius(12)
-        .shadow(radius: 10)
-        .frame(width: 330, height: 500)
+        .padding(.top)
+        ScrollView {
+            VStack {
+                Text("Travel Sustainably")
+                    .font(.title)
+                    .fontWeight(.semibold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .scaledToFit()
+                    .lineLimit(1)
+                    .padding(.bottom, 5)
+                
+                Text("Traveling has an environmental impact, but you can take action to reduce it. Every trip you take produces carbon emissions, contributing to climate change. By offsetting your Co2 footprint, you help balance these emissions and make your journeys more sustainable.")
+                
+                Text("How We Offset Carbon")
+                    .font(.title)
+                    .fontWeight(.semibold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .scaledToFit()
+                    .lineLimit(1)
+                    .padding(.top, 30)
+                    .padding(.bottom, 5)
+                
+                Text("""
+                We make it easy for you to compensate for your travel impact. 
+                Our approach is simple: we plant trees! Each tree absorbs an estimated 75 kg of Co2 over its lifetime, making a real difference for the planet. 
+                And the best part? 
+                Planting a tree costs only €2, making carbon offsetting both affordable and effective.
+                 Join us in making travel greener
+                """)
+                Text("Small actions lead to big changes!")
+                    .font(.headline)
+                    .padding(.top)
+            }
+            .padding(.horizontal)
+        }
     }
 }
