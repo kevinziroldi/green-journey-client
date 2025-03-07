@@ -86,7 +86,7 @@ struct InsertReviewView: View {
                 }) {
                     ZStack {
                         RoundedRectangle(cornerRadius: 10)
-                            .fill((viewModel.reviewText.isEmpty) || (viewModel.greenSpacesRating == 0) || (viewModel.localTransportRating == 0) || (viewModel.wasteBinsRating == 0) ? .black.opacity(0.3): AppColors.mainGreen)
+                            .fill((viewModel.reviewText.isEmpty) || (viewModel.greenSpacesRating == 0) || (viewModel.localTransportRating == 0) || (viewModel.wasteBinsRating == 0) ? .black.opacity(0.3): AppColors.mainColor)
                         Text("Save review")
                             .padding(10)
                             .foregroundColor(.white)

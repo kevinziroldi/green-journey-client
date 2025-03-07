@@ -108,7 +108,7 @@ struct TravelSearchView: View {
                                 
                                 ZStack {
                                     RoundedRectangle(cornerRadius: 10)
-                                        .fill((viewModel.departure.iata == "" || viewModel.arrival.iata == "") ? .black.opacity(0.3) : AppColors.mainGreen)
+                                        .fill((viewModel.departure.iata == "" || viewModel.arrival.iata == "") ? .black.opacity(0.3) : AppColors.mainColor)
                                     
                                     HStack (spacing: 3) {
                                         Spacer()
@@ -342,7 +342,7 @@ struct DepartureCompleterView: View {
                     departureTapped = true
                 }) {
                     Text(viewModel.departure.cityName == "" ? "Insert departure" : viewModel.departure.cityName)
-                        .foregroundColor(viewModel.departure.cityName == "" ? .secondary : AppColors.mainGreen)
+                        .foregroundColor(viewModel.departure.cityName == "" ? .secondary : AppColors.mainColor)
                         .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 0))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .font(.title2)
@@ -400,7 +400,7 @@ struct DestinationCompleterView: View {
                     }
                 }) {
                     Text(viewModel.arrival.cityName == "" ? "Insert destination" : viewModel.arrival.cityName)
-                        .foregroundColor (viewModel.arrival.cityName == "" ? Color.secondary : triggerAI ? Color.white : AppColors.mainGreen)
+                        .foregroundColor (viewModel.arrival.cityName == "" ? Color.secondary : triggerAI ? Color.white : AppColors.mainColor)
                         .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 0))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .font(.title2)
@@ -437,7 +437,7 @@ struct OutwardDatePickerView: View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)
                 //.stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 1.5)
-                .fill(AppColors.mainGreen)
+                .fill(AppColors.mainColor)
             Button(action: {
                 dateTapped = true
             }) {
@@ -474,7 +474,7 @@ struct ReturnDatePickerView: View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)
                 //.stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 1.5)
-                .fill(viewModel.oneWay ? Color.gray.opacity(0.5) : AppColors.mainGreen)
+                .fill(viewModel.oneWay ? Color.gray.opacity(0.5) : AppColors.mainColor)
             Button(action:  {
                 dateReturnTapped = true
             }) {

@@ -101,7 +101,7 @@ struct MyTravelsView: View {
                                     // selectedTravel is set synchronously
                                     navigationPath.append(NavigationDestination.TravelDetailsView(viewModel))
                                 }) {
-                                    TravelCard(travelDetails: travelDetails)
+                                    TravelCardView(travelDetails: travelDetails)
                                 }
                                 .accessibilityIdentifier("travelCardButton_\(travelDetails.travel.travelID ?? 1)")
                                 
@@ -178,7 +178,7 @@ struct MyTravelsView: View {
     }
 }
 
-struct TravelCard: View {
+struct TravelCardView: View {
     let travelDetails: TravelDetails
     @EnvironmentObject var viewModel: MyTravelsViewModel
     @Environment(\.colorScheme) var colorScheme: ColorScheme

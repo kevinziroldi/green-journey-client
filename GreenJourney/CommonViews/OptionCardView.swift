@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct OptionCard: View {
+struct OptionCardView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     var option: [Segment]

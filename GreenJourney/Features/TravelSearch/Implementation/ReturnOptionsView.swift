@@ -24,7 +24,7 @@ struct ReturnOptionsView: View {
                 VStack {
                     ForEach (viewModel.returnOptions.indices, id: \.self) { option in
                         NavigationLink (destination: OptionDetailsView(segments: viewModel.returnOptions[option], viewModel: viewModel, navigationPath: $navigationPath)){
-                            OptionCard(option: viewModel.returnOptions[option], viewModel: viewModel)
+                            OptionCardView(option: viewModel.returnOptions[option], viewModel: viewModel)
                                 .padding(.horizontal, 10)
                         }
                         .accessibilityIdentifier("returnOption_\(option)")

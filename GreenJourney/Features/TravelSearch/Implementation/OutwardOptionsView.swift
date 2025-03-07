@@ -25,7 +25,7 @@ struct OutwardOptionsView: View {
                 VStack {
                     ForEach (viewModel.outwardOptions.indices, id: \.self) { option in
                         NavigationLink (destination: OptionDetailsView(segments: viewModel.outwardOptions[option], viewModel: viewModel, navigationPath: $navigationPath)){
-                            OptionCard(option: viewModel.outwardOptions[option], viewModel: viewModel)
+                            OptionCardView(option: viewModel.outwardOptions[option], viewModel: viewModel)
                                 .padding(.horizontal, 10)
                         }
                         .accessibilityIdentifier("outwardOption_\(option)")

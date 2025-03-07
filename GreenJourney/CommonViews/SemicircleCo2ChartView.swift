@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct SemicircleCo2Chart: View {
+struct SemicircleCo2ChartView: View {
     let progress: Double
     let height: Double
     let width: Double

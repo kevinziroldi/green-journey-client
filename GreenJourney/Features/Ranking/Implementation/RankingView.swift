@@ -178,7 +178,7 @@ struct LeaderBoardsView: View {
             else {
                 ZStack {
                     RoundedRectangle(cornerRadius: 20)
-                        .stroke(AppColors.mainGreen, lineWidth: 3)
+                        .stroke(AppColors.mainColor, lineWidth: 3)
                         .padding(.top, 5)
                     VStack{
                         if currentRanking.isEmpty {
@@ -239,7 +239,7 @@ struct LeaderBoardView: View {
             .padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
             .foregroundStyle(.white)
             .background(
-                AppColors.mainGreen
+                AppColors.mainColor
                     .clipShape(TopRoundedCorners(cornerRadius: 20))
             )
             .overlay(Color.clear.accessibilityIdentifier("tableHeader"))
@@ -358,7 +358,7 @@ struct LeaderBoardUserView: View {
             
             ZStack {
                 RoundedRectangle(cornerRadius: 20)
-                    .stroke(AppColors.mainGreen, lineWidth: 3)
+                    .stroke(AppColors.mainColor, lineWidth: 3)
                     .shadow(radius: 10)
                 
                 VStack(spacing: 0) {

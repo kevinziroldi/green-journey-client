@@ -158,10 +158,10 @@ struct BestCityView: View {
                 HStack {
                     ZStack {
                         Circle()
-                            .fill(AppColors.mainGreen.opacity(0.3))
+                            .fill(AppColors.mainColor.opacity(0.3))
                             .frame(width: 45, height: 45)
                         Text("\(pos)")
-                            .foregroundStyle(AppColors.mainGreen)
+                            .foregroundStyle(AppColors.mainColor)
                             .font(.system(size: 24))
                             .fontWeight(.semibold)
                     }
@@ -195,10 +195,10 @@ struct BestCityView: View {
                 HStack {
                     ZStack {
                         Circle()
-                            .fill(AppColors.mainGreen.opacity(0.3))
+                            .fill(AppColors.mainColor.opacity(0.3))
                             .frame(width: 45, height: 45)
                         Text("\(pos)")
-                            .foregroundStyle(AppColors.mainGreen)
+                            .foregroundStyle(AppColors.mainColor)
                             .font(.system(size: 24))
                             .fontWeight(.semibold)
                     }

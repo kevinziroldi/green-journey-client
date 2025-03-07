@@ -78,7 +78,7 @@ struct TravelDetailsView: View {
                                                                 Image(systemName: "plus.circle")
                                                                     .font(.system(size: 26))
                                                                     .fontWeight(.light)
-                                                                    .foregroundStyle(plantedTrees == totalTrees ? .secondary : AppColors.mainGreen)
+                                                                    .foregroundStyle(plantedTrees == totalTrees ? .secondary : AppColors.mainColor)
                                                                 
                                                             }
                                                             .disabled(plantedTrees == totalTrees)
@@ -93,7 +93,7 @@ struct TravelDetailsView: View {
                                                                 Image(systemName: "minus.circle")
                                                                     .font(.system(size: 26))
                                                                     .fontWeight(.light)
-                                                                    .foregroundStyle(plantedTrees==viewModel.getPlantedTrees(travelDetails) ? .secondary : AppColors.mainGreen)
+                                                                    .foregroundStyle(plantedTrees==viewModel.getPlantedTrees(travelDetails) ? .secondary : AppColors.mainColor)
                                                             }
                                                             .disabled(plantedTrees==viewModel.getPlantedTrees(travelDetails))
                                                             .accessibilityIdentifier("minusButton")
@@ -124,7 +124,7 @@ struct TravelDetailsView: View {
                                                     }) {
                                                         ZStack {
                                                             RoundedRectangle(cornerRadius: 10)
-                                                                .fill(plantedTrees==viewModel.getPlantedTrees(travelDetails) ? Color.secondary.opacity(0.6) : AppColors.mainGreen)
+                                                                .fill(plantedTrees==viewModel.getPlantedTrees(travelDetails) ? Color.secondary.opacity(0.6) : AppColors.mainColor)
                                                                 .stroke(plantedTrees==viewModel.getPlantedTrees(travelDetails) ? Color.secondary : Color(red: 1/255, green: 150/255, blue: 1/255), lineWidth: 2)
                                                             HStack (spacing: 3) {
                                                                 Image(systemName: "leaf")
@@ -195,7 +195,7 @@ struct TravelDetailsView: View {
                                         .padding(.top, 40)
                                         .frame(maxWidth: .infinity)
                                         VStack {
-                                            SemicircleCo2Chart(progress: progress, height: 120, width: 140, lineWidth: 10)
+                                            SemicircleCo2ChartView(progress: progress, height: 120, width: 140, lineWidth: 10)
                                                 .padding(.top, 25)
                                             
                                             HStack {
@@ -231,7 +231,7 @@ struct TravelDetailsView: View {
                             // if the user hasn't left a review yet
                             let city = travelDetails.getDestinationSegment()?.destinationCity
                             let country = travelDetails.getDestinationSegment()?.destinationCountry
-                            InsertReviewButton(viewModel: reviewViewModel, reviewTapped: $reviewTapped, city: city, country: country)
+                            InsertReviewButtonView(viewModel: reviewViewModel, reviewTapped: $reviewTapped, city: city, country: country)
                                 .accessibilityIdentifier("reviewButton")
                         }
                         HStack {

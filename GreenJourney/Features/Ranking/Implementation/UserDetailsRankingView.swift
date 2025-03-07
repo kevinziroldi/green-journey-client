@@ -352,7 +352,7 @@ struct Co2EmissionView: View {
                     .foregroundStyle(.mint.opacity(0.8))
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                SemicircleCo2Chart(progress: progress, height: 170, width: 200, lineWidth: 16)
+                SemicircleCo2ChartView(progress: progress, height: 170, width: 200, lineWidth: 16)
                     .padding(.top, 30)
                 HStack {
                     VStack {

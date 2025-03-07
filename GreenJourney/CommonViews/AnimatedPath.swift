@@ -8,12 +8,8 @@ struct AnimatedRectangle: View {
     @State var t: CGFloat = 0.0
     @State private var timerSubscription: Cancellable? = nil
 
-    
     var body: some View {
-        
-        
-        Path { path in
-            
+        Path { path in            
             let width = size.width
             let height = size.height
             let radius = cornerRadius

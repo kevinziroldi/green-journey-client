@@ -16,7 +16,7 @@ struct Co2DetailsView: View {
                             .foregroundStyle(.mint.opacity(0.8))
                             .fontWeight(.semibold)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                        SemicircleCo2Chart(progress: viewModel.computeProgress(), height: 170, width: 200, lineWidth: 16)
+                        SemicircleCo2ChartView(progress: viewModel.computeProgress(), height: 170, width: 200, lineWidth: 16)
                             .padding(.top, 30)
                         HStack {
                             VStack {
@@ -62,7 +62,7 @@ struct Co2DetailsView: View {
                 DoubleBarChart(element1: "Co2 Emitted", keys: viewModel.keysToString(keys: viewModel.co2CompensatedPerYear.keys.sorted()), data1: viewModel.co2EmittedPerYear.keys.sorted().map{viewModel.co2EmittedPerYear[$0]!}, element2: "Co2 Compensated", data2: viewModel.co2CompensatedPerYear.keys.sorted().map{viewModel.co2CompensatedPerYear[$0]!}, title: "Co2 per year", measureunit: "Kg of CO2")
                     .padding()
                 
-                BarChartView(title: "Planted trees", value: "\(viewModel.treesPlanted)", data: viewModel.co2CompensatedPerYear.keys.sorted().map{Int(viewModel.co2CompensatedPerYear[$0]!/75)}, labels: viewModel.keysToString(keys: viewModel.co2CompensatedPerYear.keys.sorted()), color: AppColors.mainGreen)
+                BarChartView(title: "Planted trees", value: "\(viewModel.treesPlanted)", data: viewModel.co2CompensatedPerYear.keys.sorted().map{Int(viewModel.co2CompensatedPerYear[$0]!/75)}, labels: viewModel.keysToString(keys: viewModel.co2CompensatedPerYear.keys.sorted()), color: AppColors.mainColor)
                     .padding()
             }
             .padding(.horizontal)

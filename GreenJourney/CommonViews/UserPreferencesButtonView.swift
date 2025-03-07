@@ -10,7 +10,7 @@ struct UserPreferencesButtonView: View {
         NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)) {
             Image(systemName: "person")
                 .font(.title)
-                .foregroundStyle(AppColors.mainGreen)
+                .foregroundStyle(AppColors.mainColor)
         }
         .accessibilityIdentifier("userPreferencesButton")
     }

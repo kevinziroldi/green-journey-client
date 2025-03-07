@@ -20,7 +20,7 @@ struct CityReviewsDetailsView: View {
                         
                         // button or user review
                         if viewModel.isReviewable(userID: users.first?.userID ?? -1) {
-                            InsertReviewButton(viewModel: viewModel, reviewTapped: $reviewTapped)
+                            InsertReviewButtonView(viewModel: viewModel, reviewTapped: $reviewTapped)
                         }
                         
                         // latest reviews, if present
@@ -323,7 +323,7 @@ struct LatestReviewsView: View {
                 }){
                     ZStack {
                         RoundedRectangle(cornerRadius: 10)
-                            .fill(AppColors.mainGreen)
+                            .fill(AppColors.mainColor)
                         
                         HStack (spacing: 3) {
                             Spacer()

@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct InsertReviewButton: View {
+struct InsertReviewButtonView: View {
     @ObservedObject var viewModel: CitiesReviewsViewModel
     @Binding var reviewTapped: Bool
     var city: String?
@@ -11,8 +11,8 @@ struct InsertReviewButton: View {
             if viewModel.userReview == nil {
                 ZStack{
                     RoundedRectangle(cornerRadius: 20)
-                        .fill(AppColors.mainGreen)
-                        .shadow(color: AppColors.mainGreen.opacity(0.3), radius: 5, x: 0, y: 3)
+                        .fill(AppColors.mainColor)
+                        .shadow(color: AppColors.mainColor.opacity(0.3), radius: 5, x: 0, y: 3)
                     HStack{
                         Button(action: {
                             reviewTapped = true
@@ -20,7 +20,7 @@ struct InsertReviewButton: View {
                             
                             ZStack {
                                 RoundedRectangle(cornerRadius: 10)
-                                    .fill(AppColors.mainGreen)
+                                    .fill(AppColors.mainColor)
                                 
                                 HStack (spacing: 3) {
                                     Spacer()
