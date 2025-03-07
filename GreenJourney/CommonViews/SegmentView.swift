@@ -92,22 +92,27 @@ struct SegmentDetailView: View {
                     }
                     if detailsOpen {
                         if segment.segmentDescription != "" {
-                            VStack {
-                                HStack (spacing: 5) {
-                                    VStack{
-                                        Text("Info:")
-                                            .font(.subheadline)
-                                            .fontWeight(.bold)
-                                        Spacer()
-                                    }
-                                    VStack {
-                                        Text(segment.segmentDescription)
-                                            .font(.subheadline)
-                                        Spacer()
+                            HStack {
+                                VStack {
+                                    HStack (spacing: 5) {
+                                        VStack{
+                                            Text("Info:")
+                                                .font(.subheadline)
+                                                .fontWeight(.bold)
+                                            Spacer()
+                                        }
+                                        VStack {
+                                            Text(segment.segmentDescription)
+                                                .font(.subheadline)
+                                            Spacer()
+                                        }
                                     }
                                 }
+                                .overlay(Color.clear.accessibilityIdentifier("segmentInfo"))
+                                
+                                Spacer()
                             }
-                            .overlay(Color.clear.accessibilityIdentifier("segmentInfo"))
+                            .padding(.vertical, 5)
                         }
                     }
                     if detailsOpen {

@@ -2,6 +2,8 @@ import SwiftData
 import SwiftUI
 
 struct MyTravelsView: View {
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    
     @StateObject var viewModel: MyTravelsViewModel
     @Environment(\.modelContext) private var modelContext
     private var serverService: ServerServiceProtocol
@@ -35,12 +37,9 @@ struct MyTravelsView: View {
                     
                     Spacer()
                     
-                    NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)) {
-                        Image(systemName: "person")
-                            .font(.title)
-                            .foregroundStyle(AppColors.mainGreen)
+                    if horizontalSizeClass == .compact {
+                        UserPreferencesButtonView(navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
                     }
-                    .accessibilityIdentifier("userPreferencesButton")
                 }
                 .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
                 

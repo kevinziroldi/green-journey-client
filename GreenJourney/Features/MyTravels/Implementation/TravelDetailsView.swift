@@ -98,8 +98,6 @@ struct TravelDetailsView: View {
                                                             .disabled(plantedTrees==viewModel.getPlantedTrees(travelDetails))
                                                             .accessibilityIdentifier("minusButton")
                                                         }
-                                                        //.padding(.leading, 20)
-                                                        
                                              
                                                         Spacer()
                                                         
@@ -178,7 +176,7 @@ struct TravelDetailsView: View {
                                             else {
                                                 VStack {
                                                     HStack (spacing: 0){
-                                                        Text("you planted: \(plantedTrees)")
+                                                        Text("You planted: \(plantedTrees)")
                                                             .font(.system(size: 20))
                                                         Image(systemName: "tree")
                                                             .font(.system(size: 20))
