@@ -227,8 +227,9 @@ struct BestCityView: View {
                     
                     VStack {
                         if viewModel.hasVisited(city: city) {
-                            Image(systemName: "checkmark.circle")
-                                .foregroundColor(.green)
+                            Image(systemName: "mappin.and.ellipse.circle")
+                                .foregroundColor(AppColors.mainColor)
+                                .font(.system(size: 25))
                         }
                     }
                    
