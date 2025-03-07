@@ -1,8 +1,9 @@
 import SwiftUI
 
 struct OptionDetailsView: View {
-    var option: TravelOption
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
 
+    var option: TravelOption
     @ObservedObject var viewModel: TravelSearchViewModel
     @Binding var navigationPath: NavigationPath
     
@@ -13,21 +14,44 @@ struct OptionDetailsView: View {
             .frame(height: 1)
             .foregroundColor(.gray)
         
-        ScrollView {
+        if horizontalSizeClass == .compact {
+            // iOS
             
-            Co2RecapView(co2Emitted: option.getCo2Emitted(), numTrees: option.getNumTrees(), distance: option.getTotalDistance())
-            .padding(EdgeInsets(top: 10, leading: 15, bottom: 5, trailing: 15))
-            .overlay(Color.clear.accessibilityIdentifier("co2EmittedBox"))
-            
-            TravelRecapView(distance: option.getTotalDistance(), duration: option.getTotalDuration(), price: option.getTotalPrice(), greenPrice: option.getGreenPrice())
-                .padding()
-                .overlay(Color.clear.accessibilityIdentifier("travelRecap"))
+            ScrollView {
+                Co2RecapView(halfWidth: false, co2Emitted: option.getCo2Emitted(), numTrees: option.getNumTrees(), distance: option.getTotalDistance())
+                    .padding(EdgeInsets(top: 10, leading: 15, bottom: 5, trailing: 15))
+                    .overlay(Color.clear.accessibilityIdentifier("co2EmittedBox"))
                 
-            SegmentsView(segments: option.segments)
-                .padding(.top)
+                TravelRecapView(distance: option.getTotalDistance(), duration: option.getTotalDuration(), price: option.getTotalPrice(), greenPrice: option.getGreenPrice())
+                    .padding()
+                    .overlay(Color.clear.accessibilityIdentifier("travelRecap"))
+                
+                SegmentsView(segments: option.segments)
+                    .padding(.top)
+                
+                Spacer()
+            }
+        } else {
+            // iPadOS
             
-            Spacer()
+            ScrollView {
+                HStack {
+                    Co2RecapView(halfWidth: true, co2Emitted: option.getCo2Emitted(), numTrees: option.getNumTrees(), distance: option.getTotalDistance())
+                        .padding(EdgeInsets(top: 10, leading: 15, bottom: 5, trailing: 15))
+                        .overlay(Color.clear.accessibilityIdentifier("co2EmittedBox"))
+                    
+                    TravelRecapView(distance: option.getTotalDistance(), duration: option.getTotalDuration(), price: option.getTotalPrice(), greenPrice: option.getGreenPrice())
+                        .padding()
+                        .overlay(Color.clear.accessibilityIdentifier("travelRecap"))
+                }
+                
+                SegmentsView(segments: option.segments)
+                    .padding(.top)
+                
+                Spacer()
+            }
         }
+        
         if (!viewModel.oneWay) {
             if (viewModel.selectedOption.isEmpty) {
                 Button (action: {

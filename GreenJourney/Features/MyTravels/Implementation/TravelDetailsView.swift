@@ -148,7 +148,7 @@ struct TravelDetailsView: View {
                                                     .alert(isPresented: $showAlertCompensation) {
                                                         Alert(
                                                             title: Text("Compensate \(viewModel.compensatedPrice)€ for this travel?"),
-                                                            message: Text("you cannot undo this action"),
+                                                            message: Text("You cannot undo this action"),
                                                             primaryButton: .cancel(Text("Cancel")) {},
                                                             secondaryButton: .default(Text("Confirm")) {
                                                                 //compensate travel
@@ -215,7 +215,7 @@ struct TravelDetailsView: View {
                             .padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
                         }
                         else {
-                            Co2RecapView(co2Emitted: travelDetails.computeCo2Emitted(), numTrees: viewModel.getNumTrees(travelDetails), distance: travelDetails.computeTotalDistance())
+                            Co2RecapView(halfWidth: false, co2Emitted: travelDetails.computeCo2Emitted(), numTrees: viewModel.getNumTrees(travelDetails), distance: travelDetails.computeTotalDistance())
                             .padding()
                             .accessibilityElement(children: .contain)
                             .overlay(Color.clear.accessibilityIdentifier("emissionsRecapFutureTravel"))
@@ -234,34 +234,9 @@ struct TravelDetailsView: View {
                             InsertReviewButtonView(viewModel: reviewViewModel, reviewTapped: $reviewTapped, city: city, country: country)
                                 .accessibilityIdentifier("reviewButton")
                         }
-                        HStack {
-                            Text(travelDetails.isOneway() ? "Segments" : "Outward")
-                                .font(.title)
-                                .fontWeight(.semibold)
-                                .accessibilityIdentifier("segmentsTitle")
-                                .padding(.horizontal, 15)
-                            Spacer()
-                        }
-                        .padding(.top)
-                            
-                        SegmentsView(segments: travelDetails.getOutwardSegments())
-                            .accessibilityElement(children: .contain)
-                            .overlay(Color.clear.accessibilityIdentifier("outwardSegmentsView"))
                         
-                        if !travelDetails.isOneway() {
-                            HStack {
-                                Text("Return")
-                                    .font(.title)
-                                    .fontWeight(.semibold)
-                                    .accessibilityIdentifier("returnTitle")
-                                Spacer()
-                            }
-                            .padding()
-                            
-                            SegmentsView(segments: travelDetails.getReturnSegments())
-                                .accessibilityElement(children: .contain)
-                                .overlay(Color.clear.accessibilityIdentifier("returnSegmentsView"))
-                        }
+                        SegmentsDetailsView(travelDetails: travelDetails)
+                        
                         Button(action: {
                             showAlertDelete = true
                             viewModel.selectedTravel = travelDetails
@@ -279,13 +254,13 @@ struct TravelDetailsView: View {
                                 }
                                 .padding()
                             }
-                            .padding(.bottom)
+                            .padding(.vertical, 20)
                             .fixedSize()
                         }
                         .alert(isPresented: $showAlertDelete) {
                             Alert(
                                 title: Text("Delete this travel?"),
-                                message: Text("you cannot undo this action"),
+                                message: Text("You cannot undo this action"),
                                 primaryButton: .cancel(Text("Cancel")) {},
                                 secondaryButton: .destructive(Text("Delete")) {
                                     //delete travel
@@ -382,6 +357,95 @@ struct InfoCompensationView: View {
                     .padding(.top)
             }
             .padding(.horizontal)
+        }
+    }
+}
+
+struct SegmentsDetailsView: View {
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    var travelDetails: TravelDetails
+    
+    var body: some View {
+        if horizontalSizeClass == .compact {
+            // iOS
+            
+            HStack {
+                Text(travelDetails.isOneway() ? "Segments" : "Outward")
+                    .font(.title)
+                    .fontWeight(.semibold)
+                    .accessibilityIdentifier("segmentsTitle")
+                    .padding(.horizontal, 15)
+                Spacer()
+            }
+            .padding(.top)
+            
+            SegmentsView(segments: travelDetails.getOutwardSegments())
+                .accessibilityElement(children: .contain)
+                .overlay(Color.clear.accessibilityIdentifier("outwardSegmentsView"))
+            
+            if !travelDetails.isOneway() {
+                HStack {
+                    Text("Return")
+                        .font(.title)
+                        .fontWeight(.semibold)
+                        .accessibilityIdentifier("returnTitle")
+                    Spacer()
+                }
+                .padding()
+                
+                SegmentsView(segments: travelDetails.getReturnSegments())
+                    .accessibilityElement(children: .contain)
+                    .overlay(Color.clear.accessibilityIdentifier("returnSegmentsView"))
+            }
+        } else {
+            HStack(alignment: .top) {
+                Spacer()
+                
+                VStack(alignment: .leading) {
+                    HStack {
+                        Text(travelDetails.isOneway() ? "Segments" : "Outward")
+                            .font(.title)
+                            .fontWeight(.semibold)
+                            .accessibilityIdentifier("segmentsTitle")
+                            .padding(.horizontal, 15)
+                        Spacer()
+                    }
+                    .padding(.top)
+                    
+                    SegmentsView(segments: travelDetails.getOutwardSegments())
+                        .fixedSize()
+                        .accessibilityElement(children: .contain)
+                        .overlay(Color.clear.accessibilityIdentifier("outwardSegmentsView"))
+                }
+                .frame(maxWidth: 400)
+                
+                Spacer()
+                
+                if !travelDetails.isOneway() {
+                    VStack(alignment: .leading) {
+                        HStack {
+                            Text("Return")
+                                .font(.title)
+                                .fontWeight(.semibold)
+                                .accessibilityIdentifier("returnTitle")
+                                .padding(.horizontal, 15)
+                            Spacer()
+                        }
+                        .padding(.top)
+                        
+                        VStack {
+                            SegmentsView(segments: travelDetails.getReturnSegments())
+                                .fixedSize()
+                                .accessibilityElement(children: .contain)
+                                .overlay(Color.clear.accessibilityIdentifier("returnSegmentsView"))
+                        }
+                    }
+                    .frame(maxWidth: 400)
+                }
+                
+                Spacer()
+            }
+            .padding(.horizontal, 50)
         }
     }
 }

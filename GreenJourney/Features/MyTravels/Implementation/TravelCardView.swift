@@ -79,6 +79,17 @@ struct TravelCardView: View {
                     
                     Spacer()
                     
+                    VStack {
+                        Image(systemName: "carbon.dioxide.cloud")
+                            .font(.title)
+                            .scaleEffect(1.5)
+                            .padding(EdgeInsets(top: 0, leading: 0, bottom: 5, trailing: 0))
+                        Text("Co2 compensation")
+                        Text(String(format: "%.2f/%.2f kg", travelDetails.travel.CO2Compensated, travelDetails.computeCo2Emitted()))
+                    }
+                    
+                    Spacer()
+                    
                     Image(systemName: "chevron.forward")
                         .font(.title2)
                         .foregroundStyle(.blue)
