@@ -140,22 +140,29 @@ class MockServerService: ServerServiceProtocol {
 
     func computeRoutes(departureIata: String, departureCountryCode: String,
                        destinationIata: String, destinationCountryCode: String,
-                       date: String, time: String, isOutward: Bool) async throws -> TravelOptionsResponse {
+                       date: String, time: String, isOutward: Bool) async throws -> [TravelOption] {
         if shouldSucceed {
             // read mock review from json
             guard let path = Bundle.main.path(forResource: "mock_travel_options", ofType: "json") else {
                 print("Mock travel options file not found")
-                return TravelOptionsResponse(options: [])
+                return [TravelOption(segments: [])]
             }
             do {
                 let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
                 let decoder = JSONDecoder()
                 decoder.dateDecodingStrategy = .iso8601
-                let travelOptions = try decoder.decode(TravelOptionsResponse.self, from: data)
+                let travelOptionsRaw = try decoder.decode(TravelOptionsResponse.self, from: data)
+                
+                // convert to [TravelOption]
+                var travelOptions: [TravelOption] = []
+                for segments in travelOptionsRaw.options {
+                    travelOptions.append(TravelOption(segments: segments))
+                }
+                
                 return travelOptions
             } catch {
                 print(error)
-                return TravelOptionsResponse(options: [])
+                return [TravelOption(segments: [])]
             }
         } else {
             throw ServerServiceError.computeRoutesFailed

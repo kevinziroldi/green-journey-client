@@ -17,7 +17,7 @@ protocol ServerServiceProtocol {
     // search travels
     func computeRoutes(departureIata: String, departureCountryCode: String,
                        destinationIata: String, destinationCountryCode: String,
-                       date: String, time: String, isOutward: Bool) async throws -> TravelOptionsResponse
+                       date: String, time: String, isOutward: Bool) async throws -> [TravelOption]
     func saveTravel(travelDetails: TravelDetails) async throws -> TravelDetails
     
     // travels

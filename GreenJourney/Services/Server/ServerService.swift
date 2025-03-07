@@ -317,7 +317,7 @@ class ServerService: ServerServiceProtocol {
 
     func computeRoutes(departureIata: String, departureCountryCode: String,
                        destinationIata: String, destinationCountryCode: String,
-                       date: String, time: String, isOutward: Bool) async throws -> TravelOptionsResponse {
+                       date: String, time: String, isOutward: Bool) async throws -> [TravelOption] {
         // build request
         let baseURL = URLHandler.shared.getBaseURL()
         guard let url = URL(string:"\(baseURL)/travels/search?iata_departure=\(departureIata)&country_code_departure=\(departureCountryCode)&iata_destination=\(destinationIata)&country_code_destination=\(destinationCountryCode)&date=\(date)&time=\(time)&is_outward=\(isOutward)") else {
@@ -340,7 +340,13 @@ class ServerService: ServerServiceProtocol {
             
         // decode response
         do {
-            let travelOptions = try decoder.decode(TravelOptionsResponse.self, from: data)
+            let travelOptionsRaw = try decoder.decode(TravelOptionsResponse.self, from: data)
+            
+            // convert to [TravelOption]
+            var travelOptions: [TravelOption] = []
+            for segments in travelOptionsRaw.options {
+                travelOptions.append(TravelOption(segments: segments))
+            }
             return travelOptions
         } catch {
             print("Failed to decode review: \(error.localizedDescription)")

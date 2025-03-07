@@ -24,7 +24,7 @@ struct OutwardOptionsView: View {
             ScrollView {
                 VStack {
                     ForEach (viewModel.outwardOptions.indices, id: \.self) { option in
-                        NavigationLink (destination: OptionDetailsView(segments: viewModel.outwardOptions[option], viewModel: viewModel, navigationPath: $navigationPath)){
+                        NavigationLink (destination: OptionDetailsView(option: viewModel.outwardOptions[option], viewModel: viewModel, navigationPath: $navigationPath)){
                             OptionCardView(option: viewModel.outwardOptions[option], viewModel: viewModel)
                                 .padding(.horizontal, 10)
                         }

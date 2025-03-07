@@ -3,7 +3,7 @@ import SwiftUI
 struct OptionCardView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
-    var option: [Segment]
+    var option: TravelOption
     @Environment(\.colorScheme) var colorScheme
     @ObservedObject var viewModel: TravelSearchViewModel
     
@@ -19,17 +19,17 @@ struct OptionCardView: View {
                 VStack {
                     // top part
                     HStack {
-                        Image(systemName: viewModel.findVehicle(option))
+                        Image(systemName: option.findVehicle())
                             .font(.title2)
                             .padding(EdgeInsets(top: -20, leading: 10, bottom: 0, trailing: 0))
                         
                         Spacer()
                         
-                        DepartureDestinationInfoView(departureDate: option.first?.dateTime, departure: viewModel.getOptionDeparture(option), destinationDate: option.last?.getArrivalDateTime(), destination: viewModel.getOptionDestination(option), changes: viewModel.countChanges(option))
+                        DepartureDestinationInfoView(departureDate: option.segments.first?.dateTime, departure: option.getOptionDeparture(), destinationDate: option.segments.last?.getArrivalDateTime(), destination: option.getOptionDestination(), changes: option.countChanges())
                         
                         Spacer()
                         
-                        Co2CloudView(co2Value: viewModel.computeCo2Emitted(option))
+                        Co2CloudView(co2Value: option.getCo2Emitted())
                         
                         Spacer()
                         
@@ -51,11 +51,11 @@ struct OptionCardView: View {
                         Image(systemName: "clock")
                             .font(.title3)
                             .padding(EdgeInsets(top: 7, leading: 0, bottom: 5, trailing: 0))
-                        Text(viewModel.computeTotalDuration(option))
+                        Text(option.getTotalDuration())
                         
                         Spacer()
                         
-                        Text("Price: " + String(format: "%.2f", viewModel.computeTotalPrice(option)) + "€")
+                        Text("Price: " + String(format: "%.2f", option.getTotalPrice()) + "€")
                             .foregroundStyle(.green)
                         Spacer()
                     }
@@ -66,7 +66,7 @@ struct OptionCardView: View {
                 
                 HStack {
                     // vehicle
-                    Image(systemName: viewModel.findVehicle(option))
+                    Image(systemName: option.findVehicle())
                         .font(.title2)
                         .padding(.leading, 10)
                     
@@ -74,25 +74,25 @@ struct OptionCardView: View {
                     
                     // general info
                     VStack {
-                        DepartureDestinationInfoView(departureDate: option.first?.dateTime, departure: viewModel.getOptionDeparture(option), destinationDate: option.last?.getArrivalDateTime(), destination: viewModel.getOptionDestination(option), changes: viewModel.countChanges(option))
+                        DepartureDestinationInfoView(departureDate: option.segments.first?.dateTime, departure: option.getOptionDeparture(), destinationDate: option.segments.last?.getArrivalDateTime(), destination: option.getOptionDestination(), changes: option.countChanges())
                         
                         HStack {
                             Image(systemName: "clock")
                                 .font(.title3)
                                 .padding(.top, 5)
-                            Text(viewModel.computeTotalDuration(option))
+                            Text(option.getTotalDuration())
                         }
                     }
                     
                     Spacer()
                     
                     // prices
-                    OptionPriceView(basePrice: viewModel.computeTotalPrice(option), greenPrice: viewModel.computeGreenPrice(option))
+                    OptionPriceView(basePrice: option.getTotalPrice(), greenPrice: option.getGreenPrice())
                     
                     Spacer()
                     
                     // co2 emission
-                    Co2CloudView(co2Value: viewModel.computeCo2Emitted(option))
+                    Co2CloudView(co2Value: option.getCo2Emitted())
                     
                     Spacer()
                     
@@ -108,10 +108,10 @@ struct OptionCardView: View {
         
     }
     
-    func computeTravelColor(option : [Segment]) -> LinearGradient {
+    func computeTravelColor(option : TravelOption) -> LinearGradient {
         var co2Emitted = 0.0
         var distance = 0.0
-        for segment in option {
+        for segment in option.segments {
             distance += segment.distance
             co2Emitted += segment.co2Emitted
         }

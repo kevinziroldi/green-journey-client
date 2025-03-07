@@ -1,13 +1,13 @@
 import SwiftUI
 
 struct OptionDetailsView: View {
-    var segments: [Segment]
+    var option: TravelOption
 
     @ObservedObject var viewModel: TravelSearchViewModel
     @Binding var navigationPath: NavigationPath
     
     var body: some View {
-        HeaderView(from: viewModel.getOptionDeparture(segments), to: viewModel.getOptionDestination(segments), date: segments.first?.dateTime)
+        HeaderView(from: option.getOptionDeparture(), to: option.getOptionDestination(), date: option.segments.first?.dateTime)
         
         Rectangle()
             .frame(height: 1)
@@ -15,15 +15,15 @@ struct OptionDetailsView: View {
         
         ScrollView {
             
-            Co2RecapView(co2Emitted: viewModel.computeCo2Emitted(segments), numTrees: viewModel.getNumTrees(segments), distance: viewModel.computeTotalDistance(segments))
+            Co2RecapView(co2Emitted: option.getCo2Emitted(), numTrees: option.getNumTrees(), distance: option.getTotalDistance())
             .padding(EdgeInsets(top: 10, leading: 15, bottom: 5, trailing: 15))
             .overlay(Color.clear.accessibilityIdentifier("co2EmittedBox"))
             
-            TravelRecapView(distance: viewModel.computeTotalDistance(segments), duration: viewModel.computeTotalDuration(segments), price: viewModel.computeTotalPrice(segments), greenPrice: viewModel.computeGreenPrice(segments))
+            TravelRecapView(distance: option.getTotalDistance(), duration: option.getTotalDuration(), price: option.getTotalPrice(), greenPrice: option.getGreenPrice())
                 .padding()
                 .overlay(Color.clear.accessibilityIdentifier("travelRecap"))
                 
-            SegmentsView(segments: segments)
+            SegmentsView(segments: option.segments)
                 .padding(.top)
             
             Spacer()
@@ -31,7 +31,7 @@ struct OptionDetailsView: View {
         if (!viewModel.oneWay) {
             if (viewModel.selectedOption.isEmpty) {
                 Button (action: {
-                    viewModel.selectedOption.append(contentsOf: segments)
+                    viewModel.selectedOption.append(contentsOf: option.segments)
                     navigationPath.append(NavigationDestination.ReturnOptionsView(viewModel))
                 }) {
                     Text("Proceed")
@@ -43,7 +43,7 @@ struct OptionDetailsView: View {
             else {
                 Button (action:  {
                     Task {
-                        viewModel.selectedOption.append(contentsOf: segments)
+                        viewModel.selectedOption.append(contentsOf: option.segments)
                         await viewModel.saveTravel()
                         navigationPath = NavigationPath()
                     }
@@ -58,7 +58,7 @@ struct OptionDetailsView: View {
         else {
             Button (action: {
                 Task {
-                    viewModel.selectedOption.append(contentsOf: segments)
+                    viewModel.selectedOption.append(contentsOf: option.segments)
                     await viewModel.saveTravel()
                     navigationPath = NavigationPath()
                 }

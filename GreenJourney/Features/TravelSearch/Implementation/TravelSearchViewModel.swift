@@ -19,8 +19,8 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
     @Published var datePicked: Date = Date.now
     @Published var dateReturnPicked : Date = Date.now.addingTimeInterval(7 * 24 * 60 * 60) //seven days in ms
     @Published var oneWay: Bool = true
-    @Published var outwardOptions: [[Segment]] = []
-    @Published var returnOptions: [[Segment]] = []
+    @Published var outwardOptions: [TravelOption] = []
+    @Published var returnOptions: [TravelOption] = []
     
     @Published var selectedOption: [Segment] = []
     
@@ -63,7 +63,7 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
         // get outward options
         do {
             let outwardOptions = try await serverService.computeRoutes(departureIata: departure.iata, departureCountryCode: departure.countryCode, destinationIata: arrival.iata, destinationCountryCode: arrival.countryCode, date: formattedDate, time: formattedTime, isOutward: isOutward)
-            self.outwardOptions = outwardOptions.options
+            self.outwardOptions = outwardOptions
         }catch {
             print("Error fetching options: \(error.localizedDescription)")
             return
@@ -73,7 +73,7 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
         if (!oneWay) {
             do {
                 let returnOptions = try await serverService.computeRoutes(departureIata: arrival.iata, departureCountryCode: arrival.countryCode, destinationIata: departure.iata, destinationCountryCode: departure.countryCode, date: formattedDateReturn, time: formattedTimeReturn, isOutward: !isOutward)
-                self.returnOptions = returnOptions.options
+                self.returnOptions = returnOptions
             }catch {
                 print("Error fetching options: \(error.localizedDescription)")
             }
@@ -117,43 +117,5 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
         }
         self.departure = CityCompleterDataset()
         self.arrival = CityCompleterDataset()
-    }
-    
-    func computeCo2Emitted(_ travelOption: [Segment]) -> Float64 {
-        return logic.computeCo2Emitted(travelOption)
-    }
-    
-    func computeTotalPrice (_ travelOption: [Segment]) -> Float64 {
-        return logic.computeTotalPrice(travelOption)
-    }
-    
-    func computeGreenPrice(_ travelOption: [Segment]) -> Float64 {
-        return logic.computeGreenPrice(travelOption)
-    }
-    
-    func computeTotalDuration (_ travelOption: [Segment]) -> String {
-        return logic.computeTotalDuration(travelOption)
-    }
-    
-    func getOptionDeparture (_ travelOption: [Segment]) -> String {
-        return logic.getOptionDeparture(travelOption)
-    }
-    
-    func getOptionDestination (_ travelOption: [Segment]) -> String {
-        return logic.getOptionDestination(travelOption)
-    }
-    
-    func findVehicle(_ option: [Segment]) -> String {
-        return logic.findVehicle(option)
-    }
-    
-    func getNumTrees(_ travelOption: [Segment]) -> Int {
-        return logic.getNumTrees(travelOption)
-    }
-    func computeTotalDistance(_ travelOption: [Segment]) -> Float64 {
-        return logic.computeTotalDistance(travelOption)
-    }
-    func countChanges(_ option: [Segment]) -> Int {
-        return logic.countChanges(option)
     }
 }
