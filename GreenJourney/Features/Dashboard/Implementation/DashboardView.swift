@@ -3,6 +3,8 @@ import SwiftData
 import Charts
 
 struct DashboardView: View {
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    
     @StateObject var viewModel: DashboardViewModel
     @Binding var navigationPath: NavigationPath
     private var modelContext: ModelContext
@@ -31,12 +33,9 @@ struct DashboardView: View {
                         .accessibilityIdentifier("dashboardTitle")
                     Spacer()
                     
-                    NavigationLink(destination: UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)) {
-                        Image(systemName: "person")
-                            .font(.title)
-                            .foregroundStyle(AppColors.mainGreen)
+                    if horizontalSizeClass == .compact {
+                        UserPreferencesButtonView(navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
                     }
-                    .accessibilityIdentifier("userPreferencesButton")
                 }
                 .padding(5)
                 
@@ -160,7 +159,7 @@ struct DashboardView: View {
                             }
                             .padding()
                             
-                            InfoRow(title: "Continents visited", value: "\(viewModel.visitedContinents.count) / 6", icon: "globe", color: .red, imageValue: false, imageValueString: nil)
+                            InfoRow(title: "Visited continents", value: "\(viewModel.visitedContinents.count) / 6", icon: "globe", color: .red, imageValue: false, imageValueString: nil)
                         }
                         .padding(.bottom, 7)
                     }
