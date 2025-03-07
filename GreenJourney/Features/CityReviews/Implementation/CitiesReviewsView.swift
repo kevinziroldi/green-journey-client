@@ -308,78 +308,7 @@ struct CitySearchView: View {
             )
         }
         
+        
     }
 }
 
-struct InfoReviewView: View {
-    //@Binding var isPresented: Bool
-        var body: some View {
-            ZStack {
-                Text("Ratings")
-                    .font(.largeTitle)
-                    .padding(.bottom)
-                HStack {
-                    Spacer()
-                    Button(action: {
-                        //isPresented = false
-                    }) {
-                        Text("Done")
-                            .fontWeight(.bold)
-                    }
-                    .padding(.bottom, 30)
-                }
-                .padding(.horizontal, 30)
-            }
-            .padding(.top)
-            ScrollView {
-                VStack {
-                    HStack {
-                        Text("Green Spaces")
-                            .font(.title2)
-                            .fontWeight(.semibold)
-                            .scaledToFit()
-                            .lineLimit(1)
-                        Spacer()
-                    }
-                    .padding(.bottom, 5)
-                    Text("This rating reflects the quantity and quality of parks, gardens, and other green areas in the city. More green spaces mean a healthier environment and a better urban experience.")
-                        .frame(maxWidth: .infinity, alignment: .leading)
-
-                    
-                    HStack {
-                        Text("Public Transport Efficiency")
-                            .font(.title2)
-                            .fontWeight(.semibold)
-                            .scaledToFit()
-                            .lineLimit(1)
-                        Spacer()
-                    }
-                    .padding(.top, 30)
-                    .padding(.bottom, 5)
-                    Text("This score evaluates the availability and effectiveness of public transport in reducing CO₂ emissions. A well-connected and eco-friendly transit system makes the city more sustainable.")
-                        .frame(maxWidth: .infinity, alignment: .leading)
-
-                    
-                    HStack {
-                        Text("Cleanliness & Recycling")
-                            .font(.title2)
-                            .fontWeight(.semibold)
-                            .scaledToFit()
-                            .lineLimit(1)
-                        Spacer()
-                    }
-                    .padding(.top, 30)
-                    .padding(.bottom, 5)
-                    Text("This rating measures the presence of recycling bins and the overall cleanliness of the city. A well-maintained urban environment contributes to a greener and more pleasant place to live and visit.")
-                        .frame(maxWidth: .infinity, alignment: .leading)
-
-                }
-                .padding(.horizontal)
-            }
-        }
-}
-
-
-#Preview {
-    InfoReviewView()
-}

@@ -16,7 +16,7 @@ struct CityReviewsDetailsView: View {
                         CityReviewsTitleView(viewModel: viewModel)
                         
                         // reviews average
-                        ReviewsAverageView(selectedCityReviewElement: selectedCityReviewElement)
+                        ReviewsAverageView(selectedCityReviewElement: selectedCityReviewElement, infoTapped: $infoTapped)
                         
                         // button or user review
                         if viewModel.isReviewable(userID: users.first?.userID ?? -1) {
@@ -31,6 +31,11 @@ struct CityReviewsDetailsView: View {
                 .sheet(isPresented: $reviewTapped) {
                     InsertReviewView(isPresented: $reviewTapped, viewModel: viewModel)
                         .presentationDetents([.height(680)])
+                        .presentationCornerRadius(30)
+                }
+                .sheet(isPresented: $infoTapped) {
+                    InfoReviewView(isPresented: $infoTapped)
+                        .presentationDetents([.fraction(0.75)])
                         .presentationCornerRadius(30)
                 }
                 .onAppear(){
@@ -59,7 +64,7 @@ struct ReviewsAverageView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     var selectedCityReviewElement: CityReviewElement
-    @State var infoTapped = false
+    @Binding var infoTapped: Bool
     
     var body: some View {
         if horizontalSizeClass == .compact {
@@ -496,4 +501,80 @@ struct ReviewsBlocksView: View {
             }
         )
     }
+}
+
+
+
+struct InfoReviewView: View {
+    @Binding var isPresented: Bool
+        var body: some View {
+            ZStack {
+                Text("Ratings")
+                    .font(.largeTitle)
+                    .padding(.bottom)
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        isPresented = false
+                    }) {
+                        Text("Done")
+                            .fontWeight(.bold)
+                    }
+                    .padding(.bottom, 30)
+                }
+                .padding(.horizontal, 30)
+            }
+            .padding(.top)
+            ScrollView {
+                VStack {
+                    HStack {
+                        Image(systemName: "bus")
+                            .resizable()
+                            .frame(width: 30, height: 30)
+                        Text("Public Transport Efficiency")
+                            .font(.title2)
+                            .fontWeight(.semibold)
+                            .scaledToFit()
+                            .lineLimit(1)
+                        Spacer()
+                    }
+                    .padding(.bottom, 5)
+                    Text("This score evaluates the availability and effectiveness of public transport in reducing Co2 emissions. A well-connected and eco-friendly transit system makes the city more sustainable.")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    HStack {
+                        Image(systemName: "tree")
+                            .resizable()
+                            .frame(width: 30, height: 30)
+                        Text("Green Spaces")
+                            .font(.title2)
+                            .fontWeight(.semibold)
+                            .scaledToFit()
+                            .lineLimit(1)
+                        Spacer()
+                    }
+                    .padding(.top, 30)
+                    .padding(.bottom, 5)
+                    Text("This rating reflects the quantity and quality of parks, gardens, and other green areas in the city. More green spaces mean a healthier environment and a better urban experience.")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+
+                    HStack {
+                        Image(systemName: "trash")
+                            .resizable()
+                            .frame(width: 30, height: 30)
+                        Text("Cleanliness & Recycling")
+                            .font(.title2)
+                            .fontWeight(.semibold)
+                            .scaledToFit()
+                            .lineLimit(1)
+                        Spacer()
+                    }
+                    .padding(.top, 30)
+                    .padding(.bottom, 5)
+                    Text("This rating measures the presence of recycling bins and the overall cleanliness of the city. A well-maintained urban environment contributes to a greener and more pleasant place to live and visit.")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .padding(.horizontal)
+            }
+        }
 }
