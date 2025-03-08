@@ -304,7 +304,7 @@ struct TravelChoiceView: View {
                             Spacer()
                             ReturnDatePickerView(dateReturnTapped: $dateReturnTapped, viewModel: viewModel)
                                 .fixedSize(horizontal: false, vertical: true)
-                                .padding(.horizontal, 60)
+                                .padding(.horizontal, 45)
                         }
                         .padding(EdgeInsets(top: 0, leading: 40, bottom: 20, trailing: 40))
                     }
@@ -540,8 +540,6 @@ struct DatePickerView: View {
         }
         .ignoresSafeArea()
         .frame(maxWidth: .infinity)
-        .background(Color.white)
-        
     }
 }
 

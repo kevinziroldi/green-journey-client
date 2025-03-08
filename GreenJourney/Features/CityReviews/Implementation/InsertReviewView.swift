@@ -127,7 +127,6 @@ struct InsertReviewView: View {
             }
         }
         .padding(.horizontal, 15)
-        .background(Color.white)
         .onAppear() {
             viewModel.reviewText = viewModel.userReview?.reviewText ?? ""
             viewModel.wasteBinsRating = viewModel.userReview?.wasteBinsRating ?? 0
