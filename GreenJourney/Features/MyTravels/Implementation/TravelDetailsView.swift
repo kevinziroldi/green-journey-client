@@ -165,6 +165,7 @@ struct TravelDetailsView: View {
                     }
                     totalTrees = viewModel.getNumTrees(travelDetails)
                     plantedTrees = viewModel.getPlantedTrees(travelDetails)
+                    viewModel.compensatedPrice = 0
                 }
             }
         }
