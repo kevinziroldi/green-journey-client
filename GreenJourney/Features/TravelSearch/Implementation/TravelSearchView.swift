@@ -16,9 +16,6 @@ struct TravelSearchView: View {
     @State private var triggerAI: Bool = false
     @State private var showAlertPrediction: Bool = false
     
-    @State var counter: Int = 0
-    @State var origin: CGPoint = .init(x: 0.5, y: 0.5)
-    
     @Binding var navigationPath: NavigationPath
     
     @Query var users: [User]
@@ -32,30 +29,38 @@ struct TravelSearchView: View {
     
     var body: some View {
         if users.first != nil {
-            GeometryReader { geometry in
-                ZStack {
-                    // animated gradient
-                    MeshGradientView()
-                        .scaleEffect(1.3) // avoids clipping
-                        .opacity(triggerAI ? 1 : 0)
-                        .ignoresSafeArea()
-                        .disabled(!triggerAI)
-                    
-                    if horizontalSizeClass == .compact {
+            ZStack {
+                GeometryReader { proxy in
+                    ZStack {
                         if triggerAI {
-                            // brighness on edges
-                            RoundedRectangle(cornerRadius: 52, style: .continuous)
-                                .stroke(Color.white, style: .init(lineWidth: 4))
-                                .blur(radius: 4)
+                            // animated gradient
+                            MeshGradientView()
+                                .scaleEffect(1.3) // avoids clipping
                                 .ignoresSafeArea()
                         }
-                    }
-                    
-                    ZStack {
+                        
+                        if horizontalSizeClass == .compact {
+                            if triggerAI {
+                                // brightness on edges
+                                RoundedRectangle(cornerRadius: 52, style: .continuous)
+                                    .stroke(Color.white, style: .init(lineWidth: 4))
+                                    .blur(radius: 4)
+                                    .ignoresSafeArea()
+                            }
+                        }
                         Rectangle()
                             .fill(colorScheme == .dark ? Color.black : Color.white)
                             .ignoresSafeArea()
-                        
+                            .mask {
+                                AnimatedRectangle(size: proxy.size, cornerRadius: 48, t: CGFloat(0.0))
+                                    .scaleEffect(triggerAI ? 1 : 1.2)
+                                    .blur(radius: triggerAI ? 28 : 8)
+                            }
+                    }
+                    .frame(width: proxy.size.width, height: proxy.size.height)
+                }
+                .ignoresSafeArea()
+            GeometryReader { geometry in
                         VStack {
                             ZStack {
                                 // dismiss AI button
@@ -135,25 +140,19 @@ struct TravelSearchView: View {
                             
                             AIPredictionView(viewModel: viewModel, triggerAI: $triggerAI, showAlertPrediction: $showAlertPrediction, width:  geometry.size.width/2)
                         }
-                    }
-                    .mask {
-                        AnimatedRectangle(size: geometry.size, cornerRadius: 48, t: CGFloat(0.0))
-                            .scaleEffect(triggerAI ? 1 : 1.2)
-                            .frame(width: geometry.size.width, height: geometry.size.height)
-                            .blur(radius: triggerAI ? 28 : 8)
-                    }
-                }
-                .sheet(isPresented: $dateTapped) {
-                    DatePickerView(dateTapped: $dateTapped, title: "Select Outward Date", date: $viewModel.datePicked)
-                        .presentationDetents([.height(530)])
-                        .presentationCornerRadius(30)
-                }
-                .sheet(isPresented: $dateReturnTapped) {
-                    DatePickerView(dateTapped: $dateReturnTapped, title: "Select Return Date", date: $viewModel.dateReturnPicked)
-                        .presentationDetents([.height(530)])
-                        .presentationCornerRadius(30)
                 }
             }
+            .sheet(isPresented: $dateTapped) {
+                DatePickerView(dateTapped: $dateTapped, title: "Select Outward Date", date: $viewModel.datePicked)
+                    .presentationDetents([.height(530)])
+                    .presentationCornerRadius(30)
+            }
+            .sheet(isPresented: $dateReturnTapped) {
+                DatePickerView(dateTapped: $dateReturnTapped, title: "Select Return Date", date: $viewModel.dateReturnPicked)
+                    .presentationDetents([.height(530)])
+                    .presentationCornerRadius(30)
+            }
+            //.ignoresSafeArea()
             .toolbar((triggerAI) ? .hidden : .automatic, for: .tabBar)
             .navigationBarBackButtonHidden(triggerAI)
             .onAppear() {
@@ -178,7 +177,7 @@ struct TravelSearchHeaderView: View {
                 .font(.system(size: 32).bold())
                 .padding()
                 .fontWeight(.semibold)
-                .opacity(triggerAI ? 0 : 1)
+                //.opacity(triggerAI ? 0 : 1)
                 .accessibilityIdentifier("travelSearchViewTitle")
             
             Spacer()
