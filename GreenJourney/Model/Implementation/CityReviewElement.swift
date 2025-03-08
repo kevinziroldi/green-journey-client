@@ -48,43 +48,4 @@ class CityReviewElement: Codable {
     func getAverageRating() -> Float64 {
         return (averageWasteBinsRating + averageGreenSpacesRating + averageLocalTransportRating)/3
     }
-    func addUserReview(userReview: Review) {
-        self.reviews.append(userReview)
-        self.averageWasteBinsRating = (self.averageWasteBinsRating + Double(userReview.wasteBinsRating)) / Double(self.reviews.count)
-        self.averageLocalTransportRating = (self.averageLocalTransportRating + Double(userReview.localTransportRating)) / Double(self.reviews.count)
-        self.averageGreenSpacesRating = (self.averageGreenSpacesRating + Double(userReview.greenSpacesRating)) / Double(self.reviews.count)
-    }
-    func deleteReviewUser(userReview: Review) {
-        if let index = self.reviews.firstIndex(where: { $0.id == userReview.id }) {
-            self.reviews.remove(at: index)
-            
-            if !self.reviews.isEmpty {
-                self.averageWasteBinsRating = (self.averageWasteBinsRating - Double(userReview.wasteBinsRating)) / Double(self.reviews.count)
-                self.averageLocalTransportRating = (self.averageLocalTransportRating - Double(userReview.localTransportRating)) / Double(self.reviews.count)
-                self.averageGreenSpacesRating = (self.averageGreenSpacesRating - Double(userReview.greenSpacesRating)) / Double(self.reviews.count)
-            }
-            else {
-                self.averageWasteBinsRating = 0.0
-                self.averageLocalTransportRating = 0.0
-                self.averageGreenSpacesRating = 0.0
-            }
-        }
-    }
-    func modifyUserReview(oldReview: Review, newReview: Review) {
-        if let index = self.reviews.firstIndex(where: { $0.id == oldReview.id }) {
-            self.reviews.remove(at: index)
-            
-            if !self.reviews.isEmpty {
-                self.averageWasteBinsRating = (self.averageWasteBinsRating - Double(oldReview.wasteBinsRating)) / Double(self.reviews.count)
-                self.averageLocalTransportRating = (self.averageLocalTransportRating - Double(oldReview.localTransportRating)) / Double(self.reviews.count)
-                self.averageGreenSpacesRating = (self.averageGreenSpacesRating - Double(oldReview.greenSpacesRating)) / Double(self.reviews.count)
-            }
-            else {
-                self.averageWasteBinsRating = 0.0
-                self.averageLocalTransportRating = 0.0
-                self.averageGreenSpacesRating = 0.0
-            }
-            self.addUserReview(userReview: newReview)
-        }
-    }
 }

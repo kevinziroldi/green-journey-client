@@ -190,7 +190,7 @@ struct BestCityView: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
                     .fill(Color(uiColor: .systemBackground))
-                    .shadow(color: .green.opacity(0.3), radius: 5, x: 0, y: 3)
+                    .shadow(color: AppColors.mainColor.opacity(0.3), radius: 5, x: 0, y: 3)
                 
                 HStack {
                     ZStack {
@@ -300,7 +300,7 @@ struct CitySearchView: View {
                     viewModel.selectedCity = city
                     // for details view
                     viewModel.selectedCity = viewModel.selectedCity
-                    await viewModel.getReviewsForSearchedCity()
+                    await viewModel.getReviewsForSearchedCity(reload: false)
                     searchTapped = false
                 }
             },

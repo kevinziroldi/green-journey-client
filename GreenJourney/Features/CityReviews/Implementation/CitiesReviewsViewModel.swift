@@ -38,13 +38,14 @@ class CitiesReviewsViewModel: ObservableObject {
         self.serverService = serverService
     }
     
-    func getReviewsForSearchedCity() async {
+    func getReviewsForSearchedCity(reload: Bool) async {
         do {
             let cityReviewElement = try await serverService.getReviewsForCity(iata: selectedCity.iata, countryCode: selectedCity.countryCode)
             self.selectedCityReviewElement = cityReviewElement
-            self.searchedCityAvailable = true
-            
-            print("Searched city reviews available")
+            if !reload {
+                self.searchedCityAvailable = true
+                print("Searched city reviews available")
+            }
         }catch {
             print("Error getting reviews for searched city")
             return
@@ -174,7 +175,7 @@ class CitiesReviewsViewModel: ObservableObject {
         do {
             let userReview = try await serverService.uploadReview(review: review)
             self.userReview = userReview
-            self.selectedCityReviewElement?.addUserReview(userReview: userReview)
+            await getReviewsForSearchedCity(reload: true)
         } catch {
             self.errorMessage = "An error occurred while saving the review"
             return
@@ -206,8 +207,8 @@ class CitiesReviewsViewModel: ObservableObject {
         
         do {
             let modifiedReview = try await serverService.modifyReview(modifiedReview: modifiedReview)
-            self.selectedCityReviewElement?.modifyUserReview(oldReview: userReview, newReview: modifiedReview)
             self.userReview = modifiedReview
+            await getReviewsForSearchedCity(reload: true)
         } catch {
             self.errorMessage = "Error while modifying the review"
             return
@@ -228,6 +229,7 @@ class CitiesReviewsViewModel: ObservableObject {
         do {
             try await serverService.deleteReview(reviewID: reviewID)
             self.userReview = nil
+            await getReviewsForSearchedCity(reload: true)
         } catch {
             self.errorMessage = "Error while deleting the review"
             return
