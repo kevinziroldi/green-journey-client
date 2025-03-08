@@ -48,7 +48,6 @@ struct MyTravelsView: View {
                     Text("Scheduled").tag(false)
                 }
                 .pickerStyle(SegmentedPickerStyle())
-                //.padding()
                 .frame(maxWidth: 400) // set a max width to control the size
                 .accessibilityIdentifier("travelCompletedControl")
                 
@@ -71,6 +70,8 @@ struct MyTravelsView: View {
                     }
                     .accessibilityIdentifier("sortByButton")
                 }
+                .padding(.vertical, 10)
+                .frame(maxWidth: 800)
                 
                 
                 if viewModel.filteredTravelDetailsList.count == 0 {

@@ -35,14 +35,17 @@ struct OptionDetailsView: View {
             // iPadOS
             
             ScrollView {
-                HStack {
-                    Co2RecapView(halfWidth: true, co2Emitted: option.getCo2Emitted(), numTrees: option.getNumTrees(), distance: option.getTotalDistance())
-                        .padding(EdgeInsets(top: 10, leading: 15, bottom: 5, trailing: 15))
-                        .overlay(Color.clear.accessibilityIdentifier("co2EmittedBox"))
-                    
+                HStack(alignment: .top) {
                     TravelRecapView(distance: option.getTotalDistance(), duration: option.getTotalDuration(), price: option.getTotalPrice(), greenPrice: option.getGreenPrice())
                         .padding()
                         .overlay(Color.clear.accessibilityIdentifier("travelRecap"))
+                    
+                    VStack {
+                        Co2RecapView(halfWidth: true, co2Emitted: option.getCo2Emitted(), numTrees: option.getNumTrees(), distance: option.getTotalDistance())
+                            .padding(EdgeInsets(top: 10, leading: 15, bottom: 5, trailing: 15))
+                            .overlay(Color.clear.accessibilityIdentifier("co2EmittedBox"))
+                    }
+                    .frame(maxHeight: .infinity, alignment: .top)
                 }
                 
                 SegmentsView(segments: option.segments)
