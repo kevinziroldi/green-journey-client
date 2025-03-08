@@ -369,83 +369,88 @@ struct SegmentsDetailsView: View {
         if horizontalSizeClass == .compact {
             // iOS
             
-            HStack {
-                Text(travelDetails.isOneway() ? "Segments" : "Outward")
-                    .font(.title)
-                    .fontWeight(.semibold)
-                    .accessibilityIdentifier("segmentsTitle")
-                    .padding(.horizontal, 15)
-                Spacer()
-            }
-            .padding(.top)
-            
-            SegmentsView(segments: travelDetails.getOutwardSegments())
-                .accessibilityElement(children: .contain)
-                .overlay(Color.clear.accessibilityIdentifier("outwardSegmentsView"))
-            
-            if !travelDetails.isOneway() {
+            VStack{
                 HStack {
-                    Text("Return")
+                    Text(travelDetails.isOneway() ? "Segments" : "Outward")
                         .font(.title)
                         .fontWeight(.semibold)
-                        .accessibilityIdentifier("returnTitle")
+                        .accessibilityIdentifier("segmentsTitle")
+                        .padding(.horizontal, 15)
                     Spacer()
                 }
-                .padding()
+                .padding(.top)
                 
-                SegmentsView(segments: travelDetails.getReturnSegments())
+                SegmentsView(segments: travelDetails.getOutwardSegments())
                     .accessibilityElement(children: .contain)
-                    .overlay(Color.clear.accessibilityIdentifier("returnSegmentsView"))
-            }
-        } else {
-            HStack(alignment: .top) {
-                Spacer()
-                
-                VStack(alignment: .leading) {
-                    HStack {
-                        Text(travelDetails.isOneway() ? "Segments" : "Outward")
-                            .font(.title)
-                            .fontWeight(.semibold)
-                            .accessibilityIdentifier("segmentsTitle")
-                            .padding(.horizontal, 15)
-                        Spacer()
-                    }
-                    .padding(.top)
-                    
-                    SegmentsView(segments: travelDetails.getOutwardSegments())
-                        .fixedSize()
-                        .accessibilityElement(children: .contain)
-                        .overlay(Color.clear.accessibilityIdentifier("outwardSegmentsView"))
-                }
-                .frame(maxWidth: 400)
-                
-                Spacer()
+                    .overlay(Color.clear.accessibilityIdentifier("outwardSegmentsView"))
                 
                 if !travelDetails.isOneway() {
+                    HStack {
+                        Text("Return")
+                            .font(.title)
+                            .fontWeight(.semibold)
+                            .accessibilityIdentifier("returnTitle")
+                        Spacer()
+                    }
+                    .padding()
+                    
+                    SegmentsView(segments: travelDetails.getReturnSegments())
+                        .accessibilityElement(children: .contain)
+                        .overlay(Color.clear.accessibilityIdentifier("returnSegmentsView"))
+                }
+            }
+        } else {
+            // iPadOS
+            
+            VStack {
+                HStack(alignment: .top) {
+                    Spacer()
+                    
                     VStack(alignment: .leading) {
                         HStack {
-                            Text("Return")
+                            Text(travelDetails.isOneway() ? "Segments" : "Outward")
                                 .font(.title)
                                 .fontWeight(.semibold)
-                                .accessibilityIdentifier("returnTitle")
+                                .accessibilityIdentifier("segmentsTitle")
                                 .padding(.horizontal, 15)
                             Spacer()
                         }
                         .padding(.top)
                         
-                        VStack {
-                            SegmentsView(segments: travelDetails.getReturnSegments())
-                                .fixedSize()
-                                .accessibilityElement(children: .contain)
-                                .overlay(Color.clear.accessibilityIdentifier("returnSegmentsView"))
-                        }
+                        SegmentsView(segments: travelDetails.getOutwardSegments())
+                            .fixedSize(horizontal: false, vertical: true)
+                            .accessibilityElement(children: .contain)
+                            .overlay(Color.clear.accessibilityIdentifier("outwardSegmentsView"))
                     }
                     .frame(maxWidth: 400)
+                    
+                    Spacer()
+                    
+                    if !travelDetails.isOneway() {
+                        VStack(alignment: .leading) {
+                            HStack {
+                                Text("Return")
+                                    .font(.title)
+                                    .fontWeight(.semibold)
+                                    .accessibilityIdentifier("returnTitle")
+                                    .padding(.horizontal, 15)
+                                Spacer()
+                            }
+                            .padding(.top)
+                            
+                            VStack {
+                                SegmentsView(segments: travelDetails.getReturnSegments())
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .accessibilityElement(children: .contain)
+                                    .overlay(Color.clear.accessibilityIdentifier("returnSegmentsView"))
+                            }
+                        }
+                        .frame(maxWidth: 400)
+                    }
+                    
+                    Spacer()
                 }
-                
-                Spacer()
             }
-            .padding(.horizontal, 50)
         }
     }
 }

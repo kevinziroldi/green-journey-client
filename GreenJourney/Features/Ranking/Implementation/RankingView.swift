@@ -76,7 +76,7 @@ struct RankingView: View {
                 
                 // picker
                 LeaderBoardPickerView(viewModel: viewModel)
-                    .frame(maxWidth: 300)
+                    .frame(maxWidth: 400) // set a max width to control the size
                 
                 Spacer()
                 

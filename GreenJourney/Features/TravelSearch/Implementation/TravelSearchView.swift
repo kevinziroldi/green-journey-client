@@ -91,7 +91,7 @@ struct TravelSearchView: View {
                             }
                             .pickerStyle(.segmented)
                             .padding()
-                            .frame(maxWidth: 300) // set a max width to control the size
+                            .frame(maxWidth: 400) // set a max width to control the size
                             .accessibilityIdentifier("tripTypePicker")
                             
                             TravelChoiceView(viewModel: viewModel, departureTapped: $departureTapped, destinationTapped: $destinationTapped, dateTapped: $dateTapped, dateReturnTapped: $dateReturnTapped, triggerAI: $triggerAI)
