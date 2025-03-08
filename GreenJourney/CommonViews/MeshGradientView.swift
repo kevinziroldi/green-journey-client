@@ -20,7 +20,7 @@ struct MeshGradientView: View {
             [sinInRange(1.0...1.5, offset: 0.939, timeScale: 0.056, t: maskTimer), sinInRange(1.3...1.7, offset: 0.47, timeScale: 0.342, t: maskTimer)]
         ], colors: [
             .green, .blue, .mint,
-            .green, .green, .green,
+            .mint, .green, .blue,
             .blue, .mint, .green
         ])
         

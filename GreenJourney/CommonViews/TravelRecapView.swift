@@ -6,15 +6,17 @@ struct TravelRecapView: View {
     let price: Float64
     let greenPrice: Float64
     
+    @State var infoTapped = false
+    
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 15)
                 .fill(Color(uiColor: .systemBackground))
-                .shadow(color: .indigo.opacity(0.3), radius: 5, x: 0, y: 3)
+                .shadow(color: AppColors.mainColor.opacity(0.3), radius: 5, x: 0, y: 3)
             VStack (spacing:0){
                 Text("Recap")
                     .font(.title)
-                    .foregroundStyle(.indigo.opacity(0.8))
+                    .foregroundStyle(AppColors.mainColor.opacity(0.8))
                     .padding(EdgeInsets(top: 15, leading: 15, bottom: 10, trailing: 0))
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -40,7 +42,7 @@ struct TravelRecapView: View {
                     Text(String(format: "%.1f", distance) + " Km")
                         .font(.system(size: 25).bold())
                         .bold()
-                        .foregroundColor(.indigo.opacity(0.8))
+                        .foregroundColor(AppColors.mainColor.opacity(0.8))
                     Spacer()
                 }
                 .padding(.horizontal)
@@ -68,7 +70,7 @@ struct TravelRecapView: View {
                     Text(duration)
                         .font(.system(size: 25).bold())
                         .bold()
-                        .foregroundColor(.blue.opacity(0.8))
+                        .foregroundColor(AppColors.mainColor.opacity(0.8))
                     Spacer()
                 }
                 .padding(.horizontal)
@@ -97,7 +99,7 @@ struct TravelRecapView: View {
                     Text(String(format: "%.2f", price) + " €")
                         .font(.system(size: 25).bold())
                         .bold()
-                        .foregroundColor(.red.opacity(0.8))
+                        .foregroundColor(AppColors.mainColor.opacity(0.8))
                     Spacer()
                 }
                 .padding(.horizontal)
@@ -115,7 +117,6 @@ struct TravelRecapView: View {
                             .foregroundColor(.green)
                     }
                     
-                    
                     Text("Green price")
                         .font(.system(size: 20).bold())
                         .foregroundColor(.primary)
@@ -125,11 +126,19 @@ struct TravelRecapView: View {
                         Text(String(format: "%.2f", greenPrice) + " €")
                         .font(.system(size: 25).bold())
                         .bold()
-                        .foregroundColor(.green.opacity(0.8))
+                        .foregroundColor(AppColors.mainColor.opacity(0.8))
                     Spacer()
+                    Button(action: {
+                        infoTapped = true
+                    }) {
+                        Image(systemName: "info.circle")
+                    }
                 }
                 .padding(EdgeInsets(top: 5, leading: 15, bottom: 10, trailing: 15))
             }
+        }
+        .sheet(isPresented: $infoTapped) {
+            InfoCompensationView(isPresented: $infoTapped)
         }
     }
 }

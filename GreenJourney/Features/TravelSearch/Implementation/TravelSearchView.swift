@@ -393,7 +393,7 @@ struct DestinationCompleterView: View {
         VStack{
             ZStack{
                 RoundedRectangle(cornerRadius: 10)
-                    .stroke(AppColors.mainColor, lineWidth: 6)
+                    .stroke(triggerAI ? .clear : AppColors.mainColor, lineWidth: 6)
                     .frame(height: 50)
                 
                 Button(action: {
@@ -410,7 +410,7 @@ struct DestinationCompleterView: View {
                 }
                 .accessibilityIdentifier("destinationButton")
             }
-            .background(triggerAI ? LinearGradient(gradient: Gradient(colors: [.green, .cyan, .blue, .cyan, .green]), startPoint: .bottomLeading, endPoint: .topTrailing) : LinearGradient(gradient: Gradient(colors: [colorScheme == .dark ? Color(red: 48/255, green: 48/255, blue: 48/255) : Color.white]), startPoint: .bottomLeading, endPoint: .topTrailing))
+            .background(triggerAI ? LinearGradient(gradient: Gradient(colors: [.green, .mint, .blue]), startPoint: .bottomLeading, endPoint: .topTrailing) : LinearGradient(gradient: Gradient(colors: [colorScheme == .dark ? Color(red: 48/255, green: 48/255, blue: 48/255) : Color.white]), startPoint: .bottomLeading, endPoint: .topTrailing))
             .cornerRadius(10)
         }
         .fullScreenCover(isPresented: $destinationTapped ) {
