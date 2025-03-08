@@ -47,29 +47,32 @@ struct CompleterView: View {
             
             
             List(viewModel.suggestions, id: \.id) { city in
-                HStack{
-                    VStack(alignment: .leading) {
-                        Text(city.cityName).font(.headline)
-                        Text("\(city.countryName) (\(city.countryCode))")
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
-                    }
-                    .overlay(Color.clear.accessibilityIdentifier("listElement_\(city.iata)_\(city.countryCode)"))
-                    
-                    Spacer()
-                    if viewModel.departure && viewModel.searchText == "" {
-                        Image(systemName: "clock.arrow.trianglehead.counterclockwise.rotate.90")
-                            .font(.title3)
-                            .padding(.trailing, 10)
-                    }
-                    else if !viewModel.departure && viewModel.searchText == "" {
-                        Text("🔥")
-                            .font(.title3)
-                            .padding(.trailing, 10)
-                    }
-                }
-                .onTapGesture {
+                Button(action: {
                     onClick(city)
+                }) {
+                    HStack{
+                        VStack(alignment: .leading) {
+                            Text(city.cityName).font(.headline)
+                                .foregroundStyle(colorScheme == .dark ? .white: .black)
+                            Text("\(city.countryName) (\(city.countryCode))")
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
+                        }
+                        .overlay(Color.clear.accessibilityIdentifier("listElement_\(city.iata)_\(city.countryCode)"))
+                        
+                        Spacer()
+                        if viewModel.departure && viewModel.searchText == "" {
+                            Image(systemName: "clock.arrow.trianglehead.counterclockwise.rotate.90")
+                                .font(.title3)
+                                .foregroundStyle(colorScheme == .dark ? .white: .black)
+                                .padding(.trailing, 10)
+                        }
+                        else if !viewModel.departure && viewModel.searchText == "" {
+                            Text("🔥")
+                                .font(.title3)
+                                .padding(.trailing, 10)
+                        }
+                    }
                 }
             }
             .scrollDismissesKeyboard(.interactively)
