@@ -29,6 +29,7 @@ struct Co2RecapView: View {
                         Co2RecapViewTitle(color:computeTravelColor(distance: distance, co2Emitted: co2Emitted))
                         Co2RecapEmissionView(co2Emitted: co2Emitted, color: computeTravelColor(distance: distance, co2Emitted: co2Emitted))
                     }
+                    .padding(.bottom, 15)
                     
                     Co2RecapNumTreesView(numTrees: numTrees, color: computeTravelColor(distance: distance, co2Emitted: co2Emitted))
                 }

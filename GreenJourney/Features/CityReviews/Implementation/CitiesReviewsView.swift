@@ -237,7 +237,7 @@ struct BestCityView: View {
                 .padding()
             }
             .fixedSize(horizontal: false, vertical: true)
-            .padding(.horizontal)
+            .frame(maxWidth: 800)
         }
     }
 }
