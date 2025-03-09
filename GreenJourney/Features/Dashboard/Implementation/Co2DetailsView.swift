@@ -19,36 +19,33 @@ struct Co2DetailsView: View {
                         SemicircleCo2ChartView(progress: viewModel.computeProgress(), height: 170, width: 200, lineWidth: 16)
                             .padding(.top, 30)
                         HStack {
-                            VStack {
-                                Text("Compensated")
-                                    .font(.title2)
-                                    .fontWeight(.semibold)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .scaledToFit()
-                                    .minimumScaleFactor(0.6)
-                                    .lineLimit(1)
-                                Text(String(format: "%.0f", viewModel.co2Compensated) + " Kg")
-                                    .font(.title3)
-                                    .fontWeight(.semibold)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                            }
-                            .padding(.leading, 20)
-                            .foregroundStyle(.green)
-                            VStack {
-                                Text("Emitted")
-                                    .font(.title2)
-                                    .fontWeight(.semibold)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .scaledToFit()
-                                    .minimumScaleFactor(0.6)
-                                    .lineLimit(1)
-                                Text(String(format: "%.0f", viewModel.co2Emitted) + " Kg")
-                                    .font(.title3)
-                                    .fontWeight(.semibold)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                            }
-                            .padding(.leading, 40)
-                            .foregroundStyle(.red)
+                            Spacer()
+                                VStack {
+                                    Text("Compensated")
+                                        .font(.title2)
+                                        .fontWeight(.semibold)
+                                        .scaledToFit()
+                                        .minimumScaleFactor(0.6)
+                                        .lineLimit(1)
+                                    Text(String(format: "%.0f", viewModel.co2Compensated) + " Kg")
+                                        .font(.title3)
+                                        .fontWeight(.semibold)
+                                }
+                                .foregroundStyle(.green)
+                            Spacer()
+                                VStack {
+                                    Text("Emitted")
+                                        .font(.title2)
+                                        .fontWeight(.semibold)
+                                        .scaledToFit()
+                                        .minimumScaleFactor(0.6)
+                                        .lineLimit(1)
+                                    Text(String(format: "%.0f", viewModel.co2Emitted) + " Kg")
+                                        .font(.title3)
+                                        .fontWeight(.semibold)
+                                }
+                                .foregroundStyle(.red)
+                            Spacer()
                         }
                     }
                     .padding()
