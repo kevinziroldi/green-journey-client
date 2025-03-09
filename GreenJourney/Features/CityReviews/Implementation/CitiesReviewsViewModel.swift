@@ -13,6 +13,10 @@ class CitiesReviewsViewModel: ObservableObject {
     @Published var bestCitiesReviewElements: [CityReviewElement] = []
     @Published var bestCities: [CityCompleterDataset] = []
     
+    //reviewable cities
+    @Published var reviewableCities: [CityCompleterDataset] = []
+    @Published var reviewableCitiesReviewElement: [CityReviewElement] = []
+    
     // searched city
     @Published var searchedCityAvailable: Bool = false
     
@@ -104,18 +108,24 @@ class CitiesReviewsViewModel: ObservableObject {
     }
     
     func hasVisited(city: CityCompleterDataset) -> Bool {
-        let fetchRequest = FetchDescriptor<Segment>(
+        let fetchTravels = FetchDescriptor<Travel> (
+            predicate: #Predicate { travel in
+                travel.confirmed
+            }
+            )
+        let fetchSegments = FetchDescriptor<Segment>(
             predicate: #Predicate { segment in
-                segment.isOutward == true
+                 segment.isOutward == true
             },
             sortBy: [
                 SortDescriptor(\Segment.travelID),
                 SortDescriptor(\Segment.numSegment, order: .reverse)
             ]
         )
-        
         do {
-            let segments = try modelContext.fetch(fetchRequest)
+            let travels = try modelContext.fetch(fetchTravels).map( \.travelID )
+            let segments = try modelContext.fetch(fetchSegments).filter { travels.contains($0.travelID) }
+            
             let filteredSegments = Dictionary(grouping: segments, by: \.travelID)
                 .compactMapValues { $0.first }
                 .values
@@ -133,6 +143,10 @@ class CitiesReviewsViewModel: ObservableObject {
         }
         
         return false
+    }
+    
+    func getReviewableCities() async {
+        //TODO
     }
         
     func uploadReview() async {
