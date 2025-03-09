@@ -180,10 +180,7 @@ class CitiesReviewsViewModel: ObservableObject {
             cityIata: selectedCity.iata,
             countryCode: selectedCity.countryCode,
             firstName: user.firstName,
-            lastName: user.lastName,
-            scoreShortDistance: user.scoreShortDistance,
-            scoreLongDistance: user.scoreLongDistance,
-            badges: user.badges
+            lastName: user.lastName
         )
         
         do {
@@ -213,10 +210,7 @@ class CitiesReviewsViewModel: ObservableObject {
             cityIata: userReview.cityIata,
             countryCode: userReview.countryCode,
             firstName: userReview.firstName,
-            lastName: userReview.lastName,
-            scoreShortDistance: userReview.scoreShortDistance,
-            scoreLongDistance: userReview.scoreLongDistance,
-            badges: userReview.badges
+            lastName: userReview.lastName
         )
         
         do {

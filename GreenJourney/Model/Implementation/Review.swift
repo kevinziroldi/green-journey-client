@@ -14,11 +14,8 @@ class Review: Codable, Identifiable {
     var countryCode: String
     var firstName: String
     var lastName: String
-    var scoreShortDistance: Float64
-    var scoreLongDistance: Float64
-    var badges: [Badge]
     
-    init(reviewID: Int?, cityID: Int?, userID: Int, reviewText: String, localTransportRating: Int, greenSpacesRating: Int, wasteBinsRating: Int, cityIata: String, countryCode: String, firstName: String, lastName: String, scoreShortDistance: Float64, scoreLongDistance: Float64, badges: [Badge]) {
+    init(reviewID: Int?, cityID: Int?, userID: Int, reviewText: String, localTransportRating: Int, greenSpacesRating: Int, wasteBinsRating: Int, cityIata: String, countryCode: String, firstName: String, lastName: String) {
         self.reviewID = reviewID
         self.cityID = cityID
         self.userID = userID
@@ -30,9 +27,6 @@ class Review: Codable, Identifiable {
         self.countryCode = countryCode
         self.firstName = firstName
         self.lastName = lastName
-        self.scoreShortDistance = scoreShortDistance
-        self.scoreLongDistance = scoreLongDistance
-        self.badges = badges
     }
     
     enum CodingKeys: String, CodingKey {
@@ -47,9 +41,6 @@ class Review: Codable, Identifiable {
         case countryCode = "country_code"
         case firstName = "first_name"
         case lastName = "last_name"
-        case scoreShortDistance = "score_short_distance"
-        case scoreLongDistance = "score_long_distance"
-        case badges = "badges"
     }
     
     required init(from decoder: Decoder) throws {
@@ -66,9 +57,6 @@ class Review: Codable, Identifiable {
         self.countryCode = try container.decode(String.self, forKey: .countryCode)
         self.firstName = try container.decode(String.self, forKey: .firstName)
         self.lastName = try container.decode(String.self, forKey: .lastName)
-        self.scoreShortDistance = try container.decode(Float64.self, forKey: .scoreShortDistance)
-        self.scoreLongDistance = try container.decode(Float64.self, forKey: .scoreLongDistance)
-        self.badges = try container.decode([Badge].self, forKey: .badges)
     }
 
     func encode(to encoder: Encoder) throws {
@@ -85,12 +73,6 @@ class Review: Codable, Identifiable {
         try container.encode(countryCode, forKey: .countryCode)
         try container.encode(firstName, forKey: .firstName)
         try container.encode(lastName, forKey: .lastName)
-        try container.encode(scoreShortDistance, forKey: .scoreShortDistance)
-        try container.encode(scoreLongDistance, forKey: .scoreLongDistance)
-        
-        // send badges that are not base
-        let filteredBadges = badges.filter {$0 != $0.baseBadge}
-        try container.encode(filteredBadges, forKey: .badges)
     }
     
     func computeRating() -> Float64 {
