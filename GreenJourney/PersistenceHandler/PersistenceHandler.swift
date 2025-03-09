@@ -28,7 +28,7 @@ class PersistenceHandler {
                     
                     // configure model container
                     let configuration = ModelConfiguration(url: databaseURL)
-                    self.container = try ModelContainer(for: User.self, Travel.self, Segment.self, CityFeatures.self, CityCompleterDataset.self, configurations: configuration)
+                    self.container = try ModelContainer(for: User.self, Travel.self, Segment.self, CityFeatures.self, CityCompleterDataset.self, Review.self, configurations: configuration)
                     
                     print("ModelContainer successfully initialized")
                 } catch {
@@ -39,7 +39,7 @@ class PersistenceHandler {
             }
         case .mock:
             let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
-            self.container = try! ModelContainer(for: User.self, Travel.self, Segment.self, CityFeatures.self, CityCompleterDataset.self, configurations: configuration)
+            self.container = try! ModelContainer(for: User.self, Travel.self, Segment.self, CityFeatures.self, CityCompleterDataset.self, Review.self, configurations: configuration)
             
             try! addCitiesCompleterDatasetToSwiftData()
             try! addCitiesFeaturesToSwiftData()

@@ -1,5 +1,7 @@
 import Foundation
+import SwiftData
 
+@Model
 class Review: Codable, Identifiable {
     var reviewID: Int?
     var cityID: Int?

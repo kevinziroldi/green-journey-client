@@ -7,7 +7,7 @@ class Travel: Codable {
     var CO2Compensated: Float64 = 0
     var confirmed: Bool
     var userID: Int
-    var userReview: Review?
+    @Relationship var userReview: Review?
  
     init(travelID: Int? = nil, userID: Int, confirmed: Bool? = false, userReview: Review? = nil) {
         self.travelID = travelID
