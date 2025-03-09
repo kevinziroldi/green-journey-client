@@ -19,7 +19,7 @@ struct CityReviewsDetailsView: View {
                         ReviewsAverageView(selectedCityReviewElement: selectedCityReviewElement, infoTapped: $infoTapped)
                         
                         // button or user review
-                        if viewModel.isReviewable(userID: users.first?.userID ?? -1) {
+                        if viewModel.isReviewable() {
                             InsertReviewButtonView(viewModel: viewModel, reviewTapped: $reviewTapped)
                         }
                         

@@ -103,7 +103,7 @@ class CitiesReviewsViewModel: ObservableObject {
         }
     }
     
-    func isReviewable(userID: Int) -> Bool {
+    func isReviewable() -> Bool {
         return hasVisited(city: selectedCity)
     }
     
