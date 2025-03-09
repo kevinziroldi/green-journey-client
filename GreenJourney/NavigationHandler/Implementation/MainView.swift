@@ -70,8 +70,8 @@ struct MainView: View {
                 }
             }.onAppear() {
                 // get travels from server
-                Task {
-                    await viewModel.getUserTravels()
+                if users.first != nil {
+                    Task { await viewModel.getUserTravels() }
                 }
             }
         } else {
@@ -136,7 +136,9 @@ struct MainView: View {
                     }
                 }
                 .onAppear {
-                    Task { await viewModel.getUserTravels() }
+                    if users.first != nil {
+                        Task { await viewModel.getUserTravels() }
+                    }
                 }
             }
         }

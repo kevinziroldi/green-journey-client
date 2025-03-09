@@ -38,7 +38,7 @@ class Travel: Codable {
         self.CO2Compensated = try container.decode(Float64.self, forKey: .CO2Compensated)
         self.confirmed = try container.decode(Bool.self, forKey: .confirmed)
         self.userID = try container.decode(Int.self, forKey: .userID)
-        self.userReview = try container.decode(Review.self, forKey: .userReview)
+        self.userReview = try container.decodeIfPresent(Review.self, forKey: .userReview)
     }
     
     func encode(to encoder: Encoder) throws {
@@ -47,6 +47,6 @@ class Travel: Codable {
         try container.encode(CO2Compensated, forKey: .CO2Compensated)
         try container.encode(confirmed, forKey: .confirmed)
         try container.encode(userID, forKey: .userID)
-        try container.encode(userReview, forKey: .userReview)
+        try container.encodeIfPresent(userReview, forKey: .userReview)
     }
 }

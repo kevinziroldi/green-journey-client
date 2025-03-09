@@ -422,6 +422,9 @@ class ServerService: ServerServiceProtocol {
             throw URLError(.badServerResponse)
         }
         
+        //print(NSString(data: data, encoding: String.Encoding.utf8.rawValue)!)
+        //print(String(data: data, encoding: .utf8))
+        
         // decode response
         do {
             let travelDetailsList = try decoder.decode([TravelDetails].self, from: data)
