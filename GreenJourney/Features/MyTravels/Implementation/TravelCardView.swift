@@ -48,8 +48,10 @@ struct TravelCardView: View {
                             .padding(.bottom, 5)
                             .padding(.trailing, 10)
                         Text("Compensation:" )
-                        Text(String(format: "%.2f", travelDetails.travel.CO2Compensated) + " / " + String(format: "%.2f", travelDetails.computeCo2Emitted()) + " Kg")
+                        Text(String(format: "%.1f", travelDetails.travel.CO2Compensated) + " / " + String(format: "%.1f", travelDetails.computeCo2Emitted()) + " Kg")
                     }
+                    .scaledToFit()
+                    .minimumScaleFactor(0.7)
                 }
                 .padding()
                 .foregroundStyle(colorScheme == .dark ? Color.white : Color.black)
@@ -85,7 +87,7 @@ struct TravelCardView: View {
                             .scaleEffect(1.5)
                             .padding(EdgeInsets(top: 0, leading: 0, bottom: 5, trailing: 0))
                         Text("Co2 compensation")
-                        Text(String(format: "%.2f/%.2f kg", travelDetails.travel.CO2Compensated, travelDetails.computeCo2Emitted()))
+                        Text(String(format: "%.1f/%.1f kg", travelDetails.travel.CO2Compensated, travelDetails.computeCo2Emitted()))
                     }
                     
                     Spacer()
@@ -171,17 +173,21 @@ struct DepartureDestinationAllDatesInfoView: View {
                 Text(travelDetails.getDestinationSegment()?.destinationCity ?? "")
                     .font(.headline)
             }
+            .scaledToFit()
+            .minimumScaleFactor(0.7)
             HStack{
                 Text(travelDetails.getOutwardSegments().first?.dateTime.formatted(date: .numeric, time: .omitted) ?? "")
                     .font(.subheadline)
                     .fontWeight(.light)
-                Text("-")
+                /*Text("-")
                     .font(.subheadline)
                 let arrivalDate = travelDetails.getOutwardSegments().last?.getArrivalDateTime()
                 Text(arrivalDate?.formatted(date: .numeric, time: .omitted) ?? "")
                     .font(.subheadline)
-                    .fontWeight(.light)
+                    .fontWeight(.light)*/
             }
+            .scaledToFit()
+            .minimumScaleFactor(0.7)
             if horizontalSizeClass == .regular {
                 ZStack {
                     let changesOut = travelDetails.countChanges(outwardDirection: true)
@@ -212,17 +218,21 @@ struct DepartureDestinationAllDatesInfoView: View {
                     Text(travelDetails.getDepartureSegment()?.departureCity ?? "")
                         .font(.headline)
                 }
+                .scaledToFit()
+                .minimumScaleFactor(0.7)
                 HStack{
                     Text(travelDetails.getReturnSegments().first?.dateTime.formatted(date: .numeric, time: .omitted) ?? "")
                         .font(.subheadline)
                         .fontWeight(.light)
-                    Text("-")
+                    /*Text("-")
                         .font(.subheadline)
                     let arrivalDate = travelDetails.getReturnSegments().last?.getArrivalDateTime()
                     Text(arrivalDate?.formatted(date: .numeric, time: .omitted) ?? "")
                         .font(.subheadline)
-                        .fontWeight(.light)
+                        .fontWeight(.light)*/
                 }
+                .scaledToFit()
+                .minimumScaleFactor(0.7)
                 if horizontalSizeClass == .regular {
                     ZStack {
                         let changesRet = travelDetails.countChanges(outwardDirection: false)
@@ -252,7 +262,7 @@ struct DirectionTagView: View {
 
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 20)
+            /*RoundedRectangle(cornerRadius: 20)
                 .stroke()
             if direction {
                 Text("One way")
@@ -265,7 +275,7 @@ struct DirectionTagView: View {
                     .font(.caption)
                     .fontWeight(.bold)
                     .padding(5)
-            }
+            }*/
         }
         .fixedSize()
     }
