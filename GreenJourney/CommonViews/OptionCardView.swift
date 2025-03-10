@@ -19,9 +19,17 @@ struct OptionCardView: View {
                 VStack {
                     // top part
                     HStack {
-                        Image(systemName: option.findVehicle())
-                            .font(.title2)
-                            .padding(EdgeInsets(top: -20, leading: 10, bottom: 0, trailing: 0))
+                        
+                        // vehicle
+                        ZStack{
+                            Circle()
+                                .stroke(lineWidth: 2)
+                                .frame(width: 45, height: 45)
+                            Image(systemName: option.findVehicle())
+                                .font(.title2)
+                        }
+                        .padding(.leading, 10)
+                        .padding(.bottom, 20)
                         
                         Spacer()
                         

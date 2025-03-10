@@ -226,6 +226,7 @@ struct RecapViewCompactDevice: View {
                 }
                 .padding(.horizontal)
                 .padding(.vertical, 5)
+                
                 HStack {
                     ZStack {
                         Circle()
