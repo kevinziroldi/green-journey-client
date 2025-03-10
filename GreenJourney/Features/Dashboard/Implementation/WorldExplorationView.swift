@@ -49,7 +49,7 @@ struct WorldExplorationView: View {
                             .padding()
                             .fontWeight(.semibold)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                        InfoRow(title: "", value: "\(viewModel.visitedCountries) / 195", icon: "globe.europe.africa", color: .orange, imageValue: false, imageValueString: nil)
+                        InfoRowView(title: "", value: "\(viewModel.visitedCountries) / 195", icon: "globe.europe.africa", color: .orange, imageValue: false, imageValueString: nil)
                     }
                     .padding(.bottom, 7)
                 }

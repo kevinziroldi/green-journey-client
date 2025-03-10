@@ -13,14 +13,14 @@ struct ScoresView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
             
-            InfoRow(title: "Short distance",
+            InfoRowView(title: "Short distance",
                     value: String(format: "%.1f", scoreShortDistance),
                     icon: "trophy",
                     color: AppColors.mainColor,
                     imageValue: false,
                     imageValueString: nil)
             
-            InfoRow(title: "Long distance",
+            InfoRowView(title: "Long distance",
                     value: String(format: "%.1f", scoreLongDistance),
                     icon: "trophy",
                     color: AppColors.mainColor,

@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct TravelRecapView: View {
+    let singleColumn: Bool
+    
     let distance: Float64
     let duration: String
     let price: Float64
@@ -13,132 +15,203 @@ struct TravelRecapView: View {
             RoundedRectangle(cornerRadius: 15)
                 .fill(Color(uiColor: .systemBackground))
                 .shadow(color: AppColors.mainColor.opacity(0.3), radius: 5, x: 0, y: 3)
-            VStack (spacing:0){
-                Text("Recap")
-                    .font(.title)
-                    .foregroundStyle(AppColors.mainColor.opacity(0.8))
-                    .padding(EdgeInsets(top: 15, leading: 15, bottom: 10, trailing: 0))
-                    .fontWeight(.semibold)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                HStack {
-                    ZStack {
-                        Circle()
-                            .fill(.indigo.opacity(0.2))
-                            .frame(width: 40, height: 40)
+            
+            if singleColumn {
+                VStack (spacing:0){
+                    HStack {
+                        Text("Recap")
+                            .font(.title)
+                            .foregroundStyle(AppColors.mainColor.opacity(0.8))
+                            .padding(EdgeInsets(top: 15, leading: 15, bottom: 10, trailing: 0))
+                            .fontWeight(.semibold)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                         
-                        Image(systemName: "road.lanes")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 25, height: 25)
-                            .foregroundColor(.indigo)
-                    }
-                    
-                    
-                    Text("Distance")
-                        .font(.system(size: 20).bold())
-                        .foregroundColor(.primary)
-                        .padding(.leading, 5)
-                        .frame(width: 120, alignment: .leading)
-                    Text(String(format: "%.1f", distance) + " Km")
-                        .font(.system(size: 25).bold())
-                        .bold()
-                        .foregroundColor(AppColors.mainColor.opacity(0.8))
-                    Spacer()
-                }
-                .padding(.horizontal)
-                .padding(.vertical, 5)
-                HStack {
-                    ZStack {
-                        Circle()
-                            .fill(.blue.opacity(0.2))
-                            .frame(width: 40, height: 40)
+                        Spacer()
                         
-                        Image(systemName: "clock")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 25, height: 25)
-                            .foregroundColor(.blue)
+                        Button(action: {
+                            infoTapped = true
+                        }) {
+                            Image(systemName: "info.circle")
+                        }
                     }
                     
-                    
-                    Text("Duration")
-                        .font(.system(size: 20).bold())
-                        .foregroundColor(.primary)
-                        .padding(.leading, 5)
-                        .frame(width: 120, alignment: .leading)
-
-                    Text(duration)
-                        .font(.system(size: 25).bold())
-                        .bold()
-                        .foregroundColor(AppColors.mainColor.opacity(0.8))
-                    Spacer()
+                    DistanceEntryView(distance: distance)
+                    DurationEntryView(duration: duration)
+                    PriceEntryView(price: price)
+                    GreenPriceEntryView(greenPrice: greenPrice)
                 }
-                .padding(.horizontal)
-                .padding(.vertical, 5)
-                
-                HStack {
-                    ZStack {
-                        Circle()
-                            .fill(.red.opacity(0.2))
-                            .frame(width: 40, height: 40)
+            } else {
+                VStack (spacing:0){
+                    HStack {
+                        Text("Recap")
+                            .font(.title)
+                            .foregroundStyle(AppColors.mainColor.opacity(0.8))
+                            .fontWeight(.semibold)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                         
-                        Image("price_red")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 30, height: 30)
-                            .foregroundColor(.red)
-                    }
-                    
-                    
-                    Text("Price")
-                        .font(.system(size: 20).bold())
-                        .foregroundColor(.primary)
-                        .padding(.leading, 5)
-                        .frame(width: 120, alignment: .leading)
-
-                    Text(String(format: "%.2f", price) + " €")
-                        .font(.system(size: 25).bold())
-                        .bold()
-                        .foregroundColor(AppColors.mainColor.opacity(0.8))
-                    Spacer()
-                }
-                .padding(.horizontal)
-                .padding(.vertical, 5)
-                HStack {
-                    ZStack {
-                        Circle()
-                            .fill(.green.opacity(0.2))
-                            .frame(width: 40, height: 40)
+                        Spacer()
                         
-                        Image("price_green")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 30, height: 30)
-                            .foregroundColor(.green)
+                        Button(action: {
+                            infoTapped = true
+                        }) {
+                            Image(systemName: "info.circle")
+                        }
                     }
+                    .padding(EdgeInsets(top: 15, leading: 15, bottom: 10, trailing: 15))
                     
-                    Text("Green price")
-                        .font(.system(size: 20).bold())
-                        .foregroundColor(.primary)
-                        .padding(.leading, 5)
-                        .frame(width: 120, alignment: .leading)
-
-                        Text(String(format: "%.2f", greenPrice) + " €")
-                        .font(.system(size: 25).bold())
-                        .bold()
-                        .foregroundColor(AppColors.mainColor.opacity(0.8))
-                    Spacer()
-                    Button(action: {
-                        infoTapped = true
-                    }) {
-                        Image(systemName: "info.circle")
+                    HStack {
+                        VStack {
+                            DistanceEntryView(distance: distance)
+                            DurationEntryView(duration: duration)
+                        }
+                        VStack {
+                            PriceEntryView(price: price)
+                            GreenPriceEntryView(greenPrice: greenPrice)
+                        }
                     }
+                    .padding(.bottom, 5)
                 }
-                .padding(EdgeInsets(top: 5, leading: 15, bottom: 10, trailing: 15))
             }
         }
         .sheet(isPresented: $infoTapped) {
             InfoCompensationView(isPresented: $infoTapped)
         }
+    }
+}
+
+private struct DistanceEntryView: View {
+    let distance: Float64
+    
+    var body: some View {
+        HStack {
+            ZStack {
+                Circle()
+                    .fill(.indigo.opacity(0.2))
+                    .frame(width: 40, height: 40)
+                
+                Image(systemName: "road.lanes")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 25, height: 25)
+                    .foregroundColor(.indigo)
+            }
+            
+            
+            Text("Distance")
+                .font(.system(size: 20).bold())
+                .foregroundColor(.primary)
+                .padding(.leading, 5)
+                .frame(width: 120, alignment: .leading)
+            Text(String(format: "%.1f", distance) + " Km")
+                .font(.system(size: 25).bold())
+                .bold()
+                .foregroundColor(AppColors.mainColor.opacity(0.8))
+            Spacer()
+        }
+        .padding(.horizontal)
+        .padding(.vertical, 5)
+    }
+}
+
+private struct DurationEntryView: View {
+    let duration: String
+    
+    var body: some View {
+    HStack {
+        ZStack {
+            Circle()
+                .fill(.blue.opacity(0.2))
+                .frame(width: 40, height: 40)
+            
+            Image(systemName: "clock")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 25, height: 25)
+                .foregroundColor(.blue)
+        }
+        
+        
+        Text("Duration")
+            .font(.system(size: 20).bold())
+            .foregroundColor(.primary)
+            .padding(.leading, 5)
+            .frame(width: 120, alignment: .leading)
+        
+        Text(duration)
+            .font(.system(size: 25).bold())
+            .bold()
+            .foregroundColor(AppColors.mainColor.opacity(0.8))
+        Spacer()
+    }
+    .padding(.horizontal)
+    .padding(.vertical, 5)
+    
+    }
+}
+
+private struct PriceEntryView: View {
+    let price: Float64
+    
+    var body: some View {
+        HStack {
+            ZStack {
+                Circle()
+                    .fill(.red.opacity(0.2))
+                    .frame(width: 40, height: 40)
+                
+                Image("price_red")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 30, height: 30)
+                    .foregroundColor(.red)
+            }
+            
+            
+            Text("Price")
+                .font(.system(size: 20).bold())
+                .foregroundColor(.primary)
+                .padding(.leading, 5)
+                .frame(width: 120, alignment: .leading)
+
+            Text(String(format: "%.2f", price) + " €")
+                .font(.system(size: 25).bold())
+                .bold()
+                .foregroundColor(AppColors.mainColor.opacity(0.8))
+            Spacer()
+        }
+        .padding(.horizontal)
+        .padding(.vertical, 5)
+    }
+}
+
+private struct GreenPriceEntryView: View {
+    let greenPrice: Float64
+    var body: some View {
+        HStack {
+            ZStack {
+                Circle()
+                    .fill(.green.opacity(0.2))
+                    .frame(width: 40, height: 40)
+                
+                Image("price_green")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 30, height: 30)
+                    .foregroundColor(.green)
+            }
+            
+            Text("Green price")
+                .font(.system(size: 20).bold())
+                .foregroundColor(.primary)
+                .padding(.leading, 5)
+                .frame(width: 120, alignment: .leading)
+
+                Text(String(format: "%.2f", greenPrice) + " €")
+                .font(.system(size: 25).bold())
+                .bold()
+                .foregroundColor(AppColors.mainColor.opacity(0.8))
+            Spacer()
+        }
+        .padding(EdgeInsets(top: 5, leading: 15, bottom: 10, trailing: 15))
     }
 }
