@@ -187,9 +187,47 @@ class CitiesReviewsViewModel: ObservableObject {
             let userReview = try await serverService.uploadReview(review: review)
             self.userReview = userReview
             await getReviewsForSearchedCity(reload: true)
+            uploadReviewToSwiftData(userReview: userReview)
         } catch {
             self.errorMessage = "An error occurred while saving the review"
             return
+        }
+    }
+    
+    func uploadReviewToSwiftData(userReview: Review) {
+        do {
+            let travels = try modelContext.fetch(FetchDescriptor<Travel>(predicate: #Predicate { travel in
+                travel.confirmed
+            }))
+            let travelsID = travels.map( \.travelID )
+            let segments = try modelContext.fetch(FetchDescriptor<Segment>(
+                predicate: #Predicate { segment in
+                     segment.isOutward == true
+                },
+                sortBy: [
+                    SortDescriptor(\Segment.travelID),
+                    SortDescriptor(\Segment.numSegment, order: .reverse)
+                ]
+            )).filter { travelsID.contains($0.travelID) }
+            
+            let filteredSegments = Dictionary(grouping: segments, by: \.travelID)
+                .compactMapValues { $0.first }
+                .values
+            var travelsToChange: [Int] = []
+            for segment in filteredSegments {
+                if segment.destinationCity == selectedCity.cityName && segment.destinationCountry == selectedCity.countryName {
+                    travelsToChange.append(segment.travelID)
+                }
+            }
+            for travel in travels {
+                if travelsToChange.contains(travel.travelID ?? -1) {
+                    travel.userReview = userReview
+                    try modelContext.save()
+                }
+            }
+        }
+        catch {
+            print("error uploading the review in SwiftData")
         }
     }
     
@@ -217,9 +255,47 @@ class CitiesReviewsViewModel: ObservableObject {
             let modifiedReview = try await serverService.modifyReview(modifiedReview: modifiedReview)
             self.userReview = modifiedReview
             await getReviewsForSearchedCity(reload: true)
+            modifyReviewInSwiftData(userReview: modifiedReview)
         } catch {
             self.errorMessage = "Error while modifying the review"
             return
+        }
+    }
+    
+    func modifyReviewInSwiftData(userReview: Review) {
+        do {
+            let travels = try modelContext.fetch(FetchDescriptor<Travel>(predicate: #Predicate { travel in
+                travel.confirmed
+            }))
+            let travelsID = travels.map( \.travelID )
+            let segments = try modelContext.fetch(FetchDescriptor<Segment>(
+                predicate: #Predicate { segment in
+                     segment.isOutward == true
+                },
+                sortBy: [
+                    SortDescriptor(\Segment.travelID),
+                    SortDescriptor(\Segment.numSegment, order: .reverse)
+                ]
+            )).filter { travelsID.contains($0.travelID) }
+            
+            let filteredSegments = Dictionary(grouping: segments, by: \.travelID)
+                .compactMapValues { $0.first }
+                .values
+            var travelsToChange: [Int] = []
+            for segment in filteredSegments {
+                if segment.destinationCity == selectedCity.cityName && segment.destinationCountry == selectedCity.countryName {
+                    travelsToChange.append(segment.travelID)
+                }
+            }
+            for travel in travels {
+                if travelsToChange.contains(travel.travelID ?? -1) {
+                    travel.userReview = userReview
+                }
+            }
+            try modelContext.save()
+        }
+        catch {
+            print("Error while modifying the review in SwiftData")
         }
     }
     
@@ -236,11 +312,49 @@ class CitiesReviewsViewModel: ObservableObject {
         
         do {
             try await serverService.deleteReview(reviewID: reviewID)
-            self.userReview = nil
             await getReviewsForSearchedCity(reload: true)
+            deleteReviewFromSwiftData(userReviewID: reviewID)
+            self.userReview = nil
         } catch {
             self.errorMessage = "Error while deleting the review"
             return
+        }
+    }
+     
+    func deleteReviewFromSwiftData(userReviewID: Int) {
+        do {
+            let travels = try modelContext.fetch(FetchDescriptor<Travel>(predicate: #Predicate { travel in
+                travel.confirmed
+            }))
+            let travelsID = travels.map( \.travelID )
+            let segments = try modelContext.fetch(FetchDescriptor<Segment>(
+                predicate: #Predicate { segment in
+                     segment.isOutward == true
+                },
+                sortBy: [
+                    SortDescriptor(\Segment.travelID),
+                    SortDescriptor(\Segment.numSegment, order: .reverse)
+                ]
+            )).filter { travelsID.contains($0.travelID) }
+            
+            let filteredSegments = Dictionary(grouping: segments, by: \.travelID)
+                .compactMapValues { $0.first }
+                .values
+            var travelsToChange: [Int] = []
+            for segment in filteredSegments {
+                if segment.destinationCity == selectedCity.cityName && segment.destinationCountry == selectedCity.countryName {
+                    travelsToChange.append(segment.travelID)
+                }
+            }
+            for travel in travels {
+                if travelsToChange.contains(travel.travelID ?? -1) {
+                    travel.userReview = nil
+                }
+            }
+            try modelContext.save()
+        }
+        catch{
+            print("Error deleting the review from SwiftData")
         }
     }
     
