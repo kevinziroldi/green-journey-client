@@ -41,9 +41,9 @@ struct CitiesReviewsView: View {
                 // city search
                 CitySearchView(viewModel: viewModel, searchTapped: $searchTapped)
                 
-                Spacer()
+                //Spacer()
                 
-                Text("TODO - visited cities")
+                ReviewableCitiesView(viewModel: viewModel)
                 
                 // best cities
                 BestCitiesTitle()
@@ -52,6 +52,7 @@ struct CitiesReviewsView: View {
             .onAppear {
                 Task {
                     await viewModel.getBestReviewedCities()
+                    await viewModel.getReviewableCities()
                 }
             }
             .onChange(of: viewModel.searchedCityAvailable) {
@@ -76,7 +77,7 @@ struct CitiesReviewsView: View {
                 
                 Spacer()
                 
-                Text("TODO - visited cities")
+                ReviewableCitiesView(viewModel: viewModel)
                 
                 Spacer()
                 
@@ -88,6 +89,7 @@ struct CitiesReviewsView: View {
             .onAppear {
                 Task {
                     await viewModel.getBestReviewedCities()
+                    await viewModel.getReviewableCities()
                 }
             }
             .onChange(of: viewModel.searchedCityAvailable) {
@@ -287,7 +289,7 @@ struct CitySearchView: View {
             }
             .background(colorScheme == .dark ? Color(red: 48/255, green: 48/255, blue: 48/255) : Color.white)
             .cornerRadius(10)
-            .padding(EdgeInsets(top: 0, leading: 30, bottom: 50, trailing: 30))
+            .padding(EdgeInsets(top: 0, leading: 30, bottom: 15, trailing: 30))
         }
         .fullScreenCover(isPresented: $searchTapped ) {
             CompleterView(modelContext: modelContext, searchText: "",
@@ -307,8 +309,53 @@ struct CitySearchView: View {
                           departure: false
             )
         }
-        
-        
     }
 }
 
+struct ReviewableCitiesView: View {
+    @ObservedObject var viewModel: CitiesReviewsViewModel
+    var body: some View {
+        Text ("Reviewable Cities")
+            .font(.title)
+            .fontWeight(.semibold)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, 30)
+        
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack {
+                    ForEach(viewModel.reviewableCities) { city in
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(Color(uiColor: .systemBackground))
+                                .shadow(color: AppColors.mainColor.opacity(0.3), radius: 5, x: 0, y: 3)
+                            VStack {
+                                Text(city.cityName)
+                                    .font(.headline)
+                                    .scaledToFit()
+                                    .minimumScaleFactor(0.6)
+                                    .lineLimit(1)
+                                Text(city.countryName)
+                                    .fontWeight(.light)
+                                    .scaledToFit()
+                                    .minimumScaleFactor(0.6)
+                                    .lineLimit(1)
+                            }
+                            .padding()
+                        }
+                        .onTapGesture {
+                            Task {
+                                viewModel.selectedCity = city
+                                await viewModel.getReviewsForSearchedCity(reload: false)
+                            }
+                        }
+                        .padding(.horizontal, 5)
+                        .padding(.bottom, 15)
+                        .frame(width: 150)
+                        .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
+                
+            }
+            .padding(.horizontal)
+    }
+}

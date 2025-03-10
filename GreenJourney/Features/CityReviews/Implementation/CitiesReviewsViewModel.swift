@@ -15,7 +15,6 @@ class CitiesReviewsViewModel: ObservableObject {
     
     //reviewable cities
     @Published var reviewableCities: [CityCompleterDataset] = []
-    @Published var reviewableCitiesReviewElement: [CityReviewElement] = []
     
     // searched city
     @Published var searchedCityAvailable: Bool = false
@@ -146,7 +145,39 @@ class CitiesReviewsViewModel: ObservableObject {
     }
     
     func getReviewableCities() async {
-        //TODO
+        do{
+            var citiesToReview: [CityCompleterDataset] = []
+            let travels = try modelContext.fetch(FetchDescriptor<Travel>(predicate: #Predicate { travel in
+                travel.confirmed && travel.userReview == nil
+            })).map( \.travelID )
+            let segments = try modelContext.fetch(FetchDescriptor<Segment>(
+                predicate: #Predicate { segment in
+                     segment.isOutward == true
+                },
+                sortBy: [
+                    SortDescriptor(\Segment.travelID),
+                    SortDescriptor(\Segment.numSegment, order: .reverse)
+                ]
+            )).filter { travels.contains($0.travelID) }
+            
+            let filteredSegments = Dictionary(grouping: segments, by: \.travelID)
+                .compactMapValues { $0.first }
+                .values
+            for segment in filteredSegments {
+                guard let city = try modelContext.fetch(FetchDescriptor<CityCompleterDataset>(predicate: #Predicate { city in
+                    city.cityName == segment.destinationCity && city.countryName == segment.destinationCountry
+                })).first else {
+                    continue
+                }
+                if !citiesToReview.contains(city) {
+                    citiesToReview.append(city)
+                }
+            }
+            self.reviewableCities = citiesToReview.sorted { $0.cityName < $1.cityName }
+        }
+        catch {
+            print("error retrieving user travels from SwiftData")
+        }
     }
         
     func uploadReview() async {
