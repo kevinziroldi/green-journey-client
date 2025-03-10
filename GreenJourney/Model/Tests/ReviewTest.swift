@@ -17,10 +17,7 @@ struct ReviewTest {
             cityIata: "PAR",
             countryCode: "FR",
             firstName: "John",
-            lastName: "Doe",
-            scoreShortDistance: 50,
-            scoreLongDistance: 100,
-            badges: []
+            lastName: "Doe"
         )
         
         #expect(review.reviewID == 1)
@@ -34,10 +31,6 @@ struct ReviewTest {
         #expect(review.countryCode == "FR")
         #expect(review.firstName == "John")
         #expect(review.lastName == "Doe")
-        #expect(review.scoreShortDistance == 50)
-        #expect(review.scoreLongDistance == 100)
-        #expect(review.badges.isEmpty)
-        
     }
     
     @Test
@@ -53,10 +46,7 @@ struct ReviewTest {
             cityIata: "PAR",
             countryCode: "FR",
             firstName: "John",
-            lastName: "Doe",
-            scoreShortDistance: 50,
-            scoreLongDistance: 100,
-            badges: []
+            lastName: "Doe"
         )
         
         let encoder = JSONEncoder()
@@ -78,9 +68,6 @@ struct ReviewTest {
         #expect(decodedReview.countryCode == review.countryCode)
         #expect(decodedReview.firstName == review.firstName)
         #expect(decodedReview.lastName == review.lastName)
-        #expect(decodedReview.scoreShortDistance == review.scoreShortDistance)
-        #expect(decodedReview.scoreLongDistance == review.scoreLongDistance)
-        #expect(decodedReview.badges.isEmpty)
     }
     
     @Test
@@ -96,10 +83,7 @@ struct ReviewTest {
             cityIata: "PAR",
             countryCode: "FR",
             firstName: "John",
-            lastName: "Doe",
-            scoreShortDistance: 50,
-            scoreLongDistance: 100,
-            badges: []
+            lastName: "Doe"
         )
         
         let average = review.computeRating()
@@ -120,17 +104,11 @@ struct ReviewTest {
             cityIata: "PAR",
             countryCode: "FR",
             firstName: "John",
-            lastName: "Doe",
-            scoreShortDistance: 50,
-            scoreLongDistance: 100,
-            badges: []
+            lastName: "Doe"
         )
-        
         
         let average = review.computeRating()
         
-        
         #expect(average == 0)
     }
-
 }

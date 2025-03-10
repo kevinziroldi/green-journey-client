@@ -27,10 +27,7 @@ struct CityReviewElementTest {
             cityIata: "PAR",
             countryCode: "FR",
             firstName: "John",
-            lastName: "Doe",
-            scoreShortDistance: 50,
-            scoreLongDistance: 100,
-            badges: []
+            lastName: "Doe"
         )
         
         let city = CityReviewElement(
@@ -60,10 +57,7 @@ struct CityReviewElementTest {
             cityIata: "PAR",
             countryCode: "FR",
             firstName: "John",
-            lastName: "Doe",
-            scoreShortDistance: 50,
-            scoreLongDistance: 100,
-            badges: []
+            lastName: "Doe"
         )
         
         let city = CityReviewElement(
@@ -115,10 +109,7 @@ struct CityReviewElementTest {
             cityIata: "PAR",
             countryCode: "FR",
             firstName: "John",
-            lastName: "Doe",
-            scoreShortDistance: 50,
-            scoreLongDistance: 100,
-            badges: []
+            lastName: "Doe"
         )
         
         let city = CityReviewElement(
@@ -147,10 +138,7 @@ struct CityReviewElementTest {
             cityIata: "PAR",
             countryCode: "FR",
             firstName: "John",
-            lastName: "Doe",
-            scoreShortDistance: 50,
-            scoreLongDistance: 100,
-            badges: []
+            lastName: "Doe"
         )
         let review2 = Review(
             reviewID: 2,
@@ -163,10 +151,7 @@ struct CityReviewElementTest {
             cityIata: "PAR",
             countryCode: "FR",
             firstName: "John",
-            lastName: "Doe",
-            scoreShortDistance: 50,
-            scoreLongDistance: 100,
-            badges: []
+            lastName: "Doe"
         )
         let review3 = Review(
             reviewID: 3,
@@ -179,10 +164,7 @@ struct CityReviewElementTest {
             cityIata: "PAR",
             countryCode: "FR",
             firstName: "John",
-            lastName: "Doe",
-            scoreShortDistance: 50,
-            scoreLongDistance: 100,
-            badges: []
+            lastName: "Doe"
         )
         let review4 = Review(
             reviewID: 4,
@@ -195,10 +177,7 @@ struct CityReviewElementTest {
             cityIata: "PAR",
             countryCode: "FR",
             firstName: "John",
-            lastName: "Doe",
-            scoreShortDistance: 50,
-            scoreLongDistance: 100,
-            badges: []
+            lastName: "Doe"
         )
         let review5 = Review(
             reviewID: 5,
@@ -211,10 +190,7 @@ struct CityReviewElementTest {
             cityIata: "PAR",
             countryCode: "FR",
             firstName: "John",
-            lastName: "Doe",
-            scoreShortDistance: 50,
-            scoreLongDistance: 100,
-            badges: []
+            lastName: "Doe"
         )
         let review6 = Review(
             reviewID: 6,
@@ -227,10 +203,7 @@ struct CityReviewElementTest {
             cityIata: "PAR",
             countryCode: "FR",
             firstName: "John",
-            lastName: "Doe",
-            scoreShortDistance: 50,
-            scoreLongDistance: 100,
-            badges: []
+            lastName: "Doe"
         )
         
         let city = CityReviewElement(
