@@ -151,7 +151,12 @@ class MyTravelsViewModel: ObservableObject {
                     if let firstSegment2 = $1.getDepartureSegment() {
                         let date1 = firstSegment1.dateTime
                         let date2 = firstSegment2.dateTime
-                        return date1 > date2
+                        
+                        if date1 > date2 {
+                            return true
+                        } else if date1 == date2 && firstSegment1.travelID > firstSegment2.travelID {
+                            return true
+                        }
                     }
                 }
                 return false
@@ -167,7 +172,16 @@ class MyTravelsViewModel: ObservableObject {
                 for segment in $1.segments {
                     co2Emitted2 += segment.co2Emitted
                 }
-                return co2Emitted1 > co2Emitted2
+                if let firstSegment1 = $0.getDepartureSegment() {
+                    if let firstSegment2 = $1.getDepartureSegment() {
+                        if co2Emitted1 > co2Emitted2 {
+                            return true
+                        } else if co2Emitted1 == co2Emitted2 && firstSegment1.travelID > firstSegment2.travelID {
+                            return true
+                        }
+                    }
+                }
+                return false
             }
         case .co2CompensationRate:
             // increasing co2 compensated / co2 emitted
@@ -194,7 +208,18 @@ class MyTravelsViewModel: ObservableObject {
                 } else {
                     co2Rate2 = co2Compensated2/co2Emitted2
                 }
-                return co2Rate1 < co2Rate2
+                
+                if let firstSegment1 = $0.getDepartureSegment() {
+                    if let firstSegment2 = $1.getDepartureSegment() {
+                        if co2Rate1 < co2Rate2 {
+                            return true
+                        } else if co2Rate1 == co2Rate2 && firstSegment1.travelID > firstSegment2.travelID {
+                            return true
+                        }
+                    }
+                }
+                
+                return false
             }
         case .price:
             // decreasing price
@@ -207,7 +232,17 @@ class MyTravelsViewModel: ObservableObject {
                 for segment in $1.segments {
                     price2 += segment.price
                 }
-                return price1 > price2
+                
+                if let firstSegment1 = $0.getDepartureSegment() {
+                    if let firstSegment2 = $1.getDepartureSegment() {
+                        if price1 > price2 {
+                            return true
+                        } else if price1 == price2 && firstSegment1.travelID > firstSegment2.travelID {
+                            return true
+                        }
+                    }
+                }
+                return false
             }
         }
     }
