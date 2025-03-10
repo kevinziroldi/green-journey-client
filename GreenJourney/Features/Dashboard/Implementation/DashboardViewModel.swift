@@ -39,19 +39,6 @@ class DashboardViewModel: ObservableObject {
         self.co2CompensatedPerYear = [getCurrentYear()-3: 0, getCurrentYear()-2: 0, getCurrentYear()-1: 0, getCurrentYear(): 0]
     }
     
-    func getUserBadges() {
-        do {
-            let users = try modelContext.fetch(FetchDescriptor<User>())
-            if let user = users.first {
-                self.badges = user.badges
-            } else {
-                self.badges = []
-            }
-        }catch {
-            print("Error fetching user data")
-        }
-    }
-    
     func getUserFromServer() async{
         do {
             let user = try await serverService.getUser()

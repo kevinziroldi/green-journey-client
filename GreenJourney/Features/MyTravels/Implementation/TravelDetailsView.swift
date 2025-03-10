@@ -425,16 +425,13 @@ private struct Co2CompensationView: View {
                                     ZStack {
                                         RoundedRectangle(cornerRadius: 10)
                                             .fill(plantedTrees==viewModel.getPlantedTrees(travelDetails) ? Color.secondary.opacity(0.6) : AppColors.mainColor)
-                                            .stroke(plantedTrees==viewModel.getPlantedTrees(travelDetails) ? Color.secondary : Color(red: 1/255, green: 150/255, blue: 1/255), lineWidth: 2)
                                         HStack (spacing: 3) {
                                             Image(systemName: "leaf")
-                                                .font(.title3)
-                                                .fontWeight(.semibold)
-                                                .fontWeight(.light)
+                                                .font(.headline)
                                                 .foregroundStyle(.white)
                                             Text("Compensate")
                                                 .foregroundStyle(.white)
-                                                .fontWeight(.semibold)
+                                                .font(.headline)
                                         }
                                         .scaledToFit()
                                         .minimumScaleFactor(0.6)
