@@ -41,28 +41,40 @@ struct RankingView: View {
             // iOS
             
             ScrollView {
-                HStack {
-                    // title
-                    RankingTitleView()
+                VStack {
+                    HStack {
+                        // title
+                        RankingTitleView()
+                        
+                        Spacer()
+                        
+                        // user preferences button
+                        UserPreferencesButtonView(navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
+                    }
+                    .padding(5)
+                    
+                    
+                    UserBadgesView(legendTapped: $legendTapped, badges: viewModel.badges, inline: true)
+                    
+                    ScoresView(scoreLongDistance: viewModel.longDistanceScore, scoreShortDistance: viewModel.shortDistanceScore)
+                    Spacer()
+                    // LeaderBoards
+                    Text("Long Distance")
+                        .font(.system(size: 24).bold())
+                        .padding(.horizontal)
+                        .fontWeight(.semibold)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    LeaderBoardsView(viewModel: viewModel, navigationPath: $navigationPath, gridItems: gridItemsCompactDevice, currentRanking: Array(viewModel.longDistanceRanking.prefix(3)))
+                    Text("Short Distance")
+                        .font(.system(size: 24).bold())
+                        .padding(.horizontal)
+                        .fontWeight(.semibold)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    LeaderBoardsView(viewModel: viewModel, navigationPath: $navigationPath, gridItems: gridItemsRegularDevice, currentRanking: Array(viewModel.shortDistanceRanking.prefix(3)))
                     
                     Spacer()
-                    
-                    // user preferences button
-                    UserPreferencesButtonView(navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
                 }
-                .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
-                
-                
-                UserBadgesView(legendTapped: $legendTapped, badges: viewModel.badges, inline: true)
-                
-                ScoresView(scoreLongDistance: viewModel.longDistanceScore, scoreShortDistance: viewModel.shortDistanceScore)
-                // picker
-                LeaderBoardPickerView(viewModel: viewModel)
-                Spacer()
-                // LeaderBoards
-                LeaderBoardsView(viewModel: viewModel, navigationPath: $navigationPath, gridItems: gridItemsCompactDevice)
-                
-                Spacer()
+                .padding(.horizontal)
             }
             .sheet(isPresented: $legendTapped) {
                 LegendBadgeView(isPresented: $legendTapped)
@@ -90,7 +102,9 @@ struct RankingView: View {
                 Spacer()
                 
                 // LeaderBoards
-                LeaderBoardsView(viewModel: viewModel, navigationPath: $navigationPath, gridItems: gridItemsRegularDevice)
+                LeaderBoardsView(viewModel: viewModel, navigationPath: $navigationPath, gridItems: gridItemsCompactDevice, currentRanking: Array(viewModel.longDistanceRanking.prefix(3)))
+                    .frame(maxWidth: 700)
+                LeaderBoardsView(viewModel: viewModel, navigationPath: $navigationPath, gridItems: gridItemsRegularDevice, currentRanking: Array(viewModel.shortDistanceRanking.prefix(3)))
                     .frame(maxWidth: 700)
                 
                 Spacer()
@@ -167,18 +181,6 @@ private struct LeaderBoardsView: View {
     @Binding var navigationPath: NavigationPath
     var gridItems: [GridItem]
     var currentRanking: [RankingElement]
-    
-    init(viewModel: RankingViewModel, navigationPath: Binding<NavigationPath>, gridItems: [GridItem]) {
-        self.viewModel = viewModel
-        _navigationPath = navigationPath
-        self.gridItems = gridItems
-        
-        if viewModel.leaderboardSelected {
-            currentRanking = viewModel.longDistanceRanking
-        } else {
-            currentRanking = viewModel.shortDistanceRanking
-        }
-    }
     
     var body: some View {
         VStack{
@@ -447,7 +449,7 @@ private struct UserBadgesView: View {
                 }
                 .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 0))
                 HStack{
-                    BadgeView(badges: badges, dim: 80, inline: inline)
+                    BadgeView(badges: badges, dim: 110, inline: false)
                         .padding()
                 }
             }
