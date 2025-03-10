@@ -48,17 +48,7 @@ struct DashboardView: View {
                     
                 /*    // scores
                     ScoresView(scoreLongDistance: viewModel.longDistanceScore, scoreShortDistance: viewModel.shortDistanceScore)*/
-                } else {
-                    HStack(alignment: .top) {
-                        // badges
-                        UserBadgesView(legendTapped: $legendTapped, viewModel: viewModel, inline: false)
-                        // scores
-                        VStack {
-                            ScoresView(scoreLongDistance: viewModel.longDistanceScore, scoreShortDistance: viewModel.shortDistanceScore)
-                        }
-                        .frame(maxHeight: .infinity, alignment: .top)
-                    }
-                    
+                } else {                    
                     // expandible recaps
                     DashboardDetailsNavigationView(viewModel: viewModel)
                 }
@@ -67,14 +57,8 @@ struct DashboardView: View {
         }
         .onAppear() {
             Task {
-                await viewModel.getUserFromServer()
                 viewModel.getUserTravels()
             }
-        }
-        .sheet(isPresented: $legendTapped) {
-            LegendBadgeView(isPresented: $legendTapped)
-                .presentationDetents([.large])
-                .presentationCornerRadius(30)
         }
     }
 }
@@ -247,7 +231,7 @@ private struct DashboardDetailsNavigationView: View {
     }
 }
 
-
+/*
 private struct UserBadgesView: View {
     @Binding var legendTapped: Bool
     @ObservedObject var viewModel: DashboardViewModel
@@ -284,3 +268,4 @@ private struct UserBadgesView: View {
         .overlay(Color.clear.accessibilityIdentifier("userBadges"))
     }
 }
+*/

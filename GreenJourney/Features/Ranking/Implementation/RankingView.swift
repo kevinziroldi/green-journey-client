@@ -8,6 +8,7 @@ struct RankingView: View {
     @StateObject var viewModel: RankingViewModel
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @Environment(\.modelContext) private var modelContext
+    @State var legendTapped: Bool = false
     private var serverService: ServerServiceProtocol
     private var firebaseAuthService: FirebaseAuthServiceProtocol
     
@@ -51,18 +52,26 @@ struct RankingView: View {
                 }
                 .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
                 
+                
+                UserBadgesView(legendTapped: $legendTapped, badges: viewModel.badges, inline: true)
+                
+                ScoresView(scoreLongDistance: viewModel.longDistanceScore, scoreShortDistance: viewModel.shortDistanceScore)
                 // picker
                 LeaderBoardPickerView(viewModel: viewModel)
-                
                 Spacer()
-                
                 // LeaderBoards
                 LeaderBoardsView(viewModel: viewModel, navigationPath: $navigationPath, gridItems: gridItemsCompactDevice)
                 
                 Spacer()
             }
+            .sheet(isPresented: $legendTapped) {
+                LegendBadgeView(isPresented: $legendTapped)
+                    .presentationDetents([.large])
+                    .presentationCornerRadius(30)
+            }
             .onAppear {
                 Task {
+                    await viewModel.getUserFromServer()
                     await viewModel.fecthRanking()
                 }
             }
@@ -85,6 +94,11 @@ struct RankingView: View {
                     .frame(maxWidth: 700)
                 
                 Spacer()
+            }
+            .sheet(isPresented: $legendTapped) {
+                LegendBadgeView(isPresented: $legendTapped)
+                    .presentationDetents([.large])
+                    .presentationCornerRadius(30)
             }
             .onAppear {
                 Task {
@@ -403,5 +417,42 @@ struct LeaderBoardUserView: View {
             }
         }
         .padding(EdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 0))
+    }
+}
+
+private struct UserBadgesView: View {
+    @Binding var legendTapped: Bool
+    var badges: [Badge]
+    var inline: Bool
+    
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 15)
+                .fill(Color(uiColor: .systemBackground))
+                .shadow(color: AppColors.mainColor.opacity(0.3), radius: 5, x: 0, y: 3)
+            VStack (spacing:0){
+                HStack {
+                    Text("Badges")
+                        .font(.title)
+                        .foregroundStyle(AppColors.mainColor.opacity(0.8))
+                        .fontWeight(.semibold)
+                    Button(action: {
+                        legendTapped = true
+                    }) {
+                        Image(systemName: "info.circle")
+                            .font(.title3)
+                            .foregroundStyle(.gray)
+                    }
+                    Spacer()
+                }
+                .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 0))
+                HStack{
+                    BadgeView(badges: badges, dim: 80, inline: inline)
+                        .padding()
+                }
+            }
+        }
+        .padding(EdgeInsets(top: 5, leading: 15, bottom: 7, trailing: 15))
+        .overlay(Color.clear.accessibilityIdentifier("userBadges"))
     }
 }

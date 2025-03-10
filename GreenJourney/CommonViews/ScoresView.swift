@@ -8,7 +8,7 @@ struct ScoresView: View {
         VStack(spacing: 0) {
             Text("Scores")
                 .font(.title)
-                .foregroundStyle(.pink.opacity(0.8))
+                .foregroundStyle(AppColors.mainColor.opacity(0.8))
                 .fontWeight(.semibold)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
@@ -16,14 +16,14 @@ struct ScoresView: View {
             InfoRow(title: "Short distance",
                     value: String(format: "%.1f", scoreShortDistance),
                     icon: "trophy",
-                    color: .pink,
+                    color: AppColors.mainColor,
                     imageValue: false,
                     imageValueString: nil)
             
             InfoRow(title: "Long distance",
                     value: String(format: "%.1f", scoreLongDistance),
                     icon: "trophy",
-                    color: .pink,
+                    color: AppColors.mainColor,
                     imageValue: false,
                     imageValueString: nil)
         }
@@ -31,7 +31,7 @@ struct ScoresView: View {
         .background(
             RoundedRectangle(cornerRadius: 15)
                 .fill(Color(uiColor: .systemBackground))
-                .shadow(color: .pink.opacity(0.3), radius: 5, x: 0, y: 3)
+                .shadow(color: AppColors.mainColor.opacity(0.3), radius: 5, x: 0, y: 3)
         )
         .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
     }

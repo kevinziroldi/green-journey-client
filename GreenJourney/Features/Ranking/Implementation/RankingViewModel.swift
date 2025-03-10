@@ -8,7 +8,9 @@ class RankingViewModel: ObservableObject {
     private var serverService: ServerServiceProtocol
     
     var users: [User] = []
-    
+    @Published var badges: [Badge] = []
+    @Published var shortDistanceScore: Float64 = 0.0
+    @Published var longDistanceScore: Float64 = 0.0
     @Published var shortDistanceRanking: [RankingElement] = []
     @Published var longDistanceRanking: [RankingElement] = []
     @Published var leaderboardSelected: Bool = true
@@ -19,6 +21,49 @@ class RankingViewModel: ObservableObject {
         self.modelContext = modelContext
         self.serverService = serverService
     }
+    
+    func getUserFromServer() async{
+        do {
+            let user = try await serverService.getUser()
+            badges = user.badges
+            shortDistanceScore = user.scoreShortDistance
+            longDistanceScore = user.scoreLongDistance
+            saveUserToSwiftData(serverUser: user)
+        }
+        catch {
+            print("Error retrieving user from server")
+        }
+    }
+    
+    private func saveUserToSwiftData(serverUser: User?) {
+        if let user = serverUser {
+            // check no user logged
+            do {
+                let users = try modelContext.fetch(FetchDescriptor<User>())
+                if users.count > 0 {
+                    for user in users {
+                        modelContext.delete(user)
+                    }
+                    try modelContext.save()
+                }
+            } catch {
+                print("Error while checking number of users: \(error)")
+                return
+            }
+            
+            // add user to context
+            modelContext.insert(user)
+            
+            // save user in SwiftData
+            do {
+                try modelContext.save()
+            } catch {
+                print("Error while saving user to SwiftData: \(error)")
+                return
+            }
+        }
+    }
+
     
     func fecthRanking() async {
         self.errorMessage = nil
