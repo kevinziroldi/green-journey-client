@@ -89,7 +89,6 @@ struct UserPreferencesView : View {
         }
     }
 }
-
 extension Binding where Value == String? {
     func toNonOptional(defaultValue: String = "") -> Binding<String> {
         Binding<String>(
@@ -100,7 +99,6 @@ extension Binding where Value == String? {
         )
     }
 }
-
 extension Binding where Value == Date? {
     func toNonOptional(defaultValue: Date = Date.now) -> Binding<Date> {
         Binding<Date>(
@@ -112,7 +110,7 @@ extension Binding where Value == Date? {
     }
 }
 
-struct UserPreferencesTitleView: View {
+private struct UserPreferencesTitleView: View {
     var body: some View {
         HStack {
             Text("Profile")
@@ -128,7 +126,7 @@ struct UserPreferencesTitleView: View {
     }
 }
 
-struct UserPreferencesTextFieldsView: View {
+private struct UserPreferencesTextFieldsView: View {
     @ObservedObject var userPreferencesViewModel: UserPreferencesViewModel
     @State var editTapped: Bool = false
     var user: User
@@ -254,7 +252,7 @@ struct UserPreferencesTextFieldsView: View {
     }
 }
 
-struct PasswordModificationView: View {
+private struct PasswordModificationView: View {
     @ObservedObject var authenticationViewModel: AuthenticationViewModel
     @State var showResendMessage: Bool
     let email: String = Auth.auth().currentUser?.email ?? ""
@@ -288,7 +286,7 @@ struct PasswordModificationView: View {
     }
 }
 
-struct ErrorMessageView: View {
+private struct ErrorMessageView: View {
     @ObservedObject var userPreferencesViewModel: UserPreferencesViewModel
     
     var body: some View {
@@ -301,7 +299,7 @@ struct ErrorMessageView: View {
     }
 }
 
-struct LogoutButtonView: View {
+private struct LogoutButtonView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     @ObservedObject var authenticationViewModel: AuthenticationViewModel

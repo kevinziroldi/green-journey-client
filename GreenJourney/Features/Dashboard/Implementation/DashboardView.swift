@@ -63,69 +63,6 @@ struct DashboardView: View {
     }
 }
 
-struct InfoRow: View {
-    let title: String
-    let value: String
-    let icon: String
-    let color: Color
-    let imageValue: Bool
-    let imageValueString: String?
-    
-    var body: some View {
-        HStack {
-            HStack {
-                ZStack {
-                    Circle()
-                        .fill(color.opacity(0.2))
-                        .frame(width: 50, height: 50)
-                    
-                    Image(systemName: icon)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 30, height: 30)
-                        .foregroundColor(color)
-                }
-                Text(title)
-                    .font(.system(size: 20).bold())
-                    .scaledToFit()
-                    .minimumScaleFactor(0.8)
-                    .lineLimit(1)
-                    .foregroundColor(.primary)
-                if title != "" {
-                    Spacer()
-                }
-                if !imageValue {
-                    Text(value)
-                        .font(.system(size: 23).bold())
-                        .bold()
-                        .scaledToFit()
-                        .minimumScaleFactor(0.8)
-                        .lineLimit(1)
-                        .foregroundColor(color.opacity(0.8))
-                    
-                }
-                else {
-                    if let imageValueString = imageValueString {
-                        Image(systemName: imageValueString)
-                            .resizable()
-                            .fontWeight(.semibold)
-                            .scaledToFit()
-                            .frame(width: 45, height: 45)
-                            .foregroundColor(color.opacity(0.8))
-                    }
-                    
-                }
-            }
-            Spacer()
-        }
-        
-        .padding(.horizontal)
-        .padding(.vertical, 5)
-        
-    }
-}
-
-
 private struct DashboardDetailsNavigationView: View {
     @ObservedObject var viewModel: DashboardViewModel
     
@@ -155,9 +92,9 @@ private struct DashboardDetailsNavigationView: View {
                             .fontWeight(.bold)
                     }
                     .padding()
-                    InfoRow(title: "Emitted", value: String(format: "%.0f", viewModel.co2Emitted) + " Kg", icon: "carbon.dioxide.cloud", color: .teal, imageValue: false, imageValueString: nil)
+                    InfoRowView(title: "Emitted", value: String(format: "%.0f", viewModel.co2Emitted) + " Kg", icon: "carbon.dioxide.cloud", color: .teal, imageValue: false, imageValueString: nil)
                     
-                    InfoRow(title: "Compensated", value: String(format: "%.0f", viewModel.co2Compensated) + " Kg", icon: "leaf", color: .teal, imageValue: false, imageValueString: nil)
+                    InfoRowView(title: "Compensated", value: String(format: "%.0f", viewModel.co2Compensated) + " Kg", icon: "leaf", color: .teal, imageValue: false, imageValueString: nil)
                 }
                 .padding(.bottom, 7)
             }
@@ -186,8 +123,8 @@ private struct DashboardDetailsNavigationView: View {
                             .fontWeight(.bold)
                     }
                     .padding()
-                    InfoRow(title: "Distance made", value: String(format: "%.0f", viewModel.totalDistance) + " Km", icon: "road.lanes", color: .indigo, imageValue: false, imageValueString: nil)
-                    InfoRow(title: "Travel time", value: viewModel.totalDurationString, icon: "clock", color: .indigo, imageValue: false, imageValueString: nil)
+                    InfoRowView(title: "Distance made", value: String(format: "%.0f", viewModel.totalDistance) + " Km", icon: "road.lanes", color: .indigo, imageValue: false, imageValueString: nil)
+                    InfoRowView(title: "Travel time", value: viewModel.totalDurationString, icon: "clock", color: .indigo, imageValue: false, imageValueString: nil)
                     
                 }
                 .padding(.bottom, 7)
@@ -221,8 +158,8 @@ private struct DashboardDetailsNavigationView: View {
                     }
                     .padding()
                     
-                    InfoRow(title: "Visited continents", value: "\(viewModel.visitedContinents.count) / 6", icon: "globe", color: .red, imageValue: false, imageValueString: nil)
-                    InfoRow(title: "Visited countries", value: "\(viewModel.visitedCountries) / 195", icon: "globe.europe.africa", color: .red, imageValue: false, imageValueString: nil)
+                    InfoRowView(title: "Visited continents", value: "\(viewModel.visitedContinents.count) / 6", icon: "globe", color: .red, imageValue: false, imageValueString: nil)
+                    InfoRowView(title: "Visited countries", value: "\(viewModel.visitedCountries) / 195", icon: "globe.europe.africa", color: .red, imageValue: false, imageValueString: nil)
                 }
                 .padding(.bottom, 7)
             }

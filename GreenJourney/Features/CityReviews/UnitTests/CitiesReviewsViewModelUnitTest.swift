@@ -118,7 +118,7 @@ final class CitiesReviewsViewModelUnitTest {
             continent: "Europe"
         )
         
-        await viewModel.getReviewsForSearchedCity()
+        await viewModel.getReviewsForSearchedCity(reload: true)
         
         #expect(viewModel.searchedCityAvailable == true)
         #expect(viewModel.selectedCityReviewElement != nil)
@@ -137,8 +137,6 @@ final class CitiesReviewsViewModelUnitTest {
             #expect(review.wasteBinsRating >= 0 && review.wasteBinsRating <= 5)
             #expect(review.cityIata == viewModel.selectedCity.iata)
             #expect(review.countryCode == viewModel.selectedCity.countryCode)
-            #expect(review.scoreShortDistance >= 0)
-            #expect(review.scoreLongDistance >= 0)
         }
     }
     
@@ -154,7 +152,7 @@ final class CitiesReviewsViewModelUnitTest {
             continent: "Europe"
         )
         
-        await viewModel.getReviewsForSearchedCity()
+        await viewModel.getReviewsForSearchedCity(reload: true)
         
         viewModel.selectedCityReviewElement = nil
         viewModel.searchedCityAvailable = false
@@ -209,7 +207,7 @@ final class CitiesReviewsViewModelUnitTest {
             countryCode: "FR",
             continent: "Europe"
         )
-        await viewModel.getReviewsForSearchedCity()
+        await viewModel.getReviewsForSearchedCity(reload: true)
         
         // call ViewModel function
         let userID = try mockModelContext.fetch(FetchDescriptor<User>()).first!.userID!
@@ -231,7 +229,7 @@ final class CitiesReviewsViewModelUnitTest {
             countryCode: "FR",
             continent: "Europe"
         )
-        await viewModel.getReviewsForSearchedCity()
+        await viewModel.getReviewsForSearchedCity(reload: true)
         
         // call ViewModel function
         let userID = try mockModelContext.fetch(FetchDescriptor<User>()).first!.userID!
@@ -255,10 +253,10 @@ final class CitiesReviewsViewModelUnitTest {
             countryCode: "FR",
             continent: "Europe"
         )
-        await viewModel.getReviewsForSearchedCity()
+        await viewModel.getReviewsForSearchedCity(reload: true)
     
         // selected city = Paris, user has visited Paris
-        #expect(viewModel.isReviewable(userID: userID) == true)
+        #expect(viewModel.isReviewable() == true)
     }
     
     @Test
@@ -276,10 +274,10 @@ final class CitiesReviewsViewModelUnitTest {
             countryCode: "DE",
             continent: "Europe"
         )
-        await viewModel.getReviewsForSearchedCity()
+        await viewModel.getReviewsForSearchedCity(reload: true)
         
         // selected city = Berlin, user has NOT visited Paris
-        #expect(viewModel.isReviewable(userID: userID) == false)
+        #expect(viewModel.isReviewable() == false)
     }
     
     @Test
@@ -502,10 +500,7 @@ final class CitiesReviewsViewModelUnitTest {
             cityIata: "iata",
             countryCode: "country code",
             firstName: "name",
-            lastName: "name",
-            scoreShortDistance: 1,
-            scoreLongDistance: 1,
-            badges: []
+            lastName: "name"
         )
         
         // set server behaviour
@@ -606,7 +601,7 @@ final class CitiesReviewsViewModelUnitTest {
             countryCode: "FR",
             continent: "Europe"
         )
-        await viewModel.getReviewsForSearchedCity()
+        await viewModel.getReviewsForSearchedCity(reload: true)
         
         #expect(viewModel.getNumPages() == 1)
     }
@@ -625,7 +620,7 @@ final class CitiesReviewsViewModelUnitTest {
             countryCode: "DE",
             continent: "Europe"
         )
-        await viewModel.getReviewsForSearchedCity()
+        await viewModel.getReviewsForSearchedCity(reload: true)
         
         #expect(viewModel.getNumPages() == 1)
     }
@@ -642,7 +637,7 @@ final class CitiesReviewsViewModelUnitTest {
             countryCode: "FR",
             continent: "Europe"
         )
-        await viewModel.getReviewsForSearchedCity()
+        await viewModel.getReviewsForSearchedCity(reload: true)
         
         #expect(viewModel.getNumPages() == 0)
     }

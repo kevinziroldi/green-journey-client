@@ -105,7 +105,7 @@ struct LoginView: View {
     }
 }
 
-struct LogoView: View {
+private struct LogoView: View {
     var body: some View {
         Image("login_logo")
             .resizable()
@@ -116,7 +116,7 @@ struct LogoView: View {
     }
 }
 
-struct LoginTextFieldsView: View {
+private struct LoginTextFieldsView: View {
     @ObservedObject var viewModel: AuthenticationViewModel
     
     var body: some View {
@@ -139,7 +139,7 @@ struct LoginTextFieldsView: View {
     }
 }
 
-struct ResetPasswordButtonView: View {
+private struct ResetPasswordButtonView: View {
     @ObservedObject var viewModel: AuthenticationViewModel
     
     var body: some View {
@@ -153,7 +153,7 @@ struct ResetPasswordButtonView: View {
     }
 }
 
-struct MessagesView: View {
+private struct MessagesView: View {
     @ObservedObject var viewModel: AuthenticationViewModel
     
     var body: some View {
@@ -171,7 +171,7 @@ struct MessagesView: View {
     }
 }
 
-struct LoginButtonsView: View {
+private struct LoginButtonsView: View {
     @ObservedObject var viewModel: AuthenticationViewModel
     
     var body: some View {
@@ -243,7 +243,7 @@ struct LoginButtonsView: View {
     }
 }
 
-struct MoveToSignupView: View {
+private struct MoveToSignupView: View {
     @ObservedObject var viewModel: AuthenticationViewModel
     @Binding var navigationPath: NavigationPath
     

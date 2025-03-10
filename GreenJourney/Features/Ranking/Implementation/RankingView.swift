@@ -109,7 +109,7 @@ struct RankingView: View {
     }
 }
 
-struct TopRoundedCorners: Shape {
+private struct TopRoundedCorners: Shape {
     var cornerRadius: CGFloat
     
     func path(in rect: CGRect) -> Path {
@@ -137,7 +137,7 @@ struct TopRoundedCorners: Shape {
     }
 }
 
-struct RankingTitleView: View {
+private struct RankingTitleView: View {
     var body: some View {
         Text("Ranking")
             .font(.system(size: 32).bold())
@@ -148,7 +148,7 @@ struct RankingTitleView: View {
     }
 }
 
-struct LeaderBoardPickerView: View {
+private struct LeaderBoardPickerView: View {
     @ObservedObject var viewModel: RankingViewModel
     
     var body: some View {
@@ -162,7 +162,7 @@ struct LeaderBoardPickerView: View {
     }
 }
 
-struct LeaderBoardsView: View {
+private struct LeaderBoardsView: View {
     @ObservedObject var viewModel: RankingViewModel
     @Binding var navigationPath: NavigationPath
     var gridItems: [GridItem]
@@ -222,7 +222,7 @@ struct LeaderBoardsView: View {
     }
 }
 
-struct LeaderBoardView: View {
+private struct LeaderBoardView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     @ObservedObject var viewModel: RankingViewModel
@@ -275,7 +275,7 @@ struct LeaderBoardView: View {
     }
 }
 
-struct LeaderBoardRow: View {
+private struct LeaderBoardRow: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     var gridItems: [GridItem]
@@ -351,7 +351,7 @@ struct LeaderBoardRow: View {
     }
 }
 
-struct LeaderBoardUserView: View {
+private struct LeaderBoardUserView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
 
     var userRanking: RankingElement

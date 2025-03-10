@@ -139,7 +139,7 @@ struct InsertReviewView: View {
     }
 }
 
-struct ReviewStarRating: View {
+private struct ReviewStarRating: View {
     let icon: String
     let color: Color
     @Binding var rating: Int

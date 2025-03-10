@@ -22,7 +22,7 @@ struct OptionDetailsView: View {
                     .padding(EdgeInsets(top: 10, leading: 15, bottom: 5, trailing: 15))
                     .overlay(Color.clear.accessibilityIdentifier("co2EmittedBox"))
                 
-                TravelRecapView(distance: option.getTotalDistance(), duration: option.getTotalDuration(), price: option.getTotalPrice(), greenPrice: option.getGreenPrice())
+                TravelRecapView(singleColumn: true, distance: option.getTotalDistance(), duration: option.getTotalDuration(), price: option.getTotalPrice(), greenPrice: option.getGreenPrice())
                     .padding()
                     .overlay(Color.clear.accessibilityIdentifier("travelRecap"))
                 
@@ -36,7 +36,7 @@ struct OptionDetailsView: View {
             
             ScrollView {
                 HStack(alignment: .top) {
-                    TravelRecapView(distance: option.getTotalDistance(), duration: option.getTotalDuration(), price: option.getTotalPrice(), greenPrice: option.getGreenPrice())
+                    TravelRecapView(singleColumn: true, distance: option.getTotalDistance(), duration: option.getTotalDuration(), price: option.getTotalPrice(), greenPrice: option.getGreenPrice())
                         .padding()
                         .overlay(Color.clear.accessibilityIdentifier("travelRecap"))
                     

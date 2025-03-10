@@ -4,9 +4,11 @@ import CoreML
 
 struct DestinationPredictionLogic {
     private var modelContext: ModelContext
+    
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
     }
+    
     func getRecommendation(predictionSize: Int) -> [CityCompleterDataset] {
         var predictedCities : [CityCompleterDataset] = []
         do {

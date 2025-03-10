@@ -79,8 +79,6 @@ private struct CompensationButtonsView: View {
                     // iOS
                     
                     HStack {
-                        
-                        
                         VStack(spacing: 0) {
                             HStack {
                                 VStack (spacing: 10) {
@@ -170,16 +168,15 @@ private struct CompensationButtonsView: View {
                                         .frame(width: 35, height: 35)
                                         .foregroundColor(.red)
                                 }
-                                
+                                                                
+                                Text("Co2 emitted: ")
+                                    .font(.system(size: 20).bold())
+                                    .foregroundColor(.red.opacity(0.8))
+                                    .padding(.leading, 5)
                                 Text(String(format: "%.0f", travelDetails.computeCo2Emitted()) + " Kg")
                                     .font(.system(size: 22).bold())
                                     .bold()
                                     .foregroundColor(.red.opacity(0.8))
-                                
-                                Text("Co2 emitted")
-                                    .font(.system(size: 20).bold())
-                                    .foregroundColor(.red.opacity(0.8))
-                                    .padding(.leading, 5)
                                 Spacer()
                             }
                             .padding(.horizontal)
@@ -198,16 +195,15 @@ private struct CompensationButtonsView: View {
                                         .foregroundColor(.green)
                                 }
                                 
+                                Text("Co2 compensated: ")
+                                    .font(.system(size: 20).bold())
+                                    .foregroundColor(.green.opacity(0.8))
+                                    .padding(.leading, 5)
                                 Text(String(format: "%.0f", travelDetails.travel.CO2Compensated) + " Kg")
                                     .font(.system(size: 20).bold())
                                     .bold()
                                     .foregroundColor(.green.opacity(0.8))
-
-                                Text("Co2 compensated")
-                                    .font(.system(size: 20).bold())
-                                    .foregroundColor(.green.opacity(0.8))
-                                    .padding(.leading, 5)
-
+                                
                                 Spacer()
                             }
                             .padding(EdgeInsets(top: 5, leading: 15, bottom: 10, trailing: 15))
@@ -288,8 +284,7 @@ private struct CompensationButtonsView: View {
                     }
                     .padding(.horizontal, 20)
                 }
-            }
-            else {
+            } else {
                 VStack {
                     HStack (spacing: 0){
                         Text("You planted: \(plantedTrees)")
