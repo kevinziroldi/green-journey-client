@@ -227,7 +227,7 @@ struct InfoCompensationView: View {
     }
 }
 
-struct SegmentsDetailsView: View {
+private struct SegmentsDetailsView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     var travelDetails: TravelDetails
     

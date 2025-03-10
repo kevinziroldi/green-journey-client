@@ -108,7 +108,7 @@ struct AllReviewsView: View {
     }
 }
 
-struct ReviewsListView: View {
+private struct ReviewsListView: View {
     var reviews: [Review]
     var page: Int = 0
     var paginatedReview: [Review] {
@@ -131,7 +131,7 @@ struct ReviewsListView: View {
     
 }
 
-struct SingleReviewView: View {
+private struct SingleReviewView: View {
     let review: Review
     var body: some View {
         ZStack {

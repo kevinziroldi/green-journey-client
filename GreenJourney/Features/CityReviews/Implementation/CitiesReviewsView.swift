@@ -101,7 +101,7 @@ struct CitiesReviewsView: View {
     }
 }
 
-struct BestCitiesTitle: View {
+private struct BestCitiesTitle: View {
     var body: some View {
         Text("Top Cities")
             .font(.title)
@@ -112,7 +112,7 @@ struct BestCitiesTitle: View {
     }
 }
 
-struct BestCitiesView: View {
+private struct BestCitiesView: View {
     @ObservedObject var viewModel: CitiesReviewsViewModel
     @Binding var navigationPath: NavigationPath
     
@@ -136,7 +136,7 @@ struct BestCitiesView: View {
     }
 }
 
-struct BestCityView: View {
+private struct BestCityView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     var city: CityCompleterDataset
@@ -242,7 +242,7 @@ struct BestCityView: View {
     }
 }
 
-struct CitiesReviewsTitleView: View {
+private struct CitiesReviewsTitleView: View {
     var body: some View {
         Text("Reviews")
             .font(.system(size: 32).bold())
@@ -253,7 +253,7 @@ struct CitiesReviewsTitleView: View {
     }
 }
 
-struct CitySearchView: View {
+private struct CitySearchView: View {
     @ObservedObject var viewModel: CitiesReviewsViewModel
     @Binding var searchTapped: Bool
     @Environment(\.colorScheme) var colorScheme: ColorScheme

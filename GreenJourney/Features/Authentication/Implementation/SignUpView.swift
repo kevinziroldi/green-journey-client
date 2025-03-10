@@ -80,7 +80,7 @@ struct SignUpView: View {
     }
 }
 
-struct SignupTitleView: View {
+private struct SignupTitleView: View {
     var body: some View {
         Text("Signup")
             .font(.system(size: 32).bold())
@@ -90,7 +90,7 @@ struct SignupTitleView: View {
     }
 }
 
-struct SignupDataFieldsView: View {
+private struct SignupDataFieldsView: View {
     @ObservedObject var viewModel: AuthenticationViewModel
     
     var body: some View {
@@ -138,7 +138,7 @@ struct SignupDataFieldsView: View {
     }
 }
 
-struct SignupButtonsView: View {
+private struct SignupButtonsView: View {
     @ObservedObject var viewModel: AuthenticationViewModel
     @Binding var navigationPath: NavigationPath
     

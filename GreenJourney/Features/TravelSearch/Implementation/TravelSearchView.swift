@@ -162,7 +162,7 @@ struct TravelSearchView: View {
     }
 }
 
-struct TravelSearchHeaderView: View {
+private struct TravelSearchHeaderView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     @Environment(\.modelContext) var modelContext: ModelContext
@@ -192,7 +192,7 @@ struct TravelSearchHeaderView: View {
     }
 }
 
-struct TravelChoiceView: View {
+private struct TravelChoiceView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     @ObservedObject var viewModel: TravelSearchViewModel
@@ -314,7 +314,7 @@ struct TravelChoiceView: View {
     }
 }
 
-struct DepartureTitleView: View {
+private struct DepartureTitleView: View {
     var body: some View {
         Text("From")
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -325,7 +325,7 @@ struct DepartureTitleView: View {
     }
 }
 
-struct DepartureCompleterView: View {
+private struct DepartureCompleterView: View {
     @Environment(\.modelContext) private var modelContext: ModelContext
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     
@@ -370,7 +370,7 @@ struct DepartureCompleterView: View {
     }
 }
 
-struct DestinationTitleView: View {
+private struct DestinationTitleView: View {
     var body: some View {
         Text("To")
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -381,7 +381,7 @@ struct DestinationTitleView: View {
     }
 }
 
-struct DestinationCompleterView: View {
+private struct DestinationCompleterView: View {
     @Environment(\.modelContext) private var modelContext: ModelContext
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     
@@ -429,7 +429,7 @@ struct DestinationCompleterView: View {
     }
 }
 
-struct OutwardDatePickerView: View {
+private struct OutwardDatePickerView: View {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     
     @Binding var dateTapped: Bool
@@ -463,7 +463,7 @@ struct OutwardDatePickerView: View {
     }
 }
 
-struct ReturnDatePickerView: View {
+private struct ReturnDatePickerView: View {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     
     @Binding var dateReturnTapped: Bool
@@ -501,7 +501,7 @@ struct ReturnDatePickerView: View {
     }
 }
 
-struct DatePickerView: View {
+private struct DatePickerView: View {
     @Binding var dateTapped: Bool
     @State private var offsetY: CGFloat = 0
     var title: String
@@ -543,7 +543,7 @@ struct DatePickerView: View {
     }
 }
 
-struct AIPredictionView: View {
+private struct AIPredictionView: View {
     @Environment(\.modelContext) private var modelContext: ModelContext
     
     @ObservedObject var viewModel: TravelSearchViewModel

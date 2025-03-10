@@ -47,7 +47,7 @@ struct CityReviewsDetailsView: View {
     }
 }
 
-struct CityReviewsTitleView: View {
+private struct CityReviewsTitleView: View {
     var viewModel: CitiesReviewsViewModel
     
     var body: some View {
@@ -60,7 +60,7 @@ struct CityReviewsTitleView: View {
     }
 }
 
-struct ReviewsAverageView: View {
+private struct ReviewsAverageView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     var selectedCityReviewElement: CityReviewElement
@@ -297,7 +297,7 @@ struct ReviewsAverageView: View {
     }
 }
 
-struct LatestReviewsView: View {
+private struct LatestReviewsView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     var viewModel: CitiesReviewsViewModel
@@ -361,7 +361,7 @@ struct LatestReviewsView: View {
     }
 }
 
-struct CarouselView: View {
+private struct CarouselView: View {
     var reviews: [Review]
     let width: CGFloat = UIScreen.main.bounds.width * 0.7
     var body: some View {
@@ -383,7 +383,7 @@ struct CarouselView: View {
     }
 }
 
-struct CardView: View {
+private struct CardView: View {
     let review: Review
     let width: CGFloat
     var body: some View {
@@ -467,7 +467,7 @@ struct CardView: View {
     }
 }
 
-struct ReviewsBlocksView: View {
+private struct ReviewsBlocksView: View {
     var reviews: [Review]
     @State private var availableWidth: CGFloat = 0
 
@@ -503,9 +503,7 @@ struct ReviewsBlocksView: View {
     }
 }
 
-
-
-struct InfoReviewView: View {
+private struct InfoReviewView: View {
     @Binding var isPresented: Bool
         var body: some View {
             ZStack {

@@ -125,7 +125,6 @@ struct InfoRow: View {
     }
 }
 
-
 private struct DashboardDetailsNavigationView: View {
     @ObservedObject var viewModel: DashboardViewModel
     

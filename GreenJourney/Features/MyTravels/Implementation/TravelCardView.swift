@@ -130,7 +130,7 @@ struct TravelCardView: View {
     }
 }
 
-struct VehiclesView: View {
+private struct VehiclesView: View {
     var oneWay: Bool
     var outwardVehicle: String
     var returnVehicle: String
@@ -158,7 +158,7 @@ struct VehiclesView: View {
     }
 }
 
-struct DepartureDestinationAllDatesInfoView: View {
+private struct DepartureDestinationAllDatesInfoView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     var travelDetails: TravelDetails
     
@@ -257,7 +257,7 @@ struct DepartureDestinationAllDatesInfoView: View {
     }
 }
 
-struct DirectionTagView: View {
+private struct DirectionTagView: View {
     var direction: Bool
 
     var body: some View {
