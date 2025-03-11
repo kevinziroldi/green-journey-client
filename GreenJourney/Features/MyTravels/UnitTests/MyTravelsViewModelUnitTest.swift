@@ -43,7 +43,25 @@ final class MyTravelsViewModelUnitTest {
         let segments = try mockModelContext.fetch(FetchDescriptor<Segment>())
         #expect(travels.count > 0)
         #expect(segments.count > 0)
-        #expect(viewModel.travelDetailsList.count > 0)
+        #expect(viewModel.travelDetailsList.count == 10)
+    }
+    
+    @Test
+    func testGetUserTravelsTwice() async throws {
+        self.mockServerService.shouldSucceed = true
+        
+        // call first time
+        await viewModel.getUserTravels()
+        let travels = try mockModelContext.fetch(FetchDescriptor<Travel>())
+        let segments = try mockModelContext.fetch(FetchDescriptor<Segment>())
+        #expect(travels.count > 0)
+        #expect(segments.count > 0)
+        #expect(viewModel.travelDetailsList.count == 10)
+        
+        // call again
+        await viewModel.getUserTravels()
+        // check that old travels have been removed
+        #expect(viewModel.travelDetailsList.count == 10)
     }
     
     @Test
@@ -309,5 +327,182 @@ final class MyTravelsViewModelUnitTest {
             }
         }
         #expect(foundTravel)
+    }
+    
+    @Test
+    func testGetNumTreesNoCo2Emitted() {
+        let travelDetails = TravelDetails(
+            travel: Travel(
+                travelID: 1,
+                userID: 1,
+                confirmed: true),
+            segments: [
+                Segment(
+                    segmentID: 1,
+                    departureID: 1,
+                    destinationID: 1,
+                    departureCity: "City1",
+                    departureCountry: "City1",
+                    destinationCity: "City2",
+                    destinationCountry: "City2",
+                    dateTime: Date.now,
+                    duration: 100,
+                    vehicle: Vehicle.car,
+                    segmentDescription: "desription",
+                    price: 100,
+                    co2Emitted: 0,
+                    distance: 100,
+                    numSegment: 1,
+                    isOutward: true,
+                    travelID: 1
+                )
+            ]
+        )
+        
+        let numTrees = viewModel.getNumTrees(travelDetails)
+        
+        #expect(numTrees == 0)
+    }
+    
+    @Test
+    func testGetNumTreesExactValue() {
+        let travelDetails = TravelDetails(
+            travel: Travel(
+                travelID: 1,
+                userID: 1,
+                confirmed: true),
+            segments: [
+                Segment(
+                    segmentID: 1,
+                    departureID: 1,
+                    destinationID: 1,
+                    departureCity: "City1",
+                    departureCountry: "City1",
+                    destinationCity: "City2",
+                    destinationCountry: "City2",
+                    dateTime: Date.now,
+                    duration: 100,
+                    vehicle: Vehicle.car,
+                    segmentDescription: "desription",
+                    price: 100,
+                    co2Emitted: 75,
+                    distance: 100,
+                    numSegment: 1,
+                    isOutward: true,
+                    travelID: 1
+                )
+            ]
+        )
+        
+        let numTrees = viewModel.getNumTrees(travelDetails)
+        
+        #expect(numTrees == 1)
+    }
+    
+    @Test
+    func testGetNumTreesCeiling() {
+        let travelDetails = TravelDetails(
+            travel: Travel(
+                travelID: 1,
+                userID: 1,
+                confirmed: true),
+            segments: [
+                Segment(
+                    segmentID: 1,
+                    departureID: 1,
+                    destinationID: 1,
+                    departureCity: "City1",
+                    departureCountry: "City1",
+                    destinationCity: "City2",
+                    destinationCountry: "City2",
+                    dateTime: Date.now,
+                    duration: 100,
+                    vehicle: Vehicle.car,
+                    segmentDescription: "desription",
+                    price: 100,
+                    co2Emitted: 76,
+                    distance: 100,
+                    numSegment: 1,
+                    isOutward: true,
+                    travelID: 1
+                )
+            ]
+        )
+        
+        let numTrees = viewModel.getNumTrees(travelDetails)
+        
+        #expect(numTrees == 2)
+    }
+    
+    @Test
+    func testGetPlantedTreesNoCo2Compensated() {
+        let travelDetails = TravelDetails(
+            travel: Travel(
+                travelID: 1,
+                userID: 1,
+                confirmed: true),
+            segments: [
+                Segment(
+                    segmentID: 1,
+                    departureID: 1,
+                    destinationID: 1,
+                    departureCity: "City1",
+                    departureCountry: "City1",
+                    destinationCity: "City2",
+                    destinationCountry: "City2",
+                    dateTime: Date.now,
+                    duration: 100,
+                    vehicle: Vehicle.car,
+                    segmentDescription: "desription",
+                    price: 100,
+                    co2Emitted: 100,
+                    distance: 100,
+                    numSegment: 1,
+                    isOutward: true,
+                    travelID: 1
+                )
+            ]
+        )
+        travelDetails.travel.CO2Compensated = 0
+        
+        let plantedTrees = viewModel.getPlantedTrees(travelDetails)
+        
+        #expect(plantedTrees == 0)
+    }
+    
+    @Test
+    func testGetPlantedTreesCo2Compensated() {
+        let travelDetails = TravelDetails(
+            travel: Travel(
+                travelID: 1,
+                userID: 1,
+                confirmed: true),
+            segments: [
+                Segment(
+                    segmentID: 1,
+                    departureID: 1,
+                    destinationID: 1,
+                    departureCity: "City1",
+                    departureCountry: "City1",
+                    destinationCity: "City2",
+                    destinationCountry: "City2",
+                    dateTime: Date.now,
+                    duration: 100,
+                    vehicle: Vehicle.car,
+                    segmentDescription: "desription",
+                    price: 100,
+                    co2Emitted: 100,
+                    distance: 100,
+                    numSegment: 1,
+                    isOutward: true,
+                    travelID: 1
+                )
+            ]
+        )
+        travelDetails.travel.CO2Compensated = 75
+        
+        let plantedTrees = viewModel.getPlantedTrees(travelDetails)
+        
+        #expect(plantedTrees == 1)
     }
 }

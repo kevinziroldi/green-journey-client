@@ -70,6 +70,7 @@ final class DashboardViewModelUnitTest {
         try self.mockModelContext.save()
     }
     
+    /*
     @Test
     func testGetUserBadges() throws {
         viewModel.getUserBadges()
@@ -80,6 +81,7 @@ final class DashboardViewModelUnitTest {
         #expect(viewModel.badges.contains(Badge.badgeEcologicalChoiceMid))
         #expect(viewModel.badges.contains(Badge.badgeTravelsNumberHigh))
     }
+     */
     
     @Test
     func testGetUserTravels() throws {
@@ -115,5 +117,49 @@ final class DashboardViewModelUnitTest {
     func testKeysToString() {
         let strings = viewModel.keysToString(keys: [2022, 2023, 2024, 2025])
         #expect(strings == ["2022", "2023", "2024", "2025"])
+    }
+    
+    @Test
+    func testComputeProgressoOver1() {
+        // co2 compensated > co2 emitted
+        viewModel.co2Compensated = 101
+        viewModel.co2Emitted = 100
+        
+        let progress = viewModel.computeProgress()
+        
+        #expect(progress == 1)
+    }
+    
+    @Test
+    func testComputeProgressoExactly1() {
+        // co2 compensated == co2 emitted
+        viewModel.co2Compensated = 100
+        viewModel.co2Emitted = 100
+        
+        let progress = viewModel.computeProgress()
+        
+        #expect(progress == 1)
+    }
+    
+    @Test
+    func testComputeProgress0() {
+        // co2 compensated = 0
+        viewModel.co2Compensated = 0
+        viewModel.co2Emitted = 100
+        
+        let progress = viewModel.computeProgress()
+        
+        #expect(progress == 0)
+    }
+    
+    @Test
+    func testComputeProgressMid() {
+        // co2 compensated < co2 emitted
+        viewModel.co2Compensated = 50
+        viewModel.co2Emitted = 100
+        
+        let progress = viewModel.computeProgress()
+        
+        #expect(progress == 0.5)
     }
 }

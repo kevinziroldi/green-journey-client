@@ -96,6 +96,36 @@ final class AuthenticationViewModelUnitTest {
     }
     
     @Test
+    func testLoginUserAlreadyLogged() async throws {
+        // set parameters
+        self.mockFirebaseAuthService.shouldSucceed = true
+        self.mockFirebaseAuthService.emailVerified = true
+        self.mockServerService.shouldSucceed = true
+        
+        // login first user
+        viewModel.email = "test@test.com"
+        viewModel.password = "test"
+        await viewModel.login()
+        
+        #expect(viewModel.isEmailVerificationActiveLogin == false)
+        #expect(viewModel.isLogged == true)
+        #expect(viewModel.errorMessage == nil)
+        var users = try mockModelContext.fetch(FetchDescriptor<User>())
+        #expect(users.count == 1)
+        
+        // login new user
+        viewModel.email = "test2@test2.com"
+        viewModel.password = "test2"
+        await viewModel.login()
+        
+        #expect(viewModel.isEmailVerificationActiveLogin == false)
+        #expect(viewModel.isLogged == true)
+        #expect(viewModel.errorMessage == nil)
+        users = try mockModelContext.fetch(FetchDescriptor<User>())
+        #expect(users.count == 1)
+    }
+    
+    @Test
     func testLogout() async throws {
         // set email and password
         viewModel.email = "test@test.com"

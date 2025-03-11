@@ -126,7 +126,6 @@ class AuthenticationViewModel: ObservableObject {
                     // error happened
                     print("Error deleting user from Firebase: \(error.localizedDescription)")
                 }
-                return
             }
         } catch {
             self.errorMessage = "Error creating account"
@@ -166,7 +165,6 @@ class AuthenticationViewModel: ObservableObject {
         }catch {
             print("Error reloading user: \(error.localizedDescription)")
             self.errorMessage = "Error verifying email"
-            return
         }
     }
     
@@ -207,7 +205,6 @@ class AuthenticationViewModel: ObservableObject {
             } catch {
                 print("Error while saving user to SwiftData: \(error)")
                 self.errorMessage = "Error logging in"
-                return
             }
         }
     }

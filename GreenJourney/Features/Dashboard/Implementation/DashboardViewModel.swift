@@ -124,6 +124,7 @@ class DashboardViewModel: ObservableObject {
             return co2Compensated/co2Emitted
         }
     }
+    
     private func getDestContinent(country: String) -> String {
         var fetchDescriptor = FetchDescriptor<CityCompleterDataset>(
             predicate: #Predicate<CityCompleterDataset> {

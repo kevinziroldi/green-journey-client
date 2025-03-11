@@ -92,7 +92,7 @@ class CitiesReviewsViewModel: ObservableObject {
     }
     
     func getUserReview(userID: Int) {
-        guard let selectedCityReviewElement else {return}
+        guard let selectedCityReviewElement else { return }
         userReview = nil
         for review in selectedCityReviewElement.reviews {
             if review.userID == userID {
@@ -111,10 +111,10 @@ class CitiesReviewsViewModel: ObservableObject {
             predicate: #Predicate { travel in
                 travel.confirmed
             }
-            )
+        )
         let fetchSegments = FetchDescriptor<Segment>(
             predicate: #Predicate { segment in
-                 segment.isOutward == true
+                segment.isOutward == true
             },
             sortBy: [
                 SortDescriptor(\Segment.travelID),
@@ -131,6 +131,8 @@ class CitiesReviewsViewModel: ObservableObject {
             
             // cityName + countryName uniquely identifies a city in the dataset
             for segment in filteredSegments {
+                print("VISITED \(segment.destinationCity), \(segment.destinationCountry)")
+                
                 if city.cityName == segment.destinationCity {
                     if city.countryName == segment.destinationCountry {
                         return true
@@ -152,7 +154,7 @@ class CitiesReviewsViewModel: ObservableObject {
             })).map( \.travelID )
             let segments = try modelContext.fetch(FetchDescriptor<Segment>(
                 predicate: #Predicate { segment in
-                     segment.isOutward == true
+                    segment.isOutward == true
                 },
                 sortBy: [
                     SortDescriptor(\Segment.travelID),

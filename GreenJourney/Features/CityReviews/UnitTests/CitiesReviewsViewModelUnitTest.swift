@@ -79,7 +79,7 @@ final class CitiesReviewsViewModelUnitTest {
     }
     
     private func addTravelsToSwiftData() throws {
-        let mockTravel = Travel(travelID: 1, userID: 53)
+        let mockTravel = Travel(travelID: 1, userID: 53, confirmed: true)
         
         let mockSegment = Segment(
             segmentID: 1,
@@ -118,7 +118,7 @@ final class CitiesReviewsViewModelUnitTest {
             continent: "Europe"
         )
         
-        await viewModel.getReviewsForSearchedCity(reload: true)
+        await viewModel.getReviewsForSearchedCity(reload: false)
         
         #expect(viewModel.searchedCityAvailable == true)
         #expect(viewModel.selectedCityReviewElement != nil)
@@ -255,6 +255,9 @@ final class CitiesReviewsViewModelUnitTest {
         )
         await viewModel.getReviewsForSearchedCity(reload: true)
     
+        #expect(viewModel.selectedCity.cityName == "Paris")
+        #expect(viewModel.selectedCity.countryName == "France")
+        
         // selected city = Paris, user has visited Paris
         #expect(viewModel.isReviewable() == true)
     }
@@ -278,6 +281,19 @@ final class CitiesReviewsViewModelUnitTest {
         
         // selected city = Berlin, user has NOT visited Paris
         #expect(viewModel.isReviewable() == false)
+    }
+    
+    @Test
+    func testGetReviewableCities() async {
+        // user has travel Milano - Paris
+        
+        // call method
+        await viewModel.getReviewableCities()
+        
+        // only destination should be reviewable
+        #expect(viewModel.reviewableCities.count == 1)
+        #expect(viewModel.reviewableCities[0].cityName == "Paris")
+        #expect(viewModel.reviewableCities[0].countryName == "France")
     }
     
     @Test
@@ -640,5 +656,31 @@ final class CitiesReviewsViewModelUnitTest {
         await viewModel.getReviewsForSearchedCity(reload: true)
         
         #expect(viewModel.getNumPages() == 0)
+    }
+    
+    @Test
+    func testGetDestinationCityPresent() {
+        // call method
+        viewModel.getDestinationCity(city: "Paris", country: "France")
+        
+        // check city present
+        #expect(viewModel.selectedCity != nil)
+        #expect(viewModel.selectedCity.cityName == "Paris")
+        #expect(viewModel.selectedCity.countryName == "France")
+    }
+    
+    @Test
+    func testGetDestinationCityNotPresent() {
+        // check no selected city
+        #expect(viewModel.selectedCity.cityName == "")
+        #expect(viewModel.selectedCity.countryName == "")
+        
+        
+        // call method
+        viewModel.getDestinationCity(city: "NonExistingCity", country: "NonExistingCity")
+        
+        // check city not present
+        #expect(viewModel.selectedCity.cityName == "")
+        #expect(viewModel.selectedCity.countryName == "")
     }
 }
