@@ -59,18 +59,9 @@ struct RankingView: View {
                     ScoresView(scoreLongDistance: viewModel.longDistanceScore, scoreShortDistance: viewModel.shortDistanceScore)
                     Spacer()
                     // LeaderBoards
-                    Text("Long Distance")
-                        .font(.system(size: 24).bold())
-                        .padding(.horizontal)
-                        .fontWeight(.semibold)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    LeaderBoardsView(viewModel: viewModel, navigationPath: $navigationPath, gridItems: gridItemsCompactDevice, currentRanking: Array(viewModel.longDistanceRanking.prefix(3)))
-                    Text("Short Distance")
-                        .font(.system(size: 24).bold())
-                        .padding(.horizontal)
-                        .fontWeight(.semibold)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    LeaderBoardsView(viewModel: viewModel, navigationPath: $navigationPath, gridItems: gridItemsRegularDevice, currentRanking: Array(viewModel.shortDistanceRanking.prefix(3)))
+                    LeaderboardNavigationView(title: "Long Distance", leaderboard: Array(viewModel.longDistanceRanking.prefix(3)), gridItems: gridItemsCompactDevice, leaderboardType: true)
+                
+                    LeaderboardNavigationView(title: "Short Distance", leaderboard: Array(viewModel.shortDistanceRanking.prefix(3)), gridItems: gridItemsCompactDevice, leaderboardType: false)
                     
                     Spacer()
                 }
@@ -102,7 +93,7 @@ struct RankingView: View {
                 Spacer()
                 
                 // LeaderBoards
-                LeaderBoardsView(viewModel: viewModel, navigationPath: $navigationPath, gridItems: gridItemsCompactDevice, currentRanking: Array(viewModel.longDistanceRanking.prefix(3)))
+                LeaderBoardsView(viewModel: viewModel, navigationPath: $navigationPath, gridItems: gridItemsRegularDevice, currentRanking: Array(viewModel.longDistanceRanking.prefix(3)))
                     .frame(maxWidth: 700)
                 LeaderBoardsView(viewModel: viewModel, navigationPath: $navigationPath, gridItems: gridItemsRegularDevice, currentRanking: Array(viewModel.shortDistanceRanking.prefix(3)))
                     .frame(maxWidth: 700)
@@ -333,6 +324,9 @@ private struct LeaderBoardRow: View {
                 }
                 
                 Text(String(format: "%.1f", leaderBoardSelected ?  leaderboard[index].scoreLongDistance : leaderboard[index].scoreShortDistance))
+                    .scaledToFit()
+                    .minimumScaleFactor(0.6)
+                    .lineLimit(1)
                     .foregroundStyle(
                         LinearGradient(
                             gradient: Gradient(colors: [.green, .blue]),
@@ -449,12 +443,90 @@ private struct UserBadgesView: View {
                 }
                 .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 0))
                 HStack{
-                    BadgeView(badges: badges, dim: 110, inline: false)
+                    BadgeView(badges: badges, dim: 80, inline: inline)
                         .padding()
                 }
             }
         }
         .padding(EdgeInsets(top: 5, leading: 15, bottom: 7, trailing: 15))
         .overlay(Color.clear.accessibilityIdentifier("userBadges"))
+    }
+}
+
+struct LeaderboardNavigationView: View {
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    let title: String
+    let leaderboard: [RankingElement]
+    var gridItems: [GridItem]
+    let leaderboardType: Bool
+
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 15)
+                .fill(Color(uiColor: .systemBackground))
+                .shadow(color: AppColors.mainColor.opacity(0.3), radius: 5, x: 0, y: 3)
+            VStack (spacing:0){
+                HStack {
+                    Text(title)
+                        .font(.title)
+                        .foregroundStyle(AppColors.mainColor.opacity(0.8))
+                        .fontWeight(.semibold)
+                        .scaledToFit()
+                        .minimumScaleFactor(0.6)
+                        .lineLimit(1)
+                    Spacer()
+                    Image(systemName: "list.number")
+                        .foregroundColor(AppColors.mainColor.opacity(0.8))
+                        .font(.title2)
+                        .fontWeight(.bold)
+                    Image(systemName: "chevron.right")
+                        .foregroundColor(AppColors.mainColor.opacity(0.8))
+                        .font(.title2)
+                        .fontWeight(.bold)
+                }
+                .padding()
+                ZStack {
+                    RoundedRectangle(cornerRadius: 20)
+                        .stroke(AppColors.mainColor, lineWidth: 3)
+                        .padding(.top, 5)
+                    VStack (spacing: 0) {
+                        if leaderboard.isEmpty {
+                            CircularProgressView()
+                                .padding(30)
+                        } else {
+                            LazyVGrid(columns: gridItems, spacing: 10) {
+                                Text("#.")
+                                    .font(.headline)
+                                Text("User")
+                                    .font(.headline)
+                                
+                                if horizontalSizeClass != .compact {
+                                    Text("Badges")
+                                        .font(.headline)
+                                }
+                                
+                                Text("Score")
+                                    .font(.headline)
+                            }
+                            .padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
+                            .foregroundStyle(.white)
+                            .background(
+                                AppColors.mainColor
+                                    .clipShape(TopRoundedCorners(cornerRadius: 20))
+                            )
+                            .overlay(Color.clear.accessibilityIdentifier("tableHeader"))
+                            
+                            ForEach(leaderboard.indices, id: \.self) { index in
+                                LeaderBoardRow(gridItems: gridItems, leaderboard: leaderboard, leaderBoardSelected: leaderboardType, index: index)
+                                    .accessibilityIdentifier("rankingRow_\(index)")
+                            }
+                            .padding(EdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 0))
+                        }
+                    }
+                }
+                .padding(10)
+            }
+        }
+        .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
     }
 }
