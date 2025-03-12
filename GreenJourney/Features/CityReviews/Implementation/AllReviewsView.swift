@@ -10,8 +10,10 @@ struct AllReviewsView: View {
     var body: some View {
         VStack {
             if let selectedCity = viewModel.selectedCityReviewElement {
-                Text(viewModel.selectedCity.cityName)
-                    .font(.title)
+                Text(viewModel.selectedCity.cityName + ", " + viewModel.selectedCity.countryName)
+                    .font(.system(size: 32).bold())
+                    .padding()
+                    .fontWeight(.semibold)
                     .accessibilityIdentifier("cityName")
                 
                 Spacer()
