@@ -74,17 +74,17 @@ final class OutwardOptionsViewUITest: XCTestCase {
     
     func testOutwardOptionsViewElementsExist() {
         // UI elements
-        let departureLabel = app.staticTexts["departureLabel"]
+        let fromTravelHeader = app.staticTexts["fromTravelHeader"]
         let fromToLine = app.otherElements["fromToLine"]
-        let destinationLabel = app.staticTexts["destinationLabel"]
-        let datePicked = app.staticTexts["datePicked"]
+        let toTravelHeader = app.staticTexts["toTravelHeader"]
+        let departureDate = app.staticTexts["departureDate"]
         let outwardOption_0 = app.buttons["outwardOption_0"]
         
         // check elements present
-        XCTAssertTrue(departureLabel.exists, "departureLabel not displayed")
+        XCTAssertTrue(fromTravelHeader.exists, "fromTravelHeader not displayed")
         XCTAssertTrue(fromToLine.exists, "fromToLine not displayed")
-        XCTAssertTrue(destinationLabel.exists, "destinationLabel not displayed")
-        XCTAssertTrue(datePicked.exists, "datePicked not displayed")
+        XCTAssertTrue(toTravelHeader.exists, "toTravelHeader not displayed")
+        XCTAssertTrue(departureDate.exists, "departureDate not displayed")
         XCTAssertTrue(outwardOption_0.exists, "outwardOption_0 not displayed")
     }
     
