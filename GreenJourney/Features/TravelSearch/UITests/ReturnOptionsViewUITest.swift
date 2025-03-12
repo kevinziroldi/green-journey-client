@@ -105,17 +105,17 @@ final class ReturnOptionsViewUITest: XCTestCase {
     
     func testReturnOptionsElementsPresent() {
         // UI elements
-        let arrivalLabel = app.staticTexts["arrivalLabel"]
+        let fromTravelHeader = app.staticTexts["fromTravelHeader"]
         let fromToLine = app.otherElements["fromToLine"]
-        let departureLabel = app.staticTexts["departureLabel"]
-        let datePicked = app.staticTexts["datePicked"]
+        let toTravelHeader = app.staticTexts["toTravelHeader"]
+        let departureDate = app.staticTexts["departureDate"]
         let returnOption_0 = app.buttons["returnOption_0"]
         
         // check elements present
-        XCTAssertTrue(departureLabel.exists, "departureLabel not displayed")
+        XCTAssertTrue(fromTravelHeader.exists, "fromTravelHeader not displayed")
         XCTAssertTrue(fromToLine.exists, "fromToLine not displayed")
-        XCTAssertTrue(arrivalLabel.exists, "destinationLabel not displayed")
-        XCTAssertTrue(datePicked.exists, "datePicked not displayed")
+        XCTAssertTrue(toTravelHeader.exists, "toTravelHeader not displayed")
+        XCTAssertTrue(departureDate.exists, "date not displayed")
         XCTAssertTrue(returnOption_0.exists, "outwardOption_0 not displayed")
     }
     
