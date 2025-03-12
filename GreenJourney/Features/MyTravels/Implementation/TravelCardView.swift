@@ -12,7 +12,7 @@ struct TravelCardView: View {
             // iOS
             
             ZStack {
-                RoundedRectangle(cornerRadius: 20)
+                RoundedRectangle(cornerRadius: 15)
                     .stroke(computeTravelColor(travel: travelDetails), lineWidth: 5)
                     .fill(computeTravelBackColor(travel: travelDetails))
                 
@@ -60,7 +60,7 @@ struct TravelCardView: View {
             // iPadOS
             
             ZStack {
-                RoundedRectangle(cornerRadius: 20)
+                RoundedRectangle(cornerRadius: 15)
                     .stroke(computeTravelColor(travel: travelDetails), lineWidth: 5)
                     .fill(computeTravelBackColor(travel: travelDetails))
                 

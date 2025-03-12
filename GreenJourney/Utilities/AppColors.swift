@@ -6,7 +6,8 @@ enum AppColors {
     static let ecoRedTravel = LinearGradient(colors: [Color(red: 184/255, green: 56/255, blue: 53/255), .red], startPoint: .bottomLeading, endPoint: .topTrailing)
     
     static let mainColor = Color(red: 10/255, green: 159/255, blue: 183/255)
-    
+    static let backColorLight = Color(red: 245/255, green: 245/255, blue: 245/255)
+    static let backColorDark = Color(red: 10/255, green: 10/255, blue: 10/255)
     // verde
     //static let mainColor = Color(red: 20/255, green: 184/255, blue: 23/255)
     // verde

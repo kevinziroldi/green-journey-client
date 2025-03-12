@@ -2,6 +2,7 @@ import SwiftUI
 
 struct WorldExplorationView: View {
     @ObservedObject var viewModel: DashboardViewModel
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     var body: some View {
         ScrollView {
             VStack {
@@ -60,6 +61,7 @@ struct WorldExplorationView: View {
             }
             .padding(.horizontal)
         }
+        .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
     }
 }
 

@@ -37,78 +37,70 @@ struct RankingView: View {
     }
     
     var body: some View {
-        if horizontalSizeClass == .compact {
-            // iOS
-            
-            ScrollView {
-                VStack {
-                    HStack {
-                        // title
-                        RankingTitleView()
+        VStack {
+            if horizontalSizeClass == .compact {
+                // iOS
+                ScrollView {
+                    VStack {
+                        HStack {
+                            // title
+                            RankingTitleView()
+                            
+                            Spacer()
+                            
+                            // user preferences button
+                            UserPreferencesButtonView(navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
+                        }
+                        .padding(5)
+                        
+                        
+                        UserBadgesView(legendTapped: $legendTapped, badges: viewModel.badges, inline: true)
+                        
+                        ScoresView(scoreLongDistance: viewModel.longDistanceScore, scoreShortDistance: viewModel.shortDistanceScore)
+                        Spacer()
+                        // LeaderBoards
+                        LeaderboardNavigationView(title: "Long Distance", leaderboard: Array(viewModel.longDistanceRanking.prefix(3)), gridItems: gridItemsCompactDevice, leaderboardType: true)
+                        
+                        LeaderboardNavigationView(title: "Short Distance", leaderboard: Array(viewModel.shortDistanceRanking.prefix(3)), gridItems: gridItemsCompactDevice, leaderboardType: false)
                         
                         Spacer()
-                        
-                        // user preferences button
-                        UserPreferencesButtonView(navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
                     }
-                    .padding(5)
+                    .padding(.horizontal)
+                }
+            } else {
+                // iPadOS
+                
+                ScrollView {
+                    // title
+                    RankingTitleView()
+                        .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
                     
+                    // picker
+                    LeaderBoardPickerView(viewModel: viewModel)
+                        .frame(maxWidth: 400) // set a max width to control the size
                     
-                    UserBadgesView(legendTapped: $legendTapped, badges: viewModel.badges, inline: true)
-                    
-                    ScoresView(scoreLongDistance: viewModel.longDistanceScore, scoreShortDistance: viewModel.shortDistanceScore)
                     Spacer()
+                    
                     // LeaderBoards
-                    LeaderboardNavigationView(title: "Long Distance", leaderboard: Array(viewModel.longDistanceRanking.prefix(3)), gridItems: gridItemsCompactDevice, leaderboardType: true)
-                
-                    LeaderboardNavigationView(title: "Short Distance", leaderboard: Array(viewModel.shortDistanceRanking.prefix(3)), gridItems: gridItemsCompactDevice, leaderboardType: false)
+                    LeaderBoardsView(viewModel: viewModel, navigationPath: $navigationPath, gridItems: gridItemsRegularDevice, currentRanking: Array(viewModel.longDistanceRanking.prefix(3)))
+                        .frame(maxWidth: 700)
+                    LeaderBoardsView(viewModel: viewModel, navigationPath: $navigationPath, gridItems: gridItemsRegularDevice, currentRanking: Array(viewModel.shortDistanceRanking.prefix(3)))
+                        .frame(maxWidth: 700)
                     
                     Spacer()
                 }
-                .padding(.horizontal)
             }
-            .sheet(isPresented: $legendTapped) {
-                LegendBadgeView(isPresented: $legendTapped)
-                    .presentationDetents([.large])
-                    .presentationCornerRadius(30)
-            }
-            .onAppear {
-                Task {
-                    await viewModel.getUserFromServer()
-                    await viewModel.fecthRanking()
-                }
-            }
-        } else {
-            // iPadOS
-            
-            ScrollView {
-                // title
-                RankingTitleView()
-                    .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
-                
-                // picker
-                LeaderBoardPickerView(viewModel: viewModel)
-                    .frame(maxWidth: 400) // set a max width to control the size
-                
-                Spacer()
-                
-                // LeaderBoards
-                LeaderBoardsView(viewModel: viewModel, navigationPath: $navigationPath, gridItems: gridItemsRegularDevice, currentRanking: Array(viewModel.longDistanceRanking.prefix(3)))
-                    .frame(maxWidth: 700)
-                LeaderBoardsView(viewModel: viewModel, navigationPath: $navigationPath, gridItems: gridItemsRegularDevice, currentRanking: Array(viewModel.shortDistanceRanking.prefix(3)))
-                    .frame(maxWidth: 700)
-                
-                Spacer()
-            }
-            .sheet(isPresented: $legendTapped) {
-                LegendBadgeView(isPresented: $legendTapped)
-                    .presentationDetents([.large])
-                    .presentationCornerRadius(30)
-            }
-            .onAppear {
-                Task {
-                    await viewModel.fecthRanking()
-                }
+        }
+        .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
+        .sheet(isPresented: $legendTapped) {
+            LegendBadgeView(isPresented: $legendTapped)
+                .presentationDetents([.medium])
+                .presentationCornerRadius(15)
+        }
+        .onAppear {
+            Task {
+                await viewModel.getUserFromServer()
+                await viewModel.fecthRanking()
             }
         }
     }
@@ -184,7 +176,7 @@ private struct LeaderBoardsView: View {
             }
             else {
                 ZStack {
-                    RoundedRectangle(cornerRadius: 20)
+                    RoundedRectangle(cornerRadius: 10)
                         .stroke(AppColors.mainColor, lineWidth: 3)
                         .padding(.top, 5)
                     VStack{
@@ -247,7 +239,7 @@ private struct LeaderBoardView: View {
             .foregroundStyle(.white)
             .background(
                 AppColors.mainColor
-                    .clipShape(TopRoundedCorners(cornerRadius: 20))
+                    .clipShape(TopRoundedCorners(cornerRadius: 10))
             )
             .overlay(Color.clear.accessibilityIdentifier("tableHeader"))
             
@@ -367,7 +359,7 @@ private struct LeaderBoardUserView: View {
             .padding(.bottom, 10)
             
             ZStack {
-                RoundedRectangle(cornerRadius: 20)
+                RoundedRectangle(cornerRadius: 10)
                     .stroke(AppColors.mainColor, lineWidth: 3)
                     .shadow(radius: 10)
                 
@@ -486,9 +478,8 @@ struct LeaderboardNavigationView: View {
                 }
                 .padding()
                 ZStack {
-                    RoundedRectangle(cornerRadius: 20)
+                    RoundedRectangle(cornerRadius: 10)
                         .stroke(AppColors.mainColor, lineWidth: 3)
-                        .padding(.top, 5)
                     VStack (spacing: 0) {
                         if leaderboard.isEmpty {
                             CircularProgressView()
@@ -512,7 +503,7 @@ struct LeaderboardNavigationView: View {
                             .foregroundStyle(.white)
                             .background(
                                 AppColors.mainColor
-                                    .clipShape(TopRoundedCorners(cornerRadius: 20))
+                                    .clipShape(TopRoundedCorners(cornerRadius: 10))
                             )
                             .overlay(Color.clear.accessibilityIdentifier("tableHeader"))
                             

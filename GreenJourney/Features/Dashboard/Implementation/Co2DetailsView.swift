@@ -3,6 +3,7 @@ import Charts
 
 struct Co2DetailsView: View {
     @ObservedObject var viewModel: DashboardViewModel
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     var body: some View {
         ScrollView {
             VStack {
@@ -68,6 +69,7 @@ struct Co2DetailsView: View {
             }
             .padding(.horizontal)
         }
+        .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
     }
 }
 

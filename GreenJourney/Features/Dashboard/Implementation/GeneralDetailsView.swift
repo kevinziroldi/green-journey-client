@@ -3,6 +3,7 @@ import Charts
 
 struct GeneralDetailsView: View {
     @ObservedObject var viewModel: DashboardViewModel
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     var body: some View {
         ScrollView {
             VStack {
@@ -44,6 +45,7 @@ struct GeneralDetailsView: View {
             }
             .padding(.horizontal)
         }
+        .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
     }
 }
 

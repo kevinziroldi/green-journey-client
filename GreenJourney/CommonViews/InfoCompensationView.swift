@@ -12,8 +12,8 @@ struct InfoCompensationView: View {
                 Text("Done")
                     .fontWeight(.bold)
             }
-            .padding(.horizontal, 30)
         }
+        .padding(.horizontal)
         .padding(.top)
         ScrollView {
             VStack {

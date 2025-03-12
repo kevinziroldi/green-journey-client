@@ -22,81 +22,70 @@ struct CitiesReviewsView: View {
     }
     
     var body: some View {
-        if horizontalSizeClass == .compact {
-            // iOS
-            
-            ScrollView {
-                // header
-                HStack {
-                    // title
+        VStack {
+            if horizontalSizeClass == .compact {
+                // iOS
+                
+                ScrollView {
+                    // header
+                    HStack {
+                        // title
+                        CitiesReviewsTitleView()
+                        
+                        Spacer()
+                        
+                        // user preferences button
+                        UserPreferencesButtonView(navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
+                    }
+                    .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
+                    
+                    // city search
+                    CitySearchView(viewModel: viewModel, searchTapped: $searchTapped)
+                    
+                    // cities the user has visited
+                    ReviewableCitiesView(viewModel: viewModel)
+                    
+                    // best cities
+                    BestCitiesTitle()
+                    BestCitiesView(viewModel: viewModel, navigationPath: $navigationPath)
+                }
+            } else {
+                // iPadOS
+                
+                ScrollView {
+                    // header
                     CitiesReviewsTitleView()
+                        .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
+                    
+                    // city search
+                    CitySearchView(viewModel: viewModel, searchTapped: $searchTapped)
+                        .padding(.horizontal, 80)
                     
                     Spacer()
                     
-                    // user preferences button
-                    UserPreferencesButtonView(navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
-                }
-                .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
-                
-                // city search
-                CitySearchView(viewModel: viewModel, searchTapped: $searchTapped)
-                
-                // cities the user has visited 
-                ReviewableCitiesView(viewModel: viewModel)
-                
-                // best cities
-                BestCitiesTitle()
-                BestCitiesView(viewModel: viewModel, navigationPath: $navigationPath)
-            }
-            .onAppear {
-                Task {
-                    await viewModel.getBestReviewedCities()
-                    await viewModel.getReviewableCities()
+                    ReviewableCitiesView(viewModel: viewModel)
+                    
+                    Spacer()
+                    
+                    // best cities
+                    BestCitiesTitle()
+                    BestCitiesView(viewModel: viewModel, navigationPath: $navigationPath)
+                        .padding(.horizontal, 100)
                 }
             }
-            .onChange(of: viewModel.searchedCityAvailable) {
-                if viewModel.searchedCityAvailable {
-                    // append path of the inner view
-                    navigationPath.append(NavigationDestination.CityReviewsDetailsView(viewModel))
-                    viewModel.searchedCityAvailable = false
-                }
+        }
+        .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
+        .onChange(of: viewModel.searchedCityAvailable) {
+            if viewModel.searchedCityAvailable {
+                // append path of the inner view
+                navigationPath.append(NavigationDestination.CityReviewsDetailsView(viewModel))
+                viewModel.searchedCityAvailable = false
             }
-            
-        } else {
-            // iPadOS
-            
-            ScrollView {
-                // header
-                CitiesReviewsTitleView()
-                    .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
-                
-                // city search
-                CitySearchView(viewModel: viewModel, searchTapped: $searchTapped)
-                    .padding(.horizontal, 80)
-                
-                Spacer()
-                
-                ReviewableCitiesView(viewModel: viewModel)
-                
-                Spacer()
-                
-                // best cities
-                BestCitiesTitle()
-                BestCitiesView(viewModel: viewModel, navigationPath: $navigationPath)
-                    .padding(.horizontal, 100)
-            }
-            .onAppear {
-                Task {
-                    await viewModel.getBestReviewedCities()
-                    await viewModel.getReviewableCities()
-                }
-            }
-            .onChange(of: viewModel.searchedCityAvailable) {
-                if viewModel.searchedCityAvailable {
-                    // append path of the inner view
-                    navigationPath.append(NavigationDestination.CityReviewsDetailsView(viewModel))
-                    viewModel.searchedCityAvailable = false
-                }
+        }
+        .onAppear {
+            Task {
+                await viewModel.getBestReviewedCities()
+                await viewModel.getReviewableCities()
             }
         }
     }
@@ -130,7 +119,8 @@ private struct CitySearchView: View {
             
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
-                    .stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 3)
+                    .stroke(AppColors.mainColor, lineWidth: 6)
+                    .fill(Color(uiColor: .systemBackground))
                     .frame(height: 50)
                 
                 Button(action: {
@@ -145,8 +135,6 @@ private struct CitySearchView: View {
                 }
                 .accessibilityIdentifier("searchCityReviews")
             }
-            .background(colorScheme == .dark ? Color(red: 48/255, green: 48/255, blue: 48/255) : Color.white)
-            .cornerRadius(10)
             .padding(EdgeInsets(top: 0, leading: 30, bottom: 15, trailing: 30))
         }
         .fullScreenCover(isPresented: $searchTapped ) {
@@ -173,20 +161,21 @@ private struct CitySearchView: View {
 struct ReviewableCitiesView: View {
     @ObservedObject var viewModel: CitiesReviewsViewModel
     var body: some View {
-        Text ("Reviewable Cities")
-            .font(.title)
-            .fontWeight(.semibold)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, 30)
-            .accessibilityIdentifier("reviewableCitiesTitle")
-        
+        VStack (spacing: 0) {
+            Text ("Reviewable Cities")
+                .font(.title)
+                .fontWeight(.semibold)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 30)
+                .accessibilityIdentifier("reviewableCitiesTitle")
+            
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
                     ForEach(viewModel.reviewableCities) { city in
                         ZStack {
-                            RoundedRectangle(cornerRadius: 10)
+                            RoundedRectangle(cornerRadius: 15)
                                 .fill(Color(uiColor: .systemBackground))
-                                .shadow(color: AppColors.mainColor.opacity(0.3), radius: 5, x: 0, y: 3)
+                                //.shadow(color: AppColors.mainColor.opacity(0.3), radius: 5, x: 0, y: 3)
                             VStack {
                                 Text(city.cityName)
                                     .font(.headline)
@@ -207,6 +196,7 @@ struct ReviewableCitiesView: View {
                                 await viewModel.getReviewsForSearchedCity(reload: false)
                             }
                         }
+                        .padding(.top, 15)
                         .padding(.horizontal, 5)
                         .padding(.bottom, 15)
                         .frame(width: 150)
@@ -217,6 +207,7 @@ struct ReviewableCitiesView: View {
                 
             }
             .padding(.horizontal)
+        }
     }
 }
 
@@ -270,7 +261,7 @@ private struct BestCityView: View {
             // iOS
             
             ZStack {
-                RoundedRectangle(cornerRadius: 10)
+                RoundedRectangle(cornerRadius: 15)
                     .fill(Color(uiColor: .systemBackground))
                     .shadow(color: AppColors.mainColor.opacity(0.3), radius: 5, x: 0, y: 3)
                 
@@ -307,7 +298,7 @@ private struct BestCityView: View {
             // iPadOS
             
             ZStack {
-                RoundedRectangle(cornerRadius: 10)
+                RoundedRectangle(cornerRadius: 15)
                     .fill(Color(uiColor: .systemBackground))
                     .shadow(color: AppColors.mainColor.opacity(0.3), radius: 5, x: 0, y: 3)
                 

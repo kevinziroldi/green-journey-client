@@ -3,6 +3,7 @@ import SwiftData
 
 struct CityReviewsDetailsView: View {
     @Query var users: [User]
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     @ObservedObject var viewModel: CitiesReviewsViewModel
     @Binding var navigationPath: NavigationPath
     @State var infoTapped = false
@@ -28,15 +29,16 @@ struct CityReviewsDetailsView: View {
                     }
                     .padding()
                 }
+                .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
                 .sheet(isPresented: $reviewTapped) {
                     InsertReviewView(isPresented: $reviewTapped, viewModel: viewModel)
                         .presentationDetents([.height(680)])
-                        .presentationCornerRadius(30)
+                        .presentationCornerRadius(15)
                 }
                 .sheet(isPresented: $infoTapped) {
                     InfoReviewView(isPresented: $infoTapped)
                         .presentationDetents([.fraction(0.75)])
-                        .presentationCornerRadius(30)
+                        .presentationCornerRadius(15)
                 }
                 .onAppear(){
                     Task {
@@ -71,7 +73,7 @@ private struct ReviewsAverageView: View {
             // iOS
             
             ZStack {
-                RoundedRectangle(cornerRadius: 20)
+                RoundedRectangle(cornerRadius: 15)
                     .fill(Color(uiColor: .systemBackground))
                     .shadow(color: .green.opacity(0.3), radius: 5, x: 0, y: 3)
                 VStack{
@@ -173,7 +175,7 @@ private struct ReviewsAverageView: View {
             // iPadOS
             
             ZStack {
-                RoundedRectangle(cornerRadius: 20)
+                RoundedRectangle(cornerRadius: 15)
                     .fill(Color(uiColor: .systemBackground))
                     .shadow(color: .green.opacity(0.3), radius: 5, x: 0, y: 3)
                 
@@ -389,7 +391,7 @@ private struct CardView: View {
     let width: CGFloat
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 20)
+            RoundedRectangle(cornerRadius: 15)
                 .fill(Color(uiColor: .systemBackground))
                 .shadow(color: .blue.opacity(0.3), radius: 5, x: 0, y: 3)
             
@@ -521,7 +523,7 @@ private struct InfoReviewView: View {
                     }
                     .padding(.bottom, 30)
                 }
-                .padding(.horizontal, 30)
+                .padding(.horizontal)
             }
             .padding(.top)
             ScrollView {
