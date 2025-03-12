@@ -575,6 +575,7 @@ private struct InfoReviewView: View {
                     Text("This rating measures the presence of recycling bins and the overall cleanliness of the city. A well-maintained urban environment contributes to a greener and more pleasant place to live and visit.")
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
+                .padding(.bottom)
                 .padding(.horizontal)
             }
         }

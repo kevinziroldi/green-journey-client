@@ -77,7 +77,7 @@ struct LegendBadgeView: View {
                 Text("This badge tracks the total number of trips you have taken. Keep exploring and watch your count grow!")
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
-            
+            .padding(.bottom)
             .padding(.horizontal)
         }
     }

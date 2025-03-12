@@ -49,6 +49,7 @@ struct InfoCompensationView: View {
                     .font(.headline)
                     .padding(.top)
             }
+            .padding(.bottom)
             .padding(.horizontal)
         }
     }

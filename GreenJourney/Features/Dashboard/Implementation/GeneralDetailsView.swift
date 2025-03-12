@@ -35,7 +35,7 @@ struct GeneralDetailsView: View {
                             .padding()
                             .fontWeight(.semibold)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                        InfoRowView(title: "Distance made", value: String(format: "%.0f", viewModel.totalDistance) + " Km", icon: "road.lanes", color: .indigo, imageValue: false, imageValueString: nil)
+                        InfoRowView(title: "Distance", value: String(format: "%.0f", viewModel.totalDistance) + " Km", icon: "road.lanes", color: .indigo, imageValue: false, imageValueString: nil)
                         InfoRowView(title: "Travel time", value: viewModel.totalDurationString, icon: "clock", color: .indigo, imageValue: false, imageValueString: nil)
                     }
                     .padding(.bottom, 7)
