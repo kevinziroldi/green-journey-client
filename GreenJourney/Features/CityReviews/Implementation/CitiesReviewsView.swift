@@ -41,8 +41,7 @@ struct CitiesReviewsView: View {
                 // city search
                 CitySearchView(viewModel: viewModel, searchTapped: $searchTapped)
                 
-                //Spacer()
-                
+                // cities the user has visited 
                 ReviewableCitiesView(viewModel: viewModel)
                 
                 // best cities
@@ -100,6 +99,124 @@ struct CitiesReviewsView: View {
                 }
             }
         }
+    }
+}
+
+private struct CitiesReviewsTitleView: View {
+    var body: some View {
+        Text("Reviews")
+            .font(.system(size: 32).bold())
+            .padding()
+            .fontWeight(.semibold)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .accessibilityIdentifier("citiesReviewsTitle")
+    }
+}
+
+private struct CitySearchView: View {
+    @ObservedObject var viewModel: CitiesReviewsViewModel
+    @Binding var searchTapped: Bool
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
+    @Environment(\.modelContext) private var modelContext
+    
+    var body: some View {
+        VStack {
+            Text("Select a city")
+                .font(.title)
+                .fontWeight(.semibold)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 30)
+                .accessibilityIdentifier("selectCityText")
+            
+            ZStack {
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 3)
+                    .frame(height: 50)
+                
+                Button(action: {
+                    searchTapped = true
+                }) {
+                    Text("Search city")
+                        .foregroundColor(.secondary)
+                        .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 0))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .font(.title2)
+                        .fontWeight(.light)
+                }
+                .accessibilityIdentifier("searchCityReviews")
+            }
+            .background(colorScheme == .dark ? Color(red: 48/255, green: 48/255, blue: 48/255) : Color.white)
+            .cornerRadius(10)
+            .padding(EdgeInsets(top: 0, leading: 30, bottom: 15, trailing: 30))
+        }
+        .fullScreenCover(isPresented: $searchTapped ) {
+            CompleterView(modelContext: modelContext, searchText: "",
+                          onBack: {
+                searchTapped = false
+            },
+                          onClick: { city in
+                Task {
+                    // for server call
+                    viewModel.selectedCity = city
+                    // for details view
+                    viewModel.selectedCity = viewModel.selectedCity
+                    await viewModel.getReviewsForSearchedCity(reload: false)
+                    searchTapped = false
+                }
+            },
+                          departure: false
+            )
+        }
+    }
+}
+
+struct ReviewableCitiesView: View {
+    @ObservedObject var viewModel: CitiesReviewsViewModel
+    var body: some View {
+        Text ("Reviewable Cities")
+            .font(.title)
+            .fontWeight(.semibold)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, 30)
+            .accessibilityIdentifier("reviewableCitiesTitle")
+        
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack {
+                    ForEach(viewModel.reviewableCities) { city in
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(Color(uiColor: .systemBackground))
+                                .shadow(color: AppColors.mainColor.opacity(0.3), radius: 5, x: 0, y: 3)
+                            VStack {
+                                Text(city.cityName)
+                                    .font(.headline)
+                                    .scaledToFit()
+                                    .minimumScaleFactor(0.6)
+                                    .lineLimit(1)
+                                Text(city.countryName)
+                                    .fontWeight(.light)
+                                    .scaledToFit()
+                                    .minimumScaleFactor(0.6)
+                                    .lineLimit(1)
+                            }
+                            .padding()
+                        }
+                        .onTapGesture {
+                            Task {
+                                viewModel.selectedCity = city
+                                await viewModel.getReviewsForSearchedCity(reload: false)
+                            }
+                        }
+                        .padding(.horizontal, 5)
+                        .padding(.bottom, 15)
+                        .frame(width: 150)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .overlay(Color.clear.accessibilityIdentifier("reviewableCityView_\(city.iata)_\(city.countryCode)"))
+                    }
+                }
+                
+            }
+            .padding(.horizontal)
     }
 }
 
@@ -241,121 +358,5 @@ private struct BestCityView: View {
             .fixedSize(horizontal: false, vertical: true)
             .frame(maxWidth: 800)
         }
-    }
-}
-
-private struct CitiesReviewsTitleView: View {
-    var body: some View {
-        Text("Reviews")
-            .font(.system(size: 32).bold())
-            .padding()
-            .fontWeight(.semibold)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .accessibilityIdentifier("citiesReviewsTitle")
-    }
-}
-
-private struct CitySearchView: View {
-    @ObservedObject var viewModel: CitiesReviewsViewModel
-    @Binding var searchTapped: Bool
-    @Environment(\.colorScheme) var colorScheme: ColorScheme
-    @Environment(\.modelContext) private var modelContext
-    
-    var body: some View {
-        VStack {
-            Text("Select a city")
-                .font(.title)
-                .fontWeight(.semibold)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, 30)
-                .accessibilityIdentifier("selectCityText")
-            
-            ZStack {
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 3)
-                    .frame(height: 50)
-                
-                Button(action: {
-                    searchTapped = true
-                }) {
-                    Text("Search city")
-                        .foregroundColor(.secondary)
-                        .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 0))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .font(.title2)
-                        .fontWeight(.light)
-                }
-                .accessibilityIdentifier("searchCityReviews")
-            }
-            .background(colorScheme == .dark ? Color(red: 48/255, green: 48/255, blue: 48/255) : Color.white)
-            .cornerRadius(10)
-            .padding(EdgeInsets(top: 0, leading: 30, bottom: 15, trailing: 30))
-        }
-        .fullScreenCover(isPresented: $searchTapped ) {
-            CompleterView(modelContext: modelContext, searchText: "",
-                          onBack: {
-                searchTapped = false
-            },
-                          onClick: { city in
-                Task {
-                    // for server call
-                    viewModel.selectedCity = city
-                    // for details view
-                    viewModel.selectedCity = viewModel.selectedCity
-                    await viewModel.getReviewsForSearchedCity(reload: false)
-                    searchTapped = false
-                }
-            },
-                          departure: false
-            )
-        }
-    }
-}
-
-struct ReviewableCitiesView: View {
-    @ObservedObject var viewModel: CitiesReviewsViewModel
-    var body: some View {
-        Text ("Reviewable Cities")
-            .font(.title)
-            .fontWeight(.semibold)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, 30)
-        
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack {
-                    ForEach(viewModel.reviewableCities) { city in
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 10)
-                                .fill(Color(uiColor: .systemBackground))
-                                .shadow(color: AppColors.mainColor.opacity(0.3), radius: 5, x: 0, y: 3)
-                            VStack {
-                                Text(city.cityName)
-                                    .font(.headline)
-                                    .scaledToFit()
-                                    .minimumScaleFactor(0.6)
-                                    .lineLimit(1)
-                                Text(city.countryName)
-                                    .fontWeight(.light)
-                                    .scaledToFit()
-                                    .minimumScaleFactor(0.6)
-                                    .lineLimit(1)
-                            }
-                            .padding()
-                        }
-                        .onTapGesture {
-                            Task {
-                                viewModel.selectedCity = city
-                                await viewModel.getReviewsForSearchedCity(reload: false)
-                            }
-                        }
-                        .padding(.horizontal, 5)
-                        .padding(.bottom, 15)
-                        .frame(width: 150)
-                        .fixedSize(horizontal: false, vertical: true)
-                    }
-                }
-                
-            }
-            .padding(.horizontal)
     }
 }

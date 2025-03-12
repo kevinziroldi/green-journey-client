@@ -103,8 +103,8 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
         userText.typeText("This is the review text")
         
         // close keyboard
-        let selecteCityTitleCenter = selecteCityTitle.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
-        selecteCityTitleCenter.tap()
+        let personalReviewTitleCenter = personalReviewTitle.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        personalReviewTitleCenter.tap()
         
         // save review
         saveButton.tap()
@@ -120,12 +120,12 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
         let yourReviewTitle = app.staticTexts["yourReviewTitle"]
         let userReviewRating = app.otherElements["userReviewRating"]
         let userReviewText = app.staticTexts["userReviewText"]
-        let lastReviewsTitle = app.staticTexts["latestReviewsTitle"]
-        let firstReviewElement = app.otherElements["reviewElement_17"]
-        let secondReviewElement = app.otherElements["reviewElement_18"]
-        let thirdReviewElement = app.otherElements["reviewElement_19"]
-        let fourthReviewElement = app.otherElements["reviewElement_20"]
-        let lastReviewElement = app.otherElements["reviewElement_21"]
+        let latestReviewsTitle = app.staticTexts["latestReviewsTitle"]
+        let reviewElement_17 = app.otherElements["reviewElement_17"]
+        let reviewElement_18 = app.otherElements["reviewElement_18"]
+        let reviewElement_19 = app.otherElements["reviewElement_19"]
+        let reviewElement_20 = app.otherElements["reviewElement_20"]
+        let reviewElement_21 = app.otherElements["reviewElement_21"]
         let wrongReviewElement = app.otherElements["reviewElement_16"]
         let allReviewsButton = app.buttons["allReviewsButton"]
         let noReviewsText = app.staticTexts["noReviewsText"]
@@ -141,22 +141,24 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
         XCTAssertFalse(userReviewRating.exists, "userReviewRating displayed")
         XCTAssertFalse(userReviewText.exists, "userReviewText displayed")
         
+        // title last reviews
+        XCTAssertTrue(latestReviewsTitle.exists, "latestReviewsTitle not displayed")
+    
         // some reviews are present
-        XCTAssertTrue(lastReviewsTitle.exists, "lastReviewsTitle not displayed")
-        XCTAssertTrue(firstReviewElement.exists, "firstReviewElement not displayed")
-        XCTAssertTrue(secondReviewElement.exists, "secondReviewElement not displayed")
-        XCTAssertTrue(thirdReviewElement.exists, "thirdReviewElement not displayed")
+        XCTAssertTrue(reviewElement_17.exists, "reviewElement_17 not displayed")
+        reviewElement_17.swipeLeft()
         
-        // swipe
-        firstReviewElement.swipeLeft()
-        secondReviewElement.swipeLeft()
-        thirdReviewElement.swipeLeft()
+        XCTAssertTrue(reviewElement_18.exists, "reviewElement_18 not displayed")
+        reviewElement_18.swipeLeft()
         
-        XCTAssertTrue(fourthReviewElement.exists, "thirdReviewElement not displayed")
+        XCTAssertTrue(reviewElement_19.exists, "reviewElement_19 not displayed")
+        reviewElement_19.swipeLeft()
         
-        fourthReviewElement.swipeLeft()
+        XCTAssertTrue(reviewElement_20.exists, "reviewElement_20 not displayed")
+        reviewElement_20.swipeLeft()
         
-        XCTAssertTrue(lastReviewElement.waitForExistence(timeout: timer), "lastReviewElement not displayed")
+        XCTAssertTrue(reviewElement_21.exists, "reviewElement_21 not displayed")
+        
         // just 5 reviews should be  displayed
         XCTAssertFalse(wrongReviewElement.exists, "wrongReviewElement not displayed")
         
@@ -243,8 +245,8 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
         userText.typeText("This is the review text")
         
         // close keyboard
-        let selecteCityTitleCenter = selecteCityTitle.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
-        selecteCityTitleCenter.tap()
+        let personalReviewTitleCenter = personalReviewTitle.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        personalReviewTitleCenter.tap()
         
         // save review
         saveButton.tap()
@@ -297,8 +299,8 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
         userText.typeText("add some text")
         
         // close keyboard
-        let selecteCityTitleCenter = selecteCityTitle.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
-        selecteCityTitleCenter.tap()
+        let personalReviewTitleCenter = personalReviewTitle.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        personalReviewTitleCenter.tap()
         
         // click save button
         saveButton.tap()
@@ -347,8 +349,8 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
         userText.typeText("add some text")
         
         // close keyboard
-        let selecteCityTitleCenter = selecteCityTitle.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
-        selecteCityTitleCenter.tap()
+        let personalReviewTitleCenter = personalReviewTitle.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        personalReviewTitleCenter.tap()
         
         // click cancel button
         let cancelButtonCenter = cancelButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))

@@ -55,16 +55,30 @@ final class CitiesReviewsViewUITest: XCTestCase {
         let userPreferencesButton = app.buttons["userPreferencesButton"]
         let selectCityText = app.staticTexts["selectCityText"]
         let searchCityReviews = app.buttons["searchCityReviews"]
+        let reviewableCitiesTitle = app.staticTexts["reviewableCitiesTitle"]
+        let reviewableCity_Berlin = app.otherElements["reviewableCityView_BER_DE"]
+        let reviewableCity_Firenze = app.otherElements["reviewableCityView_FLR_IT"]
+        let reviewableCity_Paris = app.otherElements["reviewableCityView_PAR_FR"]
+        let reviewableCity_Roma = app.otherElements["reviewableCityView_ROM_IT"]
         let topCitiesTitle = app.staticTexts["topCitiesTitle"]
         let bestCity_0 = app.otherElements["bestCityView_0"]
         let bestCity_1 = app.otherElements["bestCityView_1"]
         let bestCity_2 = app.otherElements["bestCityView_2"]
-     
+        
         // check elements present
         XCTAssertTrue(citiesReviewsTitle.exists, "citiesReviewsTitle is not displayed")
         XCTAssertTrue(userPreferencesButton.exists, "userPreferencesButton is not displayed")
         XCTAssertTrue(selectCityText.exists, "selectCityText is not displayed")
         XCTAssertTrue(searchCityReviews.exists, "searchCityReviews is not displayed")
+    
+        XCTAssertTrue(reviewableCitiesTitle.exists, "reviewableCitiesTitle is not displayed")
+        XCTAssertTrue(reviewableCity_Berlin.exists, "reviewableCity_Berlin is not displayed")
+        XCTAssertTrue(reviewableCity_Firenze.exists, "reviewableCity_Firenze is not displayed")
+        
+        reviewableCity_Berlin.swipeLeft()
+        
+        XCTAssertTrue(reviewableCity_Paris.waitForExistence(timeout: timer), "reviewableCity_Paris is not displayed")
+        XCTAssertTrue(reviewableCity_Roma.exists, "reviewableCity_Roma is not displayed")
         XCTAssertTrue(topCitiesTitle.exists, "topCitiesTitle is not displayed")
         XCTAssertTrue(bestCity_0.exists, "bestCity_0 is not displayed")
         XCTAssertTrue(bestCity_1.exists, "bestCity_1 is not displayed")
@@ -86,23 +100,6 @@ final class CitiesReviewsViewUITest: XCTestCase {
         // check change of view
         let userPreferencesTitle = app.staticTexts["userPreferencesTitle"]
         XCTAssertTrue(userPreferencesTitle.waitForExistence(timeout: timer), "The userPreferencesTitle is not displayed")
-    }
-    
-    func testNavigationToCitiesReviewsDetails() {
-        // UI elements
-        let citiesReviewsTitle = app.staticTexts["citiesReviewsTitle"]
-        let bestCity_0 = app.otherElements["bestCityView_0"]
-        let selecteCityTitle = app.staticTexts["selecteCityTitle"]
-        
-        // check elements present
-        XCTAssertTrue(citiesReviewsTitle.waitForExistence(timeout: timer), "The citiesReviewsTitle is not displayed")
-        XCTAssertTrue(bestCity_0.exists, "bestCity_0 is not displayed")
-        
-        // tap bestCity_0 button
-        bestCity_0.tap()
-        
-        // check new view
-        XCTAssertTrue(selecteCityTitle.exists, "selecteCityTitle is not displayed")
     }
     
     func testCitySearch() {
@@ -133,7 +130,40 @@ final class CitiesReviewsViewUITest: XCTestCase {
         // new view
         let selecteCityTitle = app.staticTexts["selecteCityTitle"]
         
-        XCTAssertTrue(selecteCityTitle.waitForExistence(timeout: timer), "selecteCityTitle is not displayed")        
+        XCTAssertTrue(selecteCityTitle.waitForExistence(timeout: timer), "selecteCityTitle is not displayed")
     }
     
+    func testNavigationToCitiesReviewsDetailsReviewableCity() {
+        // UI elements
+        let citiesReviewsTitle = app.staticTexts["citiesReviewsTitle"]
+        let reviewableCity_Berlin = app.otherElements["reviewableCityView_BER_DE"]
+        let selecteCityTitle = app.staticTexts["selecteCityTitle"]
+        
+        // check elements present
+        XCTAssertTrue(citiesReviewsTitle.waitForExistence(timeout: timer), "The citiesReviewsTitle is not displayed")
+        XCTAssertTrue(reviewableCity_Berlin.exists, "reviewableCity_Berlin is not displayed")
+        
+        // tap reviewableCity_Berlin button
+        reviewableCity_Berlin.tap()
+        
+        // check new view
+        XCTAssertTrue(selecteCityTitle.exists, "selecteCityTitle is not displayed")
+    }
+    
+    func testNavigationToCitiesReviewsDetailsBestCity() {
+        // UI elements
+        let citiesReviewsTitle = app.staticTexts["citiesReviewsTitle"]
+        let bestCity_0 = app.otherElements["bestCityView_0"]
+        let selecteCityTitle = app.staticTexts["selecteCityTitle"]
+        
+        // check elements present
+        XCTAssertTrue(citiesReviewsTitle.waitForExistence(timeout: timer), "The citiesReviewsTitle is not displayed")
+        XCTAssertTrue(bestCity_0.exists, "bestCity_0 is not displayed")
+        
+        // tap bestCity_0 button
+        bestCity_0.tap()
+        
+        // check new view
+        XCTAssertTrue(selecteCityTitle.exists, "selecteCityTitle is not displayed")
+    }
 }

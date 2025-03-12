@@ -374,6 +374,7 @@ private struct CarouselView: View {
                             content
                                 .opacity(phase.isIdentity ? 1 : 0.8)
                         }
+                        .overlay(Color.clear.accessibilityIdentifier("reviewElement_\(review.reviewID ?? -1)"))
                 }
             }
             .scrollTargetLayout()
