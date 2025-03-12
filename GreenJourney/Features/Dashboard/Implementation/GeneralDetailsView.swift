@@ -10,13 +10,15 @@ struct GeneralDetailsView: View {
                 HorizontalBarChart(keys: viewModel.distancePerTransport.keys.sorted(), data: viewModel.distancePerTransport.keys.sorted().map{viewModel.distancePerTransport[$0]!}, title: "Distance per vehicle", color: .pink, measureUnit: "Km")
                     .padding()
                     .frame(height: 250)
+                    .overlay(Color.clear.accessibilityIdentifier("distancePerVehicle"))
                 
                 BarChartView(title: "Distance traveled (Km)", value: "", data: viewModel.distances.keys.sorted().map{viewModel.distances[$0]!}, labels: viewModel.keysToString(keys: viewModel.distances.keys.sorted()), color: .indigo.opacity(0.8))
                     .padding()
-                    .overlay(Color.clear.accessibilityIdentifier("distanceTraveled"))
+                    .overlay(Color.clear.accessibilityIdentifier("distancePerYear"))
                 
                 PieChartView(keys: viewModel.travelsPerTransport.keys.sorted(), data: viewModel.travelsPerTransport.keys.sorted().map{viewModel.travelsPerTransport[$0]!}, title: "Most chosen Vehicle", color: .orange, icon: viewModel.mostChosenVehicle)
                     .padding()
+                    .overlay(Color.clear.accessibilityIdentifier("mostChosenVehicle"))
                 
                 BarChartView(title: "Trips completed", value: "\(viewModel.totalTripsMade)", data: viewModel.tripsMade.keys.sorted().map{viewModel.tripsMade[$0]!}, labels: viewModel.keysToString(keys: viewModel.tripsMade.keys.sorted()) , color: .pink.opacity(0.8))
                     .padding()
@@ -39,6 +41,7 @@ struct GeneralDetailsView: View {
                     .padding(.bottom, 7)
                 }
                 .padding()
+                .overlay(Color.clear.accessibilityIdentifier("distanceTimeRecap"))
             }
             .padding(.horizontal)
         }

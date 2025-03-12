@@ -50,20 +50,89 @@ final class DashboardViewUITest: XCTestCase {
     func testDashBoardElementsPresent() {
         // UI elements
         let dashboardTitle = app.staticTexts["dashboardTitle"]
-        let userBadges = app.otherElements["userBadges"]
         let co2Tracker = app.otherElements["co2Tracker"]
         let travelsRecap = app.otherElements["travelsRecap"]
-        let travelTime = app.otherElements["travelTime"]
-        let tripsCompleted = app.otherElements["tripsCompleted"]
-        let distanceTraveled = app.otherElements["distanceTraveled"]
+        let worldExploration = app.otherElements["worldExploration"]
         
         // check elements present
         XCTAssertTrue(dashboardTitle.exists, "dashboardTitle is not displayed")
-        XCTAssertTrue(userBadges.exists, "userBadges is not displayed")
         XCTAssertTrue(co2Tracker.exists, "co2Tracker is not displayed")
         XCTAssertTrue(travelsRecap.exists, "travelsRecap is not displayed")
-        XCTAssertTrue(travelTime.exists, "travelTime is not displayed")
+        XCTAssertTrue(worldExploration.exists, "worldExploration is not displayed")
+    }
+    
+    func testCo2TrackerViewElements() {
+        // UI elements
+        let dashboardTitle = app.staticTexts["dashboardTitle"]
+        let co2Tracker = app.otherElements["co2Tracker"]
+        
+        // check elements present
+        XCTAssertTrue(dashboardTitle.exists, "dashboardTitle is not displayed")
+        XCTAssertTrue(co2Tracker.exists, "co2Tracker is not displayed")
+        
+        // tap co2 tracker box
+        co2Tracker.tap()
+        
+        // UI elements
+        let co2CompenationRecap = app.otherElements["co2CompenationRecap"]
+        let co2EmittedPerVehicle = app.otherElements["co2EmittedPerVehicle"]
+        let co2EmittedPerYear = app.otherElements["co2EmittedPerYear"]
+        let plantedTreesPerYear = app.otherElements["plantedTreesPerYear"]
+        
+        // check elements present
+        XCTAssertTrue(co2CompenationRecap.waitForExistence(timeout: timer), "co2CompenationRecap is not displayed")
+        XCTAssertTrue(co2EmittedPerVehicle.exists, "co2EmittedPerVehicle is not displayed")
+        XCTAssertTrue(co2EmittedPerYear.exists, "co2EmittedPerYear is not displayed")
+        XCTAssertTrue(plantedTreesPerYear.exists, "plantedTreesPerYear is not displayed")
+    }
+    
+    func testTravelRecapViewElements() {
+        // UI elements
+        let dashboardTitle = app.staticTexts["dashboardTitle"]
+        let travelsRecap = app.otherElements["travelsRecap"]
+        
+        // check elements present
+        XCTAssertTrue(dashboardTitle.exists, "dashboardTitle is not displayed")
+        XCTAssertTrue(travelsRecap.exists, "co2Tracker is not displayed")
+        
+        // tap co2 tracker box
+        travelsRecap.tap()
+        
+        // UI elements
+        let distancePerVehicle = app.otherElements["distancePerVehicle"]
+        let distancePerYear = app.otherElements["distancePerYear"]
+        let mostChosenVehicle = app.otherElements["mostChosenVehicle"]
+        let tripsCompleted = app.otherElements["tripsCompleted"]
+        let distanceTimeRecap = app.otherElements["distanceTimeRecap"]
+        
+        // check elements present
+        XCTAssertTrue(distancePerVehicle.waitForExistence(timeout: timer), "distancePerVehicle is not displayed")
+        XCTAssertTrue(distancePerYear.exists, "distancePerYear is not displayed")
+        XCTAssertTrue(mostChosenVehicle.exists, "mostChosenVehicle is not displayed")
         XCTAssertTrue(tripsCompleted.exists, "tripsCompleted is not displayed")
-        XCTAssertTrue(distanceTraveled.exists, "distanceTraveled is not displayed")
+        XCTAssertTrue(distanceTimeRecap.exists, "distanceTimeRecap is not displayed")
+    }
+    
+    func testWorldExplorationViewElements() {
+        // UI elements
+        let dashboardTitle = app.staticTexts["dashboardTitle"]
+        let worldExploration = app.otherElements["worldExploration"]
+        
+        // check elements present
+        XCTAssertTrue(dashboardTitle.exists, "dashboardTitle is not displayed")
+        XCTAssertTrue(worldExploration.exists, "co2Tracker is not displayed")
+        
+        // tap co2 tracker box
+        worldExploration.tap()
+        
+        // UI elements
+        let visitedContinents = app.otherElements["visitedContinents"]
+        let countriesPerContinent = app.otherElements["countriesPerContinent"]
+        let visitedCountries = app.otherElements["visitedCountries"]
+        
+        // check elements present
+        XCTAssertTrue(visitedContinents.waitForExistence(timeout: timer), "visitedContinents is not displayed")
+        XCTAssertTrue(countriesPerContinent.exists, "countriesPerContinent is not displayed")
+        XCTAssertTrue(visitedCountries.exists, "visitedCountries is not displayed")
     }
 }

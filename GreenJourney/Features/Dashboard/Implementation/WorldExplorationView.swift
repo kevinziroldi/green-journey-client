@@ -10,7 +10,7 @@ struct WorldExplorationView: View {
                     RoundedRectangle(cornerRadius: 15)
                         .fill(Color(uiColor: .systemBackground))
                         .shadow(color: .teal.opacity(0.3), radius: 5, x: 0, y: 3)
-                    VStack (spacing:0){
+                    VStack(spacing:0) {
                         Text("Continents")
                             .font(.title)
                             .foregroundStyle(.teal.opacity(0.8))
@@ -32,12 +32,14 @@ struct WorldExplorationView: View {
                         }
                         .padding()
                     }
+                    .overlay(Color.clear.accessibilityIdentifier("visitedContinents"))
                 }
                 .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
                
                 HorizontalBarChart(keys: viewModel.countriesPerContinent.keys.sorted(), data: viewModel.countriesPerContinent.keys.sorted().map{Float64(viewModel.countriesPerContinent[$0]!)}, title: "Countries", color: .yellow, measureUnit: "")
                     .frame(height: 250)
                     .padding()
+                    .overlay(Color.clear.accessibilityIdentifier("countriesPerContinent"))
                 
                 ZStack {
                     RoundedRectangle(cornerRadius: 15)
@@ -55,14 +57,13 @@ struct WorldExplorationView: View {
                     .padding(.bottom, 7)
                 }
                 .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
-                
+                .overlay(Color.clear.accessibilityIdentifier("visitedCountries"))
             }
             .padding(.horizontal)
         }
         .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
     }
 }
-
 
 struct ContinentImage: View {
     let image: String

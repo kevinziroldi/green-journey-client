@@ -38,6 +38,7 @@ struct DashboardView: View {
                     }
                 }
                 .padding(5)
+                
                 // expandible recaps
                 DashboardDetailsNavigationView(viewModel: viewModel)
             }
@@ -153,6 +154,7 @@ private struct DashboardDetailsNavigationView: View {
                 .padding(.bottom, 7)
             }
             .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
+            .overlay(Color.clear.accessibilityIdentifier("worldExploration"))
         }
     }
 }
