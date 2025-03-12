@@ -76,6 +76,36 @@ final class UserPreferencesViewModelUnitTest {
     }
     
     @Test
+    func testAddUserToSwiftDataWrongGender() throws {
+        let mockUser = User(
+            userID: nil,
+            firstName: "John",
+            lastName: "Doe",
+            gender: "someNonExistingGender",
+            firebaseUID: "john_doe_firebase_uid",
+            zipCode: 19,
+            city: "London",
+            scoreShortDistance: 50,
+            scoreLongDistance: 100
+        )
+        
+        self.mockModelContext.insert(mockUser)
+        try self.mockModelContext.save()
+        
+        viewModel.getUserData()
+        
+        #expect(viewModel.firstName == "John")
+        #expect(viewModel.lastName == "Doe")
+        #expect(viewModel.birthDate == nil)
+        #expect(viewModel.gender == Gender.notSpecified)
+        #expect(viewModel.city == "London")
+        #expect(viewModel.zipCode == 19)
+        #expect(viewModel.streetName == nil)
+        #expect(viewModel.houseNumber == nil)
+        #expect(viewModel.errorMessage == nil)
+    }
+    
+    @Test
     func testGetUserDataNoUser() async throws {
         // no user present
         viewModel.getUserData()

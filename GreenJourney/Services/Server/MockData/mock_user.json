@@ -9,7 +9,7 @@
   "street_name": null,
   "house_number": null,
   "city": null,
-  "score_short_distance": 0,
-  "score_long_distance": 0,
+  "score_short_distance": 50,
+  "score_long_distance": 100,
   "badges": ["badge_distance_low", "badge_compensation_high", "badge_travels_number_mid"]
 }

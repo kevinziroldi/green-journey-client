@@ -221,4 +221,55 @@ final class TravelSearchViewModelUnitTest {
         }
         #expect(found)
     }
+    
+    @Test
+    func testResetParameters() async {
+        // set a departure
+        let cityDeparture = CityCompleterDataset(
+            cityName: "City1",
+            countryName: "City1",
+            iata: "City1",
+            countryCode: "City1",
+            continent: "City1"
+        )
+        viewModel.departure = cityDeparture
+        // set an arrival
+        let cityArrival = CityCompleterDataset(
+            cityName: "City2",
+            countryName: "City2",
+            iata: "City2",
+            countryCode: "City2",
+            continent: "City2"
+        )
+        viewModel.arrival = cityArrival
+        
+        // set date
+        viewModel.datePicked = Date.now
+        
+        // compute a route
+        self.mockServerService.shouldSucceed = true
+        viewModel.oneWay = false
+        
+        await viewModel.computeRoutes()
+        #expect(!viewModel.outwardOptions.isEmpty)
+        #expect(!viewModel.returnOptions.isEmpty)
+        
+        // select an option
+        viewModel.selectedOption = viewModel.outwardOptions[0].segments
+        
+        // select a predicted city
+        viewModel.predictedCities = [cityArrival]
+        
+        // reset
+        viewModel.resetParameters()
+        
+        // check effective reset
+        
+        #expect(viewModel.arrival == CityCompleterDataset())
+        #expect(viewModel.departure == CityCompleterDataset())
+        #expect(viewModel.selectedOption.isEmpty)
+        #expect(viewModel.outwardOptions.isEmpty)
+        #expect(viewModel.returnOptions.isEmpty)
+        #expect(viewModel.predictedCities.isEmpty)
+    }
 }

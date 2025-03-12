@@ -1,3 +1,4 @@
+import Foundation
 import SwiftData
 import Testing
 
@@ -23,15 +24,39 @@ final class CompleterViewModelUnitTest {
         
         // add cities to SwiftData
         try addCitiesToSwiftData()
+        // add travel to SwiftData
+        try addTravelToSwiftData()
+    }
+    
+    private func addTravelToSwiftData() throws {
+        let mockTravel = Travel(travelID: 1, userID: 1)
+        let mockSegment = Segment(segmentID: 1, departureID: 1, destinationID: 1, departureCity: "Milano", departureCountry: "Italy", destinationCity: "Milano", destinationCountry: "Italy", dateTime: Date.now, duration: 100, vehicle: Vehicle.car, segmentDescription: "description", price: 100, co2Emitted: 100, distance: 100, numSegment: 1, isOutward: true, travelID: 1)
+        self.mockModelContext.insert(mockTravel)
+        self.mockModelContext.insert(mockSegment)
+        try self.mockModelContext.save()
     }
     
     private func addCitiesToSwiftData() throws {
-        let cityMilan = CityCompleterDataset(
-            cityName: "Milan",
+        let cityMilano = CityCompleterDataset(
+            cityName: "Milano",
             countryName: "Italy",
             iata: "MIL",
             countryCode: "IT",
             continent: "Europe"
+        )
+        let cityRomaIT = CityCompleterDataset(
+            cityName: "Roma",
+            countryName: "Italy",
+            iata: "ROM",
+            countryCode: "IT",
+            continent: "Europe"
+        )
+        let cityRomaUS = CityCompleterDataset(
+            cityName: "Roma",
+            countryName: "United States",
+            iata: "FAL",
+            countryCode: "US",
+            continent: "North America"
         )
         let cityParis = CityCompleterDataset(
             cityName: "Paris",
@@ -62,7 +87,9 @@ final class CompleterViewModelUnitTest {
             continent: "North America"
         )
         
-        self.mockModelContext.insert(cityMilan)
+        self.mockModelContext.insert(cityMilano)
+        self.mockModelContext.insert(cityRomaIT)
+        self.mockModelContext.insert(cityRomaUS)
         self.mockModelContext.insert(cityParis)
         self.mockModelContext.insert(cityNewYork)
         self.mockModelContext.insert(cityMiami)
@@ -74,15 +101,33 @@ final class CompleterViewModelUnitTest {
     func testEmptySearchDeparture() {
         let viewModel = CompleterViewModel(modelContext: self.mockModelContext, departure: true)
         viewModel.searchText = ""
-        #expect(viewModel.suggestions.isEmpty)
+        
+        let cityMilano = CityCompleterDataset(
+            cityName: "Milano",
+            countryName: "Italy",
+            iata: "MIL",
+            countryCode: "IT",
+            continent: "Europe"
+        )
+        
+        #expect(!viewModel.suggestions.isEmpty)
+        #expect(viewModel.suggestions.contains(cityMilano))
     }
     
     @Test
     func testExactSearchDeparture() {
         let viewModel = CompleterViewModel(modelContext: self.mockModelContext, departure: true)
-        viewModel.searchText = "Milan"
+        viewModel.searchText = "Milano"
         #expect(!viewModel.suggestions.isEmpty)
-        #expect(viewModel.suggestions.first?.cityName == "Milan")
+        #expect(viewModel.suggestions.first?.cityName == "Milano")
+    }
+    
+    @Test
+    func testSearchRoma() {
+        let viewModel = CompleterViewModel(modelContext: self.mockModelContext, departure: true)
+        viewModel.searchText = "Roma"
+        #expect(!viewModel.suggestions.isEmpty)
+        #expect(viewModel.suggestions.first?.cityName == "Roma")
     }
     
     @Test
@@ -117,9 +162,9 @@ final class CompleterViewModelUnitTest {
     @Test
     func testExactSearchDestination() {
         let viewModel = CompleterViewModel(modelContext: self.mockModelContext, departure: false)
-        viewModel.searchText = "Milan"
+        viewModel.searchText = "Milano"
         #expect(!viewModel.suggestions.isEmpty)
-        #expect(viewModel.suggestions.first?.cityName == "Milan")
+        #expect(viewModel.suggestions.first?.cityName == "Milano")
     }
     
     @Test

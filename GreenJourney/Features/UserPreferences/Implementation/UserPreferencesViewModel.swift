@@ -132,23 +132,18 @@ class UserPreferencesViewModel: ObservableObject {
             self.errorMessage = nil
             users = try modelContext.fetch(FetchDescriptor<User>())
             if let oldUser = users.first {
-                do {
-                    // update values
-                    oldUser.firstName = newUser.firstName
-                    oldUser.lastName = newUser.lastName
-                    oldUser.birthDate = newUser.birthDate
-                    oldUser.gender = newUser.gender
-                    oldUser.city = newUser.city
-                    oldUser.streetName = newUser.streetName
-                    oldUser.houseNumber = newUser.houseNumber
-                    oldUser.zipCode = newUser.zipCode
-                    oldUser.scoreShortDistance = newUser.scoreShortDistance
-                    oldUser.scoreLongDistance = newUser.scoreLongDistance
-                    try modelContext.save()
-                } catch {
-                    print("Error while updating user in SwiftData")
-                    self.errorMessage = "An error occurred while updating user"
-                }
+                // update values
+                oldUser.firstName = newUser.firstName
+                oldUser.lastName = newUser.lastName
+                oldUser.birthDate = newUser.birthDate
+                oldUser.gender = newUser.gender
+                oldUser.city = newUser.city
+                oldUser.streetName = newUser.streetName
+                oldUser.houseNumber = newUser.houseNumber
+                oldUser.zipCode = newUser.zipCode
+                oldUser.scoreShortDistance = newUser.scoreShortDistance
+                oldUser.scoreLongDistance = newUser.scoreLongDistance
+                try modelContext.save()
             }
         }catch {
             print("Error while updating user in SwiftData")

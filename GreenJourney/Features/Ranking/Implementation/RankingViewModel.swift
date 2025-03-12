@@ -22,7 +22,7 @@ class RankingViewModel: ObservableObject {
         self.serverService = serverService
     }
     
-    func getUserFromServer() async{
+    func getUserFromServer() async {
         do {
             let user = try await serverService.getUser()
             badges = user.badges
@@ -46,25 +46,19 @@ class RankingViewModel: ObservableObject {
                     }
                     try modelContext.save()
                 }
-            } catch {
-                print("Error while checking number of users: \(error)")
-                return
-            }
-            
-            // add user to context
-            modelContext.insert(user)
-            
-            // save user in SwiftData
-            do {
+                
+                // add user to context
+                modelContext.insert(user)
+                
+                // save user in SwiftData
                 try modelContext.save()
             } catch {
-                print("Error while saving user to SwiftData: \(error)")
+                print("Error while interacting with SwiftData: \(error)")
                 return
             }
         }
     }
 
-    
     func fecthRanking() async {
         self.errorMessage = nil
         

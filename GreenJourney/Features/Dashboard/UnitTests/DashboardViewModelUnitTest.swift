@@ -70,19 +70,6 @@ final class DashboardViewModelUnitTest {
         try self.mockModelContext.save()
     }
     
-    /*
-    @Test
-    func testGetUserBadges() throws {
-        viewModel.getUserBadges()
-        
-        // check bedges present
-        #expect(viewModel.badges.count == 3)
-        #expect(viewModel.badges.contains(Badge.badgeDistanceLow))
-        #expect(viewModel.badges.contains(Badge.badgeEcologicalChoiceMid))
-        #expect(viewModel.badges.contains(Badge.badgeTravelsNumberHigh))
-    }
-     */
-    
     @Test
     func testGetUserTravels() throws {
         viewModel.getUserTravels()

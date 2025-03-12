@@ -36,6 +36,77 @@ final class RankingViewModelUnitTest {
     }
     
     @Test
+    func testGetUserFromServerFails() async throws {
+        // set server
+        self.mockServerService.shouldSucceed = false
+        
+        // call method
+        await viewModel.getUserFromServer()
+        
+        // check values present
+        #expect(viewModel.badges.count == 0)
+        #expect(viewModel.shortDistanceScore == 0)
+        #expect(viewModel.longDistanceScore == 0)
+        
+        let users = try mockModelContext.fetch(FetchDescriptor<User>())
+        #expect(users.count == 0)
+    }
+    
+    @Test
+    func testGetUserFromServerUserNotPresent() async throws {
+        // set server
+        self.mockServerService.shouldSucceed = true
+        
+        // call method
+        await viewModel.getUserFromServer()
+        
+        // check values present
+        #expect(viewModel.badges.count == 3)
+        #expect(viewModel.badges.contains(Badge.badgeDistanceLow))
+        #expect(viewModel.badges.contains(Badge.badgeCompensationHigh))
+        #expect(viewModel.badges.contains(Badge.badgeTravelsNumberMid))
+        #expect(viewModel.shortDistanceScore == 50)
+        #expect(viewModel.longDistanceScore == 100)
+        
+        let users = try mockModelContext.fetch(FetchDescriptor<User>())
+        #expect(users.count == 1)
+        #expect(users.first!.userID == 1)
+    }
+    
+    @Test
+    func testGetUserFromServerUserAlreadyPresent() async throws {
+        // add a user to SwiftData
+        let user = User(
+            userID: 2,
+            firstName: "User2",
+            lastName: "User2",
+            firebaseUID: "User2",
+            scoreShortDistance: 10,
+            scoreLongDistance: 10
+        )
+        mockModelContext.insert(user)
+        try mockModelContext.save()
+        
+        // set server
+        self.mockServerService.shouldSucceed = true
+        
+        // call method
+        await viewModel.getUserFromServer()
+        
+        // check values present
+        #expect(viewModel.badges.count == 3)
+        #expect(viewModel.badges.contains(Badge.badgeDistanceLow))
+        #expect(viewModel.badges.contains(Badge.badgeCompensationHigh))
+        #expect(viewModel.badges.contains(Badge.badgeTravelsNumberMid))
+        #expect(viewModel.shortDistanceScore == 50)
+        #expect(viewModel.longDistanceScore == 100)
+        
+        let users = try mockModelContext.fetch(FetchDescriptor<User>())
+        #expect(users.count == 1)
+        #expect(users.first!.userID == 1)
+    }
+    
+    @Test
     func testFetchRankingsNoUser() async {
         // no user in SwiftData
         self.mockServerService.shouldSucceed = true

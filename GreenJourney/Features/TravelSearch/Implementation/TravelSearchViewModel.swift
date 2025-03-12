@@ -63,19 +63,15 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
         do {
             let outwardOptions = try await serverService.computeRoutes(departureIata: departure.iata, departureCountryCode: departure.countryCode, destinationIata: arrival.iata, destinationCountryCode: arrival.countryCode, date: formattedDate, time: formattedTime, isOutward: isOutward)
             self.outwardOptions = outwardOptions
+            
+            // get return options
+            if (!oneWay) {
+                let returnOptions = try await serverService.computeRoutes(departureIata: arrival.iata, departureCountryCode: arrival.countryCode, destinationIata: departure.iata, destinationCountryCode: departure.countryCode, date: formattedDateReturn, time: formattedTimeReturn, isOutward: !isOutward)
+                self.returnOptions = returnOptions
+            }
         }catch {
             print("Error fetching options: \(error.localizedDescription)")
             return
-        }
-        
-        // get return options
-        if (!oneWay) {
-            do {
-                let returnOptions = try await serverService.computeRoutes(departureIata: arrival.iata, departureCountryCode: arrival.countryCode, destinationIata: departure.iata, destinationCountryCode: departure.countryCode, date: formattedDateReturn, time: formattedTimeReturn, isOutward: !isOutward)
-                self.returnOptions = returnOptions
-            }catch {
-                print("Error fetching options: \(error.localizedDescription)")
-            }
         }
     }
     
