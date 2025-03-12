@@ -38,20 +38,8 @@ struct DashboardView: View {
                     }
                 }
                 .padding(5)
-                
-                if horizontalSizeClass == .compact {
-               /*     // badges
-                    UserBadgesView(legendTapped: $legendTapped, viewModel: viewModel, inline: false)
-                    */
-                    // expandible recaps
-                    DashboardDetailsNavigationView(viewModel: viewModel)
-                    
-                /*    // scores
-                    ScoresView(scoreLongDistance: viewModel.longDistanceScore, scoreShortDistance: viewModel.shortDistanceScore)*/
-                } else {                    
-                    // expandible recaps
-                    DashboardDetailsNavigationView(viewModel: viewModel)
-                }
+                // expandible recaps
+                DashboardDetailsNavigationView(viewModel: viewModel)
             }
             .padding(.horizontal)
         }
@@ -167,42 +155,3 @@ private struct DashboardDetailsNavigationView: View {
         }
     }
 }
-
-/*
-private struct UserBadgesView: View {
-    @Binding var legendTapped: Bool
-    @ObservedObject var viewModel: DashboardViewModel
-    var inline: Bool
-    
-    var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 15)
-                .fill(Color(uiColor: .systemBackground))
-                .shadow(color: .blue.opacity(0.3), radius: 5, x: 0, y: 3)
-            VStack (spacing:0){
-                HStack {
-                    Text("Badges")
-                        .font(.title)
-                        .foregroundStyle(.blue.opacity(0.8))
-                        .fontWeight(.semibold)
-                    Button(action: {
-                        legendTapped = true
-                    }) {
-                        Image(systemName: "info.circle")
-                            .font(.title3)
-                            .foregroundStyle(.gray)
-                    }
-                    Spacer()
-                }
-                .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 0))
-                HStack{
-                    BadgeView(badges: viewModel.badges, dim: 130, inline: inline)
-                        .padding()
-                }
-            }
-        }
-        .padding(EdgeInsets(top: 5, leading: 15, bottom: 7, trailing: 15))
-        .overlay(Color.clear.accessibilityIdentifier("userBadges"))
-    }
-}
-*/
