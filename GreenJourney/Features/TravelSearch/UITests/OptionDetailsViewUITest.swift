@@ -213,9 +213,9 @@ final class OptionDetailsViewUITest: XCTestCase {
         searchButton.tap()
         
         // UI elements
-        let outwardOption_2 = app.buttons["outwardOption_2"]
+        let outwardOption_2 = app.buttons["outwardOption_3"]
         
-        XCTAssertTrue(outwardOption_2.exists, "outwardOption_2 not displayed")
+        XCTAssertTrue(outwardOption_2.exists, "outwardOption_3 not displayed")
         
         // tap option
         outwardOption_2.tap()

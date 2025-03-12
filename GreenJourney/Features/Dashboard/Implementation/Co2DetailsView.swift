@@ -49,18 +49,22 @@ struct Co2DetailsView: View {
                         }
                     }
                     .padding()
+                    .overlay(Color.clear.accessibilityIdentifier("co2CompenationRecap"))
                 }
                 .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
                 
                 HorizontalBarChart(keys: viewModel.co2PerTransport.keys.sorted(), data: viewModel.co2PerTransport.keys.sorted().map{viewModel.co2PerTransport[$0]!}, title: "Co2 emitted per vehicle", color: .mint, measureUnit: "Kg")
                     .padding()
                     .frame(height: 250)
+                    .overlay(Color.clear.accessibilityIdentifier("co2EmittedPerVehicle"))
 
                 DoubleBarChart(element1: "Co2 Emitted", keys: viewModel.keysToString(keys: viewModel.co2CompensatedPerYear.keys.sorted()), data1: viewModel.co2EmittedPerYear.keys.sorted().map{viewModel.co2EmittedPerYear[$0]!}, element2: "Co2 Compensated", data2: viewModel.co2CompensatedPerYear.keys.sorted().map{viewModel.co2CompensatedPerYear[$0]!}, title: "Co2 per year", measureunit: "Kg of CO2")
                     .padding()
+                    .overlay(Color.clear.accessibilityIdentifier("co2EmittedPerYear"))
                 
                 BarChartView(title: "Planted trees", value: "\(viewModel.treesPlanted)", data: viewModel.co2CompensatedPerYear.keys.sorted().map{Int(viewModel.co2CompensatedPerYear[$0]!/75)}, labels: viewModel.keysToString(keys: viewModel.co2CompensatedPerYear.keys.sorted()), color: AppColors.mainColor)
                     .padding()
+                    .overlay(Color.clear.accessibilityIdentifier("plantedTreesPerYear"))
             }
             .padding(.horizontal)
         }
