@@ -11,60 +11,59 @@ struct UserDetailsRankingView: View {
     @State private var legendTapped: Bool = false
     
     var body: some View {
-        if horizontalSizeClass == .compact {
-            // iOS
-            ScrollView {
-                VStack {
-                    // title
-                    RankingElementDetailsTitle(user: user)
-                    
-                    //badges
-                    UserDetailsBadgesView(inline: false, user: user, legendTapped: $legendTapped)
-                    
-                    //user aggregate data
-                    RecapViewCompactDevice(viewModel: viewModel, user: user)
-                    
-                    Spacer()
-                }
-                .padding()
-            }
-            .sheet(isPresented: $legendTapped) {
-                LegendBadgeView(isPresented: $legendTapped)
-                    .presentationDetents([.large])
-                    .presentationCornerRadius(30)
-            }
-        } else {
-            // iPadOS
-            ScrollView {
-                VStack {
-                    // title
-                    RankingElementDetailsTitle(user: user)
-                    
-                    // badges
-                    UserDetailsBadgesView(inline: true, user: user, legendTapped: $legendTapped)
-                    
-                    // user aggregate data
-                    HStack {
-                        VStack {
-                            // scores
-                            ScoresView(scoreLongDistance: user.scoreLongDistance, scoreShortDistance: user.scoreShortDistance)
-                            
-                            // user aggregate data
-                            RecapViewRegularDevice(viewModel: viewModel, user: user)
-                        }
+        VStack {
+            if horizontalSizeClass == .compact {
+                // iOS
+                ScrollView {
+                    VStack {
+                        // title
+                        RankingElementDetailsTitle(user: user)
                         
-                        // co2 emission
-                        Co2EmissionView(co2Emitted: user.totalCo2Emitted, co2Compensated: user.totalCo2Compensated, progress: user.totalCo2Compensated / user.totalCo2Emitted)
+                        //badges
+                        UserDetailsBadgesView(inline: false, user: user, legendTapped: $legendTapped)
+                        
+                        //user aggregate data
+                        RecapViewCompactDevice(viewModel: viewModel, user: user)
+                        
+                        Spacer()
                     }
-                    Spacer()
+                    .padding()
                 }
-                .padding()
+                
+            } else {
+                // iPadOS
+                ScrollView {
+                    VStack {
+                        // title
+                        RankingElementDetailsTitle(user: user)
+                        
+                        // badges
+                        UserDetailsBadgesView(inline: true, user: user, legendTapped: $legendTapped)
+                        
+                        // user aggregate data
+                        HStack {
+                            VStack {
+                                // scores
+                                ScoresView(scoreLongDistance: user.scoreLongDistance, scoreShortDistance: user.scoreShortDistance)
+                                
+                                // user aggregate data
+                                RecapViewRegularDevice(viewModel: viewModel, user: user)
+                            }
+                            
+                            // co2 emission
+                            Co2EmissionView(co2Emitted: user.totalCo2Emitted, co2Compensated: user.totalCo2Compensated, progress: user.totalCo2Compensated / user.totalCo2Emitted)
+                        }
+                        Spacer()
+                    }
+                    .padding()
+                }
             }
-            .sheet(isPresented: $legendTapped) {
-                LegendBadgeView(isPresented: $legendTapped)
-                    .presentationDetents([.large])
-                    .presentationCornerRadius(30)
-            }
+        }
+        .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
+        .sheet(isPresented: $legendTapped) {
+            LegendBadgeView(isPresented: $legendTapped)
+                .presentationDetents([.large])
+                .presentationCornerRadius(15)
         }
     }
 }

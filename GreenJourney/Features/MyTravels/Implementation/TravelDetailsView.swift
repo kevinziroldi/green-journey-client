@@ -107,7 +107,7 @@ struct TravelDetailsView: View {
                             viewModel.selectedTravel = travelDetails
                         }) {
                             ZStack {
-                                RoundedRectangle(cornerRadius: 20)
+                                RoundedRectangle(cornerRadius: 15)
                                     .fill(Color.red.opacity(0.3))
                                 HStack {
                                     Image(systemName: "trash")
@@ -146,15 +146,15 @@ struct TravelDetailsView: View {
             .sheet(isPresented: $reviewTapped) {
                 InsertReviewView(isPresented: $reviewTapped, viewModel: reviewViewModel)
                     .presentationDetents([.height(680)])
-                    .presentationCornerRadius(30)
+                    .presentationCornerRadius(15)
             }
             .sheet(isPresented: $infoTapped) {
                 InfoCompensationView(isPresented: $infoTapped)
                     .presentationDetents([.fraction(0.75)])
-                    .presentationCornerRadius(30)
+                    .presentationCornerRadius(15)
             }
             .ignoresSafeArea(edges: [.bottom, .horizontal])
-            .background(colorScheme == .dark ? Color(red: 10/255, green: 10/255, blue: 10/255) : Color(red: 245/255, green: 245/255, blue: 245/255))
+            .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
             .onAppear() {
                 reviewViewModel.userReview = travelDetails.travel.userReview
                 if (travelDetails.computeCo2Emitted() >= 0.0) {

@@ -29,62 +29,60 @@ struct UserPreferencesView : View {
     
     var body: some View {
         if let user = users.first {
-            if horizontalSizeClass == .compact {
-                // iOS
+            VStack {
+                if horizontalSizeClass == .compact {
+                    // iOS
+                    ScrollView {
+                        VStack {
+                            // view title
+                            UserPreferencesTitleView()
+                            
+                            // user data TextFields
+                            UserPreferencesTextFieldsView(userPreferencesViewModel: userPreferencesViewModel, editTapped: editTapped, user: user)
+                            
+                            // password modification
+                            PasswordModificationView(authenticationViewModel: authenticationViewModel, showResendMessage: showResendMessage)
+                            
+                            // error message
+                            ErrorMessageView(userPreferencesViewModel: userPreferencesViewModel)
+                            
+                            // logout button
+                            LogoutButtonView(authenticationViewModel: authenticationViewModel, navigationPath: $navigationPath)
+                        }
+                        .padding()
+                    }
+                    .scrollDismissesKeyboard(.immediately)
+                    .frame(maxWidth: .infinity)
+                } else {
+                    // iPadOS
+                    ScrollView {
+                        VStack {
+                            // view title
+                            UserPreferencesTitleView()
+                            
+                            // user data TextFields
+                            UserPreferencesTextFieldsView(userPreferencesViewModel: userPreferencesViewModel, editTapped: editTapped, user: user)
+                                .padding(.horizontal, 50)
+                            
+                            // password modification
+                            PasswordModificationView(authenticationViewModel: authenticationViewModel, showResendMessage: showResendMessage)
+                            
+                            // error message
+                            ErrorMessageView(userPreferencesViewModel: userPreferencesViewModel)
+                            
+                            // logout button
+                            LogoutButtonView(authenticationViewModel: authenticationViewModel, navigationPath: $navigationPath)
+                        }
+                        .padding()
+                    }
+                    .scrollDismissesKeyboard(.immediately)
+                    .frame(maxWidth: .infinity)
+                }
+            }
+            .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
+            .onAppear(){
+                userPreferencesViewModel.getUserData()
                 
-                ScrollView {
-                    // view title
-                    UserPreferencesTitleView()
-                    
-                    // user data TextFields
-                    UserPreferencesTextFieldsView(userPreferencesViewModel: userPreferencesViewModel, editTapped: editTapped, user: user)
-                    
-                    // password modification
-                    PasswordModificationView(authenticationViewModel: authenticationViewModel, showResendMessage: showResendMessage)
-                    
-                    // error message
-                    ErrorMessageView(userPreferencesViewModel: userPreferencesViewModel)
-                    
-                    // logout button
-                    LogoutButtonView(authenticationViewModel: authenticationViewModel, navigationPath: $navigationPath)
-                }
-                .scrollDismissesKeyboard(.immediately)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .onAppear(){
-                    userPreferencesViewModel.getUserData()
-                    
-                }
-                .background(colorScheme == .dark ? Color(red: 10/255, green: 10/255, blue: 10/255) : Color(red: 245/255, green: 245/255, blue: 245/255))
-            } else {
-                // iPadOS
-                
-                
-                ScrollView {
-                    // view title
-                    UserPreferencesTitleView()
-                    
-                    // user data TextFields
-                    UserPreferencesTextFieldsView(userPreferencesViewModel: userPreferencesViewModel, editTapped: editTapped, user: user)
-                        .padding(.horizontal, 50)
-                    
-                    // password modification
-                    PasswordModificationView(authenticationViewModel: authenticationViewModel, showResendMessage: showResendMessage)
-                    
-                    // error message
-                    ErrorMessageView(userPreferencesViewModel: userPreferencesViewModel)
-                    
-                    // logout button
-                    LogoutButtonView(authenticationViewModel: authenticationViewModel, navigationPath: $navigationPath)
-                }
-                .scrollDismissesKeyboard(.immediately)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .onAppear(){
-                    userPreferencesViewModel.getUserData()
-                    
-                }
-                .background(colorScheme == .dark ? Color(red: 10/255, green: 10/255, blue: 10/255) : Color(red: 245/255, green: 245/255, blue: 245/255))
             }
         }
     }

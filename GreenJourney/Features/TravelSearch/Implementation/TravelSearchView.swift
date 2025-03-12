@@ -49,7 +49,7 @@ struct TravelSearchView: View {
                             }
                         }
                         Rectangle()
-                            .fill(colorScheme == .dark ? Color.black : Color.white)
+                            .fill(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
                             .ignoresSafeArea()
                             .mask {
                                 AnimatedRectangle(size: proxy.size, cornerRadius: 48, t: CGFloat(0.0))
@@ -60,7 +60,8 @@ struct TravelSearchView: View {
                     .frame(width: proxy.size.width, height: proxy.size.height)
                 }
                 .ignoresSafeArea()
-            GeometryReader { geometry in
+                ScrollView {
+                    GeometryReader { geometry in
                         VStack {
                             ZStack {
                                 // dismiss AI button
@@ -118,11 +119,6 @@ struct TravelSearchView: View {
                                     
                                     HStack (spacing: 3) {
                                         Spacer()
-                                        /*Image(systemName: "location.magnifyingglass")
-                                            .font(.title3)
-                                            .fontWeight(.light)
-                                            .foregroundStyle(.white)
-                                        Spacer()*/
                                         Text("Search")
                                             .foregroundStyle(.white)
                                             .font(.title3)
@@ -140,19 +136,20 @@ struct TravelSearchView: View {
                             
                             AIPredictionView(viewModel: viewModel, triggerAI: $triggerAI, showAlertPrediction: $showAlertPrediction, width:  geometry.size.width/2)
                         }
+                    }
                 }
             }
+            .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
             .sheet(isPresented: $dateTapped) {
                 DatePickerView(dateTapped: $dateTapped, title: "Select Outward Date", date: $viewModel.datePicked)
                     .presentationDetents([.height(530)])
-                    .presentationCornerRadius(30)
+                    .presentationCornerRadius(15)
             }
             .sheet(isPresented: $dateReturnTapped) {
                 DatePickerView(dateTapped: $dateReturnTapped, title: "Select Return Date", date: $viewModel.dateReturnPicked)
                     .presentationDetents([.height(530)])
-                    .presentationCornerRadius(30)
+                    .presentationCornerRadius(15)
             }
-            //.ignoresSafeArea()
             .toolbar((triggerAI) ? .hidden : .automatic, for: .tabBar)
             .navigationBarBackButtonHidden(triggerAI)
             .onAppear() {
@@ -366,7 +363,6 @@ private struct DepartureCompleterView: View {
             },
                           departure: true)
         }
-        
     }
 }
 

@@ -25,151 +25,150 @@ struct MyTravelsView: View {
         self.firebaseAuthService = firebaseAuthService
     }
     var body: some View {
-        VStack {
-            ScrollView {
-                HStack {
-                    Text("My travels")
-                        .font(.system(size: 32).bold())
-                        .padding()
-                        .fontWeight(.semibold)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .accessibilityIdentifier("myTravelsTitle")
-                    
-                    Spacer()
-                    
-                    if horizontalSizeClass == .compact {
-                        UserPreferencesButtonView(navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
-                    }
-                }
-                .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
+        ScrollView {
+            HStack {
+                Text("My travels")
+                    .font(.system(size: 32).bold())
+                    .padding()
+                    .fontWeight(.semibold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityIdentifier("myTravelsTitle")
                 
-                Picker("", selection: $viewModel.showCompleted) {
-                    Text("Completed").tag(true)
-                    Text("Scheduled").tag(false)
-                }
-                .pickerStyle(SegmentedPickerStyle())
-                .frame(maxWidth: 400) // set a max width to control the size
-                .accessibilityIdentifier("travelCompletedControl")
+                Spacer()
                 
-                HStack {
-                    Spacer()
-                    Button(action: {
-                        showSortOptions.toggle()
-                    }) {
-                        Text("Order by")
-                    }
-                    .padding(.trailing, 20)
-                    .actionSheet(isPresented: $showSortOptions) {
-                        ActionSheet(title: Text("Sort by"), buttons: [
-                            .default(Text("Departure date")) {viewModel.sortOption = .departureDate},
-                            .default(Text("CO2 emitted")) {viewModel.sortOption = .co2Emitted},
-                            .default(Text("CO2 compensation rate")) {viewModel.sortOption = .co2CompensationRate},
-                            .default(Text("Price")) {viewModel.sortOption = .price},
-                            .cancel()
-                        ])
-                    }
-                    .accessibilityIdentifier("sortByButton")
+                if horizontalSizeClass == .compact {
+                    UserPreferencesButtonView(navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
                 }
-                .padding(.vertical, 10)
-                .frame(maxWidth: 800)
-                
-                
-                if viewModel.filteredTravelDetailsList.count == 0 {
-                    VStack {
-                        if colorScheme == .dark {
-                            Image("noTravelsDark")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 300, height: 300)
-                        }
-                        else {
-                            Image("noTravelsLight")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 300, height: 300)
-                        }
-                        Text("You have no trips in this section yet")
-                            .font(.headline)
-                            .fontWeight(.light)
-                    }
-                    .accessibilityIdentifier("noTravelsAlert")
+            }
+            .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
+            
+            Picker("", selection: $viewModel.showCompleted) {
+                Text("Completed").tag(true)
+                Text("Scheduled").tag(false)
+            }
+            .pickerStyle(SegmentedPickerStyle())
+            .frame(maxWidth: 400) // set a max width to control the size
+            .accessibilityIdentifier("travelCompletedControl")
+            
+            HStack {
+                Spacer()
+                Button(action: {
+                    showSortOptions.toggle()
+                }) {
+                    Text("Order by")
                 }
-                else {
-                    VStack{
-                        ForEach(viewModel.filteredTravelDetailsList, id: \.id) { travelDetails in
-                            HStack (spacing: 10) {
-                                Button(action: {
-                                    viewModel.selectedTravel = travelDetails
-                                    // selectedTravel is set synchronously
-                                    navigationPath.append(NavigationDestination.TravelDetailsView(viewModel))
-                                }) {
-                                    TravelCardView(travelDetails: travelDetails)
-                                }
-                                .accessibilityIdentifier("travelCardButton_\(travelDetails.travel.travelID ?? 1)")
-                                
-                                if viewModel.showCompleted && !travelDetails.travel.confirmed {
-                                    VStack {
-                                        
-                                        Button(action: {
-                                            showConfirm = true
-                                            viewModel.selectedTravel = travelDetails
-                                        }) {
-                                            Image(systemName: "checkmark.circle")
-                                                .font(.largeTitle)
-                                                .scaleEffect(1.2)
-                                                .fontWeight(.light)
-                                                .foregroundStyle(.green)
-                                        }
-                                        .padding(.vertical, 5)
-                                        .alert(isPresented: $showConfirm) {
-                                            Alert(
-                                                title: Text("Have you done this travel?"),
-                                                primaryButton: .cancel(Text("Cancel")) {},
-                                                secondaryButton: .default(Text("Confirm")) {
-                                                    //confirm travel
-                                                    Task {
-                                                        await viewModel.confirmTravel()
-                                                    }
-                                                }
-                                            )
-                                        }
-                                        .accessibilityIdentifier("confirmTravelButton_\(travelDetails.travel.travelID ?? 1)")
-                                        
-                                        Button(action: {
-                                            showAlert = true
-                                            viewModel.selectedTravel = travelDetails
-                                        }) {
-                                            Image(systemName: "trash.circle")
-                                                .font(.largeTitle)
-                                                .scaleEffect(1.2)
-                                                .fontWeight(.light)
-                                                .foregroundStyle(.red)
-                                        }
-                                        .padding(.vertical, 5)
-                                        .alert(isPresented: $showAlert) {
-                                            Alert(
-                                                title: Text("Delete this travel?"),
-                                                message: Text("You cannot undo this action"),
-                                                primaryButton: .cancel(Text("Cancel")) {},
-                                                secondaryButton: .destructive(Text("Delete")) {
-                                                    //delete travel
-                                                    Task {
-                                                        await viewModel.deleteTravel()
-                                                    }
-                                                }
-                                            )
-                                        }
-                                        .accessibilityIdentifier("deleteTravelButton_\(travelDetails.travel.travelID ?? 1)")
+                .padding(.trailing, 20)
+                .actionSheet(isPresented: $showSortOptions) {
+                    ActionSheet(title: Text("Sort by"), buttons: [
+                        .default(Text("Departure date")) {viewModel.sortOption = .departureDate},
+                        .default(Text("CO2 emitted")) {viewModel.sortOption = .co2Emitted},
+                        .default(Text("CO2 compensation rate")) {viewModel.sortOption = .co2CompensationRate},
+                        .default(Text("Price")) {viewModel.sortOption = .price},
+                        .cancel()
+                    ])
+                }
+                .accessibilityIdentifier("sortByButton")
+            }
+            .padding(.vertical, 10)
+            .frame(maxWidth: 800)
+            
+            
+            if viewModel.filteredTravelDetailsList.count == 0 {
+                VStack {
+                    if colorScheme == .dark {
+                        Image("noTravelsDark")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 300, height: 300)
+                    }
+                    else {
+                        Image("noTravelsLight")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 300, height: 300)
+                    }
+                    Text("You have no trips in this section yet")
+                        .font(.headline)
+                        .fontWeight(.light)
+                }
+                .accessibilityIdentifier("noTravelsAlert")
+            }
+            else {
+                VStack{
+                    ForEach(viewModel.filteredTravelDetailsList, id: \.id) { travelDetails in
+                        HStack (spacing: 10) {
+                            Button(action: {
+                                viewModel.selectedTravel = travelDetails
+                                // selectedTravel is set synchronously
+                                navigationPath.append(NavigationDestination.TravelDetailsView(viewModel))
+                            }) {
+                                TravelCardView(travelDetails: travelDetails)
+                            }
+                            .accessibilityIdentifier("travelCardButton_\(travelDetails.travel.travelID ?? 1)")
+                            
+                            if viewModel.showCompleted && !travelDetails.travel.confirmed {
+                                VStack {
+                                    
+                                    Button(action: {
+                                        showConfirm = true
+                                        viewModel.selectedTravel = travelDetails
+                                    }) {
+                                        Image(systemName: "checkmark.circle")
+                                            .font(.largeTitle)
+                                            .scaleEffect(1.2)
+                                            .fontWeight(.light)
+                                            .foregroundStyle(.green)
                                     }
+                                    .padding(.vertical, 5)
+                                    .alert(isPresented: $showConfirm) {
+                                        Alert(
+                                            title: Text("Have you done this travel?"),
+                                            primaryButton: .cancel(Text("Cancel")) {},
+                                            secondaryButton: .default(Text("Confirm")) {
+                                                //confirm travel
+                                                Task {
+                                                    await viewModel.confirmTravel()
+                                                }
+                                            }
+                                        )
+                                    }
+                                    .accessibilityIdentifier("confirmTravelButton_\(travelDetails.travel.travelID ?? 1)")
+                                    
+                                    Button(action: {
+                                        showAlert = true
+                                        viewModel.selectedTravel = travelDetails
+                                    }) {
+                                        Image(systemName: "trash.circle")
+                                            .font(.largeTitle)
+                                            .scaleEffect(1.2)
+                                            .fontWeight(.light)
+                                            .foregroundStyle(.red)
+                                    }
+                                    .padding(.vertical, 5)
+                                    .alert(isPresented: $showAlert) {
+                                        Alert(
+                                            title: Text("Delete this travel?"),
+                                            message: Text("You cannot undo this action"),
+                                            primaryButton: .cancel(Text("Cancel")) {},
+                                            secondaryButton: .destructive(Text("Delete")) {
+                                                //delete travel
+                                                Task {
+                                                    await viewModel.deleteTravel()
+                                                }
+                                            }
+                                        )
+                                    }
+                                    .accessibilityIdentifier("deleteTravelButton_\(travelDetails.travel.travelID ?? 1)")
                                 }
                             }
-                            .frame(maxWidth: 800)
-                            .padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
                         }
+                        .frame(maxWidth: 800)
+                        .padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
                     }
                 }
             }
         }
+        .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
         .onAppear {
             viewModel.showRequestedTravels()
             if viewModel.filteredTravelDetailsList.isEmpty {

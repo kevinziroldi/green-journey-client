@@ -3,6 +3,7 @@ import SwiftUI
 struct AllReviewsView: View {
     @ObservedObject var viewModel: CitiesReviewsViewModel
     @Binding var navigationPath: NavigationPath
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     
     @FocusState private var isFocused: Bool
     
@@ -105,6 +106,7 @@ struct AllReviewsView: View {
                 Spacer()
             }
         }
+        .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
     }
 }
 
@@ -135,7 +137,7 @@ private struct SingleReviewView: View {
     let review: Review
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 20)
+            RoundedRectangle(cornerRadius: 15)
                 .fill(Color(uiColor: .systemBackground))
                 .shadow(color: .blue.opacity(0.3), radius: 5, x: 0, y: 3)
             

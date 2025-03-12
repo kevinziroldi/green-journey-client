@@ -36,9 +36,9 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
         self.arrival = CityCompleterDataset()
         self.departure = CityCompleterDataset()
         self.datePicked = Date()
-        self.selectedOption = []
+        /*self.selectedOption = []
         self.outwardOptions = []
-        self.returnOptions = []
+        self.returnOptions = []*/
         self.predictedCities = []
     }
     
