@@ -94,7 +94,7 @@ struct RankingView: View {
         .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
         .sheet(isPresented: $legendTapped) {
             LegendBadgeView(isPresented: $legendTapped)
-                .presentationDetents([.fraction(0.90)])
+                .presentationDetents([.fraction(0.95)])
                 .presentationCornerRadius(15)
         }
         .onAppear {
