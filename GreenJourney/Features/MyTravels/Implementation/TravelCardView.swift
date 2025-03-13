@@ -125,7 +125,7 @@ struct TravelCardView: View {
             return LinearGradient(colors: [.green.opacity(0.3), .blue.opacity(0.3)], startPoint: .bottomLeading, endPoint: .topTrailing)
         }
         else {
-            return LinearGradient(colors: [.clear], startPoint: .bottomLeading, endPoint: .topTrailing)
+            return LinearGradient(colors: [Color(uiColor: .systemBackground)], startPoint: .bottomLeading, endPoint: .topTrailing)
         }
     }
 }

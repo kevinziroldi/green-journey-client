@@ -26,7 +26,7 @@ enum TabViewElement: Hashable, CaseIterable, Identifiable {
         case .Reviews:      return "star.fill"
         case .SearchTravel: return "location"
         case .MyTravels:    return "airplane"
-        case .Dashboard:    return "house"
+        case .Dashboard:    return "chart.bar.xaxis.ascending"
         case .UserPreferences: return "person"
         }
     }

@@ -22,6 +22,7 @@ struct InfoCompensationView: View {
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .scaledToFit()
+                    .minimumScaleFactor(0.6)
                     .lineLimit(1)
                     .padding(.bottom, 5)
                 
@@ -33,6 +34,7 @@ struct InfoCompensationView: View {
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .scaledToFit()
+                    .minimumScaleFactor(0.6)
                     .lineLimit(1)
                     .padding(.top, 30)
                     .padding(.bottom, 5)

@@ -131,7 +131,7 @@ struct TravelSearchView: View {
                             .disabled(viewModel.departure.iata == "" || viewModel.arrival.iata == "")
                             .padding(.top, 20)
                             .accessibilityIdentifier("searchButton")
-                            Spacer()
+
                             AIPredictionView(viewModel: viewModel, triggerAI: $triggerAI, showAlertPrediction: $showAlertPrediction)
                         }
                     
@@ -431,8 +431,8 @@ private struct OutwardDatePickerView: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)
-                .stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 1.5)
-                .fill(colorScheme == .dark ? .black : .white)
+                .stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 3)
+                .fill(Color(uiColor: .systemBackground))
             Button(action: {
                 dateTapped = true
             }) {
@@ -453,6 +453,7 @@ private struct OutwardDatePickerView: View {
             .padding(.vertical, 10)
             .accessibilityIdentifier("outwardDateButton")
         }
+        .padding(.bottom, 5)
     }
 }
 
@@ -465,8 +466,8 @@ private struct ReturnDatePickerView: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)
-                .stroke(viewModel.oneWay ? .clear : colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 1.5)
-                .fill(viewModel.oneWay ? Color.gray.opacity(0.5) : colorScheme == .dark ? .black : .white)
+                .stroke(viewModel.oneWay ? .clear : colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 3)
+                .fill(viewModel.oneWay ? Color.gray.opacity(0.5) : Color(uiColor: .systemBackground))
             Button(action:  {
                 dateReturnTapped = true
             }) {
@@ -606,7 +607,7 @@ private struct AIPredictionView: View {
                 Spacer()
             }
         }
-        .padding(.top, 20)
+        .padding(.top, 40)
         .padding(.bottom, 10)
     }
 }

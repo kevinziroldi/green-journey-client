@@ -108,18 +108,19 @@ struct UserDetailsBadgesView: View {
                         .foregroundStyle(AppColors.mainColor.opacity(0.8))
                         .fontWeight(.semibold)
                     
+                    Spacer()
+                    
                     Button(action: {
                         legendTapped = true
                     }) {
                         Image(systemName: "info.circle")
                             .font(.title3)
-                            .foregroundStyle(.gray)
                     }
                     .accessibilityIdentifier("badgesInfoButton")
                     
-                    Spacer()
+                    
                 }
-                .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 0))
+                .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 15))
                 
                 HStack{
                     BadgeView(badges: user.badges, dim: 150, inline: inline)

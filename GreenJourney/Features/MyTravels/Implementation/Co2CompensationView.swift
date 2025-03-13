@@ -50,7 +50,6 @@ private struct CompensationTitleView: View {
                     infoTapped = true
                 }) {
                     Image(systemName: "info.circle")
-                        .foregroundStyle(.gray)
                         .font(.title3)
                 }
                 .padding(.trailing)

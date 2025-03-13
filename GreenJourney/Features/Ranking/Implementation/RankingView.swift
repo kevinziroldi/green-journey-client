@@ -55,9 +55,6 @@ struct RankingView: View {
                         
                         
                         UserBadgesView(legendTapped: $legendTapped, badges: viewModel.badges, inline: true)
-                            .onLongPressGesture {
-                                legendTapped = true
-                            }
                         
                         ScoresView(scoreLongDistance: viewModel.longDistanceScore, scoreShortDistance: viewModel.shortDistanceScore)
                         Spacer()
@@ -426,16 +423,15 @@ private struct UserBadgesView: View {
                             .font(.title)
                             .foregroundStyle(AppColors.mainColor.opacity(0.8))
                             .fontWeight(.semibold)
+                        Spacer()
                         Button(action: {
                             legendTapped = true
                         }) {
                             Image(systemName: "info.circle")
                                 .font(.title3)
-                                .foregroundStyle(.gray)
                         }
-                        Spacer()
                     }
-                    .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 0))
+                    .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 15))
                     
                     HStack{
                         BadgeView(badges: badges, dim: (UIScreen.main.bounds.width - 120)/4, inline: inline)
