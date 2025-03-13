@@ -24,12 +24,6 @@ struct ScoresView: View {
         }
         .padding(EdgeInsets(top: 15, leading: 15, bottom: 5, trailing: 15))
             
-            InfoRowView(title: "Short distance",
-                    value: String(format: "%.1f", scoreShortDistance),
-                    icon: "trophy",
-                    color: AppColors.mainColor,
-                    imageValue: false,
-                    imageValueString: nil)
             
             InfoRowView(title: "Long distance",
                     value: String(format: "%.1f", scoreLongDistance),
@@ -37,6 +31,13 @@ struct ScoresView: View {
                     color: AppColors.mainColor,
                     imageValue: false,
                     imageValueString: nil)
+            InfoRowView(title: "Short distance",
+                    value: String(format: "%.1f", scoreShortDistance),
+                    icon: "trophy",
+                    color: AppColors.mainColor,
+                    imageValue: false,
+                    imageValueString: nil)
+            
         }
         .padding(.bottom, 7)
         .background(

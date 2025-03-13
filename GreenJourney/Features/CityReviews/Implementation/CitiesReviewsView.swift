@@ -199,8 +199,7 @@ struct ReviewableCitiesView: View {
                         .padding(.top, 15)
                         .padding(.horizontal, 5)
                         .padding(.bottom, 15)
-                        .frame(width: 150)
-                        .fixedSize(horizontal: false, vertical: true)
+                        .frame(width: 150, height: 100)
                         .overlay(Color.clear.accessibilityIdentifier("reviewableCityView_\(city.iata)_\(city.countryCode)"))
                     }
                 }
