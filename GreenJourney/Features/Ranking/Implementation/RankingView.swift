@@ -55,6 +55,9 @@ struct RankingView: View {
                         
                         
                         UserBadgesView(legendTapped: $legendTapped, badges: viewModel.badges, inline: true)
+                            .onLongPressGesture {
+                                legendTapped = true
+                            }
                         
                         ScoresView(scoreLongDistance: viewModel.longDistanceScore, scoreShortDistance: viewModel.shortDistanceScore)
                         Spacer()
@@ -331,9 +334,7 @@ private struct LeaderBoardRow: View {
             .padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
             
             if index < leaderboard.count - 1 {
-                Rectangle()
-                    .frame(height: 1)
-                    .foregroundColor(.gray)
+                Divider()
             }
         }
     }
@@ -414,34 +415,39 @@ private struct UserBadgesView: View {
     var inline: Bool
     
     var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 15)
-                .fill(Color(uiColor: .systemBackground))
-                .shadow(color: AppColors.mainColor.opacity(0.3), radius: 5, x: 0, y: 3)
-            VStack (spacing:0){
-                HStack {
-                    Text("Badges")
-                        .font(.title)
-                        .foregroundStyle(AppColors.mainColor.opacity(0.8))
-                        .fontWeight(.semibold)
-                    Button(action: {
-                        legendTapped = true
-                    }) {
-                        Image(systemName: "info.circle")
-                            .font(.title3)
-                            .foregroundStyle(.gray)
+            
+            ZStack {
+                RoundedRectangle(cornerRadius: 15)
+                    .fill(Color(uiColor: .systemBackground))
+                    .shadow(color: AppColors.mainColor.opacity(0.3), radius: 5, x: 0, y: 3)
+                VStack (spacing:0){
+                    HStack {
+                        Text("Badges")
+                            .font(.title)
+                            .foregroundStyle(AppColors.mainColor.opacity(0.8))
+                            .fontWeight(.semibold)
+                        Button(action: {
+                            legendTapped = true
+                        }) {
+                            Image(systemName: "info.circle")
+                                .font(.title3)
+                                .foregroundStyle(.gray)
+                        }
+                        Spacer()
                     }
-                    Spacer()
-                }
-                .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 0))
-                HStack{
-                    BadgeView(badges: badges, dim: 80, inline: inline)
-                        .padding()
+                    .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 0))
+                    
+                    HStack{
+                        BadgeView(badges: badges, dim: (UIScreen.main.bounds.width - 120)/4, inline: inline)
+                            .padding()
+                    }
                 }
             }
-        }
+            .overlay(Color.clear.accessibilityIdentifier("userBadges"))
+        
+        
         .padding(EdgeInsets(top: 5, leading: 15, bottom: 7, trailing: 15))
-        .overlay(Color.clear.accessibilityIdentifier("userBadges"))
+        
     }
 }
 

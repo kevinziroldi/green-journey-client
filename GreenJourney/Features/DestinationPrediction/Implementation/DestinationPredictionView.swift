@@ -20,14 +20,20 @@ struct DestinationPredictionView: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 20)
                     .stroke(.linearGradient(Gradient(colors: [.green, .blue]), startPoint: .bottomLeading, endPoint: .topTrailing), lineWidth: 3)
+                    .fill(.linearGradient(Gradient(colors: [.green.opacity(0.2), .blue.opacity(0.2)]), startPoint: .bottomLeading, endPoint: .topTrailing))
                 HStack{
                     Text("Don't know where to go? Ask AI.")
                         .foregroundColor(.gray)
                     Spacer()
+                    
                     Image(systemName: "apple.intelligence")
                         .font(.title)
                         .clipShape(Circle())
                         .foregroundStyle(.linearGradient(Gradient(colors: [.blue, .green]), startPoint: .bottomLeading, endPoint: .topTrailing))
+                    /*Image("icon_no_background")
+                        .resizable()
+                        .frame(width: 40, height: 40)
+                        .padding(.trailing, 5)*/
                 }
                 .padding(5)
                 .padding(.horizontal, 5)

@@ -61,7 +61,6 @@ struct TravelSearchView: View {
                 }
                 .ignoresSafeArea()
                 ScrollView {
-                    GeometryReader { geometry in
                         VStack {
                             ZStack {
                                 // dismiss AI button
@@ -79,7 +78,6 @@ struct TravelSearchView: View {
                                                 .foregroundStyle(.red.opacity(0.8))
                                                 .frame(width: 35, height: 35)
                                         }
-                                        .padding(.top, 30)
                                         .padding(.horizontal, 30)
                                         .accessibilityIdentifier("dismissAIButton")
                                     }
@@ -133,10 +131,10 @@ struct TravelSearchView: View {
                             .disabled(viewModel.departure.iata == "" || viewModel.arrival.iata == "")
                             .padding(.top, 20)
                             .accessibilityIdentifier("searchButton")
-                            
-                            AIPredictionView(viewModel: viewModel, triggerAI: $triggerAI, showAlertPrediction: $showAlertPrediction, width:  geometry.size.width/2)
+                            Spacer()
+                            AIPredictionView(viewModel: viewModel, triggerAI: $triggerAI, showAlertPrediction: $showAlertPrediction)
                         }
-                    }
+                    
                 }
             }
             .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
@@ -174,7 +172,6 @@ private struct TravelSearchHeaderView: View {
                 .font(.system(size: 32).bold())
                 .padding()
                 .fontWeight(.semibold)
-                //.opacity(triggerAI ? 0 : 1)
                 .accessibilityIdentifier("travelSearchViewTitle")
             
             Spacer()
@@ -545,9 +542,7 @@ private struct AIPredictionView: View {
     @ObservedObject var viewModel: TravelSearchViewModel
     @Binding var triggerAI: Bool
     @Binding var showAlertPrediction: Bool
-    
-    var width: CGFloat
-    
+        
     var body: some View {
         HStack {
             if !triggerAI {
@@ -590,7 +585,8 @@ private struct AIPredictionView: View {
                 }) {
                     ZStack {
                         RoundedRectangle(cornerRadius: 20)
-                            .stroke(.linearGradient(Gradient(colors: [.green, .blue]), startPoint: .bottomLeading, endPoint: .topTrailing), lineWidth: 2)
+                            .stroke(.linearGradient(Gradient(colors: [.green, .blue]), startPoint: .bottomLeading, endPoint: .topTrailing), lineWidth: 3)
+                            .fill(.linearGradient(Gradient(colors: [.green.opacity(0.2), .mint.opacity(0.2)]), startPoint: .bottomLeading, endPoint: .topTrailing))
                         HStack {
                             Text("Generate a new prediction")
                                 .foregroundStyle(.gray)
@@ -610,8 +606,7 @@ private struct AIPredictionView: View {
                 Spacer()
             }
         }
-        .position(x: width, y: 60)
-        
-        Spacer()
+        .padding(.top, 20)
+        .padding(.bottom, 10)
     }
 }
