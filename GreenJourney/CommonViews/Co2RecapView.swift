@@ -38,15 +38,15 @@ struct Co2RecapView: View {
     }
     func computeTravelColor(distance: Float64, co2Emitted: Float64) -> Color {
         if co2Emitted == 0.0 {
-            return Color.mint
+            return Color(red: 102/255, green: 187/255, blue: 106/255)
         }
         if distance/co2Emitted > 30 {
-            return Color.green
+            return Color(red: 102/255, green: 187/255, blue: 106/255)
         }
         if distance/co2Emitted > 20 {
-            return Color.yellow
+            return Color(red: 207/255, green: 155/255, blue: 2/255)
         }
-        return Color.red
+        return Color(red: 184/255, green: 56/255, blue: 53/255)
     }
 }
 

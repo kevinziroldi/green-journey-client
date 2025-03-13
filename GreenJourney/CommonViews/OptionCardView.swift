@@ -10,8 +10,8 @@ struct OptionCardView: View {
     var body: some View {
         ZStack{
             RoundedRectangle(cornerRadius: 15)
-                .stroke(computeTravelColor(option: option), lineWidth: 5)
                 .fill(Color(uiColor: .systemBackground))
+                .strokeBorder(computeTravelColor(option: option), lineWidth: 3)
             
             if horizontalSizeClass == .compact {
                 // iOS

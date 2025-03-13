@@ -20,7 +20,7 @@ struct Co2CompensationView: View {
                 .strokeBorder(
                     LinearGradient(gradient: Gradient(colors: [.blue, .cyan, .mint, .green]),
                                    startPoint: .topTrailing, endPoint: .bottomLeading), lineWidth: 6)
-                .shadow(color: .green.opacity(0.3), radius: 5, x: 0, y: 3)
+                //.shadow(color: .green.opacity(0.3), radius: 5, x: 0, y: 3)
             
             ZStack {
                 // title and info button
@@ -322,7 +322,7 @@ private struct CompensateButtonView: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
                     .fill(plantedTrees==viewModel.getPlantedTrees(travelDetails) ? Color.secondary.opacity(0.6) : AppColors.mainColor)
-                    .stroke(plantedTrees==viewModel.getPlantedTrees(travelDetails) ? Color.secondary : Color(red: 1/255, green: 150/255, blue: 1/255), lineWidth: 2)
+                    .stroke(plantedTrees==viewModel.getPlantedTrees(travelDetails) ? Color.secondary : AppColors.mainColor, lineWidth: 2)
                 HStack (spacing: 3) {
                     Image(systemName: "leaf")
                         .font(.title3)

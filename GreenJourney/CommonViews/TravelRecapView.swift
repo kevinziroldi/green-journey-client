@@ -22,7 +22,6 @@ struct TravelRecapView: View {
                         Text("Recap")
                             .font(.title)
                             .foregroundStyle(AppColors.mainColor.opacity(0.8))
-                            .padding(EdgeInsets(top: 15, leading: 15, bottom: 10, trailing: 0))
                             .fontWeight(.semibold)
                             .frame(maxWidth: .infinity, alignment: .leading)
                         
@@ -32,8 +31,10 @@ struct TravelRecapView: View {
                             infoTapped = true
                         }) {
                             Image(systemName: "info.circle")
+                                .font(.title3)
                         }
                     }
+                    .padding(EdgeInsets(top: 15, leading: 15, bottom: 10, trailing: 15))
                     
                     DistanceEntryView(distance: distance)
                     DurationEntryView(duration: duration)
@@ -74,7 +75,9 @@ struct TravelRecapView: View {
             }
         }
         .sheet(isPresented: $infoTapped) {
-            InfoCompensationView(isPresented: $infoTapped)
+            InfoGreenPriceView(isPresented: $infoTapped)
+                .presentationDetents([.fraction(0.30)])
+                .presentationCornerRadius(15)
         }
     }
 }
@@ -213,5 +216,43 @@ private struct GreenPriceEntryView: View {
             Spacer()
         }
         .padding(EdgeInsets(top: 5, leading: 15, bottom: 10, trailing: 15))
+    }
+}
+
+
+struct InfoGreenPriceView: View {
+    @Binding var isPresented: Bool
+    var body: some View {
+        HStack {
+            Spacer()
+            Button(action: {
+                isPresented = false
+            }) {
+                Text("Done")
+                    .fontWeight(.bold)
+            }
+        }
+        .padding(.horizontal)
+        .padding(.top)
+        
+        ScrollView {
+            VStack {
+                Text("What Is The Green Price")
+                    .font(.title)
+                    .fontWeight(.semibold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .scaledToFit()
+                    .minimumScaleFactor(0.6)
+                    .lineLimit(1)
+                    .padding(.bottom, 5)
+                Text("""
+                The green price represents the total cost of your trip, combining the base fare with full carbon compensation. 
+                Carbon offsets are achieved by planting trees at just €2 each, neutralizing your travel emissions.
+                """)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .padding(.horizontal)
+            .padding(.bottom)
+        }
     }
 }
