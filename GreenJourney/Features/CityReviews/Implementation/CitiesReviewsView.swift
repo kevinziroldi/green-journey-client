@@ -175,7 +175,7 @@ struct ReviewableCitiesView: View {
                         ZStack {
                             RoundedRectangle(cornerRadius: 15)
                                 .fill(Color(uiColor: .systemBackground))
-                                //.shadow(color: AppColors.mainColor.opacity(0.3), radius: 5, x: 0, y: 3)
+                                .shadow(color: AppColors.mainColor.opacity(0.2), radius: 5, x: 0, y: 1)
                             VStack {
                                 Text(city.cityName)
                                     .font(.headline)

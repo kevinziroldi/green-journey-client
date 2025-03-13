@@ -130,9 +130,7 @@ class CitiesReviewsViewModel: ObservableObject {
                 .values
             
             // cityName + countryName uniquely identifies a city in the dataset
-            for segment in filteredSegments {
-                print("VISITED \(segment.destinationCity), \(segment.destinationCountry)")
-                
+            for segment in filteredSegments {                
                 if city.cityName == segment.destinationCity {
                     if city.countryName == segment.destinationCountry {
                         return true
