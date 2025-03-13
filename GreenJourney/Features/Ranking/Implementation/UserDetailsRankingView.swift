@@ -22,6 +22,8 @@ struct UserDetailsRankingView: View {
                         //badges
                         UserDetailsBadgesView(inline: false, user: user, legendTapped: $legendTapped)
                         
+                        ScoresView(scoreLongDistance: user.scoreLongDistance, scoreShortDistance: user.scoreShortDistance)
+                        
                         //user aggregate data
                         RecapViewCompactDevice(viewModel: viewModel, user: user)
                         
@@ -98,12 +100,12 @@ struct UserDetailsBadgesView: View {
         ZStack {
             RoundedRectangle(cornerRadius: 15)
                 .fill(Color(uiColor: .systemBackground))
-                .shadow(color: .blue.opacity(0.3), radius: 5, x: 0, y: 3)
+                .shadow(color: AppColors.mainColor.opacity(0.3), radius: 5, x: 0, y: 3)
             VStack (spacing:0){
                 HStack {
                     Text("Badges")
                         .font(.title)
-                        .foregroundStyle(.blue.opacity(0.8))
+                        .foregroundStyle(AppColors.mainColor.opacity(0.8))
                         .fontWeight(.semibold)
                     
                     Button(action: {

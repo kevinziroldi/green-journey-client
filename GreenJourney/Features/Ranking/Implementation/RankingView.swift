@@ -59,9 +59,9 @@ struct RankingView: View {
                         ScoresView(scoreLongDistance: viewModel.longDistanceScore, scoreShortDistance: viewModel.shortDistanceScore)
                         Spacer()
                         // LeaderBoards
-                        LeaderboardNavigationView(title: "Long Distance", leaderboard: Array(viewModel.longDistanceRanking.prefix(3)), gridItems: gridItemsCompactDevice, leaderboardType: true)
+                        LeaderboardNavigationView(viewModel: viewModel, navigationPath: $navigationPath, title: "Long Distance", leaderboard: viewModel.longDistanceRanking, gridItems: gridItemsCompactDevice, leaderboardType: true)
                         
-                        LeaderboardNavigationView(title: "Short Distance", leaderboard: Array(viewModel.shortDistanceRanking.prefix(3)), gridItems: gridItemsCompactDevice, leaderboardType: false)
+                        LeaderboardNavigationView(viewModel: viewModel,navigationPath: $navigationPath, title: "Short Distance", leaderboard: viewModel.shortDistanceRanking, gridItems: gridItemsCompactDevice, leaderboardType: false)
                         
                         Spacer()
                     }
@@ -159,7 +159,7 @@ private struct LeaderBoardPickerView: View {
     }
 }
 
-private struct LeaderBoardsView: View {
+struct LeaderBoardsView: View {
     @ObservedObject var viewModel: RankingViewModel
     @Binding var navigationPath: NavigationPath
     var gridItems: [GridItem]
@@ -447,77 +447,81 @@ private struct UserBadgesView: View {
 
 struct LeaderboardNavigationView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @ObservedObject var viewModel: RankingViewModel
+    @Binding var navigationPath: NavigationPath
     let title: String
     let leaderboard: [RankingElement]
     var gridItems: [GridItem]
     let leaderboardType: Bool
 
     var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 15)
-                .fill(Color(uiColor: .systemBackground))
-                .shadow(color: AppColors.mainColor.opacity(0.3), radius: 5, x: 0, y: 3)
-            VStack (spacing:0){
-                HStack {
-                    Text(title)
-                        .font(.title)
-                        .foregroundStyle(AppColors.mainColor.opacity(0.8))
-                        .fontWeight(.semibold)
-                        .scaledToFit()
-                        .minimumScaleFactor(0.6)
-                        .lineLimit(1)
-                    Spacer()
-                    Image(systemName: "list.number")
-                        .foregroundColor(AppColors.mainColor.opacity(0.8))
-                        .font(.title2)
-                        .fontWeight(.bold)
-                    Image(systemName: "chevron.right")
-                        .foregroundColor(AppColors.mainColor.opacity(0.8))
-                        .font(.title2)
-                        .fontWeight(.bold)
-                }
-                .padding()
-                ZStack {
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(AppColors.mainColor, lineWidth: 3)
-                    VStack (spacing: 0) {
-                        if leaderboard.isEmpty {
-                            CircularProgressView()
-                                .padding(30)
-                        } else {
-                            LazyVGrid(columns: gridItems, spacing: 10) {
-                                Text("#.")
-                                    .font(.headline)
-                                Text("User")
-                                    .font(.headline)
-                                
-                                if horizontalSizeClass != .compact {
-                                    Text("Badges")
+        NavigationLink(destination: RankingLeaderboardView(viewModel: viewModel, navigationPath: $navigationPath, title: title, gridItems: gridItems, currentRanking: leaderboard)) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 15)
+                    .fill(Color(uiColor: .systemBackground))
+                    .shadow(color: AppColors.mainColor.opacity(0.3), radius: 5, x: 0, y: 3)
+                VStack (spacing:0){
+                    HStack {
+                        Text(title)
+                            .font(.title)
+                            .foregroundStyle(AppColors.mainColor.opacity(0.8))
+                            .fontWeight(.semibold)
+                            .scaledToFit()
+                            .minimumScaleFactor(0.6)
+                            .lineLimit(1)
+                        Spacer()
+                        Image(systemName: "list.number")
+                            .foregroundColor(AppColors.mainColor.opacity(0.8))
+                            .font(.title2)
+                            .fontWeight(.bold)
+                        Image(systemName: "chevron.right")
+                            .foregroundColor(AppColors.mainColor.opacity(0.8))
+                            .font(.title2)
+                            .fontWeight(.bold)
+                    }
+                    .padding()
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(AppColors.mainColor, lineWidth: 3)
+                        VStack (spacing: 0) {
+                            if leaderboard.isEmpty {
+                                CircularProgressView()
+                                    .padding(30)
+                            } else {
+                                LazyVGrid(columns: gridItems, spacing: 10) {
+                                    Text("#.")
+                                        .font(.headline)
+                                    Text("User")
+                                        .font(.headline)
+                                    
+                                    if horizontalSizeClass != .compact {
+                                        Text("Badges")
+                                            .font(.headline)
+                                    }
+                                    
+                                    Text("Score")
                                         .font(.headline)
                                 }
+                                .padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
+                                .foregroundStyle(.white)
+                                .background(
+                                    AppColors.mainColor
+                                        .clipShape(TopRoundedCorners(cornerRadius: 10))
+                                )
+                                .overlay(Color.clear.accessibilityIdentifier("tableHeader"))
                                 
-                                Text("Score")
-                                    .font(.headline)
+                                ForEach(leaderboard.prefix(3).indices, id: \.self) { index in
+                                    LeaderBoardRow(gridItems: gridItems, leaderboard: Array(leaderboard.prefix(3)), leaderBoardSelected: leaderboardType, index: index)
+                                        .accessibilityIdentifier("rankingRow_\(index)")
+                                }
+                                .padding(EdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 0))
                             }
-                            .padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
-                            .foregroundStyle(.white)
-                            .background(
-                                AppColors.mainColor
-                                    .clipShape(TopRoundedCorners(cornerRadius: 10))
-                            )
-                            .overlay(Color.clear.accessibilityIdentifier("tableHeader"))
-                            
-                            ForEach(leaderboard.indices, id: \.self) { index in
-                                LeaderBoardRow(gridItems: gridItems, leaderboard: leaderboard, leaderBoardSelected: leaderboardType, index: index)
-                                    .accessibilityIdentifier("rankingRow_\(index)")
-                            }
-                            .padding(EdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 0))
                         }
                     }
+                    .padding(10)
                 }
-                .padding(10)
             }
+            .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
         }
-        .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
     }
 }
