@@ -12,9 +12,11 @@ struct InfoCompensationView: View {
                 Text("Done")
                     .fontWeight(.bold)
             }
+            .accessibilityIdentifier("infoCloseButton")
         }
         .padding(.horizontal)
         .padding(.top)
+                
         ScrollView {
             VStack {
                 Text("Travel Sustainably")
@@ -53,6 +55,7 @@ struct InfoCompensationView: View {
             }
             .padding(.bottom)
             .padding(.horizontal)
+            .overlay(Color.clear.accessibilityIdentifier("infoCompensationContent"))
         }
     }
 }

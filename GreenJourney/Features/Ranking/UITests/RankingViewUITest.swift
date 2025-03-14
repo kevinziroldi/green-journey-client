@@ -51,20 +51,25 @@ final class RankingViewUITest: XCTestCase {
         // UI elements
         let rankingTitle = app.staticTexts["rankingTitle"]
         let userPreferencesButton = app.buttons["userPreferencesButton"]
-        let distanceControl = app.segmentedControls["shortLongDistanceControl"]
         let errorMessage = app.staticTexts["errorMessage"]
-        let leaderboard = app.otherElements["leaderboard"]
-        let leaderBoardUserLongDistance = app.otherElements["leaderboardUserLongDistance"]
-        let leaderboardUserShortDistance = app.otherElements["leaderboardUserShortDistance"]
+        
+        let userBadgesView = app.otherElements["userBadgesView"]
+        let userScoresView = app.otherElements["userScoresView"]
+        
+        let longDistanceNavigationView = app.otherElements["longDistanceNavigationView"]
+        let shortDistanceNavigationView = app.otherElements["shortDistanceNavigationView"]
         
         // check elements exist
         XCTAssertTrue(rankingTitle.waitForExistence(timeout: timer), "The rankingTitle is not displayed")
         XCTAssertTrue(userPreferencesButton.exists, "The userPreferencesButton is not displayed")
-        XCTAssertTrue(distanceControl.exists, "The distanceControl is not displayed")
         XCTAssertFalse(errorMessage.exists, "The errorMessage is displayed")
-        XCTAssertTrue(leaderboard.exists, "The leaderboard is not displayed")
-        XCTAssertTrue(leaderBoardUserLongDistance.exists, "The leaderBoardUserLongDistance is not displayed")
-        XCTAssertFalse(leaderboardUserShortDistance.exists, "The leaderboardUserShortDistance is displayed")
+        
+        XCTAssertTrue(userBadgesView.exists, "userBadgesView not displayed")
+        XCTAssertTrue(userScoresView.exists, "userScoresView not displayed")
+        
+        XCTAssertTrue(longDistanceNavigationView.exists, "longDistanceNavigationView not displayed")
+        XCTAssertTrue(shortDistanceNavigationView.exists, "shortDistanceNavigationView not displayed")
+        
     }
     
     func testNavigatioToUserPreferences() {
@@ -84,42 +89,130 @@ final class RankingViewUITest: XCTestCase {
         XCTAssertTrue(userPreferencesTitle.waitForExistence(timeout: timer), "The userPreferencesTitle is not displayed")
     }
     
-    func testNavigationUserDetailsRanking() {
+    func testInfoBadges() {
         // UI elements
-        let leaderboard = app.otherElements["leaderboard"]
-        let tableHeader = app.otherElements["tableHeader"]
-        let firstRankingRow = app.buttons["rankingRow_0"]
+        let infoBadgesButton = app.buttons["infoBadgesButton"]
+        let infoBadgesView = app.otherElements["infoBadgesView"]
+        let infoBadgesCloseButton = app.buttons["infoBadgesCloseButton"]
+        let infoBadgesContent = app.otherElements["infoBadgesContent"]
         
-        // check for existnce of UI elements
-        XCTAssertTrue(leaderboard.exists, "The leaderboard is not displayed")
-        XCTAssertTrue(tableHeader.exists, "The table header is not displayed")
-        XCTAssertTrue(firstRankingRow.exists, "The first row is not displayed")
+        // check elements displayed
+        // info button present
+        XCTAssertTrue(infoBadgesButton.exists, "infoBadgesButton not displayed")
+        // modal closed
+        XCTAssertFalse(infoBadgesView.exists, "infoBadgesView already displayed")
+        XCTAssertFalse(infoBadgesContent.exists, "infoBadgesContent already displayed")
+        XCTAssertFalse(infoBadgesCloseButton.exists, "infoBadgesCloseButton already displayed")
         
-        // tap on first row
-        firstRankingRow.tap()
+        // tap info button
+        let infoBadgesButtonCenter = infoBadgesButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        infoBadgesButtonCenter.tap()
         
-        // check page changes
-        let userDetailsTitle = app.staticTexts["userDetailsTitle"]
-        XCTAssertTrue(userDetailsTitle.waitForExistence(timeout: timer), "The user details ranking view was not displayed")
+        // check elements displayed
+        // modal open
+        XCTAssertTrue(infoBadgesView.waitForExistence(timeout: timer), "infoBadgesView not displayed")
+        XCTAssertTrue(infoBadgesContent.exists, "infoBadgesContent not displayed")
+        XCTAssertTrue(infoBadgesCloseButton.exists, "infoBadgesCloseButton not displayed")
+        
+        // close info section
+        let infoBadgesCloseButtonCenter = infoBadgesCloseButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        infoBadgesCloseButtonCenter.tap()
+        
+        // check elements displayed
+        // modal close
+        XCTAssertTrue(infoBadgesButton.exists, "infoBadgesButton not displayed")
+        XCTAssertFalse(infoBadgesView.exists, "infoBadgesView already displayed")
+        XCTAssertFalse(infoBadgesContent.exists, "infoBadgesContent already displayed")
+        XCTAssertFalse(infoBadgesCloseButton.exists, "infoBadgesCloseButton already displayed")
     }
     
-    func testDistanceControlTap() {
+    func testInfoScores() {
+        // UI elements
+        let infoScoresButton = app.buttons["infoScoresButton"]
+        let infoScoresView = app.otherElements["infoScoresView"]
+        let infoScoresCloseButton = app.buttons["infoScoresCloseButton"]
+        let infoScoresContent = app.otherElements["infoScoresContent"]
+        
+        // check elements displayed
+        // info button present
+        XCTAssertTrue(infoScoresButton.exists, "infoScoresButton not displayed")
+        // modal closed
+        XCTAssertFalse(infoScoresView.exists, "infoScoresView already displayed")
+        XCTAssertFalse(infoScoresContent.exists, "infoScoresContent already displayed")
+        XCTAssertFalse(infoScoresCloseButton.exists, "infoScoresCloseButton already displayed")
+        
+        // tap info button
+        let infoScoresButtonCenter = infoScoresButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        infoScoresButtonCenter.tap()
+        
+        // check elements displayed
+        // modal open
+        XCTAssertTrue(infoScoresView.waitForExistence(timeout: timer), "infoScoresView not displayed")
+        XCTAssertTrue(infoScoresContent.exists, "infoScoresContent not displayed")
+        XCTAssertTrue(infoScoresCloseButton.exists, "infoScoresCloseButton not displayed")
+        
+        // close info section
+        let infoScoresCloseButtonCenter = infoScoresCloseButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        infoScoresCloseButtonCenter.tap()
+        
+        // check elements displayed
+        // modal close
+        XCTAssertTrue(infoScoresButton.exists, "infoScoresButton not displayed")
+        XCTAssertFalse(infoScoresView.exists, "infoScoresView already displayed")
+        XCTAssertFalse(infoScoresContent.exists, "infoScoresContent already displayed")
+        XCTAssertFalse(infoScoresCloseButton.exists, "infoScoresCloseButton already displayed")
+    }
+    
+    func testNavigationLongDistanceRanking() {
         // UI elements
         let rankingTitle = app.staticTexts["rankingTitle"]
-        let distanceControl = app.segmentedControls["shortLongDistanceControl"]
+        let longDistanceNavigationView = app.otherElements["longDistanceNavigationView"]
+     
+        // check elements exist
+        XCTAssertTrue(rankingTitle.exists, "Ranking page not displayed")
+        XCTAssertTrue(longDistanceNavigationView.exists, "longDistanceNavigationView not displayed")
+        
+        // tap long distance ranking button
+        longDistanceNavigationView.tap()
+        
+        // UI elements
+        let rankingName = app.staticTexts["rankingName"]
         let errorMessage = app.staticTexts["errorMessage"]
+        let leaderboard = app.otherElements["leaderboard"]
+        let leaderboardUser = app.otherElements["leaderboardUser"]
+        
+        // check elements
+        XCTAssertTrue(rankingName.waitForExistence(timeout: timer), "rankingName not displayed")
+        XCTAssertFalse(errorMessage.exists, "errorMessage displayed")
+        XCTAssertTrue(leaderboard.exists, "leaderboard not displayed")
+        XCTAssertTrue(leaderboardUser.exists, "leaderboardUser not displayed")
+    }
+    
+    func testNavigationShortDistanceRanking() {
+        // UI elements
+        let rankingTitle = app.staticTexts["rankingTitle"]
+        let shortDistanceNavigationView = app.otherElements["shortDistanceNavigationView"]
+        
+        // swipe
+        app.swipeUp()
         
         // check elements exist
-        XCTAssertTrue(rankingTitle.waitForExistence(timeout: timer), "The rankingTitle is not displayed")
-        XCTAssertTrue(distanceControl.exists, "The distanceControl is not displayed")
-        XCTAssertFalse(errorMessage.exists, "The errorMessage is displayed")
+        XCTAssertTrue(rankingTitle.exists, "Ranking page not displayed")
+        XCTAssertTrue(shortDistanceNavigationView.exists, "longDistanceNavigationView not displayed")
         
-        // tap control distance button
-        distanceControl.tap()
+        // tap long distance ranking button
+        shortDistanceNavigationView.tap()
         
-        // check elements exist (and right page)
-        XCTAssertTrue(rankingTitle.waitForExistence(timeout: timer), "The rankingTitle is not displayed")
-        XCTAssertTrue(distanceControl.exists, "The distanceControl is not displayed")
-        XCTAssertFalse(errorMessage.exists, "The errorMessage is displayed")
+        // UI elements
+        let rankingName = app.staticTexts["rankingName"]
+        let errorMessage = app.staticTexts["errorMessage"]
+        let leaderboard = app.otherElements["leaderboard"]
+        let leaderboardUser = app.otherElements["leaderboardUser"]
+        
+        // check elements
+        XCTAssertTrue(rankingName.waitForExistence(timeout: timer), "rankingName not displayed")
+        XCTAssertFalse(errorMessage.exists, "errorMessage displayed")
+        XCTAssertTrue(leaderboard.exists, "leaderboard not displayed")
+        XCTAssertFalse(leaderboardUser.exists, "leaderboardUser displayed")
     }
 }

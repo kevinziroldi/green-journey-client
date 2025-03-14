@@ -16,6 +16,7 @@ struct LegendBadgeView: View {
                         .fontWeight(.bold)
                 }
                 .padding(.bottom, 30)
+                .accessibilityIdentifier("infoBadgesCloseButton")
             }
             .padding(.horizontal)
         }
@@ -77,6 +78,7 @@ struct LegendBadgeView: View {
                 Text("This badge tracks the total number of trips you have taken. Keep exploring and watch your count grow!")
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
+            .overlay(Color.clear.accessibilityIdentifier("infoBadgesContent"))
             .padding(.bottom)
             .padding(.horizontal)
         }

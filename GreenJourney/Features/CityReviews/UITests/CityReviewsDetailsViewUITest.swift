@@ -260,6 +260,42 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
         XCTAssertTrue(userReviewText.exists, "userReviewText not displayed")
     }
     
+    func testInfoReview() {
+        // UI elements
+        let infoReviewButton = app.buttons["infoReviewButton"]
+        let infoReviewView = app.otherElements["infoReviewView"]
+        let infoReviewCloseButton = app.buttons["infoReviewCloseButton"]
+        let infoReviewContent = app.otherElements["infoReviewContent"]
+        
+        // check elements present
+        // button present, modal close
+        XCTAssertTrue(infoReviewButton.exists, "infoReviewButton not displayed")
+        XCTAssertFalse(infoReviewView.exists, "infoReviewView already displayed")
+        XCTAssertFalse(infoReviewCloseButton.exists, "infoReviewCloseButton already displayed")
+        XCTAssertFalse(infoReviewContent.exists, "infoReviewContent already displayed")
+        
+        // tap info review button
+        let infoReviewButtonCenter = infoReviewButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        infoReviewButtonCenter.tap()
+        
+        // check elements present
+        // modal open
+        XCTAssertTrue(infoReviewView.waitForExistence(timeout: timer), "infoReviewView not displayed")
+        XCTAssertTrue(infoReviewCloseButton.exists, "infoReviewCloseButton not displayed")
+        XCTAssertTrue(infoReviewContent.exists, "infoReviewContent not displayed")
+        
+        // close info review
+        let infoReviewCloseButtonCenter = infoReviewCloseButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        infoReviewCloseButtonCenter.tap()
+        
+        // check elements present
+        // button present, modal close
+        XCTAssertTrue(infoReviewButton.exists, "infoReviewButton not displayed")
+        XCTAssertFalse(infoReviewView.exists, "infoReviewView already displayed")
+        XCTAssertFalse(infoReviewCloseButton.exists, "infoReviewCloseButton already displayed")
+        XCTAssertFalse(infoReviewContent.exists, "infoReviewContent already displayed")
+    }
+    
     func testModifyAndSaveReview() {
         // add a review
         addReviewToRoma()

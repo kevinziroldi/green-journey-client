@@ -152,6 +152,7 @@ struct TravelDetailsView: View {
                 InfoCompensationView(isPresented: $infoTapped)
                     .presentationDetents([.fraction(0.75)])
                     .presentationCornerRadius(15)
+                    .overlay(Color.clear.accessibilityIdentifier("infoCompensationView"))
             }
             .ignoresSafeArea(edges: [.bottom, .horizontal])
             .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)

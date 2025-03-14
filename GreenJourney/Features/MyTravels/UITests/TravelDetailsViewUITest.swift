@@ -159,32 +159,37 @@ final class TravelDetailsViewUITest: XCTestCase {
         navigateToTravelDetailsViewTravelConfirmed()
         
         // UI elements
-        let infoButton = app.buttons["infoButton"]
+        let infoCompensationButton = app.buttons["infoCompensationButton"]
         let infoCompensationView = app.otherElements["infoCompensationView"]
-        let infoText = app.staticTexts["infoText"]
+        let infoCompensationContent = app.otherElements["infoCompensationContent"]
         let infoCloseButton = app.buttons["infoCloseButton"]
         
         // check elements displayed
-        XCTAssertTrue(infoButton.exists, "infoCompensationView not displayed")
+        // info button present
+        XCTAssertTrue(infoCompensationButton.exists, "infoCompensationButton not displayed")
+        // modal closed
         XCTAssertFalse(infoCompensationView.exists, "infoCompensationView already displayed")
-        XCTAssertFalse(infoText.exists, "infoText already displayed")
+        XCTAssertFalse(infoCompensationContent.exists, "infoCompensationContent already displayed")
         XCTAssertFalse(infoCloseButton.exists, "infoCloseButton already displayed")
         
         // tap info button
-        infoButton.tap()
+        infoCompensationButton.tap()
         
         // check elements displayed
+        // modal open
         XCTAssertTrue(infoCompensationView.waitForExistence(timeout: timer), "infoCompensationView not displayed")
-        XCTAssertTrue(infoText.exists, "infoText not displayed")
+        XCTAssertTrue(infoCompensationContent.exists, "infoText not displayed")
         XCTAssertTrue(infoCloseButton.exists, "infoCloseButton not displayed")
         
         // close info section
-        infoCloseButton.tap()
+        let infoCloseButtonCenter = infoCloseButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        infoCloseButtonCenter.tap()
         
         // check elements displayed
-        XCTAssertTrue(infoButton.exists, "infoCompensationView not displayed")
+        // modal close
+        XCTAssertTrue(infoCompensationButton.exists, "infoCompensationButton not displayed")
         XCTAssertFalse(infoCompensationView.exists, "infoCompensationView already displayed")
-        XCTAssertFalse(infoText.exists, "infoText already displayed")
+        XCTAssertFalse(infoCompensationContent.exists, "infoText already displayed")
         XCTAssertFalse(infoCloseButton.exists, "infoCloseButton already displayed")
     }
 
@@ -224,6 +229,45 @@ final class TravelDetailsViewUITest: XCTestCase {
         XCTAssertTrue(plusTreesButton.waitForExistence(timeout: timer), "The plus button is not displayed")
         XCTAssertTrue(minusTreesButton.waitForExistence(timeout: timer), "The minus button is not displayed")
         XCTAssertTrue(compensateButton.exists, "The compensate button is not displayed")
+    }
+    
+    func testInoGreenPrice() {
+        navigateToTravelDetailsViewTravelConfirmed()
+        
+        // UI elements
+        let infoGreenPriceButton = app.buttons["infoGreenPriceButton"]
+        let infoGreenPriceView = app.otherElements["infoGreenPriceView"]
+        let infoGreenPriceContent = app.otherElements["infoGreenPriceContent"]
+        let infoGreenPriceCloseButton = app.buttons["infoGreenPriceCloseButton"]
+        
+        // check elements displayed
+        // info button present
+        XCTAssertTrue(infoGreenPriceButton.exists, "infoGreenPriceButton not displayed")
+        // modal closed
+        XCTAssertFalse(infoGreenPriceView.exists, "infoGreenPriceView already displayed")
+        XCTAssertFalse(infoGreenPriceContent.exists, "infoGreenPriceContent already displayed")
+        XCTAssertFalse(infoGreenPriceCloseButton.exists, "infoGreenPriceCloseButton already displayed")
+        
+        // tap info button
+        let infoGreenPriceButtonCenter = infoGreenPriceButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        infoGreenPriceButtonCenter.tap()
+        
+        // check elements displayed
+        // modal open
+        XCTAssertTrue(infoGreenPriceView.waitForExistence(timeout: timer), "infoGreenPriceView not displayed")
+        XCTAssertTrue(infoGreenPriceContent.exists, "infoGreenPriceContent not displayed")
+        XCTAssertTrue(infoGreenPriceCloseButton.exists, "infoGreenPriceCloseButton not displayed")
+        
+        // close info section
+        let infoGreenPriceCloseButtonCenter = infoGreenPriceCloseButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        infoGreenPriceCloseButtonCenter.tap()
+        
+        // check elements displayed
+        // modal close
+        XCTAssertTrue(infoGreenPriceButton.exists, "infoGreenPriceButton not displayed")
+        XCTAssertFalse(infoGreenPriceView.exists, "infoGreenPriceView already displayed")
+        XCTAssertFalse(infoGreenPriceContent.exists, "infoGreenPriceContent already displayed")
+        XCTAssertFalse(infoGreenPriceCloseButton.exists, "infoCloseButton already displayed")
     }
     
     func testReviewButton() {

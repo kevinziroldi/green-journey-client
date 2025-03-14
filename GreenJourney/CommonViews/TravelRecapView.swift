@@ -33,6 +33,7 @@ struct TravelRecapView: View {
                             Image(systemName: "info.circle")
                                 .font(.title3)
                         }
+                        .accessibilityIdentifier("infoGreenPriceButton")
                     }
                     .padding(EdgeInsets(top: 15, leading: 15, bottom: 10, trailing: 15))
                     
@@ -57,6 +58,7 @@ struct TravelRecapView: View {
                         }) {
                             Image(systemName: "info.circle")
                         }
+                        .accessibilityIdentifier("infoGreenPriceButton")
                     }
                     .padding(EdgeInsets(top: 15, leading: 15, bottom: 10, trailing: 15))
                     
@@ -78,6 +80,7 @@ struct TravelRecapView: View {
             InfoGreenPriceView(isPresented: $infoTapped)
                 .presentationDetents([.fraction(0.30)])
                 .presentationCornerRadius(15)
+                .overlay(Color.clear.accessibilityIdentifier("infoGreenPriceView"))
         }
     }
 }
@@ -231,6 +234,7 @@ struct InfoGreenPriceView: View {
                 Text("Done")
                     .fontWeight(.bold)
             }
+            .accessibilityIdentifier("infoGreenPriceCloseButton")
         }
         .padding(.horizontal)
         .padding(.top)
@@ -253,6 +257,7 @@ struct InfoGreenPriceView: View {
             }
             .padding(.horizontal)
             .padding(.bottom)
+            .overlay(Color.clear.accessibilityIdentifier("infoGreenPriceContent"))
         }
     }
 }

@@ -53,15 +53,18 @@ struct RankingView: View {
                         }
                         .padding(5)
                         
-                        
                         UserBadgesView(legendTapped: $legendTapped, badges: viewModel.badges, inline: true)
                         
                         ScoresView(scoreLongDistance: viewModel.longDistanceScore, scoreShortDistance: viewModel.shortDistanceScore)
+                        
                         Spacer()
+                        
                         // LeaderBoards
                         LeaderboardNavigationView(viewModel: viewModel, navigationPath: $navigationPath, title: "Long Distance", leaderboard: viewModel.longDistanceRanking, gridItems: gridItemsCompactDevice, leaderboardType: true)
+                            .overlay(Color.clear.accessibilityIdentifier("longDistanceNavigationView"))
                         
                         LeaderboardNavigationView(viewModel: viewModel,navigationPath: $navigationPath, title: "Short Distance", leaderboard: viewModel.shortDistanceRanking, gridItems: gridItemsCompactDevice, leaderboardType: false)
+                            .overlay(Color.clear.accessibilityIdentifier("shortDistanceNavigationView"))
                         
                         Spacer()
                     }
@@ -70,6 +73,8 @@ struct RankingView: View {
             } else {
                 // iPadOS
                 
+                // TODO da rifare
+                /*
                 ScrollView {
                     // title
                     RankingTitleView()
@@ -89,6 +94,7 @@ struct RankingView: View {
                     
                     Spacer()
                 }
+                 */
             }
         }
         .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
@@ -96,6 +102,7 @@ struct RankingView: View {
             LegendBadgeView(isPresented: $legendTapped)
                 .presentationDetents([.fraction(0.95)])
                 .presentationCornerRadius(15)
+                .overlay(Color.clear.accessibilityIdentifier("infoBadgesView"))
         }
         .onAppear {
             Task {
@@ -103,34 +110,6 @@ struct RankingView: View {
                 await viewModel.fecthRanking()
             }
         }
-    }
-}
-
-private struct TopRoundedCorners: Shape {
-    var cornerRadius: CGFloat
-    
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-        path.move(to: CGPoint(x: rect.minX, y: rect.maxY))
-        path.addLine(to: CGPoint(x: rect.minX, y: rect.minY + cornerRadius))
-        path.addArc(
-            center: CGPoint(x: rect.minX + cornerRadius, y: rect.minY + cornerRadius),
-            radius: cornerRadius,
-            startAngle: .degrees(180),
-            endAngle: .degrees(270),
-            clockwise: false
-        )
-        path.addLine(to: CGPoint(x: rect.maxX - cornerRadius, y: rect.minY))
-        path.addArc(
-            center: CGPoint(x: rect.maxX - cornerRadius, y: rect.minY + cornerRadius),
-            radius: cornerRadius,
-            startAngle: .degrees(270),
-            endAngle: .degrees(0),
-            clockwise: false
-        )
-        path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
-        path.closeSubpath()
-        return path
     }
 }
 
@@ -145,274 +124,12 @@ private struct RankingTitleView: View {
     }
 }
 
-private struct LeaderBoardPickerView: View {
-    @ObservedObject var viewModel: RankingViewModel
-    
-    var body: some View {
-        Picker("", selection: $viewModel.leaderboardSelected) {
-            Text("Long distance").tag(true)
-            Text("Short distance").tag(false)
-        }
-        .pickerStyle(.segmented)
-        .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
-        .accessibilityIdentifier("shortLongDistanceControl")
-    }
-}
-
-struct LeaderBoardsView: View {
-    @ObservedObject var viewModel: RankingViewModel
-    @Binding var navigationPath: NavigationPath
-    var gridItems: [GridItem]
-    var currentRanking: [RankingElement]
-    
-    var body: some View {
-        VStack{
-            if let errorMessage = viewModel.errorMessage {
-                Text(errorMessage)
-                    .font(.headline)
-                    .fontWeight(.light)
-                    .foregroundStyle(.red)
-                    .accessibilityIdentifier("errorMessage")
-            }
-            else {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(AppColors.mainColor, lineWidth: 3)
-                        .padding(.top, 5)
-                    VStack{
-                        if currentRanking.isEmpty {
-                            CircularProgressView()
-                                .padding(30)
-                        } else {
-                            LeaderBoardView(viewModel: viewModel, navigationPath: $navigationPath, gridItems: gridItems, leaderboard: Array(currentRanking.prefix(10)), leaderBoardSelected: viewModel.leaderboardSelected)
-                        }
-                    }
-                    .accessibilityElement(children: .contain)
-                    .accessibilityIdentifier("leaderboard")
-                }
-                .padding(10)
-            }
-            
-            if currentRanking.count == 11 {
-                if viewModel.longDistanceRanking.isEmpty {
-                    CircularProgressView()
-                } else {
-                    LeaderBoardUserView(userRanking: currentRanking[10], gridItems: gridItems, leaderBoardSelected: viewModel.leaderboardSelected)
-                        .accessibilityElement(children: .contain)
-                        .accessibilityIdentifier("leaderboardUserLongDistance")
-                        .padding(.horizontal, 10)
-                }
-            }
-        }.fixedSize(horizontal: false, vertical: true)
-    }
-}
-
-private struct LeaderBoardView: View {
-    @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    
-    @ObservedObject var viewModel: RankingViewModel
-    @Binding var navigationPath: NavigationPath
-    var gridItems: [GridItem]
-    
-    @Environment(\.colorScheme) var colorScheme: ColorScheme
-    
-    var leaderboard: [RankingElement]
-    var leaderBoardSelected: Bool
-    
-    var body: some View {
-        VStack(spacing: 0) {
-            LazyVGrid(columns: gridItems, spacing: 10) {
-                Text("#.")
-                    .font(.headline)
-                Text("User")
-                    .font(.headline)
-                
-                if horizontalSizeClass != .compact {
-                    Text("Badges")
-                        .font(.headline)
-                }
-                
-                Text("Score")
-                    .font(.headline)
-            }
-            .padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
-            .foregroundStyle(.white)
-            .background(
-                AppColors.mainColor
-                    .clipShape(TopRoundedCorners(cornerRadius: 10))
-            )
-            .overlay(Color.clear.accessibilityIdentifier("tableHeader"))
-            
-            ForEach(leaderboard.indices, id: \.self) { index in
-                NavigationLink(
-                    destination: UserDetailsRankingView(
-                        viewModel: viewModel,
-                        navigationPath: $navigationPath,
-                        user: leaderboard[index]
-                    )
-                ) {
-                    LeaderBoardRow(gridItems: gridItems, leaderboard: leaderboard, leaderBoardSelected: leaderBoardSelected, index: index)
-                }
-                .accessibilityIdentifier("rankingRow_\(index)")
-            }
-        }
-        .padding(EdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 0))
-    }
-}
-
-private struct LeaderBoardRow: View {
-    @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    
-    var gridItems: [GridItem]
-    @Query var users: [User]
-    var leaderboard: [RankingElement]
-    var leaderBoardSelected: Bool
-    var index: Int
-    
-    @Environment(\.colorScheme) var colorScheme: ColorScheme
-    
-    var body: some View {
-        VStack(spacing: 5) {
-            LazyVGrid(columns: gridItems, spacing: 10) {
-                ZStack {
-                    Circle()
-                        .stroke(
-                            LinearGradient(
-                                gradient: Gradient(colors: [.green, .blue]),
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            ),
-                            lineWidth: 2
-                        )
-                        .frame(width: 40, height: 40)
-                    Text("#\(index + 1)")
-                        .foregroundStyle(
-                            leaderboard[index].userID == users.first?.userID ?? -1 ?
-                                .blue :
-                                (colorScheme == .dark ? .white : .black)
-                        )
-                        .fontWeight(.semibold)
-                }
-                
-                VStack(alignment: .center) {
-                    Text(leaderboard[index].firstName)
-                        .foregroundStyle(
-                            leaderboard[index].userID == users.first?.userID ?? -1 ?
-                                .blue :
-                                (colorScheme == .dark ? .white : .black)
-                        )
-                        .fontWeight(.semibold)
-                    Text(leaderboard[index].lastName)
-                        .foregroundStyle(
-                            leaderboard[index].userID == users.first?.userID ?? -1 ?
-                                .blue :
-                                (colorScheme == .dark ? .white : .black)
-                        )
-                        .fontWeight(.semibold)
-                }
-                
-                if horizontalSizeClass != .compact {
-                    BadgeView(badges: leaderboard[index].badges, dim: 40, inline: false)
-                }
-                
-                Text(String(format: "%.1f", leaderBoardSelected ?  leaderboard[index].scoreLongDistance : leaderboard[index].scoreShortDistance))
-                    .scaledToFit()
-                    .minimumScaleFactor(0.6)
-                    .lineLimit(1)
-                    .foregroundStyle(
-                        LinearGradient(
-                            gradient: Gradient(colors: [.green, .blue]),
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-                    .fontWeight(.bold)
-            }
-            .padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
-            
-            if index < leaderboard.count - 1 {
-                Divider()
-            }
-        }
-    }
-}
-
-private struct LeaderBoardUserView: View {
-    @Environment(\.horizontalSizeClass) var horizontalSizeClass
-
-    var userRanking: RankingElement
-    var gridItems: [GridItem]
-    var leaderBoardSelected: Bool
-    
-    var body: some View {
-        VStack {
-            HStack {
-                Circle()
-                    .frame(width: 8, height: 8)
-                Circle()
-                    .frame(width: 8, height: 8)
-                Circle()
-                    .frame(width: 8, height: 8)
-            }
-            .padding(.bottom, 10)
-            
-            ZStack {
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(AppColors.mainColor, lineWidth: 3)
-                    .shadow(radius: 10)
-                
-                VStack(spacing: 0) {
-                    LazyVGrid(columns: gridItems, spacing: 10) {
-                        ZStack {
-                            Circle()
-                                .stroke(
-                                    LinearGradient(
-                                        gradient: Gradient(colors: [.green, .blue]),
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
-                                    ),
-                                    lineWidth: 2
-                                )
-                                .frame(width: 40, height: 40)
-                            Text("#.")
-                                .foregroundStyle(.blue)
-                                .fontWeight(.semibold)
-                        }
-                        
-                        VStack {
-                            Text(userRanking.firstName)
-                                .frame(maxWidth: .infinity, alignment: .center)
-                                .foregroundStyle(LinearGradient(gradient: Gradient(colors: [.green, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing))
-                                .fontWeight(.semibold)
-                            Text(userRanking.lastName)
-                                .frame(maxWidth: .infinity, alignment: .center)
-                                .foregroundStyle(LinearGradient(gradient: Gradient(colors: [.green, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing))
-                                .fontWeight(.semibold)
-                        }
-                        
-                        if horizontalSizeClass != .compact {
-                            BadgeView(badges: userRanking.badges, dim: 40, inline: false)
-                        }
-                        Text(String(format: "%.1f", leaderBoardSelected ? userRanking.scoreLongDistance : userRanking.scoreShortDistance))
-                            .frame(maxWidth: 90, alignment: .center)
-                            .foregroundStyle(LinearGradient(gradient: Gradient(colors: [.green, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing))
-                            .fontWeight(.bold)
-                    }
-                    .padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
-                }
-            }
-        }
-        .padding(EdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 0))
-    }
-}
-
 private struct UserBadgesView: View {
     @Binding var legendTapped: Bool
     var badges: [Badge]
     var inline: Bool
     
     var body: some View {
-            
             ZStack {
                 RoundedRectangle(cornerRadius: 15)
                     .fill(Color(uiColor: .systemBackground))
@@ -430,6 +147,7 @@ private struct UserBadgesView: View {
                             Image(systemName: "info.circle")
                                 .font(.title3)
                         }
+                        .accessibilityIdentifier("infoBadgesButton")
                     }
                     .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 15))
                     
@@ -439,11 +157,9 @@ private struct UserBadgesView: View {
                     }
                 }
             }
-            .overlay(Color.clear.accessibilityIdentifier("userBadges"))
-        
+            .overlay(Color.clear.accessibilityIdentifier("userBadgesView"))
         
         .padding(EdgeInsets(top: 5, leading: 15, bottom: 7, trailing: 15))
-        
     }
 }
 
@@ -457,7 +173,7 @@ struct LeaderboardNavigationView: View {
     let leaderboardType: Bool
 
     var body: some View {
-        NavigationLink(destination: RankingLeaderboardView(viewModel: viewModel, navigationPath: $navigationPath, title: title, gridItems: gridItems, currentRanking: leaderboard)) {
+        NavigationLink(destination: RankingLeaderBoardView(viewModel: viewModel, navigationPath: $navigationPath, title: title, gridItems: gridItems, currentRanking: leaderboard)) {
             ZStack {
                 RoundedRectangle(cornerRadius: 15)
                     .fill(Color(uiColor: .systemBackground))

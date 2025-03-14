@@ -39,6 +39,7 @@ struct CityReviewsDetailsView: View {
                     InfoReviewView(isPresented: $infoTapped)
                         .presentationDetents([.fraction(0.75)])
                         .presentationCornerRadius(15)
+                        .overlay(Color.clear.accessibilityIdentifier("infoReviewView"))
                 }
                 .onAppear(){
                     Task {
@@ -163,6 +164,7 @@ private struct ReviewsAverageView: View {
                                 Image(systemName: "info.circle")
                                     .font(.title3)
                             }
+                            .accessibilityIdentifier("infoReviewButton")
                         }
                         .padding(EdgeInsets(top: 0, leading: 0, bottom: 120, trailing: 20))
                     }
@@ -193,6 +195,7 @@ private struct ReviewsAverageView: View {
                             Image(systemName: "info.circle")
                                 .font(.title3)
                         }
+                        .accessibilityIdentifier("infoReviewButton")
                     }
                     .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 15))
                     
@@ -522,6 +525,7 @@ private struct InfoReviewView: View {
                             .fontWeight(.bold)
                     }
                     .padding(.bottom, 30)
+                    .accessibilityIdentifier("infoReviewCloseButton")
                 }
                 .padding(.horizontal)
             }
@@ -577,6 +581,7 @@ private struct InfoReviewView: View {
                 }
                 .padding(.bottom)
                 .padding(.horizontal)
+                .overlay(Color.clear.accessibilityIdentifier("infoReviewContent"))
             }
         }
 }

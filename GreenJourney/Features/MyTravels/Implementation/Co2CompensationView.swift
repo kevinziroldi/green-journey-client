@@ -53,7 +53,7 @@ private struct CompensationTitleView: View {
                         .font(.title3)
                 }
                 .padding(.trailing)
-                .accessibilityIdentifier("infoButton")
+                .accessibilityIdentifier("infoCompensationButton")
                 
             }
             Spacer()

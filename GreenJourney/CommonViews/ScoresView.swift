@@ -4,41 +4,42 @@ struct ScoresView: View {
     @State var infoTapped: Bool = false
     var scoreLongDistance: Float64
     var scoreShortDistance: Float64
-
+    
     var body: some View {
         VStack(spacing: 0) {
             HStack {
-            Text("Scores")
-                .font(.title)
-                .foregroundStyle(AppColors.mainColor.opacity(0.8))
-                .fontWeight(.semibold)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            Spacer()
+                Text("Scores")
+                    .font(.title)
+                    .foregroundStyle(AppColors.mainColor.opacity(0.8))
+                    .fontWeight(.semibold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Spacer()
                 
-            Button(action: {
-                infoTapped = true
-            }) {
-                Image(systemName: "info.circle")
-                    .font(.title3)
+                Button(action: {
+                    infoTapped = true
+                }) {
+                    Image(systemName: "info.circle")
+                        .font(.title3)
+                }
+                .accessibilityIdentifier("infoScoresButton")
             }
-        }
-        .padding(EdgeInsets(top: 15, leading: 15, bottom: 5, trailing: 15))
-            
+            .padding(EdgeInsets(top: 15, leading: 15, bottom: 5, trailing: 15))
             
             InfoRowView(title: "Long distance",
-                    value: String(format: "%.1f", scoreLongDistance),
-                    icon: "trophy",
-                    color: AppColors.mainColor,
-                    imageValue: false,
-                    imageValueString: nil)
-            InfoRowView(title: "Short distance",
-                    value: String(format: "%.1f", scoreShortDistance),
-                    icon: "trophy",
-                    color: AppColors.mainColor,
-                    imageValue: false,
-                    imageValueString: nil)
+                        value: String(format: "%.1f", scoreLongDistance),
+                        icon: "trophy",
+                        color: AppColors.mainColor,
+                        imageValue: false,
+                        imageValueString: nil)
             
+            InfoRowView(title: "Short distance",
+                        value: String(format: "%.1f", scoreShortDistance),
+                        icon: "trophy",
+                        color: AppColors.mainColor,
+                        imageValue: false,
+                        imageValueString: nil)
         }
+        .overlay(Color.clear.accessibilityIdentifier("userScoresView"))
         .padding(.bottom, 7)
         .background(
             RoundedRectangle(cornerRadius: 15)
@@ -49,6 +50,7 @@ struct ScoresView: View {
             InfoScoresView(isPresented: $infoTapped)
                 .presentationDetents([.fraction(0.80)])
                 .presentationCornerRadius(15)
+                .overlay(Color.clear.accessibilityIdentifier("infoScoresView"))
         }
         .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
     }
@@ -65,6 +67,7 @@ struct InfoScoresView: View {
                 Text("Done")
                     .fontWeight(.bold)
             }
+            .accessibilityIdentifier("infoScoresCloseButton")
         }
         .padding(.horizontal)
         .padding(.top)
@@ -93,7 +96,7 @@ struct InfoScoresView: View {
                 """)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
-
+                
                 Text("How We Calculate The Scores")
                     .font(.title)
                     .fontWeight(.semibold)
@@ -130,6 +133,7 @@ struct InfoScoresView: View {
             }
             .padding(.horizontal)
             .padding(.bottom)
+            .overlay(Color.clear.accessibilityIdentifier("infoScoresContent"))
         }
     }
 }
