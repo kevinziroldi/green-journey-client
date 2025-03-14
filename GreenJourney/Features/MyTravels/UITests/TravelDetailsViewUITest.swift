@@ -83,7 +83,8 @@ final class TravelDetailsViewUITest: XCTestCase {
         // UI elements
         let headerView = app.otherElements["headerView"]
         let travelRecap = app.otherElements["travelRecap"]
-        let infoButton = app.buttons["infoButton"]
+        let infoCompensationButton = app.buttons["infoCompensationButton"]
+        let infoGreenPriceButton = app.buttons["infoGreenPriceButton"]
         let plusTreesButton = app.buttons["plusButton"]
         let minusTreesButton = app.buttons["minusButton"]
         let compensateButton = app.buttons["compensateButton"]
@@ -97,14 +98,17 @@ final class TravelDetailsViewUITest: XCTestCase {
         
         // check elements present
         XCTAssertTrue(headerView.exists, "headerView not displayed")
-        XCTAssertTrue(travelRecap.exists, "travelRecap not displayed")
-        XCTAssertFalse(emissionsRecapFutureTravel.exists, "emission recap displyed for a confirmed travel")
-        
-        XCTAssertTrue(infoButton.exists, "infoButton not displayed")
+    
+        XCTAssertTrue(infoCompensationButton.exists, "infoCompensationButton not displayed")
         XCTAssertTrue(plusTreesButton.exists, "plusTreesButton not displayed")
         XCTAssertTrue(minusTreesButton.exists, "minusTreesButton not displayed")
         XCTAssertTrue(compensateButton.exists, "compensateButton not displayed")
-       
+        
+        XCTAssertTrue(travelRecap.exists, "travelRecap not displayed")
+        XCTAssertTrue(infoGreenPriceButton.exists, "infoGreenPriceButton not displayed")
+        
+        XCTAssertFalse(emissionsRecapFutureTravel.exists, "emission recap displyed for a confirmed travel")
+        
         XCTAssertTrue(reviewButton.exists, "reviewButton not displayed")
         XCTAssertTrue(trashButton.exists, "trashButton not displayed")
         

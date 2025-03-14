@@ -77,14 +77,14 @@ final class UserDetailsRankingViewUITest: XCTestCase {
         // UI elements
         let userDetailsTitle = app.staticTexts["userDetailsTitle"]
         let userName = app.staticTexts["userName"]
-        let userBadges = app.otherElements["userBadges"]
+        let userBadgesView = app.otherElements["userBadgesView"]
         let scoresView = app.otherElements["scoresView"]
         let userTravelsRecap = app.otherElements["userTravelsRecap"]
         
         // check UI elements present
         XCTAssertTrue(userDetailsTitle.exists, "userDetailsTitle not displayed")
         XCTAssertTrue(userName.exists, "userName not displayed")
-        XCTAssertTrue(userBadges.exists, "userBadges not displayed")
+        XCTAssertTrue(userBadgesView.exists, "userBadgesView not displayed")
         XCTAssertTrue(scoresView.exists, "scoresView not displayed")
         XCTAssertTrue(userTravelsRecap.exists, "userTravelsRecap not displayed")
     }
