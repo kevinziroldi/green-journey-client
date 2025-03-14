@@ -37,7 +37,7 @@
             default = "YES">
          </TestPlanReference>
          <TestPlanReference
-            reference = "container:UICompactDeviceTestPlan.xctestplan">
+            reference = "container:UITestPlan.xctestplan">
          </TestPlanReference>
       </TestPlans>
       <Testables>
@@ -58,8 +58,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "0AB2AA7C2D63E08000FDF38D"
-               BuildableName = "GreenJourneyCompactDevicesUITests.xctest"
-               BlueprintName = "GreenJourneyCompactDevicesUITests"
+               BuildableName = "GreenJourneyUITests.xctest"
+               BlueprintName = "GreenJourneyUITests"
                ReferencedContainer = "container:GreenJourney.xcodeproj">
             </BuildableReference>
          </TestableReference>

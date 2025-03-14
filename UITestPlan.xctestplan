@@ -17,7 +17,7 @@
       "target" : {
         "containerPath" : "container:GreenJourney.xcodeproj",
         "identifier" : "0AB2AA7C2D63E08000FDF38D",
-        "name" : "GreenJourneyCompactDevicesUITests"
+        "name" : "GreenJourneyUITests"
       }
     }
   ],
