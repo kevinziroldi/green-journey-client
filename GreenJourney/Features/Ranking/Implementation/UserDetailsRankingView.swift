@@ -22,7 +22,9 @@ struct UserDetailsRankingView: View {
                         //badges
                         UserDetailsBadgesView(inline: false, user: user, legendTapped: $legendTapped)
                         
+                        // scores
                         ScoresView(scoreLongDistance: user.scoreLongDistance, scoreShortDistance: user.scoreShortDistance)
+                            .overlay(Color.clear.accessibilityIdentifier("scoresView"))
                         
                         //user aggregate data
                         RecapViewCompactDevice(viewModel: viewModel, user: user)
@@ -66,6 +68,7 @@ struct UserDetailsRankingView: View {
             LegendBadgeView(isPresented: $legendTapped)
                 .presentationDetents([.large])
                 .presentationCornerRadius(15)
+                .overlay(Color.clear.accessibilityIdentifier("infoBadgesView"))
         }
     }
 }
@@ -116,7 +119,7 @@ struct UserDetailsBadgesView: View {
                         Image(systemName: "info.circle")
                             .font(.title3)
                     }
-                    .accessibilityIdentifier("badgesInfoButton")
+                    .accessibilityIdentifier("infoBadgesButton")
                     
                     
                 }
@@ -126,10 +129,10 @@ struct UserDetailsBadgesView: View {
                     BadgeView(badges: user.badges, dim: 150, inline: inline)
                         .padding()
                 }
-                .overlay(Color.clear.accessibilityIdentifier("userBadges"))
             }
         }
         .padding(EdgeInsets(top: 5, leading: 15, bottom: 7, trailing: 15))
+        .overlay(Color.clear.accessibilityIdentifier("userBadgesView"))
     }
 }
 

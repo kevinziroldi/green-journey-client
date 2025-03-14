@@ -23,11 +23,7 @@ final class UserDetailsRankingViewUITest: XCTestCase {
         let loginButton = app.buttons["loginButton"]
         let travelSearchViewTitle = app.staticTexts["travelSearchViewTitle"]
         let rankingTabButton = app.tabBars.buttons["rankingTabViewElement"]
-        let rankingTitle = app.staticTexts["rankingTitle"]
-        let firstRankingRow = app.buttons["rankingRow_0"]
-        let userDetailsTitle = app.staticTexts["userDetailsTitle"]
         
-        // check login view elements
         XCTAssertTrue(emailTextField.exists, "The email field is not displayed")
         XCTAssertTrue(passwordField.exists, "The password field is not displayed")
         XCTAssertTrue(loginButton.exists, "The login button is not displayed")
@@ -37,26 +33,43 @@ final class UserDetailsRankingViewUITest: XCTestCase {
         emailTextField.typeText("test@example.com")
         passwordField.tap()
         passwordField.typeText("test_password")
-        
         // tap login button
         loginButton.tap()
         
-        // check travel search view
+        // check page change after login
         XCTAssertTrue(travelSearchViewTitle.waitForExistence(timeout: timer), "TravelSearchView not appeared after login")
         
-        // tap ranking tab button
+        // tap tab button
         rankingTabButton.tap()
         
-        // check ranking view page
-        XCTAssertTrue(rankingTitle.waitForExistence(timeout: timer), "RankingView not appeared after selecting it")
+        // UI elements
+        let rankingTitle = app.staticTexts["rankingTitle"]
+        let longDistanceNavigationView = app.otherElements["longDistanceNavigationView"]
         
-        // check first row displayed
+        // check ranking page
+        XCTAssertTrue(rankingTitle.waitForExistence(timeout: timer), "RankingView not appeared after selecting it")
+        XCTAssertTrue(longDistanceNavigationView.exists, "longDistanceNavigationView not displayed")
+        
+        // tap long distance ranking button
+        longDistanceNavigationView.tap()
+        
+        // UI elements
+        let rankingName = app.staticTexts["rankingName"]
+        let leaderboard = app.otherElements["leaderboard"]
+        let tableHeader = app.otherElements["tableHeader"]
+        let firstRankingRow = app.buttons["rankingRow_0"]
+        
+        // check for existnce of UI elements
+        XCTAssertTrue(rankingName.waitForExistence(timeout: timer), "rankingName not displayed")
+        XCTAssertTrue(leaderboard.exists, "The leaderboard is not displayed")
+        XCTAssertTrue(tableHeader.exists, "The table header is not displayed")
         XCTAssertTrue(firstRankingRow.exists, "The first row is not displayed")
         
         // tap on first row
         firstRankingRow.tap()
         
-        // check user details ranking page
+        // check page changes
+        let userDetailsTitle = app.staticTexts["userDetailsTitle"]
         XCTAssertTrue(userDetailsTitle.waitForExistence(timeout: timer), "The user details ranking view was not displayed")
     }
     
@@ -64,56 +77,89 @@ final class UserDetailsRankingViewUITest: XCTestCase {
         // UI elements
         let userDetailsTitle = app.staticTexts["userDetailsTitle"]
         let userName = app.staticTexts["userName"]
-        let badgesInfoButton = app.buttons["badgesInfoButton"]
         let userBadges = app.otherElements["userBadges"]
+        let scoresView = app.otherElements["scoresView"]
         let userTravelsRecap = app.otherElements["userTravelsRecap"]
         
         // check UI elements present
         XCTAssertTrue(userDetailsTitle.exists, "userDetailsTitle not displayed")
         XCTAssertTrue(userName.exists, "userName not displayed")
-        XCTAssertTrue(badgesInfoButton.exists, "badgesInfoButton not displayed")
         XCTAssertTrue(userBadges.exists, "userBadges not displayed")
+        XCTAssertTrue(scoresView.exists, "scoresView not displayed")
         XCTAssertTrue(userTravelsRecap.exists, "userTravelsRecap not displayed")
     }
     
-    func testTapBadgesInfoButton() {
-        // UI elements UserDetailsRankingView
-        let userDetailsTitle = app.staticTexts["userDetailsTitle"]
-        let userName = app.staticTexts["userName"]
-        let badgesInfoButton = app.buttons["badgesInfoButton"]
-        let userBadges = app.otherElements["userBadges"]
-        let userTravelsRecap = app.otherElements["userTravelsRecap"]
+    func testInfoBadges() {
+        // UI elements
+        let infoBadgesButton = app.buttons["infoBadgesButton"]
+        let infoBadgesView = app.otherElements["infoBadgesView"]
+        let infoBadgesCloseButton = app.buttons["infoBadgesCloseButton"]
+        let infoBadgesContent = app.otherElements["infoBadgesContent"]
         
-        // check UI elements present
-        XCTAssertTrue(userDetailsTitle.exists, "userDetailsTitle not displayed")
-        XCTAssertTrue(badgesInfoButton.exists, "badgesInfoButton not displayed")
+        // check elements displayed
+        // info button present
+        XCTAssertTrue(infoBadgesButton.exists, "infoBadgesButton not displayed")
+        // modal closed
+        XCTAssertFalse(infoBadgesView.exists, "infoBadgesView already displayed")
+        XCTAssertFalse(infoBadgesContent.exists, "infoBadgesContent already displayed")
+        XCTAssertFalse(infoBadgesCloseButton.exists, "infoBadgesCloseButton already displayed")
         
         // tap info button
-        badgesInfoButton.tap()
+        let infoBadgesButtonCenter = infoBadgesButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        infoBadgesButtonCenter.tap()
         
-        // UI elements LegendBadgeView
-        let badgeDistanceDescription = app.otherElements["badgeDistanceDescription"]
-        let badgeEcologicalChoiceDescription = app.otherElements["badgeEcologicalChoiceDescription"]
-        let badgeTravelsNumberDescription = app.otherElements["badgeTravelsNumberDescription"]
-        let badgeCompensationDescription = app.otherElements["badgeCompensationDescription"]
-        let closeBadgesInfoButton = app.buttons["closeBadgesInfoButton"]
+        // check elements displayed
+        // modal open
+        XCTAssertTrue(infoBadgesView.waitForExistence(timeout: timer), "infoBadgesView not displayed")
+        XCTAssertTrue(infoBadgesContent.exists, "infoBadgesContent not displayed")
+        XCTAssertTrue(infoBadgesCloseButton.exists, "infoBadgesCloseButton not displayed")
         
-        // check UI elements present
-        XCTAssertTrue(badgeDistanceDescription.waitForExistence(timeout: timer), "badgeDistanceDescription not displayed")
-        XCTAssertTrue(badgeEcologicalChoiceDescription.exists, "badgeEcologicalChoiceDescription not displayed")
-        XCTAssertTrue(badgeTravelsNumberDescription.exists, "badgeTravelsNumberDescription not displayed")
-        XCTAssertTrue(badgeCompensationDescription.exists, "badgeCompensationDescription not displayed")
-        XCTAssertTrue(closeBadgesInfoButton.exists, "closeBadgesInfoButton not displayed")
+        // close info section
+        let infoBadgesCloseButtonCenter = infoBadgesCloseButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        infoBadgesCloseButtonCenter.tap()
         
-        // tap close button
-        closeBadgesInfoButton.tap()
+        // check elements displayed
+        // modal close
+        XCTAssertTrue(infoBadgesButton.exists, "infoBadgesButton not displayed")
+        XCTAssertFalse(infoBadgesView.exists, "infoBadgesView already displayed")
+        XCTAssertFalse(infoBadgesContent.exists, "infoBadgesContent already displayed")
+        XCTAssertFalse(infoBadgesCloseButton.exists, "infoBadgesCloseButton already displayed")
+    }
+    
+    func testInfoScores() {
+        // UI elements
+        let infoScoresButton = app.buttons["infoScoresButton"]
+        let infoScoresView = app.otherElements["infoScoresView"]
+        let infoScoresCloseButton = app.buttons["infoScoresCloseButton"]
+        let infoScoresContent = app.otherElements["infoScoresContent"]
         
-        // check UI elements present
-        XCTAssertTrue(userDetailsTitle.exists, "userDetailsTitle not displayed")
-        XCTAssertTrue(userName.exists, "userName not displayed")
-        XCTAssertTrue(badgesInfoButton.exists, "badgesInfoButton not displayed")
-        XCTAssertTrue(userBadges.exists, "userBadges not displayed")
-        XCTAssertTrue(userTravelsRecap.exists, "userTravelsRecap not displayed")
+        // check elements displayed
+        // info button present
+        XCTAssertTrue(infoScoresButton.exists, "infoScoresButton not displayed")
+        // modal closed
+        XCTAssertFalse(infoScoresView.exists, "infoScoresView already displayed")
+        XCTAssertFalse(infoScoresContent.exists, "infoScoresContent already displayed")
+        XCTAssertFalse(infoScoresCloseButton.exists, "infoScoresCloseButton already displayed")
+        
+        // tap info button
+        let infoScoresButtonCenter = infoScoresButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        infoScoresButtonCenter.tap()
+        
+        // check elements displayed
+        // modal open
+        XCTAssertTrue(infoScoresView.waitForExistence(timeout: timer), "infoScoresView not displayed")
+        XCTAssertTrue(infoScoresContent.exists, "infoScoresContent not displayed")
+        XCTAssertTrue(infoScoresCloseButton.exists, "infoScoresCloseButton not displayed")
+        
+        // close info section
+        let infoScoresCloseButtonCenter = infoScoresCloseButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        infoScoresCloseButtonCenter.tap()
+        
+        // check elements displayed
+        // modal close
+        XCTAssertTrue(infoScoresButton.exists, "infoScoresButton not displayed")
+        XCTAssertFalse(infoScoresView.exists, "infoScoresView already displayed")
+        XCTAssertFalse(infoScoresContent.exists, "infoScoresContent already displayed")
+        XCTAssertFalse(infoScoresCloseButton.exists, "infoScoresCloseButton already displayed")
     }
 }
-
