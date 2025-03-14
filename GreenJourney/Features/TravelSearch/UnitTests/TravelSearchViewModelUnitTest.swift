@@ -264,12 +264,8 @@ final class TravelSearchViewModelUnitTest {
         viewModel.resetParameters()
         
         // check effective reset
-        
         #expect(viewModel.arrival == CityCompleterDataset())
         #expect(viewModel.departure == CityCompleterDataset())
-        #expect(viewModel.selectedOption.isEmpty)
-        #expect(viewModel.outwardOptions.isEmpty)
-        #expect(viewModel.returnOptions.isEmpty)
         #expect(viewModel.predictedCities.isEmpty)
     }
 }

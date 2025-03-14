@@ -3,7 +3,7 @@ import Testing
 
 @testable import GreenJourney
 
-struct TravelTest {
+struct TravelUnitTest {
     @Test
     func testInitializerWithAttributesWithTravelID() {
         let travel = Travel(

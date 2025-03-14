@@ -41,6 +41,33 @@ final class TravelOptionUnitTest {
     }
     
     @Test
+    func testGetGreenPrice() {
+        let segment = Segment(
+            segmentID: 0,
+            departureID: 264373,
+            destinationID: 275549,
+            departureCity: "Milano",
+            departureCountry: "Italy",
+            destinationCity: "Paris",
+            destinationCountry: "France",
+            dateTime: Date.now,
+            duration: 31554000000000,
+            vehicle: Vehicle.car,
+            segmentDescription: "",
+            price: 0,
+            co2Emitted: 75,
+            distance: 852.88099999999997,
+            numSegment: 1,
+            isOutward: true,
+            travelID: -1
+        )
+        let travelOption = TravelOption(segments: [segment])
+        
+        let greenPrice = travelOption.getGreenPrice()
+        #expect(greenPrice == 2)
+    }
+    
+    @Test
     func testComputeTotalPriceNoSegments() async {
         let travelOption = TravelOption(segments: [])
         let price = travelOption.getTotalPrice()
@@ -499,4 +526,145 @@ final class TravelOptionUnitTest {
         #expect(vehicle == "")
     }
     
+    @Test
+    func testGetNumTreesInteger() {
+        let segment = Segment(
+            segmentID: 0,
+            departureID: 264373,
+            destinationID: 275549,
+            departureCity: "Milano",
+            departureCountry: "Italy",
+            destinationCity: "Paris",
+            destinationCountry: "France",
+            dateTime: Date.now,
+            duration: 510000000000000,
+            vehicle: Vehicle.bus,
+            segmentDescription: "AZ 352",
+            price: 201.22,
+            co2Emitted: 150,
+            distance: 637.82560356753254,
+            numSegment: 1,
+            isOutward: true,
+            travelID: -1
+        )
+        let travelOption = TravelOption(segments: [segment])
+        
+        #expect(travelOption.getNumTrees() == 2)
+    }
+    
+    @Test
+    func testGetNumTreesFloat() {
+        let segment = Segment(
+            segmentID: 0,
+            departureID: 264373,
+            destinationID: 275549,
+            departureCity: "Milano",
+            departureCountry: "Italy",
+            destinationCity: "Paris",
+            destinationCountry: "France",
+            dateTime: Date.now,
+            duration: 510000000000000,
+            vehicle: Vehicle.bus,
+            segmentDescription: "AZ 352",
+            price: 201.22,
+            co2Emitted: 75.01,
+            distance: 637.82560356753254,
+            numSegment: 1,
+            isOutward: true,
+            travelID: -1
+        )
+        let travelOption = TravelOption(segments: [segment])
+        
+        #expect(travelOption.getNumTrees() == 2)
+    }
+    
+    @Test
+    func testGetTotalDistance() {
+        let segment1 = Segment(
+            segmentID: 0,
+            departureID: 264373,
+            destinationID: 275549,
+            departureCity: "Milano",
+            departureCountry: "Italy",
+            destinationCity: "Paris",
+            destinationCountry: "France",
+            dateTime: Date.now,
+            duration: 510000000000000,
+            vehicle: Vehicle.bus,
+            segmentDescription: "AZ 352",
+            price: 201.22,
+            co2Emitted: 75.01,
+            distance: 100,
+            numSegment: 1,
+            isOutward: true,
+            travelID: -1
+        )
+        let segment2 = Segment(
+            segmentID: 1,
+            departureID: 264373,
+            destinationID: 275549,
+            departureCity: "Milano",
+            departureCountry: "Italy",
+            destinationCity: "Paris",
+            destinationCountry: "France",
+            dateTime: Date.now,
+            duration: 510000000000000,
+            vehicle: Vehicle.bus,
+            segmentDescription: "AZ 352",
+            price: 201.22,
+            co2Emitted: 75.01,
+            distance: 200,
+            numSegment: 1,
+            isOutward: true,
+            travelID: -1
+        )
+        let travelOption = TravelOption(segments: [segment1, segment2])
+     
+        #expect(travelOption.getTotalDistance() == 300)
+    }
+    
+    @Test
+    func testGetCountChanges() {
+        let segment1 = Segment(
+            segmentID: 0,
+            departureID: 264373,
+            destinationID: 275549,
+            departureCity: "Milano",
+            departureCountry: "Italy",
+            destinationCity: "Paris",
+            destinationCountry: "France",
+            dateTime: Date.now,
+            duration: 510000000000000,
+            vehicle: Vehicle.bus,
+            segmentDescription: "AZ 352",
+            price: 201.22,
+            co2Emitted: 75.01,
+            distance: 100,
+            numSegment: 1,
+            isOutward: true,
+            travelID: -1
+        )
+        let segment2 = Segment(
+            segmentID: 1,
+            departureID: 264373,
+            destinationID: 275549,
+            departureCity: "Milano",
+            departureCountry: "Italy",
+            destinationCity: "Paris",
+            destinationCountry: "France",
+            dateTime: Date.now,
+            duration: 510000000000000,
+            vehicle: Vehicle.car,
+            segmentDescription: "AZ 352",
+            price: 201.22,
+            co2Emitted: 75.01,
+            distance: 200,
+            numSegment: 1,
+            isOutward: true,
+            travelID: -1
+        )
+        let travelOption = TravelOption(segments: [segment1, segment2])
+     
+        #expect(travelOption.countChanges() == 2)
+    }
 }

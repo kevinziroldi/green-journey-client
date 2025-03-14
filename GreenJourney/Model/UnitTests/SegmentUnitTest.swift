@@ -3,7 +3,7 @@ import Testing
 
 @testable import GreenJourney
 
-struct SegmentTest {
+struct SegmentUnitTest {
     @Test
     func testInitializerWithAttributes() {
         let date = Date.now
@@ -92,5 +92,56 @@ struct SegmentTest {
         #expect(decodedSegment.numSegment == segment.numSegment)
         #expect(decodedSegment.isOutward == segment.isOutward)
         #expect(decodedSegment.travelID == segment.travelID)
+    }
+    
+    @Test
+    func testGetArrivalDateTime() {
+        let date = Date.now
+        let segment = Segment(
+            segmentID: 1,
+            departureID: 10,
+            destinationID: 11,
+            departureCity: "Milan",
+            departureCountry: "Italy",
+            destinationCity: "Paris",
+            destinationCountry: "France",
+            dateTime: date,
+            duration: 1000,
+            vehicle: Vehicle.bike,
+            segmentDescription: "segment description",
+            price: 100.123,
+            co2Emitted: 100.1234,
+            distance: 10.1234,
+            numSegment: 1,
+            isOutward: true,
+            travelID: 2
+        )
+        #expect(segment.getArrivalDateTime() == date.addingTimeInterval(TimeInterval(segment.duration/1000000000)))
+    }
+    
+    @Test
+    func testFindVehicleBicycle() {
+        let date = Date.now
+        let segment = Segment(
+            segmentID: 1,
+            departureID: 10,
+            destinationID: 11,
+            departureCity: "Milan",
+            departureCountry: "Italy",
+            destinationCity: "Paris",
+            destinationCountry: "France",
+            dateTime: date,
+            duration: 1000,
+            vehicle: Vehicle.bike,
+            segmentDescription: "segment description",
+            price: 100.123,
+            co2Emitted: 100.1234,
+            distance: 10.1234,
+            numSegment: 1,
+            isOutward: true,
+            travelID: 2
+        )
+        
+        #expect(segment.findVehicle() == "bicycle")
     }
 }

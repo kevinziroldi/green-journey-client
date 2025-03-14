@@ -3,7 +3,7 @@ import Testing
 
 @testable import GreenJourney
 
-struct CityReviewElementTest {
+struct CityReviewElementUnitTest {
     @Test
     func testEmptyInitializer() {
         let city = CityReviewElement()

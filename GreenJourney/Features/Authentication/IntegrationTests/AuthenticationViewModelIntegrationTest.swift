@@ -213,6 +213,22 @@ final class AuthenticationViewModelIntegrationTest {
     }
     
     @Test
+    func testResetPasswordEmptyEmail() async {
+        // no interaction with server
+        await viewModel.resetPassword(email: "")
+        #expect(viewModel.errorMessage != nil)
+    }
+    
+    @Test
+    func testResetPasswordSuccessful() async {
+        let email = "test@test.com"
+        
+        await viewModel.resetPassword(email: email)
+        #expect(viewModel.errorMessage == nil)
+        #expect(viewModel.resendEmail != nil)
+    }
+    
+    @Test
     func testSignInGoogleSignup() async throws {
         self.mockFirebaseAuthService.shouldSucceed = true
         // signup - new user

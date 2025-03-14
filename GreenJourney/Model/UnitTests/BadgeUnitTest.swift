@@ -2,7 +2,7 @@ import Testing
 
 @testable import GreenJourney
 
-struct BadgeTest {
+struct BadgeUnitTest {
     @Test
     func testBaseBadgeDistance() {
         #expect(Badge.badgeDistanceLow.baseBadge == Badge.badgeDistanceBase)

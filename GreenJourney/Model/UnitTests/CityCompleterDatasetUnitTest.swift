@@ -2,7 +2,7 @@ import Testing
 
 @testable import GreenJourney
 
-struct CityCompleterDatasetTest {
+struct CityCompleterDatasetUnitTest {
     @Test
     func testEmptyInitializer() {
         let city = CityCompleterDataset()

@@ -282,7 +282,7 @@ final class CitiesReviewsViewModelIntegrationTest {
         
         viewModel.selectedCity = cityParis
         
-        await viewModel.getReviewsForSearchedCity(reload: true)
+        await viewModel.getReviewsForSearchedCity(reload: false)
         
         #expect(viewModel.searchedCityAvailable == true)
         #expect(viewModel.selectedCityReviewElement != nil)

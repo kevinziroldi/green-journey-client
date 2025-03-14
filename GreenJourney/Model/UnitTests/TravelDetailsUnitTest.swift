@@ -3,7 +3,7 @@ import Testing
 
 @testable import GreenJourney
 
-struct TravelDetailsTest {
+struct TravelDetailsUnitTest {
     @Test
     func testInitializer() {
         let travel = Travel(
@@ -1435,5 +1435,141 @@ struct TravelDetailsTest {
         let vehicleOutward = travelDetails.findVehicle(outwardDirection: true)
         
         #expect(vehicleOutward == "bus")
+    }
+    
+    @Test
+    func testComputeGreenPrice() {
+        let travel = Travel(
+            travelID: 1,
+            userID: 100
+        )
+        let date = Date.now
+        let segment1 = Segment(
+            segmentID: 1,
+            departureID: 10,
+            destinationID: 11,
+            departureCity: "Milan",
+            departureCountry: "Italy",
+            destinationCity: "Paris",
+            destinationCountry: "France",
+            dateTime: date,
+            duration: 1000,
+            vehicle: Vehicle.bus,
+            segmentDescription: "segment description",
+            price: 100.123,
+            co2Emitted: 75,
+            distance: 10.1234,
+            numSegment: 1,
+            isOutward: true,
+            travelID: 2
+        )
+        let travelDetails = TravelDetails(
+            travel: travel,
+            segments: [segment1]
+        )
+        
+        #expect(travelDetails.computeGreenPrice() == travelDetails.segments[0].price + 2)
+    }
+    
+    @Test
+    func testCountChangesOne() {
+        let travel = Travel(
+            travelID: 1,
+            userID: 100
+        )
+        let date = Date.now
+        let segment1 = Segment(
+            segmentID: 1,
+            departureID: 10,
+            destinationID: 11,
+            departureCity: "Milan",
+            departureCountry: "Italy",
+            destinationCity: "Paris",
+            destinationCountry: "France",
+            dateTime: date,
+            duration: 1000,
+            vehicle: Vehicle.bus,
+            segmentDescription: "segment description",
+            price: 100.123,
+            co2Emitted: 75,
+            distance: 10.1234,
+            numSegment: 1,
+            isOutward: true,
+            travelID: 2
+        )
+        let travelDetails = TravelDetails(
+            travel: travel,
+            segments: [segment1]
+        )
+        
+        #expect(travelDetails.countChanges(outwardDirection: true) == 1)
+    }
+    
+    @Test
+    func testCountChangesZero() {
+        let travel = Travel(
+            travelID: 1,
+            userID: 100
+        )
+        let date = Date.now
+        let segment1 = Segment(
+            segmentID: 1,
+            departureID: 10,
+            destinationID: 11,
+            departureCity: "Milan",
+            departureCountry: "Italy",
+            destinationCity: "Paris",
+            destinationCountry: "France",
+            dateTime: date,
+            duration: 1000,
+            vehicle: Vehicle.walk,
+            segmentDescription: "segment description",
+            price: 100.123,
+            co2Emitted: 75,
+            distance: 10.1234,
+            numSegment: 1,
+            isOutward: true,
+            travelID: 2
+        )
+        let travelDetails = TravelDetails(
+            travel: travel,
+            segments: [segment1]
+        )
+        
+        #expect(travelDetails.countChanges(outwardDirection: false) == 0)
+    }
+    
+    @Test
+    func testGetYear() {
+        let travel = Travel(
+            travelID: 1,
+            userID: 100
+        )
+        let date = Date.now
+        let segment1 = Segment(
+            segmentID: 1,
+            departureID: 10,
+            destinationID: 11,
+            departureCity: "Milan",
+            departureCountry: "Italy",
+            destinationCity: "Paris",
+            destinationCountry: "France",
+            dateTime: date,
+            duration: 1000,
+            vehicle: Vehicle.walk,
+            segmentDescription: "segment description",
+            price: 100.123,
+            co2Emitted: 75,
+            distance: 10.1234,
+            numSegment: 1,
+            isOutward: true,
+            travelID: 2
+        )
+        let travelDetails = TravelDetails(
+            travel: travel,
+            segments: [segment1]
+        )
+        
+        #expect(travelDetails.getYear() == 2025)
     }
 }

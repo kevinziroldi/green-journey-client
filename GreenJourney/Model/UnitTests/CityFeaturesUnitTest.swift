@@ -2,7 +2,7 @@ import Testing
 
 @testable import GreenJourney
 
-struct CityFeaturesTest {
+struct CityFeaturesUnitTest {
     @Test
     func testInitializerWithAttributes() {
         let city = CityFeatures(
