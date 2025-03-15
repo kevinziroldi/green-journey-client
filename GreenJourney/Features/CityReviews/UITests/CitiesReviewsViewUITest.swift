@@ -3,6 +3,7 @@ import XCTest
 final class CitiesReviewsViewUITest: XCTestCase {
     let app = XCUIApplication()
     let timer = 5.0
+    let deviceSize = UITestsDeviceSize.deviceSize
     
     override func setUpWithError() throws {
         continueAfterFailure = false
@@ -23,8 +24,6 @@ final class CitiesReviewsViewUITest: XCTestCase {
         let loginButton = app.buttons["loginButton"]
         let travelSearchViewTitle = app.staticTexts["travelSearchViewTitle"]
         
-        let citiesReviewsTabButton = app.tabBars.buttons["citiesReviewsTabViewElement"]
-        
         let citiesReviewsTitle = app.staticTexts["citiesReviewsTitle"]
         
         XCTAssertTrue(emailTextField.exists, "The email field is not displayed")
@@ -43,7 +42,25 @@ final class CitiesReviewsViewUITest: XCTestCase {
         XCTAssertTrue(travelSearchViewTitle.waitForExistence(timeout: timer), "TravelSearchView not appeared after login")
         
         // tap tab button
-        citiesReviewsTabButton.tap()
+        print(deviceSize)
+        
+        if deviceSize == .small {
+            let citiesReviewsTabButton = app.tabBars.buttons["citiesReviewsTabViewElement"]
+            citiesReviewsTabButton.tap()
+        } else {
+            // .regular
+            let app = XCUIApplication()
+            let start = app.coordinate(withNormalizedOffset: CGVector(dx: 0.0, dy: 0.5))
+            let end = app.coordinate(withNormalizedOffset: CGVector(dx: 0.3, dy: 0.5))
+            start.press(forDuration: 0.1, thenDragTo: end)
+            
+            let citiesReviewsTabButton = app.otherElements["citiesReviewsTabViewElement"]
+            XCTAssertTrue(citiesReviewsTabButton.exists)
+            citiesReviewsTabButton.tap()
+            
+            let right = app.coordinate(withNormalizedOffset: CGVector(dx: 0.95, dy: 0.5))
+            right.tap()
+        }
         
         // check CitiesReviews page
         XCTAssertTrue(citiesReviewsTitle.waitForExistence(timeout: timer), "CitiesReviewsVoiew not appeared after selecting it")
@@ -67,10 +84,13 @@ final class CitiesReviewsViewUITest: XCTestCase {
         
         // check elements present
         XCTAssertTrue(citiesReviewsTitle.exists, "citiesReviewsTitle is not displayed")
-        XCTAssertTrue(userPreferencesButton.exists, "userPreferencesButton is not displayed")
         XCTAssertTrue(selectCityText.exists, "selectCityText is not displayed")
+        
+        if deviceSize == .small {
+            XCTAssertTrue(userPreferencesButton.exists, "userPreferencesButton is not displayed")
+        }
+        
         XCTAssertTrue(searchCityReviews.exists, "searchCityReviews is not displayed")
-    
         XCTAssertTrue(reviewableCitiesTitle.exists, "reviewableCitiesTitle is not displayed")
         XCTAssertTrue(reviewableCity_Berlin.exists, "reviewableCity_Berlin is not displayed")
         XCTAssertTrue(reviewableCity_Firenze.exists, "reviewableCity_Firenze is not displayed")

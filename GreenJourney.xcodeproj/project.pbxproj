@@ -55,6 +55,7 @@
 		0AB2AA8D2D63E0A500FDF38D /* Exceptions for "GreenJourney" folder in "GreenJourneyUITests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Config.plist,
 				Features/Authentication/UITests/EmailVerificationViewUITest.swift,
 				Features/Authentication/UITests/LoginViewUITest.swift,
 				Features/Authentication/UITests/SignUpViewUITest.swift,
@@ -74,6 +75,7 @@
 				Features/TravelSearch/UITests/ReturnOptionsViewUITest.swift,
 				Features/TravelSearch/UITests/TravelSearchViewUITest.swift,
 				Features/UserPreferences/UITests/UserPreferencesViewUITest.swift,
+				Utilities/UITestsDeviceSize.swift,
 			);
 			target = 0AB2AA7C2D63E08000FDF38D /* GreenJourneyUITests */;
 		};
@@ -170,6 +172,7 @@
 				Model/UnitTests/TravelUnitTest.swift,
 				Model/UnitTests/UserUnitTest.swift,
 				NavigationHandler/Tests/NavigationDestinationTest.swift,
+				Utilities/UITestsDeviceSize.swift,
 			);
 			target = 0A15767F2CA459AC00EE99BC /* GreenJourney */;
 		};

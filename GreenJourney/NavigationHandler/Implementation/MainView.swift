@@ -81,14 +81,14 @@ struct MainView: View {
                 List(selection: $navigationSplitViewElement) {
                     Section {
                         Label(TabViewElement.UserPreferences.title, systemImage: TabViewElement.UserPreferences.systemImage)
-                            .accessibilityIdentifier(TabViewElement.UserPreferences.accessibilityIdentifier)
+                            .overlay(Color.clear.accessibilityIdentifier(TabViewElement.UserPreferences.accessibilityIdentifier))
                             .tag(TabViewElement.UserPreferences)
                     }
                     Spacer()
                     Section {
                         ForEach(TabViewElement.allCases.filter { $0 != .UserPreferences }, id: \.self) { element in
                             Label(element.title, systemImage: element.systemImage)
-                                .accessibilityIdentifier(element.accessibilityIdentifier)
+                                .overlay(Color.clear.accessibilityIdentifier(element.accessibilityIdentifier))
                                 .tag(element)
                         }
                     }
