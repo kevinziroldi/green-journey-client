@@ -492,6 +492,7 @@ private struct ReviewsBlocksView: View {
                 // ternary operator needed because at start width is 0
                 CardView(review: review, width: cardWidth > 0 ? cardWidth : 1)
                     .frame(maxHeight: 270)
+                    .overlay(Color.clear.accessibilityIdentifier("reviewElement_\(review.reviewID ?? -1)"))
             }
         }
         .padding(.horizontal, 20)

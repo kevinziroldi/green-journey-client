@@ -3,6 +3,7 @@ import XCTest
 final class CityReviewsDetailsViewUITest: XCTestCase {
     let app = XCUIApplication()
     let timer = 5.0
+    let deviceSize = UITestsDeviceSize.deviceSize
     
     override func setUpWithError() throws {
         continueAfterFailure = false
@@ -23,8 +24,6 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
         let loginButton = app.buttons["loginButton"]
         let travelSearchViewTitle = app.staticTexts["travelSearchViewTitle"]
         
-        let citiesReviewsTabButton = app.tabBars.buttons["citiesReviewsTabViewElement"]
-        
         XCTAssertTrue(emailTextField.exists, "The email field is not displayed")
         XCTAssertTrue(passwordField.exists, "The password field is not displayed")
         XCTAssertTrue(loginButton.exists, "The login button is not displayed")
@@ -41,7 +40,23 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
         XCTAssertTrue(travelSearchViewTitle.waitForExistence(timeout: timer), "TravelSearchView not appeared after login")
         
         // tap tab button
-        citiesReviewsTabButton.tap()
+        if deviceSize == .small {
+            let citiesReviewsTabButton = app.tabBars.buttons["citiesReviewsTabViewElement"]
+            citiesReviewsTabButton.tap()
+        } else {
+            // .regular
+            let app = XCUIApplication()
+            let start = app.coordinate(withNormalizedOffset: CGVector(dx: 0.0, dy: 0.5))
+            let end = app.coordinate(withNormalizedOffset: CGVector(dx: 0.3, dy: 0.5))
+            start.press(forDuration: 0.1, thenDragTo: end)
+            
+            let citiesReviewsTabButton = app.otherElements["citiesReviewsTabViewElement"]
+            XCTAssertTrue(citiesReviewsTabButton.exists)
+            citiesReviewsTabButton.tap()
+            
+            let right = app.coordinate(withNormalizedOffset: CGVector(dx: 0.95, dy: 0.5))
+            right.tap()
+        }
         
         // UI elements 
         let citiesReviewsTitle = app.staticTexts["citiesReviewsTitle"]
@@ -112,7 +127,10 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
         XCTAssertTrue(selecteCityTitle.waitForExistence(timeout: timer), "selecteCityTitle not displayed")
     }
     
-    func testCityReviewsDetailsElementsPresent() {
+    func testCityReviewsDetailsElementsPresentSmallDevice() throws {
+        if deviceSize != .small {
+            throw XCTSkip("Small devices only")
+        }
         // UI elements
         let selecteCityTitle = app.staticTexts["selecteCityTitle"]
         let averageRatingSection = app.otherElements["averageRatingSection"]
@@ -167,7 +185,56 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
         XCTAssertFalse(noReviewsText.exists, "noReviewsText displayed")
     }
     
+    func testCityReviewsDetailsElementsPresentRegularDevice() throws {
+        if deviceSize != .regular {
+            throw XCTSkip("Regular devices only")
+        }
+        // UI elements
+        let selecteCityTitle = app.staticTexts["selecteCityTitle"]
+        let averageRatingSection = app.otherElements["averageRatingSection"]
+        let addReviewButton = app.buttons["addReviewButton"]
+        let yourReviewTitle = app.staticTexts["yourReviewTitle"]
+        let userReviewRating = app.otherElements["userReviewRating"]
+        let userReviewText = app.staticTexts["userReviewText"]
+        let latestReviewsTitle = app.staticTexts["latestReviewsTitle"]
+        let reviewElement_16 = app.otherElements["reviewElement_16"]
+        let reviewElement_17 = app.otherElements["reviewElement_17"]
+        let reviewElement_20 = app.otherElements["reviewElement_20"]
+        let reviewElement_21 = app.otherElements["reviewElement_21"]
+        let wrongReviewElement = app.otherElements["reviewElement_15"]
+        let allReviewsButton = app.buttons["allReviewsButton"]
+        let noReviewsText = app.staticTexts["noReviewsText"]
+        
+        // check UI elements
+        XCTAssertTrue(selecteCityTitle.exists, "selecteCityTitle not displayed")
+        XCTAssertTrue(averageRatingSection.exists, "averageRatingSection not displayed")
+        
+        // there is no review, button present
+        XCTAssertTrue(addReviewButton.exists, "addReviewButton not displayed")
+        // review data not present
+        XCTAssertFalse(yourReviewTitle.exists, "yourReviewTitle displayed")
+        XCTAssertFalse(userReviewRating.exists, "userReviewRating displayed")
+        XCTAssertFalse(userReviewText.exists, "userReviewText displayed")
+        
+        // title last reviews
+        XCTAssertTrue(latestReviewsTitle.exists, "latestReviewsTitle not displayed")
+    
+        // some reviews are present
+        XCTAssertTrue(reviewElement_16.exists, "reviewElement_17 not displayed")
+        XCTAssertTrue(reviewElement_17.exists, "reviewElement_18 not displayed")
+        XCTAssertTrue(reviewElement_20.exists, "reviewElement_20 not displayed")
+        XCTAssertTrue(reviewElement_21.exists, "reviewElement_21 not displayed")
+
+        XCTAssertFalse(wrongReviewElement.exists, "wrongReviewElement not displayed")
+        
+        // more than 10 reviews present
+        XCTAssertTrue(allReviewsButton.exists, "allReviewsButton not displayed")
+        XCTAssertFalse(noReviewsText.exists, "noReviewsText displayed")
+    }
+    
     func testInsertReviewElementsPresent() {
+        // both small and regular devices
+        
         // UI elements
         let addReviewButton = app.buttons["addReviewButton"]
         
@@ -199,6 +266,8 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
     }
     
     func testAddReview() {
+        // both small and regular devices
+        
         // UI elements
         let selecteCityTitle = app.staticTexts["selecteCityTitle"]
         let addReviewButton = app.buttons["addReviewButton"]
@@ -261,6 +330,8 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
     }
     
     func testInfoReview() {
+        // both small and regular devices
+        
         // UI elements
         let infoReviewButton = app.buttons["infoReviewButton"]
         let infoReviewView = app.otherElements["infoReviewView"]
@@ -297,6 +368,8 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
     }
     
     func testModifyAndSaveReview() {
+        // both small and regular devices
+        
         // add a review
         addReviewToRoma()
         
@@ -346,6 +419,8 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
     }
      
     func testModifyAndCancelReview() {
+        // both small and regular devices
+        
         // add a review
         addReviewToRoma()
         
@@ -439,6 +514,8 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
     }
     
     func testSeeAllReviews() {
+        // both small and regular devices
+        
         // UI elements
         let selecteCityTitle = app.staticTexts["selecteCityTitle"]
         let allReviewsButton = app.buttons["allReviewsButton"]

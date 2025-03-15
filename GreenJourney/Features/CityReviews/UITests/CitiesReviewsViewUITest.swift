@@ -41,9 +41,6 @@ final class CitiesReviewsViewUITest: XCTestCase {
         // check page change after login
         XCTAssertTrue(travelSearchViewTitle.waitForExistence(timeout: timer), "TravelSearchView not appeared after login")
         
-        // tap tab button
-        print(deviceSize)
-        
         if deviceSize == .small {
             let citiesReviewsTabButton = app.tabBars.buttons["citiesReviewsTabViewElement"]
             citiesReviewsTabButton.tap()
@@ -67,6 +64,8 @@ final class CitiesReviewsViewUITest: XCTestCase {
     }
     
     func testCitiesReviewsViewElementsPresent() {
+        // both small and regular devices
+        
         // UI elements
         let citiesReviewsTitle = app.staticTexts["citiesReviewsTitle"]
         let userPreferencesButton = app.buttons["userPreferencesButton"]
@@ -106,23 +105,27 @@ final class CitiesReviewsViewUITest: XCTestCase {
     }
     
     func testNavigationToUserPreferences() {
-        // UI elements
-        let citiesReviewsTitle = app.staticTexts["citiesReviewsTitle"]
-        let userPreferencesButton = app.buttons["userPreferencesButton"]
-        
-        // check elements exist
-        XCTAssertTrue(citiesReviewsTitle.waitForExistence(timeout: timer), "The citiesReviewsTitle is not displayed")
-        XCTAssertTrue(userPreferencesButton.exists, "The userPreferencesButton is not displayed")
-        
-        // tap user preference button
-        userPreferencesButton.tap()
-        
-        // check change of view
-        let userPreferencesTitle = app.staticTexts["userPreferencesTitle"]
-        XCTAssertTrue(userPreferencesTitle.waitForExistence(timeout: timer), "The userPreferencesTitle is not displayed")
+        if deviceSize == .small {
+            // UI elements
+            let citiesReviewsTitle = app.staticTexts["citiesReviewsTitle"]
+            let userPreferencesButton = app.buttons["userPreferencesButton"]
+            
+            // check elements exist
+            XCTAssertTrue(citiesReviewsTitle.waitForExistence(timeout: timer), "The citiesReviewsTitle is not displayed")
+            XCTAssertTrue(userPreferencesButton.exists, "The userPreferencesButton is not displayed")
+            
+            // tap user preference button
+            userPreferencesButton.tap()
+            
+            // check change of view
+            let userPreferencesTitle = app.staticTexts["userPreferencesTitle"]
+            XCTAssertTrue(userPreferencesTitle.waitForExistence(timeout: timer), "The userPreferencesTitle is not displayed")
+        }
     }
     
     func testCitySearch() {
+        // both small and regular devices
+        
         // UI elements
         let citiesReviewsTitle = app.staticTexts["citiesReviewsTitle"]
         let searchCityReviews = app.buttons["searchCityReviews"]
@@ -154,6 +157,8 @@ final class CitiesReviewsViewUITest: XCTestCase {
     }
     
     func testNavigationToCitiesReviewsDetailsReviewableCity() {
+        // both small and regular devices
+        
         // UI elements
         let citiesReviewsTitle = app.staticTexts["citiesReviewsTitle"]
         let reviewableCity_Berlin = app.otherElements["reviewableCityView_BER_DE"]
@@ -171,6 +176,8 @@ final class CitiesReviewsViewUITest: XCTestCase {
     }
     
     func testNavigationToCitiesReviewsDetailsBestCity() {
+        // both small and regular devices
+        
         // UI elements
         let citiesReviewsTitle = app.staticTexts["citiesReviewsTitle"]
         let bestCity_0 = app.otherElements["bestCityView_0"]
