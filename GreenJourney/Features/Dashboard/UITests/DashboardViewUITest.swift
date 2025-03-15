@@ -3,6 +3,7 @@ import XCTest
 final class DashboardViewUITest: XCTestCase {
     let app = XCUIApplication()
     let timer = 5.0
+    let deviceSize = UITestsDeviceSize.deviceSize
     
     override func setUpWithError() throws {
         continueAfterFailure = false
@@ -22,7 +23,6 @@ final class DashboardViewUITest: XCTestCase {
         let passwordField = app.secureTextFields["passwordSecureField"]
         let loginButton = app.buttons["loginButton"]
         let travelSearchViewTitle = app.staticTexts["travelSearchViewTitle"]
-        let dashboardTabViewElement = app.tabBars.buttons["dashboardTabViewElement"]
         let dashboardTitle = app.staticTexts["dashboardTitle"]
         
         XCTAssertTrue(emailTextField.exists, "The email field is not displayed")
@@ -41,7 +41,23 @@ final class DashboardViewUITest: XCTestCase {
         XCTAssertTrue(travelSearchViewTitle.waitForExistence(timeout: timer), "TravelSearchView not appeared after login")
         
         // tap tab button
-        dashboardTabViewElement.tap()
+        if deviceSize == .small {
+            let dashboardTabViewElement = app.tabBars.buttons["dashboardTabViewElement"]
+            dashboardTabViewElement.tap()
+        } else {
+            // .regular
+            let app = XCUIApplication()
+            let start = app.coordinate(withNormalizedOffset: CGVector(dx: 0.0, dy: 0.5))
+            let end = app.coordinate(withNormalizedOffset: CGVector(dx: 0.3, dy: 0.5))
+            start.press(forDuration: 0.1, thenDragTo: end)
+            
+            let citiesReviewsTabButton = app.otherElements["dashboardTabViewElement"]
+            XCTAssertTrue(citiesReviewsTabButton.exists)
+            citiesReviewsTabButton.tap()
+            
+            let right = app.coordinate(withNormalizedOffset: CGVector(dx: 0.95, dy: 0.5))
+            right.tap()
+        }
         
         // check dashboard page
         XCTAssertTrue(dashboardTitle.waitForExistence(timeout: timer), "DashboardView not appeared after selecting it")
