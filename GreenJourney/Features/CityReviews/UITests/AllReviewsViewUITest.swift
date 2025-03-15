@@ -3,6 +3,7 @@ import XCTest
 final class AllReviewsViewUITest: XCTestCase {
     let app = XCUIApplication()
     let timer = 5.0
+    let deviceSize = UITestsDeviceSize.deviceSize
     
     override func setUpWithError() throws {
         continueAfterFailure = false
@@ -23,8 +24,6 @@ final class AllReviewsViewUITest: XCTestCase {
         let loginButton = app.buttons["loginButton"]
         let travelSearchViewTitle = app.staticTexts["travelSearchViewTitle"]
         
-        let citiesReviewsTabButton = app.tabBars.buttons["citiesReviewsTabViewElement"]
-    
         XCTAssertTrue(emailTextField.exists, "The email field is not displayed")
         XCTAssertTrue(passwordField.exists, "The password field is not displayed")
         XCTAssertTrue(loginButton.exists, "The login button is not displayed")
@@ -41,16 +40,33 @@ final class AllReviewsViewUITest: XCTestCase {
         XCTAssertTrue(travelSearchViewTitle.waitForExistence(timeout: timer), "TravelSearchView not appeared after login")
         
         // tap tab button
-        citiesReviewsTabButton.tap()
+        if deviceSize == .small {
+            let citiesReviewsTabButton = app.tabBars.buttons["citiesReviewsTabViewElement"]
+            citiesReviewsTabButton.tap()
+        } else {
+            // .regular
+            let app = XCUIApplication()
+            let start = app.coordinate(withNormalizedOffset: CGVector(dx: 0.0, dy: 0.5))
+            let end = app.coordinate(withNormalizedOffset: CGVector(dx: 0.3, dy: 0.5))
+            start.press(forDuration: 0.1, thenDragTo: end)
+            
+            let citiesReviewsTabButton = app.otherElements["citiesReviewsTabViewElement"]
+            XCTAssertTrue(citiesReviewsTabButton.exists)
+            citiesReviewsTabButton.tap()
+            
+            let right = app.coordinate(withNormalizedOffset: CGVector(dx: 0.95, dy: 0.5))
+            right.tap()
+        }
         
+        // UI elements
         let citiesReviewsTitle = app.staticTexts["citiesReviewsTitle"]
         let bestCity_2 = app.otherElements["bestCityView_2"]
         
         // check CitiesReviews page
-        XCTAssertTrue(citiesReviewsTitle.waitForExistence(timeout: timer), "CitiesReviewsVoiew not appeared after selecting it")
-        XCTAssertTrue(bestCity_2.waitForExistence(timeout: timer), "best city element not appeared after selecting it")
+        XCTAssertTrue(citiesReviewsTitle.waitForExistence(timeout: timer), "The citiesReviewsTitle is not displayed")
+        XCTAssertTrue(bestCity_2.exists, "bestCity_2 is not displayed")
         
-        // open best city Roma
+        // tap bestCity_2 button
         bestCity_2.tap()
         
         // all reviews button
