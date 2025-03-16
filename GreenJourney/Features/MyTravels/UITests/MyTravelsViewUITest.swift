@@ -94,7 +94,10 @@ final class MyTravelsUITests: XCTestCase {
         XCTAssertTrue(userPreferencesTitle.waitForExistence(timeout: timer), "The userPreferencesTitle is not displayed")
     }
     
-    func testSortByButtonShowsActionSheetTapCancelButton() {
+    func testSortByButtonShowsActionSheetTapCancelButton() throws {
+        if deviceSize != .small {
+            throw XCTSkip("Small device only")
+        }
         // UI elements
         let myTravelsTitle = app.staticTexts["myTravelsTitle"]
         let sortByButton = app.buttons["sortByButton"]
@@ -151,7 +154,9 @@ final class MyTravelsUITests: XCTestCase {
         XCTAssertTrue(co2EmittedButton.waitForExistence(timeout: timer), "Co2 emitted button not found")
         XCTAssertTrue(co2CompensationRate.waitForExistence(timeout: timer), "Co2 compensation rate button not found")
         XCTAssertTrue(priceButton.waitForExistence(timeout: timer), "Price button not found")
-        XCTAssertTrue(cancelButton.waitForExistence(timeout: timer), "Cancel button not found")
+        if deviceSize == .small {
+            XCTAssertTrue(cancelButton.waitForExistence(timeout: timer), "Cancel button not found")
+        }
         
         // choose a sorting method and tap the button
         departureDateButton.tap()
@@ -161,7 +166,9 @@ final class MyTravelsUITests: XCTestCase {
         XCTAssertFalse(co2EmittedButton.waitForExistence(timeout: timer), "Co2 emitted button found")
         XCTAssertFalse(co2CompensationRate.waitForExistence(timeout: timer), "Co2 compensation rate button found")
         XCTAssertFalse(priceButton.waitForExistence(timeout: timer), "Price button found")
-        XCTAssertFalse(cancelButton.waitForExistence(timeout: timer), "Cancel button found")
+        if deviceSize == .small {
+            XCTAssertFalse(cancelButton.waitForExistence(timeout: timer), "Cancel button found")
+        }
         // check title present
         XCTAssertTrue(myTravelsTitle.exists, "The title of the page is not present")
     }
