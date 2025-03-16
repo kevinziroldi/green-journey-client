@@ -3,6 +3,7 @@ import XCTest
 final class MyTravelsUITests: XCTestCase {
     let app = XCUIApplication()
     let timer = 5.0
+    let deviceSize = UITestsDeviceSize.deviceSize
     
     override func setUp() {
         continueAfterFailure = false
@@ -17,7 +18,6 @@ final class MyTravelsUITests: XCTestCase {
         let passwordField = app.secureTextFields["passwordSecureField"]
         let loginButton = app.buttons["loginButton"]
         let travelSearchViewTitle = app.staticTexts["travelSearchViewTitle"]
-        let myTravelsTabButton = app.tabBars.buttons["myTravelsTabViewElement"]
         let myTravelsTitle = app.staticTexts["myTravelsTitle"]
         
         XCTAssertTrue(emailTextField.exists, "The email field is not displayed")
@@ -35,8 +35,24 @@ final class MyTravelsUITests: XCTestCase {
         // check page change after login
         XCTAssertTrue(travelSearchViewTitle.waitForExistence(timeout: timer), "TravelSearchView not appeared after login")
         
-        // tap tab button
-        myTravelsTabButton.tap()
+        // tap button
+        if deviceSize == .small {
+            let myTravelsTabButton = app.tabBars.buttons["myTravelsTabViewElement"]
+            myTravelsTabButton.tap()
+        } else {
+            // .regular
+            let app = XCUIApplication()
+            let start = app.coordinate(withNormalizedOffset: CGVector(dx: 0.0, dy: 0.5))
+            let end = app.coordinate(withNormalizedOffset: CGVector(dx: 0.3, dy: 0.5))
+            start.press(forDuration: 0.1, thenDragTo: end)
+            
+            let citiesReviewsTabButton = app.otherElements["myTravelsTabViewElement"]
+            XCTAssertTrue(citiesReviewsTabButton.exists)
+            citiesReviewsTabButton.tap()
+            
+            let right = app.coordinate(withNormalizedOffset: CGVector(dx: 0.95, dy: 0.5))
+            right.tap()
+        }
         
         // check MyTravels page
         XCTAssertTrue(myTravelsTitle.waitForExistence(timeout: timer), "MyTravelsView not appeared after selecting it")
@@ -49,12 +65,19 @@ final class MyTravelsUITests: XCTestCase {
         let sortByButton = app.buttons["sortByButton"]
         
         XCTAssertTrue(myTravelsTitle.exists, "The title of the page is not present")
-        XCTAssertTrue(userPreferencesButton.exists, "The button to access user preferences is not present")
+        
+        if deviceSize == .small {
+            XCTAssertTrue(userPreferencesButton.exists, "The button to access user preferences is not present")
+        }
+        
         XCTAssertTrue(travelCompletedControl.exists, "The travel completed picket is not present")
         XCTAssertTrue(sortByButton.exists, "The sort by button is not present")
     }
     
-    func testNavigationToUserPreferences() {
+    func testNavigationToUserPreferences() throws {
+        if deviceSize != .small {
+            throw XCTSkip("Small device only")
+        }
         // UI elements
         let myTravelsTitle = app.staticTexts["myTravelsTitle"]
         let userPreferencesButton = app.buttons["userPreferencesButton"]
@@ -106,7 +129,7 @@ final class MyTravelsUITests: XCTestCase {
         // check title present
         XCTAssertTrue(myTravelsTitle.exists, "The title of the page is not present")
     }
-    
+     
     func testSortByButtonShowsActionSheetTapSortButton() {
         // UI elements
         let myTravelsTitle = app.staticTexts["myTravelsTitle"]
