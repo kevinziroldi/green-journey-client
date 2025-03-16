@@ -3,6 +3,7 @@ import XCTest
 final class TravelSearchViewUITest: XCTestCase {
     let app = XCUIApplication()
     let timer = 5.0
+    let deviceSize = UITestsDeviceSize.deviceSize
     
     override func setUpWithError() throws {
         continueAfterFailure = false
@@ -58,7 +59,9 @@ final class TravelSearchViewUITest: XCTestCase {
         
         // check UI elements present
         XCTAssertTrue(travelSearchViewTitle.exists, "travelSearchViewTitle is not displayed")
-        XCTAssertTrue(userPreferencesButton.exists, "userPreferencesButton is not displayed")
+        if deviceSize == .small {
+            XCTAssertTrue(userPreferencesButton.exists, "userPreferencesButton is not displayed")
+        }
         XCTAssertTrue(tripTypePicker.exists, "tripTypePicker is not displayed")
         XCTAssertTrue(departureLabel.exists, "departureLabel is not displayed")
         XCTAssertTrue(departureButton.exists, "departureButton is not displayed")
@@ -73,7 +76,10 @@ final class TravelSearchViewUITest: XCTestCase {
         XCTAssertFalse(newGenerationButton.exists, "newGenerationButton is not displayed")
     }
     
-    func testNavigationToUserPreferences() {
+    func testNavigationToUserPreferences() throws {
+        if deviceSize != .small {
+            throw XCTSkip("Small devices only")
+        }
         // UI elements
         let travelSearchViewTitle = app.staticTexts["travelSearchViewTitle"]
         let userPreferencesButton = app.buttons["userPreferencesButton"]

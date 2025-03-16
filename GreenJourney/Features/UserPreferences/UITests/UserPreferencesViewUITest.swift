@@ -3,6 +3,7 @@ import XCTest
 final class UserPreferencesViewUITest: XCTestCase {
     let app = XCUIApplication()
     let timer = 5.0
+    let deviceSize = UITestsDeviceSize.deviceSize
     
     override func setUpWithError() throws {
         continueAfterFailure = false
@@ -22,7 +23,6 @@ final class UserPreferencesViewUITest: XCTestCase {
         let passwordField = app.secureTextFields["passwordSecureField"]
         let loginButton = app.buttons["loginButton"]
         let travelSearchViewTitle = app.staticTexts["travelSearchViewTitle"]
-        let userPreferencesButton = app.buttons["userPreferencesButton"]
         
         // check LoginView UI elements
         XCTAssertTrue(emailTextField.exists, "The email field is not displayed")
@@ -39,10 +39,26 @@ final class UserPreferencesViewUITest: XCTestCase {
         
         // check page change after login
         XCTAssertTrue(travelSearchViewTitle.waitForExistence(timeout: timer), "TravelSearchView not appeared after login")
-        XCTAssertTrue(userPreferencesButton.exists, "The userPreferencesButton is not displayed")
         
         // tap user preference button
-        userPreferencesButton.tap()
+        if deviceSize == .small {
+            let userPreferencesButton = app.buttons["userPreferencesButton"]
+            XCTAssertTrue(userPreferencesButton.exists, "The userPreferencesButton is not displayed")
+            userPreferencesButton.tap()
+        } else {
+            // .regular
+            let app = XCUIApplication()
+            let start = app.coordinate(withNormalizedOffset: CGVector(dx: 0.0, dy: 0.5))
+            let end = app.coordinate(withNormalizedOffset: CGVector(dx: 0.3, dy: 0.5))
+            start.press(forDuration: 0.1, thenDragTo: end)
+            
+            let citiesReviewsTabButton = app.otherElements["userPreferencesTabViewElement"]
+            XCTAssertTrue(citiesReviewsTabButton.exists)
+            citiesReviewsTabButton.tap()
+            
+            let right = app.coordinate(withNormalizedOffset: CGVector(dx: 0.95, dy: 0.5))
+            right.tap()
+        }
         
         // check change of view
         let userPreferencesTitle = app.staticTexts["userPreferencesTitle"]
