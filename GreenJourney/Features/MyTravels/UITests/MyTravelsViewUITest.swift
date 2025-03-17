@@ -36,7 +36,7 @@ final class MyTravelsUITests: XCTestCase {
         XCTAssertTrue(travelSearchViewTitle.waitForExistence(timeout: timer), "TravelSearchView not appeared after login")
         
         // tap button
-        if deviceSize == .small {
+        if deviceSize == .compact {
             let myTravelsTabButton = app.tabBars.buttons["myTravelsTabViewElement"]
             myTravelsTabButton.tap()
         } else {
@@ -66,7 +66,7 @@ final class MyTravelsUITests: XCTestCase {
         
         XCTAssertTrue(myTravelsTitle.exists, "The title of the page is not present")
         
-        if deviceSize == .small {
+        if deviceSize == .compact {
             XCTAssertTrue(userPreferencesButton.exists, "The button to access user preferences is not present")
         }
         
@@ -75,7 +75,7 @@ final class MyTravelsUITests: XCTestCase {
     }
     
     func testNavigationToUserPreferences() throws {
-        if deviceSize != .small {
+        if deviceSize != .compact {
             throw XCTSkip("Small device only")
         }
         // UI elements
@@ -95,7 +95,7 @@ final class MyTravelsUITests: XCTestCase {
     }
     
     func testSortByButtonShowsActionSheetTapCancelButton() throws {
-        if deviceSize != .small {
+        if deviceSize != .compact {
             throw XCTSkip("Small device only")
         }
         // UI elements
@@ -154,7 +154,7 @@ final class MyTravelsUITests: XCTestCase {
         XCTAssertTrue(co2EmittedButton.waitForExistence(timeout: timer), "Co2 emitted button not found")
         XCTAssertTrue(co2CompensationRate.waitForExistence(timeout: timer), "Co2 compensation rate button not found")
         XCTAssertTrue(priceButton.waitForExistence(timeout: timer), "Price button not found")
-        if deviceSize == .small {
+        if deviceSize == .compact {
             XCTAssertTrue(cancelButton.waitForExistence(timeout: timer), "Cancel button not found")
         }
         
@@ -166,7 +166,7 @@ final class MyTravelsUITests: XCTestCase {
         XCTAssertFalse(co2EmittedButton.waitForExistence(timeout: timer), "Co2 emitted button found")
         XCTAssertFalse(co2CompensationRate.waitForExistence(timeout: timer), "Co2 compensation rate button found")
         XCTAssertFalse(priceButton.waitForExistence(timeout: timer), "Price button found")
-        if deviceSize == .small {
+        if deviceSize == .compact {
             XCTAssertFalse(cancelButton.waitForExistence(timeout: timer), "Cancel button found")
         }
         // check title present

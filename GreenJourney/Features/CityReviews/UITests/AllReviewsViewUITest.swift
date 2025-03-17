@@ -40,7 +40,7 @@ final class AllReviewsViewUITest: XCTestCase {
         XCTAssertTrue(travelSearchViewTitle.waitForExistence(timeout: timer), "TravelSearchView not appeared after login")
         
         // tap tab button
-        if deviceSize == .small {
+        if deviceSize == .compact {
             let citiesReviewsTabButton = app.tabBars.buttons["citiesReviewsTabViewElement"]
             citiesReviewsTabButton.tap()
         } else {

@@ -41,7 +41,7 @@ final class UserPreferencesViewUITest: XCTestCase {
         XCTAssertTrue(travelSearchViewTitle.waitForExistence(timeout: timer), "TravelSearchView not appeared after login")
         
         // tap user preference button
-        if deviceSize == .small {
+        if deviceSize == .compact {
             let userPreferencesButton = app.buttons["userPreferencesButton"]
             XCTAssertTrue(userPreferencesButton.exists, "The userPreferencesButton is not displayed")
             userPreferencesButton.tap()

@@ -56,6 +56,9 @@ final class EmailVerificationViewUITest: XCTestCase {
         repeatPasswordSecureField.typeText("password_test")
         firstName.tap()
         firstName.typeText("first name")
+        
+        app.swipeUp()
+        
         lastName.tap()
         lastName.typeText("last name")
         

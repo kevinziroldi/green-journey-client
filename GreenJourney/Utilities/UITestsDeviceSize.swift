@@ -1,7 +1,7 @@
 import Foundation
 
 enum DeviceSize: String {
-    case small = "small"
+    case compact = "compact"
     case regular = "regular"
 }
 
@@ -11,10 +11,10 @@ class UITestsDeviceSize {
         guard let url = bundle.url(forResource: "Config", withExtension: "plist"),
               let data = try? Data(contentsOf: url),
               let config = try? PropertyListSerialization.propertyList(from: data, options: [], format: nil) as? [String: Any]
-        else { return .small }
+        else { return .compact }
         if let stringValue = config["UITestsDeviceSize"] as? String {
-            return DeviceSize(rawValue: stringValue) ?? .small
+            return DeviceSize(rawValue: stringValue) ?? .compact
         }
-        return .small
+        return .compact
     }
 }

@@ -59,7 +59,7 @@ final class TravelSearchViewUITest: XCTestCase {
         
         // check UI elements present
         XCTAssertTrue(travelSearchViewTitle.exists, "travelSearchViewTitle is not displayed")
-        if deviceSize == .small {
+        if deviceSize == .compact {
             XCTAssertTrue(userPreferencesButton.exists, "userPreferencesButton is not displayed")
         }
         XCTAssertTrue(tripTypePicker.exists, "tripTypePicker is not displayed")
@@ -77,7 +77,7 @@ final class TravelSearchViewUITest: XCTestCase {
     }
     
     func testNavigationToUserPreferences() throws {
-        if deviceSize != .small {
+        if deviceSize != .compact {
             throw XCTSkip("Small devices only")
         }
         // UI elements

@@ -41,7 +41,7 @@ final class CitiesReviewsViewUITest: XCTestCase {
         // check page change after login
         XCTAssertTrue(travelSearchViewTitle.waitForExistence(timeout: timer), "TravelSearchView not appeared after login")
         
-        if deviceSize == .small {
+        if deviceSize == .compact {
             let citiesReviewsTabButton = app.tabBars.buttons["citiesReviewsTabViewElement"]
             citiesReviewsTabButton.tap()
         } else {
@@ -85,7 +85,7 @@ final class CitiesReviewsViewUITest: XCTestCase {
         XCTAssertTrue(citiesReviewsTitle.exists, "citiesReviewsTitle is not displayed")
         XCTAssertTrue(selectCityText.exists, "selectCityText is not displayed")
         
-        if deviceSize == .small {
+        if deviceSize == .compact {
             XCTAssertTrue(userPreferencesButton.exists, "userPreferencesButton is not displayed")
         }
         
@@ -105,7 +105,7 @@ final class CitiesReviewsViewUITest: XCTestCase {
     }
     
     func testNavigationToUserPreferences() {
-        if deviceSize == .small {
+        if deviceSize == .compact {
             // UI elements
             let citiesReviewsTitle = app.staticTexts["citiesReviewsTitle"]
             let userPreferencesButton = app.buttons["userPreferencesButton"]

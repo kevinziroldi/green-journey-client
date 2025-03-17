@@ -41,7 +41,7 @@ final class DashboardViewUITest: XCTestCase {
         XCTAssertTrue(travelSearchViewTitle.waitForExistence(timeout: timer), "TravelSearchView not appeared after login")
         
         // tap tab button
-        if deviceSize == .small {
+        if deviceSize == .compact {
             let dashboardTabViewElement = app.tabBars.buttons["dashboardTabViewElement"]
             dashboardTabViewElement.tap()
         } else {

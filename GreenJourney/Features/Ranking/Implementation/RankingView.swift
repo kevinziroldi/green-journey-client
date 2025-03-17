@@ -40,6 +40,7 @@ struct RankingView: View {
         VStack {
             if horizontalSizeClass == .compact {
                 // iOS
+                
                 ScrollView {
                     VStack {
                         HStack {
@@ -72,6 +73,36 @@ struct RankingView: View {
                 }
             } else {
                 // iPadOS
+                
+                ScrollView {
+                    VStack {
+                        // title
+                        RankingTitleView()
+                            .padding(5)
+                        
+                        HStack(alignment: .top) {
+                            // badges
+                            UserBadgesView(legendTapped: $legendTapped, badges: viewModel.badges, inline: false)
+                            
+                            // scores
+                            ScoresView(scoreLongDistance: viewModel.longDistanceScore, scoreShortDistance: viewModel.shortDistanceScore)
+                        }
+                        
+                        Spacer()
+                        
+                        // LeaderBoards
+                        LeaderboardNavigationView(viewModel: viewModel, navigationPath: $navigationPath, title: "Long Distance", leaderboard: viewModel.longDistanceRanking, gridItems: gridItemsCompactDevice, leaderboardType: true)
+                            .overlay(Color.clear.accessibilityIdentifier("longDistanceNavigationView"))
+                        
+                        LeaderboardNavigationView(viewModel: viewModel,navigationPath: $navigationPath, title: "Short Distance", leaderboard: viewModel.shortDistanceRanking, gridItems: gridItemsCompactDevice, leaderboardType: false)
+                            .overlay(Color.clear.accessibilityIdentifier("shortDistanceNavigationView"))
+                        
+                        Spacer()
+                    }
+                    .padding(.horizontal)
+                }
+                
+                
                 
                 // TODO da rifare
                 /*
@@ -125,6 +156,7 @@ private struct RankingTitleView: View {
 }
 
 private struct UserBadgesView: View {
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @Binding var legendTapped: Bool
     var badges: [Badge]
     var inline: Bool
@@ -152,8 +184,13 @@ private struct UserBadgesView: View {
                     .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 15))
                     
                     HStack{
-                        BadgeView(badges: badges, dim: (UIScreen.main.bounds.width - 120)/4, inline: inline)
-                            .padding()
+                        if horizontalSizeClass == .compact {
+                            BadgeView(badges: badges, dim: (UIScreen.main.bounds.width - 120)/4, inline: inline)
+                                .padding()
+                        } else {
+                            BadgeView(badges: badges, dim: (UIScreen.main.bounds.width/2)/4, inline: inline)
+                                .padding()
+                        }
                     }
                 }
             }
