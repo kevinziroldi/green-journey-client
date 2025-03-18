@@ -139,12 +139,12 @@ struct TravelSearchView: View {
             }
             .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
             .sheet(isPresented: $dateTapped) {
-                DatePickerView(dateTapped: $dateTapped, title: "Select Outward Date", date: $viewModel.datePicked)
+                DatePickerView(dateTapped: $dateTapped, title: "Select Outward Date", date: $viewModel.datePicked, limitDate: Date())
                     .presentationDetents([.height(530)])
                     .presentationCornerRadius(15)
             }
             .sheet(isPresented: $dateReturnTapped) {
-                DatePickerView(dateTapped: $dateReturnTapped, title: "Select Return Date", date: $viewModel.dateReturnPicked)
+                DatePickerView(dateTapped: $dateReturnTapped, title: "Select Return Date", date: $viewModel.dateReturnPicked, limitDate: viewModel.datePicked)
                     .presentationDetents([.height(530)])
                     .presentationCornerRadius(15)
             }
@@ -152,6 +152,11 @@ struct TravelSearchView: View {
             .navigationBarBackButtonHidden(triggerAI)
             .onAppear() {
                 viewModel.resetParameters()
+            }
+            .onChange(of: viewModel.datePicked) {
+                if viewModel.datePicked > viewModel.dateReturnPicked {
+                    viewModel.dateReturnPicked = viewModel.datePicked.addingTimeInterval(7 * 24 * 60 * 60)
+                }
             }
         }
     }
@@ -497,9 +502,9 @@ private struct ReturnDatePickerView: View {
 
 private struct DatePickerView: View {
     @Binding var dateTapped: Bool
-    @State private var offsetY: CGFloat = 0
     var title: String
     @Binding var date: Date
+    let limitDate: Date
     @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
@@ -525,7 +530,7 @@ private struct DatePickerView: View {
                     .padding(.top, 30)
                     .accessibilityIdentifier("datePickerTitle")
             }
-            DatePicker("", selection: $date, in: Date()...Date.distantFuture)
+            DatePicker("", selection: $date, in: limitDate...Date.distantFuture)
                 .datePickerStyle(.graphical)
                 .labelsHidden()
                 .accessibilityIdentifier("datePickerElement")
