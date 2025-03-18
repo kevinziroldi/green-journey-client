@@ -26,10 +26,6 @@ struct TravelCardView: View {
                         DepartureDestinationAllDatesInfoView(travelDetails: travelDetails)
                         Spacer()
                         // travel direction
-                        VStack {
-                            DirectionTagView(direction: travelDetails.isOneway())
-                            Spacer()
-                        }
                         Spacer()
                         Image(systemName: "chevron.forward")
                             .font(.title2)
@@ -70,7 +66,6 @@ struct TravelCardView: View {
                         VehiclesView(oneWay: travelDetails.isOneway(), outwardVehicle: travelDetails.findVehicle(outwardDirection: true), returnVehicle: travelDetails.findVehicle(outwardDirection: false))
                         Spacer()
                         // direction tag
-                        DirectionTagView(direction: travelDetails.isOneway())
                     }
                     .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0))
                     
@@ -179,12 +174,6 @@ private struct DepartureDestinationAllDatesInfoView: View {
                 Text(travelDetails.getOutwardSegments().first?.dateTime.formatted(date: .numeric, time: .omitted) ?? "")
                     .font(.subheadline)
                     .fontWeight(.light)
-                /*Text("-")
-                    .font(.subheadline)
-                let arrivalDate = travelDetails.getOutwardSegments().last?.getArrivalDateTime()
-                Text(arrivalDate?.formatted(date: .numeric, time: .omitted) ?? "")
-                    .font(.subheadline)
-                    .fontWeight(.light)*/
             }
             .scaledToFit()
             .minimumScaleFactor(0.7)
@@ -224,12 +213,6 @@ private struct DepartureDestinationAllDatesInfoView: View {
                     Text(travelDetails.getReturnSegments().first?.dateTime.formatted(date: .numeric, time: .omitted) ?? "")
                         .font(.subheadline)
                         .fontWeight(.light)
-                    /*Text("-")
-                        .font(.subheadline)
-                    let arrivalDate = travelDetails.getReturnSegments().last?.getArrivalDateTime()
-                    Text(arrivalDate?.formatted(date: .numeric, time: .omitted) ?? "")
-                        .font(.subheadline)
-                        .fontWeight(.light)*/
                 }
                 .scaledToFit()
                 .minimumScaleFactor(0.7)
@@ -254,29 +237,5 @@ private struct DepartureDestinationAllDatesInfoView: View {
                 }
             }
         }
-    }
-}
-
-private struct DirectionTagView: View {
-    var direction: Bool
-
-    var body: some View {
-        ZStack {
-            /*RoundedRectangle(cornerRadius: 20)
-                .stroke()
-            if direction {
-                Text("One way")
-                    .font(.caption)
-                    .fontWeight(.bold)
-                    .padding(5)
-            }
-            else {
-                Text("Round trip")
-                    .font(.caption)
-                    .fontWeight(.bold)
-                    .padding(5)
-            }*/
-        }
-        .fixedSize()
     }
 }
