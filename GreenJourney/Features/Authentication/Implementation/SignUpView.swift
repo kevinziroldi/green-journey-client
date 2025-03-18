@@ -211,6 +211,8 @@ private struct SignupButtonsView: View {
                         viewModel.email = ""
                         viewModel.password = ""
                         viewModel.repeatPassword = ""
+                        viewModel.firstName = ""
+                        viewModel.lastName = ""
                         navigationPath.removeLast()
                     }
                 }
