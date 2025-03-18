@@ -77,7 +77,10 @@ final class RankingViewUITest: XCTestCase {
         
         // check elements exist
         XCTAssertTrue(rankingTitle.waitForExistence(timeout: timer), "The rankingTitle is not displayed")
-        XCTAssertTrue(userPreferencesButton.exists, "The userPreferencesButton is not displayed")
+        
+        if deviceSize == .compact {
+            XCTAssertTrue(userPreferencesButton.exists, "The userPreferencesButton is not displayed")
+        }
         XCTAssertFalse(errorMessage.exists, "The errorMessage is displayed")
         
         XCTAssertTrue(userBadgesView.exists, "userBadgesView not displayed")
@@ -88,7 +91,10 @@ final class RankingViewUITest: XCTestCase {
         
     }
     
-    func testNavigatioToUserPreferences() {
+    func testNavigatioToUserPreferences() throws {
+        if deviceSize != .compact {
+            throw XCTSkip("Compact devices only")
+        }
         // UI elements
         let rankingTitle = app.staticTexts["rankingTitle"]
         let userPreferencesButton = app.buttons["userPreferencesButton"]

@@ -66,7 +66,7 @@ struct MainView: View {
                     }
                 }
                 .navigationDestination(for: NavigationDestination.self) { destination in
-                        destinationView(for: destination)
+                    destinationView(for: destination)
                 }
             }.onAppear() {
                 // get travels from server
