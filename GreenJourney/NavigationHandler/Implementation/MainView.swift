@@ -24,7 +24,7 @@ struct MainView: View {
         self.serverService = serverService
         self.firebaseAuthService = firebaseAuthService
     }
-        
+    
     var body: some View {
         if horizontalSizeClass == .compact {
             // iOS
@@ -53,11 +53,11 @@ struct MainView: View {
                             .tag(TabViewElement.Dashboard)
                     } else {
                         LoginView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
-                            .onAppear() {
+                            .onAppear {
                                 // reset tab after logout+login
                                 selectedTab = .SearchTravel
                             }
-                            .onDisappear() {
+                            .onDisappear {
                                 // get travels from server
                                 Task {
                                     await viewModel.getUserTravels()
@@ -68,8 +68,8 @@ struct MainView: View {
                 .navigationDestination(for: NavigationDestination.self) { destination in
                     destinationView(for: destination)
                 }
-            }.onAppear() {
-                // get travels from server
+            }
+            .onAppear {
                 if users.first != nil {
                     Task { await viewModel.getUserTravels() }
                 }
@@ -77,26 +77,26 @@ struct MainView: View {
         } else {
             // iPadOS
             
-            NavigationSplitView(columnVisibility: $visibility) {
-                List(selection: $navigationSplitViewElement) {
-                    Section {
-                        Label(TabViewElement.UserPreferences.title, systemImage: TabViewElement.UserPreferences.systemImage)
-                            .overlay(Color.clear.accessibilityIdentifier(TabViewElement.UserPreferences.accessibilityIdentifier))
-                            .tag(TabViewElement.UserPreferences)
-                    }
-                    Spacer()
-                    Section {
-                        ForEach(TabViewElement.allCases.filter { $0 != .UserPreferences }, id: \.self) { element in
-                            Label(element.title, systemImage: element.systemImage)
-                                .overlay(Color.clear.accessibilityIdentifier(element.accessibilityIdentifier))
-                                .tag(element)
+            if users.first != nil {
+                NavigationSplitView(columnVisibility: $visibility) {
+                    List(selection: $navigationSplitViewElement) {
+                        Section {
+                            Label(TabViewElement.UserPreferences.title, systemImage: TabViewElement.UserPreferences.systemImage)
+                                .overlay(Color.clear.accessibilityIdentifier(TabViewElement.UserPreferences.accessibilityIdentifier))
+                                .tag(TabViewElement.UserPreferences)
+                        }
+                        Spacer()
+                        Section {
+                            ForEach(TabViewElement.allCases.filter { $0 != .UserPreferences }, id: \.self) { element in
+                                Label(element.title, systemImage: element.systemImage)
+                                    .overlay(Color.clear.accessibilityIdentifier(element.accessibilityIdentifier))
+                                    .tag(element)
+                            }
                         }
                     }
-                }
-            } detail: {
-                NavigationStack(path: $navigationPath) {
-                    Group {
-                        if users.first != nil {
+                } detail: {
+                    NavigationStack(path: $navigationPath) {
+                        Group {
                             switch navigationSplitViewElement {
                             case .Ranking:
                                 RankingView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
@@ -114,31 +114,32 @@ struct MainView: View {
                                 // never happens, but optional needed for selection
                                 EmptyView()
                             }
-                        } else {
-                            LoginView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
-                                .onAppear() {
-                                    // remove side bar
-                                    visibility = .detailOnly
-                                    
-                                    // reset tab after logout+login
-                                    navigationSplitViewElement = .SearchTravel
-                                }
-                                .onDisappear() {
-                                    // get travels from server
-                                    Task {
-                                        await viewModel.getUserTravels()
-                                    }
-                                }
+                        }
+                        .navigationDestination(for: NavigationDestination.self) { destination in
+                            destinationView(for: destination)
                         }
                     }
-                    .navigationDestination(for: NavigationDestination.self) { destination in
-                        destinationView(for: destination)
-                    }
-                }
-                .onAppear {
-                    if users.first != nil {
+                    .onAppear {
                         Task { await viewModel.getUserTravels() }
                     }
+                }
+            } else {
+                // show login view
+                NavigationStack(path: $navigationPath) {
+                    LoginView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
+                        .navigationDestination(for: NavigationDestination.self) { destination in
+                            destinationView(for: destination)
+                        }
+                        .onAppear() {
+                            // reset tab after logout+login
+                            navigationSplitViewElement = .SearchTravel
+                        }
+                        .onDisappear() {
+                            // get travels from server
+                            Task {
+                                await viewModel.getUserTravels()
+                            }
+                        }
                 }
             }
         }
@@ -179,4 +180,3 @@ struct TabItemView: View {
             .accessibilityIdentifier(tabElement.accessibilityIdentifier)
     }
 }
-

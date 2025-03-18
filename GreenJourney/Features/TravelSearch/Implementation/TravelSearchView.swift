@@ -160,6 +160,12 @@ struct TravelSearchView: View {
                     viewModel.dateReturnPicked = viewModel.datePicked.addingTimeInterval(7 * 24 * 60 * 60)
                 }
             }
+            .onChange(of: navigationSplitViewVisibility) {
+                // disable AI if the user opens the navigation split view
+                if triggerAI && navigationSplitViewVisibility != .detailOnly {
+                    triggerAI = false
+                }
+            }
         }
     }
 }
