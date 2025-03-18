@@ -34,30 +34,24 @@ struct BadgeView: View {
             
             VStack(spacing: 5) {
                 HStack(spacing: 5) { //first line
-                    Spacer()
                     Image(allBadges[0].rawValue)
                         .resizable()
                         .scaledToFit()
                         .frame(width: dim, height: dim)
-                    Spacer()
                     Image(allBadges[1].rawValue)
                         .resizable()
                         .scaledToFit()
                         .frame(width: dim, height: dim)
-                    Spacer()
                 }
                 HStack(spacing: 5) { // second line
-                    Spacer()
                     Image(allBadges[2].rawValue)
                         .resizable()
                         .scaledToFit()
                         .frame(width: dim, height: dim)
-                    Spacer()
                     Image(allBadges[3].rawValue)
                         .resizable()
                         .scaledToFit()
                         .frame(width: dim, height: dim)
-                    Spacer()
                 }
             }
         }
