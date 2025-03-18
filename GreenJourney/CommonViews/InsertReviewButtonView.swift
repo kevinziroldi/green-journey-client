@@ -9,40 +9,34 @@ struct InsertReviewButtonView: View {
     var body: some View {
         VStack {
             if viewModel.userReview == nil {
-                ZStack{
-                    RoundedRectangle(cornerRadius: 20)
-                        .fill(AppColors.mainColor)
-                        .shadow(color: AppColors.mainColor.opacity(0.3), radius: 5, x: 0, y: 3)
-                    HStack{
-                        Button(action: {
-                            reviewTapped = true
-                        }) {
-                            
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .fill(AppColors.mainColor)
-                                
-                                HStack (spacing: 3) {
-                                    Spacer()
-                                    Image(systemName: "pencil.and.scribble")
-                                        .font(.title3)
-                                        .fontWeight(.semibold)
-                                        .fontWeight(.light)
-                                        .foregroundStyle(.white)
-                                    Spacer()
-                                    Text("Leave a review")
-                                        .foregroundStyle(.white)
-                                        .fontWeight(.semibold)
-                                    Spacer()
-                                }
-                                .padding(10)
-                            }
-                            .fixedSize()
+                Button(action: {
+                    reviewTapped = true
+                }) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 15)
+                            .fill(AppColors.mainColor)
+                            .shadow(color: AppColors.mainColor.opacity(0.3), radius: 5, x: 0, y: 3)
+                        HStack (spacing: 3) {
+                            Spacer()
+                            Text("Leave a review")
+                                .foregroundStyle(.white)
+                                .fontWeight(.semibold)
+                            Spacer()
+                            Image(systemName: "pencil.and.scribble")
+                                .font(.title3)
+                                .fontWeight(.semibold)
+                                .fontWeight(.light)
+                                .foregroundStyle(.white)
+                            Spacer()
                         }
-                        .padding(.horizontal)
-                        .accessibilityIdentifier("addReviewButton")
+                        .padding(10)
                     }
+                    .fixedSize(horizontal: false, vertical: true)
                 }
+                .padding(.horizontal)
+                .accessibilityIdentifier("addReviewButton")
+                
+                
             } else {
                 if let userReview = viewModel.userReview {
                     ZStack{
