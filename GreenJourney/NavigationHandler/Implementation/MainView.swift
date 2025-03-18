@@ -40,7 +40,7 @@ struct MainView: View {
                             .tabItem {TabItemView(tabElement: TabViewElement.Reviews)}
                             .tag(TabViewElement.Reviews)
                         
-                        TravelSearchView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
+                        TravelSearchView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService, navigationSplitViewVisibility: $visibility)
                             .tabItem {TabItemView(tabElement: TabViewElement.SearchTravel)}
                             .tag(TabViewElement.SearchTravel)
                         
@@ -103,7 +103,7 @@ struct MainView: View {
                             case .Reviews:
                                 CitiesReviewsView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
                             case .SearchTravel:
-                                TravelSearchView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
+                                TravelSearchView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService, navigationSplitViewVisibility: $visibility)
                             case .MyTravels:
                                 MyTravelsView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
                             case .Dashboard:

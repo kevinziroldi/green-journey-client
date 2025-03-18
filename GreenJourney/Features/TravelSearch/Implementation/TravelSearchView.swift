@@ -17,14 +17,16 @@ struct TravelSearchView: View {
     @State private var showAlertPrediction: Bool = false
     
     @Binding var navigationPath: NavigationPath
+    @Binding var navigationSplitViewVisibility: NavigationSplitViewVisibility
     
     @Query var users: [User]
     
-    init(modelContext: ModelContext, navigationPath: Binding<NavigationPath>, serverService: ServerServiceProtocol, firebaseAuthService: FirebaseAuthServiceProtocol) {
+    init(modelContext: ModelContext, navigationPath: Binding<NavigationPath>, serverService: ServerServiceProtocol, firebaseAuthService: FirebaseAuthServiceProtocol, navigationSplitViewVisibility: Binding<NavigationSplitViewVisibility>) {
         _viewModel = StateObject(wrappedValue: TravelSearchViewModel(modelContext: modelContext, serverService: serverService))
         _navigationPath = navigationPath
         self.serverService = serverService
         self.firebaseAuthService = firebaseAuthService
+        _navigationSplitViewVisibility = navigationSplitViewVisibility
     }
     
     var body: some View {
@@ -132,7 +134,7 @@ struct TravelSearchView: View {
                             .padding(.top, 20)
                             .accessibilityIdentifier("searchButton")
 
-                            AIPredictionView(viewModel: viewModel, triggerAI: $triggerAI, showAlertPrediction: $showAlertPrediction)
+                            AIPredictionView(viewModel: viewModel, triggerAI: $triggerAI, showAlertPrediction: $showAlertPrediction, navigationSplitViewVisibility: $navigationSplitViewVisibility)
                         }
                     
                 }
@@ -548,6 +550,8 @@ private struct AIPredictionView: View {
     @ObservedObject var viewModel: TravelSearchViewModel
     @Binding var triggerAI: Bool
     @Binding var showAlertPrediction: Bool
+    
+    @Binding var navigationSplitViewVisibility: NavigationSplitViewVisibility
         
     var body: some View {
         HStack {
@@ -560,6 +564,7 @@ private struct AIPredictionView: View {
                             viewModel.arrival = firstCity
                             viewModel.predictedCities = predictedCities
                             withAnimation(.bouncy(duration: 0.5)) {
+                                self.navigationSplitViewVisibility = .detailOnly
                                 self.triggerAI = true
                             }
                         } else {
