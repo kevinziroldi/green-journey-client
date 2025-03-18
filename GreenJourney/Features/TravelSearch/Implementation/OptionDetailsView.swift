@@ -35,7 +35,6 @@ struct OptionDetailsView: View {
                 }
             } else {
                 // iPadOS
-                
                 ScrollView {
                     HStack(alignment: .top) {
                         TravelRecapView(singleColumn: true, distance: option.getTotalDistance(), duration: option.getTotalDuration(), price: option.getTotalPrice(), greenPrice: option.getGreenPrice())
@@ -56,21 +55,36 @@ struct OptionDetailsView: View {
                     Spacer()
                 }
             }
-            
-            if (!viewModel.oneWay) {
-                if (viewModel.selectedOption.isEmpty) {
-                    Button (action: {
-                        viewModel.selectedOption.append(contentsOf: option.segments)
-                        navigationPath.append(NavigationDestination.ReturnOptionsView(viewModel))
-                    }) {
-                        Text("Proceed")
-                            .font(.title2)
+            VStack {
+                if (!viewModel.oneWay) {
+                    if (viewModel.selectedOption.isEmpty) {
+                        Button (action: {
+                            viewModel.selectedOption.append(contentsOf: option.segments)
+                            navigationPath.append(NavigationDestination.ReturnOptionsView(viewModel))
+                        }) {
+                            Text("Proceed")
+                                .font(.title2)
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .accessibilityIdentifier("proceedButton")
                     }
-                    .buttonStyle(.borderedProminent)
-                    .accessibilityIdentifier("proceedButton")
+                    else {
+                        Button (action:  {
+                            Task {
+                                viewModel.selectedOption.append(contentsOf: option.segments)
+                                await viewModel.saveTravel()
+                                navigationPath = NavigationPath()
+                            }
+                        }) {
+                            Text("Save travel")
+                                .font(.title2)
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .accessibilityIdentifier("saveTravelButtonTwoWays")
+                    }
                 }
                 else {
-                    Button (action:  {
+                    Button (action: {
                         Task {
                             viewModel.selectedOption.append(contentsOf: option.segments)
                             await viewModel.saveTravel()
@@ -81,23 +95,10 @@ struct OptionDetailsView: View {
                             .font(.title2)
                     }
                     .buttonStyle(.borderedProminent)
-                    .accessibilityIdentifier("saveTravelButtonTwoWays")
+                    .accessibilityIdentifier("saveTravelButtonOneWay")
                 }
             }
-            else {
-                Button (action: {
-                    Task {
-                        viewModel.selectedOption.append(contentsOf: option.segments)
-                        await viewModel.saveTravel()
-                        navigationPath = NavigationPath()
-                    }
-                }) {
-                    Text("Save travel")
-                        .font(.title2)
-                }
-                .buttonStyle(.borderedProminent)
-                .accessibilityIdentifier("saveTravelButtonOneWay")
-            }
+            .padding(10)
         }
         .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
     }

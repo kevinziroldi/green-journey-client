@@ -66,7 +66,7 @@ struct UserDetailsRankingView: View {
         .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
         .sheet(isPresented: $legendTapped) {
             LegendBadgeView(isPresented: $legendTapped)
-                .presentationDetents([.large])
+                .presentationDetents([.fraction(0.95)])
                 .presentationCornerRadius(15)
                 .overlay(Color.clear.accessibilityIdentifier("infoBadgesView"))
         }
