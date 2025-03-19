@@ -183,44 +183,61 @@ class MyTravelsViewModel: ObservableObject {
                 }
                 return false
             }
+            
         case .co2CompensationRate:
             // increasing co2 compensated / co2 emitted
             travelDetailsList.sort {
-                var co2Emitted1 = 0.0
-                for segment in $0.segments {
-                    co2Emitted1 += segment.co2Emitted
-                }
-                var co2Emitted2 = 0.0
-                for segment in $1.segments {
-                    co2Emitted2 += segment.co2Emitted
-                }
+                let co2Emitted1 = $0.segments.reduce(0.0) { $0 + $1.co2Emitted }
+                let co2Emitted2 = $1.segments.reduce(0.0) { $0 + $1.co2Emitted }
                 let co2Compensated1 = $0.travel.CO2Compensated
                 let co2Compensated2 = $1.travel.CO2Compensated
-                let co2Rate1: Double
-                let co2Rate2: Double
-                if co2Emitted1 == 0 {
-                    co2Rate1 = 0
-                } else {
-                    co2Rate1 = co2Compensated1/co2Emitted1
-                }
-                if co2Emitted2 == 0 {
-                    co2Rate2 = 0
-                } else {
-                    co2Rate2 = co2Compensated2/co2Emitted2
-                }
+                let isZero1 = co2Emitted1 == 0 && co2Compensated1 == 0
+                let isZero2 = co2Emitted2 == 0 && co2Compensated2 == 0
                 
-                if let firstSegment1 = $0.getDepartureSegment() {
-                    if let firstSegment2 = $1.getDepartureSegment() {
-                        if co2Rate1 < co2Rate2 {
-                            return true
-                        } else if co2Rate1 == co2Rate2 && firstSegment1.travelID > firstSegment2.travelID {
+                // zero compensated / zero emitted
+                if isZero1 && !isZero2 {
+                    return false
+                }
+                if isZero2 && !isZero1 {
+                    return true
+                }
+                if isZero1 && isZero2 {
+                    if let travelID1 = $0.travel.travelID {
+                        if let travelID2 = $1.travel.travelID {
+                            return travelID1 < travelID2
+                        } else {
                             return true
                         }
+                    } else {
+                        return true
                     }
                 }
                 
-                return false
+                let ratio1 = co2Emitted1 == 0 ? Double.infinity : co2Compensated1 / co2Emitted1
+                let ratio2 = co2Emitted2 == 0 ? Double.infinity : co2Compensated2 / co2Emitted2
+                
+                // increasing ratio
+                if ratio1 != ratio2 {
+                    return ratio1 < ratio2
+                }
+                
+                // if same ratio, return based on co2 emitted
+                if co2Emitted1 != co2Emitted2 {
+                    return co2Emitted1 > co2Emitted2
+                }
+                
+                // if all the same, return based on travelID
+                if let travelID1 = $0.travel.travelID {
+                    if let travelID2 = $1.travel.travelID {
+                        return travelID1 < travelID2
+                    } else {
+                        return true
+                    }
+                } else {
+                    return true
+                }
             }
+            
         case .price:
             // decreasing price
             travelDetailsList.sort {

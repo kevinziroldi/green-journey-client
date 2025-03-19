@@ -183,6 +183,7 @@ private struct LeaderBoardUserView: View {
                         if horizontalSizeClass != .compact {
                             BadgeView(badges: userRanking.badges, dim: 40, inline: false)
                         }
+                        
                         Text(String(format: "%.1f", leaderBoardSelected ? userRanking.scoreLongDistance : userRanking.scoreShortDistance))
                             .frame(maxWidth: 90, alignment: .center)
                             .foregroundStyle(LinearGradient(gradient: Gradient(colors: [.green, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing))

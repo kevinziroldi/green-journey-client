@@ -91,41 +91,16 @@ struct RankingView: View {
                         Spacer()
                         
                         // LeaderBoards
-                        LeaderboardNavigationView(viewModel: viewModel, navigationPath: $navigationPath, title: "Long Distance", leaderboard: viewModel.longDistanceRanking, gridItems: gridItemsCompactDevice, leaderboardType: true)
+                        LeaderboardNavigationView(viewModel: viewModel, navigationPath: $navigationPath, title: "Long Distance", leaderboard: viewModel.longDistanceRanking, gridItems: gridItemsRegularDevice, leaderboardType: true)
                             .overlay(Color.clear.accessibilityIdentifier("longDistanceNavigationView"))
                         
-                        LeaderboardNavigationView(viewModel: viewModel,navigationPath: $navigationPath, title: "Short Distance", leaderboard: viewModel.shortDistanceRanking, gridItems: gridItemsCompactDevice, leaderboardType: false)
+                        LeaderboardNavigationView(viewModel: viewModel,navigationPath: $navigationPath, title: "Short Distance", leaderboard: viewModel.shortDistanceRanking, gridItems: gridItemsRegularDevice, leaderboardType: false)
                             .overlay(Color.clear.accessibilityIdentifier("shortDistanceNavigationView"))
                         
                         Spacer()
                     }
                     .padding(.horizontal)
                 }
-                
-                
-                
-                // TODO da rifare
-                /*
-                ScrollView {
-                    // title
-                    RankingTitleView()
-                        .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
-                    
-                    // picker
-                    LeaderBoardPickerView(viewModel: viewModel)
-                        .frame(maxWidth: 400) // set a max width to control the size
-                    
-                    Spacer()
-                    
-                    // LeaderBoards
-                    LeaderBoardsView(viewModel: viewModel, navigationPath: $navigationPath, gridItems: gridItemsRegularDevice, currentRanking: Array(viewModel.longDistanceRanking.prefix(3)))
-                        .frame(maxWidth: 700)
-                    LeaderBoardsView(viewModel: viewModel, navigationPath: $navigationPath, gridItems: gridItemsRegularDevice, currentRanking: Array(viewModel.shortDistanceRanking.prefix(3)))
-                        .frame(maxWidth: 700)
-                    
-                    Spacer()
-                }
-                 */
             }
         }
         .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
