@@ -23,7 +23,7 @@ struct LegendBadgeView: View {
         .padding(.top)
         ScrollView {
             VStack {
-                Text("Co2 compensator")
+                Text("Co2 Compensator")
                     .font(.title)
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -36,7 +36,7 @@ struct LegendBadgeView: View {
                 Text("This badge reflects your efforts to compensate for your carbon footprint. The more you offset, the bigger your impact!")
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
-                Text("Kilometer hunter")
+                Text("Kilometer Hunter")
                     .padding(.top, 30)
                     .font(.title)
                     .fontWeight(.semibold)
@@ -50,7 +50,7 @@ struct LegendBadgeView: View {
                 Text("See how far you’ve gone! This badge records the total distance you’ve traveled in kilometers.")
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
-                Text("Planet saver")
+                Text("Planet Saver")
                     .padding(.top, 30)
                     .font(.title)
                     .fontWeight(.semibold)
@@ -64,7 +64,7 @@ struct LegendBadgeView: View {
                 Text("Earn this badge by making sustainable travel choices. The greener your trips, the higher your score!")
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
-                Text("Serial traveller")
+                Text("Serial Traveller")
                     .padding(.top, 30)
                     .font(.title)
                     .fontWeight(.semibold)

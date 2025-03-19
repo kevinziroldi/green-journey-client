@@ -46,7 +46,7 @@ struct InfoCompensationView: View {
                 Our approach is simple: we plant trees! Each tree absorbs an estimated 75 kg of Co2 over its lifetime, making a real difference for the planet. 
                 And the best part? 
                 Planting a tree costs only €2, making carbon offsetting both affordable and effective.
-                Join us in making travel greener
+                Join us in making travel greener!
                 """)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 Text("Small actions lead to big changes!")
