@@ -122,19 +122,29 @@ private struct ReviewsListView: View {
     var reviews: [Review]
     
     var body: some View {
-        ScrollView{
-            VStack {
-                ForEach (reviews) { review in
-                    SingleReviewView(review: review)
-                        .overlay(Color.clear.accessibilityIdentifier("reviewView_\(review.reviewID ?? -1)"))
+        ScrollViewReader { proxy in
+            ScrollView {
+                VStack {
+                    ForEach(reviews) { review in
+                        SingleReviewView(review: review)
+                            .id(review.reviewID)
+                            .overlay(Color.clear.accessibilityIdentifier("reviewView_\(review.reviewID ?? -1)"))
+                    }
+                }
+                .frame(maxWidth: .infinity)
+                .padding()
+            }
+            .scrollDismissesKeyboard(.interactively)
+            .onChange(of: reviews) {
+                // scroll to the top 
+                if let firstReview = reviews.first {
+                    withAnimation {
+                        proxy.scrollTo(firstReview.reviewID, anchor: .top)
+                    }
                 }
             }
-            .frame(maxWidth: .infinity)
-            .padding()
         }
-        .scrollDismissesKeyboard(.interactively)
     }
-    
 }
 
 private struct SingleReviewView: View {

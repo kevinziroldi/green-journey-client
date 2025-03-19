@@ -43,5 +43,7 @@
   ],
   "average_waste_bins_rating" : 4.5,
   "average_local_transport_rating" : 4.5,
-  "average_green_spaces_rating" : 4
+  "average_green_spaces_rating" : 4,
+  "has_previous": false,
+  "has_next": false
 }
