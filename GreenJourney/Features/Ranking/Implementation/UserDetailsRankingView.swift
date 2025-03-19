@@ -42,7 +42,7 @@ struct UserDetailsRankingView: View {
                         RankingElementDetailsTitle(user: user)
                         
                         // badges
-                        UserBadgesView(legendTapped: $legendTapped, badges: user.badges,inline: false)
+                        UserBadgesView(legendTapped: $legendTapped, badges: user.badges,inline: true)
 
                         // user aggregate data
                         HStack {

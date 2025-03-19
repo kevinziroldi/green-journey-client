@@ -128,6 +128,7 @@ private struct ReviewsListView: View {
                         .overlay(Color.clear.accessibilityIdentifier("reviewView_\(review.reviewID ?? -1)"))
                 }
             }
+            .frame(maxWidth: .infinity)
             .padding()
         }
         .scrollDismissesKeyboard(.interactively)
@@ -217,6 +218,7 @@ private struct SingleReviewView: View {
             }
             .padding()
         }
+        .frame(maxWidth: 800)
     }
 }
 
