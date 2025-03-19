@@ -35,6 +35,7 @@ struct OptionDetailsView: View {
                 }
             } else {
                 // iPadOS
+                
                 ScrollView {
                     HStack(alignment: .top) {
                         TravelRecapView(singleColumn: true, distance: option.getTotalDistance(), duration: option.getTotalDuration(), price: option.getTotalPrice(), greenPrice: option.getGreenPrice())
@@ -43,7 +44,7 @@ struct OptionDetailsView: View {
                         
                         VStack {
                             Co2RecapView(halfWidth: true, co2Emitted: option.getCo2Emitted(), numTrees: option.getNumTrees(), distance: option.getTotalDistance())
-                                .padding(EdgeInsets(top: 10, leading: 15, bottom: 5, trailing: 15))
+                                .padding()
                                 .overlay(Color.clear.accessibilityIdentifier("co2EmittedBox"))
                         }
                         .frame(maxHeight: .infinity, alignment: .top)

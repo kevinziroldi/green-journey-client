@@ -17,7 +17,7 @@ struct TravelRecapView: View {
                 .shadow(color: AppColors.mainColor.opacity(0.3), radius: 5, x: 0, y: 3)
             
             if singleColumn {
-                VStack (spacing:0){
+                VStack(spacing:0) {
                     HStack {
                         Text("Recap")
                             .font(.title)
