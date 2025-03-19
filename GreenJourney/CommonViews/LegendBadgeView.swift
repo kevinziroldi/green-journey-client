@@ -3,24 +3,19 @@ import SwiftUI
 struct LegendBadgeView: View {
     @Binding var isPresented: Bool
     var body: some View {
-        ZStack {
-            Text("Legend")
-                .font(.largeTitle)
-                .padding(.bottom)
-            HStack {
-                Spacer()
-                Button(action: {
-                    isPresented = false
-                }) {
-                    Text("Done")
-                        .fontWeight(.bold)
-                }
-                .padding(.bottom, 30)
-                .accessibilityIdentifier("infoBadgesCloseButton")
+        HStack {
+            Spacer()
+            Button(action: {
+                isPresented = false
+            }) {
+                Text("Done")
+                    .fontWeight(.bold)
             }
-            .padding(.horizontal)
+            .accessibilityIdentifier("infoBadgesCloseButton")
         }
         .padding(.top)
+        .padding(.horizontal)
+        
         ScrollView {
             VStack {
                 Text("Co2 Compensator")

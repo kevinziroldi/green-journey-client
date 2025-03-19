@@ -239,24 +239,24 @@ struct InfoGreenPriceView: View {
         .padding(.horizontal)
         .padding(.top)
         
-            VStack {
-                Text("What Is The Green Price")
-                    .font(.title)
-                    .fontWeight(.semibold)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .scaledToFit()
-                    .minimumScaleFactor(0.6)
-                    .lineLimit(1)
-                    .padding(.bottom, 5)
-                Text("""
+        VStack {
+            Text("What Is The Green Price")
+                .font(.title)
+                .fontWeight(.semibold)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .scaledToFit()
+                .minimumScaleFactor(0.6)
+                .lineLimit(1)
+                .padding(.bottom, 5)
+            Text("""
                 The green price represents the total cost of your trip, combining the base fare with full carbon compensation. 
                 Carbon offsets are achieved by planting trees at just €2 each, neutralizing your travel emissions.
                 """)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            .padding(.horizontal)
-            .padding(.bottom)
-            .overlay(Color.clear.accessibilityIdentifier("infoGreenPriceContent"))
-        
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .padding(.horizontal)
+        .padding(.bottom)
+        .overlay(Color.clear.accessibilityIdentifier("infoGreenPriceContent"))
+        Spacer()
     }
 }
