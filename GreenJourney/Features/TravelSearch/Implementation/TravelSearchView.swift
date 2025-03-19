@@ -611,9 +611,16 @@ private struct AIPredictionView: View {
                                 .foregroundStyle(.gray)
                                 .padding(.leading, 5)
                             Spacer()
-                            Image(systemName: "apple.intelligence")
-                                .font(.title)
-                                .foregroundStyle(.linearGradient(Gradient(colors: [.blue, .green]), startPoint: .bottomLeading, endPoint: .topTrailing))
+                            ZStack {
+                                Image(systemName: "arrow.trianglehead.2.clockwise")
+                                    .font(.largeTitle)
+                                    .fontWeight(.light)
+                                    .scaleEffect(1.3)
+                                    .foregroundStyle(.linearGradient(Gradient(colors: [.blue, .green]), startPoint: .bottomLeading, endPoint: .topTrailing))
+                                Image(systemName: "apple.intelligence")
+                                    .font(.title)
+                                    .foregroundStyle(.linearGradient(Gradient(colors: [.blue, .green]), startPoint: .bottomLeading, endPoint: .topTrailing))
+                            }
                         }
                         .padding(5)
                         .padding(.horizontal, 5)
