@@ -207,7 +207,7 @@ private struct ReviewsAverageView: View {
                                 .padding(EdgeInsets(top: 4, leading: 15, bottom: 0, trailing: 5))
                             FiveStarView(rating: selectedCityReviewElement.getAverageRating(), dim: 25, color: .yellow)
                             
-                            Text("\(selectedCityReviewElement.reviews.count) \(selectedCityReviewElement.reviews.count == 1 ? "review" : "reviews")")
+                            Text("\(selectedCityReviewElement.numReviews) \(selectedCityReviewElement.numReviews == 1 ? "review" : "reviews")")
                                 .padding(.leading, 30)
                             
                             Spacer()

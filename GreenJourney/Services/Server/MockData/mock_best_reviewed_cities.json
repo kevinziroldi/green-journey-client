@@ -44,7 +44,8 @@
     "average_local_transport_rating" : 5,
     "average_green_spaces_rating" : 4,
     "has_previous": true,
-    "has_next": true
+    "has_next": true,
+    "num_reviews": 2
   },
   {
     "reviews" : [
@@ -93,7 +94,8 @@
     "average_local_transport_rating" : 4.5,
     "average_green_spaces_rating" : 4,
     "has_previous": false,
-    "has_next": false
+    "has_next": false,
+    "num_reviews": 2
   },
   {
     "reviews" : [
@@ -334,6 +336,7 @@
     "average_local_transport_rating" : 3,
     "average_green_spaces_rating" : 3,
     "has_previous": false,
-    "has_next": false
+    "has_next": false,
+    "num_reviews": 12
   }
 ]

@@ -5,6 +5,7 @@ class CityReviewElement: Codable {
     var averageWasteBinsRating: Float64
     var hasPrevious: Bool
     var hasNext: Bool
+    var numReviews: Int
     
     init() {
         self.reviews = []
@@ -13,15 +14,17 @@ class CityReviewElement: Codable {
         self.averageWasteBinsRating = 0.0
         self.hasPrevious = false
         self.hasNext = false
+        self.numReviews = 0
     }
     
-    init(reviews: [Review], averageLocalTransportRating: Float64, averageGreenSpacesRating: Float64, averageWasteBinsRating: Float64, hasPrevious: Bool, hasNext: Bool) {
+    init(reviews: [Review], averageLocalTransportRating: Float64, averageGreenSpacesRating: Float64, averageWasteBinsRating: Float64, hasPrevious: Bool, hasNext: Bool, numReviews: Int) {
         self.reviews = reviews
         self.averageLocalTransportRating = averageLocalTransportRating
         self.averageGreenSpacesRating = averageGreenSpacesRating
         self.averageWasteBinsRating = averageWasteBinsRating
         self.hasPrevious = hasPrevious
         self.hasNext = hasNext
+        self.numReviews = numReviews
     }
     
     enum CodingKeys: String, CodingKey {
@@ -31,6 +34,7 @@ class CityReviewElement: Codable {
         case averageWasteBinsRating = "average_waste_bins_rating"
         case hasPrevious = "has_previous"
         case hasNext = "has_next"
+        case numReviews = "num_reviews"
     }
     
     required init(from decoder: Decoder) throws {
@@ -41,6 +45,7 @@ class CityReviewElement: Codable {
         self.averageWasteBinsRating = try container.decode(Float64.self, forKey: .averageWasteBinsRating)
         self.hasPrevious = try container.decode(Bool.self, forKey: .hasPrevious)
         self.hasNext = try container.decode(Bool.self, forKey: .hasNext)
+        self.numReviews = try container.decode(Int.self, forKey: .numReviews)
     }
     
     func encode(to encoder: Encoder) throws {
@@ -51,6 +56,7 @@ class CityReviewElement: Codable {
         try container.encode(averageWasteBinsRating, forKey: .averageWasteBinsRating)
         try container.encode(hasPrevious, forKey: .hasPrevious)
         try container.encode(hasNext, forKey: .hasNext)
+        try container.encode(numReviews, forKey: .numReviews)
     }
     
     func getFirstReviews(num: Int) -> [Review] {
