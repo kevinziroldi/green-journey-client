@@ -74,10 +74,10 @@ struct TravelDetailsView: View {
                                 HStack(alignment: .top) {
                                     // travel recap single column
                                     TravelRecapView(singleColumn: true, distance: travelDetails.computeTotalDistance(), duration: travelDetails.computeTotalDuration(), price: travelDetails.computeTotalPrice(), greenPrice: travelDetails.computeGreenPrice())
-                                        .padding(.horizontal)
+                                        .padding()
                                         .accessibilityElement(children: .contain)
                                         .overlay(Color.clear.accessibilityIdentifier("travelRecap"))
-                                        .padding(.vertical)
+                                        
                                     
                                     // recap half width
                                     VStack {
