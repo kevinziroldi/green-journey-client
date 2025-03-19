@@ -8,7 +8,9 @@ protocol ServerServiceProtocol {
     func getRanking(userID: Int) async throws -> RankingResponse
     
     // reviews
-    func getReviewsForCity(iata: String, countryCode: String) async throws -> CityReviewElement
+    func getFirstReviewsForCity(iata: String, countryCode: String) async throws -> CityReviewElement
+    func getLastReviewsForCity(iata: String, countryCode: String) async throws -> CityReviewElement
+    func getReviewsForCity(iata: String, countryCode: String, reviewID: Int, direction: Bool) async throws -> CityReviewElement
     func getBestReviewedCities() async throws -> [CityReviewElement]
     func uploadReview(review: Review) async throws -> Review
     func modifyReview(modifiedReview: Review) async throws -> Review

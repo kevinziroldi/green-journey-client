@@ -18,22 +18,24 @@ class CitiesReviewsViewModel: ObservableObject {
     
     // searched city
     @Published var searchedCityAvailable: Bool = false
-    
     @Published var refreshAvailable: Bool = false
     
     // selected city
     @Published var selectedCity: CityCompleterDataset = CityCompleterDataset()
     @Published var selectedCityReviewElement: CityReviewElement?
-    
     @Published var userReview: Review?
-    @Published var page: Int = 0
+    
+    // current reviews shown in AllReviews
+    @Published var currentReviews: [Review] = []
+    @Published var hasPrevious: Bool = false
+    @Published var hasNext: Bool = false
     
     // upload/modify review
     @Published var reviewText: String = ""
     @Published var localTransportRating: Int = 0
     @Published var greenSpacesRating: Int = 0
     @Published var wasteBinsRating: Int = 0
-        
+    
     @Published var errorMessage: String? = nil
     
     init(modelContext: ModelContext, serverService: ServerServiceProtocol) {
@@ -41,14 +43,100 @@ class CitiesReviewsViewModel: ObservableObject {
         self.serverService = serverService
     }
     
-    func getReviewsForSearchedCity(reload: Bool) async {
+    func getSelectedCityReviewElement(reload: Bool) async {
         do {
-            let cityReviewElement = try await serverService.getReviewsForCity(iata: selectedCity.iata, countryCode: selectedCity.countryCode)
+            let cityReviewElement = try await serverService.getFirstReviewsForCity(iata: selectedCity.iata, countryCode: selectedCity.countryCode)
             self.selectedCityReviewElement = cityReviewElement
+            self.currentReviews = cityReviewElement.reviews
+            self.hasPrevious = cityReviewElement.hasPrevious
+            self.hasNext = cityReviewElement.hasNext
+            
             if !reload {
                 self.searchedCityAvailable = true
                 print("Searched city reviews available")
             }
+        }catch {
+            print("Error getting reviews for searched city")
+            return
+        }
+    }
+    
+    func getFirstReviewsForSearchedCity() async {
+        do {
+            let cityReviewElement = try await serverService.getFirstReviewsForCity(iata: selectedCity.iata, countryCode: selectedCity.countryCode)
+            
+            self.currentReviews = cityReviewElement.reviews
+            self.hasPrevious = cityReviewElement.hasPrevious
+            self.hasNext = cityReviewElement.hasNext
+        }catch {
+            print("Error getting reviews for searched city")
+            return
+        }
+    }
+    
+    func getLastReviewsForSearchedCity() async {
+        do {
+            let cityReviewElement = try await serverService.getLastReviewsForCity(iata: selectedCity.iata, countryCode: selectedCity.countryCode)
+           
+            self.currentReviews = cityReviewElement.reviews
+            self.hasPrevious = cityReviewElement.hasPrevious
+            self.hasNext = cityReviewElement.hasNext
+        }catch {
+            print("Error getting reviews for searched city")
+            return
+        }
+    }
+    
+    func getPreviousReviewsForSearchedCity() async {
+        // previous = newest
+        if !self.hasPrevious {
+            print("No previous reviews")
+            return
+        }
+        
+        // find biggest review id of the list
+        guard let newestReviewID = currentReviews.first?.reviewID else {
+            print("No review present")
+            return
+        }
+        
+        // server call
+        do {
+            // previous, direction = false
+            let cityReviewElement = try await serverService.getReviewsForCity(iata: selectedCity.iata, countryCode: selectedCity.countryCode, reviewID: newestReviewID, direction: false)
+            
+            //self.selectedCityReviewElement = cityReviewElement
+            self.currentReviews = cityReviewElement.reviews
+            self.hasPrevious = cityReviewElement.hasPrevious
+            self.hasNext = cityReviewElement.hasNext
+        }catch {
+            print("Error getting reviews for searched city")
+            return
+        }
+    }
+    
+    func getNextReviewsForSearchedCity() async {
+        // next = oldest
+        if !self.hasNext {
+            print("No next reviews")
+            return
+        }
+        
+        // find smallest review id of the list
+        guard let oldestReviewID = currentReviews.last?.reviewID else {
+            print("No review present")
+            return
+        }
+        
+        // server call
+        do {
+            // previous, direction = false
+            let cityReviewElement = try await serverService.getReviewsForCity(iata: selectedCity.iata, countryCode: selectedCity.countryCode, reviewID: oldestReviewID, direction: true)
+            
+            //self.selectedCityReviewElement = cityReviewElement
+            self.currentReviews = cityReviewElement.reviews
+            self.hasPrevious = cityReviewElement.hasPrevious
+            self.hasNext = cityReviewElement.hasNext
         }catch {
             print("Error getting reviews for searched city")
             return
@@ -208,6 +296,7 @@ class CitiesReviewsViewModel: ObservableObject {
             localTransportRating: self.localTransportRating,
             greenSpacesRating: self.greenSpacesRating,
             wasteBinsRating: self.wasteBinsRating,
+            dateTime: Date.now,
             cityIata: selectedCity.iata,
             countryCode: selectedCity.countryCode,
             firstName: user.firstName,
@@ -217,7 +306,7 @@ class CitiesReviewsViewModel: ObservableObject {
         do {
             let userReview = try await serverService.uploadReview(review: review)
             self.userReview = userReview
-            await getReviewsForSearchedCity(reload: true)
+            await getSelectedCityReviewElement(reload: true)
             uploadReviewToSwiftData(userReview: userReview)
         } catch {
             self.errorMessage = "An error occurred while saving the review"
@@ -276,6 +365,7 @@ class CitiesReviewsViewModel: ObservableObject {
             localTransportRating: self.localTransportRating,
             greenSpacesRating: self.greenSpacesRating,
             wasteBinsRating: self.wasteBinsRating,
+            dateTime: userReview.dateTime,
             cityIata: userReview.cityIata,
             countryCode: userReview.countryCode,
             firstName: userReview.firstName,
@@ -285,7 +375,7 @@ class CitiesReviewsViewModel: ObservableObject {
         do {
             let modifiedReview = try await serverService.modifyReview(modifiedReview: modifiedReview)
             self.userReview = modifiedReview
-            await getReviewsForSearchedCity(reload: true)
+            await getSelectedCityReviewElement(reload: true)
             modifyReviewInSwiftData(userReview: modifiedReview)
         } catch {
             self.errorMessage = "Error while modifying the review"
@@ -343,7 +433,7 @@ class CitiesReviewsViewModel: ObservableObject {
         
         do {
             try await serverService.deleteReview(reviewID: reviewID)
-            await getReviewsForSearchedCity(reload: true)
+            await getSelectedCityReviewElement(reload: true)
             deleteReviewFromSwiftData(userReviewID: reviewID)
             self.userReview = nil
         } catch {
@@ -386,16 +476,6 @@ class CitiesReviewsViewModel: ObservableObject {
         }
         catch{
             print("Error deleting the review from SwiftData")
-        }
-    }
-    
-    func getNumPages() -> Int {
-        guard let selectedCityReviewElement else { return 0 }
-        if selectedCityReviewElement.reviews.count % 10 == 0 {
-            return selectedCityReviewElement.reviews.count / 10
-        }
-        else {
-            return (selectedCityReviewElement.reviews.count / 10) + 1
         }
     }
     

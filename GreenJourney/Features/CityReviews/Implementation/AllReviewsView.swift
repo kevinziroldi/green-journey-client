@@ -9,104 +9,110 @@ struct AllReviewsView: View {
     
     var body: some View {
         VStack {
-            if let selectedCity = viewModel.selectedCityReviewElement {
-                Text(viewModel.selectedCity.cityName + ", " + viewModel.selectedCity.countryName)
-                    .font(.system(size: 32).bold())
-                    .padding()
-                    .fontWeight(.semibold)
-                    .accessibilityIdentifier("cityName")
+            Text(viewModel.selectedCity.cityName + ", " + viewModel.selectedCity.countryName)
+                .font(.system(size: 32).bold())
+                .padding()
+                .fontWeight(.semibold)
+                .accessibilityIdentifier("cityName")
+            
+            Spacer()
+            
+            ReviewsListView(reviews: viewModel.currentReviews)
+            
+            HStack {
+                Spacer()
+                Button(action: {
+                    Task {
+                        await viewModel.getFirstReviewsForSearchedCity()
+                    }
+                }) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 10)
+                            .frame(width: 50, height: 40)
+                            .foregroundStyle(viewModel.hasPrevious ? Color.blue : Color.black.opacity(0.3))
+                        Image(systemName: "arrow.left.to.line")
+                            .foregroundStyle(.white)
+                            .font(.title2)
+                    }
+                }
+                .disabled(!viewModel.hasPrevious)
+                .accessibilityIdentifier("buttonFirst")
                 
                 Spacer()
                 
-                ReviewsListView(reviews: selectedCity.reviews, page: viewModel.page)
-                
-                HStack {
-                    Spacer()
-                    Button(action: {
-                        viewModel.page = 0
-                    }) {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 10)
-                                .frame(width: 50, height: 40)
-                                .foregroundStyle((viewModel.page > 0) ? Color.blue : Color.black.opacity(0.3))
-                            Image(systemName: "arrow.left.to.line")
+                Button(action: {
+                    Task {
+                        await viewModel.getPreviousReviewsForSearchedCity()
+                    }
+                }) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 10)
+                            .frame(width: 115 ,height: 40)
+                            .foregroundStyle(viewModel.hasPrevious ? Color.blue : Color.black.opacity(0.3))
+                        
+                        HStack {
+                            Image(systemName: "arrow.left")
                                 .foregroundStyle(.white)
-                                .font(.title2)
-                        }
-                    }
-                    .disabled(!(viewModel.page > 0))
-                    .accessibilityIdentifier("buttonFirst")
-                    
-                    Spacer()
-                    
-                    Button(action: {
-                        viewModel.page -= 1
-                    }) {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 10)
-                                .frame(width: 115 ,height: 40)
-                                .foregroundStyle((viewModel.page > 0) ? Color.blue : Color.black.opacity(0.3))
-                            
-                            HStack {
-                                Image(systemName: "arrow.left")
-                                    .foregroundStyle(.white)
-                                    .font(.title3)
-                                Text("Previous")
-                                    .foregroundStyle(.white)
-                                    .font(.system(size: 18).bold())
-                            }
-                        }
-                    }
-                    .disabled(!(viewModel.page > 0))
-                    .accessibilityIdentifier("buttonPrevious")
-                    
-                    Spacer()
-                    
-                    Spacer()
-                    
-                    Button(action: {
-                        viewModel.page += 1
-                    }) {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 10)
-                                .frame(width: 115 ,height: 40)
-                                .foregroundStyle((viewModel.page + 1 < viewModel.getNumPages()) ? Color.blue : Color.black.opacity(0.3))
-                            HStack {
-                                Text("Next")
-                                    .foregroundStyle(.white)
-                                    .font(.system(size: 18).bold())
-                                Image(systemName: "arrow.right")
-                                    .foregroundStyle(.white)
-                                    .font(.title3)
-                            }
-                        }
-                       
-                    }
-                    .disabled(!(viewModel.page + 1 < viewModel.getNumPages()))
-                    .accessibilityIdentifier("buttonNext")
-                    
-                    Spacer()
-                    
-                    Button(action: {
-                        viewModel.page = viewModel.getNumPages() - 1
-                    }) {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 10)
-                                .frame(width: 50, height: 40)
-                                .foregroundStyle((viewModel.page + 1 < viewModel.getNumPages()) ? Color.blue : Color.black.opacity(0.3))
-                            Image(systemName: "arrow.right.to.line")
+                                .font(.title3)
+                            Text("Previous")
                                 .foregroundStyle(.white)
-                                .font(.title2)
+                                .font(.system(size: 18).bold())
                         }
                     }
-                    .disabled(!(viewModel.page + 1 < viewModel.getNumPages()))
-                    .accessibilityIdentifier("buttonLast")
-                    
-                    Spacer()
                 }
-                .padding(.top, 10)
+                .disabled(!viewModel.hasPrevious)
+                .accessibilityIdentifier("buttonPrevious")
+                
+                Spacer()
+                
+                Spacer()
+                
+                Button(action: {
+                    Task {
+                        await viewModel.getNextReviewsForSearchedCity()
+                    }
+                }) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 10)
+                            .frame(width: 115 ,height: 40)
+                            .foregroundStyle(viewModel.hasNext ? Color.blue : Color.black.opacity(0.3))
+                        HStack {
+                            Text("Next")
+                                .foregroundStyle(.white)
+                                .font(.system(size: 18).bold())
+                            Image(systemName: "arrow.right")
+                                .foregroundStyle(.white)
+                                .font(.title3)
+                        }
+                    }
+                    
+                }
+                .disabled(!viewModel.hasNext)
+                .accessibilityIdentifier("buttonNext")
+                
+                Spacer()
+                
+                Button(action: {
+                    Task {
+                        await viewModel.getLastReviewsForSearchedCity()
+                    }
+                }) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 10)
+                            .frame(width: 50, height: 40)
+                            .foregroundStyle(viewModel.hasNext ? Color.blue : Color.black.opacity(0.3))
+                        Image(systemName: "arrow.right.to.line")
+                            .foregroundStyle(.white)
+                            .font(.title2)
+                    }
+                }
+                .disabled(!viewModel.hasNext)
+                .accessibilityIdentifier("buttonLast")
+                
                 Spacer()
             }
+            .padding(.top, 10)
+            Spacer()
         }
         .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
     }
@@ -114,16 +120,11 @@ struct AllReviewsView: View {
 
 private struct ReviewsListView: View {
     var reviews: [Review]
-    var page: Int = 0
-    var paginatedReview: [Review] {
-        let startIndex = page * 10
-        let endIndex = min(startIndex + 10, reviews.count)
-        return Array(reviews[startIndex..<endIndex])
-    }
+    
     var body: some View {
         ScrollView{
             VStack {
-                ForEach (paginatedReview) { review in
+                ForEach (reviews) { review in
                     SingleReviewView(review: review)
                         .overlay(Color.clear.accessibilityIdentifier("reviewView_\(review.reviewID ?? -1)"))
                 }
@@ -150,7 +151,7 @@ private struct SingleReviewView: View {
                     .fontWeight(.semibold)
                     .foregroundStyle(.blue.opacity(0.8))
                     .frame(maxWidth: .infinity, alignment: .leading)
-
+                
                 HStack {
                     Text(String(format: "%.1f", review.computeRating()))
                         .font(.title3)

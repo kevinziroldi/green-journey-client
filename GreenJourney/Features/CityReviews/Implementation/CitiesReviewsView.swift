@@ -148,7 +148,7 @@ private struct CitySearchView: View {
                     viewModel.selectedCity = city
                     // for details view
                     viewModel.selectedCity = viewModel.selectedCity
-                    await viewModel.getReviewsForSearchedCity(reload: false)
+                    await viewModel.getSelectedCityReviewElement(reload: false)
                     searchTapped = false
                 }
             },
@@ -193,7 +193,7 @@ struct ReviewableCitiesView: View {
                         .onTapGesture {
                             Task {
                                 viewModel.selectedCity = city
-                                await viewModel.getReviewsForSearchedCity(reload: false)
+                                await viewModel.getSelectedCityReviewElement(reload: false)
                             }
                         }
                         .padding(.top, 15)
@@ -237,6 +237,10 @@ private struct BestCitiesView: View {
                     .onTapGesture {
                         viewModel.selectedCity = viewModel.bestCities[index]
                         viewModel.selectedCityReviewElement = viewModel.bestCitiesReviewElements[index]
+                        viewModel.currentReviews = viewModel.bestCitiesReviewElements[index].reviews
+                        viewModel.hasPrevious = viewModel.bestCitiesReviewElements[index].hasPrevious
+                        viewModel.hasNext = viewModel.bestCitiesReviewElements[index].hasNext
+                        
                         navigationPath.append(NavigationDestination.CityReviewsDetailsView(viewModel))
                     }
                     .overlay(Color.clear.accessibilityIdentifier("bestCityView_\(index)"))
@@ -341,7 +345,7 @@ private struct BestCityView: View {
                                 .font(.system(size: 25))
                         }
                     }
-                   
+                    
                 }
                 .padding()
             }

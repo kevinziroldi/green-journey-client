@@ -240,7 +240,7 @@ final class CitiesReviewsViewModelIntegrationTest {
             continent: "Europe"
         )
         
-        await viewModel.getReviewsForSearchedCity(reload: true)
+        await viewModel.getSelectedCityReviewElement(reload: true)
         
         viewModel.selectedCityReviewElement = nil
         viewModel.searchedCityAvailable = false
@@ -282,7 +282,7 @@ final class CitiesReviewsViewModelIntegrationTest {
         
         viewModel.selectedCity = cityParis
         
-        await viewModel.getReviewsForSearchedCity(reload: false)
+        await viewModel.getSelectedCityReviewElement(reload: false)
         
         #expect(viewModel.searchedCityAvailable == true)
         #expect(viewModel.selectedCityReviewElement != nil)

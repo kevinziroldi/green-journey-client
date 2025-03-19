@@ -139,18 +139,77 @@ class ServerService: ServerServiceProtocol {
         }
     }
     
-    func getReviewsForCity(iata: String, countryCode: String) async throws -> CityReviewElement {
-        let firebaseToken = try await firebaseAuthService.getFirebaseToken()
-        
+    func getFirstReviewsForCity(iata: String, countryCode: String) async throws -> CityReviewElement {
         // build request
         let baseURL = URLHandler.shared.getBaseURL()
-        guard let url = URL(string:"\(baseURL)/reviews?city_iata=\(iata)&country_code=\(countryCode)") else {
+        guard let url = URL(string:"\(baseURL)/reviews/first?city_iata=\(iata)&country_code=\(countryCode)") else {
             print("Invalid URL.")
             throw URLError(.badURL)
         }
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        request.setValue("Bearer \(firebaseToken)", forHTTPHeaderField: "Authorization")
+        
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        
+        // perform request
+        let session = URLHandler.shared.getURLSession()
+        let (data, response) = try await session.data(for: request)
+        guard let httpResponse = response as? HTTPURLResponse,
+                (200...299).contains(httpResponse.statusCode) else {
+            throw URLError(.badServerResponse)
+        }
+        
+        // decode response
+        do {
+            let reviews = try decoder.decode(CityReviewElement.self, from: data)
+            return reviews
+        } catch {
+            print("Failed to decode city review elements: \(error.localizedDescription)")
+            throw ServerServiceError.getBestReviewsFailed
+        }
+    }
+    
+    func getLastReviewsForCity(iata: String, countryCode: String) async throws -> CityReviewElement {
+        // build request
+        let baseURL = URLHandler.shared.getBaseURL()
+        guard let url = URL(string:"\(baseURL)/reviews/last?city_iata=\(iata)&country_code=\(countryCode)") else {
+            print("Invalid URL.")
+            throw URLError(.badURL)
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        
+        // perform request
+        let session = URLHandler.shared.getURLSession()
+        let (data, response) = try await session.data(for: request)
+        guard let httpResponse = response as? HTTPURLResponse,
+                (200...299).contains(httpResponse.statusCode) else {
+            throw URLError(.badServerResponse)
+        }
+        
+        // decode response
+        do {
+            let reviews = try decoder.decode(CityReviewElement.self, from: data)
+            return reviews
+        } catch {
+            print("Failed to decode city review elements: \(error.localizedDescription)")
+            throw ServerServiceError.getBestReviewsFailed
+        }
+    }
+    
+    func getReviewsForCity(iata: String, countryCode: String, reviewID: Int, direction: Bool) async throws -> CityReviewElement {
+        // build request
+        let baseURL = URLHandler.shared.getBaseURL()
+        guard let url = URL(string:"\(baseURL)/reviews?city_iata=\(iata)&country_code=\(countryCode)&review_id=\(reviewID)&direction=\(direction)") else {
+            print("Invalid URL.")
+            throw URLError(.badURL)
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
         
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
@@ -211,6 +270,8 @@ class ServerService: ServerServiceProtocol {
         // JSON encoding
         let encoder = JSONEncoder()
         let decoder = JSONDecoder()
+        encoder.dateEncodingStrategy = .iso8601
+        decoder.dateDecodingStrategy = .iso8601
         guard let body = try? encoder.encode(review) else {
             print("Error encoding review data")
             throw ServerServiceError.uploadReviewFailed
@@ -252,6 +313,8 @@ class ServerService: ServerServiceProtocol {
         // JSON encoding
         let encoder = JSONEncoder()
         let decoder = JSONDecoder()
+        encoder.dateEncodingStrategy = .iso8601
+        decoder.dateDecodingStrategy = .iso8601
         guard let body = try? encoder.encode(modifiedReview) else {
             print("Error encoding review data for PUT")
             throw ServerServiceError.modifyReviewFailed

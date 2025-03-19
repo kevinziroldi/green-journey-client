@@ -20,7 +20,8 @@
         "city_iata" : "BER",
         "last_name" : "K",
         "country_code" : "DE",
-        "waste_bins_rating" : 5
+        "waste_bins_rating" : 5,
+        "date_time": "2025-03-19T10:32:48+01:00"
       },
       {
         "green_spaces_rating" : 4,
@@ -38,6 +39,7 @@
         "city_iata" : "BER",
         "last_name" : "K",
         "country_code" : "DE",
+        "date_time": "2025-03-19T10:32:48+01:00",
         "waste_bins_rating" : 5
       }
     ],
@@ -68,6 +70,7 @@
         "city_iata" : "PAR",
         "last_name" : "Ziroldi",
         "country_code" : "FR",
+        "date_time": "2025-03-19T10:32:48+01:00",
         "waste_bins_rating" : 5
       },
       {
@@ -86,6 +89,7 @@
         "city_iata" : "PAR",
         "last_name" : "K",
         "country_code" : "FR",
+        "date_time": "2025-03-19T10:32:48+01:00",
         "waste_bins_rating" : 4
       }
     ],
@@ -116,6 +120,7 @@
         "city_iata" : "ROM",
         "last_name" : "Ziroldi",
         "country_code" : "IT",
+        "date_time": "2025-03-19T10:32:48+01:00",
         "waste_bins_rating" : 2
       },
       {
@@ -136,6 +141,7 @@
         "city_iata" : "ROM",
         "last_name" : "Ziroldi",
         "country_code" : "IT",
+        "date_time": "2025-03-19T10:32:48+01:00",
         "waste_bins_rating" : 2
       },
       {
@@ -156,6 +162,7 @@
         "city_iata" : "ROM",
         "last_name" : "Ziroldi",
         "country_code" : "IT",
+        "date_time": "2025-03-19T10:32:48+01:00",
         "waste_bins_rating" : 2
       },
       {
@@ -175,6 +182,7 @@
         "score_long_distance" : 433.60000000000002,
         "city_iata" : "ROM",
         "last_name" : "Ziroldi",
+        "date_time": "2025-03-19T10:32:48+01:00",
         "country_code" : "IT",
         "waste_bins_rating" : 2
       },
@@ -196,6 +204,7 @@
         "city_iata" : "ROM",
         "last_name" : "Ziroldi",
         "country_code" : "IT",
+        "date_time": "2025-03-19T10:32:48+01:00",
         "waste_bins_rating" : 2
       },
       {
@@ -216,6 +225,7 @@
         "city_iata" : "ROM",
         "last_name" : "Ziroldi",
         "country_code" : "IT",
+        "date_time": "2025-03-19T10:32:48+01:00",
         "waste_bins_rating" : 2
       },
       {
@@ -236,6 +246,7 @@
         "city_iata" : "ROM",
         "last_name" : "Ziroldi",
         "country_code" : "IT",
+        "date_time": "2025-03-19T10:32:48+01:00",
         "waste_bins_rating" : 2
       },
       {
@@ -255,6 +266,7 @@
         "score_long_distance" : 433.60000000000002,
         "city_iata" : "ROM",
         "last_name" : "Ziroldi",
+        "date_time": "2025-03-19T10:32:48+01:00",
         "country_code" : "IT",
         "waste_bins_rating" : 2
       },
@@ -275,6 +287,7 @@
         "score_long_distance" : 433.60000000000002,
         "city_iata" : "ROM",
         "last_name" : "Ziroldi",
+        "date_time": "2025-03-19T10:32:48+01:00",
         "country_code" : "IT",
         "waste_bins_rating" : 2
       },
@@ -296,6 +309,7 @@
         "city_iata" : "ROM",
         "last_name" : "Ziroldi",
         "country_code" : "IT",
+        "date_time": "2025-03-19T10:32:48+01:00",
         "waste_bins_rating" : 2
       },
       {
@@ -316,6 +330,7 @@
         "city_iata" : "ROM",
         "last_name" : "Ziroldi",
         "country_code" : "IT",
+        "date_time": "2025-03-19T10:32:48+01:00",
         "waste_bins_rating" : 2
       }
       

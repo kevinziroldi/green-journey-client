@@ -11,41 +11,41 @@ struct CityReviewsDetailsView: View {
     
     var body: some View {
         if let selectedCityReviewElement = viewModel.selectedCityReviewElement {
-                ScrollView {
-                    VStack {
-                        // title
-                        CityReviewsTitleView(viewModel: viewModel)
-                        
-                        // reviews average
-                        ReviewsAverageView(selectedCityReviewElement: selectedCityReviewElement, infoTapped: $infoTapped)
-                        
-                        // button or user review
-                        if viewModel.isReviewable() {
-                            InsertReviewButtonView(viewModel: viewModel, reviewTapped: $reviewTapped)
-                        }
-                        
-                        // latest reviews, if present
-                        LatestReviewsView(viewModel: viewModel, selectedCityReviewElement: selectedCityReviewElement, navigationPath: $navigationPath)
+            ScrollView {
+                VStack {
+                    // title
+                    CityReviewsTitleView(viewModel: viewModel)
+                    
+                    // reviews average
+                    ReviewsAverageView(selectedCityReviewElement: selectedCityReviewElement, infoTapped: $infoTapped)
+                    
+                    // button or user review
+                    if viewModel.isReviewable() {
+                        InsertReviewButtonView(viewModel: viewModel, reviewTapped: $reviewTapped)
                     }
-                    .padding()
+                    
+                    // latest reviews, if present
+                    LatestReviewsView(viewModel: viewModel, selectedCityReviewElement: selectedCityReviewElement, navigationPath: $navigationPath)
                 }
-                .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
-                .sheet(isPresented: $reviewTapped) {
-                    InsertReviewView(isPresented: $reviewTapped, viewModel: viewModel)
-                        .presentationDetents([.height(680)])
-                        .presentationCornerRadius(15)
+                .padding()
+            }
+            .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
+            .sheet(isPresented: $reviewTapped) {
+                InsertReviewView(isPresented: $reviewTapped, viewModel: viewModel)
+                    .presentationDetents([.height(680)])
+                    .presentationCornerRadius(15)
+            }
+            .sheet(isPresented: $infoTapped) {
+                InfoReviewView(isPresented: $infoTapped)
+                    .presentationDetents([.fraction(0.75)])
+                    .presentationCornerRadius(15)
+                    .overlay(Color.clear.accessibilityIdentifier("infoReviewView"))
+            }
+            .onAppear(){
+                Task {
+                    viewModel.getUserReview(userID: users.first?.userID ?? -1)
                 }
-                .sheet(isPresented: $infoTapped) {
-                    InfoReviewView(isPresented: $infoTapped)
-                        .presentationDetents([.fraction(0.75)])
-                        .presentationCornerRadius(15)
-                        .overlay(Color.clear.accessibilityIdentifier("infoReviewView"))
-                }
-                .onAppear(){
-                    Task {
-                        viewModel.getUserReview(userID: users.first?.userID ?? -1)
-                    }
-                }
+            }
         }
     }
 }
@@ -319,16 +319,22 @@ private struct LatestReviewsView: View {
                 
                 // latest reviews
                 if horizontalSizeClass == .compact {
-                    CarouselView(reviews: selectedCityReviewElement.getLastReviews(num: 5))
+                    CarouselView(reviews: selectedCityReviewElement.getFirstReviews(num: 5))
                         .frame(height: 250)
                 } else {
                     VStack {
-                        ReviewsBlocksView(reviews: selectedCityReviewElement.getLastReviews(num: 6))
+                        ReviewsBlocksView(reviews: selectedCityReviewElement.getFirstReviews(num: 6))
                     }
                 }
-                 
+                
                 // button to see all reviews
                 Button (action: {
+                    // reset reviews list
+                    viewModel.currentReviews = selectedCityReviewElement.reviews
+                    viewModel.hasPrevious = selectedCityReviewElement.hasPrevious
+                    viewModel.hasNext = selectedCityReviewElement.hasNext
+                    
+                    // navigate
                     navigationPath.append(NavigationDestination.AllReviewsView(viewModel))
                 }){
                     ZStack {
@@ -476,7 +482,7 @@ private struct CardView: View {
 private struct ReviewsBlocksView: View {
     var reviews: [Review]
     @State private var availableWidth: CGFloat = 0
-
+    
     var body: some View {
         LazyVGrid(
             columns: Array(
@@ -512,77 +518,77 @@ private struct ReviewsBlocksView: View {
 
 private struct InfoReviewView: View {
     @Binding var isPresented: Bool
-        var body: some View {
-            ZStack {
-                Text("Ratings")
-                    .font(.largeTitle)
-                    .padding(.bottom)
-                HStack {
-                    Spacer()
-                    Button(action: {
-                        isPresented = false
-                    }) {
-                        Text("Done")
-                            .fontWeight(.bold)
-                    }
-                    .padding(.bottom, 30)
-                    .accessibilityIdentifier("infoReviewCloseButton")
-                }
-                .padding(.horizontal)
-            }
-            .padding(.top)
-            ScrollView {
-                VStack {
-                    HStack {
-                        Image(systemName: "bus")
-                            .resizable()
-                            .frame(width: 30, height: 30)
-                        Text("Public Transport Efficiency")
-                            .font(.title2)
-                            .fontWeight(.semibold)
-                            .scaledToFit()
-                            .lineLimit(1)
-                        Spacer()
-                    }
-                    .padding(.bottom, 5)
-                    Text("This score evaluates the availability and effectiveness of public transport in reducing Co2 emissions. A well-connected and eco-friendly transit system makes the city more sustainable.")
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                    HStack {
-                        Image(systemName: "tree")
-                            .resizable()
-                            .frame(width: 30, height: 30)
-                        Text("Green Spaces")
-                            .font(.title2)
-                            .fontWeight(.semibold)
-                            .scaledToFit()
-                            .lineLimit(1)
-                        Spacer()
-                    }
-                    .padding(.top, 30)
-                    .padding(.bottom, 5)
-                    Text("This rating reflects the quantity and quality of parks, gardens, and other green areas in the city. More green spaces mean a healthier environment and a better urban experience.")
-                        .frame(maxWidth: .infinity, alignment: .leading)
-
-                    HStack {
-                        Image(systemName: "trash")
-                            .resizable()
-                            .frame(width: 30, height: 30)
-                        Text("Cleanliness & Recycling")
-                            .font(.title2)
-                            .fontWeight(.semibold)
-                            .scaledToFit()
-                            .lineLimit(1)
-                        Spacer()
-                    }
-                    .padding(.top, 30)
-                    .padding(.bottom, 5)
-                    Text("This rating measures the presence of recycling bins and the overall cleanliness of the city. A well-maintained urban environment contributes to a greener and more pleasant place to live and visit.")
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
+    var body: some View {
+        ZStack {
+            Text("Ratings")
+                .font(.largeTitle)
                 .padding(.bottom)
-                .padding(.horizontal)
-                .overlay(Color.clear.accessibilityIdentifier("infoReviewContent"))
+            HStack {
+                Spacer()
+                Button(action: {
+                    isPresented = false
+                }) {
+                    Text("Done")
+                        .fontWeight(.bold)
+                }
+                .padding(.bottom, 30)
+                .accessibilityIdentifier("infoReviewCloseButton")
             }
+            .padding(.horizontal)
         }
+        .padding(.top)
+        ScrollView {
+            VStack {
+                HStack {
+                    Image(systemName: "bus")
+                        .resizable()
+                        .frame(width: 30, height: 30)
+                    Text("Public Transport Efficiency")
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                        .scaledToFit()
+                        .lineLimit(1)
+                    Spacer()
+                }
+                .padding(.bottom, 5)
+                Text("This score evaluates the availability and effectiveness of public transport in reducing Co2 emissions. A well-connected and eco-friendly transit system makes the city more sustainable.")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                
+                HStack {
+                    Image(systemName: "tree")
+                        .resizable()
+                        .frame(width: 30, height: 30)
+                    Text("Green Spaces")
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                        .scaledToFit()
+                        .lineLimit(1)
+                    Spacer()
+                }
+                .padding(.top, 30)
+                .padding(.bottom, 5)
+                Text("This rating reflects the quantity and quality of parks, gardens, and other green areas in the city. More green spaces mean a healthier environment and a better urban experience.")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                
+                HStack {
+                    Image(systemName: "trash")
+                        .resizable()
+                        .frame(width: 30, height: 30)
+                    Text("Cleanliness & Recycling")
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                        .scaledToFit()
+                        .lineLimit(1)
+                    Spacer()
+                }
+                .padding(.top, 30)
+                .padding(.bottom, 5)
+                Text("This rating measures the presence of recycling bins and the overall cleanliness of the city. A well-maintained urban environment contributes to a greener and more pleasant place to live and visit.")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .padding(.bottom)
+            .padding(.horizontal)
+            .overlay(Color.clear.accessibilityIdentifier("infoReviewContent"))
+        }
+    }
 }

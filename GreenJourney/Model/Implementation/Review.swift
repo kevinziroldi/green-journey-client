@@ -10,12 +10,13 @@ class Review: Codable, Identifiable {
     var localTransportRating: Int
     var greenSpacesRating: Int
     var wasteBinsRating: Int
+    var dateTime: Date
     var cityIata: String
     var countryCode: String
     var firstName: String
     var lastName: String
     
-    init(reviewID: Int?, cityID: Int?, userID: Int, reviewText: String, localTransportRating: Int, greenSpacesRating: Int, wasteBinsRating: Int, cityIata: String, countryCode: String, firstName: String, lastName: String) {
+    init(reviewID: Int?, cityID: Int?, userID: Int, reviewText: String, localTransportRating: Int, greenSpacesRating: Int, wasteBinsRating: Int, dateTime: Date, cityIata: String, countryCode: String, firstName: String, lastName: String) {
         self.reviewID = reviewID
         self.cityID = cityID
         self.userID = userID
@@ -23,6 +24,7 @@ class Review: Codable, Identifiable {
         self.localTransportRating = localTransportRating
         self.greenSpacesRating = greenSpacesRating
         self.wasteBinsRating = wasteBinsRating
+        self.dateTime = dateTime
         self.cityIata = cityIata
         self.countryCode = countryCode
         self.firstName = firstName
@@ -37,6 +39,7 @@ class Review: Codable, Identifiable {
         case localTransportRating = "local_transport_rating"
         case greenSpacesRating = "green_spaces_rating"
         case wasteBinsRating = "waste_bins_rating"
+        case dateTime = "date_time"
         case cityIata = "city_iata"
         case countryCode = "country_code"
         case firstName = "first_name"
@@ -53,6 +56,7 @@ class Review: Codable, Identifiable {
         self.localTransportRating = try container.decode(Int.self, forKey: .localTransportRating)
         self.greenSpacesRating = try container.decode(Int.self, forKey: .greenSpacesRating)
         self.wasteBinsRating = try container.decode(Int.self, forKey: .wasteBinsRating)
+        self.dateTime = try container.decode(Date.self, forKey: .dateTime)
         self.cityIata = try container.decode(String.self, forKey: .cityIata)
         self.countryCode = try container.decode(String.self, forKey: .countryCode)
         self.firstName = try container.decode(String.self, forKey: .firstName)
@@ -69,6 +73,7 @@ class Review: Codable, Identifiable {
         try container.encode(localTransportRating, forKey: .localTransportRating)
         try container.encode(greenSpacesRating, forKey: .greenSpacesRating)
         try container.encode(wasteBinsRating, forKey: .wasteBinsRating)
+        try container.encode(dateTime, forKey: .dateTime)
         try container.encode(cityIata, forKey: .cityIata)
         try container.encode(countryCode, forKey: .countryCode)
         try container.encode(firstName, forKey: .firstName)

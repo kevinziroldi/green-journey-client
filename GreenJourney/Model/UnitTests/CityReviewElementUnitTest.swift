@@ -91,7 +91,7 @@ struct CityReviewElementUnitTest {
             averageWasteBinsRating: 3.0
         )
         
-        let lastReviews = city.getLastReviews(num: 5)
+        let lastReviews = city.getFirstReviews(num: 5)
         
         #expect(lastReviews.isEmpty)
     }
@@ -119,7 +119,7 @@ struct CityReviewElementUnitTest {
             averageWasteBinsRating: 3.0
         )
         
-        let lastReviews = city.getLastReviews(num: 5)
+        let lastReviews = city.getFirstReviews(num: 5)
         
         #expect(lastReviews.count == 1)
         #expect(lastReviews[0].reviewID == 1)
@@ -213,7 +213,7 @@ struct CityReviewElementUnitTest {
             averageWasteBinsRating: 3.0
         )
         
-        let lastReviews = city.getLastReviews(num: 5)
+        let lastReviews = city.getFirstReviews(num: 5)
         
         #expect(lastReviews.count == 5)
         #expect(lastReviews[0].reviewID == 2)

@@ -118,7 +118,7 @@ final class CitiesReviewsViewModelUnitTest {
             continent: "Europe"
         )
         
-        await viewModel.getReviewsForSearchedCity(reload: false)
+        await viewModel.getSelectedCityReviewElement(reload: false)
         
         #expect(viewModel.searchedCityAvailable == true)
         #expect(viewModel.selectedCityReviewElement != nil)
@@ -152,7 +152,7 @@ final class CitiesReviewsViewModelUnitTest {
             continent: "Europe"
         )
         
-        await viewModel.getReviewsForSearchedCity(reload: true)
+        await viewModel.getSelectedCityReviewElement(reload: true)
         
         viewModel.selectedCityReviewElement = nil
         viewModel.searchedCityAvailable = false
@@ -207,7 +207,7 @@ final class CitiesReviewsViewModelUnitTest {
             countryCode: "FR",
             continent: "Europe"
         )
-        await viewModel.getReviewsForSearchedCity(reload: true)
+        await viewModel.getSelectedCityReviewElement(reload: true)
         
         // call ViewModel function
         let userID = try mockModelContext.fetch(FetchDescriptor<User>()).first!.userID!
@@ -229,7 +229,7 @@ final class CitiesReviewsViewModelUnitTest {
             countryCode: "FR",
             continent: "Europe"
         )
-        await viewModel.getReviewsForSearchedCity(reload: true)
+        await viewModel.getSelectedCityReviewElement(reload: true)
         
         // call ViewModel function
         let userID = try mockModelContext.fetch(FetchDescriptor<User>()).first!.userID!
@@ -253,7 +253,7 @@ final class CitiesReviewsViewModelUnitTest {
             countryCode: "FR",
             continent: "Europe"
         )
-        await viewModel.getReviewsForSearchedCity(reload: true)
+        await viewModel.getSelectedCityReviewElement(reload: true)
     
         #expect(viewModel.selectedCity.cityName == "Paris")
         #expect(viewModel.selectedCity.countryName == "France")
@@ -277,7 +277,7 @@ final class CitiesReviewsViewModelUnitTest {
             countryCode: "DE",
             continent: "Europe"
         )
-        await viewModel.getReviewsForSearchedCity(reload: true)
+        await viewModel.getSelectedCityReviewElement(reload: true)
         
         // selected city = Berlin, user has NOT visited Paris
         #expect(viewModel.isReviewable() == false)
@@ -617,7 +617,7 @@ final class CitiesReviewsViewModelUnitTest {
             countryCode: "FR",
             continent: "Europe"
         )
-        await viewModel.getReviewsForSearchedCity(reload: true)
+        await viewModel.getSelectedCityReviewElement(reload: true)
         
         #expect(viewModel.getNumPages() == 1)
     }
@@ -636,7 +636,7 @@ final class CitiesReviewsViewModelUnitTest {
             countryCode: "DE",
             continent: "Europe"
         )
-        await viewModel.getReviewsForSearchedCity(reload: true)
+        await viewModel.getSelectedCityReviewElement(reload: true)
         
         #expect(viewModel.getNumPages() == 1)
     }
@@ -653,7 +653,7 @@ final class CitiesReviewsViewModelUnitTest {
             countryCode: "FR",
             continent: "Europe"
         )
-        await viewModel.getReviewsForSearchedCity(reload: true)
+        await viewModel.getSelectedCityReviewElement(reload: true)
         
         #expect(viewModel.getNumPages() == 0)
     }

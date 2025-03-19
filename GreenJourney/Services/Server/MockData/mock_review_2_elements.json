@@ -18,6 +18,7 @@
       "city_iata" : "PAR",
       "last_name" : "Doe",
       "country_code" : "FR",
+      "date_time": "2025-03-19T10:32:48+01:00",
       "waste_bins_rating" : 5
     },
     {
@@ -36,6 +37,7 @@
       "city_iata" : "PAR",
       "last_name" : "Smith",
       "country_code" : "FR",
+      "date_time": "2025-03-19T10:32:48+01:00",
       "waste_bins_rating" : 4
     }
   ],
