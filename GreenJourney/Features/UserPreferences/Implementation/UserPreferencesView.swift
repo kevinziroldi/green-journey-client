@@ -192,7 +192,7 @@ private struct UserPreferencesTextFieldsView: View {
                         .accessibilityIdentifier("lastNameTextField")
                 }
                 
-                DatePicker("Birth date", selection: $userPreferencesViewModel.birthDate, in: Date.distantPast...Date(), displayedComponents: .date)
+                DatePicker("Birth date", selection: $userPreferencesViewModel.birthDate.toNonOptional(), in: Date.distantPast...Date(), displayedComponents: .date)
                     .accessibilityIdentifier("birthDatePicker")
                 
                 Picker("Gender", selection: $userPreferencesViewModel.gender) {

@@ -47,6 +47,7 @@ struct MyTravelsView: View {
                 Text("Scheduled").tag(false)
             }
             .pickerStyle(SegmentedPickerStyle())
+            .padding(.horizontal)
             .frame(maxWidth: 400) // set a max width to control the size
             .accessibilityIdentifier("travelCompletedControl")
             

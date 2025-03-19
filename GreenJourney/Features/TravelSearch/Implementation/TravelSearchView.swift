@@ -96,7 +96,7 @@ struct TravelSearchView: View {
                                 Text("Round trip").tag(false)
                             }
                             .pickerStyle(.segmented)
-                            .padding()
+                            .padding(.horizontal)
                             .frame(maxWidth: 400) // set a max width to control the size
                             .accessibilityIdentifier("tripTypePicker")
                             
@@ -444,8 +444,8 @@ private struct OutwardDatePickerView: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)
-                .stroke(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 3)
                 .fill(Color(uiColor: .systemBackground))
+                .strokeBorder(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 2)
             Button(action: {
                 dateTapped = true
             }) {
@@ -458,6 +458,7 @@ private struct OutwardDatePickerView: View {
                     Text(viewModel.datePicked.formatted(date: .numeric, time: .shortened))
                     Spacer()
                 }
+                .padding(.horizontal, 5)
                 .scaledToFit()
                 .minimumScaleFactor(0.6)
                 .lineLimit(1)
@@ -479,8 +480,8 @@ private struct ReturnDatePickerView: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)
-                .stroke(viewModel.oneWay ? .clear : colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 3)
                 .fill(viewModel.oneWay ? Color.gray.opacity(0.5) : Color(uiColor: .systemBackground))
+                .strokeBorder(viewModel.oneWay ? .clear : colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 2)
             Button(action:  {
                 dateReturnTapped = true
             }) {
@@ -496,6 +497,7 @@ private struct ReturnDatePickerView: View {
                     Spacer()
                     
                 }
+                .padding(.horizontal, 5)
                 .scaledToFit()
                 .minimumScaleFactor(0.6)
                 .lineLimit(1)
@@ -623,7 +625,7 @@ private struct AIPredictionView: View {
                 Spacer()
             }
         }
-        .padding(.top, 40)
+        .padding(.top, 20)
         .padding(.bottom, 10)
     }
 }

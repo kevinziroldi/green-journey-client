@@ -237,5 +237,6 @@ private struct DepartureDestinationAllDatesInfoView: View {
                 }
             }
         }
+        .fixedSize()
     }
 }
