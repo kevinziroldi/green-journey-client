@@ -72,9 +72,16 @@ class User: Codable {
         self.lastName = try container.decode(String.self, forKey: .lastName)
         self.firebaseUID = try container.decode(String.self, forKey: .firebaseUID)
         if let dateString = try container.decodeIfPresent(String.self, forKey: .birthDate) {
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd"
-            self.birthDate = dateFormatter.date(from: dateString)
+            //ISO8601DateFormatter
+            let isoFormatter = ISO8601DateFormatter()
+            if let date = isoFormatter.date(from: dateString) {
+                self.birthDate = date
+            } else {
+                // Fallback: DateFormatter "yyyy-MM-dd"
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd"
+                self.birthDate = dateFormatter.date(from: dateString)
+            }
         } else {
             self.birthDate = nil
         }
