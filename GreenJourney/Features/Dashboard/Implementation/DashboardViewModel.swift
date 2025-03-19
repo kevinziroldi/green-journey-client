@@ -120,6 +120,9 @@ class DashboardViewModel: ObservableObject {
         if co2Compensated/co2Emitted > 1 {
             return 1
         }
+        if co2Emitted == 0 {
+            return 0
+        }
         else {
             return co2Compensated/co2Emitted
         }

@@ -64,7 +64,7 @@ private struct LeaderBoardsView: View {
                 if viewModel.longDistanceRanking.isEmpty {
                     CircularProgressView()
                 } else {
-                    LeaderBoardUserView(userRanking: currentRanking[10], gridItems: gridItems, leaderBoardSelected: viewModel.leaderboardSelected)
+                    LeaderBoardUserView(viewModel: viewModel, navigationPath: $navigationPath, userRanking: currentRanking[10], gridItems: gridItems, leaderBoardSelected: viewModel.leaderboardSelected)
                         .accessibilityElement(children: .contain)
                         .accessibilityIdentifier("leaderboardUser")
                         .padding(.horizontal, 10)
@@ -129,8 +129,11 @@ private struct LeaderBoardView: View {
 
 private struct LeaderBoardUserView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
-
+    @ObservedObject var viewModel: RankingViewModel
+    @Binding var navigationPath: NavigationPath
+    
     var userRanking: RankingElement
+    
     var gridItems: [GridItem]
     var leaderBoardSelected: Bool
     
@@ -145,51 +148,58 @@ private struct LeaderBoardUserView: View {
                     .frame(width: 8, height: 8)
             }
             .padding(.bottom, 10)
-            
-            ZStack {
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(AppColors.mainColor, lineWidth: 3)
-                    .shadow(radius: 10)
-                
-                VStack(spacing: 0) {
-                    LazyVGrid(columns: gridItems, spacing: 10) {
-                        ZStack {
-                            Circle()
-                                .stroke(
-                                    LinearGradient(
-                                        gradient: Gradient(colors: [.green, .blue]),
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
-                                    ),
-                                    lineWidth: 2
-                                )
-                                .frame(width: 40, height: 40)
-                            Text("#.")
-                                .foregroundStyle(.blue)
-                                .fontWeight(.semibold)
-                        }
-                        
-                        VStack {
-                            Text(userRanking.firstName)
-                                .frame(maxWidth: .infinity, alignment: .center)
+            NavigationLink(
+                destination: UserDetailsRankingView(
+                    viewModel: viewModel,
+                    navigationPath: $navigationPath,
+                    user: userRanking
+                )
+            ) {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(AppColors.mainColor, lineWidth: 3)
+                        .shadow(radius: 10)
+                    
+                    VStack(spacing: 0) {
+                        LazyVGrid(columns: gridItems, spacing: 10) {
+                            ZStack {
+                                Circle()
+                                    .stroke(
+                                        LinearGradient(
+                                            gradient: Gradient(colors: [.green, .blue]),
+                                            startPoint: .topLeading,
+                                            endPoint: .bottomTrailing
+                                        ),
+                                        lineWidth: 2
+                                    )
+                                    .frame(width: 40, height: 40)
+                                Text("#.")
+                                    .foregroundStyle(.blue)
+                                    .fontWeight(.semibold)
+                            }
+                            
+                            VStack {
+                                Text(userRanking.firstName)
+                                    .frame(maxWidth: .infinity, alignment: .center)
+                                    .foregroundStyle(LinearGradient(gradient: Gradient(colors: [.green, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing))
+                                    .fontWeight(.semibold)
+                                Text(userRanking.lastName)
+                                    .frame(maxWidth: .infinity, alignment: .center)
+                                    .foregroundStyle(LinearGradient(gradient: Gradient(colors: [.green, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing))
+                                    .fontWeight(.semibold)
+                            }
+                            
+                            if horizontalSizeClass != .compact {
+                                BadgeView(badges: userRanking.badges, dim: 40, inline: false)
+                            }
+                            
+                            Text(String(format: "%.1f", leaderBoardSelected ? userRanking.scoreLongDistance : userRanking.scoreShortDistance))
+                                .frame(maxWidth: 90, alignment: .center)
                                 .foregroundStyle(LinearGradient(gradient: Gradient(colors: [.green, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing))
-                                .fontWeight(.semibold)
-                            Text(userRanking.lastName)
-                                .frame(maxWidth: .infinity, alignment: .center)
-                                .foregroundStyle(LinearGradient(gradient: Gradient(colors: [.green, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing))
-                                .fontWeight(.semibold)
+                                .fontWeight(.bold)
                         }
-                        
-                        if horizontalSizeClass != .compact {
-                            BadgeView(badges: userRanking.badges, dim: 40, inline: false)
-                        }
-                        
-                        Text(String(format: "%.1f", leaderBoardSelected ? userRanking.scoreLongDistance : userRanking.scoreShortDistance))
-                            .frame(maxWidth: 90, alignment: .center)
-                            .foregroundStyle(LinearGradient(gradient: Gradient(colors: [.green, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing))
-                            .fontWeight(.bold)
+                        .padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
                     }
-                    .padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
                 }
             }
         }

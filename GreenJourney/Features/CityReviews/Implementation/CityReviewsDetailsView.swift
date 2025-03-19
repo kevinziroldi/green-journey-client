@@ -519,24 +519,19 @@ private struct ReviewsBlocksView: View {
 private struct InfoReviewView: View {
     @Binding var isPresented: Bool
     var body: some View {
-        ZStack {
-            Text("Ratings")
-                .font(.largeTitle)
-                .padding(.bottom)
-            HStack {
-                Spacer()
-                Button(action: {
-                    isPresented = false
-                }) {
-                    Text("Done")
-                        .fontWeight(.bold)
-                }
-                .padding(.bottom, 30)
-                .accessibilityIdentifier("infoReviewCloseButton")
+        HStack {
+            Spacer()
+            Button(action: {
+                isPresented = false
+            }) {
+                Text("Done")
+                    .fontWeight(.bold)
             }
-            .padding(.horizontal)
+            .accessibilityIdentifier("infoReviewCloseButton")
         }
         .padding(.top)
+        .padding(.horizontal)
+        
         ScrollView {
             VStack {
                 HStack {

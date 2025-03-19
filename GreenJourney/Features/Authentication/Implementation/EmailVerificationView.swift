@@ -2,12 +2,13 @@ import SwiftUI
 
 struct EmailVerificationView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    var alignment: Alignment {
-        horizontalSizeClass == .compact ? .leading : .center
-    }
     
     @ObservedObject var viewModel: AuthenticationViewModel
     @Binding var navigationPath: NavigationPath
+    @State var remainingSeconds: Int = 60
+    @State var resendAvailable: Bool = false
+    
+    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     var body: some View {
         VStack {
@@ -21,14 +22,11 @@ struct EmailVerificationView: View {
                 .font(.system(size: 32).bold())
                 .padding(.horizontal)
                 .fontWeight(.semibold)
-                .frame(maxWidth: .infinity, alignment: alignment)
                 .accessibilityIdentifier("emailVerificationTitle")
             
             VStack {
                 Text("Please, check your inbox and follow the verification link.")
-                    .frame(maxWidth: .infinity, alignment: alignment)
                 Text("Once verified, return here to continue.")
-                    .frame(maxWidth: .infinity, alignment: alignment)
                     .accessibilityIdentifier("emailSentText")
             }
             .padding(.top)
@@ -42,6 +40,8 @@ struct EmailVerificationView: View {
                 Button (action: {
                     Task {
                         await viewModel.sendEmailVerification()
+                        resendAvailable = false
+                        remainingSeconds = 60
                         withAnimation() {
                             viewModel.resendEmail = "We sent you a new email, check your inbox!"
                         }
@@ -56,13 +56,20 @@ struct EmailVerificationView: View {
                         .font(.headline)
                         .underline()
                 }
+                .disabled(!resendAvailable)
                 .accessibilityIdentifier("resendEmailButton")
             }
             .padding(.top)
             
+            if !resendAvailable {
+                Text("Wait \(remainingSeconds) seconds to resend the email")
+                    .fontWeight(.thin)
+                    .padding(.top, 5)
+            }
+            
             if let resendMessage = viewModel.resendEmail {
                 Text(resendMessage)
-                    .padding(.top, 15)
+                    .padding(.top)
                     .font(.subheadline)
                     .fontWeight(.light)
                     .accessibilityIdentifier("emailSentMessage")
@@ -80,6 +87,11 @@ struct EmailVerificationView: View {
                 Task {
                     await viewModel.verifyEmail()
                 }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                    withAnimation() {
+                        viewModel.errorMessage = nil
+                    }
+                }
             }) {
                 Text("Proceed")
                     .font(.title2)
@@ -94,5 +106,54 @@ struct EmailVerificationView: View {
                 navigationPath = NavigationPath()
             }
         })
+        .onReceive(timer) { _ in
+            if remainingSeconds > 1 {
+                remainingSeconds -= 1
+            } else {
+                resendAvailable = true
+            }
+        }
+    }
+}
+
+
+
+struct CountdownView: View {
+    @State private var remainingSeconds = 10
+    @State private var isTimeUp = false
+    
+    // Timer che emette ogni secondo
+    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    
+    var body: some View {
+        VStack(spacing: 20) {
+            Text("TIMER")
+            Spacer()
+            if isTimeUp {
+                Text("Tempo scaduto!")
+                    .font(.largeTitle)
+                    .foregroundColor(.red)
+                Spacer()
+                Button("restart timer") {
+                    isTimeUp = false
+                    remainingSeconds = 10
+                }
+            } else {
+                Text("Tempo rimanente: \(remainingSeconds)")
+                    .font(.largeTitle)
+            }
+            Spacer()
+            
+            
+        }
+        .onReceive(timer) { _ in
+            if remainingSeconds > 1 {
+                remainingSeconds -= 1
+            } else {
+                isTimeUp = true
+                // Qui eventualmente puoi fermare il timer se non ti serve più
+            }
+        }
+        .padding()
     }
 }

@@ -9,7 +9,6 @@ struct InsertReviewView: View {
     
     var body: some View {
         VStack(spacing: 10) {
-            GeometryReader { geometry in
                 ZStack {
                     Capsule()
                         .frame(width: 40, height: 5)
@@ -39,12 +38,10 @@ struct InsertReviewView: View {
                     }
                     .padding(.horizontal, 5)
                 }
-                .position(x: geometry.size.width/2, y: 15)
                 
                 
                 Text(viewModel.userReview != nil ? "Your review" : "Leave a review")
                     .font(.system(size: 25).bold())
-                    .position(x: geometry.size.width/2, y: 50)
                     .accessibilityIdentifier("personalReviewTitle")
                 
                 VStack {
@@ -52,7 +49,6 @@ struct InsertReviewView: View {
                     ReviewStarRating(icon: "tree",color: Color.green, rating: $viewModel.greenSpacesRating, editTapped: (editTapped || (viewModel.userReview == nil )))
                     ReviewStarRating(icon: "trash", color: Color.orange, rating: $viewModel.wasteBinsRating, editTapped: (editTapped || (viewModel.userReview == nil )))
                 }
-                .position(x: geometry.size.width/2, y: 190)
                 .overlay(Color.clear.accessibilityIdentifier("userRatings"))
                 
                 VStack {
@@ -66,7 +62,6 @@ struct InsertReviewView: View {
                         .accessibilityIdentifier("userText")
                 }
                 .padding(10)
-                .position(x: geometry.size.width/2, y: 400)
                 
                 Spacer()
                 
@@ -94,9 +89,9 @@ struct InsertReviewView: View {
                     .fixedSize()
                 }
                 .disabled((viewModel.reviewText.isEmpty) || (viewModel.greenSpacesRating == 0) || (viewModel.localTransportRating == 0) || (viewModel.wasteBinsRating == 0))
-                .position(x: geometry.size.width/2, y: 580)
                 .accessibilityIdentifier("saveButton")
                 
+            Spacer()
                 //delete button
                 if viewModel.userReview != nil {
                     Button(action: {
@@ -107,7 +102,6 @@ struct InsertReviewView: View {
                             .font(.headline)
                             .padding(.bottom, 20)
                     }
-                    .position(x: geometry.size.width/2, y: 660)
                     .alert(isPresented: $showAlert) {
                         Alert(
                             title: Text("Delete this review?"),
@@ -124,7 +118,6 @@ struct InsertReviewView: View {
                     }
                     .accessibilityIdentifier("deleteButton")
                 }
-            }
         }
         .padding(.horizontal, 15)
         .onAppear() {

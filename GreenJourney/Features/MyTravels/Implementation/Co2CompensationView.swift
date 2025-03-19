@@ -138,17 +138,17 @@ private struct CompensationButtonsView: View {
                         .padding(.vertical)
                         
                         VStack {
-                            SemicircleCo2ChartView(progress: progress, height: 120, width: 140, lineWidth: 10)
-                                .padding(.top, 25)
-                            
-                            HStack {
-                                Text(" 0 Kg       ")
+                            GeometryReader { geometry in
+                                SemicircleCo2ChartView(progress: progress, height: 120, width: 140, lineWidth: 10)
+                                    .position(x: geometry.size.width/2, y: geometry.size.height/2 - 15)
+                                Text("0 Kg")
+                                    .font(.headline)
+                                    .position(x: geometry.size.width/2 - 50, y: geometry.size.height/2 + 60)
                                 Text(String(format: "%.1f", travelDetails.computeCo2Emitted()) + " Kg")
+                                    .font(.headline)
+                                    .position(x: geometry.size.width/2 + 50, y: geometry.size.height/2 + 60)
                             }
-                            .padding(.bottom, 10)
-                            .font(.headline)
                         }
-                        .padding(.trailing, 5)
                     }
                 } else {
                     // iPadOS
@@ -269,23 +269,23 @@ private struct CompensationButtonsView: View {
                         Spacer()
                         
                         VStack {
-                            SemicircleCo2ChartView(progress: progress, height: 120, width: 140, lineWidth: 10)
-                                .padding(.top, 25)
-                            
-                            HStack {
-                                Text(" 0 Kg       ")
+                            GeometryReader { geometry in
+                                SemicircleCo2ChartView(progress: progress, height: 120, width: 140, lineWidth: 10)
+                                    .position(x: geometry.size.width/2, y: geometry.size.height/2 - 15)
+                                Text("0 Kg")
+                                    .font(.headline)
+                                    .position(x: geometry.size.width/2 - 50, y: geometry.size.height/2 + 60)
                                 Text(String(format: "%.1f", travelDetails.computeCo2Emitted()) + " Kg")
+                                    .font(.headline)
+                                    .position(x: geometry.size.width/2 + 50, y: geometry.size.height/2 + 60)
                             }
-                            .padding(.bottom, 10)
-                            .font(.headline)
                         }
-                        .padding(.trailing, 5)
                     }
                     .padding(.horizontal, 20)
                 }
             } else {
                 VStack {
-                    HStack (spacing: 0){
+                    HStack (spacing: 0) {
                         Text("You planted: \(plantedTrees)")
                             .font(.system(size: 20))
                         Image(systemName: "tree")

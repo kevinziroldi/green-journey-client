@@ -93,7 +93,49 @@ struct RankingElementDetailsTitle: View {
             .accessibilityIdentifier("userName")
     }
 }
-
+/*
+struct UserDetailsBadgesView: View {
+    var inline: Bool
+    var user: RankingElement
+    @Binding var legendTapped: Bool
+    
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 15)
+                .fill(Color(uiColor: .systemBackground))
+                .shadow(color: AppColors.mainColor.opacity(0.3), radius: 5, x: 0, y: 3)
+            VStack (spacing:0){
+                HStack {
+                    Text("Badges")
+                        .font(.title)
+                        .foregroundStyle(AppColors.mainColor.opacity(0.8))
+                        .fontWeight(.semibold)
+                    
+                    Spacer()
+                    
+                    Button(action: {
+                        legendTapped = true
+                    }) {
+                        Image(systemName: "info.circle")
+                            .font(.title3)
+                    }
+                    .accessibilityIdentifier("infoBadgesButton")
+                    
+                    
+                }
+                .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 15))
+                
+                HStack{
+                    BadgeView(badges: user.badges, dim: 150, inline: inline)
+                        .padding()
+                }
+            }
+        }
+        .padding(EdgeInsets(top: 5, leading: 15, bottom: 7, trailing: 15))
+        .overlay(Color.clear.accessibilityIdentifier("userBadgesView"))
+    }
+}
+*/
 struct RecapViewCompactDevice: View {
     @ObservedObject var viewModel: RankingViewModel
     var user: RankingElement
@@ -316,34 +358,38 @@ struct Co2EmissionView: View {
                     .foregroundStyle(.mint.opacity(0.8))
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                SemicircleCo2ChartView(progress: progress, height: 170, width: 200, lineWidth: 16)
-                    .padding(.top, 30)
-                HStack {
+                GeometryReader { geometry in
+                    SemicircleCo2ChartView(progress: progress, height: 170, width: 200, lineWidth: 16)
+                        .position(x: geometry.size.width/2, y: geometry.size.height/2)
                     VStack {
                         Text("Compensated")
                             .font(.title2)
                             .fontWeight(.semibold)
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .scaledToFit()
+                            .minimumScaleFactor(0.6)
+                            .lineLimit(1)
                         Text(String(format: "%.0f", co2Compensated) + " Kg")
                             .font(.title3)
                             .fontWeight(.semibold)
-                            .frame(maxWidth: .infinity, alignment: .leading)
                     }
-                    .padding(.leading, 20)
+                    .position(x: geometry.size.width/2 - 90, y: geometry.size.height/2 + 120)
                     .foregroundStyle(.green)
                     VStack {
                         Text("Emitted")
                             .font(.title2)
                             .fontWeight(.semibold)
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .scaledToFit()
+                            .minimumScaleFactor(0.6)
+                            .lineLimit(1)
                         Text(String(format: "%.0f", co2Emitted) + " Kg")
                             .font(.title3)
                             .fontWeight(.semibold)
-                            .frame(maxWidth: .infinity, alignment: .leading)
                     }
-                    .padding(.leading, 40)
                     .foregroundStyle(.red)
+                    .position(x: geometry.size.width/2 + 90, y: geometry.size.height/2 + 120)
                 }
+                .frame(height: 250)
+               Spacer()
             }
             .padding()
         }
