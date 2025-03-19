@@ -239,7 +239,6 @@ struct InfoGreenPriceView: View {
         .padding(.horizontal)
         .padding(.top)
         
-        ScrollView {
             VStack {
                 Text("What Is The Green Price")
                     .font(.title)
@@ -258,6 +257,6 @@ struct InfoGreenPriceView: View {
             .padding(.horizontal)
             .padding(.bottom)
             .overlay(Color.clear.accessibilityIdentifier("infoGreenPriceContent"))
-        }
+        
     }
 }
