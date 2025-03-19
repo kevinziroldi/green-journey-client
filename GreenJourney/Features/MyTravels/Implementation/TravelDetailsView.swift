@@ -158,11 +158,10 @@ struct TravelDetailsView: View {
             .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
             .onAppear() {
                 reviewViewModel.userReview = travelDetails.travel.userReview
-                if (travelDetails.computeCo2Emitted() >= 0.0) {
-                    if (travelDetails.travel.CO2Compensated >= travelDetails.computeCo2Emitted()) {
+                if travelDetails.computeCo2Emitted() >= 0.0 {
+                    if travelDetails.travel.CO2Compensated >= travelDetails.computeCo2Emitted() {
                         progress = 1.0
-                    }
-                    else {
+                    } else {
                         progress = travelDetails.travel.CO2Compensated / travelDetails.computeCo2Emitted()
                     }
                     totalTrees = viewModel.getNumTrees(travelDetails)

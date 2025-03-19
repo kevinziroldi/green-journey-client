@@ -9,6 +9,7 @@ struct UserDetailsRankingView: View {
     
     var user: RankingElement
     @State private var legendTapped: Bool = false
+    @State var progress: Float64 = 0
     
     var body: some View {
         VStack {
@@ -55,7 +56,7 @@ struct UserDetailsRankingView: View {
                             }
                             
                             // co2 emission
-                            Co2EmissionView(co2Emitted: user.totalCo2Emitted, co2Compensated: user.totalCo2Compensated, progress: user.totalCo2Compensated / user.totalCo2Emitted)
+                            Co2EmissionView(co2Emitted: user.totalCo2Emitted, co2Compensated: user.totalCo2Compensated, progress: progress)
                         }
                         Spacer()
                     }
@@ -69,6 +70,15 @@ struct UserDetailsRankingView: View {
                 .presentationDetents([.fraction(0.95)])
                 .presentationCornerRadius(15)
                 .overlay(Color.clear.accessibilityIdentifier("infoBadgesView"))
+        }
+        .onAppear() {
+            if user.totalCo2Compensated >= 0.0 {
+                if user.totalCo2Compensated >= user.totalCo2Emitted {
+                    progress = 1.0
+                } else {
+                    progress = user.totalCo2Compensated / user.totalCo2Emitted
+                }
+            }
         }
     }
 }
