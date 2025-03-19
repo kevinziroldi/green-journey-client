@@ -358,34 +358,38 @@ struct Co2EmissionView: View {
                     .foregroundStyle(.mint.opacity(0.8))
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                SemicircleCo2ChartView(progress: progress, height: 170, width: 200, lineWidth: 16)
-                    .padding(.top, 30)
-                HStack {
+                GeometryReader { geometry in
+                    SemicircleCo2ChartView(progress: progress, height: 170, width: 200, lineWidth: 16)
+                        .position(x: geometry.size.width/2, y: geometry.size.height/2)
                     VStack {
                         Text("Compensated")
                             .font(.title2)
                             .fontWeight(.semibold)
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .scaledToFit()
+                            .minimumScaleFactor(0.6)
+                            .lineLimit(1)
                         Text(String(format: "%.0f", co2Compensated) + " Kg")
                             .font(.title3)
                             .fontWeight(.semibold)
-                            .frame(maxWidth: .infinity, alignment: .leading)
                     }
-                    .padding(.leading, 20)
+                    .position(x: geometry.size.width/2 - 90, y: geometry.size.height/2 + 120)
                     .foregroundStyle(.green)
                     VStack {
                         Text("Emitted")
                             .font(.title2)
                             .fontWeight(.semibold)
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .scaledToFit()
+                            .minimumScaleFactor(0.6)
+                            .lineLimit(1)
                         Text(String(format: "%.0f", co2Emitted) + " Kg")
                             .font(.title3)
                             .fontWeight(.semibold)
-                            .frame(maxWidth: .infinity, alignment: .leading)
                     }
-                    .padding(.leading, 40)
                     .foregroundStyle(.red)
+                    .position(x: geometry.size.width/2 + 90, y: geometry.size.height/2 + 120)
                 }
+                .frame(height: 250)
+               Spacer()
             }
             .padding()
         }
