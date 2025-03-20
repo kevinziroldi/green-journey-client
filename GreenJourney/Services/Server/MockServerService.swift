@@ -158,7 +158,13 @@ class MockServerService: ServerServiceProtocol {
                 let decoder = JSONDecoder()
                 decoder.dateDecodingStrategy = .iso8601
                 let bestCities = try decoder.decode([CityReviewElement].self, from: data)
-                return bestCities
+                var bestCitiesPrefix: [CityReviewElement] = []
+                for bc in bestCities {
+                    var bestCity = bc
+                    bestCity.reviews = Array(bc.reviews.prefix(10))
+                    bestCitiesPrefix.append(bestCity)
+                }
+                return bestCitiesPrefix
             } catch {
                 print(error)
                 return []

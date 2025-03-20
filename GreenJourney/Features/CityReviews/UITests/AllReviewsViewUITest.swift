@@ -85,8 +85,8 @@ final class AllReviewsViewUITest: XCTestCase {
         let buttonNext = app.buttons["buttonNext"]
         let buttonLast = app.buttons["buttonLast"]
         let doneButton = app.buttons["doneButton"]
-        let firstPageReview = app.otherElements["reviewView_11"]
-        let secondPageReview = app.otherElements["reviewView_21"]
+        let firstPageReview = app.otherElements["reviewView_21"]
+        let secondPageReview = app.otherElements["reviewView_11"]
         
         // check elements of the view
         XCTAssertTrue(cityName.waitForExistence(timeout: timer), "cityName not displayed")
