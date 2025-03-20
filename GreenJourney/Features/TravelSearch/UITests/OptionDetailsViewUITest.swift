@@ -118,7 +118,7 @@ final class OptionDetailsViewUITest: XCTestCase {
         XCTAssertTrue(oneWayOption.isSelected, "One way should be default")
                
         // tap button
-        tripTypePicker.tap()
+        roundTripOption.tap()
         
         XCTAssertTrue(roundTripOption.isSelected, "Round trip should be selected")
         
