@@ -156,11 +156,16 @@ private struct SingleReviewView: View {
                 .shadow(color: .blue.opacity(0.3), radius: 5, x: 0, y: 3)
             
             VStack {
-                Text(review.firstName + " " + review.lastName)
-                    .font(.headline)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.blue.opacity(0.8))
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                HStack {
+                    Text(review.firstName + " " + review.lastName)
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.blue.opacity(0.8))
+                    Spacer()
+                    Text(review.dateTime.formatted(date: .numeric, time: .omitted))
+                        .foregroundStyle(.blue.opacity(0.8))
+                        .font(.subheadline)
+                }
                 
                 HStack {
                     Text(String(format: "%.1f", review.computeRating()))
@@ -178,54 +183,7 @@ private struct SingleReviewView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .font(.body)
                 Spacer()
-                VStack{
-                    HStack {
-                        ZStack {
-                            Circle()
-                                .fill(.green.opacity(0.2))
-                                .frame(width: 27, height: 27)
-                            
-                            Image(systemName: "bus")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 18, height: 18)
-                                .foregroundColor(.green)
-                        }
-                        .padding(.trailing)
-                        FiveStarView(rating: Float64(review.localTransportRating), dim: 15, color: .blue.opacity(0.8))
-                    }
-                    HStack {
-                        ZStack {
-                            Circle()
-                                .fill(.green.opacity(0.2))
-                                .frame(width: 27, height: 27)
-                            
-                            Image(systemName: "tree")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 18, height: 18)
-                                .foregroundColor(.green)
-                        }
-                        .padding(.trailing)
-                        FiveStarView(rating: Float64(review.greenSpacesRating), dim: 15, color: .green.opacity(0.8))
-                    }
-                    HStack {
-                        ZStack {
-                            Circle()
-                                .fill(.green.opacity(0.2))
-                                .frame(width: 27, height: 27)
-                            
-                            Image(systemName: "trash")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 18, height: 18)
-                                .foregroundColor(.green)
-                        }
-                        .padding(.trailing)
-                        FiveStarView(rating: Float64(review.wasteBinsRating), dim: 15, color: .orange.opacity(0.8))
-                    }
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
+                DetailedRatingsView(review: review)
             }
             .padding()
         }

@@ -404,12 +404,18 @@ private struct CardView: View {
                 .fill(Color(uiColor: .systemBackground))
                 .shadow(color: .blue.opacity(0.3), radius: 5, x: 0, y: 3)
             
-            VStack {
+            VStack (spacing: 0){
                 Text(review.firstName + " " + review.lastName)
                     .font(.headline)
                     .fontWeight(.semibold)
                     .foregroundStyle(.blue.opacity(0.8))
                     .frame(maxWidth: .infinity, alignment: .leading)
+                
+                Text(review.dateTime.formatted(date: .numeric, time: .omitted))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.top, 5)
+                    .fontWeight(.light)
+                    .font(.subheadline)
                 HStack {
                     Text(String(format: "%.1f", review.computeRating()))
                         .font(.title3)
@@ -423,59 +429,13 @@ private struct CardView: View {
                 Text(review.reviewText)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .font(.body)
+                    .padding(.top, 5)
                 Spacer()
-                VStack{
-                    HStack {
-                        ZStack {
-                            Circle()
-                                .fill(.blue.opacity(0.2))
-                                .frame(width: 27, height: 27)
-                            
-                            Image(systemName: "bus")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 18, height: 18)
-                                .foregroundColor(.blue)
-                        }
-                        .padding(.trailing)
-                        FiveStarView(rating: Float64(review.localTransportRating), dim: 15, color: .blue.opacity(0.8))
-                    }
-                    HStack {
-                        ZStack {
-                            Circle()
-                                .fill(.green.opacity(0.2))
-                                .frame(width: 27, height: 27)
-                            
-                            Image(systemName: "tree")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 18, height: 18)
-                                .foregroundColor(.green)
-                        }
-                        .padding(.trailing)
-                        FiveStarView(rating: Float64(review.greenSpacesRating), dim: 15, color: .green.opacity(0.8))
-                    }
-                    HStack {
-                        ZStack {
-                            Circle()
-                                .fill(.orange.opacity(0.2))
-                                .frame(width: 27, height: 27)
-                            
-                            Image(systemName: "trash")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 18, height: 18)
-                                .foregroundColor(.orange)
-                        }
-                        .padding(.trailing)
-                        FiveStarView(rating: Float64(review.wasteBinsRating), dim: 15, color: .orange.opacity(0.8))
-                    }
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
+                DetailedRatingsView(review: review)
             }
             .padding()
         }
-        .frame(maxWidth: width)
+        .frame(maxWidth: width, minHeight: 250)
     }
 }
 

@@ -20,7 +20,6 @@ struct Co2CompensationView: View {
                 .strokeBorder(
                     LinearGradient(gradient: Gradient(colors: [.blue, .cyan, .mint, .green]),
                                    startPoint: .topTrailing, endPoint: .bottomLeading), lineWidth: 6)
-                //.shadow(color: .green.opacity(0.3), radius: 5, x: 0, y: 3)
             
             ZStack {
                 // title and info button
@@ -284,21 +283,43 @@ private struct CompensationButtonsView: View {
                     .padding(.horizontal, 20)
                 }
             } else {
-                VStack {
-                    HStack (spacing: 0) {
-                        Text("You planted: \(plantedTrees)")
-                            .font(.system(size: 20))
-                        Image(systemName: "tree")
-                            .font(.system(size: 20))
-                            .padding(.bottom, 5)
-                    }
-                    .padding()
-                    
-                    Text("Thank you 🌍")
-                        .font(.system(size: 18))
-                        .fontWeight(.light)
-                    
+                HStack {
+                    Spacer()
+                    VStack {
+                        HStack (spacing: 0) {
+                            Text("You planted: \(plantedTrees)")
+                                .font(.system(size: 20))
+                            Image(systemName: "tree")
+                                .font(.system(size: 20))
+                                .padding(.bottom, 5)
+                        }
+                        .scaledToFit()
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
                         .padding()
+                        
+                        Text("Thank you 🌍")
+                            .font(.system(size: 18))
+                            .fontWeight(.light)
+                        
+                            .padding()
+                    }
+                    Spacer()
+                    VStack {
+                        GeometryReader { geometry in
+                            SemicircleCo2ChartView(progress: progress, height: 120, width: 140, lineWidth: 10)
+                                .position(x: geometry.size.width/2, y: geometry.size.height/2 - 15)
+                            Text("0 Kg")
+                                .font(.headline)
+                                .position(x: geometry.size.width/2 - 50, y: geometry.size.height/2 + 60)
+                            Text(String(format: "%.1f", travelDetails.computeCo2Emitted()) + " Kg")
+                                .font(.headline)
+                                .position(x: geometry.size.width/2 + 50, y: geometry.size.height/2 + 60)
+                        }
+                    }
+                    .padding(.bottom)
+                    .frame(width: 140,height: 170)
+                    Spacer()
                 }
             }
         }
