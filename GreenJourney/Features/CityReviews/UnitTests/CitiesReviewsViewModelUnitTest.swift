@@ -154,8 +154,232 @@ final class CitiesReviewsViewModelUnitTest {
         
         await viewModel.getSelectedCityReviewElement(reload: true)
         
-        viewModel.selectedCityReviewElement = nil
-        viewModel.searchedCityAvailable = false
+        #expect(viewModel.selectedCityReviewElement == nil)
+        #expect(viewModel.searchedCityAvailable == false)
+    }
+    
+    @Test
+    func testPreviousReviewsNoPrevious() async {
+        self.mockServerService.shouldSucceed = true
+        
+        viewModel.selectedCity = CityCompleterDataset(
+            cityName: "Paris",
+            countryName: "France",
+            iata: "PAR",
+            countryCode: "FR",
+            continent: "Europe"
+        )
+        
+        await viewModel.getSelectedCityReviewElement(reload: true)
+        
+        let reviews = viewModel.currentReviews
+        
+        await viewModel.getPreviousReviewsForSearchedCity()
+        
+        // check alla same reviews
+        for review in reviews {
+            #expect(viewModel.currentReviews.contains(review))
+        }
+    }
+    
+    @Test
+    func testNextReviewsNoNext() async {
+        self.mockServerService.shouldSucceed = true
+        
+        viewModel.selectedCity = CityCompleterDataset(
+            cityName: "Paris",
+            countryName: "France",
+            iata: "PAR",
+            countryCode: "FR",
+            continent: "Europe"
+        )
+        
+        await viewModel.getSelectedCityReviewElement(reload: true)
+        
+        let reviews = viewModel.currentReviews
+        
+        await viewModel.getNextReviewsForSearchedCity()
+        
+        // check alla same reviews
+        for review in reviews {
+            #expect(viewModel.currentReviews.contains(review))
+        }
+    }
+    
+    @Test
+    func testPreviousReviewsHasPrevious() async {
+        self.mockServerService.shouldSucceed = true
+        self.mockServerService.twoReviews = false
+        self.mockServerService.tenReviews = true
+        
+        // 10 reviews has hasPrevious and hasNext true
+
+        viewModel.selectedCity = CityCompleterDataset(
+            cityName: "Paris",
+            countryName: "France",
+            iata: "PAR",
+            countryCode: "FR",
+            continent: "Europe"
+        )
+        await viewModel.getSelectedCityReviewElement(reload: true)
+        
+        #expect(viewModel.selectedCityReviewElement!.reviews.count == 10)
+        for review in viewModel.selectedCityReviewElement!.reviews {
+            #expect(review.reviewID! >= 11 && review.reviewID! <= 20)
+        }
+        #expect(viewModel.currentReviews.count == 10)
+        for review in viewModel.currentReviews {
+            #expect(review.reviewID! >= 11 && review.reviewID! <= 20)
+        }
+        
+        #expect(viewModel.hasPrevious == viewModel.selectedCityReviewElement?.hasPrevious)
+        #expect(viewModel.hasNext == viewModel.selectedCityReviewElement?.hasNext)
+        
+        // get previous
+        self.mockServerService.twoReviews = true
+        self.mockServerService.tenReviews = false
+        await viewModel.getPreviousReviewsForSearchedCity()
+        
+        #expect(viewModel.selectedCityReviewElement!.reviews.count == 10)
+        for review in viewModel.selectedCityReviewElement!.reviews {
+            #expect(review.reviewID! >= 11 && review.reviewID! <= 20)
+        }
+        #expect(viewModel.currentReviews.count == 2)
+        for review in viewModel.currentReviews {
+            #expect(review.reviewID! >= 9 && review.reviewID! <= 10)
+        }
+    }
+    
+    @Test
+    func testNextReviewsHasNext() async {
+        self.mockServerService.shouldSucceed = true
+        self.mockServerService.twoReviews = false
+        self.mockServerService.tenReviews = true
+        
+        // 10 reviews has hasPrevious and hasNext true
+
+        viewModel.selectedCity = CityCompleterDataset(
+            cityName: "Paris",
+            countryName: "France",
+            iata: "PAR",
+            countryCode: "FR",
+            continent: "Europe"
+        )
+        await viewModel.getSelectedCityReviewElement(reload: true)
+        
+        #expect(viewModel.selectedCityReviewElement!.reviews.count == 10)
+        for review in viewModel.selectedCityReviewElement!.reviews {
+            #expect(review.reviewID! >= 11 && review.reviewID! <= 20)
+        }
+        #expect(viewModel.currentReviews.count == 10)
+        for review in viewModel.currentReviews {
+            #expect(review.reviewID! >= 11 && review.reviewID! <= 20)
+        }
+        
+        #expect(viewModel.hasPrevious == viewModel.selectedCityReviewElement?.hasPrevious)
+        #expect(viewModel.hasNext == viewModel.selectedCityReviewElement?.hasNext)
+        
+        // get previous
+        self.mockServerService.twoReviews = true
+        self.mockServerService.tenReviews = false
+        await viewModel.getNextReviewsForSearchedCity()
+        
+        #expect(viewModel.selectedCityReviewElement!.reviews.count == 10)
+        for review in viewModel.selectedCityReviewElement!.reviews {
+            #expect(review.reviewID! >= 11 && review.reviewID! <= 20)
+        }
+        #expect(viewModel.currentReviews.count == 2)
+        for review in viewModel.currentReviews {
+            #expect(review.reviewID! >= 9 && review.reviewID! <= 10)
+        }
+    }
+    
+    @Test
+    func testFirstReviews() async {
+        self.mockServerService.shouldSucceed = true
+        self.mockServerService.twoReviews = false
+        self.mockServerService.tenReviews = true
+        
+        // 10 reviews has hasPrevious and hasNext true
+
+        viewModel.selectedCity = CityCompleterDataset(
+            cityName: "Paris",
+            countryName: "France",
+            iata: "PAR",
+            countryCode: "FR",
+            continent: "Europe"
+        )
+        await viewModel.getSelectedCityReviewElement(reload: true)
+        
+        #expect(viewModel.selectedCityReviewElement!.reviews.count == 10)
+        for review in viewModel.selectedCityReviewElement!.reviews {
+            #expect(review.reviewID! >= 11 && review.reviewID! <= 20)
+        }
+        #expect(viewModel.currentReviews.count == 10)
+        for review in viewModel.currentReviews {
+            #expect(review.reviewID! >= 11 && review.reviewID! <= 20)
+        }
+        
+        #expect(viewModel.hasPrevious == viewModel.selectedCityReviewElement?.hasPrevious)
+        #expect(viewModel.hasNext == viewModel.selectedCityReviewElement?.hasNext)
+        
+        // get previous
+        self.mockServerService.twoReviews = true
+        self.mockServerService.tenReviews = false
+        await viewModel.getFirstReviewsForSearchedCity()
+        
+        #expect(viewModel.selectedCityReviewElement!.reviews.count == 10)
+        for review in viewModel.selectedCityReviewElement!.reviews {
+            #expect(review.reviewID! >= 11 && review.reviewID! <= 20)
+        }
+        #expect(viewModel.currentReviews.count == 2)
+        for review in viewModel.currentReviews {
+            #expect(review.reviewID! >= 9 && review.reviewID! <= 10)
+        }
+    }
+    
+    @Test
+    func testLastReviews() async {
+        self.mockServerService.shouldSucceed = true
+        self.mockServerService.twoReviews = false
+        self.mockServerService.tenReviews = true
+        
+        // 10 reviews has hasPrevious and hasNext true
+
+        viewModel.selectedCity = CityCompleterDataset(
+            cityName: "Paris",
+            countryName: "France",
+            iata: "PAR",
+            countryCode: "FR",
+            continent: "Europe"
+        )
+        await viewModel.getSelectedCityReviewElement(reload: true)
+        
+        #expect(viewModel.selectedCityReviewElement!.reviews.count == 10)
+        for review in viewModel.selectedCityReviewElement!.reviews {
+            #expect(review.reviewID! >= 11 && review.reviewID! <= 20)
+        }
+        #expect(viewModel.currentReviews.count == 10)
+        for review in viewModel.currentReviews {
+            #expect(review.reviewID! >= 11 && review.reviewID! <= 20)
+        }
+        
+        #expect(viewModel.hasPrevious == viewModel.selectedCityReviewElement?.hasPrevious)
+        #expect(viewModel.hasNext == viewModel.selectedCityReviewElement?.hasNext)
+        
+        // get previous
+        self.mockServerService.twoReviews = true
+        self.mockServerService.tenReviews = false
+        await viewModel.getLastReviewsForSearchedCity()
+        
+        #expect(viewModel.selectedCityReviewElement!.reviews.count == 10)
+        for review in viewModel.selectedCityReviewElement!.reviews {
+            #expect(review.reviewID! >= 11 && review.reviewID! <= 20)
+        }
+        #expect(viewModel.currentReviews.count == 2)
+        for review in viewModel.currentReviews {
+            #expect(review.reviewID! >= 9 && review.reviewID! <= 10)
+        }
     }
     
     @Test
@@ -513,6 +737,7 @@ final class CitiesReviewsViewModelUnitTest {
             localTransportRating: 0,
             greenSpacesRating: 1,
             wasteBinsRating: 1,
+            dateTime: Date.now,
             cityIata: "iata",
             countryCode: "country code",
             firstName: "name",
@@ -603,6 +828,7 @@ final class CitiesReviewsViewModelUnitTest {
         #expect(viewModel.errorMessage == nil)
     }
     
+    /*
     @Test
     func testGetNumPagesWithRest() async {
         self.mockServerService.shouldSucceed = true
@@ -657,6 +883,7 @@ final class CitiesReviewsViewModelUnitTest {
         
         #expect(viewModel.getNumPages() == 0)
     }
+    */
     
     @Test
     func testGetDestinationCityPresent() {

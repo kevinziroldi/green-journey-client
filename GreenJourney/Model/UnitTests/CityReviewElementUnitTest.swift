@@ -24,6 +24,7 @@ struct CityReviewElementUnitTest {
             localTransportRating: 1,
             greenSpacesRating: 2,
             wasteBinsRating: 3,
+            dateTime: Date.now,
             cityIata: "PAR",
             countryCode: "FR",
             firstName: "John",
@@ -34,7 +35,10 @@ struct CityReviewElementUnitTest {
             reviews: [review],
             averageLocalTransportRating: 1.0,
             averageGreenSpacesRating: 2.0,
-            averageWasteBinsRating: 3.0
+            averageWasteBinsRating: 3.0,
+            hasPrevious: true,
+            hasNext: true,
+            numReviews: 1
         )
         
         #expect(city.reviews.count == 1)
@@ -42,6 +46,9 @@ struct CityReviewElementUnitTest {
         #expect(city.averageLocalTransportRating == 1.0)
         #expect(city.averageGreenSpacesRating == 2.0)
         #expect(city.averageWasteBinsRating == 3.0)
+        #expect(city.hasPrevious == true)
+        #expect(city.hasNext == true)
+        #expect(city.numReviews == 1)
     }
     
     @Test
@@ -54,6 +61,7 @@ struct CityReviewElementUnitTest {
             localTransportRating: 1,
             greenSpacesRating: 2,
             wasteBinsRating: 3,
+            dateTime: Date.now,
             cityIata: "PAR",
             countryCode: "FR",
             firstName: "John",
@@ -64,7 +72,10 @@ struct CityReviewElementUnitTest {
             reviews: [review],
             averageLocalTransportRating: 1.0,
             averageGreenSpacesRating: 2.0,
-            averageWasteBinsRating: 3.0
+            averageWasteBinsRating: 3.0,
+            hasPrevious: true,
+            hasNext: true,
+            numReviews: 1
         )
         
         let encoder = JSONEncoder()
@@ -80,15 +91,21 @@ struct CityReviewElementUnitTest {
         #expect(decodedCity.averageLocalTransportRating == city.averageLocalTransportRating)
         #expect(decodedCity.averageGreenSpacesRating == city.averageGreenSpacesRating)
         #expect(decodedCity.averageWasteBinsRating == city.averageWasteBinsRating)
+        #expect(city.hasPrevious == true)
+        #expect(city.hasNext == true)
+        #expect(city.numReviews == 1)
     }
     
     @Test
-    func testGetLastFiveReviewsNoReview() {
+    func testGetFirstFiveReviewsNoReview() {
         let city = CityReviewElement(
             reviews: [],
             averageLocalTransportRating: 1.0,
             averageGreenSpacesRating: 2.0,
-            averageWasteBinsRating: 3.0
+            averageWasteBinsRating: 3.0,
+            hasPrevious: false,
+            hasNext: false,
+            numReviews: 0
         )
         
         let lastReviews = city.getFirstReviews(num: 5)
@@ -97,7 +114,7 @@ struct CityReviewElementUnitTest {
     }
     
     @Test
-    func testGetLastFiveReviewsLessThanFive() {
+    func testGetFirstFiveReviewsLessThanFive() {
         let review = Review(
             reviewID: 1,
             cityID: 10,
@@ -106,6 +123,7 @@ struct CityReviewElementUnitTest {
             localTransportRating: 1,
             greenSpacesRating: 2,
             wasteBinsRating: 3,
+            dateTime: Date.now,
             cityIata: "PAR",
             countryCode: "FR",
             firstName: "John",
@@ -116,7 +134,10 @@ struct CityReviewElementUnitTest {
             reviews: [review],
             averageLocalTransportRating: 1.0,
             averageGreenSpacesRating: 2.0,
-            averageWasteBinsRating: 3.0
+            averageWasteBinsRating: 3.0,
+            hasPrevious: false,
+            hasNext: false,
+            numReviews: 0
         )
         
         let lastReviews = city.getFirstReviews(num: 5)
@@ -126,7 +147,7 @@ struct CityReviewElementUnitTest {
     }
     
     @Test
-    func testGetLastFiveReviewsMoreThanFive() {
+    func testGetFirstFiveReviewsMoreThanFive() {
         let review1 = Review(
             reviewID: 1,
             cityID: 10,
@@ -135,6 +156,7 @@ struct CityReviewElementUnitTest {
             localTransportRating: 1,
             greenSpacesRating: 2,
             wasteBinsRating: 3,
+            dateTime: Date.now,
             cityIata: "PAR",
             countryCode: "FR",
             firstName: "John",
@@ -148,6 +170,7 @@ struct CityReviewElementUnitTest {
             localTransportRating: 1,
             greenSpacesRating: 2,
             wasteBinsRating: 3,
+            dateTime: Date.now,
             cityIata: "PAR",
             countryCode: "FR",
             firstName: "John",
@@ -161,6 +184,7 @@ struct CityReviewElementUnitTest {
             localTransportRating: 1,
             greenSpacesRating: 2,
             wasteBinsRating: 3,
+            dateTime: Date.now,
             cityIata: "PAR",
             countryCode: "FR",
             firstName: "John",
@@ -174,6 +198,7 @@ struct CityReviewElementUnitTest {
             localTransportRating: 1,
             greenSpacesRating: 2,
             wasteBinsRating: 3,
+            dateTime: Date.now,
             cityIata: "PAR",
             countryCode: "FR",
             firstName: "John",
@@ -187,6 +212,7 @@ struct CityReviewElementUnitTest {
             localTransportRating: 1,
             greenSpacesRating: 2,
             wasteBinsRating: 3,
+            dateTime: Date.now,
             cityIata: "PAR",
             countryCode: "FR",
             firstName: "John",
@@ -200,6 +226,7 @@ struct CityReviewElementUnitTest {
             localTransportRating: 1,
             greenSpacesRating: 2,
             wasteBinsRating: 3,
+            dateTime: Date.now,
             cityIata: "PAR",
             countryCode: "FR",
             firstName: "John",
@@ -210,17 +237,20 @@ struct CityReviewElementUnitTest {
             reviews: [review1, review2, review3, review4, review5, review6],
             averageLocalTransportRating: 1.0,
             averageGreenSpacesRating: 2.0,
-            averageWasteBinsRating: 3.0
+            averageWasteBinsRating: 3.0,
+            hasPrevious: false,
+            hasNext: false,
+            numReviews: 6
         )
         
         let lastReviews = city.getFirstReviews(num: 5)
         
         #expect(lastReviews.count == 5)
-        #expect(lastReviews[0].reviewID == 2)
-        #expect(lastReviews[1].reviewID == 3)
-        #expect(lastReviews[2].reviewID == 4)
-        #expect(lastReviews[3].reviewID == 5)
-        #expect(lastReviews[4].reviewID == 6)
+        #expect(lastReviews[0].reviewID == 1)
+        #expect(lastReviews[1].reviewID == 2)
+        #expect(lastReviews[2].reviewID == 3)
+        #expect(lastReviews[3].reviewID == 4)
+        #expect(lastReviews[4].reviewID == 5)
     }
     
     @Test
@@ -229,7 +259,10 @@ struct CityReviewElementUnitTest {
             reviews: [],
             averageLocalTransportRating: 1.0,
             averageGreenSpacesRating: 2.0,
-            averageWasteBinsRating: 3.0
+            averageWasteBinsRating: 3.0,
+            hasPrevious: false,
+            hasNext: false,
+            numReviews: 0
         )
         
         let average = city.getAverageRating()
@@ -243,7 +276,10 @@ struct CityReviewElementUnitTest {
             reviews: [],
             averageLocalTransportRating: 1.5,
             averageGreenSpacesRating: 0.0,
-            averageWasteBinsRating: 3.0
+            averageWasteBinsRating: 3.0,
+            hasPrevious: false,
+            hasNext: false,
+            numReviews: 0
         )
         
         let average = city.getAverageRating()
