@@ -39,7 +39,8 @@ struct SignUpView: View {
                     navigationPath.append(NavigationDestination.EmailVerificationView(viewModel))
                 }
             })
-            .navigationBarHidden(true)
+            .toolbar(.hidden, for: .tabBar)
+            .navigationBarBackButtonHidden(true)
             
         } else {
             // iPadOS
@@ -75,7 +76,8 @@ struct SignUpView: View {
                     navigationPath.append(NavigationDestination.EmailVerificationView(viewModel))
                 }
             })
-            .navigationBarHidden(true)
+            .toolbar(.hidden, for: .tabBar)
+            .navigationBarBackButtonHidden(true)
         }
     }
 }
