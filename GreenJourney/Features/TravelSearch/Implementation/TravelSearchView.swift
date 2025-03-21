@@ -131,6 +131,7 @@ struct TravelSearchView: View {
                                 .fixedSize(horizontal: false, vertical: true)
                             }
                             .disabled(viewModel.departure.iata == "" || viewModel.arrival.iata == "")
+                            .frame(maxWidth: 800)
                             .padding(.top, 20)
                             .accessibilityIdentifier("searchButton")
 
@@ -256,6 +257,7 @@ private struct TravelChoiceView: View {
             VStack {
                 // date pickers
                 OutwardDatePickerView(dateTapped: $dateTapped, viewModel: viewModel)
+                    .padding(.bottom, 5)
                 ReturnDatePickerView(dateReturnTapped: $dateReturnTapped, viewModel: viewModel)
             }
             .fixedSize(horizontal: false, vertical: true)
@@ -290,33 +292,24 @@ private struct TravelChoiceView: View {
                     VStack {
                         // tile
                         DepartureTitleView()
-                        
-                        HStack {
-                            DepartureCompleterView(viewModel: viewModel, departureTapped: $departureTapped, triggerAI: $triggerAI)
-                            Spacer()
-                            OutwardDatePickerView(dateTapped: $dateTapped, viewModel: viewModel)
-                                .fixedSize(horizontal: false, vertical: true)
-                                .padding(.horizontal, 45)
-                        }
-                        .padding(EdgeInsets(top: 0, leading: 40, bottom: 20, trailing: 40))
+                        DepartureCompleterView(viewModel: viewModel, departureTapped: $departureTapped, triggerAI: $triggerAI)
+                            .padding(EdgeInsets(top: 0, leading: 40, bottom: 20, trailing: 40))
                     }
-                    
-                    
                     VStack {
                         // title
                         DestinationTitleView()
-                    
-                        HStack {
-                            DestinationCompleterView(viewModel: viewModel, destinationTapped: $destinationTapped, triggerAI: $triggerAI)
-                            Spacer()
-                            ReturnDatePickerView(dateReturnTapped: $dateReturnTapped, viewModel: viewModel)
-                                .fixedSize(horizontal: false, vertical: true)
-                                .padding(.horizontal, 45)
-                        }
-                        .padding(EdgeInsets(top: 0, leading: 40, bottom: 20, trailing: 40))
+                        DestinationCompleterView(viewModel: viewModel, destinationTapped: $destinationTapped, triggerAI: $triggerAI)
+                            .padding(EdgeInsets(top: 0, leading: 40, bottom: 20, trailing: 40))
+                    }
+                    HStack (spacing: 50){
+                        OutwardDatePickerView(dateTapped: $dateTapped, viewModel: viewModel)
+                            .fixedSize(horizontal: false, vertical: true)
+                        ReturnDatePickerView(dateReturnTapped: $dateReturnTapped, viewModel: viewModel)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
                 }
             }
+            .frame(maxWidth: 800)
         }
     }
 }
@@ -467,7 +460,7 @@ private struct OutwardDatePickerView: View {
             .padding(.vertical, 10)
             .accessibilityIdentifier("outwardDateButton")
         }
-        .padding(.bottom, 5)
+        .frame(maxWidth: 310)
     }
 }
 
@@ -481,7 +474,7 @@ private struct ReturnDatePickerView: View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)
                 .fill(viewModel.oneWay ? Color.gray.opacity(0.5) : Color(uiColor: .systemBackground))
-                .strokeBorder(viewModel.oneWay ? .clear : colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 2)
+                .strokeBorder(viewModel.oneWay ? Color.gray.opacity(0.5) : colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 2)
             Button(action:  {
                 dateReturnTapped = true
             }) {
@@ -493,7 +486,6 @@ private struct ReturnDatePickerView: View {
                         .frame(width: 80, alignment: .leading)
                     
                     Text(viewModel.dateReturnPicked.formatted(date: .numeric, time: .shortened))
-                        .opacity(viewModel.oneWay ? 0 : 1)
                     Spacer()
                     
                 }
@@ -507,6 +499,7 @@ private struct ReturnDatePickerView: View {
             .disabled(viewModel.oneWay)
             .accessibilityIdentifier("returnDateButton")
         }
+        .frame(maxWidth: 310)
     }
 }
 
