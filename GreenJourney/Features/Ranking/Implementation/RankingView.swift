@@ -130,7 +130,7 @@ private struct RankingTitleView: View {
     }
 }
 
-struct LeaderboardNavigationView: View {
+private struct LeaderboardNavigationView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @ObservedObject var viewModel: RankingViewModel
     @Binding var navigationPath: NavigationPath

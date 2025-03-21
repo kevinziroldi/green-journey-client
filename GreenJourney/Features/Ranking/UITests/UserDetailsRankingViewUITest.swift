@@ -3,6 +3,7 @@ import XCTest
 final class UserDetailsRankingViewUITest: XCTestCase {
     let app = XCUIApplication()
     let timer = 5.0
+    let deviceSize = UITestsDeviceSize.deviceSize
     
     override func setUpWithError() throws {
         continueAfterFailure = false
@@ -22,7 +23,6 @@ final class UserDetailsRankingViewUITest: XCTestCase {
         let passwordField = app.secureTextFields["passwordSecureField"]
         let loginButton = app.buttons["loginButton"]
         let travelSearchViewTitle = app.staticTexts["travelSearchViewTitle"]
-        let rankingTabButton = app.tabBars.buttons["rankingTabViewElement"]
         
         XCTAssertTrue(emailTextField.exists, "The email field is not displayed")
         XCTAssertTrue(passwordField.exists, "The password field is not displayed")
@@ -40,7 +40,23 @@ final class UserDetailsRankingViewUITest: XCTestCase {
         XCTAssertTrue(travelSearchViewTitle.waitForExistence(timeout: timer), "TravelSearchView not appeared after login")
         
         // tap tab button
-        rankingTabButton.tap()
+        if deviceSize == .compact {
+            let rankingTabButton = app.tabBars.buttons["rankingTabViewElement"]
+            rankingTabButton.tap()
+        } else {
+            // .regular
+            let app = XCUIApplication()
+            let start = app.coordinate(withNormalizedOffset: CGVector(dx: 0.0, dy: 0.5))
+            let end = app.coordinate(withNormalizedOffset: CGVector(dx: 0.3, dy: 0.5))
+            start.press(forDuration: 0.1, thenDragTo: end)
+            
+            let citiesReviewsTabButton = app.otherElements["rankingTabViewElement"]
+            XCTAssertTrue(citiesReviewsTabButton.exists)
+            citiesReviewsTabButton.tap()
+            
+            let right = app.coordinate(withNormalizedOffset: CGVector(dx: 0.95, dy: 0.5))
+            right.tap()
+        }
         
         // UI elements
         let rankingTitle = app.staticTexts["rankingTitle"]
@@ -73,7 +89,10 @@ final class UserDetailsRankingViewUITest: XCTestCase {
         XCTAssertTrue(userDetailsTitle.waitForExistence(timeout: timer), "The user details ranking view was not displayed")
     }
     
-    func testUserDetailsRankingViewElementsPresent() {
+    func testUserDetailsRankingViewElementsPresentCompactDevice() throws {
+        if deviceSize != .compact {
+            throw XCTSkip("Compact device only")
+        }
         // UI elements
         let userDetailsTitle = app.staticTexts["userDetailsTitle"]
         let userName = app.staticTexts["userName"]
@@ -87,6 +106,28 @@ final class UserDetailsRankingViewUITest: XCTestCase {
         XCTAssertTrue(userBadgesView.exists, "userBadgesView not displayed")
         XCTAssertTrue(scoresView.exists, "scoresView not displayed")
         XCTAssertTrue(userTravelsRecap.exists, "userTravelsRecap not displayed")
+    }
+    
+    func testUserDetailsRankingViewElementsPresentRegularDevice() throws {
+        if deviceSize != .regular {
+            throw XCTSkip("Compact device only")
+        }
+        // UI elements
+        let userDetailsTitle = app.staticTexts["userDetailsTitle"]
+        let userName = app.staticTexts["userName"]
+        let userBadgesView = app.otherElements["userBadgesView"]
+        let scoresView = app.otherElements["userScoresView"]
+        let userTravelsRecap = app.otherElements["userTravelsRecap"]
+        let co2EmissionView = app.otherElements["co2EmissionView"]
+        
+        // check UI elements present
+        XCTAssertTrue(userDetailsTitle.exists, "userDetailsTitle not displayed")
+        XCTAssertTrue(userName.exists, "userName not displayed")
+        XCTAssertTrue(userBadgesView.exists, "userBadgesView not displayed")
+        XCTAssertTrue(scoresView.exists, "scoresView not displayed")
+        app.swipeUp()
+        XCTAssertTrue(userTravelsRecap.exists, "userTravelsRecap not displayed")
+        XCTAssertTrue(co2EmissionView.exists, "co2EmissionView not displayed")
     }
     
     func testInfoBadges() {

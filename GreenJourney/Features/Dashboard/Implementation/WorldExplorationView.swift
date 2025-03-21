@@ -65,7 +65,7 @@ struct WorldExplorationView: View {
     }
 }
 
-struct ContinentImage: View {
+private struct ContinentImage: View {
     let image: String
     let description: String
     let visited: Bool

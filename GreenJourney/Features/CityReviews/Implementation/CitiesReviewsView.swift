@@ -160,7 +160,7 @@ private struct CitySearchView: View {
     }
 }
 
-struct ReviewableCitiesView: View {
+private struct ReviewableCitiesView: View {
     @ObservedObject var viewModel: CitiesReviewsViewModel
     var body: some View {
         VStack (spacing: 0) {

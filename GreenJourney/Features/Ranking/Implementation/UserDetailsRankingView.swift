@@ -83,7 +83,7 @@ struct UserDetailsRankingView: View {
     }
 }
 
-struct RankingElementDetailsTitle: View {
+private struct RankingElementDetailsTitle: View {
     var user: RankingElement
     
     var body: some View {
@@ -104,7 +104,7 @@ struct RankingElementDetailsTitle: View {
     }
 }
 
-struct RecapViewCompactDevice: View {
+private struct RecapViewCompactDevice: View {
     @ObservedObject var viewModel: RankingViewModel
     var user: RankingElement
     
@@ -233,7 +233,7 @@ struct RecapViewCompactDevice: View {
     }
 }
 
-struct RecapViewRegularDevice: View {
+private struct RecapViewRegularDevice: View {
     @ObservedObject var viewModel: RankingViewModel
     var user: RankingElement
     
@@ -310,7 +310,7 @@ struct RecapViewRegularDevice: View {
     }
 }
  
-struct Co2EmissionView: View {
+private struct Co2EmissionView: View {
     var co2Emitted: Double
     var co2Compensated: Double
     var progress: Double
@@ -362,5 +362,6 @@ struct Co2EmissionView: View {
             .padding()
         }
         .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
+        .overlay(Color.clear.accessibilityIdentifier("co2EmissionView"))
     }
 }
