@@ -1,501 +1,501 @@
 [
-  {
-    "travel" : {
-      "co2_compensated" : 0,
-      "travel_id" : 107,
-      "confirmed" : false,
-      "user_id" : 1
+    {
+        "travel" : {
+            "co2_compensated" : 0,
+            "travel_id" : 107,
+            "confirmed" : false,
+            "user_id" : 1
+        },
+        "segments" : [
+            {
+                "description" : "",
+                "co2_emitted" : 0,
+                "vehicle" : "bike",
+                "distance" : 368,
+                "destination_city" : "Firenze",
+                "destination_country" : "Italy",
+                "is_outward" : true,
+                "departure_id" : 264373,
+                "travel_id" : 107,
+                "segment_id" : 188,
+                "num_segment" : 1,
+                "price" : 0,
+                "destination_id" : 238540,
+                "departure_city" : "Milano",
+                "departure_country" : "Italy",
+                "date_time" : "2024-12-22T19:48:00+01:00",
+                "duration" : 70232000000000
+            }
+        ]
     },
-    "segments" : [
-      {
-        "description" : "",
-        "co2_emitted" : 0,
-        "vehicle" : "bike",
-        "distance" : 368,
-        "destination_city" : "Firenze",
-        "destination_country" : "Italy",
-        "is_outward" : true,
-        "departure_id" : 264373,
-        "travel_id" : 107,
-        "segment_id" : 188,
-        "num_segment" : 1,
-        "price" : 0,
-        "destination_id" : 238540,
-        "departure_city" : "Milano",
-        "departure_country" : "Italy",
-        "date_time" : "2024-12-22T19:48:00+01:00",
-        "duration" : 70232000000000
-      }
-    ]
-  },
-  {
-    "travel" : {
-      "co2_compensated" : 0,
-      "travel_id" : 109,
-      "confirmed" : false,
-      "user_id" : 1
+    {
+        "travel" : {
+            "co2_compensated" : 0,
+            "travel_id" : 109,
+            "confirmed" : false,
+            "user_id" : 1
+        },
+        "segments" : [
+            {
+                "description" : "",
+                "co2_emitted" : 302.60000000000002,
+                "vehicle" : "car",
+                "distance" : 1513.454,
+                "destination_city" : "London",
+                "destination_country" : "United Kingdom",
+                "is_outward" : true,
+                "departure_id" : 238540,
+                "travel_id" : 109,
+                "segment_id" : 190,
+                "num_segment" : 1,
+                "price" : 136.16999999999999,
+                "destination_id" : 259911,
+                "departure_city" : "Firenze",
+                "departure_country" : "Italy",
+                "date_time" : "2024-12-22T20:26:00+01:00",
+                "duration" : 59884000000000
+            }
+        ]
     },
-    "segments" : [
-      {
-        "description" : "",
-        "co2_emitted" : 302.60000000000002,
-        "vehicle" : "car",
-        "distance" : 1513.454,
-        "destination_city" : "London",
-        "destination_country" : "United Kingdom",
-        "is_outward" : true,
-        "departure_id" : 238540,
-        "travel_id" : 109,
-        "segment_id" : 190,
-        "num_segment" : 1,
-        "price" : 136.16999999999999,
-        "destination_id" : 259911,
-        "departure_city" : "Firenze",
-        "departure_country" : "Italy",
-        "date_time" : "2024-12-22T20:26:00+01:00",
-        "duration" : 59884000000000
-      }
-    ]
-  },
-  {
-    "travel" : {
-      "co2_compensated" : 0,
-      "travel_id" : 108,
-      "confirmed" : true,
-      "user_id" : 1
+    {
+        "travel" : {
+            "co2_compensated" : 0,
+            "travel_id" : 108,
+            "confirmed" : true,
+            "user_id" : 1
+        },
+        "segments" : [
+            {
+                "description" : "",
+                "co2_emitted" : 114.60000000000001,
+                "vehicle" : "car",
+                "distance" : 573.37099999999998,
+                "destination_city" : "Roma",
+                "destination_country" : "Italy",
+                "is_outward" : true,
+                "departure_id" : 264373,
+                "travel_id" : 108,
+                "segment_id" : 189,
+                "num_segment" : 1,
+                "price" : 51.57,
+                "destination_id" : 284188,
+                "departure_city" : "Milano",
+                "departure_country" : "Italy",
+                "date_time" : "2024-12-22T20:26:00+01:00",
+                "duration" : 21620000000000
+            }
+        ]
     },
-    "segments" : [
-      {
-        "description" : "",
-        "co2_emitted" : 114.60000000000001,
-        "vehicle" : "car",
-        "distance" : 573.37099999999998,
-        "destination_city" : "Roma",
-        "destination_country" : "Italy",
-        "is_outward" : true,
-        "departure_id" : 264373,
-        "travel_id" : 108,
-        "segment_id" : 189,
-        "num_segment" : 1,
-        "price" : 51.57,
-        "destination_id" : 284188,
-        "departure_city" : "Milano",
-        "departure_country" : "Italy",
-        "date_time" : "2024-12-22T20:26:00+01:00",
-        "duration" : 21620000000000
-      }
-    ]
-  },
-  {
-    "travel" : {
-      "co2_compensated" : 0,
-      "travel_id" : 106,
-      "confirmed" : true,
-      "user_id" : 1
+    {
+        "travel" : {
+            "co2_compensated" : 0,
+            "travel_id" : 106,
+            "confirmed" : true,
+            "user_id" : 1
+        },
+        "segments" : [
+            {
+                "description" : "",
+                "co2_emitted" : 62.600000000000001,
+                "vehicle" : "car",
+                "distance" : 313.51100000000002,
+                "destination_city" : "Firenze",
+                "destination_country" : "Italy",
+                "is_outward" : true,
+                "departure_id" : 264373,
+                "travel_id" : 106,
+                "segment_id" : 187,
+                "num_segment" : 1,
+                "price" : 28.170000000000002,
+                "destination_id" : 238540,
+                "departure_city" : "Milano",
+                "departure_country" : "Italy",
+                "date_time" : "2024-12-22T19:31:00+01:00",
+                "duration" : 12505000000000
+            }
+        ]
     },
-    "segments" : [
-      {
-        "description" : "",
-        "co2_emitted" : 62.600000000000001,
-        "vehicle" : "car",
-        "distance" : 313.51100000000002,
-        "destination_city" : "Firenze",
-        "destination_country" : "Italy",
-        "is_outward" : true,
-        "departure_id" : 264373,
-        "travel_id" : 106,
-        "segment_id" : 187,
-        "num_segment" : 1,
-        "price" : 28.170000000000002,
-        "destination_id" : 238540,
-        "departure_city" : "Milano",
-        "departure_country" : "Italy",
-        "date_time" : "2024-12-22T19:31:00+01:00",
-        "duration" : 12505000000000
-      }
-    ]
-  },
-  {
-    "travel" : {
-      "co2_compensated" : 0,
-      "travel_id" : 110,
-      "confirmed" : false,
-      "user_id" : 1
+    {
+        "travel" : {
+            "co2_compensated" : 0,
+            "travel_id" : 110,
+            "confirmed" : false,
+            "user_id" : 1
+        },
+        "segments" : [
+            {
+                "description" : "",
+                "co2_emitted" : 0,
+                "vehicle" : "bike",
+                "distance" : 65,
+                "destination_city" : "Varese",
+                "destination_country" : "Italy",
+                "is_outward" : true,
+                "departure_id" : 264373,
+                "travel_id" : 110,
+                "segment_id" : 191,
+                "num_segment" : 1,
+                "price" : 0,
+                "destination_id" : 301350,
+                "departure_city" : "Milano",
+                "departure_country" : "Italy",
+                "date_time" : "2024-12-23T08:36:00+01:00",
+                "duration" : 13652000000000
+            }
+        ]
     },
-    "segments" : [
-      {
-        "description" : "",
-        "co2_emitted" : 0,
-        "vehicle" : "bike",
-        "distance" : 65,
-        "destination_city" : "Varese",
-        "destination_country" : "Italy",
-        "is_outward" : true,
-        "departure_id" : 264373,
-        "travel_id" : 110,
-        "segment_id" : 191,
-        "num_segment" : 1,
-        "price" : 0,
-        "destination_id" : 301350,
-        "departure_city" : "Milano",
-        "departure_country" : "Italy",
-        "date_time" : "2024-12-23T08:36:00+01:00",
-        "duration" : 13652000000000
-      }
-    ]
-  },
-  {
-    "travel" : {
-      "co2_compensated" : 0,
-      "travel_id" : 99,
-      "confirmed" : true,
-      "user_id" : 1
+    {
+        "travel" : {
+            "co2_compensated" : 0,
+            "travel_id" : 99,
+            "confirmed" : true,
+            "user_id" : 1
+        },
+        "segments" : [
+            {
+                "description" : "",
+                "co2_emitted" : 182.20000000000002,
+                "vehicle" : "car",
+                "distance" : 911.601,
+                "destination_city" : "Paris",
+                "destination_country" : "France",
+                "is_outward" : true,
+                "departure_id" : 264373,
+                "travel_id" : 99,
+                "segment_id" : 185,
+                "num_segment" : 1,
+                "price" : 81.989999999999995,
+                "destination_id" : 275549,
+                "departure_city" : "Milano",
+                "departure_country" : "Italy",
+                "date_time" : "2024-12-15T22:35:00+01:00",
+                "duration" : 33440000000000
+            }
+        ]
     },
-    "segments" : [
-      {
-        "description" : "",
-        "co2_emitted" : 182.20000000000002,
-        "vehicle" : "car",
-        "distance" : 911.601,
-        "destination_city" : "Paris",
-        "destination_country" : "France",
-        "is_outward" : true,
-        "departure_id" : 264373,
-        "travel_id" : 99,
-        "segment_id" : 185,
-        "num_segment" : 1,
-        "price" : 81.989999999999995,
-        "destination_id" : 275549,
-        "departure_city" : "Milano",
-        "departure_country" : "Italy",
-        "date_time" : "2024-12-15T22:35:00+01:00",
-        "duration" : 33440000000000
-      }
-    ]
-  },
-  {
-    "travel" : {
-      "co2_compensated" : 0,
-      "travel_id" : 98,
-      "confirmed" : true,
-      "user_id" : 1
+    {
+        "travel" : {
+            "co2_compensated" : 0,
+            "travel_id" : 98,
+            "confirmed" : true,
+            "user_id" : 1
+        },
+        "segments" : [
+            {
+                "description" : "",
+                "co2_emitted" : 181.60000000000002,
+                "vehicle" : "car",
+                "distance" : 908.57399999999996,
+                "destination_city" : "Paris",
+                "destination_country" : "France",
+                "is_outward" : true,
+                "departure_id" : 264373,
+                "travel_id" : 98,
+                "segment_id" : 184,
+                "num_segment" : 1,
+                "price" : 81.719999999999999,
+                "destination_id" : 275549,
+                "departure_city" : "Milano",
+                "departure_country" : "Italy",
+                "date_time" : "2024-12-12T21:56:00+01:00",
+                "duration" : 33535000000000
+            }
+        ]
     },
-    "segments" : [
-      {
-        "description" : "",
-        "co2_emitted" : 181.60000000000002,
-        "vehicle" : "car",
-        "distance" : 908.57399999999996,
-        "destination_city" : "Paris",
-        "destination_country" : "France",
-        "is_outward" : true,
-        "departure_id" : 264373,
-        "travel_id" : 98,
-        "segment_id" : 184,
-        "num_segment" : 1,
-        "price" : 81.719999999999999,
-        "destination_id" : 275549,
-        "departure_city" : "Milano",
-        "departure_country" : "Italy",
-        "date_time" : "2024-12-12T21:56:00+01:00",
-        "duration" : 33535000000000
-      }
-    ]
-  },
-  {
-    "travel" : {
-      "co2_compensated" : 0,
-      "travel_id" : 111,
-      "confirmed" : true,
-      "user_id" : 1
+    {
+        "travel" : {
+            "co2_compensated" : 0,
+            "travel_id" : 111,
+            "confirmed" : true,
+            "user_id" : 1
+        },
+        "segments" : [
+            {
+                "description" : "FlixBus 492, Munich - Milan- Genoa - Cannes",
+                "co2_emitted" : 14.52,
+                "vehicle" : "bus",
+                "distance" : 484.75,
+                "destination_city" : "Munich",
+                "destination_country" : "Germany",
+                "is_outward" : true,
+                "departure_id" : 264373,
+                "travel_id" : 111,
+                "segment_id" : 192,
+                "num_segment" : 1,
+                "price" : 33.880000000000003,
+                "destination_id" : 313116,
+                "departure_city" : "Milano",
+                "departure_country" : "Italy",
+                "date_time" : "2024-12-22T14:00:00+01:00",
+                "duration" : 23700000000000
+            },
+            {
+                "description" : "FlixBus N34, Berlin - Leipzig - Munich",
+                "co2_emitted" : 19.050000000000001,
+                "vehicle" : "bus",
+                "distance" : 635.09000000000003,
+                "destination_city" : "Berlin",
+                "destination_country" : "Germany",
+                "is_outward" : true,
+                "departure_id" : 313116,
+                "travel_id" : 111,
+                "segment_id" : 193,
+                "num_segment" : 2,
+                "price" : 44.450000000000003,
+                "destination_id" : 219536,
+                "departure_city" : "Munich",
+                "departure_country" : "Germany",
+                "date_time" : "2024-12-22T22:15:00+01:00",
+                "duration" : 30000000000000
+            }
+        ]
     },
-    "segments" : [
-      {
-        "description" : "FlixBus 492, Munich - Milan- Genoa - Cannes",
-        "co2_emitted" : 14.52,
-        "vehicle" : "bus",
-        "distance" : 484.75,
-        "destination_city" : "Munich",
-        "destination_country" : "Germany",
-        "is_outward" : true,
-        "departure_id" : 264373,
-        "travel_id" : 111,
-        "segment_id" : 192,
-        "num_segment" : 1,
-        "price" : 33.880000000000003,
-        "destination_id" : 313116,
-        "departure_city" : "Milano",
-        "departure_country" : "Italy",
-        "date_time" : "2024-12-22T14:00:00+01:00",
-        "duration" : 23700000000000
-      },
-      {
-        "description" : "FlixBus N34, Berlin - Leipzig - Munich",
-        "co2_emitted" : 19.050000000000001,
-        "vehicle" : "bus",
-        "distance" : 635.09000000000003,
-        "destination_city" : "Berlin",
-        "destination_country" : "Germany",
-        "is_outward" : true,
-        "departure_id" : 313116,
-        "travel_id" : 111,
-        "segment_id" : 193,
-        "num_segment" : 2,
-        "price" : 44.450000000000003,
-        "destination_id" : 219536,
-        "departure_city" : "Munich",
-        "departure_country" : "Germany",
-        "date_time" : "2024-12-22T22:15:00+01:00",
-        "duration" : 30000000000000
-      }
-    ]
-  },
-  {
-    "travel" : {
-      "co2_compensated" : 0,
-      "travel_id" : 115,
-      "confirmed" : false,
-      "user_id" : 1
+    {
+        "travel" : {
+            "co2_compensated" : 0,
+            "travel_id" : 115,
+            "confirmed" : false,
+            "user_id" : 1
+        },
+        "segments" : [
+            {
+                "description" : "VY 8431",
+                "co2_emitted" : 148.70588235294119,
+                "vehicle" : "plane",
+                "distance" : 590.79114377048302,
+                "destination_city" : "Paris",
+                "destination_country" : "France",
+                "is_outward" : true,
+                "departure_id" : 264373,
+                "travel_id" : 115,
+                "segment_id" : 197,
+                "num_segment" : 1,
+                "price" : 122.23,
+                "destination_id" : 275549,
+                "departure_city" : "Milano",
+                "departure_country" : "Italy",
+                "date_time" : "2024-12-23T21:45:00+01:00",
+                "duration" : 5400000000000
+            },
+            {
+                "description" : "Lyria, Paris - Bâle - Zurich",
+                "co2_emitted" : 21.350000000000001,
+                "vehicle" : "train",
+                "distance" : 610.47799999999995,
+                "destination_city" : "Zurich HB",
+                "destination_country" : "Switzerland",
+                "is_outward" : false,
+                "departure_id" : 275549,
+                "travel_id" : 115,
+                "segment_id" : 198,
+                "num_segment" : 2,
+                "price" : 67.099999999999994,
+                "destination_id" : 313107,
+                "departure_city" : "Paris",
+                "departure_country" : "France",
+                "date_time" : "2024-12-31T12:22:00+01:00",
+                "duration" : 14640000000000
+            },
+            {
+                "description" : "",
+                "co2_emitted" : 0,
+                "vehicle" : "walk",
+                "distance" : 0.26800000000000002,
+                "destination_city" : "Zurich HB",
+                "destination_country" : "Switzerland",
+                "is_outward" : false,
+                "departure_id" : 313107,
+                "travel_id" : 115,
+                "segment_id" : 199,
+                "num_segment" : 3,
+                "price" : 0,
+                "destination_id" : 313107,
+                "departure_city" : "Zurich HB",
+                "departure_country" : "Switzerland",
+                "date_time" : "2024-12-31T17:01:14+01:00",
+                "duration" : 226000000000
+            },
+            {
+                "description" : "IC2, ",
+                "co2_emitted" : 6.1950000000000003,
+                "vehicle" : "train",
+                "distance" : 177.25399999999999,
+                "destination_city" : "Lugano",
+                "destination_country" : "Switzerland",
+                "is_outward" : false,
+                "departure_id" : 313107,
+                "travel_id" : 115,
+                "segment_id" : 200,
+                "num_segment" : 4,
+                "price" : 19.469999999999999,
+                "destination_id" : 261009,
+                "departure_city" : "Zurich HB",
+                "departure_country" : "Switzerland",
+                "date_time" : "2024-12-31T17:05:00+01:00",
+                "duration" : 6780000000000
+            },
+            {
+                "description" : "",
+                "co2_emitted" : 0,
+                "vehicle" : "walk",
+                "distance" : 0.20499999999999999,
+                "destination_city" : "Lugano",
+                "destination_country" : "Switzerland",
+                "is_outward" : false,
+                "departure_id" : 261009,
+                "travel_id" : 115,
+                "segment_id" : 201,
+                "num_segment" : 5,
+                "price" : 0,
+                "destination_id" : 261009,
+                "departure_city" : "Lugano",
+                "departure_country" : "Switzerland",
+                "date_time" : "2024-12-31T18:58:35+01:00",
+                "duration" : 205000000000
+            },
+            {
+                "description" : "RE80, Locarno - Chiasso - Como - Milano",
+                "co2_emitted" : 2.6600000000000001,
+                "vehicle" : "train",
+                "distance" : 76.129999999999995,
+                "destination_city" : "Milano",
+                "destination_country" : "Italy",
+                "is_outward" : false,
+                "departure_id" : 261009,
+                "travel_id" : 115,
+                "segment_id" : 202,
+                "num_segment" : 6,
+                "price" : 8.3599999999999994,
+                "destination_id" : 264373,
+                "departure_city" : "Lugano",
+                "departure_country" : "Switzerland",
+                "date_time" : "2024-12-31T19:02:00+01:00",
+                "duration" : 4500000000000
+            }
+        ]
     },
-    "segments" : [
-      {
-        "description" : "VY 8431",
-        "co2_emitted" : 148.70588235294119,
-        "vehicle" : "plane",
-        "distance" : 590.79114377048302,
-        "destination_city" : "Paris",
-        "destination_country" : "France",
-        "is_outward" : true,
-        "departure_id" : 264373,
-        "travel_id" : 115,
-        "segment_id" : 197,
-        "num_segment" : 1,
-        "price" : 122.23,
-        "destination_id" : 275549,
-        "departure_city" : "Milano",
-        "departure_country" : "Italy",
-        "date_time" : "2024-12-23T21:45:00+01:00",
-        "duration" : 5400000000000
-      },
-      {
-        "description" : "Lyria, Paris - Bâle - Zurich",
-        "co2_emitted" : 21.350000000000001,
-        "vehicle" : "train",
-        "distance" : 610.47799999999995,
-        "destination_city" : "Zurich HB",
-        "destination_country" : "Switzerland",
-        "is_outward" : false,
-        "departure_id" : 275549,
-        "travel_id" : 115,
-        "segment_id" : 198,
-        "num_segment" : 2,
-        "price" : 67.099999999999994,
-        "destination_id" : 313107,
-        "departure_city" : "Paris",
-        "departure_country" : "France",
-        "date_time" : "2024-12-31T12:22:00+01:00",
-        "duration" : 14640000000000
-      },
-      {
-        "description" : "",
-        "co2_emitted" : 0,
-        "vehicle" : "walk",
-        "distance" : 0.26800000000000002,
-        "destination_city" : "Zurich HB",
-        "destination_country" : "Switzerland",
-        "is_outward" : false,
-        "departure_id" : 313107,
-        "travel_id" : 115,
-        "segment_id" : 199,
-        "num_segment" : 3,
-        "price" : 0,
-        "destination_id" : 313107,
-        "departure_city" : "Zurich HB",
-        "departure_country" : "Switzerland",
-        "date_time" : "2024-12-31T17:01:14+01:00",
-        "duration" : 226000000000
-      },
-      {
-        "description" : "IC2, ",
-        "co2_emitted" : 6.1950000000000003,
-        "vehicle" : "train",
-        "distance" : 177.25399999999999,
-        "destination_city" : "Lugano",
-        "destination_country" : "Switzerland",
-        "is_outward" : false,
-        "departure_id" : 313107,
-        "travel_id" : 115,
-        "segment_id" : 200,
-        "num_segment" : 4,
-        "price" : 19.469999999999999,
-        "destination_id" : 261009,
-        "departure_city" : "Zurich HB",
-        "departure_country" : "Switzerland",
-        "date_time" : "2024-12-31T17:05:00+01:00",
-        "duration" : 6780000000000
-      },
-      {
-        "description" : "",
-        "co2_emitted" : 0,
-        "vehicle" : "walk",
-        "distance" : 0.20499999999999999,
-        "destination_city" : "Lugano",
-        "destination_country" : "Switzerland",
-        "is_outward" : false,
-        "departure_id" : 261009,
-        "travel_id" : 115,
-        "segment_id" : 201,
-        "num_segment" : 5,
-        "price" : 0,
-        "destination_id" : 261009,
-        "departure_city" : "Lugano",
-        "departure_country" : "Switzerland",
-        "date_time" : "2024-12-31T18:58:35+01:00",
-        "duration" : 205000000000
-      },
-      {
-        "description" : "RE80, Locarno - Chiasso - Como - Milano",
-        "co2_emitted" : 2.6600000000000001,
-        "vehicle" : "train",
-        "distance" : 76.129999999999995,
-        "destination_city" : "Milano",
-        "destination_country" : "Italy",
-        "is_outward" : false,
-        "departure_id" : 261009,
-        "travel_id" : 115,
-        "segment_id" : 202,
-        "num_segment" : 6,
-        "price" : 8.3599999999999994,
-        "destination_id" : 264373,
-        "departure_city" : "Lugano",
-        "departure_country" : "Switzerland",
-        "date_time" : "2024-12-31T19:02:00+01:00",
-        "duration" : 4500000000000
-      }
-    ]
-  },
-  {
-    "travel" : {
-      "co2_compensated" : 0,
-      "travel_id" : 116,
-      "confirmed" : true,
-      "user_id" : 1
-    },
-    "segments" : [
-      {
-        "description" : "VY 8431",
-        "co2_emitted" : 148.70588235294119,
-        "vehicle" : "plane",
-        "distance" : 590.79114377048302,
-        "destination_city" : "Paris",
-        "destination_country" : "France",
-        "is_outward" : true,
-        "departure_id" : 264373,
-        "travel_id" : 116,
-        "segment_id" : 203,
-        "num_segment" : 1,
-        "price" : 122.23,
-        "destination_id" : 275549,
-        "departure_city" : "Milano",
-        "departure_country" : "Italy",
-        "date_time" : "2024-12-23T21:45:00+01:00",
-        "duration" : 5400000000000
-      },
-      {
-        "description" : "Lyria, Paris - Bâle - Zurich",
-        "co2_emitted" : 21.350000000000001,
-        "vehicle" : "train",
-        "distance" : 610.47799999999995,
-        "destination_city" : "Zurich HB",
-        "destination_country" : "Switzerland",
-        "is_outward" : false,
-        "departure_id" : 275549,
-        "travel_id" : 116,
-        "segment_id" : 204,
-        "num_segment" : 2,
-        "price" : 67.099999999999994,
-        "destination_id" : 313107,
-        "departure_city" : "Paris",
-        "departure_country" : "France",
-        "date_time" : "2024-12-31T12:22:00+01:00",
-        "duration" : 14640000000000
-      },
-      {
-        "description" : "",
-        "co2_emitted" : 0,
-        "vehicle" : "walk",
-        "distance" : 0.26800000000000002,
-        "destination_city" : "Zurich HB",
-        "destination_country" : "Switzerland",
-        "is_outward" : false,
-        "departure_id" : 313107,
-        "travel_id" : 116,
-        "segment_id" : 205,
-        "num_segment" : 3,
-        "price" : 0,
-        "destination_id" : 313107,
-        "departure_city" : "Zurich HB",
-        "departure_country" : "Switzerland",
-        "date_time" : "2024-12-31T17:01:14+01:00",
-        "duration" : 226000000000
-      },
-      {
-        "description" : "IC2, ",
-        "co2_emitted" : 6.1950000000000003,
-        "vehicle" : "train",
-        "distance" : 177.25399999999999,
-        "destination_city" : "Lugano",
-        "destination_country" : "Switzerland",
-        "is_outward" : false,
-        "departure_id" : 313107,
-        "travel_id" : 116,
-        "segment_id" : 206,
-        "num_segment" : 4,
-        "price" : 19.469999999999999,
-        "destination_id" : 261009,
-        "departure_city" : "Zurich HB",
-        "departure_country" : "Switzerland",
-        "date_time" : "2024-12-31T17:05:00+01:00",
-        "duration" : 6780000000000
-      },
-      {
-        "description" : "",
-        "co2_emitted" : 0,
-        "vehicle" : "walk",
-        "distance" : 0.20499999999999999,
-        "destination_city" : "Lugano",
-        "destination_country" : "Switzerland",
-        "is_outward" : false,
-        "departure_id" : 261009,
-        "travel_id" : 116,
-        "segment_id" : 207,
-        "num_segment" : 5,
-        "price" : 0,
-        "destination_id" : 261009,
-        "departure_city" : "Lugano",
-        "departure_country" : "Switzerland",
-        "date_time" : "2024-12-31T18:58:35+01:00",
-        "duration" : 205000000000
-      },
-      {
-        "description" : "RE80, Locarno - Chiasso - Como - Milano",
-        "co2_emitted" : 2.6600000000000001,
-        "vehicle" : "train",
-        "distance" : 76.129999999999995,
-        "destination_city" : "Milano",
-        "destination_country" : "Italy",
-        "is_outward" : false,
-        "departure_id" : 261009,
-        "travel_id" : 116,
-        "segment_id" : 208,
-        "num_segment" : 6,
-        "price" : 8.3599999999999994,
-        "destination_id" : 264373,
-        "departure_city" : "Lugano",
-        "departure_country" : "Switzerland",
-        "date_time" : "2024-12-31T19:02:00+01:00",
-        "duration" : 4500000000000
-      }
-    ]
-  }
+    {
+        "travel" : {
+            "co2_compensated" : 0,
+            "travel_id" : 116,
+            "confirmed" : true,
+            "user_id" : 1
+        },
+        "segments" : [
+            {
+                "description" : "VY 8431",
+                "co2_emitted" : 148.70588235294119,
+                "vehicle" : "plane",
+                "distance" : 590.79114377048302,
+                "destination_city" : "Paris",
+                "destination_country" : "France",
+                "is_outward" : true,
+                "departure_id" : 264373,
+                "travel_id" : 116,
+                "segment_id" : 203,
+                "num_segment" : 1,
+                "price" : 122.23,
+                "destination_id" : 275549,
+                "departure_city" : "Milano",
+                "departure_country" : "Italy",
+                "date_time" : "2024-12-23T21:45:00+01:00",
+                "duration" : 5400000000000
+            },
+            {
+                "description" : "Lyria, Paris - Bâle - Zurich",
+                "co2_emitted" : 21.350000000000001,
+                "vehicle" : "train",
+                "distance" : 610.47799999999995,
+                "destination_city" : "Zurich HB",
+                "destination_country" : "Switzerland",
+                "is_outward" : false,
+                "departure_id" : 275549,
+                "travel_id" : 116,
+                "segment_id" : 204,
+                "num_segment" : 2,
+                "price" : 67.099999999999994,
+                "destination_id" : 313107,
+                "departure_city" : "Paris",
+                "departure_country" : "France",
+                "date_time" : "2024-12-31T12:22:00+01:00",
+                "duration" : 14640000000000
+            },
+            {
+                "description" : "",
+                "co2_emitted" : 0,
+                "vehicle" : "walk",
+                "distance" : 0.26800000000000002,
+                "destination_city" : "Zurich HB",
+                "destination_country" : "Switzerland",
+                "is_outward" : false,
+                "departure_id" : 313107,
+                "travel_id" : 116,
+                "segment_id" : 205,
+                "num_segment" : 3,
+                "price" : 0,
+                "destination_id" : 313107,
+                "departure_city" : "Zurich HB",
+                "departure_country" : "Switzerland",
+                "date_time" : "2024-12-31T17:01:14+01:00",
+                "duration" : 226000000000
+            },
+            {
+                "description" : "IC2, ",
+                "co2_emitted" : 6.1950000000000003,
+                "vehicle" : "train",
+                "distance" : 177.25399999999999,
+                "destination_city" : "Lugano",
+                "destination_country" : "Switzerland",
+                "is_outward" : false,
+                "departure_id" : 313107,
+                "travel_id" : 116,
+                "segment_id" : 206,
+                "num_segment" : 4,
+                "price" : 19.469999999999999,
+                "destination_id" : 261009,
+                "departure_city" : "Zurich HB",
+                "departure_country" : "Switzerland",
+                "date_time" : "2024-12-31T17:05:00+01:00",
+                "duration" : 6780000000000
+            },
+            {
+                "description" : "",
+                "co2_emitted" : 0,
+                "vehicle" : "walk",
+                "distance" : 0.20499999999999999,
+                "destination_city" : "Lugano",
+                "destination_country" : "Switzerland",
+                "is_outward" : false,
+                "departure_id" : 261009,
+                "travel_id" : 116,
+                "segment_id" : 207,
+                "num_segment" : 5,
+                "price" : 0,
+                "destination_id" : 261009,
+                "departure_city" : "Lugano",
+                "departure_country" : "Switzerland",
+                "date_time" : "2024-12-31T18:58:35+01:00",
+                "duration" : 205000000000
+            },
+            {
+                "description" : "RE80, Locarno - Chiasso - Como - Milano",
+                "co2_emitted" : 2.6600000000000001,
+                "vehicle" : "train",
+                "distance" : 76.129999999999995,
+                "destination_city" : "Milano",
+                "destination_country" : "Italy",
+                "is_outward" : false,
+                "departure_id" : 261009,
+                "travel_id" : 116,
+                "segment_id" : 208,
+                "num_segment" : 6,
+                "price" : 8.3599999999999994,
+                "destination_id" : 264373,
+                "departure_city" : "Lugano",
+                "departure_country" : "Switzerland",
+                "date_time" : "2024-12-31T19:02:00+01:00",
+                "duration" : 4500000000000
+            }
+        ]
+    }
 ]
