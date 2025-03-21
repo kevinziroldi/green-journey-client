@@ -103,49 +103,7 @@ struct RankingElementDetailsTitle: View {
             .accessibilityIdentifier("userName")
     }
 }
-/*
-struct UserDetailsBadgesView: View {
-    var inline: Bool
-    var user: RankingElement
-    @Binding var legendTapped: Bool
-    
-    var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 15)
-                .fill(Color(uiColor: .systemBackground))
-                .shadow(color: AppColors.mainColor.opacity(0.3), radius: 5, x: 0, y: 3)
-            VStack (spacing:0){
-                HStack {
-                    Text("Badges")
-                        .font(.title)
-                        .foregroundStyle(AppColors.mainColor.opacity(0.8))
-                        .fontWeight(.semibold)
-                    
-                    Spacer()
-                    
-                    Button(action: {
-                        legendTapped = true
-                    }) {
-                        Image(systemName: "info.circle")
-                            .font(.title3)
-                    }
-                    .accessibilityIdentifier("infoBadgesButton")
-                    
-                    
-                }
-                .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 15))
-                
-                HStack{
-                    BadgeView(badges: user.badges, dim: 150, inline: inline)
-                        .padding()
-                }
-            }
-        }
-        .padding(EdgeInsets(top: 5, leading: 15, bottom: 7, trailing: 15))
-        .overlay(Color.clear.accessibilityIdentifier("userBadgesView"))
-    }
-}
-*/
+
 struct RecapViewCompactDevice: View {
     @ObservedObject var viewModel: RankingViewModel
     var user: RankingElement

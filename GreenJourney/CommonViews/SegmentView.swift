@@ -60,7 +60,6 @@ struct SegmentDetailView: View {
                             .lineLimit(1)
                         Spacer()
                     }
-                    .border(.blue)
                     
                     HStack {
                         ZStack{
@@ -204,7 +203,6 @@ struct SegmentDetailView: View {
                         Spacer()
                     }
                 }
-                .border(.black)
                 Spacer()
             }
         }

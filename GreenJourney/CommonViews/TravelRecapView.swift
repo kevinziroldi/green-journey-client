@@ -57,6 +57,7 @@ struct TravelRecapView: View {
                             infoTapped = true
                         }) {
                             Image(systemName: "info.circle")
+                                .font(.title3)
                         }
                         .accessibilityIdentifier("infoGreenPriceButton")
                     }
@@ -78,7 +79,7 @@ struct TravelRecapView: View {
         }
         .sheet(isPresented: $infoTapped) {
             InfoGreenPriceView(isPresented: $infoTapped)
-                .presentationDetents([.fraction(0.30)])
+                .presentationDetents([.height(200)])
                 .presentationCornerRadius(15)
                 .overlay(Color.clear.accessibilityIdentifier("infoGreenPriceView"))
         }
