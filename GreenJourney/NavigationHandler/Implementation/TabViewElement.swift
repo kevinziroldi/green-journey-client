@@ -13,7 +13,7 @@ enum TabViewElement: Hashable, CaseIterable, Identifiable {
         switch self {
         case .Ranking:      return "Ranking"
         case .Reviews:      return "Reviews"
-        case .SearchTravel: return "From-To"
+        case .SearchTravel: return "Search"
         case .MyTravels:    return "My travels"
         case .Dashboard:    return "Dashboard"
         case .UserPreferences: return "User preferences"

@@ -341,17 +341,10 @@ private struct LatestReviewsView: View {
                         RoundedRectangle(cornerRadius: 10)
                             .fill(AppColors.mainColor)
                         
-                        HStack (spacing: 3) {
-                            Spacer()
-                            Image(systemName: "arrowshape.forward.circle")
-                                .font(.title3)
-                                .fontWeight(.light)
-                                .foregroundStyle(.white)
-                            Spacer()
+                        HStack {
                             Text("See all reviews")
                                 .foregroundStyle(.white)
                                 .fontWeight(.semibold)
-                            Spacer()
                         }
                         .padding(10)
                     }

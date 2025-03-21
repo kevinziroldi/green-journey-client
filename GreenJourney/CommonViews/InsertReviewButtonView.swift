@@ -20,11 +20,6 @@ struct InsertReviewButtonView: View {
                             Text("Leave a review")
                                 .foregroundStyle(.white)
                                 .fontWeight(.semibold)
-                            Image(systemName: "pencil.and.scribble")
-                                .font(.title3)
-                                .fontWeight(.semibold)
-                                .fontWeight(.light)
-                                .foregroundStyle(.white)
                         }
                         .padding(10)
                     }

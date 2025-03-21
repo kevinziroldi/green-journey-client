@@ -113,9 +113,6 @@ struct TravelDetailsView: View {
                                 RoundedRectangle(cornerRadius: 15)
                                     .fill(Color.red.opacity(0.3))
                                 HStack {
-                                    Image(systemName: "trash")
-                                        .font(.headline)
-                                        .foregroundStyle(.red)
                                     Text("Delete travel")
                                         .foregroundStyle(.red)
                                         .font(.headline)
