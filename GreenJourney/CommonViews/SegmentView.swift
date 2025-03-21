@@ -60,6 +60,7 @@ struct SegmentDetailView: View {
                             .lineLimit(1)
                         Spacer()
                     }
+                    .border(.black)
                     
                     HStack {
                         ZStack{
@@ -89,6 +90,8 @@ struct SegmentDetailView: View {
                         
                         Spacer()
                     }
+                    .border(.black)
+                    
                     if detailsOpen {
                         if segment.segmentDescription != "" {
                             HStack {
@@ -112,6 +115,7 @@ struct SegmentDetailView: View {
                                 Spacer()
                             }
                             .padding(.vertical, 5)
+                            .border(.black)
                         }
                     }
                     if detailsOpen {
@@ -183,6 +187,7 @@ struct SegmentDetailView: View {
                                 Spacer()
                             }
                         }
+                        .border(.black)
                         .overlay(Color.clear.accessibilityIdentifier("detailsBox"))
                     }
                     
@@ -202,10 +207,12 @@ struct SegmentDetailView: View {
                             .lineLimit(1)
                         Spacer()
                     }
+                    .border(.black)
                 }
                 Spacer()
             }
         }
+        .border(.black)
         .padding(.horizontal, 30)
         .padding(.vertical, 5)
     }

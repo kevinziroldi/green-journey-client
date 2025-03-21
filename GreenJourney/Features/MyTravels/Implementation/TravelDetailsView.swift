@@ -103,6 +103,7 @@ struct TravelDetailsView: View {
                         }
                         
                         SegmentsDetailsView(travelDetails: travelDetails)
+                            .frame(maxWidth: 800)
                         
                         // delete button
                         Button(action: {
@@ -260,8 +261,6 @@ private struct SegmentsDetailsView: View {
                             }
                         }
                         .frame(maxWidth: 400)
-                        
-                        Spacer()
                     }
                 }
             }
