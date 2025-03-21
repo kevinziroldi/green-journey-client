@@ -2,8 +2,6 @@ import Foundation
 
 class MockServerService: ServerServiceProtocol {
     var shouldSucceed: Bool = true
-    var twoReviews: Bool = true
-    var tenReviews: Bool = false
     
     func saveUser(firstName: String, lastName: String, firebaseUID: String) async throws {
         if !shouldSucceed {

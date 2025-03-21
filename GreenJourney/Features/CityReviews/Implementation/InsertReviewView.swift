@@ -8,7 +8,8 @@ struct InsertReviewView: View {
     @State var showAlert: Bool = false
     
     var body: some View {
-        VStack(spacing: 10) {
+        ZStack {
+            VStack(spacing: 10) {
                 ZStack {
                     Capsule()
                         .frame(width: 40, height: 5)
@@ -39,17 +40,19 @@ struct InsertReviewView: View {
                     .padding(.horizontal, 5)
                 }
                 
-                
-                Text(viewModel.userReview != nil ? "Your review" : "Leave a review")
-                    .font(.system(size: 25).bold())
-                    .accessibilityIdentifier("personalReviewTitle")
-                
                 VStack {
-                    ReviewStarRating(icon: "bus", color: Color.blue, rating: $viewModel.localTransportRating, editTapped: (editTapped || (viewModel.userReview == nil )))
-                    ReviewStarRating(icon: "tree",color: Color.green, rating: $viewModel.greenSpacesRating, editTapped: (editTapped || (viewModel.userReview == nil )))
-                    ReviewStarRating(icon: "trash", color: Color.orange, rating: $viewModel.wasteBinsRating, editTapped: (editTapped || (viewModel.userReview == nil )))
+                    Text(viewModel.userReview != nil ? "Your review" : "Leave a review")
+                        .font(.system(size: 25).bold())
+                        .accessibilityIdentifier("personalReviewTitle")
+                    
+                    VStack {
+                        ReviewStarRating(icon: "bus", color: Color.blue, rating: $viewModel.localTransportRating, editTapped: (editTapped || (viewModel.userReview == nil )))
+                        ReviewStarRating(icon: "tree",color: Color.green, rating: $viewModel.greenSpacesRating, editTapped: (editTapped || (viewModel.userReview == nil )))
+                        ReviewStarRating(icon: "trash", color: Color.orange, rating: $viewModel.wasteBinsRating, editTapped: (editTapped || (viewModel.userReview == nil )))
+                    }
+                    .overlay(Color.clear.accessibilityIdentifier("userRatings"))
                 }
-                .overlay(Color.clear.accessibilityIdentifier("userRatings"))
+                .background(Color.clear.contentShape(Rectangle()).accessibilityIdentifier("overlayRating"))
                 
                 VStack {
                     TextField("Leave a review...", text: $viewModel.reviewText , axis: .vertical)
@@ -91,7 +94,7 @@ struct InsertReviewView: View {
                 .disabled((viewModel.reviewText.isEmpty) || (viewModel.greenSpacesRating == 0) || (viewModel.localTransportRating == 0) || (viewModel.wasteBinsRating == 0))
                 .accessibilityIdentifier("saveButton")
                 
-            Spacer()
+                Spacer()
                 //delete button
                 if viewModel.userReview != nil {
                     Button(action: {
@@ -118,20 +121,19 @@ struct InsertReviewView: View {
                     }
                     .accessibilityIdentifier("deleteButton")
                 }
+            }
+            .padding(.horizontal, 15)
         }
-        .padding(.horizontal, 15)
         .onAppear() {
             viewModel.reviewText = viewModel.userReview?.reviewText ?? ""
             viewModel.wasteBinsRating = viewModel.userReview?.wasteBinsRating ?? 0
             viewModel.greenSpacesRating = viewModel.userReview?.greenSpacesRating ?? 0
             viewModel.localTransportRating = viewModel.userReview?.localTransportRating ?? 0
         }
-        /*
+        // dismiss keyboard on tap
         .onTapGesture {
             hideKeyboard()
         }
-         */
-        
     }
 }
 
