@@ -3,6 +3,7 @@ import XCTest
 final class RankingLeaderBoardViewUITest: XCTestCase {
     let app = XCUIApplication()
     let timer = 5.0
+    let deviceSize = UITestsDeviceSize.deviceSize
     
     override func setUpWithError() throws {
         continueAfterFailure = false
@@ -22,7 +23,6 @@ final class RankingLeaderBoardViewUITest: XCTestCase {
         let passwordField = app.secureTextFields["passwordSecureField"]
         let loginButton = app.buttons["loginButton"]
         let travelSearchViewTitle = app.staticTexts["travelSearchViewTitle"]
-        let rankingTabButton = app.tabBars.buttons["rankingTabViewElement"]
         
         XCTAssertTrue(emailTextField.exists, "The email field is not displayed")
         XCTAssertTrue(passwordField.exists, "The password field is not displayed")
@@ -39,8 +39,24 @@ final class RankingLeaderBoardViewUITest: XCTestCase {
         // check page change after login
         XCTAssertTrue(travelSearchViewTitle.waitForExistence(timeout: timer), "TravelSearchView not appeared after login")
         
-        // tap tab button
-        rankingTabButton.tap()
+        // tap button
+        if deviceSize == .compact {
+            let rankingTabButton = app.tabBars.buttons["rankingTabViewElement"]
+            rankingTabButton.tap()
+        } else {
+            // .regular
+            let app = XCUIApplication()
+            let start = app.coordinate(withNormalizedOffset: CGVector(dx: 0.0, dy: 0.5))
+            let end = app.coordinate(withNormalizedOffset: CGVector(dx: 0.3, dy: 0.5))
+            start.press(forDuration: 0.1, thenDragTo: end)
+            
+            let citiesReviewsTabButton = app.otherElements["rankingTabViewElement"]
+            XCTAssertTrue(citiesReviewsTabButton.exists)
+            citiesReviewsTabButton.tap()
+            
+            let right = app.coordinate(withNormalizedOffset: CGVector(dx: 0.95, dy: 0.5))
+            right.tap()
+        }
         
         // UI elements
         let rankingTitle = app.staticTexts["rankingTitle"]
