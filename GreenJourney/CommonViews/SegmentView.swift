@@ -54,13 +54,13 @@ struct SegmentDetailView: View {
                         Text(segment.dateTime.formatted(date: .numeric, time: .shortened))
                             .font(.callout)
                             .fontWeight(.light)
-                            .frame(maxWidth: .infinity, alignment: .leading)
                             .accessibilityIdentifier("departureDate")
                             .scaledToFit()
                             .minimumScaleFactor(0.6)
                             .lineLimit(1)
                         Spacer()
                     }
+                    .border(.blue)
                     
                     HStack {
                         ZStack{
@@ -197,7 +197,6 @@ struct SegmentDetailView: View {
                         Text(segment.getArrivalDateTime().formatted(date: .numeric, time: .shortened))
                             .font(.callout)
                             .fontWeight(.light)
-                            .frame(maxWidth: .infinity, alignment: .leading)
                             .accessibilityIdentifier("arrivalDate")
                             .scaledToFit()
                             .minimumScaleFactor(0.6)
@@ -205,6 +204,7 @@ struct SegmentDetailView: View {
                         Spacer()
                     }
                 }
+                .border(.black)
                 Spacer()
             }
         }

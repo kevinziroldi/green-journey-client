@@ -71,6 +71,7 @@ struct InsertReviewButtonView: View {
                 }
             }
         }
+        .frame(maxWidth: 800)
         .padding(EdgeInsets(top: 5, leading: 20, bottom: 0, trailing: 20))
         .onAppear {
             if let city = city {

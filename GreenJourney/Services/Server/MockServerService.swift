@@ -70,23 +70,13 @@ class MockServerService: ServerServiceProtocol {
         decoder.dateDecodingStrategy = .iso8601
         
         if shouldSucceed {
-            if twoReviews {
-                // read mock 2 reviews from json
-                guard let path = Bundle.main.path(forResource: "mock_review_2_elements", ofType: "json") else {
-                    print("Mock review file not found")
-                    throw ServerServiceError.getReviewsCityFailed
-                }
-                let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
-                return try decoder.decode(CityReviewElement.self, from: data)
-            } else if tenReviews {
-                // read mock 10 reviews from json
-                guard let path = Bundle.main.path(forResource: "mock_review_10_elements", ofType: "json") else {
-                    print("Mock review file not found")
-                    throw ServerServiceError.getReviewsCityFailed
-                }
-                let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
-                return try decoder.decode(CityReviewElement.self, from: data)
+            // read mock 2 reviews from json
+            guard let path = Bundle.main.path(forResource: "mock_prev_page_reviews", ofType: "json") else {
+                print("Mock review file not found")
+                throw ServerServiceError.getReviewsCityFailed
             }
+            let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
+            return try decoder.decode(CityReviewElement.self, from: data)
         }
         
         throw ServerServiceError.getReviewsCityFailed
@@ -97,23 +87,12 @@ class MockServerService: ServerServiceProtocol {
         decoder.dateDecodingStrategy = .iso8601
         
         if shouldSucceed {
-            if twoReviews {
-                // read mock 2 reviews from json
-                guard let path = Bundle.main.path(forResource: "mock_review_2_elements", ofType: "json") else {
-                    print("Mock review file not found")
-                    throw ServerServiceError.getReviewsCityFailed
-                }
-                let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
-                return try decoder.decode(CityReviewElement.self, from: data)
-            } else if tenReviews {
-                // read mock 10 reviews from json
-                guard let path = Bundle.main.path(forResource: "mock_review_10_elements", ofType: "json") else {
-                    print("Mock review file not found")
-                    throw ServerServiceError.getReviewsCityFailed
-                }
-                let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
-                return try decoder.decode(CityReviewElement.self, from: data)
+            guard let path = Bundle.main.path(forResource: "mock_next_page_reviews", ofType: "json") else {
+                print("Mock review file not found")
+                throw ServerServiceError.getReviewsCityFailed
             }
+            let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
+            return try decoder.decode(CityReviewElement.self, from: data)
         }
         
         throw ServerServiceError.getReviewsCityFailed
@@ -124,17 +103,15 @@ class MockServerService: ServerServiceProtocol {
         decoder.dateDecodingStrategy = .iso8601
         
         if shouldSucceed {
-            if twoReviews {
-                // read mock 2 reviews from json
-                guard let path = Bundle.main.path(forResource: "mock_review_2_elements", ofType: "json") else {
+            if direction == true {
+                guard let path = Bundle.main.path(forResource: "mock_next_page_reviews", ofType: "json") else {
                     print("Mock review file not found")
                     throw ServerServiceError.getReviewsCityFailed
                 }
                 let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
                 return try decoder.decode(CityReviewElement.self, from: data)
-            } else if tenReviews {
-                // read mock 10 reviews from json
-                guard let path = Bundle.main.path(forResource: "mock_review_10_elements", ofType: "json") else {
+            } else {
+                guard let path = Bundle.main.path(forResource: "mock_prev_page_reviews", ofType: "json") else {
                     print("Mock review file not found")
                     throw ServerServiceError.getReviewsCityFailed
                 }
@@ -160,7 +137,7 @@ class MockServerService: ServerServiceProtocol {
                 let bestCities = try decoder.decode([CityReviewElement].self, from: data)
                 var bestCitiesPrefix: [CityReviewElement] = []
                 for bc in bestCities {
-                    var bestCity = bc
+                    let bestCity = bc
                     bestCity.reviews = Array(bc.reviews.prefix(10))
                     bestCitiesPrefix.append(bestCity)
                 }

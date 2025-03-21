@@ -60,35 +60,38 @@ struct TravelDetailsView: View {
                         } else {
                             // iPadOS
                             
-                            if travelDetails.travel.confirmed {
-                                // travel compensation
-                                Co2CompensationView(viewModel: viewModel, travelDetails: travelDetails, infoTapped: $infoTapped, showAlertCompensation: $showAlertCompensation, plantedTrees: $plantedTrees, totalTrees: $totalTrees, progress: $progress)
-                                
-                                // travel recap two columns
-                                TravelRecapView(singleColumn: false, distance: travelDetails.computeTotalDistance(), duration: travelDetails.computeTotalDuration(), price: travelDetails.computeTotalPrice(), greenPrice: travelDetails.computeGreenPrice())
-                                    .padding(.horizontal)
-                                    .accessibilityElement(children: .contain)
-                                    .overlay(Color.clear.accessibilityIdentifier("travelRecap"))
-                                    .padding(.vertical)
-                            } else {
-                                HStack(alignment: .top) {
-                                    // travel recap single column
-                                    TravelRecapView(singleColumn: true, distance: travelDetails.computeTotalDistance(), duration: travelDetails.computeTotalDuration(), price: travelDetails.computeTotalPrice(), greenPrice: travelDetails.computeGreenPrice())
-                                        .padding()
+                            VStack {
+                                if travelDetails.travel.confirmed {
+                                    // travel compensation
+                                    Co2CompensationView(viewModel: viewModel, travelDetails: travelDetails, infoTapped: $infoTapped, showAlertCompensation: $showAlertCompensation, plantedTrees: $plantedTrees, totalTrees: $totalTrees, progress: $progress)
+                                    
+                                    // travel recap two columns
+                                    TravelRecapView(singleColumn: false, distance: travelDetails.computeTotalDistance(), duration: travelDetails.computeTotalDuration(), price: travelDetails.computeTotalPrice(), greenPrice: travelDetails.computeGreenPrice())
+                                        .padding(.horizontal)
                                         .accessibilityElement(children: .contain)
                                         .overlay(Color.clear.accessibilityIdentifier("travelRecap"))
-                                        
-                                    
-                                    // recap half width
-                                    VStack {
-                                        Co2RecapView(halfWidth: true, co2Emitted: travelDetails.computeCo2Emitted(), numTrees: viewModel.getNumTrees(travelDetails), distance: travelDetails.computeTotalDistance())
+                                        .padding(.vertical)
+                                } else {
+                                    HStack(alignment: .top) {
+                                        // travel recap single column
+                                        TravelRecapView(singleColumn: true, distance: travelDetails.computeTotalDistance(), duration: travelDetails.computeTotalDuration(), price: travelDetails.computeTotalPrice(), greenPrice: travelDetails.computeGreenPrice())
                                             .padding()
                                             .accessibilityElement(children: .contain)
-                                            .overlay(Color.clear.accessibilityIdentifier("emissionsRecapFutureTravel"))
+                                            .overlay(Color.clear.accessibilityIdentifier("travelRecap"))
+                                        
+                                        
+                                        // recap half width
+                                        VStack {
+                                            Co2RecapView(halfWidth: true, co2Emitted: travelDetails.computeCo2Emitted(), numTrees: viewModel.getNumTrees(travelDetails), distance: travelDetails.computeTotalDistance())
+                                                .padding()
+                                                .accessibilityElement(children: .contain)
+                                                .overlay(Color.clear.accessibilityIdentifier("emissionsRecapFutureTravel"))
+                                        }
+                                        .frame(maxHeight: .infinity, alignment: .top)
                                     }
-                                    .frame(maxHeight: .infinity, alignment: .top)
                                 }
                             }
+                            .frame(maxWidth: 800)
                         }
                         
                         if travelDetails.travel.confirmed {

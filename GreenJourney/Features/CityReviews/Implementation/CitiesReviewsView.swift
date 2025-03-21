@@ -57,20 +57,22 @@ struct CitiesReviewsView: View {
                     CitiesReviewsTitleView()
                         .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
                     
-                    // city search
-                    CitySearchView(viewModel: viewModel, searchTapped: $searchTapped)
-                        .padding(.horizontal, 80)
-                    
-                    Spacer()
-                    
-                    ReviewableCitiesView(viewModel: viewModel)
-                    
-                    Spacer()
-                    
-                    // best cities
-                    BestCitiesTitle()
-                    BestCitiesView(viewModel: viewModel, navigationPath: $navigationPath)
-                        .padding(.horizontal, 100)
+                    VStack {
+                        // city search
+                        CitySearchView(viewModel: viewModel, searchTapped: $searchTapped)
+                        
+                        Spacer()
+                        
+                        ReviewableCitiesView(viewModel: viewModel)
+                        
+                        Spacer()
+                        
+                        // best cities
+                        BestCitiesTitle()
+                        BestCitiesView(viewModel: viewModel, navigationPath: $navigationPath)
+                    }
+                    .frame(maxWidth: 800)
+                    .padding(.horizontal)
                 }
             }
         }

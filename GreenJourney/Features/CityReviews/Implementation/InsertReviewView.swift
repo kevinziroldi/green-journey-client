@@ -126,9 +126,12 @@ struct InsertReviewView: View {
             viewModel.greenSpacesRating = viewModel.userReview?.greenSpacesRating ?? 0
             viewModel.localTransportRating = viewModel.userReview?.localTransportRating ?? 0
         }
+        /*
         .onTapGesture {
             hideKeyboard()
         }
+         */
+        
     }
 }
 

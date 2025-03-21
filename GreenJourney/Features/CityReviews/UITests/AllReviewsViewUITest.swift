@@ -104,8 +104,8 @@ final class AllReviewsViewUITest: XCTestCase {
     func testMoveToNextPage() {
         // UI elements
         let buttonNext = app.buttons["buttonNext"]
-        let firstPageReview = app.otherElements["reviewView_11"]
-        let secondPageReview = app.otherElements["reviewView_21"]
+        let firstPageReview = app.otherElements["reviewView_21"]
+        let secondPageReview = app.otherElements["reviewView_11"]
         
         // check first page and button present
         XCTAssertTrue(firstPageReview.exists, "firstPageReview not displayed")
@@ -121,8 +121,8 @@ final class AllReviewsViewUITest: XCTestCase {
     func testMoveToLastPage() {
         // UI elements
         let buttonLast = app.buttons["buttonLast"]
-        let firstPageReview = app.otherElements["reviewView_11"]
-        let secondPageReview = app.otherElements["reviewView_21"]
+        let firstPageReview = app.otherElements["reviewView_21"]
+        let secondPageReview = app.otherElements["reviewView_11"]
         
         // check first page and button present
         XCTAssertTrue(firstPageReview.exists, "firstPageReview not displayed")
@@ -139,8 +139,8 @@ final class AllReviewsViewUITest: XCTestCase {
         // UI elements
         let buttonLast = app.buttons["buttonLast"]
         let buttonPrevious = app.buttons["buttonPrevious"]
-        let firstPageReview = app.otherElements["reviewView_11"]
-        let secondPageReview = app.otherElements["reviewView_21"]
+        let firstPageReview = app.otherElements["reviewView_20"]
+        let secondPageReview = app.otherElements["reviewView_11"]
         
         // check first page and button present
         XCTAssertTrue(firstPageReview.exists, "firstPageReview not displayed")
@@ -166,8 +166,8 @@ final class AllReviewsViewUITest: XCTestCase {
         // UI elements
         let buttonLast = app.buttons["buttonLast"]
         let buttonFirst = app.buttons["buttonFirst"]
-        let firstPageReview = app.otherElements["reviewView_11"]
-        let secondPageReview = app.otherElements["reviewView_21"]
+        let firstPageReview = app.otherElements["reviewView_20"]
+        let secondPageReview = app.otherElements["reviewView_11"]
         
         // check first page and button present
         XCTAssertTrue(firstPageReview.exists, "firstPageReview not displayed")

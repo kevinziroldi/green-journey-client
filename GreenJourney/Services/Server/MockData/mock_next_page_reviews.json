@@ -1,0 +1,31 @@
+{
+    "reviews" : [
+        {
+            "green_spaces_rating" : 3,
+            "score_short_distance" : 100.11276627381579,
+            "badges" : [
+                "badge_distance_high",
+                "badge_ecological_choice_high",
+                "badge_travels_number_mid"
+            ],
+            "user_id" : 53,
+            "review_id" : 11,
+            "review_text" : "Rome is a beatiful city, but not very clean...11",
+            "city_id" : 284188,
+            "local_transport_rating" : 3,
+            "first_name" : "Kevin",
+            "score_long_distance" : 433.60000000000002,
+            "city_iata" : "ROM",
+            "last_name" : "Ziroldi",
+            "country_code" : "IT",
+            "date_time": "2025-03-19T10:32:48+01:00",
+            "waste_bins_rating" : 2
+        }
+    ],
+    "average_waste_bins_rating" : 2,
+    "average_local_transport_rating" : 3,
+    "average_green_spaces_rating" : 3,
+    "has_previous": true,
+    "has_next": false,
+    "num_reviews": 12
+}

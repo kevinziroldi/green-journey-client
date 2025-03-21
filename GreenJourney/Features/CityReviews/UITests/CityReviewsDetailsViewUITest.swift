@@ -120,7 +120,6 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
         // close keyboard
         let personalReviewTitleCenter = personalReviewTitle.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
         personalReviewTitleCenter.tap()
-        
         // save review
         saveButton.tap()
         
