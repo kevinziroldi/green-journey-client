@@ -2,10 +2,18 @@ import SwiftUI
 
 struct SegmentsView: View {
     var segments: [Segment]
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     var body: some View {
-        ForEach(segments) { segment in
-            SegmentDetailView(segment: segment)
+        if horizontalSizeClass == .compact {
+            ForEach(segments) { segment in
+                SegmentDetailView(segment: segment)
+            }
+            .padding(.horizontal, 30)
+        } else {
+            ForEach(segments) { segment in
+                SegmentDetailView(segment: segment)
+            }
         }
     }
 }
@@ -17,7 +25,7 @@ struct SegmentDetailView: View {
     @State private var lenght: CGFloat = 85
     @State private var arrowImage: String = "chevron.right"
     var body: some View {
-        HStack{
+        HStack {
             GeometryReader { geometry in
                 ZStack {
                     Path { path in
@@ -46,21 +54,25 @@ struct SegmentDetailView: View {
             
             HStack{
                 VStack {
-                    HStack{
-                        Text(segment.departureCity)
-                            .frame(width: 130, alignment: .leading)
-                            .font(.headline)
-                            .accessibilityIdentifier("segmentDeparture")
-                        Text(segment.dateTime.formatted(date: .numeric, time: .shortened))
-                            .font(.callout)
-                            .fontWeight(.light)
-                            .accessibilityIdentifier("departureDate")
-                            .scaledToFit()
-                            .minimumScaleFactor(0.6)
-                            .lineLimit(1)
+                    HStack {
+                        HStack {
+                            Text(segment.departureCity)
+                                .frame(width: 130, alignment: .leading)
+                                .font(.headline)
+                                .accessibilityIdentifier("segmentDeparture")
+                            
+                            Text(segment.dateTime.formatted(date: .numeric, time: .shortened))
+                                .font(.callout)
+                                .fontWeight(.light)
+                                .accessibilityIdentifier("departureDate")
+                                .scaledToFit()
+                                .minimumScaleFactor(0.6)
+                                .lineLimit(1)
+                        }
+                        .fixedSize(horizontal: true, vertical: false)
+                        
                         Spacer()
                     }
-                    .border(.black)
                     
                     HStack {
                         ZStack{
@@ -90,7 +102,6 @@ struct SegmentDetailView: View {
                         
                         Spacer()
                     }
-                    .border(.black)
                     
                     if detailsOpen {
                         if segment.segmentDescription != "" {
@@ -115,9 +126,9 @@ struct SegmentDetailView: View {
                                 Spacer()
                             }
                             .padding(.vertical, 5)
-                            .border(.black)
                         }
                     }
+                    
                     if detailsOpen {
                         VStack {
                             HStack {
@@ -164,7 +175,6 @@ struct SegmentDetailView: View {
                                 Spacer()
                             }
                             HStack {
-                                
                                 ZStack {
                                     Circle()
                                         .fill(.red.opacity(0.2))
@@ -187,33 +197,34 @@ struct SegmentDetailView: View {
                                 Spacer()
                             }
                         }
-                        .border(.black)
                         .overlay(Color.clear.accessibilityIdentifier("detailsBox"))
                     }
                     
                     Spacer()
+                    
                     HStack {
-                        Text(segment.destinationCity)
-                            .frame(width: 130, alignment: .leading)
-                            .font(.headline)
-                            .accessibilityIdentifier("segmentDestination")
+                        HStack {
+                            Text(segment.destinationCity)
+                                .frame(width: 130, alignment: .leading)
+                                .font(.headline)
+                                .accessibilityIdentifier("segmentDestination")
+                            
+                            Text(segment.getArrivalDateTime().formatted(date: .numeric, time: .shortened))
+                                .font(.callout)
+                                .fontWeight(.light)
+                                .accessibilityIdentifier("arrivalDate")
+                                .scaledToFit()
+                                .minimumScaleFactor(0.6)
+                                .lineLimit(1)
+                        }
+                        .fixedSize(horizontal: true, vertical: false)
                         
-                        Text(segment.getArrivalDateTime().formatted(date: .numeric, time: .shortened))
-                            .font(.callout)
-                            .fontWeight(.light)
-                            .accessibilityIdentifier("arrivalDate")
-                            .scaledToFit()
-                            .minimumScaleFactor(0.6)
-                            .lineLimit(1)
                         Spacer()
                     }
-                    .border(.black)
                 }
                 Spacer()
             }
         }
-        .border(.black)
-        .padding(.horizontal, 30)
         .padding(.vertical, 5)
     }
 }

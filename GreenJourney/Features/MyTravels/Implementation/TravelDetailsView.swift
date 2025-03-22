@@ -227,9 +227,9 @@ private struct SegmentsDetailsView: View {
                                 .font(.title)
                                 .fontWeight(.semibold)
                                 .accessibilityIdentifier("segmentsTitle")
-                                .padding(.horizontal, 15)
                             Spacer()
                         }
+                        .fixedSize()
                         .padding(.top)
                         
                         SegmentsView(segments: travelDetails.getOutwardSegments())
@@ -237,7 +237,7 @@ private struct SegmentsDetailsView: View {
                             .accessibilityElement(children: .contain)
                             .overlay(Color.clear.accessibilityIdentifier("outwardSegmentsView"))
                     }
-                    .frame(maxWidth: 400)
+                    .frame(maxWidth: 370)
                     
                     Spacer()
                     
@@ -248,9 +248,9 @@ private struct SegmentsDetailsView: View {
                                     .font(.title)
                                     .fontWeight(.semibold)
                                     .accessibilityIdentifier("returnTitle")
-                                    .padding(.horizontal, 15)
                                 Spacer()
                             }
+                            .fixedSize()
                             .padding(.top)
                             
                             VStack {
@@ -260,7 +260,7 @@ private struct SegmentsDetailsView: View {
                                     .overlay(Color.clear.accessibilityIdentifier("returnSegmentsView"))
                             }
                         }
-                        .frame(maxWidth: 400)
+                        .frame(maxWidth: 370)
                     }
                 }
             }
