@@ -14,6 +14,7 @@ struct SegmentsView: View {
             ForEach(segments) { segment in
                 SegmentDetailView(segment: segment)
             }
+            .padding(.horizontal, 20)
         }
     }
 }
@@ -57,9 +58,11 @@ struct SegmentDetailView: View {
                     HStack {
                         HStack {
                             Text(segment.departureCity)
-                                .frame(width: 130, alignment: .leading)
+                                //.frame(width: 130, alignment: .leading)
                                 .font(.headline)
                                 .accessibilityIdentifier("segmentDeparture")
+                            
+                            Spacer()
                             
                             Text(segment.dateTime.formatted(date: .numeric, time: .shortened))
                                 .font(.callout)
@@ -69,9 +72,7 @@ struct SegmentDetailView: View {
                                 .minimumScaleFactor(0.6)
                                 .lineLimit(1)
                         }
-                        .fixedSize(horizontal: true, vertical: false)
-                        
-                        Spacer()
+                        //.fixedSize(horizontal: true, vertical: false)
                     }
                     
                     HStack {
@@ -205,9 +206,11 @@ struct SegmentDetailView: View {
                     HStack {
                         HStack {
                             Text(segment.destinationCity)
-                                .frame(width: 130, alignment: .leading)
+                                //.frame(width: 130, alignment: .leading)
                                 .font(.headline)
                                 .accessibilityIdentifier("segmentDestination")
+                            
+                            Spacer()
                             
                             Text(segment.getArrivalDateTime().formatted(date: .numeric, time: .shortened))
                                 .font(.callout)
@@ -217,9 +220,7 @@ struct SegmentDetailView: View {
                                 .minimumScaleFactor(0.6)
                                 .lineLimit(1)
                         }
-                        .fixedSize(horizontal: true, vertical: false)
-                        
-                        Spacer()
+                        //.fixedSize(horizontal: true, vertical: false)
                     }
                 }
                 Spacer()
