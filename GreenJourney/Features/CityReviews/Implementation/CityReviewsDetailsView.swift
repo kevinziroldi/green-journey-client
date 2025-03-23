@@ -15,19 +15,22 @@ struct CityReviewsDetailsView: View {
                 VStack {
                     // title
                     CityReviewsTitleView(viewModel: viewModel)
+                        .padding(.horizontal)
                     
                     // reviews average
                     ReviewsAverageView(selectedCityReviewElement: selectedCityReviewElement, infoTapped: $infoTapped)
+                        .padding(.horizontal)
                     
                     // button or user review
                     if viewModel.isReviewable() {
                         InsertReviewButtonView(viewModel: viewModel, reviewTapped: $reviewTapped)
+                            .padding(.horizontal)
                     }
                     
                     // latest reviews, if present
                     LatestReviewsView(viewModel: viewModel, selectedCityReviewElement: selectedCityReviewElement, navigationPath: $navigationPath)
                 }
-                .padding()
+                
             }
             .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
             .sheet(isPresented: $reviewTapped) {
@@ -383,7 +386,7 @@ private struct CarouselView: View {
             }
             .scrollTargetLayout()
         }
-        .contentMargins(30, for: .scrollContent)
+        .contentMargins(45, for: .scrollContent)
         .scrollTargetBehavior(.viewAligned)
     }
 }

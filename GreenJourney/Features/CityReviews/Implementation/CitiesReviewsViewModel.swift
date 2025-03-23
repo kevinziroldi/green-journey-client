@@ -12,6 +12,7 @@ class CitiesReviewsViewModel: ObservableObject {
     // best cities
     @Published var bestCitiesReviewElements: [CityReviewElement] = []
     @Published var bestCities: [CityCompleterDataset] = []
+    @Published var bestCitiesLoaded: Bool = false
     
     //reviewable cities
     @Published var reviewableCities: [CityCompleterDataset] = []
@@ -145,12 +146,12 @@ class CitiesReviewsViewModel: ObservableObject {
     
     func getBestReviewedCities() async {
         do {
-            let bestReviewedCities = try await serverService.getBestReviewedCities()
-            
             // remove old elements
             self.bestCitiesReviewElements = []
             self.bestCities = []
-            
+            self.bestCitiesLoaded = false
+            let bestReviewedCities = try await serverService.getBestReviewedCities()
+            self.bestCitiesLoaded = true
             // add new elements
             for bestReviewCity in bestReviewedCities {
                 if let cityIata = bestReviewCity.reviews.first?.cityIata {

@@ -229,7 +229,7 @@ private struct BestCitiesView: View {
     
     var body: some View {
         // list of cities
-        if viewModel.bestCities.isEmpty {
+        if !viewModel.bestCitiesLoaded {
             CircularProgressView()
         }
         else {
