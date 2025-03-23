@@ -182,7 +182,7 @@ private struct TravelSearchHeaderView: View {
     
     var body: some View {
         HStack {
-            Text("Next journey")
+            Text("Search travel")
                 .font(.system(size: 32).bold())
                 .padding()
                 .fontWeight(.semibold)

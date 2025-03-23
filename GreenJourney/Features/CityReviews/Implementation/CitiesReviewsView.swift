@@ -160,11 +160,11 @@ private struct CitySearchView: View {
     }
 }
 
-struct ReviewableCitiesView: View {
+private struct ReviewableCitiesView: View {
     @ObservedObject var viewModel: CitiesReviewsViewModel
     var body: some View {
         VStack (spacing: 0) {
-            Text ("Reviewable Cities")
+            Text ("Reviewable cities")
                 .font(.title)
                 .fontWeight(.semibold)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -214,7 +214,7 @@ struct ReviewableCitiesView: View {
 
 private struct BestCitiesTitle: View {
     var body: some View {
-        Text("Top Cities")
+        Text("Top cities")
             .font(.title)
             .fontWeight(.semibold)
             .frame(maxWidth: .infinity, alignment: .leading)

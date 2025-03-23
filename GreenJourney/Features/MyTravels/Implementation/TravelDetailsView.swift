@@ -103,6 +103,7 @@ struct TravelDetailsView: View {
                         }
                         
                         SegmentsDetailsView(travelDetails: travelDetails)
+                            .frame(maxWidth: 800)
                         
                         // delete button
                         Button(action: {
@@ -113,9 +114,6 @@ struct TravelDetailsView: View {
                                 RoundedRectangle(cornerRadius: 15)
                                     .fill(Color.red.opacity(0.3))
                                 HStack {
-                                    Image(systemName: "trash")
-                                        .font(.headline)
-                                        .foregroundStyle(.red)
                                     Text("Delete travel")
                                         .foregroundStyle(.red)
                                         .font(.headline)
@@ -229,9 +227,9 @@ private struct SegmentsDetailsView: View {
                                 .font(.title)
                                 .fontWeight(.semibold)
                                 .accessibilityIdentifier("segmentsTitle")
-                                .padding(.horizontal, 15)
                             Spacer()
                         }
+                        .fixedSize()
                         .padding(.top)
                         
                         SegmentsView(segments: travelDetails.getOutwardSegments())
@@ -239,7 +237,7 @@ private struct SegmentsDetailsView: View {
                             .accessibilityElement(children: .contain)
                             .overlay(Color.clear.accessibilityIdentifier("outwardSegmentsView"))
                     }
-                    .frame(maxWidth: 400)
+                    .frame(maxWidth: 370)
                     
                     Spacer()
                     
@@ -250,9 +248,9 @@ private struct SegmentsDetailsView: View {
                                     .font(.title)
                                     .fontWeight(.semibold)
                                     .accessibilityIdentifier("returnTitle")
-                                    .padding(.horizontal, 15)
                                 Spacer()
                             }
+                            .fixedSize()
                             .padding(.top)
                             
                             VStack {
@@ -262,9 +260,7 @@ private struct SegmentsDetailsView: View {
                                     .overlay(Color.clear.accessibilityIdentifier("returnSegmentsView"))
                             }
                         }
-                        .frame(maxWidth: 400)
-                        
-                        Spacer()
+                        .frame(maxWidth: 370)
                     }
                 }
             }

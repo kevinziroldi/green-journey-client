@@ -120,6 +120,10 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
         // close keyboard
         let personalReviewTitleCenter = personalReviewTitle.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
         personalReviewTitleCenter.tap()
+        let overlayRaing = app.otherElements["overlayRating"]
+        let overlayPoint = overlayRaing.coordinate(withNormalizedOffset: CGVector(dx: 0.9, dy: 0.9))
+        overlayPoint.tap()
+        
         // save review
         saveButton.tap()
         
@@ -315,6 +319,9 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
         // close keyboard
         let personalReviewTitleCenter = personalReviewTitle.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
         personalReviewTitleCenter.tap()
+        let overlayRaing = app.otherElements["overlayRating"]
+        let overlayPoint = overlayRaing.coordinate(withNormalizedOffset: CGVector(dx: 0.9, dy: 0.9))
+        overlayPoint.tap()
         
         // save review
         saveButton.tap()
@@ -409,6 +416,9 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
         // close keyboard
         let personalReviewTitleCenter = personalReviewTitle.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
         personalReviewTitleCenter.tap()
+        let overlayRaing = app.otherElements["overlayRating"]
+        let overlayPoint = overlayRaing.coordinate(withNormalizedOffset: CGVector(dx: 0.9, dy: 0.9))
+        overlayPoint.tap()
         
         // click save button
         saveButton.tap()
@@ -461,6 +471,9 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
         // close keyboard
         let personalReviewTitleCenter = personalReviewTitle.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
         personalReviewTitleCenter.tap()
+        let overlayRaing = app.otherElements["overlayRating"]
+        let overlayPoint = overlayRaing.coordinate(withNormalizedOffset: CGVector(dx: 0.9, dy: 0.9))
+        overlayPoint.tap()
         
         // click cancel button
         let cancelButtonCenter = cancelButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))

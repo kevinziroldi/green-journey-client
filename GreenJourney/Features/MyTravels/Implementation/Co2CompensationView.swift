@@ -345,11 +345,6 @@ private struct CompensateButtonView: View {
                     .fill(plantedTrees==viewModel.getPlantedTrees(travelDetails) ? Color.secondary.opacity(0.6) : AppColors.mainColor)
                     .stroke(plantedTrees==viewModel.getPlantedTrees(travelDetails) ? Color.secondary : AppColors.mainColor, lineWidth: 2)
                 HStack (spacing: 3) {
-                    Image(systemName: "leaf")
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                        .fontWeight(.light)
-                        .foregroundStyle(.white)
                     Text("Compensate")
                         .foregroundStyle(.white)
                         .fontWeight(.semibold)

@@ -43,8 +43,8 @@
         "average_waste_bins_rating" : 5,
         "average_local_transport_rating" : 5,
         "average_green_spaces_rating" : 4,
-        "has_previous": true,
-        "has_next": true,
+        "has_previous": false,
+        "has_next": false,
         "num_reviews": 2
     },
     {

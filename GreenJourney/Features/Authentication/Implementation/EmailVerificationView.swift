@@ -116,13 +116,10 @@ struct EmailVerificationView: View {
     }
 }
 
-
-
 struct CountdownView: View {
     @State private var remainingSeconds = 10
     @State private var isTimeUp = false
     
-    // Timer che emette ogni secondo
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     var body: some View {
@@ -151,7 +148,6 @@ struct CountdownView: View {
                 remainingSeconds -= 1
             } else {
                 isTimeUp = true
-                // Qui eventualmente puoi fermare il timer se non ti serve più
             }
         }
         .padding()

@@ -259,7 +259,7 @@
         },
         "segments" : [
             {
-                "description" : "VY 8431",
+                "description" : "VY 8431 very very very very very very very very very very very long info",
                 "co2_emitted" : 148.70588235294119,
                 "vehicle" : "plane",
                 "distance" : 590.79114377048302,
@@ -278,7 +278,7 @@
                 "duration" : 5400000000000
             },
             {
-                "description" : "Lyria, Paris - Bâle - Zurich",
+                "description" : "Lyria, Paris - Bâle - Zurich very very very very very very very very very very very long info",
                 "co2_emitted" : 21.350000000000001,
                 "vehicle" : "train",
                 "distance" : 610.47799999999995,
@@ -383,11 +383,11 @@
         },
         "segments" : [
             {
-                "description" : "VY 8431",
+                "description" : "VY 8431  very very very very very very very very very very very long info",
                 "co2_emitted" : 148.70588235294119,
                 "vehicle" : "plane",
                 "distance" : 590.79114377048302,
-                "destination_city" : "Paris",
+                "destination_city" : "Very very very very very very very long name",
                 "destination_country" : "France",
                 "is_outward" : true,
                 "departure_id" : 264373,
@@ -396,13 +396,13 @@
                 "num_segment" : 1,
                 "price" : 122.23,
                 "destination_id" : 275549,
-                "departure_city" : "Milano",
+                "departure_city" : "Very very very very very very very long name",
                 "departure_country" : "Italy",
                 "date_time" : "2024-12-23T21:45:00+01:00",
                 "duration" : 5400000000000
             },
             {
-                "description" : "Lyria, Paris - Bâle - Zurich",
+                "description" : "Lyria, Paris - Bâle - Zurich  very very very very very very very very very very very long info",
                 "co2_emitted" : 21.350000000000001,
                 "vehicle" : "train",
                 "distance" : 610.47799999999995,
