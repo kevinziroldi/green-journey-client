@@ -112,13 +112,6 @@ private struct CitySearchView: View {
     
     var body: some View {
         VStack {
-            Text("Select a city")
-                .font(.title)
-                .fontWeight(.semibold)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, 30)
-                .accessibilityIdentifier("selectCityText")
-            
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
                     .stroke(AppColors.mainColor, lineWidth: 6)
@@ -128,7 +121,7 @@ private struct CitySearchView: View {
                 Button(action: {
                     searchTapped = true
                 }) {
-                    Text("Search city")
+                    Text("Search reviews for a city")
                         .foregroundColor(.secondary)
                         .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 0))
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -163,63 +156,84 @@ private struct CitySearchView: View {
 private struct ReviewableCitiesView: View {
     @ObservedObject var viewModel: CitiesReviewsViewModel
     var body: some View {
-        VStack (spacing: 0) {
-            Text ("Reviewable cities")
-                .font(.title)
-                .fontWeight(.semibold)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, 30)
-                .accessibilityIdentifier("reviewableCitiesTitle")
-            
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack {
-                    ForEach(viewModel.reviewableCities) { city in
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 15)
-                                .fill(Color(uiColor: .systemBackground))
-                                .shadow(color: AppColors.mainColor.opacity(0.2), radius: 5, x: 0, y: 1)
-                            VStack {
-                                Text(city.cityName)
-                                    .font(.headline)
-                                    .scaledToFit()
-                                    .minimumScaleFactor(0.6)
-                                    .lineLimit(1)
-                                Text(city.countryName)
-                                    .fontWeight(.light)
-                                    .scaledToFit()
-                                    .minimumScaleFactor(0.6)
-                                    .lineLimit(1)
+        if !viewModel.reviewableCities.isEmpty {
+            VStack (spacing: 0) {
+                Text ("Reviewable cities")
+                    .font(.title)
+                    .fontWeight(.semibold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 30)
+                    .accessibilityIdentifier("reviewableCitiesTitle")
+                
+                Text("Add a review for the cities you visited!")
+                    .font(.system(size: 16))
+                    .padding(.horizontal, 30)
+                    .padding(.top, 5)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .foregroundColor(.secondary)
+                
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack {
+                        Spacer()
+                            .frame(width: 30)
+                            .layoutPriority(-1)
+                        ForEach(viewModel.reviewableCities) { city in
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 15)
+                                    .fill(Color(uiColor: .systemBackground))
+                                    .shadow(color: AppColors.mainColor.opacity(0.2), radius: 5, x: 0, y: 1)
+                                VStack {
+                                    Text(city.cityName)
+                                        .font(.system(size: 20).bold())
+                                        .foregroundStyle(AppColors.mainColor)
+                                        .lineLimit(1)
+                                    Text(city.countryName)
+                                        .fontWeight(.light)
+                                        .foregroundStyle(AppColors.mainColor.opacity(0.7))
+                                        .scaledToFit()
+                                        .minimumScaleFactor(0.6)
+                                        .lineLimit(1)
+                                }
+                                .padding()
                             }
-                            .padding()
-                        }
-                        .onTapGesture {
-                            Task {
-                                viewModel.selectedCity = city
-                                await viewModel.getSelectedCityReviewElement(reload: false)
+                            .onTapGesture {
+                                Task {
+                                    viewModel.selectedCity = city
+                                    await viewModel.getSelectedCityReviewElement(reload: false)
+                                }
                             }
+                            .padding(.top, 15)
+                            .padding(.horizontal, 5)
+                            .padding(.bottom, 15)
+                            .frame(minWidth: 150, idealHeight: 110)
+                            .overlay(Color.clear.accessibilityIdentifier("reviewableCityView_\(city.iata)_\(city.countryCode)"))
                         }
-                        .padding(.top, 15)
-                        .padding(.horizontal, 5)
-                        .padding(.bottom, 15)
-                        .frame(width: 150, height: 100)
-                        .overlay(Color.clear.accessibilityIdentifier("reviewableCityView_\(city.iata)_\(city.countryCode)"))
+                        Spacer()
+                            .frame(width: 30)
+                            .layoutPriority(-1)
                     }
                 }
-                
             }
-            .padding(.horizontal)
         }
     }
 }
 
 private struct BestCitiesTitle: View {
     var body: some View {
-        Text("Top cities")
-            .font(.title)
-            .fontWeight(.semibold)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, 30)
-            .accessibilityIdentifier("topCitiesTitle")
+        VStack (spacing: 0) {
+            Text("Top cities")
+                .font(.title)
+                .fontWeight(.semibold)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 30)
+                .accessibilityIdentifier("topCitiesTitle")
+            Text("Check out the cities reviewed best by users")
+                .font(.system(size: 16))
+                .padding(.horizontal, 30)
+                .padding(.vertical, 5)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .foregroundColor(.secondary)
+        }
     }
 }
 
@@ -290,10 +304,17 @@ private struct BestCityView: View {
                                 .fontWeight(.bold)
                             FiveStarView(rating: cityReview.getAverageRating(), dim: 20, color: .yellow)
                             Spacer()
+                            Text("\(cityReview.numReviews)")
+                                .bold()
+                                .font(.caption)
+                                .foregroundStyle(AppColors.mainColor) +
+                            Text(" reviews")
+                                .font(.caption)
+                                .foregroundStyle(AppColors.mainColor)
                         }
                         Spacer()
                     }
-                    .padding(.leading, 30)
+                    .padding(.leading, 20)
                 }
                 .padding()
             }
