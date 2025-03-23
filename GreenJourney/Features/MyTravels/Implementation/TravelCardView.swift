@@ -40,8 +40,7 @@ struct TravelCardView: View {
                     // co2 compensation
                     HStack {
                         Image(systemName: "carbon.dioxide.cloud")
-                            .scaleEffect(1.5)
-                            .padding(.bottom, 5)
+                            .font(.title)
                             .padding(.trailing, 10)
                         Text("Compensation:" )
                         Text(String(format: "%.1f", travelDetails.travel.CO2Compensated) + " / " + String(format: "%.1f", travelDetails.computeCo2Emitted()) + " Kg")
@@ -52,6 +51,7 @@ struct TravelCardView: View {
                 .padding()
                 .foregroundStyle(colorScheme == .dark ? Color.white : Color.black)
             }
+            
         } else {
             // iPadOS
             
@@ -168,15 +168,17 @@ private struct DepartureDestinationAllDatesInfoView: View {
                 Text(travelDetails.getDestinationSegment()?.destinationCity ?? "")
                     .font(.headline)
             }
-            .scaledToFit()
-            .minimumScaleFactor(0.7)
+            .frame(width: min(UIScreen.main.bounds.width/2, 400))
+            /*.scaledToFit()
+            .minimumScaleFactor(0.7)*/
             HStack{
                 Text(travelDetails.getOutwardSegments().first?.dateTime.formatted(date: .numeric, time: .omitted) ?? "")
                     .font(.subheadline)
                     .fontWeight(.light)
             }
-            .scaledToFit()
-            .minimumScaleFactor(0.7)
+            .frame(width: min(UIScreen.main.bounds.width/2, 400))
+            /*.scaledToFit()
+            .minimumScaleFactor(0.7)*/
             if horizontalSizeClass == .regular {
                 ZStack {
                     let changesOut = travelDetails.countChanges(outwardDirection: true)
@@ -207,6 +209,7 @@ private struct DepartureDestinationAllDatesInfoView: View {
                     Text(travelDetails.getDepartureSegment()?.departureCity ?? "")
                         .font(.headline)
                 }
+                .frame(width: min(UIScreen.main.bounds.width/2, 400))
                 .scaledToFit()
                 .minimumScaleFactor(0.7)
                 HStack{
@@ -214,6 +217,7 @@ private struct DepartureDestinationAllDatesInfoView: View {
                         .font(.subheadline)
                         .fontWeight(.light)
                 }
+                .frame(width: min(UIScreen.main.bounds.width/2, 400))
                 .scaledToFit()
                 .minimumScaleFactor(0.7)
                 if horizontalSizeClass == .regular {

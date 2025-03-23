@@ -79,7 +79,7 @@ struct TravelRecapView: View {
         }
         .sheet(isPresented: $infoTapped) {
             InfoGreenPriceView(isPresented: $infoTapped)
-                .presentationDetents([.height(200)])
+                .presentationDetents([.height(250)])
                 .presentationCornerRadius(15)
                 .overlay(Color.clear.accessibilityIdentifier("infoGreenPriceView"))
         }
