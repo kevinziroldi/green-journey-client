@@ -41,6 +41,7 @@ struct DashboardView: View {
                 
                 // expandible recaps
                 DashboardDetailsNavigationView(viewModel: viewModel)
+                    .frame(maxWidth: 800)
             }
             .padding(.horizontal)
         }
