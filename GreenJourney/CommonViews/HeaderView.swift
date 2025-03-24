@@ -16,10 +16,12 @@ struct HeaderView: View {
                             .font(.system(size: 15, weight: .regular))
                             .foregroundColor(.gray)
                             .frame(width: UIScreen.main.bounds.width/2 - 30)
+                            .accessibilityIdentifier("fromTravelHeader")
                         Text("To")
                             .font(.system(size: 15, weight: .regular))
                             .foregroundColor(.gray)
                             .frame(width: UIScreen.main.bounds.width/2 - 30)
+                            .accessibilityIdentifier("toTravelHeader")
                     }
                     HStack {
                         Text(from)

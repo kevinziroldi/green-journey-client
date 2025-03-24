@@ -3,6 +3,7 @@ import XCTest
 final class ReturnOptionsViewUITest: XCTestCase {
     let app = XCUIApplication()
     let timer = 5.0
+    let deviceSize = UITestsDeviceSize.deviceSize
     
     override func setUpWithError() throws {
         continueAfterFailure = false
@@ -113,7 +114,11 @@ final class ReturnOptionsViewUITest: XCTestCase {
         
         // check elements present
         XCTAssertTrue(fromTravelHeader.exists, "fromTravelHeader not displayed")
-        XCTAssertTrue(fromToLine.exists, "fromToLine not displayed")
+        
+        if deviceSize == .regular {
+            XCTAssertTrue(fromToLine.exists, "fromToLine not displayed")
+        }
+        
         XCTAssertTrue(toTravelHeader.exists, "toTravelHeader not displayed")
         XCTAssertTrue(departureDate.exists, "date not displayed")
         XCTAssertTrue(returnOption_0.exists, "outwardOption_0 not displayed")
