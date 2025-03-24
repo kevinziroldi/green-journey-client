@@ -130,9 +130,9 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
         XCTAssertTrue(selecteCityTitle.waitForExistence(timeout: timer), "selecteCityTitle not displayed")
     }
     
-    func testCityReviewsDetailsElementsPresentSmallDevice() throws {
+    func testCityReviewsDetailsElementsPresentCompactDevice() throws {
         if deviceSize != .compact {
-            throw XCTSkip("Small devices only")
+            throw XCTSkip("Compact devices only")
         }
         // UI elements
         let selecteCityTitle = app.staticTexts["selecteCityTitle"]
@@ -166,19 +166,19 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
         XCTAssertTrue(latestReviewsTitle.exists, "latestReviewsTitle not displayed")
     
         // some reviews are present
-        XCTAssertTrue(reviewElement_17.exists, "reviewElement_17 not displayed")
-        reviewElement_17.swipeLeft()
-        
-        XCTAssertTrue(reviewElement_18.exists, "reviewElement_18 not displayed")
-        reviewElement_18.swipeLeft()
-        
-        XCTAssertTrue(reviewElement_19.exists, "reviewElement_19 not displayed")
-        reviewElement_19.swipeLeft()
+        XCTAssertTrue(reviewElement_21.exists, "reviewElement_21 not displayed")
+        reviewElement_21.swipeLeft()
         
         XCTAssertTrue(reviewElement_20.exists, "reviewElement_20 not displayed")
         reviewElement_20.swipeLeft()
         
-        XCTAssertTrue(reviewElement_21.exists, "reviewElement_21 not displayed")
+        XCTAssertTrue(reviewElement_19.exists, "reviewElement_19 not displayed")
+        reviewElement_19.swipeLeft()
+        
+        XCTAssertTrue(reviewElement_18.exists, "reviewElement_18 not displayed")
+        reviewElement_18.swipeLeft()
+        
+        XCTAssertTrue(reviewElement_17.exists, "reviewElement_17 not displayed")
         
         // just 5 reviews should be  displayed
         XCTAssertFalse(wrongReviewElement.exists, "wrongReviewElement not displayed")
@@ -223,8 +223,8 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
         XCTAssertTrue(latestReviewsTitle.exists, "latestReviewsTitle not displayed")
     
         // some reviews are present
-        XCTAssertTrue(reviewElement_16.exists, "reviewElement_17 not displayed")
-        XCTAssertTrue(reviewElement_17.exists, "reviewElement_18 not displayed")
+        XCTAssertTrue(reviewElement_16.exists, "reviewElement_16 not displayed")
+        XCTAssertTrue(reviewElement_17.exists, "reviewElement_17 not displayed")
         XCTAssertTrue(reviewElement_20.exists, "reviewElement_20 not displayed")
         XCTAssertTrue(reviewElement_21.exists, "reviewElement_21 not displayed")
 
@@ -236,7 +236,7 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
     }
     
     func testInsertReviewElementsPresent() {
-        // both small and regular devices
+        // both compact and regular devices
         
         // UI elements
         let addReviewButton = app.buttons["addReviewButton"]
@@ -269,7 +269,7 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
     }
     
     func testAddReview() {
-        // both small and regular devices
+        // both compact and regular devices
         
         // UI elements
         let selecteCityTitle = app.staticTexts["selecteCityTitle"]
@@ -336,7 +336,7 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
     }
     
     func testInfoReview() {
-        // both small and regular devices
+        // both compact and regular devices
         
         // UI elements
         let infoReviewButton = app.buttons["infoReviewButton"]
@@ -374,7 +374,7 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
     }
     
     func testModifyAndSaveReview() {
-        // both small and regular devices
+        // both compact and regular devices
         
         // add a review
         addReviewToRoma()
@@ -428,7 +428,7 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
     }
      
     func testModifyAndCancelReview() {
-        // both small and regular devices
+        // both compact and regular devices
         
         // add a review
         addReviewToRoma()
@@ -526,7 +526,7 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
     }
     
     func testSeeAllReviews() {
-        // both small and regular devices
+        // both compact and regular devices
         
         // UI elements
         let selecteCityTitle = app.staticTexts["selecteCityTitle"]
