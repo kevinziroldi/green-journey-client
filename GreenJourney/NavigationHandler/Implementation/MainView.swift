@@ -254,13 +254,10 @@ struct MainView: View {
                         .navigationDestination(for: NavigationDestination.self) { destination in
                             destinationView(for: destination)
                         }
-                        .onAppear {
-                            navigationPath = NavigationPath()
-                            
-                            // reset tab after logout+login
-                            selectedTab = .SearchTravel
-                        }
                         .onDisappear {
+                            // reset selected tab
+                            selectedTab = .SearchTravel
+                            
                             // get travels from server
                             Task {
                                 await viewModel.getUserTravels()
