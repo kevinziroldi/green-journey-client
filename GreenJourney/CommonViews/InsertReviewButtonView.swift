@@ -44,7 +44,7 @@ struct InsertReviewButtonView: View {
                                 
                                 Spacer()
                                 
-                                FiveStarView(rating: userReview.computeRating(), dim: 20, color: .green.opacity(0.8))
+                                FiveStarView(rating: userReview.computeRating(), dim: 20, color: AppColors.mainColor.opacity(0.8))
                                     .overlay(Color.clear.accessibilityIdentifier("userReviewRating"))
                                 
                                 Spacer()
