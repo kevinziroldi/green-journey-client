@@ -58,12 +58,17 @@ private struct CityReviewsTitleView: View {
     
     var body: some View {
         VStack {
-            Text(viewModel.selectedCity.cityName + ", " + viewModel.selectedCity.countryName)
-                .font(.system(size: 32).bold())
-                .padding(.horizontal)
-                .fontWeight(.semibold)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .accessibilityIdentifier("selecteCityTitle")
+            HStack {
+                Text(flag(country: viewModel.selectedCity.countryCode))
+                    .font(.system(size: 80))
+                    .foregroundColor(.blue)
+                Text(viewModel.selectedCity.cityName + ", " + viewModel.selectedCity.countryName)
+                    .font(.system(size: 32).bold())
+                    .padding(.horizontal)
+                    .fontWeight(.semibold)
+                    .accessibilityIdentifier("selecteCityTitle")
+                Spacer()
+            }
             HStack {
                 
                 Spacer()
@@ -71,6 +76,14 @@ private struct CityReviewsTitleView: View {
             .padding(.horizontal)
         }
     }
+    func flag(country:String) -> String {
+            let base : UInt32 = 127397
+            var s = ""
+        for v in country.uppercased().unicodeScalars {
+                s.unicodeScalars.append(UnicodeScalar(base + v.value)!)
+            }
+            return String(s)
+        }
 }
 
 private struct ReviewsAverageView: View {
