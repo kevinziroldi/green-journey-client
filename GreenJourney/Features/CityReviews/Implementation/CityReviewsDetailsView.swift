@@ -95,14 +95,12 @@ private struct ReviewsAverageView: View {
     var body: some View {
         if horizontalSizeClass == .compact {
             // iOS
+            
             VStack (spacing: 0){
                 ZStack {
-                    RoundedRectangle(cornerRadius: 15)
-                        .fill(Color(uiColor: .systemBackground))
-                        .shadow(color: AppColors.mainColor.opacity(0.3), radius: 5, x: 0, y: 3)
                     VStack (spacing: 0){
                         HStack {
-                            Text("Ratings")
+                            Text("Average rating")
                                 .font(.title)
                                 .fontWeight(.semibold)
                             
@@ -121,19 +119,26 @@ private struct ReviewsAverageView: View {
                                 .font(.system(size: 60).bold())
                                 .foregroundStyle(AppColors.mainColor)
                                 .fontWeight(.semibold)
-                            VStack {
-                                FiveStarView(rating: selectedCityReviewElement.getAverageRating(), dim: 25, color: AppColors.mainColor)
+                            VStack() {
+                                HStack {
+                                    FiveStarView(rating: selectedCityReviewElement.getAverageRating(), dim: 25, color: AppColors.mainColor)
+                                    Spacer()
+                                }
                                 HStack {
                                     Text("\(selectedCityReviewElement.numReviews)")
                                         .bold()
                                         .foregroundStyle(AppColors.mainColor) +
                                     Text("\(selectedCityReviewElement.numReviews == 1 ? " review" : " reviews")")
                                         .foregroundStyle(AppColors.mainColor)
+                                    Spacer()
                                 }
                             }
+                            .padding(.leading, 20)
                         }
                         .padding(.vertical, 10)
                         .frame(maxWidth: .infinity, alignment: .leading)
+                        
+                        
                         VStack {
                             HStack {
                                 ZStack {
@@ -201,7 +206,7 @@ private struct ReviewsAverageView: View {
                     .padding()
                 }
             }
-            .padding(EdgeInsets(top: 0, leading: 30, bottom: 0, trailing: 30))
+            //.padding(EdgeInsets(top: 0, leading: 30, bottom: 0, trailing: 30))
             .overlay(Color.clear.accessibilityIdentifier("averageRatingSection"))
             
         } else {

@@ -31,7 +31,7 @@ struct InfoRowView: View {
                         .scaledToFit()
                         .frame(width: 40, height: 40)
                         .foregroundColor(color)
-                        .padding(.trailing, 20)
+                        //.padding(.trailing, 20)
                         .padding(.vertical, 2)
                 } else {
                     Image(icon)
@@ -39,7 +39,7 @@ struct InfoRowView: View {
                         .scaledToFit()
                         .frame(width: 40, height: 40)
                         .foregroundColor(color)
-                        .padding(.trailing, 20)
+                        //.padding(.trailing, 20)
                 }
                 
                 Text(title)
@@ -48,6 +48,8 @@ struct InfoRowView: View {
                     .minimumScaleFactor(0.8)
                     .lineLimit(1)
                     .foregroundColor(.primary)
+                    .padding(.leading, 10)
+                
                 if title != "" {
                     Spacer()
                 }
