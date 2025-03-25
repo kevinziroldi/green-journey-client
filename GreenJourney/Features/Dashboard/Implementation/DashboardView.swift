@@ -62,30 +62,30 @@ private struct DashboardDetailsNavigationView: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 15)
                     .fill(Color(uiColor: .systemBackground))
-                    .shadow(color: .green.opacity(0.3), radius: 5, x: 0, y: 3)
+                    .shadow(color: AppColors.green.opacity(0.3), radius: 5, x: 0, y: 3)
                 VStack (spacing:0){
                     HStack {
                         Text("Co2 tracker")
                             .font(.title)
-                            .foregroundStyle(.green.opacity(0.8))
+                            .foregroundStyle(AppColors.green)
                             .fontWeight(.semibold)
                             .scaledToFit()
                             .minimumScaleFactor(0.6)
                             .lineLimit(1)
                         Spacer()
                         Image(systemName: "chart.bar.xaxis.ascending")
-                            .foregroundColor(.green.opacity(0.8))
+                            .foregroundColor(AppColors.green)
                             .font(.title2)
                             .fontWeight(.bold)
                         Image(systemName: "chevron.right")
-                            .foregroundColor(.green.opacity(0.8))
+                            .foregroundColor(AppColors.green)
                             .font(.title2)
                             .fontWeight(.bold)
                     }
                     .padding()
-                    InfoRowView(title: "Emitted", value: String(format: "%.0f", viewModel.co2Emitted) + " Kg", icon: "carbon.dioxide.cloud", isSystemIcon: true, color: .green, imageValue: false, imageValueString: nil)
+                    InfoRowView(title: "Emitted", value: String(format: "%.0f", viewModel.co2Emitted) + " Kg", icon: "carbon.dioxide.cloud", isSystemIcon: true, color: AppColors.green, imageValue: false, imageValueString: nil)
                     
-                    InfoRowView(title: "Compensated", value: String(format: "%.0f", viewModel.co2Compensated) + " Kg", icon: "leaf",  isSystemIcon: true, color: .green, imageValue: false, imageValueString: nil)
+                    InfoRowView(title: "Compensated", value: String(format: "%.0f", viewModel.co2Compensated) + " Kg", icon: "leaf",  isSystemIcon: true, color: AppColors.green, imageValue: false, imageValueString: nil)
                 }
                 .padding(.bottom, 7)
             }
@@ -96,26 +96,26 @@ private struct DashboardDetailsNavigationView: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 15)
                     .fill(Color(uiColor: .systemBackground))
-                    .shadow(color: .teal.opacity(0.3), radius: 5, x: 0, y: 3)
+                    .shadow(color: AppColors.blue.opacity(0.3), radius: 5, x: 0, y: 3)
                 VStack (spacing:0){
                     HStack {
                         Text("Recap")
                             .font(.title)
-                            .foregroundStyle(.teal.opacity(0.8))
+                            .foregroundStyle(AppColors.blue)
                             .fontWeight(.semibold)
                         Spacer()
                         Image(systemName: "chart.bar.xaxis.ascending")
-                            .foregroundColor(.teal.opacity(0.8))
+                            .foregroundColor(AppColors.blue)
                             .font(.title2)
                             .fontWeight(.bold)
                         Image(systemName: "chevron.right")
-                            .foregroundColor(.teal.opacity(0.8))
+                            .foregroundColor(AppColors.blue)
                             .font(.title2)
                             .fontWeight(.bold)
                     }
                     .padding()
-                    InfoRowView(title: "Distance", value: String(format: "%.0f", viewModel.totalDistance) + " Km", icon: "road.lanes", isSystemIcon: true, color: .teal, imageValue: false, imageValueString: nil)
-                    InfoRowView(title: "Travel time", value: viewModel.totalDurationString, icon: "clock", isSystemIcon: true, color: .teal, imageValue: false, imageValueString: nil)
+                    InfoRowView(title: "Distance", value: String(format: "%.0f", viewModel.totalDistance) + " Km", icon: "road.lanes", isSystemIcon: true, color: AppColors.blue, imageValue: false, imageValueString: nil)
+                    InfoRowView(title: "Travel time", value: viewModel.totalDurationString, icon: "clock", isSystemIcon: true, color: AppColors.blue, imageValue: false, imageValueString: nil)
                     
                 }
                 .padding(.bottom, 7)
@@ -127,23 +127,23 @@ private struct DashboardDetailsNavigationView: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 15)
                     .fill(Color(uiColor: .systemBackground))
-                    .shadow(color: .orange.opacity(0.3), radius: 5, x: 0, y: 3)
+                    .shadow(color: AppColors.orange.opacity(0.3), radius: 5, x: 0, y: 3)
                 VStack (spacing:0){
                     HStack {
                         Text("World exploration")
                             .font(.title)
-                            .foregroundStyle(.orange.opacity(0.6))
+                            .foregroundStyle(AppColors.orange)
                             .fontWeight(.semibold)
                             .scaledToFit()
                             .minimumScaleFactor(0.6)
                             .lineLimit(1)
                         Spacer()
                         Image(systemName: "chart.bar.xaxis.ascending")
-                            .foregroundColor(.orange.opacity(0.8))
+                            .foregroundColor(AppColors.orange)
                             .font(.title2)
                             .fontWeight(.bold)
                         Image(systemName: "chevron.right")
-                            .foregroundColor(.orange.opacity(0.8))
+                            .foregroundColor(AppColors.orange)
                             .font(.title2)
                             .fontWeight(.bold)
                     }
@@ -153,8 +153,8 @@ private struct DashboardDetailsNavigationView: View {
                     InfoRowView(title: "Visited continents", value: "\(viewModel.visitedContinents.count) / 6", icon: "globe", isSystemIcon: true, color: .orange, imageValue: false, imageValueString: nil)
                     InfoRowView(title: "Visited countries", value: "\(viewModel.visitedCountries) / 195", icon: "globe.europe.africa", isSystemIcon: true, color: .orange, imageValue: false, imageValueString: nil)
                      */
-                    InfoRowView(title: "Continents", value: "\(viewModel.visitedContinents.count) / 6", icon: "globe.europe.africa", isSystemIcon: true, color: .orange, imageValue: false, imageValueString: nil)
-                    InfoRowView(title: "Countries", value: "\(viewModel.visitedCountries) / 195", icon: "flag", isSystemIcon: true, color: .orange, imageValue: false, imageValueString: nil)
+                    InfoRowView(title: "Continents", value: "\(viewModel.visitedContinents.count) / 6", icon: "globe.europe.africa", isSystemIcon: true, color: AppColors.orange, imageValue: false, imageValueString: nil)
+                    InfoRowView(title: "Countries", value: "\(viewModel.visitedCountries) / 195", icon: "flag", isSystemIcon: true, color: AppColors.orange, imageValue: false, imageValueString: nil)
                 }
                 .padding(.bottom, 7)
             }
