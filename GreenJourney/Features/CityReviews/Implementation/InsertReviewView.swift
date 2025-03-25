@@ -46,9 +46,9 @@ struct InsertReviewView: View {
                         .accessibilityIdentifier("personalReviewTitle")
                     
                     VStack {
-                        ReviewStarRating(icon: "bus", color: Color.blue, rating: $viewModel.localTransportRating, editTapped: (editTapped || (viewModel.userReview == nil )))
-                        ReviewStarRating(icon: "tree",color: Color.green, rating: $viewModel.greenSpacesRating, editTapped: (editTapped || (viewModel.userReview == nil )))
-                        ReviewStarRating(icon: "trash", color: Color.orange, rating: $viewModel.wasteBinsRating, editTapped: (editTapped || (viewModel.userReview == nil )))
+                        ReviewStarRating(icon: "bus", color: AppColors.mainColor, rating: $viewModel.localTransportRating, editTapped: (editTapped || (viewModel.userReview == nil )))
+                        ReviewStarRating(icon: "tree",color:  AppColors.mainColor, rating: $viewModel.greenSpacesRating, editTapped: (editTapped || (viewModel.userReview == nil )))
+                        ReviewStarRating(icon: "trash", color:  AppColors.mainColor, rating: $viewModel.wasteBinsRating, editTapped: (editTapped || (viewModel.userReview == nil )))
                     }
                     .overlay(Color.clear.accessibilityIdentifier("userRatings"))
                 }
@@ -86,6 +86,7 @@ struct InsertReviewView: View {
                         RoundedRectangle(cornerRadius: 10)
                             .fill((viewModel.reviewText.isEmpty) || (viewModel.greenSpacesRating == 0) || (viewModel.localTransportRating == 0) || (viewModel.wasteBinsRating == 0) ? .black.opacity(0.3): AppColors.mainColor)
                         Text("Save review")
+                            .fontWeight(.semibold)
                             .padding(10)
                             .foregroundColor(.white)
                     }
@@ -147,17 +148,13 @@ private struct ReviewStarRating: View {
         HStack (spacing: 15){
             Spacer()
             
-            ZStack {
-                Circle()
-                    .fill(color.opacity(0.2))
-                    .frame(width: 50, height: 50)
-                
+            
                 Image(systemName: icon)
                     .resizable()
                     .scaledToFit()
                     .frame(width: 30, height: 30)
                     .foregroundColor(color)
-            }
+            
             Spacer()
             HStack {
                 ForEach(1..<6, id: \.self) { index in
