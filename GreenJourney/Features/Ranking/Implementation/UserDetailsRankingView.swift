@@ -112,117 +112,95 @@ private struct RecapViewCompactDevice: View {
         ZStack {
             RoundedRectangle(cornerRadius: 15)
                 .fill(Color(uiColor: .systemBackground))
-                .shadow(color: .indigo.opacity(0.3), radius: 5, x: 0, y: 3)
+                .shadow(color: AppColors.mainColor.opacity(0.3), radius: 5, x: 0, y: 3)
             VStack {
                 Text("Recap")
                     .font(.title)
-                    .foregroundStyle(.indigo.opacity(0.8))
+                    .foregroundStyle(AppColors.mainColor.opacity(0.8))
                     .padding(EdgeInsets(top: 15, leading: 15, bottom: 10, trailing: 0))
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 HStack {
-                    ZStack {
-                        Circle()
-                            .fill(.indigo.opacity(0.2))
-                            .frame(width: 50, height: 50)
-                        
-                        Image(systemName: "road.lanes")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 35, height: 35)
-                            .foregroundColor(.indigo)
-                    }
-                    
+                    Image(systemName: "road.lanes")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 35, height: 35)
+                        .foregroundColor(AppColors.blue)
+                    Text("Distance")
+                        .font(.system(size: 20).bold())
+                        .frame(maxWidth: 250, alignment: .leading)
+                        .padding(.leading, 5)
                     Text(String(format: "%.1f", user.totalDistance) + " Km")
                         .font(.system(size: 22).bold())
                         .bold()
-                        .foregroundColor(.indigo.opacity(0.8))
-
-                    Text("traveled")
-                        .font(.system(size: 20).bold())
-                        .foregroundColor(.indigo.opacity(0.8))
-                        .padding(.leading, 5)
+                        .foregroundColor(AppColors.blue.opacity(0.8))
+                    
+                    
                     Spacer()
                 }
                 .padding(.horizontal)
                 .padding(.vertical, 5)
                 HStack {
-                    ZStack {
-                        Circle()
-                            .fill(.blue.opacity(0.2))
-                            .frame(width: 50, height: 50)
-                        
-                        Image(systemName: "clock")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 35, height: 35)
-                            .foregroundColor(.blue)
-                    }
+                    Image(systemName: "clock")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 35, height: 35)
+                        .foregroundColor(AppColors.blue)
+                    
+                    Text("Time")
+                        .font(.system(size: 20).bold())
+                        .padding(.leading, 5)
+                        .frame(maxWidth: 250, alignment: .leading)
                     
                     Text(viewModel.computeTotalDuration(duration: user.totalDuration))
                         .font(.system(size: 22).bold())
                         .bold()
-                        .foregroundColor(.blue.opacity(0.8))
+                        .foregroundColor(AppColors.blue.opacity(0.8))
                     
-                    Text("in travel")
-                        .font(.system(size: 20).bold())
-                        .foregroundColor(.blue.opacity(0.8))
-                        .padding(.leading, 5)
+                    
                     Spacer()
                 }
                 .padding(.horizontal)
                 .padding(.vertical, 5)
                 
                 HStack {
-                    ZStack {
-                        Circle()
-                            .fill(.red.opacity(0.2))
-                            .frame(width: 50, height: 50)
-                        
-                        Image(systemName: "carbon.dioxide.cloud")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 35, height: 35)
-                            .foregroundColor(.red)
-                    }
-                    
+                    Image(systemName: "carbon.dioxide.cloud")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 35, height: 35)
+                        .foregroundColor(AppColors.green)
+                    Text("Co2 emitted")
+                        .font(.system(size: 20).bold())
+                        .frame(maxWidth: 250, alignment: .leading)
+                        .padding(.leading, 5)
                     Text(String(format: "%.0f", user.totalCo2Emitted) + " Kg")
                         .font(.system(size: 22).bold())
                         .bold()
-                        .foregroundColor(.red.opacity(0.8))
+                        .foregroundColor(AppColors.green.opacity(0.8))
                     
-                    Text("Co2 emitted")
-                        .font(.system(size: 20).bold())
-                        .foregroundColor(.red.opacity(0.8))
-                        .padding(.leading, 5)
+                    
                     Spacer()
                 }
                 .padding(.horizontal)
                 .padding(.vertical, 5)
                 
                 HStack {
-                    ZStack {
-                        Circle()
-                            .fill(.green.opacity(0.2))
-                            .frame(width: 50, height: 50)
-                        
-                        Image(systemName: "leaf")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 35, height: 35)
-                            .foregroundColor(.green)
-                    }
-                    
+                    Image(systemName: "leaf")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 35, height: 35)
+                        .foregroundColor(AppColors.green)
+                    Text("Co2 compensated")
+                        .font(.system(size: 20).bold())
+                        .frame(maxWidth: 250, alignment: .leading)
+                        .padding(.leading, 5)
                     Text(String(format: "%.0f", user.totalCo2Compensated) + " Kg")
                         .font(.system(size: 20).bold())
                         .bold()
-                        .foregroundColor(.green.opacity(0.8))
-
-                    Text("Co2 compensated")
-                        .font(.system(size: 20).bold())
-                        .foregroundColor(.green.opacity(0.8))
-                        .padding(.leading, 5)
-
+                        .foregroundColor(AppColors.green.opacity(0.8))
+                    
+                    
+                    
                     Spacer()
                 }
                 .padding(EdgeInsets(top: 5, leading: 15, bottom: 10, trailing: 15))
