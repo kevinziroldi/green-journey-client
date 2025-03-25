@@ -131,22 +131,18 @@ struct SegmentDetailView: View {
                     }
                     
                     if detailsOpen {
-                        VStack {
+                        VStack (spacing: 5){
                             HStack {
-                                ZStack {
-                                    Circle()
-                                        .fill(.indigo.opacity(0.2))
-                                        .frame(width: 40, height: 40)
-                                    
-                                    Image(systemName: "road.lanes")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 25, height: 25)
-                                        .foregroundColor(.indigo)
-                                }
+                                
+                                Image(systemName: "road.lanes")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 30, height: 30)
+                                    .foregroundColor(.indigo)
+                                
                                 Text("Distance")
-                                    .foregroundStyle(.indigo)
                                     .frame(width: 80, alignment: .leading)
+                                    .font(.headline)
                                     .padding(.leading)
                                 Text(String(format: "%.1f", segment.distance) + " Km")
                                     .foregroundStyle(.indigo)
@@ -154,21 +150,16 @@ struct SegmentDetailView: View {
                                 Spacer()
                             }
                             HStack {
-                                ZStack {
-                                    Circle()
-                                        .fill(.green.opacity(0.2))
-                                        .frame(width: 40, height: 40)
-                                    
-                                    Image("price_green")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 30, height: 30)
-                                        .foregroundColor(.green)
-                                }
+                                
+                                Image("price_green")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 30, height: 30)
+                                    .foregroundColor(.green)
                                 
                                 Text("Price")
                                     .frame(width: 80, alignment: .leading)
-                                    .foregroundStyle(.green)
+                                    .font(.headline)
                                     .padding(.leading)
                                 Text(String(format: "%.2f", segment.price) + " €")
                                     .fontWeight(.semibold)
@@ -176,23 +167,18 @@ struct SegmentDetailView: View {
                                 Spacer()
                             }
                             HStack {
-                                ZStack {
-                                    Circle()
-                                        .fill(.red.opacity(0.2))
-                                        .frame(width: 40, height: 40)
-                                    
-                                    Image(systemName: "carbon.dioxide.cloud")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 25, height: 25)
-                                        .foregroundColor(.red)
-                                }
+                                
+                                Image(systemName: "carbon.dioxide.cloud")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 30, height: 30)
+                                    .foregroundColor(.red)
                                 
                                 Text("Emission")
                                     .frame(width: 80, alignment: .leading)
-                                    .foregroundStyle(.red)
+                                    .font(.headline)
                                     .padding(.leading)
-                                Text(String(format: "%.1f", segment.co2Emitted) + " Kg CO2")
+                                Text(String(format: "%.1f", segment.co2Emitted) + " Kg Co2")
                                     .foregroundStyle(.red)
                                     .fontWeight(.semibold)
                                 Spacer()

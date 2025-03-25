@@ -118,6 +118,7 @@ struct PieChartView: View {
                                 .frame(width: 12, height: 12)
                             Text(key)
                                 .foregroundColor(.primary)
+                                .font(.system(size: 15, weight: .semibold))
                         }
                     }
                 }
@@ -212,7 +213,7 @@ struct DoubleBarChart: View {
         VStack {
             Text(title)
                 .font(.title)
-                .foregroundStyle(.green.opacity(0.8))
+                .foregroundStyle(AppColors.green.opacity(0.8))
                 .fontWeight(.semibold)
                 .scaledToFit()
                 .minimumScaleFactor(0.6)
@@ -251,6 +252,7 @@ struct DoubleBarChart: View {
                                 .frame(width: 12, height: 12)
                             Text(series.element)
                                 .foregroundColor(.primary)
+                                .font(.system(size: 15, weight: .semibold))
                         }
                     }
                 }

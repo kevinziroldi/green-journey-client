@@ -112,10 +112,10 @@ struct TravelDetailsView: View {
                         }) {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 15)
-                                    .fill(Color.red.opacity(0.3))
+                                    .fill(Color.red.opacity(0.9))
                                 HStack {
                                     Text("Delete travel")
-                                        .foregroundStyle(.red)
+                                        .foregroundStyle(.white)
                                         .font(.headline)
                                 }
                                 .padding()
