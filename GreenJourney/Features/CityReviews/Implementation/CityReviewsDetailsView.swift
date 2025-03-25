@@ -12,7 +12,7 @@ struct CityReviewsDetailsView: View {
     var body: some View {
         if let selectedCityReviewElement = viewModel.selectedCityReviewElement {
             ScrollView {
-                VStack {
+                VStack (spacing: 0){
                     // title
                     CityReviewsTitleView(viewModel: viewModel)
                         .padding(.horizontal)
@@ -25,6 +25,7 @@ struct CityReviewsDetailsView: View {
                     if viewModel.isReviewable() {
                         InsertReviewButtonView(viewModel: viewModel, reviewTapped: $reviewTapped)
                             .padding(.horizontal)
+                            .padding(.vertical)
                     }
                     
                     // latest reviews, if present
@@ -57,7 +58,6 @@ private struct CityReviewsTitleView: View {
     var viewModel: CitiesReviewsViewModel
     
     var body: some View {
-        VStack {
             HStack {
                 Text(flag(country: viewModel.selectedCity.countryCode))
                     .font(.system(size: 80))
@@ -69,12 +69,8 @@ private struct CityReviewsTitleView: View {
                     .accessibilityIdentifier("selecteCityTitle")
                 Spacer()
             }
-            HStack {
-                
-                Spacer()
-            }
             .padding(.horizontal)
-        }
+        
     }
     func flag(country:String) -> String {
             let base : UInt32 = 127397
@@ -117,11 +113,11 @@ private struct ReviewsAverageView: View {
                         HStack (spacing: 30) {
                             Text(String(format: "%.1f", selectedCityReviewElement.getAverageRating()))
                                 .font(.system(size: 60).bold())
-                                .foregroundStyle(AppColors.mainColor)
+                                //.foregroundStyle(Color.yellow)
                                 .fontWeight(.semibold)
                             VStack() {
                                 HStack {
-                                    FiveStarView(rating: selectedCityReviewElement.getAverageRating(), dim: 25, color: AppColors.mainColor)
+                                    FiveStarView(rating: selectedCityReviewElement.getAverageRating(), dim: 25, color: Color.yellow)
                                     Spacer()
                                 }
                                 HStack {
@@ -142,63 +138,63 @@ private struct ReviewsAverageView: View {
                         VStack {
                             HStack {
                                 ZStack {
-                                    Circle()
-                                        .fill(.blue.opacity(0.2))
+                                    /*Circle()
+                                        .fill(AppColors.mainColor.opacity(0.2))
                                         .frame(width: 40, height: 40)
-                                    
+                                    */
                                     Image(systemName: "bus")
                                         .resizable()
                                         .scaledToFit()
-                                        .frame(width: 25, height: 25)
-                                        .foregroundColor(.blue)
+                                        .frame(width: 30, height: 30)
+                                        .foregroundColor(AppColors.mainColor)
                                 }
                                 .padding(.trailing)
                                 Text(String(format: "%.1f", selectedCityReviewElement.averageLocalTransportRating))
                                     .font(.title3)
                                     .fontWeight(.semibold)
                                     .padding(EdgeInsets(top: 4, leading: 0, bottom: 0, trailing: 10))
-                                FiveStarView(rating: selectedCityReviewElement.averageLocalTransportRating, dim: 20, color: .blue.opacity(0.8))
+                                FiveStarView(rating: selectedCityReviewElement.averageLocalTransportRating, dim: 20, color: AppColors.mainColor.opacity(0.8))
                                 Spacer()
                             }
                             
                             HStack {
                                 ZStack {
-                                    Circle()
-                                        .fill(.green.opacity(0.2))
+                                    /*Circle()
+                                        .fill(AppColors.mainColor.opacity(0.2))
                                         .frame(width: 40, height: 40)
-                                    
+                                    */
                                     Image(systemName: "tree")
                                         .resizable()
                                         .scaledToFit()
-                                        .frame(width: 25, height: 25)
-                                        .foregroundColor(.green)
+                                        .frame(width: 30, height: 30)
+                                        .foregroundColor(AppColors.mainColor)
                                 }
                                 .padding(.trailing)
                                 Text(String(format: "%.1f", selectedCityReviewElement.averageGreenSpacesRating))
                                     .font(.title3)
                                     .fontWeight(.semibold)
                                     .padding(EdgeInsets(top: 4, leading: 0, bottom: 0, trailing: 10))
-                                FiveStarView(rating: selectedCityReviewElement.averageGreenSpacesRating, dim: 20, color: .green.opacity(0.8))
+                                FiveStarView(rating: selectedCityReviewElement.averageGreenSpacesRating, dim: 20, color: AppColors.mainColor.opacity(0.8))
                                 Spacer()
                             }
                             HStack {
                                 ZStack {
-                                    Circle()
-                                        .fill(.orange.opacity(0.2))
+                                    /*Circle()
+                                        .fill(AppColors.mainColor.opacity(0.2))
                                         .frame(width: 40, height: 40)
-                                    
+                                    */
                                     Image(systemName: "trash")
                                         .resizable()
                                         .scaledToFit()
-                                        .frame(width: 25, height: 25)
-                                        .foregroundColor(.orange)
+                                        .frame(width: 30, height: 30)
+                                        .foregroundColor(AppColors.mainColor)
                                 }
                                 .padding(.trailing)
                                 Text(String(format: "%.1f", selectedCityReviewElement.averageWasteBinsRating))
                                     .font(.title3)
                                     .fontWeight(.semibold)
                                     .padding(EdgeInsets(top: 4, leading: 0, bottom: 0, trailing: 10))
-                                FiveStarView(rating: selectedCityReviewElement.averageWasteBinsRating, dim: 20, color: .orange.opacity(0.8))
+                                FiveStarView(rating: selectedCityReviewElement.averageWasteBinsRating, dim: 20, color: AppColors.mainColor.opacity(0.8))
                                 Spacer()
                             }
                         }
@@ -439,7 +435,7 @@ private struct CardView: View {
                         .font(.title3)
                         .fontWeight(.semibold)
                         .padding(EdgeInsets(top: 4, leading: 0, bottom: 0, trailing: 5))
-                    FiveStarView(rating: review.computeRating(), dim: 20, color: AppColors.mainColor)
+                    FiveStarView(rating: review.computeRating(), dim: 20, color: Color.yellow)
                     Spacer()
                 }
                 .padding(.bottom, 5)

@@ -163,7 +163,7 @@ private struct SingleReviewView: View {
                         .foregroundStyle(.blue.opacity(0.8))
                     Spacer()
                     Text(review.dateTime.formatted(date: .numeric, time: .omitted))
-                        .foregroundStyle(.blue.opacity(0.8))
+                        .foregroundStyle(.primary.opacity(0.8))
                         .font(.subheadline)
                 }
                 

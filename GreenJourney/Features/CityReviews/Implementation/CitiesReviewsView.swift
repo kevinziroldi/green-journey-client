@@ -294,21 +294,21 @@ private struct BestCityView: View {
                             .font(.system(size: 24))
                             .fontWeight(.semibold)
                     }
-                    VStack {
+                    VStack (spacing: 5) {
                         HStack {
                             Text(flag(country: city.countryCode))
-                                .font(.system(size: 40))
+                                .font(.system(size: 35))
                                 .foregroundColor(.blue)
+                            
                             Text(city.cityName + ", " + city.countryName)
                                 .font(.system(size: 18))
                                 .fontWeight(.semibold)
                                 .frame(maxWidth: .infinity, alignment: .leading)
-                            
                         }
                         HStack {
                             Text(String(format: "%.1f", cityReview.getAverageRating()))
                                 .fontWeight(.bold)
-                            FiveStarView(rating: cityReview.getAverageRating(), dim: 20, color: .yellow)
+                            FiveStarView(rating: cityReview.getAverageRating(), dim: 18, color: Color.yellow)
                             Spacer()
                             Text("\(cityReview.numReviews)")
                                 .bold()
@@ -320,7 +320,7 @@ private struct BestCityView: View {
                         }
                         Spacer()
                     }
-                    .padding(.leading, 20)
+                    .padding(.leading)
                 }
                 .padding()
             }
