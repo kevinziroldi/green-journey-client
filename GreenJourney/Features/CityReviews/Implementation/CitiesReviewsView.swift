@@ -295,10 +295,16 @@ private struct BestCityView: View {
                             .fontWeight(.semibold)
                     }
                     VStack {
-                        Text(city.cityName + ", " + city.countryName)
-                            .font(.system(size: 18))
-                            .fontWeight(.semibold)
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                        HStack {
+                            Text(flag(country: city.countryCode))
+                                .font(.system(size: 40))
+                                .foregroundColor(.blue)
+                            Text(city.cityName + ", " + city.countryName)
+                                .font(.system(size: 18))
+                                .fontWeight(.semibold)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            
+                        }
                         HStack {
                             Text(String(format: "%.1f", cityReview.getAverageRating()))
                                 .fontWeight(.bold)
@@ -375,5 +381,13 @@ private struct BestCityView: View {
             .fixedSize(horizontal: false, vertical: true)
             .frame(maxWidth: 800)
         }
+    }
+    func flag(country: String) -> String {
+        let base : UInt32 = 127397
+        var s = ""
+        for v in country.uppercased().unicodeScalars {
+            s.unicodeScalars.append(UnicodeScalar(base + v.value)!)
+        }
+        return String(s)
     }
 }
