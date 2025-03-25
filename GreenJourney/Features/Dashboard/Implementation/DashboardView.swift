@@ -153,8 +153,8 @@ private struct DashboardDetailsNavigationView: View {
                     InfoRowView(title: "Visited continents", value: "\(viewModel.visitedContinents.count) / 6", icon: "globe", isSystemIcon: true, color: .orange, imageValue: false, imageValueString: nil)
                     InfoRowView(title: "Visited countries", value: "\(viewModel.visitedCountries) / 195", icon: "globe.europe.africa", isSystemIcon: true, color: .orange, imageValue: false, imageValueString: nil)
                      */
-                    InfoRowView(title: "Visited continents", value: "\(viewModel.visitedContinents.count) / 6", icon: "globe.europe.africa", isSystemIcon: true, color: .orange, imageValue: false, imageValueString: nil)
-                    InfoRowView(title: "Visited countries", value: "\(viewModel.visitedCountries) / 195", icon: "flag", isSystemIcon: true, color: .orange, imageValue: false, imageValueString: nil)
+                    InfoRowView(title: "Continents", value: "\(viewModel.visitedContinents.count) / 6", icon: "globe.europe.africa", isSystemIcon: true, color: .orange, imageValue: false, imageValueString: nil)
+                    InfoRowView(title: "Countries", value: "\(viewModel.visitedCountries) / 195", icon: "flag", isSystemIcon: true, color: .orange, imageValue: false, imageValueString: nil)
                 }
                 .padding(.bottom, 7)
             }
