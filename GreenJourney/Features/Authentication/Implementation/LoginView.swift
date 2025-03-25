@@ -189,7 +189,6 @@ private struct LoginButtonsView: View {
                     .foregroundColor(.white)
                     .padding()
                     .frame(maxWidth: .infinity)
-                    //.background(Color.blue)
                     .background(AppColors.mainColor)
                     .cornerRadius(30)
             }
