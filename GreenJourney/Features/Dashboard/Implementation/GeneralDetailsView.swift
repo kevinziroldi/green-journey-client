@@ -52,12 +52,13 @@ struct GeneralDetailsView: View {
                             .frame(height: 250)
                             .overlay(Color.clear.accessibilityIdentifier("distancePerVehicle"))
                         
-                        HStack {
+                        HStack(alignment: .top) {
                             PieChartView(keys: viewModel.travelsPerTransport.keys.sorted(), data: viewModel.travelsPerTransport.keys.sorted().map{viewModel.travelsPerTransport[$0]!}, title: "Most chosen Vehicle", color: .teal, icon: viewModel.mostChosenVehicle)
                                 .padding()
                                 .overlay(Color.clear.accessibilityIdentifier("mostChosenVehicle"))
                             
                             DistanceTimeRecapView(viewModel: viewModel)
+                                .fixedSize(horizontal: false, vertical: true)
                         }
                     }
                     .frame(maxWidth: 800)
@@ -85,8 +86,8 @@ private struct DistanceTimeRecapView: View {
                     .padding()
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                InfoRowView(title: "Distance", value: String(format: "%.0f", viewModel.totalDistance) + " Km", icon: "road.lanes", color: .teal, imageValue: false, imageValueString: nil)
-                InfoRowView(title: "Travel time", value: viewModel.totalDurationString, icon: "clock", color: .teal, imageValue: false, imageValueString: nil)
+                InfoRowView(title: "Distance", value: String(format: "%.0f", viewModel.totalDistance) + " Km", icon: "road.lanes", isSystemIcon: true, color: .teal, imageValue: false, imageValueString: nil)
+                InfoRowView(title: "Travel time", value: viewModel.totalDurationString, icon: "clock",  isSystemIcon: true, color: .teal, imageValue: false, imageValueString: nil)
             }
             .padding(.bottom, 7)
         }

@@ -28,6 +28,7 @@ struct ScoresView: View {
             InfoRowView(title: "Long distance",
                         value: String(format: "%.1f", scoreLongDistance),
                         icon: "trophy",
+                        isSystemIcon: true,
                         color: AppColors.mainColor,
                         imageValue: false,
                         imageValueString: nil)
@@ -35,6 +36,7 @@ struct ScoresView: View {
             InfoRowView(title: "Short distance",
                         value: String(format: "%.1f", scoreShortDistance),
                         icon: "trophy",
+                        isSystemIcon: true, 
                         color: AppColors.mainColor,
                         imageValue: false,
                         imageValueString: nil)

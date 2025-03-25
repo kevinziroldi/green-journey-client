@@ -83,9 +83,9 @@ private struct DashboardDetailsNavigationView: View {
                             .fontWeight(.bold)
                     }
                     .padding()
-                    InfoRowView(title: "Emitted", value: String(format: "%.0f", viewModel.co2Emitted) + " Kg", icon: "carbon.dioxide.cloud", color: .green, imageValue: false, imageValueString: nil)
+                    InfoRowView(title: "Emitted", value: String(format: "%.0f", viewModel.co2Emitted) + " Kg", icon: "carbon.dioxide.cloud", isSystemIcon: true, color: .green, imageValue: false, imageValueString: nil)
                     
-                    InfoRowView(title: "Compensated", value: String(format: "%.0f", viewModel.co2Compensated) + " Kg", icon: "leaf", color: .green, imageValue: false, imageValueString: nil)
+                    InfoRowView(title: "Compensated", value: String(format: "%.0f", viewModel.co2Compensated) + " Kg", icon: "leaf",  isSystemIcon: true, color: .green, imageValue: false, imageValueString: nil)
                 }
                 .padding(.bottom, 7)
             }
@@ -114,8 +114,8 @@ private struct DashboardDetailsNavigationView: View {
                             .fontWeight(.bold)
                     }
                     .padding()
-                    InfoRowView(title: "Distance", value: String(format: "%.0f", viewModel.totalDistance) + " Km", icon: "road.lanes", color: .teal, imageValue: false, imageValueString: nil)
-                    InfoRowView(title: "Travel time", value: viewModel.totalDurationString, icon: "clock", color: .teal, imageValue: false, imageValueString: nil)
+                    InfoRowView(title: "Distance", value: String(format: "%.0f", viewModel.totalDistance) + " Km", icon: "road.lanes", isSystemIcon: true, color: .teal, imageValue: false, imageValueString: nil)
+                    InfoRowView(title: "Travel time", value: viewModel.totalDurationString, icon: "clock", isSystemIcon: true, color: .teal, imageValue: false, imageValueString: nil)
                     
                 }
                 .padding(.bottom, 7)
@@ -149,8 +149,12 @@ private struct DashboardDetailsNavigationView: View {
                     }
                     .padding()
                     
-                    InfoRowView(title: "Visited continents", value: "\(viewModel.visitedContinents.count) / 6", icon: "globe", color: .orange, imageValue: false, imageValueString: nil)
-                    InfoRowView(title: "Visited countries", value: "\(viewModel.visitedCountries) / 195", icon: "globe.europe.africa", color: .orange, imageValue: false, imageValueString: nil)
+                    /*
+                    InfoRowView(title: "Visited continents", value: "\(viewModel.visitedContinents.count) / 6", icon: "globe", isSystemIcon: true, color: .orange, imageValue: false, imageValueString: nil)
+                    InfoRowView(title: "Visited countries", value: "\(viewModel.visitedCountries) / 195", icon: "globe.europe.africa", isSystemIcon: true, color: .orange, imageValue: false, imageValueString: nil)
+                     */
+                    InfoRowView(title: "Visited continents", value: "\(viewModel.visitedContinents.count) / 6", icon: "globe.europe.africa", isSystemIcon: true, color: .orange, imageValue: false, imageValueString: nil)
+                    InfoRowView(title: "Visited countries", value: "\(viewModel.visitedCountries) / 195", icon: "flag", isSystemIcon: true, color: .orange, imageValue: false, imageValueString: nil)
                 }
                 .padding(.bottom, 7)
             }

@@ -4,6 +4,7 @@ struct InfoRowView: View {
     let title: String
     let value: String
     let icon: String
+    let isSystemIcon: Bool
     let color: Color
     let imageValue: Bool
     let imageValueString: String?
@@ -11,17 +12,36 @@ struct InfoRowView: View {
     var body: some View {
         HStack {
             HStack {
-                ZStack {
-                    Circle()
-                        .fill(color.opacity(0.2))
-                        .frame(width: 50, height: 50)
-                    
+                if isSystemIcon {
+                    /*
+                    ZStack {
+                        Circle()
+                            .fill(color.opacity(0.2))
+                            .frame(width: 50, height: 50)
+                        
+                        Image(systemName: icon)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 30, height: 30)
+                            .foregroundColor(color)
+                    }
+                     */
                     Image(systemName: icon)
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 30, height: 30)
+                        .frame(width: 40, height: 40)
                         .foregroundColor(color)
+                        .padding(.trailing, 20)
+                        .padding(.vertical, 2)
+                } else {
+                    Image(icon)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 40, height: 40)
+                        .foregroundColor(color)
+                        .padding(.trailing, 20)
                 }
+                
                 Text(title)
                     .font(.system(size: 20).bold())
                     .scaledToFit()

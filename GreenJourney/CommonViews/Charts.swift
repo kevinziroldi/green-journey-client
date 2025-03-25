@@ -109,11 +109,36 @@ struct PieChartView: View {
             }
             .padding()
             .padding(.bottom)
+            .chartLegend {
+                HStack(spacing: 10) {
+                    ForEach(Array(zip(data, keys)), id: \.1) { (value, key) in
+                        HStack {
+                            Circle()
+                                .fill(colorForKey(key))
+                                .frame(width: 12, height: 12)
+                            Text(key)
+                                .foregroundColor(.primary)
+                        }
+                    }
+                }
+                .padding(.top)
+            }
         }
         .frame(height: 350)
         .background(Color(UIColor.systemBackground))
         .cornerRadius(15)
         .shadow(color: color.opacity(0.3), radius: 5, x: 0, y: 3)
+    }
+    
+    func colorForKey(_ key: String) -> Color {
+        switch key {
+        case "bike": return Color.blue
+        case "bus": return Color.green
+        case "car": return Color.orange
+        case "plane": return Color.purple
+        case "train": return Color.red
+        default: return Color.gray
+        }
     }
 }
 
@@ -172,6 +197,7 @@ struct DoubleBarChart: View {
     let seriesData: [(element: String, data: [String: Double])]
     let title: String
     let measureUnit: String
+    
     init(element1: String, keys: [String], data1: [Double], element2: String, data2: [Double], title: String, measureunit: String) {
         self.element1 = element1
         self.data1 = Dictionary(uniqueKeysWithValues: zip(keys, data1))
@@ -181,6 +207,7 @@ struct DoubleBarChart: View {
         self.title = title
         self.measureUnit = measureunit
     }
+    
     var body: some View {
         VStack {
             Text(title)
@@ -215,9 +242,31 @@ struct DoubleBarChart: View {
             }
             .frame(height: 250)
             .padding()
+            .chartLegend {
+                HStack(spacing: 10) {
+                    ForEach(seriesData, id: \.0) { series in
+                        HStack {
+                            Circle()
+                                .fill(colorForSeries(series.element))
+                                .frame(width: 12, height: 12)
+                            Text(series.element)
+                                .foregroundColor(.primary)
+                        }
+                    }
+                }
+                .padding(.top)
+            }
         }
         .background(Color(UIColor.systemBackground))
         .cornerRadius(15)
         .shadow(radius: 5, x: 0, y: 3)
+    }
+    
+    func colorForSeries(_ series: String) -> Color {
+        switch series {
+        case "Co2 Emitted": return Color.blue
+        case "Co2 Compensated": return Color.green
+        default: return Color.gray
+        }
     }
 }
