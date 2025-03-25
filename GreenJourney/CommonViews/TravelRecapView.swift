@@ -91,17 +91,13 @@ private struct DistanceEntryView: View {
     
     var body: some View {
         HStack {
-            ZStack {
-                Circle()
-                    .fill(.indigo.opacity(0.2))
-                    .frame(width: 40, height: 40)
-                
+            
                 Image(systemName: "road.lanes")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 25, height: 25)
-                    .foregroundColor(.indigo)
-            }
+                    .frame(width: 30, height: 30)
+                    .foregroundColor(AppColors.blue)
+            
             
             
             Text("Distance")
@@ -112,11 +108,11 @@ private struct DistanceEntryView: View {
             Text(String(format: "%.1f", distance) + " Km")
                 .font(.system(size: 25).bold())
                 .bold()
-                .foregroundColor(AppColors.mainColor.opacity(0.8))
+                .foregroundColor(AppColors.blue.opacity(0.8))
             Spacer()
         }
         .padding(.horizontal)
-        .padding(.vertical, 5)
+        .padding(.vertical, 10)
     }
 }
 
@@ -125,18 +121,12 @@ private struct DurationEntryView: View {
     
     var body: some View {
     HStack {
-        ZStack {
-            Circle()
-                .fill(.blue.opacity(0.2))
-                .frame(width: 40, height: 40)
-            
+        
             Image(systemName: "clock")
                 .resizable()
                 .scaledToFit()
-                .frame(width: 25, height: 25)
-                .foregroundColor(.blue)
-        }
-        
+                .frame(width: 30, height: 30)
+                .foregroundColor(AppColors.blue)
         
         Text("Duration")
             .font(.system(size: 20).bold())
@@ -147,11 +137,11 @@ private struct DurationEntryView: View {
         Text(duration)
             .font(.system(size: 25).bold())
             .bold()
-            .foregroundColor(AppColors.mainColor.opacity(0.8))
+            .foregroundColor(AppColors.blue.opacity(0.8))
         Spacer()
     }
     .padding(.horizontal)
-    .padding(.vertical, 5)
+    .padding(.vertical, 10)
     
     }
 }
@@ -161,19 +151,11 @@ private struct PriceEntryView: View {
     
     var body: some View {
         HStack {
-            ZStack {
-                Circle()
-                    .fill(.red.opacity(0.2))
-                    .frame(width: 40, height: 40)
-                
                 Image("price_red")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 30, height: 30)
                     .foregroundColor(.red)
-            }
-            
-            
             Text("Price")
                 .font(.system(size: 20).bold())
                 .foregroundColor(.primary)
@@ -183,11 +165,11 @@ private struct PriceEntryView: View {
             Text(String(format: "%.2f", price) + " €")
                 .font(.system(size: 25).bold())
                 .bold()
-                .foregroundColor(AppColors.mainColor.opacity(0.8))
+                .foregroundColor(.red.opacity(0.8))
             Spacer()
         }
         .padding(.horizontal)
-        .padding(.vertical, 5)
+        .padding(.vertical, 10)
     }
 }
 
@@ -195,31 +177,25 @@ private struct GreenPriceEntryView: View {
     let greenPrice: Float64
     var body: some View {
         HStack {
-            ZStack {
-                Circle()
-                    .fill(.green.opacity(0.2))
-                    .frame(width: 40, height: 40)
-                
-                Image("price_green")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 30, height: 30)
-                    .foregroundColor(.green)
-            }
+            Image("price_green")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 30, height: 30)
+                .foregroundColor(.green)
             
             Text("Green price")
                 .font(.system(size: 20).bold())
                 .foregroundColor(.primary)
                 .padding(.leading, 5)
                 .frame(width: 120, alignment: .leading)
-
-                Text(String(format: "%.2f", greenPrice) + " €")
+            
+            Text(String(format: "%.2f", greenPrice) + " €")
                 .font(.system(size: 25).bold())
                 .bold()
-                .foregroundColor(AppColors.mainColor.opacity(0.8))
+                .foregroundColor(.green.opacity(0.8))
             Spacer()
         }
-        .padding(EdgeInsets(top: 5, leading: 15, bottom: 10, trailing: 15))
+        .padding(EdgeInsets(top: 10, leading: 15, bottom: 15, trailing: 15))
     }
 }
 

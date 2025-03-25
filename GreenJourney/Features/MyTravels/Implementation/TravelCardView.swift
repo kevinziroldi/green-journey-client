@@ -168,17 +168,15 @@ private struct DepartureDestinationAllDatesInfoView: View {
                 Text(travelDetails.getDestinationSegment()?.destinationCity ?? "")
                     .font(.headline)
             }
-            .frame(width: min(UIScreen.main.bounds.width/2, 400))
-            /*.scaledToFit()
-            .minimumScaleFactor(0.7)*/
+            .frame(width: min(UIScreen.main.bounds.width/2 - 15, 400))
+            
             HStack{
                 Text(travelDetails.getOutwardSegments().first?.dateTime.formatted(date: .numeric, time: .omitted) ?? "")
                     .font(.subheadline)
                     .fontWeight(.light)
             }
-            .frame(width: min(UIScreen.main.bounds.width/2, 400))
-            /*.scaledToFit()
-            .minimumScaleFactor(0.7)*/
+            .frame(width: min(UIScreen.main.bounds.width/2 - 15, 400))
+            
             if horizontalSizeClass == .regular {
                 ZStack {
                     let changesOut = travelDetails.countChanges(outwardDirection: true)
@@ -209,7 +207,7 @@ private struct DepartureDestinationAllDatesInfoView: View {
                     Text(travelDetails.getDepartureSegment()?.departureCity ?? "")
                         .font(.headline)
                 }
-                .frame(width: min(UIScreen.main.bounds.width/2, 400))
+                .frame(width: min(UIScreen.main.bounds.width/2 - 15, 400))
                 .scaledToFit()
                 .minimumScaleFactor(0.7)
                 HStack{
@@ -217,7 +215,7 @@ private struct DepartureDestinationAllDatesInfoView: View {
                         .font(.subheadline)
                         .fontWeight(.light)
                 }
-                .frame(width: min(UIScreen.main.bounds.width/2, 400))
+                .frame(width: min(UIScreen.main.bounds.width/2 - 15, 400))
                 .scaledToFit()
                 .minimumScaleFactor(0.7)
                 if horizontalSizeClass == .regular {

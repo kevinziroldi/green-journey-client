@@ -138,14 +138,14 @@ struct SegmentDetailView: View {
                                     .resizable()
                                     .scaledToFit()
                                     .frame(width: 30, height: 30)
-                                    .foregroundColor(.indigo)
+                                    .foregroundColor(AppColors.blue)
                                 
                                 Text("Distance")
                                     .frame(width: 80, alignment: .leading)
                                     .font(.headline)
                                     .padding(.leading)
                                 Text(String(format: "%.1f", segment.distance) + " Km")
-                                    .foregroundStyle(.indigo)
+                                    .foregroundStyle(AppColors.blue)
                                     .fontWeight(.semibold)
                                 Spacer()
                             }
@@ -179,7 +179,7 @@ struct SegmentDetailView: View {
                                     .font(.headline)
                                     .padding(.leading)
                                 Text(String(format: "%.1f", segment.co2Emitted) + " Kg Co2")
-                                    .foregroundStyle(.red)
+                                    .foregroundStyle(AppColors.red)
                                     .fontWeight(.semibold)
                                 Spacer()
                             }
