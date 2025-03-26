@@ -9,6 +9,8 @@ struct WorldExplorationView: View {
         ScrollView {
             VStack {
                 if horizontalSizeClass == .compact {
+                    // iOS
+                    
                     VStack {
                         VisitedContinentsView(viewModel: viewModel)
                         
@@ -25,6 +27,8 @@ struct WorldExplorationView: View {
                             .overlay(Color.clear.accessibilityIdentifier("mostVisitedCountries"))
                     }.frame(maxWidth: 800)
                 } else {
+                    // iPadOS
+                    
                     VStack {
                         VisitedContinentsView(viewModel: viewModel)
                         
@@ -61,7 +65,7 @@ private struct VisitedContinentsView: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 15)
                     .fill(Color(uiColor: .systemBackground))
-                    .shadow(color: AppColors.orange.opacity(0.3), radius: 5, x: 0, y: 3)
+                    .shadow(radius: 3, x: 0, y: 3)
                 VStack(spacing:0) {
                     Text("Continents")
                         .font(.title)
@@ -121,7 +125,7 @@ private struct VisitedCountriesView: View {
         ZStack {
             RoundedRectangle(cornerRadius: 15)
                 .fill(Color(uiColor: .systemBackground))
-                .shadow(color: AppColors.orange.opacity(0.3), radius: 5, x: 0, y: 3)
+                .shadow(radius: 3, x: 0, y: 3)
             VStack (spacing:0){
                 Text("Visited Countries")
                     .font(.title)
@@ -133,6 +137,7 @@ private struct VisitedCountriesView: View {
             }
             .padding(.bottom, 7)
         }
+        .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
         .overlay(Color.clear.accessibilityIdentifier("visitedCountries"))
     }
 }
