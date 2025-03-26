@@ -93,6 +93,7 @@ struct TravelDetailsView: View {
                             }
                             .frame(maxWidth: 800)
                         }
+                            
                         
                         if travelDetails.travel.confirmed {
                             // if the user hasn't left a review yet
@@ -104,6 +105,7 @@ struct TravelDetailsView: View {
                         
                         SegmentsDetailsView(travelDetails: travelDetails)
                             .frame(maxWidth: 800)
+                            .padding(.leading)
                         
                         // delete button
                         Button(action: {
