@@ -87,7 +87,7 @@ private struct RankingElementDetailsTitle: View {
     var user: RankingElement
     
     var body: some View {
-        Text("User details")
+        Text("User Details")
             .font(.system(size: 32).bold())
             .padding()
             .fontWeight(.semibold)
@@ -116,7 +116,7 @@ private struct RecapViewCompactDevice: View {
             VStack {
                 Text("Recap")
                     .font(.title)
-                    .foregroundStyle(AppColors.mainColor.opacity(0.8))
+                    .foregroundStyle(AppColors.mainColor)
                     .padding(EdgeInsets(top: 15, leading: 15, bottom: 10, trailing: 0))
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -169,7 +169,7 @@ private struct RecapViewCompactDevice: View {
                         .scaledToFit()
                         .frame(width: 35, height: 35)
                         .foregroundColor(AppColors.green)
-                    Text("Co2 emitted")
+                    Text("CO\u{2082} emitted")
                         .font(.system(size: 20).bold())
                         .frame(maxWidth: 250, alignment: .leading)
                         .padding(.leading, 5)
@@ -190,7 +190,7 @@ private struct RecapViewCompactDevice: View {
                         .scaledToFit()
                         .frame(width: 35, height: 35)
                         .foregroundColor(AppColors.green)
-                    Text("Co2 compensated")
+                    Text("CO\u{2082} compensated")
                         .font(.system(size: 20).bold())
                         .frame(maxWidth: 250, alignment: .leading)
                         .padding(.leading, 5)
@@ -223,7 +223,7 @@ private struct RecapViewRegularDevice: View {
             VStack {
                 Text("Recap")
                     .font(.title)
-                    .foregroundStyle(.indigo.opacity(0.8))
+                    .foregroundStyle(AppColors.blue)
                     .padding(EdgeInsets(top: 15, leading: 15, bottom: 10, trailing: 0))
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -301,7 +301,7 @@ private struct Co2EmissionView: View {
             VStack {
                 Text("Compensation recap")
                     .font(.title)
-                    .foregroundStyle(.mint.opacity(0.8))
+                    .foregroundStyle(.mint)
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 GeometryReader { geometry in

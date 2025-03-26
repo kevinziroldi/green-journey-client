@@ -48,7 +48,7 @@ struct WorldExplorationView: View {
                             .fill(Color(uiColor: .systemBackground))
                             .shadow(color: AppColors.orange.opacity(0.3), radius: 5, x: 0, y: 3)
                         VStack (spacing:0){
-                            Text("Visited countries")
+                            Text("Visited Countries")
                                 .font(.title)
                                 .foregroundStyle(AppColors.orange)
                                 .padding()

@@ -65,7 +65,7 @@ private struct DashboardDetailsNavigationView: View {
                     .shadow(color: AppColors.green.opacity(0.3), radius: 5, x: 0, y: 3)
                 VStack (spacing:0){
                     HStack {
-                        Text("Co2 tracker")
+                        Text("CO\u{2082} Tracker")
                             .font(.title)
                             .foregroundStyle(AppColors.green)
                             .fontWeight(.semibold)
@@ -130,7 +130,7 @@ private struct DashboardDetailsNavigationView: View {
                     .shadow(color: AppColors.orange.opacity(0.3), radius: 5, x: 0, y: 3)
                 VStack (spacing:0){
                     HStack {
-                        Text("World exploration")
+                        Text("World Exploration")
                             .font(.title)
                             .foregroundStyle(AppColors.orange)
                             .fontWeight(.semibold)

@@ -15,7 +15,7 @@ struct UserBadgesView: View {
                     HStack {
                         Text("Badges")
                             .font(.title)
-                            .foregroundStyle(AppColors.mainColor.opacity(0.8))
+                            .foregroundStyle(AppColors.mainColor)
                             .fontWeight(.semibold)
                         Spacer()
                         Button(action: {

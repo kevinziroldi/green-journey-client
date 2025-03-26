@@ -10,7 +10,7 @@ struct ScoresView: View {
             HStack {
                 Text("Scores")
                     .font(.title)
-                    .foregroundStyle(AppColors.mainColor.opacity(0.8))
+                    .foregroundStyle(AppColors.mainColor)
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 Spacer()
@@ -25,7 +25,7 @@ struct ScoresView: View {
             }
             .padding(EdgeInsets(top: 15, leading: 15, bottom: 5, trailing: 15))
             
-            InfoRowView(title: "Long distance",
+            InfoRowView(title: "Long Distance",
                         value: String(format: "%.1f", scoreLongDistance),
                         icon: "trophy",
                         isSystemIcon: true,
@@ -33,7 +33,7 @@ struct ScoresView: View {
                         imageValue: false,
                         imageValueString: nil)
             
-            InfoRowView(title: "Short distance",
+            InfoRowView(title: "Short Distance",
                         value: String(format: "%.1f", scoreShortDistance),
                         icon: "medal",
                         isSystemIcon: true,

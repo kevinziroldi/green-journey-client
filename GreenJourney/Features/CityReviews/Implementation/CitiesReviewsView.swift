@@ -158,7 +158,7 @@ private struct ReviewableCitiesView: View {
     var body: some View {
         if !viewModel.reviewableCities.isEmpty {
             VStack (spacing: 0) {
-                Text ("Reviewable cities")
+                Text ("Reviewable Cities")
                     .font(.title)
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -221,7 +221,7 @@ private struct ReviewableCitiesView: View {
 private struct BestCitiesTitle: View {
     var body: some View {
         VStack (spacing: 0) {
-            Text("Top cities")
+            Text("Top Cities")
                 .font(.title)
                 .fontWeight(.semibold)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -296,7 +296,7 @@ private struct BestCityView: View {
                     }
                     VStack (spacing: 5) {
                         HStack {
-                            Text(flag(country: city.countryCode))
+                            Text(viewModel.flag(country: city.countryCode))
                                 .font(.system(size: 35))
                                 .foregroundColor(.blue)
                             
@@ -318,9 +318,10 @@ private struct BestCityView: View {
                                 .font(.caption)
                                 .foregroundStyle(AppColors.mainColor)
                         }
+                        .padding(.leading, 5)
                         Spacer()
                     }
-                    .padding(.leading)
+                    .padding(.leading, 10)
                 }
                 .padding()
             }
@@ -381,13 +382,5 @@ private struct BestCityView: View {
             .fixedSize(horizontal: false, vertical: true)
             .frame(maxWidth: 800)
         }
-    }
-    func flag(country: String) -> String {
-        let base : UInt32 = 127397
-        var s = ""
-        for v in country.uppercased().unicodeScalars {
-            s.unicodeScalars.append(UnicodeScalar(base + v.value)!)
-        }
-        return String(s)
     }
 }

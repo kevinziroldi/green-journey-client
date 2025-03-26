@@ -54,10 +54,10 @@ private struct Co2RecapViewTitle: View {
     var color: Color
     var body: some View {
         VStack {
-            Text("Co2")
+            Text("CO\u{2082}")
                 .font(.title)
                 .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 0))
-                .foregroundStyle(color).opacity(0.8)
+                .foregroundStyle(color)
                 .fontWeight(.semibold)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
