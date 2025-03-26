@@ -13,8 +13,10 @@ struct TravelCardView: View {
             
             ZStack {
                 RoundedRectangle(cornerRadius: 15)
-                    .fill(computeTravelBackColor(travel: travelDetails))
-                    .strokeBorder(computeTravelColor(travel: travelDetails), lineWidth: 3)
+                    //.fill(computeTravelBackColor(travel: travelDetails))
+                    //.strokeBorder(computeTravelColor(travel: travelDetails), lineWidth: 3)
+                    .fill(Color(uiColor: .systemBackground))
+                    .shadow(radius: 1)
                 
                 VStack {
                     HStack{
@@ -42,8 +44,12 @@ struct TravelCardView: View {
                         Image(systemName: "carbon.dioxide.cloud")
                             .font(.title)
                             .padding(.trailing, 10)
+                            .foregroundStyle(computeTravelBackColor(travel: travelDetails))
                         Text("Compensation:" )
+                            .foregroundStyle(computeTravelBackColor(travel: travelDetails))
                         Text(String(format: "%.1f", travelDetails.travel.CO2Compensated) + " / " + String(format: "%.1f", travelDetails.computeCo2Emitted()) + " Kg")
+                            .fontWeight(.semibold)
+                            .foregroundStyle(computeTravelBackColor(travel: travelDetails))
                     }
                     .scaledToFit()
                     .minimumScaleFactor(0.7)
@@ -116,12 +122,19 @@ struct TravelCardView: View {
     }
     
     func computeTravelBackColor(travel: TravelDetails) -> LinearGradient{
-        if travel.travel.CO2Compensated >= travel.computeCo2Emitted() {
-            return LinearGradient(colors: [.green.opacity(0.3), .blue.opacity(0.3)], startPoint: .bottomLeading, endPoint: .topTrailing)
+        let co2Emitted = travel.computeCo2Emitted()
+        let distance = travel.computeTotalDistance()
+        
+        if travel.travel.CO2Compensated >= co2Emitted {
+            return LinearGradient(colors: [.green, .blue], startPoint: .bottomLeading, endPoint: .topTrailing)
         }
-        else {
-            return LinearGradient(colors: [Color(uiColor: .systemBackground)], startPoint: .bottomLeading, endPoint: .topTrailing)
+        if distance/co2Emitted > 30  {
+            return AppColors.ecoGreenTravel
         }
+        if distance/co2Emitted > 20 {
+            return AppColors.ecoYellowTravel
+        }
+        return AppColors.ecoRedTravel
     }
 }
 
