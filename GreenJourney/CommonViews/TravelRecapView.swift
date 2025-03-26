@@ -14,14 +14,14 @@ struct TravelRecapView: View {
         ZStack {
             RoundedRectangle(cornerRadius: 15)
                 .fill(Color(uiColor: .systemBackground))
-                .shadow(color: AppColors.mainColor.opacity(0.3), radius: 5, x: 0, y: 3)
+                .shadow(radius: 3, x: 0, y: 3)
             
             if singleColumn {
                 VStack(spacing:0) {
                     HStack {
                         Text("Recap")
                             .font(.title)
-                            .foregroundStyle(AppColors.blue)
+                            .foregroundStyle(AppColors.mainColor)
                             .fontWeight(.semibold)
                             .frame(maxWidth: .infinity, alignment: .leading)
                         
@@ -47,7 +47,7 @@ struct TravelRecapView: View {
                     HStack {
                         Text("Recap")
                             .font(.title)
-                            .foregroundStyle(AppColors.blue)
+                            .foregroundStyle(AppColors.mainColor)
                             .fontWeight(.semibold)
                             .frame(maxWidth: .infinity, alignment: .leading)
                         
@@ -95,22 +95,21 @@ private struct DistanceEntryView: View {
             Image(systemName: "road.lanes")
                 .resizable()
                 .scaledToFit()
-                .frame(width: 30, height: 30)
-                .foregroundColor(AppColors.blue)
+                .frame(width: 25, height: 25)
+                .foregroundColor(AppColors.mainColor)
             
             Text("Distance")
-                .font(.system(size: 20).bold())
+                .font(.system(size: 20, weight: .semibold))
                 .foregroundColor(.primary)
-                .padding(.leading, 5)
-                .frame(width: 120, alignment: .leading)
+                .padding(.leading, 10)
+                .frame(width: 140, alignment: .leading)
             Text(String(format: "%.1f", distance) + " Km")
-                .font(.system(size: 25).bold())
-                .bold()
-                .foregroundColor(AppColors.blue.opacity(0.8))
+                .font(.system(size: 22, weight: .semibold))
+                
             Spacer()
         }
         .padding(.horizontal)
-        .padding(.vertical, 10)
+        .padding(.vertical, 5)
     }
 }
 
@@ -123,23 +122,22 @@ private struct DurationEntryView: View {
             Image(systemName: "clock")
                 .resizable()
                 .scaledToFit()
-                .frame(width: 30, height: 30)
-                .foregroundColor(AppColors.blue)
+                .frame(width: 25, height: 25)
+                .foregroundColor(AppColors.mainColor)
         
         Text("Duration")
-            .font(.system(size: 20).bold())
+            .font(.system(size: 20, weight: .semibold))
             .foregroundColor(.primary)
-            .padding(.leading, 5)
-            .frame(width: 120, alignment: .leading)
+            .padding(.leading, 10)
+            .frame(width: 140, alignment: .leading)
         
         Text(duration)
-            .font(.system(size: 25).bold())
-            .bold()
-            .foregroundColor(AppColors.blue.opacity(0.8))
+            .font(.system(size: 22, weight: .semibold))
+            
         Spacer()
     }
     .padding(.horizontal)
-    .padding(.vertical, 10)
+    .padding(.vertical, 5)
     
     }
 }
@@ -152,22 +150,21 @@ private struct PriceEntryView: View {
                 Image("price_red")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 30, height: 30)
+                    .frame(width: 25, height: 25)
                     .foregroundColor(.red)
             Text("Price")
-                .font(.system(size: 20).bold())
+                .font(.system(size: 20, weight: .semibold))
                 .foregroundColor(.primary)
-                .padding(.leading, 5)
-                .frame(width: 120, alignment: .leading)
+                .padding(.leading, 10)
+                .frame(width: 140, alignment: .leading)
 
             Text(String(format: "%.2f", price) + " €")
-                .font(.system(size: 25).bold())
-                .bold()
-                .foregroundColor(.red.opacity(0.8))
+                .font(.system(size: 22, weight: .semibold))
+                
             Spacer()
         }
         .padding(.horizontal)
-        .padding(.vertical, 10)
+        .padding(.vertical, 5)
     }
 }
 
@@ -178,22 +175,21 @@ private struct GreenPriceEntryView: View {
             Image("price_green")
                 .resizable()
                 .scaledToFit()
-                .frame(width: 30, height: 30)
+                .frame(width: 25, height: 25)
                 .foregroundColor(.green)
             
             Text("Green price")
-                .font(.system(size: 20).bold())
+                .font(.system(size: 20, weight: .semibold))
                 .foregroundColor(.primary)
-                .padding(.leading, 5)
-                .frame(width: 120, alignment: .leading)
+                .padding(.leading, 10)
+                .frame(width: 140, alignment: .leading)
             
             Text(String(format: "%.2f", greenPrice) + " €")
-                .font(.system(size: 25).bold())
-                .bold()
-                .foregroundColor(.green.opacity(0.8))
+                .font(.system(size: 22, weight: .semibold))
+                
             Spacer()
         }
-        .padding(EdgeInsets(top: 10, leading: 15, bottom: 15, trailing: 15))
+        .padding(EdgeInsets(top: 5, leading: 15, bottom: 15, trailing: 15))
     }
 }
 

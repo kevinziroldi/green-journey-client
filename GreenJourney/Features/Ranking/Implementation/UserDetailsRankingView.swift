@@ -112,7 +112,7 @@ private struct RecapViewCompactDevice: View {
         ZStack {
             RoundedRectangle(cornerRadius: 15)
                 .fill(Color(uiColor: .systemBackground))
-                .shadow(color: AppColors.mainColor.opacity(0.3), radius: 5, x: 0, y: 3)
+                .shadow(radius: 3, x: 0, y: 3)
             VStack {
                 Text("Recap")
                     .font(.title)
@@ -125,7 +125,7 @@ private struct RecapViewCompactDevice: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 35, height: 35)
-                        .foregroundColor(AppColors.blue)
+                        .foregroundColor(AppColors.mainColor)
                     Text("Distance")
                         .font(.system(size: 20).bold())
                         .frame(maxWidth: 250, alignment: .leading)
@@ -133,7 +133,7 @@ private struct RecapViewCompactDevice: View {
                     Text(String(format: "%.1f", user.totalDistance) + " Km")
                         .font(.system(size: 22).bold())
                         .bold()
-                        .foregroundColor(AppColors.blue.opacity(0.8))
+                        .foregroundColor(AppColors.mainColor.opacity(0.8))
                     
                     
                     Spacer()
@@ -145,7 +145,7 @@ private struct RecapViewCompactDevice: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 35, height: 35)
-                        .foregroundColor(AppColors.blue)
+                        .foregroundColor(AppColors.mainColor)
                     
                     Text("Time")
                         .font(.system(size: 20).bold())
@@ -154,9 +154,7 @@ private struct RecapViewCompactDevice: View {
                     
                     Text(viewModel.computeTotalDuration(duration: user.totalDuration))
                         .font(.system(size: 22).bold())
-                        .bold()
-                        .foregroundColor(AppColors.blue.opacity(0.8))
-                    
+                        .foregroundColor(AppColors.mainColor.opacity(0.8))
                     
                     Spacer()
                 }
@@ -175,7 +173,6 @@ private struct RecapViewCompactDevice: View {
                         .padding(.leading, 5)
                     Text(String(format: "%.0f", user.totalCo2Emitted) + " Kg")
                         .font(.system(size: 22).bold())
-                        .bold()
                         .foregroundColor(AppColors.green.opacity(0.8))
                     
                     
@@ -196,7 +193,6 @@ private struct RecapViewCompactDevice: View {
                         .padding(.leading, 5)
                     Text(String(format: "%.0f", user.totalCo2Compensated) + " Kg")
                         .font(.system(size: 20).bold())
-                        .bold()
                         .foregroundColor(AppColors.green.opacity(0.8))
                     
                     
@@ -219,7 +215,7 @@ private struct RecapViewRegularDevice: View {
         ZStack {
             RoundedRectangle(cornerRadius: 15)
                 .fill(Color(uiColor: .systemBackground))
-                .shadow(color: .indigo.opacity(0.3), radius: 5, x: 0, y: 3)
+                .shadow(radius: 3, x: 0, y: 3)
             VStack {
                 Text("Recap")
                     .font(.title)
@@ -242,7 +238,6 @@ private struct RecapViewRegularDevice: View {
                     
                     Text(String(format: "%.1f", user.totalDistance) + " Km")
                         .font(.system(size: 22).bold())
-                        .bold()
                         .foregroundColor(.indigo.opacity(0.8))
                     //.frame(width: 180, alignment: .leading)
                     
@@ -269,7 +264,6 @@ private struct RecapViewRegularDevice: View {
                     
                     Text(viewModel.computeTotalDuration(duration: user.totalDuration))
                         .font(.system(size: 22).bold())
-                        .bold()
                         .foregroundColor(.blue.opacity(0.8))
                     
                     Text("in travel")
@@ -297,7 +291,7 @@ private struct Co2EmissionView: View {
         ZStack {
             RoundedRectangle(cornerRadius: 15)
                 .fill(Color(uiColor: .systemBackground))
-                .shadow(color: .green.opacity(0.3), radius: 5, x: 0, y: 3)
+                .shadow(radius: 3, x: 0, y: 3)
             VStack {
                 Text("Compensation recap")
                     .font(.title)

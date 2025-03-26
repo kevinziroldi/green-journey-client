@@ -181,7 +181,7 @@ private struct ReviewableCitiesView: View {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 15)
                                     .fill(Color(uiColor: .systemBackground))
-                                    .shadow(color: AppColors.mainColor.opacity(0.2), radius: 5, x: 0, y: 1)
+                                    .shadow(radius: 2, x: 0, y: 2)
                                 VStack {
                                     Text(city.cityName)
                                         .font(.system(size: 20).bold())
@@ -282,7 +282,7 @@ private struct BestCityView: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 15)
                     .fill(Color(uiColor: .systemBackground))
-                    .shadow(color: AppColors.mainColor.opacity(0.3), radius: 5, x: 0, y: 3)
+                    .shadow(radius: 2, x: 0, y: 2)
                 
                 HStack {
                     ZStack {
@@ -333,7 +333,7 @@ private struct BestCityView: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 15)
                     .fill(Color(uiColor: .systemBackground))
-                    .shadow(color: AppColors.mainColor.opacity(0.3), radius: 5, x: 0, y: 3)
+                    .shadow(radius: 2, x: 0, y: 2)
                 
                 HStack {
                     ZStack {

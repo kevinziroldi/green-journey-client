@@ -160,7 +160,7 @@ private struct SingleReviewView: View {
         ZStack {
             RoundedRectangle(cornerRadius: 15)
                 .fill(Color(uiColor: .systemBackground))
-                .shadow(color: .blue.opacity(0.3), radius: 5, x: 0, y: 3)
+                .shadow(radius: 3, x: 0, y: 3)
             
             VStack {
                 HStack {
