@@ -8,6 +8,7 @@ struct RankingView: View {
     @StateObject var viewModel: RankingViewModel
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @Environment(\.modelContext) private var modelContext
+    @Query var users: [User]
     @State var legendTapped: Bool = false
     private var serverService: ServerServiceProtocol
     private var firebaseAuthService: FirebaseAuthServiceProtocol
@@ -111,9 +112,11 @@ struct RankingView: View {
                 .overlay(Color.clear.accessibilityIdentifier("infoBadgesView"))
         }
         .onAppear {
-            Task {
-                await viewModel.getUserFromServer()
-                await viewModel.fecthRanking()
+            if users.first != nil {
+                Task {
+                    await viewModel.getUserFromServer()
+                    await viewModel.fecthRanking()
+                }
             }
         }
     }
@@ -138,7 +141,7 @@ private struct LeaderboardNavigationView: View {
     let leaderboard: [RankingElement]
     var gridItems: [GridItem]
     let leaderboardType: Bool
-
+    
     var body: some View {
         NavigationLink(destination: RankingLeaderBoardView(viewModel: viewModel, navigationPath: $navigationPath, title: title, gridItems: gridItems, currentRanking: leaderboard)) {
             ZStack {

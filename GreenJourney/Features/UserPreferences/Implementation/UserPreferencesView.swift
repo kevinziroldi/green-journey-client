@@ -307,12 +307,6 @@ private struct LogoutButtonView: View {
         // logout button
         Button(action: {
             authenticationViewModel.logout()
-            navigationPath = NavigationPath()
-            
-            if horizontalSizeClass == .compact {
-                // compact devices use TabView, which has not UserPreferences inside
-                navigationPath.append(NavigationDestination.LoginView)
-            }
         }) {
             Text("Logout")
                 .font(.title3)
