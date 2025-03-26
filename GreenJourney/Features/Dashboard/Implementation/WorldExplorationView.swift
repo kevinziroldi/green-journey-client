@@ -3,6 +3,7 @@ import SwiftUI
 struct WorldExplorationView: View {
     @ObservedObject var viewModel: DashboardViewModel
     @Environment(\.colorScheme) var colorScheme: ColorScheme
+    
     var body: some View {
         ScrollView {
             VStack {
@@ -37,7 +38,7 @@ struct WorldExplorationView: View {
                     }
                     .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
                     
-                    HorizontalBarChart(keys: viewModel.countriesPerContinent.keys.sorted(), data: viewModel.countriesPerContinent.keys.sorted().map{Float64(viewModel.countriesPerContinent[$0]!)}, title: "Countries", color: AppColors.orange, measureUnit: "")
+                    HorizontalBarChart(data: viewModel.countriesPerContinent, title: "Countries", measurementUnit: "", color: AppColors.orange, sortData: true)
                         .frame(height: 250)
                         .padding()
                         .overlay(Color.clear.accessibilityIdentifier("countriesPerContinent"))
@@ -59,6 +60,12 @@ struct WorldExplorationView: View {
                     }
                     .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
                     .overlay(Color.clear.accessibilityIdentifier("visitedCountries"))
+                    
+                    HorizontalBarChart(data: viewModel.mostVisitedCountries, title: "Most visited countries", measurementUnit: "", color: AppColors.orange, sortData: false)
+                        .frame(height: 250)
+                        .padding()
+                        .overlay(Color.clear.accessibilityIdentifier("mostVisitedCountries"))
+                    
                 }.frame(maxWidth: 800)
             }
             .frame(maxWidth: .infinity)

@@ -1,7 +1,6 @@
 import SwiftUI
 import Charts
 
-/*
 struct ChartElement: Identifiable {
     let id = UUID()
     let name: String
@@ -9,68 +8,7 @@ struct ChartElement: Identifiable {
     let color: Color
 }
 
-struct BarChartView: View {
-    let title: String
-    let value: String
-    let data: [Int]
-    let labels: [String]
-    let color: Color
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            HStack {
-                Text(title)
-                    .font(.title)
-                    .foregroundStyle(color.opacity(0.8))
-                    .fontWeight(.semibold)
-                Spacer()
-                if value != "" {
-                    ZStack {
-                        Circle()
-                            .fill(color.opacity(0.2).gradient)
-                            .frame(width: 50, height: 50)
-                        Text(value)
-                            .font(.title)
-                            .foregroundStyle(color)
-                            .fontWeight(.semibold)
-                    }
-                }
-                Spacer()
-                Spacer()
-            }
-            .scaledToFit()
-            .minimumScaleFactor(0.6)
-            .lineLimit(1)
-            .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 0))
-            
-            Chart {
-                ForEach(data.indices, id: \..self) { index in
-                    BarMark(
-                        x: .value("Year", labels[index]),
-                        y: .value("Trips", data[index])
-                    )
-                    .foregroundStyle(color.gradient)
-                    .cornerRadius(10)
-                    .annotation(position: .top) {
-                        Text("\(Int(data[index]))")
-                            .font(.caption)
-                            .fontWeight(.bold)
-                            .foregroundColor(.primary.opacity(0.8))
-                    }
-                }
-            }
-            .frame(height: 250)
-            .padding()
-        }
-        .background(Color(UIColor.systemBackground))
-        .cornerRadius(15)
-        .shadow(color: color.opacity(0.3), radius: 5, x: 0, y: 3)
-    }
-}
-
 struct PieChartView: View {
-    var keys: [String]
-    var data: [Int]
     var title: String
     let color: Color
     let icon: String
@@ -78,20 +16,23 @@ struct PieChartView: View {
     private var colorCorrespondences: [String : Color]
     var chartData: [ChartElement]
     
-    init(keys: [String], data: [Int], title: String, color: Color, icon: String, colors: [Color]) {
-        self.keys = keys
-        self.data = data
+    init(data: [String: Int], title: String, color: Color, icon: String, colors: [Color]) {
         self.title = title
         self.color = color
         self.icon = icon
         self.colors = colors
         
+        // sort data
+        let sortedData = data.sorted { $0.key < $1.key }
+        
+        // buil data structures
         self.colorCorrespondences = [:]
         self.chartData = []
-        for (i, key) in keys.enumerated() {
-            let chartElement = ChartElement(name: key, value: Double(data[i]), color: colors[i])
+        for (i, element) in sortedData.enumerated() {
+            let elementColor = i < colors.count ? colors[i] : color
+            let chartElement = ChartElement(name: element.key, value: Double(element.value), color: elementColor)
             self.chartData.append(chartElement)
-            self.colorCorrespondences[key] = colors[i]
+            self.colorCorrespondences[element.key] = elementColor
         }
     }
     
@@ -159,12 +100,110 @@ struct PieChartView: View {
     }
 }
 
+struct BarChartView: View {
+    let title: String
+    let value: String
+    let color: Color
+    
+    var chartData: [ChartElement]
+    
+    init(data: [String: Int], title: String, value: String, color: Color) {
+        self.title = title
+        self.value = value
+        self.color = color
+
+        // sort data
+        let sortedData = data.sorted { $0.key < $1.key }
+        
+        // buil data structures
+        self.chartData = []
+        for (i, element) in sortedData.enumerated() {
+            let chartElement = ChartElement(name: element.key, value: Double(element.value), color: color)
+            self.chartData.append(chartElement)
+        }
+    }
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            HStack {
+                Text(title)
+                    .font(.title)
+                    .foregroundStyle(color.opacity(0.8))
+                    .fontWeight(.semibold)
+                Spacer()
+                if value != "" {
+                    ZStack {
+                        Circle()
+                            .fill(color.opacity(0.2).gradient)
+                            .frame(width: 50, height: 50)
+                        Text(value)
+                            .font(.title)
+                            .foregroundStyle(color)
+                            .fontWeight(.semibold)
+                    }
+                }
+                Spacer()
+                Spacer()
+            }
+            .scaledToFit()
+            .minimumScaleFactor(0.6)
+            .lineLimit(1)
+            .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 0))
+            
+            Chart {
+                ForEach(chartData) { chartElement in
+                    BarMark(
+                        x: .value("Year", chartElement.name),
+                        y: .value("Trips", Int(chartElement.value))
+                    )
+                    .foregroundStyle(chartElement.color.gradient)
+                    .cornerRadius(10)
+                    .annotation(position: .top) {
+                        Text("\(Int(chartElement.value))")
+                            .font(.caption)
+                            .fontWeight(.bold)
+                            .foregroundColor(.primary.opacity(0.8))
+                    }
+                }
+            }
+            .frame(height: 250)
+            .padding()
+        }
+        .background(Color(UIColor.systemBackground))
+        .cornerRadius(15)
+        .shadow(color: color.opacity(0.3), radius: 5, x: 0, y: 3)
+    }
+}
+
 struct HorizontalBarChart: View {
-    var keys: [String]
-    var data: [Float64]
     var title: String
     let color: Color
     let measureUnit: String
+    
+    var chartData: [ChartElement]
+
+    init(data: [String: Float64], title: String, measurementUnit: String, color: Color, sortData: Bool) {
+        self.title = title
+        self.measureUnit = measurementUnit
+        self.color = color
+
+        // buil data structures
+        self.chartData = []
+        
+        if sortData {
+            // sort data
+            let sortedData = data.sorted { $0.key < $1.key }
+            for (_, element) in sortedData.enumerated() {
+                let chartElement = ChartElement(name: element.key, value: Double(element.value), color: color)
+                self.chartData.append(chartElement)
+            }
+        } else {
+            for (_, element) in data.enumerated() {
+                let chartElement = ChartElement(name: element.key, value: Double(element.value), color: color)
+                self.chartData.append(chartElement)
+            }
+        }
+    }
     
     var body: some View {
         VStack {
@@ -178,12 +217,14 @@ struct HorizontalBarChart: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal)
                 .padding(.top)
+            
+            
             Chart {
-                ForEach(data.indices, id: \..self) { index in
-                    BarMark(x: .value("Value", data[index]), y: .value("Vehicle", keys[index]))
+                ForEach(chartData) { chartElement in
+                    BarMark(x: .value("Value", chartElement.value), y: .value("Vehicle", chartElement.name))
                         .annotation(position: .trailing) {
-                            if data[index] > 0 {
-                                Text(String(format: "%.0f", data[index]) + " " + measureUnit)
+                            if chartElement.value > 0 {
+                                Text(String(format: "%.0f", chartElement.value) + " " + measureUnit)
                                     .foregroundColor(.secondary)
                                     .font(.caption)
                             }
@@ -294,4 +335,3 @@ struct DoubleBarChart: View {
         .shadow(radius: 5, x: 0, y: 3)
     }
 }
-*/

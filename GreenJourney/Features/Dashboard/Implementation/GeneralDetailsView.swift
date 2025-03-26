@@ -13,20 +13,21 @@ struct GeneralDetailsView: View {
                     // iOS
                     
                     VStack {
-                        HorizontalBarChart(keys: viewModel.distancePerTransport.keys.sorted(), data: viewModel.distancePerTransport.keys.sorted().map{viewModel.distancePerTransport[$0]!}, title: "Distance per vehicle", color: AppColors.blue, measureUnit: "Km")
+                        HorizontalBarChart(data: viewModel.distancePerTransport, title: "Distance per vehicle", measurementUnit: "Km", color: AppColors.blue, sortData: true)
                             .padding()
                             .frame(height: 250)
                             .overlay(Color.clear.accessibilityIdentifier("distancePerVehicle"))
                         
-                        BarChartView(title: "Distance traveled (Km)", value: "", data: viewModel.distances.keys.sorted().map{viewModel.distances[$0]!}, labels: viewModel.keysToString(keys: viewModel.distances.keys.sorted()), color: AppColors.blue)
+                        BarChartView(data: viewModel.distances, title: "Distance traveled (Km)", value: "", color: AppColors.blue)
                             .padding()
                             .overlay(Color.clear.accessibilityIdentifier("distancePerYear"))
                         
-                        PieChartView(keys: viewModel.travelsPerTransport.keys.sorted(), data: viewModel.travelsPerTransport.keys.sorted().map{viewModel.travelsPerTransport[$0]!}, title: "Most chosen Vehicle", color: AppColors.blue, icon: viewModel.mostChosenVehicle, colors: [AppColors.blue, AppColors.orange, AppColors.green, AppColors.red, AppColors.purple])
+                        
+                        PieChartView(data: viewModel.travelsPerTransport, title: "Most chosen Vehicle", color: AppColors.blue, icon: viewModel.mostChosenVehicle, colors: [AppColors.blue, AppColors.orange, AppColors.green, AppColors.red, AppColors.purple])
                             .padding()
                             .overlay(Color.clear.accessibilityIdentifier("mostChosenVehicle"))
                         
-                        BarChartView(title: "Trips completed", value: "\(viewModel.totalTripsMade)", data: viewModel.tripsMade.keys.sorted().map{viewModel.tripsMade[$0]!}, labels: viewModel.keysToString(keys: viewModel.tripsMade.keys.sorted()) , color: AppColors.blue)
+                        BarChartView(data: viewModel.tripsMade, title: "Trips completed", value: "\(viewModel.totalTripsMade)", color: AppColors.blue)
                             .padding()
                             .overlay(Color.clear.accessibilityIdentifier("tripsCompleted"))
                         
@@ -38,22 +39,23 @@ struct GeneralDetailsView: View {
                     
                     VStack {
                         HStack {
-                            BarChartView(title: "Distance traveled (Km)", value: "", data: viewModel.distances.keys.sorted().map{viewModel.distances[$0]!}, labels: viewModel.keysToString(keys: viewModel.distances.keys.sorted()), color: AppColors.blue)
+                            BarChartView(data: viewModel.distances, title: "Distance traveled (Km)", value: "", color: AppColors.blue)
                                 .padding()
                                 .overlay(Color.clear.accessibilityIdentifier("distancePerYear"))
                             
-                            BarChartView(title: "Trips completed", value: "\(viewModel.totalTripsMade)", data: viewModel.tripsMade.keys.sorted().map{viewModel.tripsMade[$0]!}, labels: viewModel.keysToString(keys: viewModel.tripsMade.keys.sorted()) , color: AppColors.blue)
+                            BarChartView(data: viewModel.tripsMade, title: "Trips completed", value: "\(viewModel.totalTripsMade)", color: AppColors.blue)
                                 .padding()
                                 .overlay(Color.clear.accessibilityIdentifier("tripsCompleted"))
                         }
                         
-                        HorizontalBarChart(keys: viewModel.distancePerTransport.keys.sorted(), data: viewModel.distancePerTransport.keys.sorted().map{viewModel.distancePerTransport[$0]!}, title: "Distance per vehicle", color: AppColors.blue, measureUnit: "Km")
+                        HorizontalBarChart(data: viewModel.distancePerTransport, title: "Distance per vehicle", measurementUnit: "Km", color: AppColors.blue, sortData: true)
                             .padding()
                             .frame(height: 250)
                             .overlay(Color.clear.accessibilityIdentifier("distancePerVehicle"))
                         
                         HStack(alignment: .top) {
-                            PieChartView(keys: viewModel.travelsPerTransport.keys.sorted(), data: viewModel.travelsPerTransport.keys.sorted().map{viewModel.travelsPerTransport[$0]!}, title: "Most chosen Vehicle", color: AppColors.blue, icon: viewModel.mostChosenVehicle, colors: [AppColors.blue, AppColors.orange, AppColors.green, AppColors.red, AppColors.purple])
+                            
+                            PieChartView(data: viewModel.travelsPerTransport, title: "Most chosen Vehicle", color: AppColors.blue, icon: viewModel.mostChosenVehicle, colors: [AppColors.blue, AppColors.orange, AppColors.green, AppColors.red, AppColors.purple])
                                 .padding()
                                 .overlay(Color.clear.accessibilityIdentifier("mostChosenVehicle"))
                             
