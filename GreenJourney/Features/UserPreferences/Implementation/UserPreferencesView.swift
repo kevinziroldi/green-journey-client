@@ -318,8 +318,7 @@ private struct LogoutButtonView: View {
                 .font(.title3)
                 .fontWeight(.regular)
         }
-        .buttonStyle(.bordered)
-        .padding(EdgeInsets(top: 30, leading: 0, bottom: 10, trailing: 0))
+        .buttonStyle(.borderedProminent)
         .accessibilityIdentifier("logoutButton")
     }
 }

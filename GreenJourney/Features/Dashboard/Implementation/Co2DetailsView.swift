@@ -21,7 +21,7 @@ struct Co2DetailsView: View {
                             .frame(height: 250)
                             .overlay(Color.clear.accessibilityIdentifier("co2EmittedPerVehicle"))
                         
-                        DoubleBarChart(element1: "Co2 Emitted", keys: viewModel.keysToString(keys: viewModel.co2CompensatedPerYear.keys.sorted()), data1: viewModel.co2EmittedPerYear.keys.sorted().map{viewModel.co2EmittedPerYear[$0]!}, element2: "Co2 Compensated", data2: viewModel.co2CompensatedPerYear.keys.sorted().map{viewModel.co2CompensatedPerYear[$0]!}, title: "Co2 per year", measureunit: "Kg of CO2")
+                        DoubleBarChart(element1: "Co2 Emitted", keys: viewModel.keysToString(keys: viewModel.co2CompensatedPerYear.keys.sorted()), data1: viewModel.co2EmittedPerYear.keys.sorted().map{viewModel.co2EmittedPerYear[$0]!}, color1: AppColors.orange, element2: "Co2 Compensated", data2: viewModel.co2CompensatedPerYear.keys.sorted().map{viewModel.co2CompensatedPerYear[$0]!}, color2: AppColors.blue, title: "Co2 per year", measureunit: "Kg of CO2")
                             .padding()
                             .overlay(Color.clear.accessibilityIdentifier("co2EmittedPerYear"))
                         
@@ -47,7 +47,7 @@ struct Co2DetailsView: View {
                             .frame(height: 250)
                             .overlay(Color.clear.accessibilityIdentifier("co2EmittedPerVehicle"))
                         
-                        DoubleBarChart(element1: "Co2 Emitted", keys: viewModel.keysToString(keys: viewModel.co2CompensatedPerYear.keys.sorted()), data1: viewModel.co2EmittedPerYear.keys.sorted().map{viewModel.co2EmittedPerYear[$0]!}, element2: "Co2 Compensated", data2: viewModel.co2CompensatedPerYear.keys.sorted().map{viewModel.co2CompensatedPerYear[$0]!}, title: "Co2 per year", measureunit: "Kg of CO2")
+                        DoubleBarChart(element1: "Co2 Emitted", keys: viewModel.keysToString(keys: viewModel.co2CompensatedPerYear.keys.sorted()), data1: viewModel.co2EmittedPerYear.keys.sorted().map{viewModel.co2EmittedPerYear[$0]!}, color1: AppColors.orange, element2: "Co2 Compensated", data2: viewModel.co2CompensatedPerYear.keys.sorted().map{viewModel.co2CompensatedPerYear[$0]!}, color2: AppColors.blue, title: "Co2 per year", measureunit: "Kg of CO2")
                             .padding()
                             .overlay(Color.clear.accessibilityIdentifier("co2EmittedPerYear"))
                     }

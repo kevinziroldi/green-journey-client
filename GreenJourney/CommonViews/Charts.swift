@@ -1,6 +1,13 @@
 import SwiftUI
 import Charts
 
+struct ChartElement: Identifiable {
+    let id = UUID()
+    let name: String
+    let value: Double
+    let color: Color
+}
+
 struct BarChartView: View {
     let title: String
     let value: String
@@ -34,7 +41,7 @@ struct BarChartView: View {
             .minimumScaleFactor(0.6)
             .lineLimit(1)
             .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 0))
-
+            
             Chart {
                 ForEach(data.indices, id: \..self) { index in
                     BarMark(
@@ -42,9 +49,7 @@ struct BarChartView: View {
                         y: .value("Trips", data[index])
                     )
                     .foregroundStyle(color.gradient)
-                    .cornerRadius(10) // rounding of bars
-
-                    // Adding label on top of each bar
+                    .cornerRadius(10)
                     .annotation(position: .top) {
                         Text("\(Int(data[index]))")
                             .font(.caption)
@@ -68,6 +73,27 @@ struct PieChartView: View {
     var title: String
     let color: Color
     let icon: String
+    var colors: [Color]
+    private var colorCorrespondences: [String : Color]
+    var chartData: [ChartElement]
+    
+    init(keys: [String], data: [Int], title: String, color: Color, icon: String, colors: [Color]) {
+        self.keys = keys
+        self.data = data
+        self.title = title
+        self.color = color
+        self.icon = icon
+        self.colors = colors
+        
+        self.colorCorrespondences = [:]
+        self.chartData = []
+        for (i, key) in keys.enumerated() {
+            let chartElement = ChartElement(name: key, value: Double(data[i]), color: colors[i])
+            self.chartData.append(chartElement)
+            self.colorCorrespondences[key] = colors[i]
+        }
+    }
+    
     var body: some View {
         VStack {
             HStack {
@@ -92,54 +118,43 @@ struct PieChartView: View {
             .scaledToFit()
             .minimumScaleFactor(0.6)
             .lineLimit(1)
+            
+            
             Chart {
-                ForEach(data.indices, id: \..self) { index in
-                    SectorMark(angle: .value("Distance", data[index]), angularInset: 2)
-                        .foregroundStyle(by: .value("Vehicle", keys[index]))
+                ForEach(chartData) { chartElement in
+                    SectorMark(angle: .value("Distance", chartElement.value), angularInset: 2)
+                        .foregroundStyle(chartElement.color)
                         .cornerRadius(5)
                         .annotation(position: .overlay) {
-                            if data[index] != 0 {
-                                Text("\(data[index])")
+                            if chartElement.value != 0 {
+                                Text("\(Int(chartElement.value))")
                                     .font(.headline)
                                     .foregroundStyle(.white)
                             }
                         }
                 }
-                
             }
             .padding()
             .padding(.bottom)
-            .chartLegend {
-                HStack(spacing: 10) {
-                    ForEach(Array(zip(data, keys)), id: \.1) { (value, key) in
-                        HStack {
-                            Circle()
-                                .fill(colorForKey(key))
-                                .frame(width: 12, height: 12)
-                            Text(key)
-                                .foregroundColor(.primary)
-                                .font(.system(size: 15, weight: .semibold))
-                        }
+            
+            HStack(spacing: 10) {
+                ForEach(chartData) { chartElement in
+                    HStack {
+                        Circle()
+                            .fill(chartElement.color)
+                            .frame(width: 12, height: 12)
+                        Text(chartElement.name)
+                            .foregroundColor(.primary)
+                            .font(.system(size: 15, weight: .semibold))
                     }
                 }
-                .padding(.top)
             }
+            .padding(.bottom)
         }
         .frame(height: 350)
         .background(Color(UIColor.systemBackground))
         .cornerRadius(15)
         .shadow(color: color.opacity(0.3), radius: 5, x: 0, y: 3)
-    }
-    
-    func colorForKey(_ key: String) -> Color {
-        switch key {
-        case "bike": return Color.blue
-        case "bus": return Color.green
-        case "car": return Color.orange
-        case "plane": return Color.purple
-        case "train": return Color.red
-        default: return Color.gray
-        }
     }
 }
 
@@ -149,6 +164,7 @@ struct HorizontalBarChart: View {
     var title: String
     let color: Color
     let measureUnit: String
+    
     var body: some View {
         VStack {
             Text(title)
@@ -193,20 +209,26 @@ struct HorizontalBarChart: View {
 struct DoubleBarChart: View {
     let element1: String
     let data1: [String : Double]
+    let color1: Color
     let element2: String
     let data2: [String : Double]
+    let color2: Color
     let seriesData: [(element: String, data: [String: Double])]
     let title: String
     let measureUnit: String
+    private let colorCorrespondences: [String : Color]
     
-    init(element1: String, keys: [String], data1: [Double], element2: String, data2: [Double], title: String, measureunit: String) {
+    init(element1: String, keys: [String], data1: [Double], color1: Color, element2: String, data2: [Double], color2: Color, title: String, measureunit: String) {
         self.element1 = element1
         self.data1 = Dictionary(uniqueKeysWithValues: zip(keys, data1))
+        self.color1 = color1
         self.element2 = element2
         self.data2 = Dictionary(uniqueKeysWithValues: zip(keys, data2))
+        self.color2 = color2
         self.seriesData = [(element1, self.data1), (element2, self.data2)]
         self.title = title
         self.measureUnit = measureunit
+        self.colorCorrespondences = [element1 : color1, element2 : color2]
     }
     
     var body: some View {
@@ -221,13 +243,14 @@ struct DoubleBarChart: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal)
                 .padding(.top)
+                        
             Chart {
                 ForEach(seriesData, id: \.0) { series in
                     ForEach(series.data.sorted(by: { $0.key < $1.key }), id: \.key) { item in
                         BarMark(x: .value("Year", item.key), y: .value("", item.value), width: .fixed(20))
                             .cornerRadius(5)
                             .annotation(position: .top) {
-                                   if item.value > 0 {
+                                if item.value > 0 {
                                     Text(String(format: "%.0f", item.value))
                                         .foregroundColor(.secondary)
                                         .font(.caption)
@@ -241,6 +264,12 @@ struct DoubleBarChart: View {
             .chartYAxisLabel {
                 Text(measureUnit)
             }
+            .chartForegroundStyleScale(
+                [
+                    element1: color1,
+                    element2: color2
+                ]
+            )
             .frame(height: 250)
             .padding()
             .chartLegend {
@@ -248,7 +277,7 @@ struct DoubleBarChart: View {
                     ForEach(seriesData, id: \.0) { series in
                         HStack {
                             Circle()
-                                .fill(colorForSeries(series.element))
+                                .fill(colorCorrespondences[series.element] ?? .gray)
                                 .frame(width: 12, height: 12)
                             Text(series.element)
                                 .foregroundColor(.primary)
@@ -262,13 +291,5 @@ struct DoubleBarChart: View {
         .background(Color(UIColor.systemBackground))
         .cornerRadius(15)
         .shadow(radius: 5, x: 0, y: 3)
-    }
-    
-    func colorForSeries(_ series: String) -> Color {
-        switch series {
-        case "Co2 Emitted": return Color.blue
-        case "Co2 Compensated": return Color.green
-        default: return Color.gray
-        }
     }
 }

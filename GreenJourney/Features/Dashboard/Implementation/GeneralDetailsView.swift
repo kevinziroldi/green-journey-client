@@ -22,7 +22,7 @@ struct GeneralDetailsView: View {
                             .padding()
                             .overlay(Color.clear.accessibilityIdentifier("distancePerYear"))
                         
-                        PieChartView(keys: viewModel.travelsPerTransport.keys.sorted(), data: viewModel.travelsPerTransport.keys.sorted().map{viewModel.travelsPerTransport[$0]!}, title: "Most chosen Vehicle", color: AppColors.blue, icon: viewModel.mostChosenVehicle)
+                        PieChartView(keys: viewModel.travelsPerTransport.keys.sorted(), data: viewModel.travelsPerTransport.keys.sorted().map{viewModel.travelsPerTransport[$0]!}, title: "Most chosen Vehicle", color: AppColors.blue, icon: viewModel.mostChosenVehicle, colors: [AppColors.blue, AppColors.orange, AppColors.green, AppColors.red, AppColors.purple])
                             .padding()
                             .overlay(Color.clear.accessibilityIdentifier("mostChosenVehicle"))
                         
@@ -53,7 +53,7 @@ struct GeneralDetailsView: View {
                             .overlay(Color.clear.accessibilityIdentifier("distancePerVehicle"))
                         
                         HStack(alignment: .top) {
-                            PieChartView(keys: viewModel.travelsPerTransport.keys.sorted(), data: viewModel.travelsPerTransport.keys.sorted().map{viewModel.travelsPerTransport[$0]!}, title: "Most chosen Vehicle", color: AppColors.blue, icon: viewModel.mostChosenVehicle)
+                            PieChartView(keys: viewModel.travelsPerTransport.keys.sorted(), data: viewModel.travelsPerTransport.keys.sorted().map{viewModel.travelsPerTransport[$0]!}, title: "Most chosen Vehicle", color: AppColors.blue, icon: viewModel.mostChosenVehicle, colors: [AppColors.blue, AppColors.orange, AppColors.green, AppColors.red, AppColors.purple])
                                 .padding()
                                 .overlay(Color.clear.accessibilityIdentifier("mostChosenVehicle"))
                             

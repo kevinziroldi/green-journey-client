@@ -64,7 +64,7 @@ struct OptionDetailsView: View {
                             navigationPath.append(NavigationDestination.ReturnOptionsView(viewModel))
                         }) {
                             Text("Proceed")
-                                .font(.title2)
+                                .font(.title3)
                         }
                         .buttonStyle(.borderedProminent)
                         .accessibilityIdentifier("proceedButton")
@@ -78,7 +78,7 @@ struct OptionDetailsView: View {
                             }
                         }) {
                             Text("Save travel")
-                                .font(.title2)
+                                .font(.title3)
                         }
                         .buttonStyle(.borderedProminent)
                         .accessibilityIdentifier("saveTravelButtonTwoWays")
