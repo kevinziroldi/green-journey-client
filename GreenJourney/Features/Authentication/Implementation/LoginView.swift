@@ -46,11 +46,6 @@ struct LoginView: View {
             .onAppear() {
                 viewModel.isEmailVerificationActiveLogin = false
             }
-            .onChange(of: viewModel.isLogged, {
-                if viewModel.isLogged {
-                    navigationPath = NavigationPath()
-                }
-            })
             .onChange(of: viewModel.isEmailVerificationActiveLogin, {
                 if viewModel.isEmailVerificationActiveLogin {
                     navigationPath.append(NavigationDestination.EmailVerificationView(viewModel))
