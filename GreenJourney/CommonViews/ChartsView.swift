@@ -117,7 +117,7 @@ struct BarChartView: View {
         
         // buil data structures
         self.chartData = []
-        for (i, element) in sortedData.enumerated() {
+        for (_, element) in sortedData.enumerated() {
             let chartElement = ChartElement(name: element.key, value: Double(element.value), color: color)
             self.chartData.append(chartElement)
         }
@@ -182,7 +182,7 @@ struct HorizontalBarChart: View {
     
     var chartData: [ChartElement]
 
-    init(data: [String: Float64], title: String, measurementUnit: String, color: Color, sortData: Bool) {
+    init(data: [String: Float64], title: String, measurementUnit: String, color: Color, sortByKey: Bool) {
         self.title = title
         self.measureUnit = measurementUnit
         self.color = color
@@ -190,7 +190,7 @@ struct HorizontalBarChart: View {
         // buil data structures
         self.chartData = []
         
-        if sortData {
+        if sortByKey {
             // sort data
             let sortedData = data.sorted { $0.key < $1.key }
             for (_, element) in sortedData.enumerated() {
@@ -198,7 +198,8 @@ struct HorizontalBarChart: View {
                 self.chartData.append(chartElement)
             }
         } else {
-            for (_, element) in data.enumerated() {
+            let sortedData = data.sorted { $0.value > $1.value }
+            for (_, element) in sortedData.enumerated() {
                 let chartElement = ChartElement(name: element.key, value: Double(element.value), color: color)
                 self.chartData.append(chartElement)
             }

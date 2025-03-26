@@ -38,7 +38,7 @@ struct WorldExplorationView: View {
                     }
                     .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
                     
-                    HorizontalBarChart(data: viewModel.countriesPerContinent, title: "Countries", measurementUnit: "", color: AppColors.orange, sortData: true)
+                    HorizontalBarChart(data: viewModel.countriesPerContinent, title: "Countries", measurementUnit: "", color: AppColors.orange, sortByKey: true)
                         .frame(height: 250)
                         .padding()
                         .overlay(Color.clear.accessibilityIdentifier("countriesPerContinent"))
@@ -61,7 +61,7 @@ struct WorldExplorationView: View {
                     .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
                     .overlay(Color.clear.accessibilityIdentifier("visitedCountries"))
                     
-                    HorizontalBarChart(data: viewModel.mostVisitedCountries, title: "Most visited countries", measurementUnit: "", color: AppColors.orange, sortData: false)
+                    HorizontalBarChart(data: viewModel.mostVisitedCountries, title: "Most visited countries", measurementUnit: "", color: AppColors.orange, sortByKey: false)
                         .frame(height: 250)
                         .padding()
                         .overlay(Color.clear.accessibilityIdentifier("mostVisitedCountries"))

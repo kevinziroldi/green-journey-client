@@ -13,7 +13,7 @@ struct GeneralDetailsView: View {
                     // iOS
                     
                     VStack {
-                        HorizontalBarChart(data: viewModel.distancePerTransport, title: "Distance per vehicle", measurementUnit: "Km", color: AppColors.blue, sortData: true)
+                        HorizontalBarChart(data: viewModel.distancePerTransport, title: "Distance per vehicle", measurementUnit: "Km", color: AppColors.blue, sortByKey: true)
                             .padding()
                             .frame(height: 250)
                             .overlay(Color.clear.accessibilityIdentifier("distancePerVehicle"))
@@ -48,7 +48,7 @@ struct GeneralDetailsView: View {
                                 .overlay(Color.clear.accessibilityIdentifier("tripsCompleted"))
                         }
                         
-                        HorizontalBarChart(data: viewModel.distancePerTransport, title: "Distance per vehicle", measurementUnit: "Km", color: AppColors.blue, sortData: true)
+                        HorizontalBarChart(data: viewModel.distancePerTransport, title: "Distance per vehicle", measurementUnit: "Km", color: AppColors.blue, sortByKey: true)
                             .padding()
                             .frame(height: 250)
                             .overlay(Color.clear.accessibilityIdentifier("distancePerVehicle"))

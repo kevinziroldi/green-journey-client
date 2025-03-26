@@ -15,7 +15,7 @@ struct Co2DetailsView: View {
                     VStack {
                         CompensationRecapView(viewModel: viewModel)
                         
-                        HorizontalBarChart(data: viewModel.co2PerTransport, title: "Co2 emitted per vehicle", measurementUnit: "Kg", color: AppColors.green, sortData: true)
+                        HorizontalBarChart(data: viewModel.co2PerTransport, title: "Co2 emitted per vehicle", measurementUnit: "Kg", color: AppColors.green, sortByKey: true)
                             .padding()
                             .frame(height: 250)
                             .overlay(Color.clear.accessibilityIdentifier("co2EmittedPerVehicle"))
@@ -42,7 +42,7 @@ struct Co2DetailsView: View {
                                 .overlay(Color.clear.accessibilityIdentifier("plantedTreesPerYear"))
                         }
                         
-                        HorizontalBarChart(data: viewModel.co2PerTransport, title: "Co2 emitted per vehicle", measurementUnit: "Kg", color: AppColors.green, sortData: true)
+                        HorizontalBarChart(data: viewModel.co2PerTransport, title: "Co2 emitted per vehicle", measurementUnit: "Kg", color: AppColors.green, sortByKey: true)
                             .padding()
                             .frame(height: 250)
                             .overlay(Color.clear.accessibilityIdentifier("co2EmittedPerVehicle"))
