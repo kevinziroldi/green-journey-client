@@ -496,6 +496,15 @@ class CitiesReviewsViewModel: ObservableObject {
         }
     }
     
+    func flag(country:String) -> String {
+            let base : UInt32 = 127397
+            var s = ""
+        for v in country.uppercased().unicodeScalars {
+                s.unicodeScalars.append(UnicodeScalar(base + v.value)!)
+            }
+            return String(s)
+        }
+    
 }
 
 extension CitiesReviewsViewModel: Hashable {

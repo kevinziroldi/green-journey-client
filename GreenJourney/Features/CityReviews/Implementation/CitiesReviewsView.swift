@@ -296,7 +296,7 @@ private struct BestCityView: View {
                     }
                     VStack (spacing: 5) {
                         HStack {
-                            Text(flag(country: city.countryCode))
+                            Text(viewModel.flag(country: city.countryCode))
                                 .font(.system(size: 35))
                                 .foregroundColor(.blue)
                             
@@ -318,9 +318,10 @@ private struct BestCityView: View {
                                 .font(.caption)
                                 .foregroundStyle(AppColors.mainColor)
                         }
+                        .padding(.leading, 5)
                         Spacer()
                     }
-                    .padding(.leading)
+                    .padding(.leading, 10)
                 }
                 .padding()
             }
@@ -381,13 +382,5 @@ private struct BestCityView: View {
             .fixedSize(horizontal: false, vertical: true)
             .frame(maxWidth: 800)
         }
-    }
-    func flag(country: String) -> String {
-        let base : UInt32 = 127397
-        var s = ""
-        for v in country.uppercased().unicodeScalars {
-            s.unicodeScalars.append(UnicodeScalar(base + v.value)!)
-        }
-        return String(s)
     }
 }

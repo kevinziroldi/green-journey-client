@@ -9,11 +9,18 @@ struct AllReviewsView: View {
     
     var body: some View {
         VStack {
-            Text(viewModel.selectedCity.cityName + ", " + viewModel.selectedCity.countryName)
-                .font(.system(size: 32).bold())
-                .padding()
-                .fontWeight(.semibold)
-                .accessibilityIdentifier("cityName")
+            HStack {
+                Text(viewModel.flag(country: viewModel.selectedCity.countryCode))
+                                    .font(.system(size: 80))
+                                    .foregroundColor(.blue)
+                Text(viewModel.selectedCity.cityName + ", " + viewModel.selectedCity.countryName)
+                    .font(.system(size: 32).bold())
+                    .padding()
+                    .fontWeight(.semibold)
+                    .accessibilityIdentifier("cityName")
+                Spacer()
+            }
+            .padding(.horizontal)
             
             Spacer()
             
