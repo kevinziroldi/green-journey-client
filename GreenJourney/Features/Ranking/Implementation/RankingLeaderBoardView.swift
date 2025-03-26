@@ -158,7 +158,7 @@ private struct LeaderBoardUserView: View {
                 ZStack {
                     RoundedRectangle(cornerRadius: 10)
                         .stroke(AppColors.mainColor, lineWidth: 3)
-                        .shadow(radius: 10)
+                        .shadow(radius: 3)
                     
                     VStack(spacing: 0) {
                         LazyVGrid(columns: gridItems, spacing: 10) {

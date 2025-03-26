@@ -126,7 +126,7 @@ struct TravelCardView: View {
         let distance = travel.computeTotalDistance()
         
         if travel.travel.CO2Compensated >= co2Emitted {
-            return LinearGradient(colors: [.green, .blue], startPoint: .bottomLeading, endPoint: .topTrailing)
+            return LinearGradient(colors: [.green, .blue], startPoint: .bottom, endPoint: .top)
         }
         if distance/co2Emitted > 30  {
             return AppColors.ecoGreenTravel

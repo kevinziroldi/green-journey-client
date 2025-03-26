@@ -62,7 +62,7 @@ private struct DashboardDetailsNavigationView: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 15)
                     .fill(Color(uiColor: .systemBackground))
-                    .shadow(color: AppColors.green.opacity(0.3), radius: 5, x: 0, y: 3)
+                    .shadow(radius: 3, x: 0, y: 3)
                 VStack (spacing:0){
                     HStack {
                         Text("CO\u{2082} Tracker")
@@ -74,11 +74,11 @@ private struct DashboardDetailsNavigationView: View {
                             .lineLimit(1)
                         Spacer()
                         Image(systemName: "chart.bar.xaxis.ascending")
-                            .foregroundColor(AppColors.green)
+                            .foregroundColor(.secondary)
                             .font(.title2)
                             .fontWeight(.bold)
                         Image(systemName: "chevron.right")
-                            .foregroundColor(AppColors.green)
+                            .foregroundColor(.secondary)
                             .font(.title2)
                             .fontWeight(.bold)
                     }
@@ -96,7 +96,7 @@ private struct DashboardDetailsNavigationView: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 15)
                     .fill(Color(uiColor: .systemBackground))
-                    .shadow(color: AppColors.blue.opacity(0.3), radius: 5, x: 0, y: 3)
+                    .shadow(radius: 3, x: 0, y: 3)
                 VStack (spacing:0){
                     HStack {
                         Text("Recap")
@@ -105,11 +105,11 @@ private struct DashboardDetailsNavigationView: View {
                             .fontWeight(.semibold)
                         Spacer()
                         Image(systemName: "chart.bar.xaxis.ascending")
-                            .foregroundColor(AppColors.blue)
+                            .foregroundColor(.secondary)
                             .font(.title2)
                             .fontWeight(.bold)
                         Image(systemName: "chevron.right")
-                            .foregroundColor(AppColors.blue)
+                            .foregroundColor(.secondary)
                             .font(.title2)
                             .fontWeight(.bold)
                     }
@@ -127,7 +127,7 @@ private struct DashboardDetailsNavigationView: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 15)
                     .fill(Color(uiColor: .systemBackground))
-                    .shadow(color: AppColors.orange.opacity(0.3), radius: 5, x: 0, y: 3)
+                    .shadow(radius: 3, x: 0, y: 3)
                 VStack (spacing:0){
                     HStack {
                         Text("World Exploration")
@@ -139,11 +139,11 @@ private struct DashboardDetailsNavigationView: View {
                             .lineLimit(1)
                         Spacer()
                         Image(systemName: "chart.bar.xaxis.ascending")
-                            .foregroundColor(AppColors.orange)
+                            .foregroundColor(.secondary)
                             .font(.title2)
                             .fontWeight(.bold)
                         Image(systemName: "chevron.right")
-                            .foregroundColor(AppColors.orange)
+                            .foregroundColor(.secondary)
                             .font(.title2)
                             .fontWeight(.bold)
                     }

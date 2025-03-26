@@ -96,7 +96,7 @@ struct PieChartView: View {
         .frame(height: 350)
         .background(Color(UIColor.systemBackground))
         .cornerRadius(15)
-        .shadow(color: color.opacity(0.3), radius: 5, x: 0, y: 3)
+        .shadow(radius: 3, x: 0, y: 3)
     }
 }
 
@@ -171,7 +171,7 @@ struct BarChartView: View {
         }
         .background(Color(UIColor.systemBackground))
         .cornerRadius(15)
-        .shadow(color: color.opacity(0.3), radius: 5, x: 0, y: 3)
+        .shadow(radius: 3, x: 0, y: 3)
     }
 }
 
@@ -245,7 +245,7 @@ struct HorizontalBarChart: View {
         }
         .background(Color(UIColor.systemBackground))
         .cornerRadius(15)
-        .shadow(color: color.opacity(0.3), radius: 5, x: 0, y: 3)
+        .shadow(radius: 3, x: 0, y: 3)
     }
 }
 
@@ -333,6 +333,6 @@ struct DoubleBarChart: View {
         }
         .background(Color(UIColor.systemBackground))
         .cornerRadius(15)
-        .shadow(radius: 5, x: 0, y: 3)
+        .shadow(radius: 3, x: 0, y: 3)
     }
 }

@@ -80,7 +80,7 @@ private struct DistanceTimeRecapView: View {
         ZStack {
             RoundedRectangle(cornerRadius: 15)
                 .fill(Color(uiColor: .systemBackground))
-                .shadow(color: AppColors.blue.opacity(0.3), radius: 5, x: 0, y: 3)
+                .shadow(radius: 3, x: 0, y: 3)
             VStack (spacing:0){
                 Text("Recap")
                     .font(.title)
