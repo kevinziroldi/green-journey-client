@@ -151,7 +151,7 @@ private struct ReviewsAverageView: View {
                             .font(.title3)
                             .fontWeight(.semibold)
                             .padding(EdgeInsets(top: 4, leading: 0, bottom: 0, trailing: 10))
-                        FiveStarView(rating: selectedCityReviewElement.averageLocalTransportRating, dim: 20, color: AppColors.mainColor.opacity(0.8))
+                        FiveStarView(rating: selectedCityReviewElement.averageLocalTransportRating, dim: 20, color: AppColors.mainColor)
                         Spacer()
                     }
                     
@@ -167,7 +167,7 @@ private struct ReviewsAverageView: View {
                             .font(.title3)
                             .fontWeight(.semibold)
                             .padding(EdgeInsets(top: 4, leading: 0, bottom: 0, trailing: 10))
-                        FiveStarView(rating: selectedCityReviewElement.averageGreenSpacesRating, dim: 20, color: AppColors.mainColor.opacity(0.8))
+                        FiveStarView(rating: selectedCityReviewElement.averageGreenSpacesRating, dim: 20, color: AppColors.mainColor)
                         Spacer()
                     }
                     HStack {
@@ -182,7 +182,7 @@ private struct ReviewsAverageView: View {
                             .font(.title3)
                             .fontWeight(.semibold)
                             .padding(EdgeInsets(top: 4, leading: 0, bottom: 0, trailing: 10))
-                        FiveStarView(rating: selectedCityReviewElement.averageWasteBinsRating, dim: 20, color: AppColors.mainColor.opacity(0.8))
+                        FiveStarView(rating: selectedCityReviewElement.averageWasteBinsRating, dim: 20, color: AppColors.mainColor)
                         Spacer()
                     }
                 }
@@ -253,7 +253,7 @@ private struct ReviewsAverageView: View {
                                 .font(.title3)
                                 .fontWeight(.semibold)
                                 .padding(EdgeInsets(top: 4, leading: 50, bottom: 0, trailing: 10))
-                            FiveStarView(rating: selectedCityReviewElement.averageLocalTransportRating, dim: 20, color: .blue.opacity(0.8))
+                            FiveStarView(rating: selectedCityReviewElement.averageLocalTransportRating, dim: 20, color: .blue)
                         }
                         
                         HStack {
@@ -277,7 +277,7 @@ private struct ReviewsAverageView: View {
                                 .font(.title3)
                                 .fontWeight(.semibold)
                                 .padding(EdgeInsets(top: 4, leading: 50, bottom: 0, trailing: 10))
-                            FiveStarView(rating: selectedCityReviewElement.averageGreenSpacesRating, dim: 20, color: .green.opacity(0.8))
+                            FiveStarView(rating: selectedCityReviewElement.averageGreenSpacesRating, dim: 20, color: .green)
                         }
                         
                         HStack {
@@ -301,7 +301,7 @@ private struct ReviewsAverageView: View {
                                 .font(.title3)
                                 .fontWeight(.semibold)
                                 .padding(EdgeInsets(top: 4, leading: 50, bottom: 0, trailing: 10))
-                            FiveStarView(rating: selectedCityReviewElement.averageWasteBinsRating, dim: 20, color: .orange.opacity(0.8))
+                            FiveStarView(rating: selectedCityReviewElement.averageWasteBinsRating, dim: 20, color: .orange)
                         }
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)

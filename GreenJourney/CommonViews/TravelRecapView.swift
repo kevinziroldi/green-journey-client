@@ -21,7 +21,7 @@ struct TravelRecapView: View {
                     HStack {
                         Text("Recap")
                             .font(.title)
-                            .foregroundStyle(AppColors.mainColor.opacity(0.8))
+                            .foregroundStyle(AppColors.blue)
                             .fontWeight(.semibold)
                             .frame(maxWidth: .infinity, alignment: .leading)
                         
@@ -47,7 +47,7 @@ struct TravelRecapView: View {
                     HStack {
                         Text("Recap")
                             .font(.title)
-                            .foregroundStyle(AppColors.mainColor.opacity(0.8))
+                            .foregroundStyle(AppColors.blue)
                             .fontWeight(.semibold)
                             .frame(maxWidth: .infinity, alignment: .leading)
                         
@@ -92,13 +92,11 @@ private struct DistanceEntryView: View {
     var body: some View {
         HStack {
             
-                Image(systemName: "road.lanes")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 30, height: 30)
-                    .foregroundColor(AppColors.blue)
-            
-            
+            Image(systemName: "road.lanes")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 30, height: 30)
+                .foregroundColor(AppColors.blue)
             
             Text("Distance")
                 .font(.system(size: 20).bold())

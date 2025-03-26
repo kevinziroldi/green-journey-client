@@ -20,7 +20,7 @@ struct BarChartView: View {
             HStack {
                 Text(title)
                     .font(.title)
-                    .foregroundStyle(color.opacity(0.8))
+                    .foregroundStyle(color)
                     .fontWeight(.semibold)
                 Spacer()
                 if value != "" {
@@ -99,7 +99,7 @@ struct PieChartView: View {
             HStack {
                 Text(title)
                     .font(.title)
-                    .foregroundStyle(color.opacity(0.8))
+                    .foregroundStyle(color)
                     .fontWeight(.semibold)
                     .padding()
                 Spacer()
@@ -169,7 +169,7 @@ struct HorizontalBarChart: View {
         VStack {
             Text(title)
                 .font(.title)
-                .foregroundStyle(color.opacity(0.8))
+                .foregroundStyle(color)
                 .fontWeight(.semibold)
                 .scaledToFit()
                 .minimumScaleFactor(0.6)
@@ -235,7 +235,7 @@ struct DoubleBarChart: View {
         VStack {
             Text(title)
                 .font(.title)
-                .foregroundStyle(AppColors.green.opacity(0.8))
+                .foregroundStyle(AppColors.green)
                 .fontWeight(.semibold)
                 .scaledToFit()
                 .minimumScaleFactor(0.6)

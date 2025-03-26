@@ -57,7 +57,7 @@ private struct Co2RecapViewTitle: View {
             Text("Co2")
                 .font(.title)
                 .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 0))
-                .foregroundStyle(color).opacity(0.8)
+                .foregroundStyle(color)
                 .fontWeight(.semibold)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }

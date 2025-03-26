@@ -116,7 +116,7 @@ private struct RecapViewCompactDevice: View {
             VStack {
                 Text("Recap")
                     .font(.title)
-                    .foregroundStyle(AppColors.mainColor.opacity(0.8))
+                    .foregroundStyle(AppColors.mainColor)
                     .padding(EdgeInsets(top: 15, leading: 15, bottom: 10, trailing: 0))
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -223,7 +223,7 @@ private struct RecapViewRegularDevice: View {
             VStack {
                 Text("Recap")
                     .font(.title)
-                    .foregroundStyle(.indigo.opacity(0.8))
+                    .foregroundStyle(AppColors.blue)
                     .padding(EdgeInsets(top: 15, leading: 15, bottom: 10, trailing: 0))
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -301,7 +301,7 @@ private struct Co2EmissionView: View {
             VStack {
                 Text("Compensation recap")
                     .font(.title)
-                    .foregroundStyle(.mint.opacity(0.8))
+                    .foregroundStyle(.mint)
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 GeometryReader { geometry in

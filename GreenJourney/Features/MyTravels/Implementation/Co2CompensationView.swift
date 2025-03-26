@@ -41,7 +41,7 @@ private struct CompensationTitleView: View {
             HStack {
                 Text("Compensation")
                     .font(.title)
-                    .foregroundStyle(.green.opacity(0.8))
+                    .foregroundStyle(AppColors.green)
                     .padding(EdgeInsets(top: 15, leading: 15, bottom: 10, trailing: 0))
                     .fontWeight(.semibold)
                 Spacer()

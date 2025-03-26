@@ -10,7 +10,7 @@ struct ScoresView: View {
             HStack {
                 Text("Scores")
                     .font(.title)
-                    .foregroundStyle(AppColors.mainColor.opacity(0.8))
+                    .foregroundStyle(AppColors.mainColor)
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 Spacer()
