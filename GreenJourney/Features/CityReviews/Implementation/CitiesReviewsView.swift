@@ -158,7 +158,7 @@ private struct ReviewableCitiesView: View {
     var body: some View {
         if !viewModel.reviewableCities.isEmpty {
             VStack (spacing: 0) {
-                Text ("Reviewable cities")
+                Text ("Reviewable Cities")
                     .font(.title)
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -221,7 +221,7 @@ private struct ReviewableCitiesView: View {
 private struct BestCitiesTitle: View {
     var body: some View {
         VStack (spacing: 0) {
-            Text("Top cities")
+            Text("Top Cities")
                 .font(.title)
                 .fontWeight(.semibold)
                 .frame(maxWidth: .infinity, alignment: .leading)

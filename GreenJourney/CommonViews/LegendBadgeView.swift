@@ -18,7 +18,7 @@ struct LegendBadgeView: View {
         
         ScrollView {
             VStack {
-                Text("Co2 Compensator")
+                Text("CO\u{2082} Compensator")
                     .font(.title)
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity, alignment: .leading)

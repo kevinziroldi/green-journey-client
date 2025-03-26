@@ -178,7 +178,7 @@ struct SegmentDetailView: View {
                                     .frame(width: 80, alignment: .leading)
                                     .font(.headline)
                                     .padding(.leading)
-                                Text(String(format: "%.1f", segment.co2Emitted) + " Kg Co2")
+                                Text(String(format: "%.1f", segment.co2Emitted) + " Kg CO\u{2082}")
                                     .foregroundStyle(AppColors.red)
                                     .fontWeight(.semibold)
                                 Spacer()

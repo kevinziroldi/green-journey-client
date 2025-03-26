@@ -87,7 +87,7 @@ private struct RankingElementDetailsTitle: View {
     var user: RankingElement
     
     var body: some View {
-        Text("User details")
+        Text("User Details")
             .font(.system(size: 32).bold())
             .padding()
             .fontWeight(.semibold)
@@ -169,7 +169,7 @@ private struct RecapViewCompactDevice: View {
                         .scaledToFit()
                         .frame(width: 35, height: 35)
                         .foregroundColor(AppColors.green)
-                    Text("Co2 emitted")
+                    Text("CO\u{2082} emitted")
                         .font(.system(size: 20).bold())
                         .frame(maxWidth: 250, alignment: .leading)
                         .padding(.leading, 5)
@@ -190,7 +190,7 @@ private struct RecapViewCompactDevice: View {
                         .scaledToFit()
                         .frame(width: 35, height: 35)
                         .foregroundColor(AppColors.green)
-                    Text("Co2 compensated")
+                    Text("CO\u{2082} compensated")
                         .font(.system(size: 20).bold())
                         .frame(maxWidth: 250, alignment: .leading)
                         .padding(.leading, 5)

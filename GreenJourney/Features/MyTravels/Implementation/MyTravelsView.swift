@@ -27,7 +27,7 @@ struct MyTravelsView: View {
     var body: some View {
         ScrollView {
             HStack {
-                Text("My travels")
+                Text("My Travels")
                     .font(.system(size: 32).bold())
                     .padding()
                     .fontWeight(.semibold)
@@ -62,8 +62,8 @@ struct MyTravelsView: View {
                 .actionSheet(isPresented: $showSortOptions) {
                     ActionSheet(title: Text("Sort by"), buttons: [
                         .default(Text("Departure date")) {viewModel.sortOption = .departureDate},
-                        .default(Text("CO2 emitted")) {viewModel.sortOption = .co2Emitted},
-                        .default(Text("CO2 compensation rate")) {viewModel.sortOption = .co2CompensationRate},
+                        .default(Text("CO\u{2082} emitted")) {viewModel.sortOption = .co2Emitted},
+                        .default(Text("CO\u{2082} compensation rate")) {viewModel.sortOption = .co2CompensationRate},
                         .default(Text("Price")) {viewModel.sortOption = .price},
                         .cancel()
                     ])

@@ -16,12 +16,12 @@ struct Co2DetailsView: View {
                     VStack {
                         CompensationRecapView(viewModel: viewModel)
                         
-                        HorizontalBarChart(keys: viewModel.co2PerTransport.keys.sorted(), data: viewModel.co2PerTransport.keys.sorted().map{viewModel.co2PerTransport[$0]!}, title: "Co2 emitted per vehicle", color: AppColors.green, measureUnit: "Kg")
+                        HorizontalBarChart(keys: viewModel.co2PerTransport.keys.sorted(), data: viewModel.co2PerTransport.keys.sorted().map{viewModel.co2PerTransport[$0]!}, title: "CO\u{2082} emitted per vehicle", color: AppColors.green, measureUnit: "Kg")
                             .padding()
                             .frame(height: 250)
                             .overlay(Color.clear.accessibilityIdentifier("co2EmittedPerVehicle"))
                         
-                        DoubleBarChart(element1: "Co2 Emitted", keys: viewModel.keysToString(keys: viewModel.co2CompensatedPerYear.keys.sorted()), data1: viewModel.co2EmittedPerYear.keys.sorted().map{viewModel.co2EmittedPerYear[$0]!}, color1: AppColors.orange, element2: "Co2 Compensated", data2: viewModel.co2CompensatedPerYear.keys.sorted().map{viewModel.co2CompensatedPerYear[$0]!}, color2: AppColors.blue, title: "Co2 per year", measureunit: "Kg of CO2")
+                        DoubleBarChart(element1: "CO\u{2082} Emitted", keys: viewModel.keysToString(keys: viewModel.co2CompensatedPerYear.keys.sorted()), data1: viewModel.co2EmittedPerYear.keys.sorted().map{viewModel.co2EmittedPerYear[$0]!}, color1: AppColors.orange, element2: "CO\u{2082} Compensated", data2: viewModel.co2CompensatedPerYear.keys.sorted().map{viewModel.co2CompensatedPerYear[$0]!}, color2: AppColors.blue, title: "CO\u{2082} per year", measureunit: "Kg of CO\u{2082}")
                             .padding()
                             .overlay(Color.clear.accessibilityIdentifier("co2EmittedPerYear"))
                         
@@ -42,12 +42,12 @@ struct Co2DetailsView: View {
                                 .overlay(Color.clear.accessibilityIdentifier("plantedTreesPerYear"))
                         }
                             
-                        HorizontalBarChart(keys: viewModel.co2PerTransport.keys.sorted(), data: viewModel.co2PerTransport.keys.sorted().map{viewModel.co2PerTransport[$0]!}, title: "Co2 emitted per vehicle", color: AppColors.green, measureUnit: "Kg")
+                        HorizontalBarChart(keys: viewModel.co2PerTransport.keys.sorted(), data: viewModel.co2PerTransport.keys.sorted().map{viewModel.co2PerTransport[$0]!}, title: "CO\u{2082} emitted per vehicle", color: AppColors.green, measureUnit: "Kg")
                             .padding()
                             .frame(height: 250)
                             .overlay(Color.clear.accessibilityIdentifier("co2EmittedPerVehicle"))
                         
-                        DoubleBarChart(element1: "Co2 Emitted", keys: viewModel.keysToString(keys: viewModel.co2CompensatedPerYear.keys.sorted()), data1: viewModel.co2EmittedPerYear.keys.sorted().map{viewModel.co2EmittedPerYear[$0]!}, color1: AppColors.orange, element2: "Co2 Compensated", data2: viewModel.co2CompensatedPerYear.keys.sorted().map{viewModel.co2CompensatedPerYear[$0]!}, color2: AppColors.blue, title: "Co2 per year", measureunit: "Kg of CO2")
+                        DoubleBarChart(element1: "CO\u{2082} Emitted", keys: viewModel.keysToString(keys: viewModel.co2CompensatedPerYear.keys.sorted()), data1: viewModel.co2EmittedPerYear.keys.sorted().map{viewModel.co2EmittedPerYear[$0]!}, color1: AppColors.orange, element2: "CO\u{2082} Compensated", data2: viewModel.co2CompensatedPerYear.keys.sorted().map{viewModel.co2CompensatedPerYear[$0]!}, color2: AppColors.blue, title: "CO\u{2082} per year", measureunit: "Kg of CO\u{2082}")
                             .padding()
                             .overlay(Color.clear.accessibilityIdentifier("co2EmittedPerYear"))
                     }

@@ -81,7 +81,7 @@ struct TravelCardView: View {
                             .font(.title)
                             .scaleEffect(1.5)
                             .padding(EdgeInsets(top: 0, leading: 0, bottom: 5, trailing: 0))
-                        Text("Co2 compensation")
+                        Text("CO\u{2082} compensation")
                         Text(String(format: "%.1f/%.1f kg", travelDetails.travel.CO2Compensated, travelDetails.computeCo2Emitted()))
                     }
                     

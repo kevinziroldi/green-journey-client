@@ -167,7 +167,7 @@ private struct CompensationButtonsView: View {
                                         .foregroundColor(.red)
                                 }
                                                                 
-                                Text("Co2 emitted: ")
+                                Text("CO\u{2082} emitted: ")
                                     .font(.system(size: 20).bold())
                                     .foregroundColor(.red.opacity(0.8))
                                     .padding(.leading, 5)
@@ -193,7 +193,7 @@ private struct CompensationButtonsView: View {
                                         .foregroundColor(.green)
                                 }
                                 
-                                Text("Co2 compensated: ")
+                                Text("CO\u{2082} compensated: ")
                                     .font(.system(size: 20).bold())
                                     .foregroundColor(.green.opacity(0.8))
                                     .padding(.leading, 5)
