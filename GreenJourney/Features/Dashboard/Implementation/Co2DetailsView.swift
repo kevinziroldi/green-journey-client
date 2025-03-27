@@ -12,30 +12,31 @@ struct Co2DetailsView: View {
                 if horizontalSizeClass == .compact {
                     // iPhone
                     
-                    VStack {
+                    VStack(spacing: 20) {
                         CompensationRecapView(viewModel: viewModel)
+                            .padding(.horizontal)
                         
                         HorizontalBarChart(data: viewModel.co2PerTransport, title: "CO\u{2082} emitted per vehicle", measurementUnit: "Kg", color: AppColors.green, sortByKey: true)
-                            .padding()
+                            .padding(.horizontal)
                             .frame(height: 250)
                             .overlay(Color.clear.accessibilityIdentifier("co2EmittedPerVehicle"))
                                                 
                         DoubleBarChart(element1: "CO\u{2082} Emitted", keys: viewModel.keysToString(keys: viewModel.co2CompensatedPerYearKg.keys.sorted()), data1: viewModel.co2EmittedPerYear.keys.sorted().map{viewModel.co2EmittedPerYear[$0]!}, color1: AppColors.orange, element2: "CO\u{2082} Compensated", data2: viewModel.co2CompensatedPerYearKg.keys.sorted().map{viewModel.co2CompensatedPerYearKg[$0]!}, color2: AppColors.blue, title: "CO\u{2082} per year", measureunit: "Kg of CO\u{2082}")
-                            .padding()
+                            .padding(.horizontal)
                             .overlay(Color.clear.accessibilityIdentifier("co2EmittedPerYear"))
                         
-                        
                         BarChartView(data: viewModel.co2CompensatedPerYearNumTrees, title: "Planted trees", value: "\(viewModel.treesPlanted)", color: AppColors.green)
-                            .padding()
+                            .padding(.horizontal)
                             .overlay(Color.clear.accessibilityIdentifier("plantedTreesPerYear"))
                     }
                     .frame(maxWidth: 800)
                 } else {
                     // iPad
                     
-                    VStack {
-                        HStack {
+                    VStack(spacing: 0) {
+                        HStack(spacing: 0) {
                             CompensationRecapView(viewModel: viewModel)
+                                .padding()
                             
                             BarChartView(data: viewModel.co2CompensatedPerYearNumTrees, title: "Planted trees", value: "\(viewModel.treesPlanted)", color: AppColors.green)
                                 .padding()
@@ -110,6 +111,5 @@ private struct CompensationRecapView: View {
             .padding()
             .overlay(Color.clear.accessibilityIdentifier("co2CompenationRecap"))
         }
-        .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
     }
 }

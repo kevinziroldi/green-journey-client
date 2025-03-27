@@ -12,33 +12,33 @@ struct GeneralDetailsView: View {
                 if horizontalSizeClass == .compact {
                     // iOS
                     
-                    VStack {
+                    VStack(spacing: 20) {
                         HorizontalBarChart(data: viewModel.distancePerTransport, title: "Distance per vehicle", measurementUnit: "Km", color: AppColors.blue, sortByKey: true)
-                            .padding()
+                            .padding(.horizontal)
                             .frame(height: 250)
                             .overlay(Color.clear.accessibilityIdentifier("distancePerVehicle"))
                         
                         BarChartView(data: viewModel.distances, title: "Distance traveled (Km)", value: "", color: AppColors.blue)
-                            .padding()
+                            .padding(.horizontal)
                             .overlay(Color.clear.accessibilityIdentifier("distancePerYear"))
                         
-                        
                         PieChartView(data: viewModel.travelsPerTransport, title: "Most chosen Vehicle", color: AppColors.blue, icon: viewModel.mostChosenVehicle, colors: [AppColors.blue, AppColors.orange, AppColors.green, AppColors.red, AppColors.purple])
-                            .padding()
+                            .padding(.horizontal)
                             .overlay(Color.clear.accessibilityIdentifier("mostChosenVehicle"))
                         
                         BarChartView(data: viewModel.tripsMade, title: "Trips completed", value: "\(viewModel.totalTripsMade)", color: AppColors.blue)
-                            .padding()
+                            .padding(.horizontal)
                             .overlay(Color.clear.accessibilityIdentifier("tripsCompleted"))
                         
                         DistanceTimeRecapView(viewModel: viewModel)
+                            .padding(.horizontal)
                     }
                     .frame(maxWidth: 800)
                 } else {
                     // iPadOS
                     
-                    VStack {
-                        HStack {
+                    VStack(spacing: 0) {
+                        HStack(spacing: 0) {
                             BarChartView(data: viewModel.distances, title: "Distance traveled (Km)", value: "", color: AppColors.blue)
                                 .padding()
                                 .overlay(Color.clear.accessibilityIdentifier("distancePerYear"))
@@ -53,13 +53,14 @@ struct GeneralDetailsView: View {
                             .frame(height: 250)
                             .overlay(Color.clear.accessibilityIdentifier("distancePerVehicle"))
                         
-                        HStack(alignment: .top) {
+                        HStack(alignment: .top, spacing: 0) {
                             
                             PieChartView(data: viewModel.travelsPerTransport, title: "Most chosen Vehicle", color: AppColors.blue, icon: viewModel.mostChosenVehicle, colors: [AppColors.blue, AppColors.orange, AppColors.green, AppColors.red, AppColors.purple])
                                 .padding()
                                 .overlay(Color.clear.accessibilityIdentifier("mostChosenVehicle"))
                             
                             DistanceTimeRecapView(viewModel: viewModel)
+                                .padding()
                                 .fixedSize(horizontal: false, vertical: true)
                         }
                     }
@@ -93,7 +94,6 @@ private struct DistanceTimeRecapView: View {
             }
             .padding(.bottom, 7)
         }
-        .padding()
         .overlay(Color.clear.accessibilityIdentifier("distanceTimeRecap"))
     }
 }

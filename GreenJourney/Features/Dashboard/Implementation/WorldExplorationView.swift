@@ -11,33 +11,36 @@ struct WorldExplorationView: View {
                 if horizontalSizeClass == .compact {
                     // iOS
                     
-                    VStack {
+                    VStack(spacing: 20) {
                         VisitedContinentsView(viewModel: viewModel)
+                            .padding(.horizontal)
                         
                         HorizontalBarChart(data: viewModel.countriesPerContinent, title: "Countries", measurementUnit: "", color: AppColors.orange, sortByKey: true)
                             .frame(height: 250)
-                            .padding()
+                            .padding(.horizontal)
                             .overlay(Color.clear.accessibilityIdentifier("countriesPerContinent"))
                         
                         VisitedCountriesView(viewModel: viewModel)
+                            .padding(.horizontal)
                         
                         HorizontalBarChart(data: viewModel.mostVisitedCountries, title: "Most visited countries", measurementUnit: "", color: AppColors.orange, sortByKey: false)
                             .frame(height: 250)
-                            .padding()
+                            .padding(.horizontal)
                             .overlay(Color.clear.accessibilityIdentifier("mostVisitedCountries"))
-                    }.frame(maxWidth: 800)
+                    }
                 } else {
                     // iPadOS
                     
-                    VStack {
+                    VStack(spacing: 0) {
                         VisitedContinentsView(viewModel: viewModel)
+                            .padding()
                         
                         HorizontalBarChart(data: viewModel.countriesPerContinent, title: "Countries", measurementUnit: "", color: AppColors.orange, sortByKey: true)
                             .frame(height: 250)
                             .padding()
                             .overlay(Color.clear.accessibilityIdentifier("countriesPerContinent"))
                         
-                        HStack(alignment: .top) {
+                        HStack(alignment: .top, spacing: 0) {
                             HorizontalBarChart(data: viewModel.mostVisitedCountries, title: "Most visited countries", measurementUnit: "", color: AppColors.orange, sortByKey: false)
                                 .frame(height: 250)
                                 .overlay(Color.clear.accessibilityIdentifier("mostVisitedCountries"))
@@ -90,7 +93,6 @@ private struct VisitedContinentsView: View {
                 }
                 .overlay(Color.clear.accessibilityIdentifier("visitedContinents"))
             }
-            .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
         }
     }
 }
@@ -137,7 +139,6 @@ private struct VisitedCountriesView: View {
             }
             .padding(.bottom, 7)
         }
-        .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
         .overlay(Color.clear.accessibilityIdentifier("visitedCountries"))
     }
 }
