@@ -169,7 +169,7 @@ private struct LeaderBoardUserView: View {
                                         endPoint: .bottomTrailing)
                                     , lineWidth: 3)
                                     .frame(width: 40, height: 40)
-                                Text("#.")
+                                Text("#")
                                     .foregroundStyle(.blue)
                                     .font(.system(size: 22))
                                     .fontWeight(.semibold)                            }
