@@ -130,6 +130,7 @@ struct BarChartView: View {
                     .font(.title)
                     .foregroundStyle(color)
                     .fontWeight(.semibold)
+                    .frame(height: 50)
                 Spacer()
                 if value != "" {
                     ZStack {
