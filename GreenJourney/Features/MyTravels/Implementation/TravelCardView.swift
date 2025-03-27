@@ -13,10 +13,8 @@ struct TravelCardView: View {
             
             ZStack {
                 RoundedRectangle(cornerRadius: 15)
-                    //.fill(computeTravelBackColor(travel: travelDetails))
-                    //.strokeBorder(computeTravelColor(travel: travelDetails), lineWidth: 3)
                     .fill(Color(uiColor: .systemBackground))
-                    .shadow(radius: 1)
+                    .shadow(radius: 2, x: 0, y: 2)
                 
                 VStack {
                     HStack{

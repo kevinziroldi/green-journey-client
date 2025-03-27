@@ -59,43 +59,64 @@ struct OptionDetailsView: View {
             VStack {
                 if (!viewModel.oneWay) {
                     if (viewModel.selectedOption.isEmpty) {
-                        Button (action: {
+                        Button(action: {
                             viewModel.selectedOption.append(contentsOf: option.segments)
                             navigationPath.append(NavigationDestination.ReturnOptionsView(viewModel))
                         }) {
-                            Text("Proceed")
-                                .font(.title3)
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .fill(AppColors.mainColor)
+                                Text("Proceed")
+                                    .font(.title3)
+                                    .fontWeight(.semibold)
+                                    .foregroundStyle(.white)
+                                    .padding(10)
+                            }
+                            .fixedSize()
                         }
-                        .buttonStyle(.borderedProminent)
                         .accessibilityIdentifier("proceedButton")
                     }
                     else {
-                        Button (action:  {
+                        Button(action:  {
                             Task {
                                 viewModel.selectedOption.append(contentsOf: option.segments)
                                 await viewModel.saveTravel()
                                 navigationPath = NavigationPath()
                             }
                         }) {
-                            Text("Save travel")
-                                .font(.title3)
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .fill(AppColors.mainColor)
+                                Text("Save travel")
+                                    .font(.title3)
+                                    .fontWeight(.semibold)
+                                    .foregroundStyle(.white)
+                                    .padding(10)
+                            }
+                            .fixedSize()
                         }
-                        .buttonStyle(.borderedProminent)
                         .accessibilityIdentifier("saveTravelButtonTwoWays")
                     }
                 }
                 else {
-                    Button (action: {
+                    Button(action: {
                         Task {
                             viewModel.selectedOption.append(contentsOf: option.segments)
                             await viewModel.saveTravel()
                             navigationPath = NavigationPath()
                         }
                     }) {
-                        Text("Save travel")
-                            .font(.title2)
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(AppColors.mainColor)
+                            Text("Save travel")
+                                .font(.title3)
+                                .fontWeight(.semibold)
+                                .foregroundStyle(.white)
+                                .padding(10)
+                        }
+                        .fixedSize()
                     }
-                    .buttonStyle(.borderedProminent)
                     .accessibilityIdentifier("saveTravelButtonOneWay")
                 }
             }

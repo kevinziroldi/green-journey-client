@@ -94,7 +94,7 @@ private struct ReviewsAverageView: View {
                     
                     Spacer()
                     
-                    Button (action: {
+                    Button(action: {
                         infoTapped = true
                     }){
                         Image(systemName: "info.circle")
@@ -106,12 +106,13 @@ private struct ReviewsAverageView: View {
                     Text(String(format: "%.1f", selectedCityReviewElement.getAverageRating()))
                         .font(.system(size: 60).bold())
                         .fontWeight(.semibold)
+                        .foregroundStyle(AppColors.mainColor)
                     HStack {
                         VStack {
                             HStack {
                                 FiveStarView(rating: selectedCityReviewElement.getAverageRating(), dim: 25, color: Color.yellow)
                             }
-                            Button (action: {
+                            Button(action: {
                                     // reset reviews list
                                                 viewModel.currentReviews = selectedCityReviewElement.reviews
                                                 viewModel.hasPrevious = selectedCityReviewElement.hasPrevious
@@ -207,7 +208,7 @@ private struct ReviewsAverageView: View {
                         
                         Spacer()
                         
-                        Button (action: {
+                        Button(action: {
                             infoTapped = true
                         }){
                             Image(systemName: "info.circle")
@@ -343,7 +344,7 @@ private struct LatestReviewsView: View {
                 }
                 
                 // button to see all reviews
-                Button (action: {
+                Button(action: {
                     // reset reviews list
                     viewModel.currentReviews = selectedCityReviewElement.reviews
                     viewModel.hasPrevious = selectedCityReviewElement.hasPrevious

@@ -37,7 +37,7 @@ struct EmailVerificationView: View {
             HStack {
                 Text("Haven't received any email?")
                     .fontWeight(.thin)
-                Button (action: {
+                Button(action: {
                     Task {
                         await viewModel.sendEmailVerification()
                         resendAvailable = false
@@ -83,7 +83,7 @@ struct EmailVerificationView: View {
                     .accessibilityIdentifier("errorMessage")
             }
             
-            Button (action: {
+            Button(action: {
                 Task {
                     await viewModel.verifyEmail()
                 }
@@ -93,11 +93,18 @@ struct EmailVerificationView: View {
                     }
                 }
             }) {
-                Text("Proceed")
-                    .font(.title2)
-                    .fontWeight(.semibold)
+                ZStack {
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(AppColors.mainColor)
+                    
+                    Text("Proceed")
+                        .font(.title3)
+                        .foregroundStyle(.white)
+                        .fontWeight(.semibold)
+                        .padding(10)
+                }
+                .fixedSize()
             }
-            .buttonStyle(.borderedProminent)
             .accessibilityIdentifier("proceedButton")
         }
         .padding(.horizontal)
@@ -113,43 +120,5 @@ struct EmailVerificationView: View {
                 resendAvailable = true
             }
         }
-    }
-}
-
-struct CountdownView: View {
-    @State private var remainingSeconds = 10
-    @State private var isTimeUp = false
-    
-    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-    
-    var body: some View {
-        VStack(spacing: 20) {
-            Text("TIMER")
-            Spacer()
-            if isTimeUp {
-                Text("Tempo scaduto!")
-                    .font(.largeTitle)
-                    .foregroundColor(.red)
-                Spacer()
-                Button("restart timer") {
-                    isTimeUp = false
-                    remainingSeconds = 10
-                }
-            } else {
-                Text("Tempo rimanente: \(remainingSeconds)")
-                    .font(.largeTitle)
-            }
-            Spacer()
-            
-            
-        }
-        .onReceive(timer) { _ in
-            if remainingSeconds > 1 {
-                remainingSeconds -= 1
-            } else {
-                isTimeUp = true
-            }
-        }
-        .padding()
     }
 }

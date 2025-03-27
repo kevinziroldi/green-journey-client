@@ -207,7 +207,7 @@ private struct SignupButtonsView: View {
             VStack {
                 Text("Already have an account?")
                     .fontWeight(.light)
-                Button ("Login") {
+                Button("Login") {
                     if !navigationPath.isEmpty {
                         viewModel.errorMessage = nil
                         viewModel.email = ""

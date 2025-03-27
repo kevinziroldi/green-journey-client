@@ -12,7 +12,7 @@ struct DestinationPredictionView: View {
     }
     
     var body: some View {
-        Button (action: {
+        Button(action: {
             viewModel.getRecommendation()
             confirm(viewModel.predictedCities)
             

@@ -67,7 +67,7 @@ struct TravelSearchView: View {
                             ZStack {
                                 // dismiss AI button
                                 if triggerAI {
-                                    Button (action: {
+                                    Button(action: {
                                         viewModel.arrival = CityCompleterDataset()
                                         withAnimation(.bouncy(duration: 0.5)) {
                                             triggerAI = false
@@ -584,7 +584,7 @@ private struct AIPredictionView: View {
                 Spacer()
                 
                 //button for see another prediction
-                Button (action: {
+                Button(action: {
                     if viewModel.predictedCities.count == viewModel.predictionShown + 1 {
                         viewModel.predictionShown = 0
                     }

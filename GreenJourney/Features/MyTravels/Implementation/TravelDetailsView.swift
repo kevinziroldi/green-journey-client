@@ -119,12 +119,12 @@ struct TravelDetailsView: View {
                                     Text("Delete travel")
                                         .foregroundStyle(.white)
                                         .font(.headline)
+                                        .padding(10)
                                 }
-                                .padding()
                             }
-                            .padding(.vertical, 20)
                             .fixedSize()
                         }
+                        .padding(.vertical, 20)
                         .alert(isPresented: $showAlertDelete) {
                             Alert(
                                 title: Text("Delete this travel?"),

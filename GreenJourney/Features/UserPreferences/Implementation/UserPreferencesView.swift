@@ -257,7 +257,7 @@ private struct PasswordModificationView: View {
     
     var body: some View {
         VStack {
-            Button ("Modify password") {
+            Button("Modify password") {
                 withAnimation() {
                     showResendMessage = true
                 }
@@ -280,7 +280,7 @@ private struct PasswordModificationView: View {
             }
             
         }
-        .padding(EdgeInsets(top: 0, leading: 0, bottom: 20, trailing: 25))
+        .padding(.bottom, 20)
     }
 }
 
@@ -310,7 +310,6 @@ private struct LogoutButtonView: View {
         }) {
             Text("Logout")
                 .font(.title3)
-                .fontWeight(.regular)
         }
         .buttonStyle(.borderedProminent)
         .accessibilityIdentifier("logoutButton")

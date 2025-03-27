@@ -247,7 +247,7 @@ private struct MoveToSignupView: View {
         VStack {
             Text("Haven't signed up yet?")
                 .fontWeight(.light)
-            Button ("Sign up") {
+            Button("Sign up") {
                 viewModel.errorMessage = nil
                 viewModel.email = ""
                 viewModel.password = ""
