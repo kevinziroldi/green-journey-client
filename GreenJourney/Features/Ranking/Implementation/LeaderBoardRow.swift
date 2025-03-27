@@ -17,21 +17,10 @@ struct LeaderBoardRow: View {
             LazyVGrid(columns: gridItems, spacing: 10) {
                 ZStack {
                     Circle()
-                        .stroke(
-                            LinearGradient(
-                                gradient: Gradient(colors: [.green, .blue]),
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            ),
-                            lineWidth: 2
-                        )
-                        .frame(width: 40, height: 40)
-                    Text("#\(index + 1)")
-                        .foregroundStyle(
-                            leaderboard[index].userID == users.first?.userID ?? -1 ?
-                                .blue :
-                                (colorScheme == .dark ? .white : .black)
-                        )
+                        .fill(computeColor().gradient)
+                        .frame(width: 35, height: 35)
+                    Text("\(index + 1)")
+                        .foregroundStyle(.black)
                         .fontWeight(.semibold)
                 }
                 
@@ -39,15 +28,15 @@ struct LeaderBoardRow: View {
                     Text(leaderboard[index].firstName)
                         .foregroundStyle(
                             leaderboard[index].userID == users.first?.userID ?? -1 ?
-                                .blue :
-                                (colorScheme == .dark ? .white : .black)
+                                LinearGradient(gradient: Gradient(colors: [.green, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing) :
+                                (colorScheme == .dark ? LinearGradient(gradient: Gradient(colors: [.white]), startPoint: .topLeading, endPoint: .bottomTrailing) : LinearGradient(gradient: Gradient(colors: [.black]), startPoint: .topLeading, endPoint: .bottomTrailing))
                         )
                         .fontWeight(.semibold)
                     Text(leaderboard[index].lastName)
                         .foregroundStyle(
                             leaderboard[index].userID == users.first?.userID ?? -1 ?
-                                .blue :
-                                (colorScheme == .dark ? .white : .black)
+                                LinearGradient(gradient: Gradient(colors: [.green, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing) :
+                                (colorScheme == .dark ? LinearGradient(gradient: Gradient(colors: [.white]), startPoint: .topLeading, endPoint: .bottomTrailing) : LinearGradient(gradient: Gradient(colors: [.black]), startPoint: .topLeading, endPoint: .bottomTrailing))
                         )
                         .fontWeight(.semibold)
                 }
@@ -75,5 +64,17 @@ struct LeaderBoardRow: View {
                 Divider()
             }
         }
+    }
+    func computeColor() -> Color{
+        if index == 0 {
+            return AppColors.gold
+        }
+        if index == 1 {
+            return AppColors.silver
+        }
+        if index == 2 {
+            return AppColors.bronze
+        }
+        return Color.black.opacity(0.5)
     }
 }

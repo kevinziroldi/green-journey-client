@@ -9,10 +9,9 @@ enum AppColors {
     static let ecoYellowTravel = LinearGradient(colors: [Color(red: 255/255, green: 202/255, blue: 40/255), .orange], startPoint: .bottom, endPoint: .top)
     static let ecoRedTravel = LinearGradient(colors: [Color(red: 184/255, green: 56/255, blue: 53/255), .red], startPoint: .bottom, endPoint: .top)
     
-   /* static let ecoGreenTravel = LinearGradient(colors: [Color(red: 178/255, green: 223/255, blue: 181/255), Color.mint.opacity(0.6)], startPoint: .bottom, endPoint: .top)
-    static let ecoYellowTravel = LinearGradient(colors: [Color(red: 255/255, green: 236/255, blue: 179/255), Color.orange.opacity(0.6)], startPoint: .bottom, endPoint: .top)
-    static let ecoRedTravel = LinearGradient(colors: [Color(red: 239/255, green: 154/255, blue: 154/255), Color.red.opacity(0.6)], startPoint: .bottom, endPoint: .top)
-    */
+    static let gold = Color(red: 239/255, green: 191/255, blue: 4/255)
+    static let silver = Color(red: 192/255, green: 192/255, blue: 192/255)
+    static let bronze = Color(red: 205/255, green: 127/255, blue: 50/255)
     
     static let backColorLight = Color(red: 245/255, green: 245/255, blue: 245/255)
     static let backColorDark = Color(red: 20/255, green: 20/255, blue: 20/255)
