@@ -90,16 +90,6 @@ struct TravelSearchView: View {
                             }
                             .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
                             
-                            // trip tipe picker
-                            Picker("", selection: $viewModel.oneWay) {
-                                Text("One way").tag(true)
-                                Text("Round trip").tag(false)
-                            }
-                            .pickerStyle(.segmented)
-                            .padding(.horizontal)
-                            .frame(maxWidth: 400) // set a max width to control the size
-                            .accessibilityIdentifier("tripTypePicker")
-                            
                             TravelChoiceView(viewModel: viewModel, departureTapped: $departureTapped, destinationTapped: $destinationTapped, dateTapped: $dateTapped, dateReturnTapped: $dateReturnTapped, triggerAI: $triggerAI)
                             
                             Spacer()
@@ -137,7 +127,6 @@ struct TravelSearchView: View {
 
                             AIPredictionView(viewModel: viewModel, triggerAI: $triggerAI, showAlertPrediction: $showAlertPrediction, navigationSplitViewVisibility: $navigationSplitViewVisibility)
                         }
-                    
                 }
             }
             .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
@@ -202,6 +191,7 @@ private struct TravelSearchHeaderView: View {
 
 private struct TravelChoiceView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     
     @ObservedObject var viewModel: TravelSearchViewModel
     
@@ -255,13 +245,31 @@ private struct TravelChoiceView: View {
             Spacer()
             
             VStack {
+                HStack {
+                    Toggle("Round trip", isOn: Binding(
+                        get: { !viewModel.oneWay },
+                        set: { viewModel.oneWay = !$0 }))
+                    .frame(width: 150)
+                    .fontWeight(.semibold)
+                    .toggleStyle(SwitchToggleStyle(tint: AppColors.mainColor))
+                    Spacer()
+                }
                 // date pickers
-                OutwardDatePickerView(dateTapped: $dateTapped, viewModel: viewModel)
-                    .padding(.bottom, 5)
-                ReturnDatePickerView(dateReturnTapped: $dateReturnTapped, viewModel: viewModel)
+                ZStack {
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Color(uiColor: .systemBackground))
+                        .shadow(radius: 2, x: 0, y: 2)
+                    VStack (spacing: 0){
+                        OutwardDatePickerView(dateTapped: $dateTapped, viewModel: viewModel)
+                        
+                        Divider()
+                        
+                        ReturnDatePickerView(dateReturnTapped: $dateReturnTapped, viewModel: viewModel)
+                    }
+                }
             }
             .fixedSize(horizontal: false, vertical: true)
-            .padding(.horizontal, 60)
+            .padding(.horizontal, 45)
         } else {
             // iPadOS
             
@@ -301,6 +309,7 @@ private struct TravelChoiceView: View {
                         DestinationCompleterView(viewModel: viewModel, destinationTapped: $destinationTapped, triggerAI: $triggerAI)
                             .padding(EdgeInsets(top: 0, leading: 40, bottom: 20, trailing: 40))
                     }
+                
                     HStack (spacing: 50){
                         OutwardDatePickerView(dateTapped: $dateTapped, viewModel: viewModel)
                             .fixedSize(horizontal: false, vertical: true)
@@ -435,31 +444,27 @@ private struct OutwardDatePickerView: View {
     @ObservedObject var viewModel: TravelSearchViewModel
     
     var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 10)
-                .fill(Color(uiColor: .systemBackground))
-                .strokeBorder(colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 2)
-            Button(action: {
-                dateTapped = true
-            }) {
-                HStack{
-                    Image(systemName: "calendar")
-                        .font(.title2)
-                    Text("Outward")
-                        .font(.headline)
-                        .frame(width: 80, alignment: .leading)
-                    Text(viewModel.datePicked.formatted(date: .numeric, time: .shortened))
-                    Spacer()
-                }
-                .padding(.horizontal, 5)
-                .scaledToFit()
-                .minimumScaleFactor(0.6)
-                .lineLimit(1)
-                .foregroundStyle(colorScheme == .dark ? .white : .black)
+        Button(action: {
+            dateTapped = true
+        }) {
+            HStack{
+                Image(systemName: "calendar")
+                    .font(.title2)
+                Text("Outward")
+                    .font(.headline)
+                    .frame(width: 80, alignment: .leading)
+                Text(viewModel.datePicked.formatted(date: .numeric, time: .shortened))
+                Spacer()
             }
-            .padding(.vertical, 10)
-            .accessibilityIdentifier("outwardDateButton")
+            .padding(.horizontal, 5)
+            .scaledToFit()
+            .minimumScaleFactor(0.6)
+            .lineLimit(1)
+            .foregroundStyle(colorScheme == .dark ? .white : .black)
         }
+        .padding(.vertical, 10)
+        .accessibilityIdentifier("outwardDateButton")
+        
         .frame(maxWidth: 310)
     }
 }
@@ -471,34 +476,31 @@ private struct ReturnDatePickerView: View {
     @ObservedObject var viewModel: TravelSearchViewModel
     
     var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 10)
-                .fill(viewModel.oneWay ? Color.gray.opacity(0.5) : Color(uiColor: .systemBackground))
-                .strokeBorder(viewModel.oneWay ? Color.gray.opacity(0.5) : colorScheme == .dark ? Color.white.opacity(0.6) : Color.black.opacity(0.6), lineWidth: 2)
-            Button(action:  {
-                dateReturnTapped = true
-            }) {
-                HStack {
-                    Image(systemName: "calendar")
-                        .font(.title2)
-                    Text("Return")
-                        .font(.headline)
-                        .frame(width: 80, alignment: .leading)
-                    
-                    Text(viewModel.dateReturnPicked.formatted(date: .numeric, time: .shortened))
-                    Spacer()
-                    
-                }
-                .padding(.horizontal, 5)
-                .scaledToFit()
-                .minimumScaleFactor(0.6)
-                .lineLimit(1)
-                .foregroundStyle(viewModel.oneWay ? Color.secondary : colorScheme == .dark ? Color.white : Color.black)
+        
+        Button(action:  {
+            dateReturnTapped = true
+        }) {
+            HStack {
+                Image(systemName: "calendar")
+                    .font(.title2)
+                Text("Return")
+                    .font(.headline)
+                    .frame(width: 80, alignment: .leading)
+                
+                Text(viewModel.dateReturnPicked.formatted(date: .numeric, time: .shortened))
+                Spacer()
+                
             }
-            .padding(.vertical, 10)
-            .disabled(viewModel.oneWay)
-            .accessibilityIdentifier("returnDateButton")
+            .padding(.horizontal, 5)
+            .scaledToFit()
+            .minimumScaleFactor(0.6)
+            .lineLimit(1)
+            .foregroundStyle(viewModel.oneWay ? Color.secondary : colorScheme == .dark ? Color.white : Color.black)
         }
+        .padding(.vertical, 10)
+        .disabled(viewModel.oneWay)
+        .accessibilityIdentifier("returnDateButton")
+        
         .frame(maxWidth: 310)
     }
 }
