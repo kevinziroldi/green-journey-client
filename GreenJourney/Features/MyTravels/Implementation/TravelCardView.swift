@@ -61,8 +61,8 @@ struct TravelCardView: View {
             
             ZStack {
                 RoundedRectangle(cornerRadius: 15)
-                    .stroke(computeTravelColor(), lineWidth: 5)
                     .fill(computeTravelBackColor())
+                    .shadow(radius: 2, x: 0, y: 2)
                 
                 HStack {
                     VStack {
@@ -82,12 +82,13 @@ struct TravelCardView: View {
                     
                     VStack {
                         Image(systemName: "carbon.dioxide.cloud")
-                            .font(.title)
-                            .scaleEffect(1.5)
+                            .font(.system(size: 40))
                             .padding(EdgeInsets(top: 0, leading: 0, bottom: 5, trailing: 0))
                         Text("CO\u{2082} compensation")
                         Text(String(format: "%.1f/%.1f kg", travelDetails.travel.CO2Compensated, travelDetails.computeCo2Emitted()))
+                            .fontWeight(.semibold)
                     }
+                    .foregroundStyle(computeTravelColor())
                     
                     Spacer()
                     
@@ -119,7 +120,7 @@ struct TravelCardView: View {
     
     func computeTravelBackColor() -> LinearGradient{
         if travelDetails.travel.CO2Compensated >= travelDetails.computeCo2Emitted() {
-            return LinearGradient(colors: [Color(red: 153/255, green: 204/255, blue: 153/255), Color(red: 153/255, green: 153/255, blue: 255/255)], startPoint: .bottomLeading, endPoint: .topTrailing)
+            return LinearGradient(colors: [Color(red: 153/255, green: 204/255, blue: 153/255), Color(red: 143/255, green: 234/255, blue: 255/255)], startPoint: .bottomLeading, endPoint: .topTrailing)
         }
         else {
             return LinearGradient(colors: [Color(uiColor: .systemBackground)], startPoint: .bottom, endPoint: .top)
