@@ -72,6 +72,8 @@ struct RankingView: View {
                     }
                     .padding(.horizontal)
                 }
+                .scrollClipDisabled(true)
+                .clipShape(Rectangle())
             } else {
                 // iPadOS
                 
@@ -102,6 +104,8 @@ struct RankingView: View {
                     }
                     .padding(.horizontal)
                 }
+                .scrollClipDisabled(true)
+                .clipShape(Rectangle())
             }
         }
         .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)

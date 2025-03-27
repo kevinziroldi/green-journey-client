@@ -129,6 +129,8 @@ struct TravelSearchView: View {
                         AIPredictionView(viewModel: viewModel, triggerAI: $triggerAI, showAlertPrediction: $showAlertPrediction, navigationSplitViewVisibility: $navigationSplitViewVisibility)
                     }
                 }
+                .scrollClipDisabled(true)
+                .clipShape(Rectangle())
             }
             
             .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)

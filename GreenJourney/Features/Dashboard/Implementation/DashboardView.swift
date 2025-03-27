@@ -45,6 +45,8 @@ struct DashboardView: View {
             }
             .padding(.horizontal)
         }
+        .scrollClipDisabled(true)
+        .clipShape(Rectangle())
         .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
         .onAppear() {
             Task {

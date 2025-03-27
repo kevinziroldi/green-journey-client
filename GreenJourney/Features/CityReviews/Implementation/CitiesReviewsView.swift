@@ -52,6 +52,8 @@ struct CitiesReviewsView: View {
                     }
                     .padding(.bottom)
                 }
+                .scrollClipDisabled(true)
+                .clipShape(Rectangle())
             } else {
                 // iPadOS
                 
@@ -77,6 +79,8 @@ struct CitiesReviewsView: View {
                     .frame(maxWidth: 800)
                     .padding(.horizontal)
                 }
+                .scrollClipDisabled(true)
+                .clipShape(Rectangle())
             }
         }
         .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
