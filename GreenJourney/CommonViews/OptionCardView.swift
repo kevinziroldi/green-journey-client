@@ -58,11 +58,12 @@ struct OptionCardView: View {
                             .font(.title3)
                             .padding(EdgeInsets(top: 7, leading: 0, bottom: 5, trailing: 0))
                         Text(option.getTotalDuration())
+                            .fontWeight(.semibold)
                         
                         Spacer()
                         
                         Text("Price: " + String(format: "%.2f", option.getTotalPrice()) + "€")
-                            .foregroundStyle(.green)
+                            .fontWeight(.semibold)
                         Spacer()
                     }
                 }

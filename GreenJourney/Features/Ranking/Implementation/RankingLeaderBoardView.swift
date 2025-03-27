@@ -163,19 +163,16 @@ private struct LeaderBoardUserView: View {
                         LazyVGrid(columns: gridItems, spacing: 10) {
                             ZStack {
                                 Circle()
-                                    .stroke(
-                                        LinearGradient(
-                                            gradient: Gradient(colors: [.green, .blue]),
-                                            startPoint: .topLeading,
-                                            endPoint: .bottomTrailing
-                                        ),
-                                        lineWidth: 2
-                                    )
-                                    .frame(width: 35, height: 35)
+                                    .stroke(LinearGradient(
+                                        gradient: Gradient(colors: [.green, .blue]),
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing)
+                                    , lineWidth: 3)
+                                    .frame(width: 40, height: 40)
                                 Text("#.")
                                     .foregroundStyle(.blue)
-                                    .fontWeight(.semibold)
-                            }
+                                    .font(.system(size: 22))
+                                    .fontWeight(.semibold)                            }
                             
                             VStack {
                                 Text(userRanking.firstName)
