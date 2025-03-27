@@ -17,10 +17,11 @@ struct LeaderBoardRow: View {
             LazyVGrid(columns: gridItems, spacing: 10) {
                 ZStack {
                     Circle()
-                        .fill(computeColor().gradient)
-                        .frame(width: 35, height: 35)
+                        .stroke(computeColor(), lineWidth: 3)
+                        .frame(width: 40, height: 40)
                     Text("\(index + 1)")
-                        .foregroundStyle(.black)
+                        .foregroundStyle(computeColor())
+                        .font(.system(size: 22))
                         .fontWeight(.semibold)
                 }
                 
@@ -49,13 +50,7 @@ struct LeaderBoardRow: View {
                     .scaledToFit()
                     .minimumScaleFactor(0.6)
                     .lineLimit(1)
-                    .foregroundStyle(
-                        LinearGradient(
-                            gradient: Gradient(colors: [.green, .blue]),
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
+                    .foregroundStyle(colorScheme == .dark ? .white : .black)
                     .fontWeight(.bold)
             }
             .padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
@@ -75,6 +70,6 @@ struct LeaderBoardRow: View {
         if index == 2 {
             return AppColors.bronze
         }
-        return Color.black.opacity(0.5)
+        return (colorScheme == .dark ? .white.opacity(0.7) : .black.opacity(0.7))
     }
 }
