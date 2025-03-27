@@ -6,24 +6,21 @@ struct OutwardOptionsView: View {
     @Binding var navigationPath: NavigationPath
     
     var body: some View {
-        VStack {
-            HeaderView(from: viewModel.departure.cityName, to: viewModel.arrival.cityName, date: viewModel.datePicked)
-                .overlay(Color.clear.accessibilityIdentifier("headerView"))
-            
-            Rectangle()
-                .frame(height: 1)
-                .foregroundColor(.gray)
-            
-            if (viewModel.outwardOptions.isEmpty){
-                Spacer()
-                CircularProgressView()
-                Spacer()
-                Spacer()
-                Spacer()
-                Spacer()
-            }
-            else{
-                ScrollView {
+        ScrollView {
+            VStack {
+                HeaderView(from: viewModel.departure.cityName, to: viewModel.arrival.cityName, date: viewModel.datePicked)
+                    .overlay(Color.clear.accessibilityIdentifier("headerView"))
+                
+                Rectangle()
+                    .frame(height: 1)
+                    .foregroundColor(.gray)
+                
+                if (viewModel.outwardOptions.isEmpty){
+                    CircularProgressView()
+                        .padding(.top, 50)
+                }
+                else{
+                    
                     VStack {
                         ForEach (viewModel.outwardOptions.indices, id: \.self) { option in
                             HStack {

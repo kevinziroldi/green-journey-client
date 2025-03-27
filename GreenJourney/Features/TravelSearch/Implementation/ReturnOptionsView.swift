@@ -5,24 +5,20 @@ struct ReturnOptionsView: View {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @Binding var navigationPath: NavigationPath
     var body: some View {
-        VStack {
-            HeaderView(from: viewModel.arrival.cityName, to: viewModel.departure.cityName, date: viewModel.dateReturnPicked)
-                .overlay(Color.clear.accessibilityIdentifier("headerView"))
-            
-            Rectangle()
-                .frame(height: 1)
-                .foregroundColor(.gray)
-            
-            if (viewModel.returnOptions.isEmpty){
-                Spacer()
-                CircularProgressView()
-                Spacer()
-                Spacer()
-                Spacer()
-                Spacer()
-            }
-            else{
-                ScrollView {
+        ScrollView {
+            VStack {
+                HeaderView(from: viewModel.arrival.cityName, to: viewModel.departure.cityName, date: viewModel.dateReturnPicked)
+                    .overlay(Color.clear.accessibilityIdentifier("headerView"))
+                
+                Rectangle()
+                    .frame(height: 1)
+                    .foregroundColor(.gray)
+                
+                if (viewModel.returnOptions.isEmpty){
+                    CircularProgressView()
+                        .padding(.top, 50)
+                }
+                else{
                     VStack {
                         ForEach (viewModel.returnOptions.indices, id: \.self) { option in
                             HStack {

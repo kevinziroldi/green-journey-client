@@ -11,15 +11,13 @@ struct OptionCardView: View {
         ZStack{
             RoundedRectangle(cornerRadius: 15)
                 .fill(Color(uiColor: .systemBackground))
-                .strokeBorder(computeTravelColor(option: option), lineWidth: 3)
+                .shadow(radius: 2, x: 0, y: 2)
             
             if horizontalSizeClass == .compact {
                 // iOS
-                
                 VStack {
                     // top part
                     HStack {
-                        
                         // vehicle
                         ZStack{
                             Circle()
@@ -37,7 +35,7 @@ struct OptionCardView: View {
                         
                         Spacer()
                         
-                        Co2CloudView(co2Value: option.getCo2Emitted())
+                        Co2CloudView(co2Value: option.getCo2Emitted(), color: computeTravelColor())
                         
                         Spacer()
                         
@@ -105,7 +103,7 @@ struct OptionCardView: View {
                     Spacer()
                     
                     // co2 emission
-                    Co2CloudView(co2Value: option.getCo2Emitted())
+                    Co2CloudView(co2Value: option.getCo2Emitted(), color: computeTravelColor())
                     
                     Spacer()
                     
@@ -121,7 +119,7 @@ struct OptionCardView: View {
         
     }
     
-    func computeTravelColor(option : TravelOption) -> LinearGradient {
+    func computeTravelColor() -> LinearGradient {
         var co2Emitted = 0.0
         var distance = 0.0
         for segment in option.segments {
@@ -208,15 +206,17 @@ struct OptionPriceView: View {
 }
 
 struct Co2CloudView: View {
-    var co2Value: Float64
+    let co2Value: Float64
+    let color: LinearGradient
     
     var body: some View {
         VStack {
             Image(systemName: "carbon.dioxide.cloud")
-                .font(.title)
-                .scaleEffect(1.5)
+                .font(.system(size: 40))
                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 5, trailing: 0))
             Text(String(format: "%.2f", co2Value) + " Kg")
+                .fontWeight(.semibold)
         }
+        .foregroundStyle(color)
     }
 }

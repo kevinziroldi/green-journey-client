@@ -41,15 +41,6 @@ struct TravelSearchView: View {
                                 .ignoresSafeArea()
                         }
                         
-                        if horizontalSizeClass == .compact {
-                            if triggerAI {
-                                // brightness on edges
-                                RoundedRectangle(cornerRadius: 52, style: .continuous)
-                                    .stroke(Color.white, style: .init(lineWidth: 4))
-                                    .blur(radius: 4)
-                                    .ignoresSafeArea()
-                            }
-                        }
                         Rectangle()
                             .fill(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
                             .ignoresSafeArea()
@@ -131,6 +122,7 @@ struct TravelSearchView: View {
                 }
                 .scrollClipDisabled(true)
                 .clipShape(Rectangle())
+                
             }
             
             .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)

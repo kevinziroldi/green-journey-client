@@ -175,7 +175,6 @@ struct MyTravelsView: View {
             }
             .scrollClipDisabled(true)
             .clipShape(Rectangle())
-            .navigationTitle("Titolo Schermata")
             .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
             .onAppear {
                 viewModel.showRequestedTravels()
