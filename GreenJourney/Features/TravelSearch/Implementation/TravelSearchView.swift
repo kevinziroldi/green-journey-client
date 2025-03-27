@@ -63,72 +63,74 @@ struct TravelSearchView: View {
                 }
                 .ignoresSafeArea()
                 ScrollView {
-                        VStack {
-                            ZStack {
-                                // dismiss AI button
-                                if triggerAI {
-                                    Button(action: {
-                                        viewModel.arrival = CityCompleterDataset()
-                                        withAnimation(.bouncy(duration: 0.5)) {
-                                            triggerAI = false
-                                        }
-                                    }) {
-                                        HStack {
-                                            Spacer()
-                                            Image(systemName: "xmark.circle")
-                                                .resizable()
-                                                .foregroundStyle(.red.opacity(0.8))
-                                                .frame(width: 35, height: 35)
-                                        }
-                                        .padding(.horizontal, 30)
-                                        .accessibilityIdentifier("dismissAIButton")
+                    VStack {
+                        ZStack {
+                            // dismiss AI button
+                            if triggerAI {
+                                Button(action: {
+                                    viewModel.arrival = CityCompleterDataset()
+                                    withAnimation(.bouncy(duration: 0.5)) {
+                                        triggerAI = false
                                     }
-                                }
-                                
-                                // header
-                                TravelSearchHeaderView(triggerAI: $triggerAI, serverService: serverService, firebaseAuthService: firebaseAuthService, navigationPath: $navigationPath)
-                            }
-                            .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
-                            
-                            TravelChoiceView(viewModel: viewModel, departureTapped: $departureTapped, destinationTapped: $destinationTapped, dateTapped: $dateTapped, dateReturnTapped: $dateReturnTapped, triggerAI: $triggerAI)
-                            
-                            Spacer()
-                            
-                            Button(action: {
-                                Task {
-                                    await viewModel.computeRoutes()
-                                }
-                                navigationPath.append(NavigationDestination.OutwardOptionsView(viewModel))
-                                triggerAI = false
-                                
-                            }) {
-                                
-                                ZStack {
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .fill(AppColors.mainColor)
-                                    
-                                    HStack (spacing: 3) {
+                                }) {
+                                    HStack {
                                         Spacer()
-                                        Text("Search")
-                                            .foregroundStyle(.white)
-                                            .font(.title3)
-                                            .fontWeight(.semibold)
-                                        Spacer()
+                                        
+                                        Image(systemName: "xmark")
+                                            .resizable()
+                                            .foregroundStyle(.red)
+                                            .frame(width: 25, height: 25)
                                     }
-                                    .padding(10)
+                                    .padding(.horizontal, 30)
+                                    .accessibilityIdentifier("dismissAIButton")
                                 }
-                                .padding(.horizontal, 45)
-                                .fixedSize(horizontal: false, vertical: true)
                             }
-                            .disabled(viewModel.departure.iata == "" || viewModel.arrival.iata == "")
-                            .frame(maxWidth: 800)
-                            .padding(.top, 20)
-                            .accessibilityIdentifier("searchButton")
-
-                            AIPredictionView(viewModel: viewModel, triggerAI: $triggerAI, showAlertPrediction: $showAlertPrediction, navigationSplitViewVisibility: $navigationSplitViewVisibility)
+                            
+                            // header
+                            TravelSearchHeaderView(triggerAI: $triggerAI, serverService: serverService, firebaseAuthService: firebaseAuthService, navigationPath: $navigationPath)
                         }
+                        .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
+                        
+                        TravelChoiceView(viewModel: viewModel, departureTapped: $departureTapped, destinationTapped: $destinationTapped, dateTapped: $dateTapped, dateReturnTapped: $dateReturnTapped, triggerAI: $triggerAI)
+                        
+                        Spacer()
+                        
+                        Button(action: {
+                            Task {
+                                await viewModel.computeRoutes()
+                            }
+                            navigationPath.append(NavigationDestination.OutwardOptionsView(viewModel))
+                            triggerAI = false
+                            
+                        }) {
+                            
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .fill(AppColors.mainColor)
+                                
+                                HStack (spacing: 3) {
+                                    Spacer()
+                                    Text("Search")
+                                        .foregroundStyle(.white)
+                                        .font(.title3)
+                                        .fontWeight(.semibold)
+                                    Spacer()
+                                }
+                                .padding(10)
+                            }
+                            .padding(.horizontal, 45)
+                            .fixedSize(horizontal: false, vertical: true)
+                        }
+                        .disabled(viewModel.departure.iata == "" || viewModel.arrival.iata == "")
+                        .frame(maxWidth: 800)
+                        .padding(.top, 20)
+                        .accessibilityIdentifier("searchButton")
+                        
+                        AIPredictionView(viewModel: viewModel, triggerAI: $triggerAI, showAlertPrediction: $showAlertPrediction, navigationSplitViewVisibility: $navigationSplitViewVisibility)
+                    }
                 }
             }
+            
             .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
             .sheet(isPresented: $dateTapped) {
                 DatePickerView(dateTapped: $dateTapped, title: "Select Outward Date", date: $viewModel.datePicked, limitDate: Date())
@@ -182,8 +184,8 @@ private struct TravelSearchHeaderView: View {
             if horizontalSizeClass == .compact {
                 // iOS
                 UserPreferencesButtonView(navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
-                .disabled(triggerAI)
-                .opacity(triggerAI ? 0 : 1)
+                    .disabled(triggerAI)
+                    .opacity(triggerAI ? 0 : 1)
             }
         }
     }
@@ -232,13 +234,13 @@ private struct TravelChoiceView: View {
                     DepartureTitleView()
                     DepartureCompleterView(viewModel: viewModel, departureTapped: $departureTapped, triggerAI: $triggerAI)
                         .padding(EdgeInsets(top: 0, leading: 40, bottom: 20, trailing: 40))
-
+                    
                     
                     // destination
                     DestinationTitleView()
                     DestinationCompleterView(viewModel: viewModel, destinationTapped: $destinationTapped, triggerAI: $triggerAI)
                         .padding(EdgeInsets(top: 0, leading: 40, bottom: 20, trailing: 40))
-
+                    
                 }
             }
             
@@ -309,7 +311,7 @@ private struct TravelChoiceView: View {
                         DestinationCompleterView(viewModel: viewModel, destinationTapped: $destinationTapped, triggerAI: $triggerAI)
                             .padding(EdgeInsets(top: 0, leading: 40, bottom: 20, trailing: 40))
                     }
-                
+                    
                     HStack (spacing: 50){
                         OutwardDatePickerView(dateTapped: $dateTapped, viewModel: viewModel)
                             .fixedSize(horizontal: false, vertical: true)
@@ -555,7 +557,7 @@ private struct AIPredictionView: View {
     @Binding var showAlertPrediction: Bool
     
     @Binding var navigationSplitViewVisibility: NavigationSplitViewVisibility
-        
+    
     var body: some View {
         HStack {
             if !triggerAI {
