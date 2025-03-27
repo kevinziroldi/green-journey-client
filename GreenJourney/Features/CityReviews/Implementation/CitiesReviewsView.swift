@@ -27,27 +27,30 @@ struct CitiesReviewsView: View {
                 // iOS
                 
                 ScrollView {
-                    // header
-                    HStack {
-                        // title
-                        CitiesReviewsTitleView()
+                    VStack {
+                        // header
+                        HStack {
+                            // title
+                            CitiesReviewsTitleView()
+                            
+                            Spacer()
+                            
+                            // user preferences button
+                            UserPreferencesButtonView(navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
+                        }
+                        .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
                         
-                        Spacer()
+                        // city search
+                        CitySearchView(viewModel: viewModel, searchTapped: $searchTapped)
                         
-                        // user preferences button
-                        UserPreferencesButtonView(navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
+                        // cities the user has visited
+                        ReviewableCitiesView(viewModel: viewModel)
+                        
+                        // best cities
+                        BestCitiesTitle()
+                        BestCitiesView(viewModel: viewModel, navigationPath: $navigationPath)
                     }
-                    .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
-                    
-                    // city search
-                    CitySearchView(viewModel: viewModel, searchTapped: $searchTapped)
-                    
-                    // cities the user has visited
-                    ReviewableCitiesView(viewModel: viewModel)
-                    
-                    // best cities
-                    BestCitiesTitle()
-                    BestCitiesView(viewModel: viewModel, navigationPath: $navigationPath)
+                    .padding(.bottom)
                 }
             } else {
                 // iPadOS
