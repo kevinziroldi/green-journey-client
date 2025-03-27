@@ -93,7 +93,7 @@ struct TravelDetailsView: View {
                             }
                             .frame(maxWidth: 800)
                         }
-                            
+                        
                         
                         if travelDetails.travel.confirmed {
                             // if the user hasn't left a review yet
@@ -215,35 +215,54 @@ private struct SegmentsDetailsView: View {
                 }
             }
         } else {
-            // iPadOS
             
             VStack {
-                HStack(alignment: .top) {
-                    if !travelDetails.isOneway() {
+                
+                if travelDetails.isOneway() {
+                    HStack(alignment: .top) {
+                        VStack(alignment: .leading) {
+                            HStack {
+                                Text(travelDetails.isOneway() ? "Segments" : "Outward")
+                                    .font(.title)
+                                    .fontWeight(.semibold)
+                                    .accessibilityIdentifier("segmentsTitle")
+                                Spacer()
+                            }
+                            .fixedSize()
+                            .padding(.top)
+                            
+                            SegmentsView(segments: travelDetails.getOutwardSegments())
+                                .fixedSize(horizontal: false, vertical: true)
+                                .accessibilityElement(children: .contain)
+                                .overlay(Color.clear.accessibilityIdentifier("outwardSegmentsView"))
+                        }
+                        
                         Spacer()
                     }
-                    
-                    VStack(alignment: .leading) {
-                        HStack {
-                            Text(travelDetails.isOneway() ? "Segments" : "Outward")
-                                .font(.title)
-                                .fontWeight(.semibold)
-                                .accessibilityIdentifier("segmentsTitle")
-                            Spacer()
-                        }
-                        .fixedSize()
-                        .padding(.top)
+                    .padding(.leading, 10)
+                } else {
+                    HStack(alignment: .top) {
+                        Spacer()
                         
-                        SegmentsView(segments: travelDetails.getOutwardSegments())
-                            .fixedSize(horizontal: false, vertical: true)
-                            .accessibilityElement(children: .contain)
-                            .overlay(Color.clear.accessibilityIdentifier("outwardSegmentsView"))
-                    }
-                    .frame(maxWidth: 370)
-                    
-                    Spacer()
-                    
-                    if !travelDetails.isOneway() {
+                        VStack(alignment: .leading) {
+                            HStack {
+                                Text(travelDetails.isOneway() ? "Segments" : "Outward")
+                                    .font(.title)
+                                    .fontWeight(.semibold)
+                                    .accessibilityIdentifier("segmentsTitle")
+                                Spacer()
+                            }
+                            .fixedSize()
+                            .padding(.top)
+                            
+                            SegmentsView(segments: travelDetails.getOutwardSegments())
+                                .fixedSize(horizontal: false, vertical: true)
+                                .accessibilityElement(children: .contain)
+                                .overlay(Color.clear.accessibilityIdentifier("outwardSegmentsView"))
+                        }.frame(maxWidth: 370)
+                        
+                        Spacer()
+                        
                         VStack(alignment: .leading) {
                             HStack {
                                 Text("Return")
@@ -264,6 +283,7 @@ private struct SegmentsDetailsView: View {
                         }
                         .frame(maxWidth: 370)
                     }
+                    .padding(.leading, -20)
                 }
             }
         }
