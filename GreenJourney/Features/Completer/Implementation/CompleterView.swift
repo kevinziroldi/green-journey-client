@@ -75,8 +75,10 @@ struct CompleterView: View {
                     }
                 }
             }
+            .scrollContentBackground(.hidden)
             .scrollDismissesKeyboard(.interactively)
         }
+        .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
         .onAppear(){
             viewModel.searchText = self.searchText
             textfieldOpen = true
