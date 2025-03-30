@@ -165,11 +165,11 @@ private struct LeaderboardNavigationView: View {
                         Spacer()
                         Image(systemName: "list.number")
                             .foregroundColor(AppColors.mainColor)
-                            .font(.title2)
+                            .font(.title3)
                             .fontWeight(.bold)
                         Image(systemName: "chevron.right")
                             .foregroundColor(AppColors.mainColor)
-                            .font(.title2)
+                            .font(.title3)
                             .fontWeight(.bold)
                     }
                     .padding()

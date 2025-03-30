@@ -50,7 +50,11 @@ struct LeaderBoardRow: View {
                     .scaledToFit()
                     .minimumScaleFactor(0.6)
                     .lineLimit(1)
-                    .foregroundStyle(colorScheme == .dark ? .white : .black)
+                    .foregroundStyle(
+                        leaderboard[index].userID == users.first?.userID ?? -1 ?
+                            LinearGradient(gradient: Gradient(colors: [.green, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing) :
+                            (colorScheme == .dark ? LinearGradient(gradient: Gradient(colors: [.white]), startPoint: .topLeading, endPoint: .bottomTrailing) : LinearGradient(gradient: Gradient(colors: [.black]), startPoint: .topLeading, endPoint: .bottomTrailing))
+                    )
                     .fontWeight(.bold)
             }
             .padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))

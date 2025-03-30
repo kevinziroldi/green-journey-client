@@ -1,6 +1,9 @@
 import SwiftUI
 
 struct OutwardOptionsView: View {
+    let departure: String
+    let arrival: String
+    
     @ObservedObject var viewModel: TravelSearchViewModel
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @Binding var navigationPath: NavigationPath
@@ -8,7 +11,7 @@ struct OutwardOptionsView: View {
     var body: some View {
         ScrollView {
             VStack {
-                HeaderView(from: viewModel.departure.cityName, to: viewModel.arrival.cityName, date: viewModel.datePicked)
+                HeaderView(from: departure, to: arrival, date: viewModel.datePicked)
                     .overlay(Color.clear.accessibilityIdentifier("headerView"))
                 
                 Rectangle()
@@ -25,7 +28,7 @@ struct OutwardOptionsView: View {
                         ForEach (viewModel.outwardOptions.indices, id: \.self) { option in
                             HStack {
                                 NavigationLink (
-                                    destination: OptionDetailsView(option: viewModel.outwardOptions[option], viewModel: viewModel, navigationPath: $navigationPath)) {
+                                    destination: OptionDetailsView(departure: departure, arrival: arrival, option: viewModel.outwardOptions[option], viewModel: viewModel, navigationPath: $navigationPath)) {
                                         OptionCardView(option: viewModel.outwardOptions[option], viewModel: viewModel)
                                             .contentShape(Rectangle())
                                     }

@@ -3,14 +3,16 @@ import SwiftUI
 struct OptionDetailsView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @Environment(\.colorScheme) var colorScheme: ColorScheme
-
+    let departure: String
+    let arrival: String
+    
     var option: TravelOption
     @ObservedObject var viewModel: TravelSearchViewModel
     @Binding var navigationPath: NavigationPath
     
     var body: some View {
         VStack {
-            HeaderView(from: option.getOptionDeparture(), to: option.getOptionDestination(), date: option.segments.first?.dateTime)
+            HeaderView(from: departure, to: arrival, date: option.segments.first?.dateTime)
             
             Rectangle()
                 .frame(height: 1)
@@ -61,7 +63,7 @@ struct OptionDetailsView: View {
                     if (viewModel.selectedOption.isEmpty) {
                         Button(action: {
                             viewModel.selectedOption.append(contentsOf: option.segments)
-                            navigationPath.append(NavigationDestination.ReturnOptionsView(viewModel))
+                            navigationPath.append(NavigationDestination.ReturnOptionsView(departure, arrival, viewModel))
                         }) {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 10)

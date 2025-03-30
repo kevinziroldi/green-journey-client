@@ -1,13 +1,15 @@
 import SwiftUI
 
 struct ReturnOptionsView: View {
+    let departure: String
+    let arrival: String
     @ObservedObject var viewModel: TravelSearchViewModel
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @Binding var navigationPath: NavigationPath
     var body: some View {
         ScrollView {
             VStack {
-                HeaderView(from: viewModel.arrival.cityName, to: viewModel.departure.cityName, date: viewModel.dateReturnPicked)
+                HeaderView(from: arrival, to: departure, date: viewModel.dateReturnPicked)
                     .overlay(Color.clear.accessibilityIdentifier("headerView"))
                 
                 Rectangle()
@@ -22,7 +24,7 @@ struct ReturnOptionsView: View {
                     VStack {
                         ForEach (viewModel.returnOptions.indices, id: \.self) { option in
                             HStack {
-                                NavigationLink (destination: OptionDetailsView(option: viewModel.returnOptions[option], viewModel: viewModel, navigationPath: $navigationPath)){
+                                NavigationLink (destination: OptionDetailsView(departure: departure, arrival: arrival, option: viewModel.returnOptions[option], viewModel: viewModel, navigationPath: $navigationPath)){
                                     OptionCardView(option: viewModel.returnOptions[option], viewModel: viewModel)
                                         .contentShape(Rectangle())
                                 }

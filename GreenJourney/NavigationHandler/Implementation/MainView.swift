@@ -346,10 +346,10 @@ struct MainView: View {
             SignUpView(viewModel: viewModel, navigationPath: $navigationPath)
         case .EmailVerificationView(let viewModel):
             EmailVerificationView(viewModel: viewModel, navigationPath: $navigationPath)
-        case .OutwardOptionsView(let viewModel):
-            OutwardOptionsView(viewModel: viewModel, navigationPath: $navigationPath)
-        case .ReturnOptionsView(let viewModel):
-            ReturnOptionsView(viewModel: viewModel, navigationPath: $navigationPath)
+        case .OutwardOptionsView(let departure, let arrival, let viewModel):
+            OutwardOptionsView(departure: departure, arrival: arrival, viewModel: viewModel, navigationPath: $navigationPath)
+        case .ReturnOptionsView(let departure, let arrival, let viewModel):
+            ReturnOptionsView(departure: departure, arrival: arrival, viewModel: viewModel, navigationPath: $navigationPath)
         case .CityReviewsDetailsView(let viewModel):
             CityReviewsDetailsView(viewModel: viewModel, navigationPath: $navigationPath)
         case .TravelDetailsView(let viewModel):

@@ -90,7 +90,7 @@ struct TravelSearchView: View {
                             Task {
                                 await viewModel.computeRoutes()
                             }
-                            navigationPath.append(NavigationDestination.OutwardOptionsView(viewModel))
+                            navigationPath.append(NavigationDestination.OutwardOptionsView(viewModel.departure.cityName, viewModel.arrival.cityName ,viewModel))
                             triggerAI = false
                             
                         }) {
