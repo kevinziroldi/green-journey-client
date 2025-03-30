@@ -109,9 +109,8 @@ private struct ReviewsAverageView: View {
                         .foregroundStyle(AppColors.mainColor)
                     HStack {
                         VStack {
-                            HStack {
-                                FiveStarView(rating: selectedCityReviewElement.getAverageRating(), dim: 25, color: Color.yellow)
-                            }
+                            FiveStarView(rating: selectedCityReviewElement.getAverageRating(), dim: 25, color: Color.yellow)
+                            
                             Button(action: {
                                     // reset reviews list
                                                 viewModel.currentReviews = selectedCityReviewElement.reviews
@@ -195,6 +194,115 @@ private struct ReviewsAverageView: View {
         } else {
             // iPadOS
             
+            VStack (spacing: 0) {
+                HStack {
+                    Text("Average Rating")
+                        .font(.title)
+                        .fontWeight(.semibold)
+                    
+                    Spacer()
+                    
+                    Button(action: {
+                        infoTapped = true
+                    }){
+                        Image(systemName: "info.circle")
+                            .font(.title3)
+                    }
+                    .accessibilityIdentifier("infoReviewButton")
+                }
+                HStack (spacing: 30) {
+                    VStack {
+                         HStack {
+                             Image(systemName: "bus")
+                                 .resizable()
+                                 .scaledToFit()
+                                 .frame(width: 30, height: 30)
+                                 .foregroundColor(.black)
+                                 .padding(.trailing)
+                             
+                             Text(String(format: "%.1f", selectedCityReviewElement.averageLocalTransportRating))
+                                 .font(.title3)
+                                 .fontWeight(.semibold)
+                                 .padding(EdgeInsets(top: 4, leading: 0, bottom: 0, trailing: 10))
+                             FiveStarView(rating: selectedCityReviewElement.averageLocalTransportRating, dim: 20, color: .black)
+                             Spacer()
+                         }
+                         
+                         HStack {
+                             Image(systemName: "tree")
+                                 .resizable()
+                                 .scaledToFit()
+                                 .frame(width: 30, height: 30)
+                                 .foregroundColor(.black)
+                                 .padding(.trailing)
+                             
+                             Text(String(format: "%.1f", selectedCityReviewElement.averageGreenSpacesRating))
+                                 .font(.title3)
+                                 .fontWeight(.semibold)
+                                 .padding(EdgeInsets(top: 4, leading: 0, bottom: 0, trailing: 10))
+                             FiveStarView(rating: selectedCityReviewElement.averageGreenSpacesRating, dim: 20, color: .black)
+                             Spacer()
+                         }
+                         HStack {
+                             Image(systemName: "trash")
+                                 .resizable()
+                                 .scaledToFit()
+                                 .frame(width: 30, height: 30)
+                                 .foregroundColor(.black)
+                                 .padding(.trailing)
+                             
+                             Text(String(format: "%.1f", selectedCityReviewElement.averageWasteBinsRating))
+                                 .font(.title3)
+                                 .fontWeight(.semibold)
+                                 .padding(EdgeInsets(top: 4, leading: 0, bottom: 0, trailing: 10))
+                             FiveStarView(rating: selectedCityReviewElement.averageWasteBinsRating, dim: 20, color: .black)
+                             Spacer()
+                         }
+                     }
+                    .fixedSize()
+                    
+                    Spacer()
+                    
+                    VStack {
+                        HStack (spacing: 30){
+                            Text(String(format: "%.1f", selectedCityReviewElement.getAverageRating()))
+                                .font(.system(size: 70).bold())
+                                .fontWeight(.semibold)
+                                .foregroundStyle(AppColors.mainColor)
+                            VStack {
+                                FiveStarView(rating: selectedCityReviewElement.getAverageRating(), dim: 35, color: Color.yellow)
+                                Button(action: {
+                                    // reset reviews list
+                                    viewModel.currentReviews = selectedCityReviewElement.reviews
+                                    viewModel.hasPrevious = selectedCityReviewElement.hasPrevious
+                                    viewModel.hasNext = selectedCityReviewElement.hasNext
+                                    
+                                    // navigate
+                                    navigationPath.append(NavigationDestination.AllReviewsView(viewModel))
+                                }) {
+                                    HStack {
+                                        Text("\(selectedCityReviewElement.numReviews)")
+                                            .bold()
+                                            .foregroundStyle(AppColors.mainColor) +
+                                        Text("\(selectedCityReviewElement.numReviews == 1 ? " review" : " reviews")")
+                                            .foregroundStyle(AppColors.mainColor)
+                                    }
+                                }
+                            }
+                        }
+                        Spacer()
+                    }
+                    
+                    Spacer()
+                    
+                }
+                .padding(.vertical, 10)
+                .padding(.top)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                
+            }
+            .padding()
+            /*
             ZStack {
                 RoundedRectangle(cornerRadius: 15)
                     .fill(Color(uiColor: .systemBackground))
@@ -310,7 +418,7 @@ private struct ReviewsAverageView: View {
                 }
             }
             .fixedSize()
-            .padding(EdgeInsets(top: 5, leading: 10, bottom: 0, trailing: 10))
+            .padding(EdgeInsets(top: 5, leading: 10, bottom: 0, trailing: 10))*/
             .overlay(Color.clear.accessibilityIdentifier("averageRatingSection"))
         }
     }

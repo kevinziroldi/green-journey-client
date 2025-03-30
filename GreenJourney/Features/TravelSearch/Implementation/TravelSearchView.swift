@@ -304,12 +304,32 @@ private struct TravelChoiceView: View {
                             .padding(EdgeInsets(top: 0, leading: 40, bottom: 20, trailing: 40))
                     }
                     
-                    HStack (spacing: 50){
-                        OutwardDatePickerView(dateTapped: $dateTapped, viewModel: viewModel)
-                            .fixedSize(horizontal: false, vertical: true)
-                        ReturnDatePickerView(dateReturnTapped: $dateReturnTapped, viewModel: viewModel)
-                            .fixedSize(horizontal: false, vertical: true)
+                    VStack {
+                        HStack {
+                            Toggle("Round trip", isOn: Binding(
+                                get: { !viewModel.oneWay },
+                                set: { viewModel.oneWay = !$0 }))
+                            .frame(width: 150)
+                            .fontWeight(.semibold)
+                            .toggleStyle(SwitchToggleStyle(tint: AppColors.mainColor))
+                            Spacer()
+                        }
+                        // date pickers
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(Color(uiColor: .systemBackground))
+                                .shadow(radius: 2, x: 0, y: 2)
+                            HStack {
+                                OutwardDatePickerView(dateTapped: $dateTapped, viewModel: viewModel)
+                                
+                                Divider()
+                                
+                                ReturnDatePickerView(dateReturnTapped: $dateReturnTapped, viewModel: viewModel)
+                            }
+                        }
                     }
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.horizontal, 45)
                 }
             }
             .frame(maxWidth: 800)
@@ -618,8 +638,8 @@ private struct AIPredictionView: View {
                 
             }
         }
-        .frame(maxWidth: 800)
         .padding(.horizontal, 45)
+        .frame(maxWidth: 800)
         .padding(.top, 20)
         .padding(.bottom, 10)
     }

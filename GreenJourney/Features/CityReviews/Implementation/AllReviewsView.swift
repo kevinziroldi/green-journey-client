@@ -21,6 +21,7 @@ struct AllReviewsView: View {
                 Spacer()
             }
             .padding(.horizontal)
+            .frame(maxWidth: 800)
             
             Spacer()
             

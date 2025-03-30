@@ -156,17 +156,12 @@ private struct CompensationButtonsView: View {
                     HStack {
                         VStack {
                             HStack {
-                                ZStack {
-                                    Circle()
-                                        .fill(.red.opacity(0.2))
-                                        .frame(width: 50, height: 50)
-                                    
                                     Image(systemName: "carbon.dioxide.cloud")
                                         .resizable()
                                         .scaledToFit()
                                         .frame(width: 35, height: 35)
                                         .foregroundColor(.red)
-                                }
+                                
                                                                 
                                 Text("CO\u{2082} emitted: ")
                                     .font(.system(size: 20).bold())
@@ -182,17 +177,13 @@ private struct CompensationButtonsView: View {
                             .padding(.vertical, 5)
                             
                             HStack {
-                                ZStack {
-                                    Circle()
-                                        .fill(.green.opacity(0.2))
-                                        .frame(width: 50, height: 50)
-                                    
+                                
                                     Image(systemName: "leaf")
                                         .resizable()
                                         .scaledToFit()
                                         .frame(width: 35, height: 35)
                                         .foregroundColor(.green)
-                                }
+                                
                                 
                                 Text("CO\u{2082} compensated: ")
                                     .font(.system(size: 20).bold())
@@ -219,6 +210,7 @@ private struct CompensationButtonsView: View {
                                         .font(.system(size: 25))
                                         .padding(.bottom, 5)
                                 }
+                                .border(.blue)
                                 .scaledToFit()
                                 .minimumScaleFactor(0.6)
                                 
@@ -255,6 +247,8 @@ private struct CompensationButtonsView: View {
                                 .disabled(plantedTrees == totalTrees)
                                 .accessibilityIdentifier("plusButton")
                             }
+                            .border(.blue)
+
                             
                             Text("Price: \(viewModel.compensatedPrice) €")
                                 .padding()
@@ -263,6 +257,8 @@ private struct CompensationButtonsView: View {
                             CompensateButtonView(viewModel: viewModel, travelDetails: travelDetails, showAlertCompensation: $showAlertCompensation, plantedTrees: $plantedTrees, totalTrees: $totalTrees, progress: $progress)
                             
                         }
+                        .border(.red)
+
                         .padding(.leading, 15)
                         .padding(.vertical)
                         
@@ -287,7 +283,7 @@ private struct CompensationButtonsView: View {
                 HStack {
                     Spacer()
                     VStack {
-                        HStack (spacing: 0) {
+                        HStack (spacing: 5) {
                             Text("You planted: \(plantedTrees)")
                                 .font(.system(size: 20))
                             Image(systemName: "tree")
