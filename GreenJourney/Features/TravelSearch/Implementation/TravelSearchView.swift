@@ -94,7 +94,6 @@ struct TravelSearchView: View {
                             triggerAI = false
                             
                         }) {
-                            
                             ZStack {
                                 RoundedRectangle(cornerRadius: 10)
                                     .fill(AppColors.mainColor)
@@ -578,7 +577,6 @@ private struct AIPredictionView: View {
                 }
             }
             else {
-                Spacer()
                 
                 //button for see another prediction
                 Button(action: {
@@ -599,7 +597,6 @@ private struct AIPredictionView: View {
                         HStack {
                             Text("Generate a new prediction")
                                 .foregroundStyle(.gray)
-                                .padding(.leading, 5)
                             Spacer()
                             ZStack {
                                 Image(systemName: "arrow.trianglehead.2.clockwise")
@@ -615,13 +612,14 @@ private struct AIPredictionView: View {
                         .padding(5)
                         .padding(.horizontal, 5)
                     }
-                    .frame(width: 340, height: 60)
+                    .frame(height: 60)
                 }
                 .accessibilityIdentifier("newGenerationButton")
                 
-                Spacer()
             }
         }
+        .frame(maxWidth: 800)
+        .padding(.horizontal, 45)
         .padding(.top, 20)
         .padding(.bottom, 10)
     }

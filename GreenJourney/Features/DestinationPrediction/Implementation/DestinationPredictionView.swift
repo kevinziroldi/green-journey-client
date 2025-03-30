@@ -30,15 +30,11 @@ struct DestinationPredictionView: View {
                         .font(.title)
                         .clipShape(Circle())
                         .foregroundStyle(.linearGradient(Gradient(colors: [.blue, .green]), startPoint: .bottomLeading, endPoint: .topTrailing))
-                    /*Image("icon_no_background")
-                        .resizable()
-                        .frame(width: 40, height: 40)
-                        .padding(.trailing, 5)*/
                 }
                 .padding(5)
                 .padding(.horizontal, 5)
             }
-            .frame(width: 340, height: 60)
+            .frame( height: 60)
         }
         .accessibilityIdentifier("getRecommendationButton")
     }
