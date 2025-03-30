@@ -114,17 +114,18 @@ private struct CompensationButtonsView: View {
                                 
                                 HStack {
                                     Text("\(plantedTrees) / \(totalTrees)")
-                                        .font(.system(size: 25))
+                                        .font(.system(size: 23))
                                     Image(systemName: "tree")
-                                        .font(.system(size: 25))
+                                        .font(.system(size: 23))
                                         .padding(.bottom, 5)
+                                    Spacer()
                                 }
+                                .frame(width: 100)
                                 .scaledToFit()
                                 .minimumScaleFactor(0.6)
                                 
                                 Spacer()
                             }
-                            .padding(.trailing, 15)
                             
                             Text("Price: \(viewModel.compensatedPrice) €")
                                 .padding()
@@ -343,15 +344,14 @@ private struct CompensateButtonView: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
                     .fill(plantedTrees==viewModel.getPlantedTrees(travelDetails) ? Color.secondary.opacity(0.6) : AppColors.mainColor)
-                    .stroke(plantedTrees==viewModel.getPlantedTrees(travelDetails) ? Color.secondary : AppColors.mainColor, lineWidth: 2)
-                HStack (spacing: 3) {
-                    Text("Compensate")
-                        .foregroundStyle(.white)
-                        .fontWeight(.semibold)
-                }
-                .scaledToFit()
-                .minimumScaleFactor(0.6)
-                .padding(10)
+                
+                Text("Compensate")
+                    .foregroundStyle(.white)
+                    .fontWeight(.semibold)
+
+                    .scaledToFit()
+                    .minimumScaleFactor(0.6)
+                    .padding(10)
             }
             .fixedSize()
         }
