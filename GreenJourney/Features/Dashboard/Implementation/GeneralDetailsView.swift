@@ -13,12 +13,12 @@ struct GeneralDetailsView: View {
                     // iOS
                     
                     VStack(spacing: 20) {
-                        HorizontalBarChart(data: viewModel.distancePerTransport, title: "Distance per vehicle", measurementUnit: "Km", color: AppColors.blue, sortByKey: true)
+                        HorizontalBarChart(data: viewModel.distancePerTransport, title: "Distance per Vehicle", measurementUnit: "Km", color: AppColors.blue, sortByKey: true)
                             .padding(.horizontal)
                             .frame(height: 250)
                             .overlay(Color.clear.accessibilityIdentifier("distancePerVehicle"))
                         
-                        BarChartView(data: viewModel.distances, title: "Distance traveled (Km)", value: "", color: AppColors.blue)
+                        BarChartView(data: viewModel.distances, title: "Distance Traveled (Km)", value: "", color: AppColors.blue)
                             .padding(.horizontal)
                             .overlay(Color.clear.accessibilityIdentifier("distancePerYear"))
                         
@@ -26,7 +26,7 @@ struct GeneralDetailsView: View {
                             .padding(.horizontal)
                             .overlay(Color.clear.accessibilityIdentifier("mostChosenVehicle"))
                         
-                        BarChartView(data: viewModel.tripsMade, title: "Trips completed", value: "\(viewModel.totalTripsMade)", color: AppColors.blue)
+                        BarChartView(data: viewModel.tripsMade, title: "Trips Completed", value: "\(viewModel.totalTripsMade)", color: AppColors.blue)
                             .padding(.horizontal)
                             .overlay(Color.clear.accessibilityIdentifier("tripsCompleted"))
                         
@@ -39,16 +39,16 @@ struct GeneralDetailsView: View {
                     
                     VStack(spacing: 0) {
                         HStack(spacing: 0) {
-                            BarChartView(data: viewModel.distances, title: "Distance traveled (Km)", value: "", color: AppColors.blue)
+                            BarChartView(data: viewModel.distances, title: "Distance Traveled (Km)", value: "", color: AppColors.blue)
                                 .padding()
                                 .overlay(Color.clear.accessibilityIdentifier("distancePerYear"))
                             
-                            BarChartView(data: viewModel.tripsMade, title: "Trips completed", value: "\(viewModel.totalTripsMade)", color: AppColors.blue)
+                            BarChartView(data: viewModel.tripsMade, title: "Trips Completed", value: "\(viewModel.totalTripsMade)", color: AppColors.blue)
                                 .padding()
                                 .overlay(Color.clear.accessibilityIdentifier("tripsCompleted"))
                         }
                         
-                        HorizontalBarChart(data: viewModel.distancePerTransport, title: "Distance per vehicle", measurementUnit: "Km", color: AppColors.blue, sortByKey: true)
+                        HorizontalBarChart(data: viewModel.distancePerTransport, title: "Distance per Vehicle", measurementUnit: "Km", color: AppColors.blue, sortByKey: true)
                             .padding()
                             .frame(height: 250)
                             .overlay(Color.clear.accessibilityIdentifier("distancePerVehicle"))

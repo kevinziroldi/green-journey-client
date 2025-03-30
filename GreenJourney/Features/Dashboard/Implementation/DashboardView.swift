@@ -101,7 +101,7 @@ private struct DashboardDetailsNavigationView: View {
                     .shadow(radius: 3, x: 0, y: 3)
                 VStack (spacing:0){
                     HStack {
-                        Text("Recap")
+                        Text("Travels Recap")
                             .font(.title)
                             .foregroundStyle(AppColors.blue)
                             .fontWeight(.semibold)

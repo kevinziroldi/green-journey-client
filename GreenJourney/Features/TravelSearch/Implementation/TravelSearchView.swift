@@ -121,8 +121,7 @@ struct TravelSearchView: View {
                     }
                 }
                 .scrollClipDisabled(true)
-                .clipShape(Rectangle())
-                
+                .clipShape(Rectangle())    
             }
             
             .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
