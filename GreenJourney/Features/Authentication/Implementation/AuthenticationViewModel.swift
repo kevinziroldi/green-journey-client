@@ -128,7 +128,7 @@ class AuthenticationViewModel: ObservableObject {
                 }
             }
         } catch {
-            self.errorMessage = "Error creating account"
+            self.errorMessage = "\(error.localizedDescription)"
             return
         }
     }
