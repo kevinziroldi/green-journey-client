@@ -12,16 +12,17 @@ struct OptionDetailsView: View {
     
     var body: some View {
         VStack {
-            HeaderView(from: departure, to: arrival, date: option.segments.first?.dateTime)
             
-            Rectangle()
-                .frame(height: 1)
-                .foregroundColor(.gray)
             
             if horizontalSizeClass == .compact {
                 // iOS
                 
                 ScrollView {
+                    HeaderView(from: departure, to: arrival, date: option.segments.first?.dateTime)
+                    
+                    Rectangle()
+                        .frame(height: 1)
+                        .foregroundColor(.gray)
                     Co2RecapView(halfWidth: false, co2Emitted: option.getCo2Emitted(), numTrees: option.getNumTrees(), distance: option.getTotalDistance())
                         .padding(EdgeInsets(top: 10, leading: 15, bottom: 5, trailing: 15))
                         .overlay(Color.clear.accessibilityIdentifier("co2EmittedBox"))
@@ -39,6 +40,11 @@ struct OptionDetailsView: View {
                 // iPadOS
                 
                 ScrollView {
+                    HeaderView(from: departure, to: arrival, date: option.segments.first?.dateTime)
+                    
+                    Rectangle()
+                        .frame(height: 1)
+                        .foregroundColor(.gray)
                     HStack(alignment: .top) {
                         TravelRecapView(singleColumn: true, distance: option.getTotalDistance(), duration: option.getTotalDuration(), price: option.getTotalPrice(), greenPrice: option.getGreenPrice())
                             .padding()
