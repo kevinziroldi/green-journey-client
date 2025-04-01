@@ -10,9 +10,8 @@ struct DetailedRatingsView: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: 23, height: 23)
-                //.foregroundColor(AppColors.mainColor)
             
-            Text(String(format: "%.0f", review.localTransportRating))
+            Text(String(review.localTransportRating))
             Spacer()
             Divider()
             Spacer()
@@ -21,9 +20,8 @@ struct DetailedRatingsView: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: 23, height: 23)
-                //.foregroundColor(.black)
             
-            Text(String(format: "%.0f", review.greenSpacesRating))
+            Text(String(review.greenSpacesRating))
             Spacer()
             Divider()
             Spacer()
@@ -32,9 +30,8 @@ struct DetailedRatingsView: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: 23, height: 23)
-                //.foregroundColor(AppColors.mainColor)
             
-            Text(String(format: "%.0f", review.wasteBinsRating))
+            Text(String(review.wasteBinsRating))
             Spacer()
         }
         .frame(height: 30)
