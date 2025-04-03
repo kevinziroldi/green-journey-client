@@ -92,6 +92,8 @@ final class DashboardViewModelIntegrationTest {
         #expect(!travelSearchViewModel.outwardOptions.isEmpty)
         #expect(travelSearchViewModel.returnOptions.isEmpty)
         
+        print(travelSearchViewModel.outwardOptions)
+        
         // select an option
         travelSearchViewModel.selectedOption = travelSearchViewModel.outwardOptions[0].segments
         // save travel
@@ -143,14 +145,14 @@ final class DashboardViewModelIntegrationTest {
         #expect(viewModel.visitedContinents.count == 1)
         let currYear = Calendar.current.component(.year, from: Date())
         for distance in viewModel.distances {
-            if distance.key < currYear {
+            if Int(distance.key)! < currYear {
                 #expect(distance.value == 0)
             } else {
                 #expect(distance.value > 0)
             }
         }
         for tripsMade in viewModel.tripsMade {
-            if tripsMade.key < currYear {
+            if Int(tripsMade.key)! < currYear {
                 #expect(tripsMade.value == 0)
             } else {
                 #expect(tripsMade.value == 1)

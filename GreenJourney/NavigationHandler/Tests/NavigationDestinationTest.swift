@@ -47,8 +47,8 @@ final class NavigationDestinationTest {
     func testNavigationDestinationEqualityTravelSearchViewModel() {
         let travelSearchViewModel = TravelSearchViewModel(modelContext: mockModelContext, serverService: mockServerService)
         
-        let destination1 = NavigationDestination.OutwardOptionsView(travelSearchViewModel)
-        let destination2 = NavigationDestination.OutwardOptionsView(travelSearchViewModel)
+        let destination1 = NavigationDestination.OutwardOptionsView("dep", "arr", travelSearchViewModel)
+        let destination2 = NavigationDestination.OutwardOptionsView("dep", "arr", travelSearchViewModel)
         
         #expect(destination1 == destination2)
         #expect(destination1.hashValue == destination2.hashValue)
@@ -59,8 +59,8 @@ final class NavigationDestinationTest {
         let travelSearchViewModel1 = TravelSearchViewModel(modelContext: mockModelContext, serverService: mockServerService)
         let travelSearchViewModel2 = TravelSearchViewModel(modelContext: mockModelContext, serverService: mockServerService)
         
-        let destination1 = NavigationDestination.OutwardOptionsView(travelSearchViewModel1)
-        let destination2 = NavigationDestination.OutwardOptionsView(travelSearchViewModel2)
+        let destination1 = NavigationDestination.OutwardOptionsView("dep1", "arr1", travelSearchViewModel1)
+        let destination2 = NavigationDestination.OutwardOptionsView("dep2", "arr2", travelSearchViewModel2)
         
         #expect(destination1 != destination2)
         #expect(destination1.hashValue != destination2.hashValue)

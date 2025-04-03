@@ -84,14 +84,14 @@ final class DashboardViewModelUnitTest {
         #expect(viewModel.totalDurationString == "0 h, 3 min")
         let currYear = Calendar.current.component(.year, from: Date())
         for distance in viewModel.distances {
-            if distance.key < currYear {
+            if Int(distance.key)! < currYear {
                 #expect(distance.value == 0)
             } else {
                 #expect(distance.value == 700)
             }
         }
         for tripsMade in viewModel.tripsMade {
-            if tripsMade.key < currYear {
+            if Int(tripsMade.key)! < currYear {
                 #expect(tripsMade.value == 0)
             } else {
                 #expect(tripsMade.value == 1)
