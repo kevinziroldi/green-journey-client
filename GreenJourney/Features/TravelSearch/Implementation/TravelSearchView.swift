@@ -246,6 +246,8 @@ private struct TravelChoiceView: View {
                     .frame(width: 150)
                     .fontWeight(.semibold)
                     .toggleStyle(SwitchToggleStyle(tint: AppColors.mainColor))
+                    .accessibilityIdentifier("tripTypePicker")
+                    
                     Spacer()
                 }
                 // date pickers

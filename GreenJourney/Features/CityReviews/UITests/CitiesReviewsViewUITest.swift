@@ -69,7 +69,6 @@ final class CitiesReviewsViewUITest: XCTestCase {
         // UI elements
         let citiesReviewsTitle = app.staticTexts["citiesReviewsTitle"]
         let userPreferencesButton = app.buttons["userPreferencesButton"]
-        let selectCityText = app.staticTexts["selectCityText"]
         let searchCityReviews = app.buttons["searchCityReviews"]
         let reviewableCitiesTitle = app.staticTexts["reviewableCitiesTitle"]
         let reviewableCity_Berlin = app.otherElements["reviewableCityView_BER_DE"]
@@ -83,7 +82,6 @@ final class CitiesReviewsViewUITest: XCTestCase {
         
         // check elements present
         XCTAssertTrue(citiesReviewsTitle.exists, "citiesReviewsTitle is not displayed")
-        XCTAssertTrue(selectCityText.exists, "selectCityText is not displayed")
         
         if deviceSize == .compact {
             XCTAssertTrue(userPreferencesButton.exists, "userPreferencesButton is not displayed")

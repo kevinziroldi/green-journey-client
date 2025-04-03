@@ -138,8 +138,8 @@ final class MyTravelsUITests: XCTestCase {
         let myTravelsTitle = app.staticTexts["myTravelsTitle"]
         let sortByButton = app.buttons["sortByButton"]
         let departureDateButton = app.sheets.buttons["Departure date"]
-        let co2EmittedButton = app.sheets.buttons["CO2 emitted"]
-        let co2CompensationRate = app.sheets.buttons["Departure date"]
+        let co2EmittedButton = app.sheets.buttons["CO\u{2082} emitted"]
+        let co2CompensationRate = app.sheets.buttons["CO\u{2082} compensation rate"]
         let priceButton = app.sheets.buttons["Price"]
         let cancelButton = app.sheets.buttons["Cancel"]
         

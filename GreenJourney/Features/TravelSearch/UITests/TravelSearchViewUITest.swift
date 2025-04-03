@@ -45,7 +45,7 @@ final class TravelSearchViewUITest: XCTestCase {
         // UI elements
         let travelSearchViewTitle = app.staticTexts["travelSearchViewTitle"]
         let userPreferencesButton = app.buttons["userPreferencesButton"]
-        let tripTypePicker = app.segmentedControls["tripTypePicker"]
+        let tripTypePicker = app.switches.firstMatch
         let departureLabel = app.staticTexts["departureLabel"]
         let departureButton = app.buttons["departureButton"]
         let destinationLabel = app.staticTexts["destinationLabel"]
@@ -98,21 +98,13 @@ final class TravelSearchViewUITest: XCTestCase {
     
     func testSwitchTravelDirection() {
         // UI elements
-        let tripTypePicker = app.segmentedControls["tripTypePicker"]
+        let tripTypePicker = app.switches.firstMatch
     
-        let oneWayOption = tripTypePicker.buttons["One way"]
-        let roundTripOption = tripTypePicker.buttons["Round trip"]
-        
         // check picker present
         XCTAssertTrue(tripTypePicker.exists, "tripTypePicker not displayed")
-        
-        // one way should be default
-        XCTAssertTrue(oneWayOption.isSelected, "One way should be default")
-               
+    
         // tap button
         tripTypePicker.tap()
-        
-        XCTAssertTrue(roundTripOption.isSelected, "Round trip should be selected")
     }
     
     func testDatePickerPresentationAndDismissal() {

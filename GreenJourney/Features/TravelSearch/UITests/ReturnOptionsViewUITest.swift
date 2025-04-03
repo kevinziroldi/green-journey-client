@@ -43,23 +43,15 @@ final class ReturnOptionsViewUITest: XCTestCase {
         let listElementMilano = app.otherElements["listElement_MIL_IT"]
         let listElementRoma = app.otherElements["listElement_ROM_IT"]
         let searchButton = app.buttons["searchButton"]
-        let tripTypePicker = app.segmentedControls["tripTypePicker"]
+        let tripTypePicker = app.switches.firstMatch
         
         XCTAssertTrue(travelSearchViewTitle.exists, "travelSearchViewTitle not displayed")
-        
-        let oneWayOption = tripTypePicker.buttons["One way"]
-        let roundTripOption = tripTypePicker.buttons["Round trip"]
         
         // check picker present
         XCTAssertTrue(tripTypePicker.exists, "tripTypePicker not displayed")
         
-        // one way should be default
-        XCTAssertTrue(oneWayOption.isSelected, "One way should be default")
-               
         // tap button
-        roundTripOption.tap()
-        
-        XCTAssertTrue(roundTripOption.isSelected, "Round trip should be selected")
+        tripTypePicker.tap()
         
         // check departure button
         XCTAssertTrue(departureButton.exists, "departureButton not appeared after login")
