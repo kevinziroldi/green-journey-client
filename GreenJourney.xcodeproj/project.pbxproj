@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A0677F92D9FF134003F78F1 /* CompleteTestPlan.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 0A0677F82D9FF134003F78F1 /* CompleteTestPlan.xctestplan */; };
 		0A2EDC002D76E70100B57CEA /* UITestPlan.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 0A2EDBFF2D76E70100B57CEA /* UITestPlan.xctestplan */; };
 		0AB2AA892D63E08A00FDF38D /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 0AB2AA882D63E08A00FDF38D /* FirebaseAuth */; };
 		0AB2AA8B2D63E09000FDF38D /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 0AB2AA8A2D63E09000FDF38D /* GoogleSignIn */; };
@@ -42,6 +43,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0A0677F82D9FF134003F78F1 /* CompleteTestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = CompleteTestPlan.xctestplan; sourceTree = "<group>"; };
 		0A1576802CA459AC00EE99BC /* GreenJourney.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GreenJourney.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A2EDBFC2D76E48F00B57CEA /* UnitTestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = UnitTestPlan.xctestplan; sourceTree = "<group>"; };
 		0A2EDBFF2D76E70100B57CEA /* UITestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = UITestPlan.xctestplan; sourceTree = "<group>"; };
@@ -233,6 +235,7 @@
 		0A1576772CA459AC00EE99BC = {
 			isa = PBXGroup;
 			children = (
+				0A0677F82D9FF134003F78F1 /* CompleteTestPlan.xctestplan */,
 				0A2EDBFF2D76E70100B57CEA /* UITestPlan.xctestplan */,
 				0A2EDBFC2D76E48F00B57CEA /* UnitTestPlan.xctestplan */,
 				0ACDE0F12D6F0B2000BF912B /* IntegrationTestPlan.xctestplan */,
@@ -409,6 +412,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A0677F92D9FF134003F78F1 /* CompleteTestPlan.xctestplan in Resources */,
 				0A2EDC002D76E70100B57CEA /* UITestPlan.xctestplan in Resources */,
 				0ACDE0F22D6F0B2000BF912B /* IntegrationTestPlan.xctestplan in Resources */,
 			);

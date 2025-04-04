@@ -39,6 +39,9 @@
          <TestPlanReference
             reference = "container:UITestPlan.xctestplan">
          </TestPlanReference>
+         <TestPlanReference
+            reference = "container:CompleteTestPlan.xctestplan">
+         </TestPlanReference>
       </TestPlans>
       <Testables>
          <TestableReference
@@ -71,6 +74,17 @@
                BlueprintIdentifier = "0ACDE0DC2D6F0A1300BF912B"
                BuildableName = "GreenJourneyIntegrationTests.xctest"
                BlueprintName = "GreenJourneyIntegrationTests"
+               ReferencedContainer = "container:GreenJourney.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "0A0677FD2D9FF16B003F78F1"
+               BuildableName = "CompleteTestPlan.xctest"
+               BlueprintName = "CompleteTestPlan"
                ReferencedContainer = "container:GreenJourney.xcodeproj">
             </BuildableReference>
          </TestableReference>
