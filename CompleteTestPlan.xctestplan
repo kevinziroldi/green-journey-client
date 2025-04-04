@@ -1,0 +1,42 @@
+{
+  "configurations" : [
+    {
+      "id" : "690C7B49-5771-401D-A867-C13855919437",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "maximumTestRepetitions" : 5,
+    "testRepetitionMode" : "fixedIterations",
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:GreenJourney.xcodeproj",
+        "identifier" : "0AB2AA7C2D63E08000FDF38D",
+        "name" : "GreenJourneyUITests"
+      }
+    },
+    {
+      "parallelizable" : false,
+      "target" : {
+        "containerPath" : "container:GreenJourney.xcodeproj",
+        "identifier" : "0AD1F0492D099709001A8464",
+        "name" : "GreenJourneyUnitTests"
+      }
+    },
+    {
+      "parallelizable" : false,
+      "target" : {
+        "containerPath" : "container:GreenJourney.xcodeproj",
+        "identifier" : "0ACDE0DC2D6F0A1300BF912B",
+        "name" : "GreenJourneyIntegrationTests"
+      }
+    }
+  ],
+  "version" : 1
+}
