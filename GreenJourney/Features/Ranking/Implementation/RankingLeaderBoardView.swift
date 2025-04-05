@@ -3,6 +3,7 @@ import SwiftUI
 
 struct RankingLeaderBoardView: View {
     @ObservedObject var viewModel: RankingViewModel
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     @Binding var navigationPath: NavigationPath
     let title: String
     var gridItems: [GridItem]
@@ -23,6 +24,7 @@ struct RankingLeaderBoardView: View {
                 .padding(.horizontal)
             }
         }
+        .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
     }
 }
 
@@ -44,6 +46,7 @@ private struct LeaderBoardsView: View {
             else {
                 ZStack {
                     RoundedRectangle(cornerRadius: 10)
+                        .fill(Color(UIColor.systemBackground))
                         .stroke(AppColors.mainColor, lineWidth: 3)
                         .padding(.top, 5)
                     VStack {
@@ -157,6 +160,7 @@ private struct LeaderBoardUserView: View {
             ) {
                 ZStack {
                     RoundedRectangle(cornerRadius: 10)
+                        .fill(Color(UIColor.systemBackground))
                         .stroke(AppColors.mainColor, lineWidth: 3)
                     
                     VStack(spacing: 0) {
