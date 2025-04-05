@@ -215,9 +215,9 @@ private struct SegmentsDetailsView: View {
                 }
             }
         } else {
+            // iPadOS
             
             VStack {
-                
                 if travelDetails.isOneway() {
                     HStack(alignment: .top) {
                         VStack(alignment: .leading) {
@@ -236,6 +236,7 @@ private struct SegmentsDetailsView: View {
                                 .accessibilityElement(children: .contain)
                                 .overlay(Color.clear.accessibilityIdentifier("outwardSegmentsView"))
                         }
+                        .frame(maxWidth: 370)
                         
                         Spacer()
                     }
