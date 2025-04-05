@@ -3,48 +3,6 @@
         [
             {
                 "description" : "",
-                "co2_emitted" : 0,
-                "vehicle" : "bike",
-                "distance" : 864,
-                "destination_city" : "Amsterdam",
-                "destination_country" : "Netherlands",
-                "is_outward" : true,
-                "departure_id" : 264373,
-                "travel_id" : -1,
-                "segment_id" : 0,
-                "num_segment" : 1,
-                "price" : 0,
-                "destination_id" : 275549,
-                "departure_city" : "Amsterdam",
-                "departure_country" : "Netherlands",
-                "date_time" : "2024-12-23T10:52:00Z",
-                "duration" : 165462000000000
-            }
-        ],
-        [
-            {
-                "description" : "",
-                "co2_emitted" : 0,
-                "vehicle" : "bike",
-                "distance" : 864,
-                "destination_city" : "Copenhagen",
-                "destination_country" : "Denmark",
-                "is_outward" : true,
-                "departure_id" : 264373,
-                "travel_id" : -1,
-                "segment_id" : 0,
-                "num_segment" : 1,
-                "price" : 0,
-                "destination_id" : 275549,
-                "departure_city" : "Copenhagen",
-                "departure_country" : "Denmark",
-                "date_time" : "2024-12-23T10:52:00Z",
-                "duration" : 165462000000000
-            }
-        ],
-        [
-            {
-                "description" : "",
                 "co2_emitted" : 170.40000000000001,
                 "vehicle" : "car",
                 "distance" : 852.88099999999997,
