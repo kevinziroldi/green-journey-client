@@ -3,7 +3,7 @@ protocol FirebaseAuthServiceProtocol {
     func signInWithGoogle() async throws -> Bool
     func createFirebaseUser(email: String, password: String) async throws -> String
     func sendEmailVerification() async throws
-    func isEmailVerified() async throws -> Bool
+    func isEmailVerified() throws -> Bool
     func sendPasswordReset(email: String) async throws
     func deleteFirebaseUser() async throws
     func getFirebaseToken() async throws -> String

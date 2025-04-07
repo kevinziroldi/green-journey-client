@@ -58,12 +58,12 @@ class FirebaseAuthService: FirebaseAuthServiceProtocol {
         }
     }
     
-    func isEmailVerified() async throws -> Bool {
-        if let firebaseUser = Auth.auth().currentUser {
-            return firebaseUser.isEmailVerified
-        } else {
-            throw FirebaseAuthServiceError.isEmailVerifiedFailed
+    func isEmailVerified() throws -> Bool {
+        var result: Bool = false
+        let handle = Auth.auth().addStateDidChangeListener { auth, user in
+          result = user?.isEmailVerified ?? false
         }
+        return result
     }
     
     func sendPasswordReset(email: String) async throws {

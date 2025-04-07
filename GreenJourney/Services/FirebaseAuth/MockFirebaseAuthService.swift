@@ -26,7 +26,7 @@ class MockFirebaseAuthService: FirebaseAuthServiceProtocol {
         // nothing to do
     }
     
-    func isEmailVerified() async throws -> Bool {
+    func isEmailVerified() throws -> Bool {
         if shouldSucceed {
             return emailVerified
         } else {

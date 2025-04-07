@@ -147,7 +147,7 @@ class AuthenticationViewModel: ObservableObject {
             try await firebaseAuthService.reloadFirebaseUser()
             
             // need to get Firebase user again after reload
-            let isEmailVerified = try await firebaseAuthService.isEmailVerified()
+            let isEmailVerified = try firebaseAuthService.isEmailVerified()
             
             if isEmailVerified == true {
                 print("Email verified")
