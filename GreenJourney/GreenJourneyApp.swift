@@ -6,7 +6,8 @@ import SwiftUI
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-        FirebaseApp.configure()
+        // TODO remove if ok in init
+        //FirebaseApp.configure()
         
         // make the simulator start with software keyboard
         #if targetEnvironment(simulator)
@@ -25,11 +26,21 @@ struct GreenJourneyApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
     // persistence controller for SwiftData
-    let persistenceHandler = PersistenceHandler.shared
+    let persistenceHandler: PersistenceHandler
     // server service
-    let serverService = ServiceFactory.shared.getServerService()
+    let serverService: ServerServiceProtocol
     // firebase auth service
-    let firebaseAuthService = ServiceFactory.shared.getFirebaseAuthService()
+    let firebaseAuthService: FirebaseAuthServiceProtocol
+    
+    init() {
+        if FirebaseApp.app() == nil {
+            FirebaseApp.configure()
+        }
+        
+        self.persistenceHandler = PersistenceHandler.shared
+        self.serverService = ServiceFactory.shared.getServerService()
+        self.firebaseAuthService = ServiceFactory.shared.getFirebaseAuthService()
+    }
     
     var body: some Scene {
         WindowGroup {

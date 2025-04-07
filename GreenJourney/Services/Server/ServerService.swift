@@ -2,7 +2,11 @@ import FirebaseAuth
 import Foundation
 
 class ServerService: ServerServiceProtocol {
-    private let firebaseAuthService: FirebaseAuthService = FirebaseAuthService()
+    private let firebaseAuthService: FirebaseAuthService
+    
+    init() {
+        self.firebaseAuthService = FirebaseAuthService()
+    }
     
     func saveUser(firstName: String, lastName: String, firebaseUID: String) async throws {
         let firebaseToken = try await firebaseAuthService.getFirebaseToken()
