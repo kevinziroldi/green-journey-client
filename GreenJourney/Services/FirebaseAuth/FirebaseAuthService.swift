@@ -4,23 +4,12 @@ import GoogleSignIn
 import GoogleSignInSwift
 
 class FirebaseAuthService: FirebaseAuthServiceProtocol {
-    private var currentUser: FirebaseAuth.User?
-    private var handler = Auth.auth().addStateDidChangeListener{_,_ in }
-
-    init() {
-        handler = Auth.auth().addStateDidChangeListener { auth, user in
-            self.currentUser = user
-        }
-    }
-    deinit {
-        Auth.auth().removeStateDidChangeListener(handler)
-    }
-    
     func signInWithCredentials(email: String, password: String) async throws -> Bool {
         let authDataResult = try await Auth.auth().signIn(withEmail: email, password: password)
         return authDataResult.user.isEmailVerified
     }
     
+    @MainActor
     func signInWithGoogle() async throws -> Bool {
         // Google signin configuration
         guard let clientID = FirebaseApp.app()?.options.clientID else {
@@ -31,9 +20,9 @@ class FirebaseAuthService: FirebaseAuthServiceProtocol {
         
         // get root controller to show Google login screen
         guard
-            let windowScene = await UIApplication.shared.connectedScenes.first as? UIWindowScene,
-            let window = await windowScene.windows.first,
-            let rootViewController = await window.rootViewController
+            let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+            let window = windowScene.windows.first,
+            let rootViewController = window.rootViewController
         else {
             throw FirebaseAuthServiceError.signInWithGoogleFailed
         }
@@ -71,7 +60,11 @@ class FirebaseAuthService: FirebaseAuthServiceProtocol {
     }
     
     func isEmailVerified() throws -> Bool {
-        return currentUser?.isEmailVerified ?? false
+        if let firebaseUser = Auth.auth().currentUser {
+                    return firebaseUser.isEmailVerified
+        } else {
+            throw FirebaseAuthServiceError.isEmailVerifiedFailed
+        }
     }
     
     func sendPasswordReset(email: String) async throws {
