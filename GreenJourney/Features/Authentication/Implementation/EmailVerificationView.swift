@@ -105,6 +105,7 @@ struct EmailVerificationView: View {
                 }
                 .fixedSize()
             }
+            .padding(.vertical)
             .accessibilityIdentifier("proceedButton")
         }
         .padding(.horizontal)
