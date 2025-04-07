@@ -109,12 +109,14 @@ private struct SignupDataFieldsView: View {
                 .padding()
                 .background(Color.gray.opacity(0.2))
                 .cornerRadius(8)
+                .textContentType(.oneTimeCode)
                 .accessibilityIdentifier("passwordSecureField")
             
             SecureField("Repeat Password", text: $viewModel.repeatPassword)
                 .padding()
                 .background(Color.gray.opacity(0.2))
                 .cornerRadius(8)
+                .textContentType(.oneTimeCode)
                 .accessibilityIdentifier("repeatPasswordSecureField")
             
             TextField("First name", text: $viewModel.firstName)
