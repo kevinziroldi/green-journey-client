@@ -280,7 +280,6 @@ private struct BestCityView: View {
     let pos: Int
     
     @ObservedObject var viewModel: CitiesReviewsViewModel
-    @Query var users: [User]
     
     var body: some View {
         if horizontalSizeClass == .compact {

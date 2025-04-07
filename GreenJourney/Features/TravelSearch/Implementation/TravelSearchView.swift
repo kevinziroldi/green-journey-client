@@ -122,7 +122,6 @@ struct TravelSearchView: View {
                 .scrollClipDisabled(true)
                 .clipShape(Rectangle())    
             }
-            
             .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
             .sheet(isPresented: $dateTapped) {
                 DatePickerView(dateTapped: $dateTapped, title: "Select Outward Date", date: $viewModel.datePicked, limitDate: Date())
