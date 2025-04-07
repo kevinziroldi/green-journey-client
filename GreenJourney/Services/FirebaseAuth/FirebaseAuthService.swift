@@ -4,6 +4,18 @@ import GoogleSignIn
 import GoogleSignInSwift
 
 class FirebaseAuthService: FirebaseAuthServiceProtocol {
+    private var currentUser: FirebaseAuth.User?
+    private var handler = Auth.auth().addStateDidChangeListener{_,_ in }
+
+    init() {
+        handler = Auth.auth().addStateDidChangeListener { auth, user in
+            self.currentUser = user
+        }
+    }
+    deinit {
+        Auth.auth().removeStateDidChangeListener(handler)
+    }
+    
     func signInWithCredentials(email: String, password: String) async throws -> Bool {
         let authDataResult = try await Auth.auth().signIn(withEmail: email, password: password)
         return authDataResult.user.isEmailVerified
