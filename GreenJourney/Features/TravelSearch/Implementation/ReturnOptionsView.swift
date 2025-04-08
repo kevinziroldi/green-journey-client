@@ -16,8 +16,12 @@ struct ReturnOptionsView: View {
                     .frame(height: 1)
                     .foregroundColor(.gray)
                 
-                if (viewModel.returnOptions.isEmpty){
+                if (!viewModel.optionsAvailable){
                     CircularProgressView()
+                        .padding(.top, 50)
+                }
+                else if (viewModel.returnOptions.isEmpty){
+                    Text("We don't find any travel option for this route. Please try again later.")
                         .padding(.top, 50)
                 }
                 else{

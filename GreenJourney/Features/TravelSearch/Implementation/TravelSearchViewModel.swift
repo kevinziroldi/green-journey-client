@@ -25,6 +25,7 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
     
     @Published var predictedCities: [CityCompleterDataset] = []
     @Published var predictionShown: Int = 0
+    @Published var optionsAvailable: Bool = false
     
     init(modelContext: ModelContext, serverService: ServerServiceProtocol) {
         self.modelContext = modelContext
@@ -41,6 +42,7 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
     }
     
     func computeRoutes () async {
+        optionsAvailable = false
         self.outwardOptions = []
         self.returnOptions = []
         self.selectedOption = []
@@ -71,6 +73,7 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
             print("Error fetching options: \(error.localizedDescription)")
             return
         }
+        optionsAvailable = true
     }
     
     func saveTravel() async {

@@ -18,12 +18,15 @@ struct OutwardOptionsView: View {
                     .frame(height: 1)
                     .foregroundColor(.gray)
                 
-                if (viewModel.outwardOptions.isEmpty){
+                if (!viewModel.optionsAvailable){
                     CircularProgressView()
                         .padding(.top, 50)
                 }
+                else if (viewModel.outwardOptions.isEmpty){
+                    Text("We don't find any travel option for this route. Please try again later.")
+                        .padding(.top, 50)
+                }
                 else{
-                    
                     VStack {
                         ForEach (viewModel.outwardOptions.indices, id: \.self) { option in
                             HStack {
