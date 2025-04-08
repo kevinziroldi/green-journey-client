@@ -21,8 +21,10 @@ struct ReturnOptionsView: View {
                         .padding(.top, 50)
                 }
                 else if (viewModel.returnOptions.isEmpty){
-                    Text("We don't find any travel option for this route. Please try again later.")
+                    Text("We don't find any travel option for this route. Please try again later. 😞")
+                        .font(.system(size: 20))
                         .padding(.top, 50)
+                        .padding(.horizontal)
                 }
                 else{
                     VStack {
