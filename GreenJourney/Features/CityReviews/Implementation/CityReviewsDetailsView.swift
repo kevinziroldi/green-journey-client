@@ -144,14 +144,14 @@ private struct ReviewsAverageView: View {
                             .resizable()
                             .scaledToFit()
                             .frame(width: 30, height: 30)
-                            .foregroundColor(.black)
+                            .foregroundColor(AppColors.mainColor)
                             .padding(.trailing)
                         
                         Text(String(format: "%.1f", selectedCityReviewElement.averageLocalTransportRating))
                             .font(.title3)
                             .fontWeight(.semibold)
                             .padding(EdgeInsets(top: 4, leading: 0, bottom: 0, trailing: 10))
-                        FiveStarView(rating: selectedCityReviewElement.averageLocalTransportRating, dim: 20, color: .black)
+                        FiveStarView(rating: selectedCityReviewElement.averageLocalTransportRating, dim: 20, color: AppColors.mainColor)
                         Spacer()
                     }
                     
@@ -160,14 +160,14 @@ private struct ReviewsAverageView: View {
                             .resizable()
                             .scaledToFit()
                             .frame(width: 30, height: 30)
-                            .foregroundColor(.black)
+                            .foregroundColor(AppColors.mainColor)
                             .padding(.trailing)
                         
                         Text(String(format: "%.1f", selectedCityReviewElement.averageGreenSpacesRating))
                             .font(.title3)
                             .fontWeight(.semibold)
                             .padding(EdgeInsets(top: 4, leading: 0, bottom: 0, trailing: 10))
-                        FiveStarView(rating: selectedCityReviewElement.averageGreenSpacesRating, dim: 20, color: .black)
+                        FiveStarView(rating: selectedCityReviewElement.averageGreenSpacesRating, dim: 20, color: AppColors.mainColor)
                         Spacer()
                     }
                     HStack {
@@ -175,14 +175,14 @@ private struct ReviewsAverageView: View {
                             .resizable()
                             .scaledToFit()
                             .frame(width: 30, height: 30)
-                            .foregroundColor(.black)
+                            .foregroundColor(AppColors.mainColor)
                             .padding(.trailing)
                         
                         Text(String(format: "%.1f", selectedCityReviewElement.averageWasteBinsRating))
                             .font(.title3)
                             .fontWeight(.semibold)
                             .padding(EdgeInsets(top: 4, leading: 0, bottom: 0, trailing: 10))
-                        FiveStarView(rating: selectedCityReviewElement.averageWasteBinsRating, dim: 20, color: .black)
+                        FiveStarView(rating: selectedCityReviewElement.averageWasteBinsRating, dim: 20, color: AppColors.mainColor)
                         Spacer()
                     }
                 }
@@ -217,14 +217,14 @@ private struct ReviewsAverageView: View {
                                  .resizable()
                                  .scaledToFit()
                                  .frame(width: 30, height: 30)
-                                 .foregroundColor(.black)
+                                 .foregroundColor(AppColors.mainColor)
                                  .padding(.trailing)
                              
                              Text(String(format: "%.1f", selectedCityReviewElement.averageLocalTransportRating))
                                  .font(.title3)
                                  .fontWeight(.semibold)
                                  .padding(EdgeInsets(top: 4, leading: 0, bottom: 0, trailing: 10))
-                             FiveStarView(rating: selectedCityReviewElement.averageLocalTransportRating, dim: 20, color: .black)
+                             FiveStarView(rating: selectedCityReviewElement.averageLocalTransportRating, dim: 20, color: AppColors.mainColor)
                              Spacer()
                          }
                          
@@ -233,14 +233,14 @@ private struct ReviewsAverageView: View {
                                  .resizable()
                                  .scaledToFit()
                                  .frame(width: 30, height: 30)
-                                 .foregroundColor(.black)
+                                 .foregroundColor(AppColors.mainColor)
                                  .padding(.trailing)
                              
                              Text(String(format: "%.1f", selectedCityReviewElement.averageGreenSpacesRating))
                                  .font(.title3)
                                  .fontWeight(.semibold)
                                  .padding(EdgeInsets(top: 4, leading: 0, bottom: 0, trailing: 10))
-                             FiveStarView(rating: selectedCityReviewElement.averageGreenSpacesRating, dim: 20, color: .black)
+                             FiveStarView(rating: selectedCityReviewElement.averageGreenSpacesRating, dim: 20, color: AppColors.mainColor)
                              Spacer()
                          }
                          HStack {
@@ -248,14 +248,14 @@ private struct ReviewsAverageView: View {
                                  .resizable()
                                  .scaledToFit()
                                  .frame(width: 30, height: 30)
-                                 .foregroundColor(.black)
+                                 .foregroundColor(AppColors.mainColor)
                                  .padding(.trailing)
                              
                              Text(String(format: "%.1f", selectedCityReviewElement.averageWasteBinsRating))
                                  .font(.title3)
                                  .fontWeight(.semibold)
                                  .padding(EdgeInsets(top: 4, leading: 0, bottom: 0, trailing: 10))
-                             FiveStarView(rating: selectedCityReviewElement.averageWasteBinsRating, dim: 20, color: .black)
+                             FiveStarView(rating: selectedCityReviewElement.averageWasteBinsRating, dim: 20, color: AppColors.mainColor)
                              Spacer()
                          }
                      }

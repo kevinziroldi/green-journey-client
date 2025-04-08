@@ -159,7 +159,7 @@ private struct ReviewStarRating: View {
             HStack {
                 ForEach(1..<6, id: \.self) { index in
                     Image(systemName: index <= rating ? "star.fill" : "star")
-                        .foregroundColor(.yellow)
+                        .foregroundColor(AppColors.mainColor)
                         .font(.title2)
                         .onTapGesture {
                             if editTapped {

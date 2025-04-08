@@ -148,7 +148,7 @@ private struct LeaderboardNavigationView: View {
     let leaderboardType: Bool
     
     var body: some View {
-        NavigationLink(destination: RankingLeaderBoardView(viewModel: viewModel, navigationPath: $navigationPath, title: title, gridItems: gridItems, currentRanking: leaderboard)) {
+        NavigationLink(destination: RankingLeaderBoardView(viewModel: viewModel, navigationPath: $navigationPath, title: title, gridItems: gridItems, currentRanking: leaderboard, leaderboardType: leaderboardType)) {
             ZStack {
                 RoundedRectangle(cornerRadius: 15)
                     .fill(Color(uiColor: .systemBackground))

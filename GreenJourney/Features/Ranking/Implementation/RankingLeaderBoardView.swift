@@ -8,6 +8,7 @@ struct RankingLeaderBoardView: View {
     let title: String
     var gridItems: [GridItem]
     var currentRanking: [RankingElement]
+    var leaderboardType: Bool
     var body: some View {
         VStack {
             ScrollView {
@@ -19,7 +20,7 @@ struct RankingLeaderBoardView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .accessibilityIdentifier("rankingName")
                     
-                    LeaderBoardsView(viewModel: viewModel, navigationPath: $navigationPath, gridItems: gridItems, currentRanking: currentRanking)
+                    LeaderBoardsView(viewModel: viewModel, navigationPath: $navigationPath, gridItems: gridItems, currentRanking: currentRanking, leaderboardType: leaderboardType)
                 }
                 .padding(.horizontal)
             }
@@ -33,7 +34,7 @@ private struct LeaderBoardsView: View {
     @Binding var navigationPath: NavigationPath
     var gridItems: [GridItem]
     var currentRanking: [RankingElement]
-    
+    var leaderboardType: Bool
     var body: some View {
         VStack{
             if let errorMessage = viewModel.errorMessage {
@@ -54,7 +55,7 @@ private struct LeaderBoardsView: View {
                             CircularProgressView()
                                 .padding(30)
                         } else {
-                            LeaderBoardView(viewModel: viewModel, navigationPath: $navigationPath, gridItems: gridItems, leaderboard: Array(currentRanking.prefix(10)), leaderBoardSelected: viewModel.leaderboardSelected)
+                            LeaderBoardView(viewModel: viewModel, navigationPath: $navigationPath, gridItems: gridItems, leaderboard: Array(currentRanking.prefix(10)), leaderBoardSelected: leaderboardType)
                         }
                     }
                     .accessibilityElement(children: .contain)
@@ -67,7 +68,7 @@ private struct LeaderBoardsView: View {
                 if viewModel.longDistanceRanking.isEmpty {
                     CircularProgressView()
                 } else {
-                    LeaderBoardUserView(viewModel: viewModel, navigationPath: $navigationPath, userRanking: currentRanking[10], gridItems: gridItems, leaderBoardSelected: viewModel.leaderboardSelected)
+                    LeaderBoardUserView(viewModel: viewModel, navigationPath: $navigationPath, userRanking: currentRanking[10], gridItems: gridItems, leaderBoardSelected: leaderboardType)
                         .accessibilityElement(children: .contain)
                         .accessibilityIdentifier("leaderboardUser")
                         .padding(.horizontal, 10)
