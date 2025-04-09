@@ -41,7 +41,7 @@ struct TravelDetailsView: View {
                             
                             if travelDetails.travel.confirmed {
                                 // travel compensation
-                                Co2CompensationView(viewModel: viewModel, travelDetails: travelDetails, infoTapped: $infoTapped, showAlertCompensation: $showAlertCompensation, plantedTrees: $plantedTrees, totalTrees: $totalTrees, progress: $progress)
+                                CO2CompensationView(viewModel: viewModel, travelDetails: travelDetails, infoTapped: $infoTapped, showAlertCompensation: $showAlertCompensation, plantedTrees: $plantedTrees, totalTrees: $totalTrees, progress: $progress)
                             } else {
                                 // recap full width
                                 Co2RecapView(halfWidth: false, co2Emitted: travelDetails.computeCo2Emitted(), numTrees: viewModel.getNumTrees(travelDetails), distance: travelDetails.computeTotalDistance())
@@ -63,7 +63,7 @@ struct TravelDetailsView: View {
                             VStack {
                                 if travelDetails.travel.confirmed {
                                     // travel compensation
-                                    Co2CompensationView(viewModel: viewModel, travelDetails: travelDetails, infoTapped: $infoTapped, showAlertCompensation: $showAlertCompensation, plantedTrees: $plantedTrees, totalTrees: $totalTrees, progress: $progress)
+                                    CO2CompensationView(viewModel: viewModel, travelDetails: travelDetails, infoTapped: $infoTapped, showAlertCompensation: $showAlertCompensation, plantedTrees: $plantedTrees, totalTrees: $totalTrees, progress: $progress)
                                     
                                     // travel recap two columns
                                     TravelRecapView(singleColumn: false, distance: travelDetails.computeTotalDistance(), duration: travelDetails.computeTotalDuration(), price: travelDetails.computeTotalPrice(), greenPrice: travelDetails.computeGreenPrice())

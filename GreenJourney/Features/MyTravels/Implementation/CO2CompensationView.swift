@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct Co2CompensationView: View {
+struct CO2CompensationView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     @ObservedObject var viewModel: MyTravelsViewModel
