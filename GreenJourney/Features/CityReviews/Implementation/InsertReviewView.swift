@@ -46,9 +46,9 @@ struct InsertReviewView: View {
                         .accessibilityIdentifier("personalReviewTitle")
                     
                     VStack {
-                        ReviewStarRating(icon: "bus", color: AppColors.mainColor, rating: $viewModel.localTransportRating, editTapped: (editTapped || (viewModel.userReview == nil )))
-                        ReviewStarRating(icon: "tree",color:  AppColors.mainColor, rating: $viewModel.greenSpacesRating, editTapped: (editTapped || (viewModel.userReview == nil )))
-                        ReviewStarRating(icon: "trash", color:  AppColors.mainColor, rating: $viewModel.wasteBinsRating, editTapped: (editTapped || (viewModel.userReview == nil )))
+                        ReviewStarRating(icon: "bus", color: Color.black, rating: $viewModel.localTransportRating, editTapped: (editTapped || (viewModel.userReview == nil )))
+                        ReviewStarRating(icon: "tree",color:  Color.black, rating: $viewModel.greenSpacesRating, editTapped: (editTapped || (viewModel.userReview == nil )))
+                        ReviewStarRating(icon: "trash", color:  Color.black, rating: $viewModel.wasteBinsRating, editTapped: (editTapped || (viewModel.userReview == nil )))
                     }
                     .overlay(Color.clear.accessibilityIdentifier("userRatings"))
                 }
@@ -159,7 +159,7 @@ private struct ReviewStarRating: View {
             HStack {
                 ForEach(1..<6, id: \.self) { index in
                     Image(systemName: index <= rating ? "star.fill" : "star")
-                        .foregroundColor(AppColors.mainColor)
+                        .foregroundColor(Color.yellow)
                         .font(.title2)
                         .onTapGesture {
                             if editTapped {

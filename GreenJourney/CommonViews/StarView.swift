@@ -16,14 +16,12 @@ struct FiveStarView: View {
         .frame(height: dim)
         .fixedSize()
     }
-    
 }
 
 struct RatingStar: View {
     var rating: CGFloat
     var color: Color
     var index: Int
-    
     
     var maskRatio: CGFloat {
         let mask = rating - CGFloat(index)
@@ -35,14 +33,12 @@ struct RatingStar: View {
         }
     }
     
-    
     init(rating: Float64, color: Color, index: Int) {
         
         self.rating = CGFloat(Double(rating.description) ?? 0)
         self.color = color
         self.index = index
     }
-    
     
     var body: some View {
         GeometryReader { star in
@@ -54,17 +50,12 @@ struct RatingStar: View {
                             width: star.size.width * self.maskRatio,
                             height: star.size.height
                         )
-                    
                 )
         }
-        
     }
 }
 
-
 private struct StarImage: View {
-    
-    
     var body: some View {
         Image(systemName: "star.fill")
             .resizable()
@@ -72,15 +63,12 @@ private struct StarImage: View {
     }
 }
 
-
 private struct BackgroundStars: View {
     var color: Color
-    
     
     init(_ color: Color) {
         self.color = color
     }
-    
     
     var body: some View {
         HStack {
@@ -91,7 +79,6 @@ private struct BackgroundStars: View {
         }.foregroundColor(color)
     }
 }
-
 
 private struct ForegroundStars: View {
     var rating: Float64
@@ -114,4 +101,3 @@ private struct ForegroundStars: View {
         }
     }
 }
-
