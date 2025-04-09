@@ -141,9 +141,15 @@ private struct CompensationButtonsView: View {
                             GeometryReader { geometry in
                                 SemicircleCo2ChartView(progress: progress, height: 120, width: 140, lineWidth: 10)
                                     .position(x: geometry.size.width/2, y: geometry.size.height/2 - 15)
-                                Text("0 Kg")
+                                
+                                /*Text("0 Kg")
                                     .font(.headline)
                                     .position(x: geometry.size.width/2 - 50, y: geometry.size.height/2 + 60)
+                                 */
+                                Text(String(format: "%.1f", travelDetails.travel.CO2Compensated) + " Kg")
+                                    .font(.headline)
+                                    .position(x: geometry.size.width/2 - 50, y: geometry.size.height/2 + 60)
+                                
                                 Text(String(format: "%.1f", travelDetails.computeCo2Emitted()) + " Kg")
                                     .font(.headline)
                                     .position(x: geometry.size.width/2 + 50, y: geometry.size.height/2 + 60)
