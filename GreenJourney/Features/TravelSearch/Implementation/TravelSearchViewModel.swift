@@ -69,11 +69,12 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
                 let returnOptions = try await serverService.computeRoutes(departureIata: arrival.iata, departureCountryCode: arrival.countryCode, destinationIata: departure.iata, destinationCountryCode: departure.countryCode, date: formattedDateReturn, time: formattedTimeReturn, isOutward: !isOutward)
                 self.returnOptions = returnOptions
             }
+            optionsAvailable = true
         }catch {
             print("Error fetching options: \(error.localizedDescription)")
+            optionsAvailable = true
             return
         }
-        optionsAvailable = true
     }
     
     func saveTravel() async {
