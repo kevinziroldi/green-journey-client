@@ -20,8 +20,7 @@ struct SemicircleCo2ChartView: View {
             
             VStack (spacing: 15){
                 Image(systemName: "carbon.dioxide.cloud")
-                    .font(.largeTitle)
-                    .scaleEffect(1.5)
+                    .font(.system(size: 50))
                 Text(String(format: "%.0f", progress * 100) + "%")
                     .font(.headline)
                     .fontWeight(.bold)

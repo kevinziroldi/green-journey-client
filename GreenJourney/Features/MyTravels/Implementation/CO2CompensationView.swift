@@ -78,7 +78,7 @@ private struct CompensationButtonsView: View {
                     
                     HStack {
                         VStack(spacing: 0) {
-                            HStack {
+                            HStack (spacing: 0){
                                 VStack (spacing: 10) {
                                     Button(action: {
                                         if plantedTrees < totalTrees {
@@ -115,16 +115,12 @@ private struct CompensationButtonsView: View {
                                 HStack {
                                     Text("\(plantedTrees) / \(totalTrees)")
                                         .font(.system(size: 23))
+                                        .frame(width: 55, alignment: .trailing)
                                     Image(systemName: "tree")
                                         .font(.system(size: 23))
                                         .padding(.bottom, 5)
                                     Spacer()
                                 }
-                                .frame(width: 100)
-                                .scaledToFit()
-                                .minimumScaleFactor(0.6)
-                                
-                                Spacer()
                             }
                             
                             Text("Price: \(viewModel.compensatedPrice) €")
