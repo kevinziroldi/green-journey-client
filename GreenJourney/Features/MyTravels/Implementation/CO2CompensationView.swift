@@ -127,7 +127,6 @@ private struct CompensationButtonsView: View {
                             Spacer()
                             
                             Text("Price: \(viewModel.compensatedPrice) €")
-                                //.padding()
                                 .font(.system(size: 20))
                             
                             Spacer()
@@ -136,22 +135,21 @@ private struct CompensationButtonsView: View {
                         }
                         .padding(.trailing, 10)
                         
-                        Spacer()
-                        
                         VStack {
                             GeometryReader { geometry in
-                                SemicircleCo2ChartView(progress: progress, height: 120, width: 140, lineWidth: 10)
-                                    .position(x: geometry.size.width/2+10, y: geometry.size.height/2 - 15)
+                                SemicircleCo2ChartView(progress: progress, height: geometry.size.height, width: geometry.size.width, lineWidth: 10)
+                                    .position(x: geometry.size.width/2, y: geometry.size.height/2 - 15)
                                 
                                 Text(String(format: "%.1f", travelDetails.travel.CO2Compensated) + " Kg")
                                     .font(.headline)
-                                    .position(x: geometry.size.width/2 - 50+10, y: geometry.size.height/2 + 60)
+                                    .position(x: geometry.size.width/2 - 50, y: geometry.size.height/2 + 60)
                                 
                                 Text(String(format: "%.1f", travelDetails.computeCo2Emitted()) + " Kg")
                                     .font(.headline)
-                                    .position(x: geometry.size.width/2 + 50+10, y: geometry.size.height/2 + 60)
+                                    .position(x: geometry.size.width/2 + 50, y: geometry.size.height/2 + 60)
                             }
                         }
+                        .frame(width: UIScreen.main.bounds.size.height <= 667 ? 120 : 150, height: 160)
                     }
                     .padding()
                 } else {
@@ -267,9 +265,7 @@ private struct CompensationButtonsView: View {
                             GeometryReader { geometry in
                                 SemicircleCo2ChartView(progress: progress, height: 120, width: 140, lineWidth: 10)
                                     .position(x: geometry.size.width/2, y: geometry.size.height/2 - 15)
-                                Text("0 Kg")
-                                // TODO
-                                //Text(String(format: "%.1f", travelDetails.travel.CO2Compensated) + " Kg")
+                                Text(String(format: "%.1f", travelDetails.travel.CO2Compensated) + " Kg")
                                     .font(.headline)
                                     .position(x: geometry.size.width/2 - 50, y: geometry.size.height/2 + 60)
                                 Text(String(format: "%.1f", travelDetails.computeCo2Emitted()) + " Kg")
@@ -281,84 +277,90 @@ private struct CompensationButtonsView: View {
                     .padding(.horizontal, 20)
                 }
             } else {
-                // OLD - may be needed for ipad
-                /*
-                HStack {
-                    Spacer()
+                if horizontalSizeClass == .compact {
+                    // iPhone
+                    
                     VStack {
-                        HStack (spacing: 5) {
-                            Text("You planted: \(plantedTrees)")
-                                .font(.system(size: 20))
-                            Image(systemName: "tree")
-                                .font(.system(size: 20))
-                                .padding(.bottom, 5)
+                        HStack {
+                            VStack {
+                                Text("You planted")
+                                    .font(.system(size: 20))
+                                
+                                HStack (spacing: 5) {
+                                    Text("\(plantedTrees)")
+                                        .font(.system(size: 20))
+                                    Image(systemName: "tree")
+                                        .font(.system(size: 20))
+                                        .padding(.bottom, 5)
+                                }
+                                
+                                Text("Thank you 🌍")
+                                    .font(.system(size: 18))
+                                    .fontWeight(.light)
+                            }
+                            
+                            Spacer()
+                            
+                            VStack {
+                                GeometryReader { geometry in
+                                    SemicircleCo2ChartView(progress: progress, height: geometry.size.height, width: geometry.size.width, lineWidth: 10)
+                                        .position(x: geometry.size.width/2, y: geometry.size.height/2 - 15)
+                                    
+                                    Text(String(format: "%.1f", travelDetails.travel.CO2Compensated) + " Kg")
+                                        .font(.headline)
+                                        .position(x: geometry.size.width/2 - 50, y: geometry.size.height/2 + 60)
+                                    
+                                    Text(String(format: "%.1f", travelDetails.computeCo2Emitted()) + " Kg")
+                                        .font(.headline)
+                                        .position(x: geometry.size.width/2 + 50, y: geometry.size.height/2 + 60)
+                                }
+                            }
+                            .frame(width: UIScreen.main.bounds.size.height <= 667 ? 120 : 150, height: 160)
                         }
-                        .scaledToFit()
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.7)
-                        .padding()
-                        
-                        Text("Thank you 🌍")
-                            .font(.system(size: 18))
-                            .fontWeight(.light)
-                        
+                    }
+                    .padding()
+                } else {
+                    // iPadOS
+                
+                    HStack {
+                        Spacer()
+                        VStack {
+                            HStack (spacing: 5) {
+                                Text("You planted: \(plantedTrees)")
+                                    .font(.system(size: 20))
+                                Image(systemName: "tree")
+                                    .font(.system(size: 20))
+                                    .padding(.bottom, 5)
+                            }
+                            .scaledToFit()
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
                             .padding()
-                    }
-                    Spacer()
-                    VStack {
-                        GeometryReader { geometry in
-                            SemicircleCo2ChartView(progress: progress, height: 120, width: 140, lineWidth: 10)
-                                .position(x: geometry.size.width/2, y: geometry.size.height/2 - 15)
-                            Text("0 Kg")
-                                .font(.headline)
-                                .position(x: geometry.size.width/2 - 50, y: geometry.size.height/2 + 60)
-                            Text(String(format: "%.1f", travelDetails.computeCo2Emitted()) + " Kg")
-                                .font(.headline)
-                                .position(x: geometry.size.width/2 + 50, y: geometry.size.height/2 + 60)
+                            
+                            Text("Thank you 🌍")
+                                .font(.system(size: 18))
+                                .fontWeight(.light)
+                            
+                                .padding()
                         }
+                        Spacer()
+                        VStack {
+                            GeometryReader { geometry in
+                                SemicircleCo2ChartView(progress: progress, height: 120, width: 140, lineWidth: 10)
+                                    .position(x: geometry.size.width/2, y: geometry.size.height/2 - 15)
+                                Text(String(format: "%.1f", travelDetails.travel.CO2Compensated) + " Kg")
+                                    .font(.headline)
+                                    .position(x: geometry.size.width/2 - 50, y: geometry.size.height/2 + 60)
+                                Text(String(format: "%.1f", travelDetails.computeCo2Emitted()) + " Kg")
+                                    .font(.headline)
+                                    .position(x: geometry.size.width/2 + 50, y: geometry.size.height/2 + 60)
+                            }
+                        }
+                        .padding(.bottom)
+                        .frame(width: 120,height: 140)
+                        Spacer()
                     }
-                    .padding(.bottom)
-                    .frame(width: 140,height: 170)
-                    Spacer()
                 }
-                 */
-                
-                
-                HStack {
-                    Spacer()
-                    VStack {
-                        Text("You planted")
-                            .font(.system(size: 20))
-                        
-                        HStack (spacing: 5) {
-                            Text("\(plantedTrees)")
-                                .font(.system(size: 20))
-                            Image(systemName: "tree")
-                                .font(.system(size: 20))
-                                .padding(.bottom, 5)
-                        }
-                        
-                        Text("Thank you 🌍")
-                            .font(.system(size: 18))
-                            .fontWeight(.light)
-                    }
-                    Spacer()
-                    VStack {
-                        GeometryReader { geometry in
-                            SemicircleCo2ChartView(progress: progress, height: 120, width: 140, lineWidth: 10)
-                                .position(x: geometry.size.width/2, y: geometry.size.height/2 - 15)
-                            //Text("0 Kg")
-                            Text(String(format: "%.1f", travelDetails.travel.CO2Compensated) + " Kg")
-                                .font(.headline)
-                                .position(x: geometry.size.width/2 - 50, y: geometry.size.height/2 + 60)
-                            Text(String(format: "%.1f", travelDetails.computeCo2Emitted()) + " Kg")
-                                .font(.headline)
-                                .position(x: geometry.size.width/2 + 50, y: geometry.size.height/2 + 60)
-                        }
-                    }
-                    .frame(width: 140,height: 170)
-                }
-                .padding()
             }
         }
         .padding(.top, 40)
@@ -385,7 +387,6 @@ private struct CompensateButtonView: View {
                 Text("Compensate")
                     .foregroundStyle(.white)
                     .fontWeight(.semibold)
-
                     .scaledToFit()
                     .minimumScaleFactor(0.6)
                     .padding(10)
@@ -393,7 +394,6 @@ private struct CompensateButtonView: View {
             .fixedSize()
         }
         .disabled(plantedTrees==viewModel.getPlantedTrees(travelDetails))
-        .padding(.bottom, 15)
         .alert(isPresented: $showAlertCompensation) {
             Alert(
                 title: Text("Compensate \(viewModel.compensatedPrice)€ for this travel?"),
