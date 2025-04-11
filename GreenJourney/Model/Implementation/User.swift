@@ -2,7 +2,7 @@ import Foundation
 import SwiftData
 
 @Model
-class User: Codable {
+class User: Codable, @unchecked Sendable {
     var userID: Int?
     var firstName: String
     var lastName: String

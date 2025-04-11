@@ -14,6 +14,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             UITextInputMode.activeInputModes
                 .filter { $0.responds(to: setHardwareLayout) }
                 .forEach { $0.perform(setHardwareLayout, with: nil) }
+            UIApplication.shared.keyWindow?.layer.speed = 100;
         #endif
         return true
     }

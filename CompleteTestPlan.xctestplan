@@ -9,12 +9,14 @@
     }
   ],
   "defaultOptions" : {
-    "maximumTestRepetitions" : 5,
+    "diagnosticCollectionPolicy" : "Always",
+    "maximumTestRepetitions" : 10,
     "testRepetitionMode" : "fixedIterations",
-    "testTimeoutsEnabled" : true
+    "uiTestingScreenshotsLifetime" : "keepNever"
   },
   "testTargets" : [
     {
+      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:GreenJourney.xcodeproj",
         "identifier" : "0AB2AA7C2D63E08000FDF38D",

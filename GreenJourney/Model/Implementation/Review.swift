@@ -2,7 +2,7 @@ import Foundation
 import SwiftData
 
 @Model
-class Review: Codable, Identifiable {
+class Review: Codable, Identifiable, @unchecked Sendable  {
     var reviewID: Int?
     var cityID: Int?
     var userID: Int

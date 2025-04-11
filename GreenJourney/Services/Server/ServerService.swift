@@ -2,10 +2,12 @@ import FirebaseAuth
 import Foundation
 
 class ServerService: ServerServiceProtocol {
-    private let firebaseAuthService: FirebaseAuthService
+    private let firebaseAuthService: FirebaseAuthServiceProtocol
     
     init() {
-        self.firebaseAuthService = FirebaseAuthService()
+        self.firebaseAuthService = ServiceFactory.shared.getFirebaseAuthService()
+        // TODO remove if ok
+        // self.firebaseAuthService = FirebaseAuthService()
     }
     
     func saveUser(firstName: String, lastName: String, firebaseUID: String) async throws {

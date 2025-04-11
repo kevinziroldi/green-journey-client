@@ -2,7 +2,7 @@ import Foundation
 import SwiftData
 
 @Model
-class Travel: Codable {
+class Travel: Codable, @unchecked Sendable  {
     var travelID: Int?
     var CO2Compensated: Float64 = 0
     var confirmed: Bool

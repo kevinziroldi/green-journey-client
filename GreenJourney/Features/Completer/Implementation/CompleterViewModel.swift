@@ -39,9 +39,10 @@ class CompleterViewModel: ObservableObject {
             return
         }
         
+        let searchedTextCopy = searchText
         var fetchRequest = FetchDescriptor<CityCompleterDataset>(
             predicate: #Predicate { cityCompleter in
-                cityCompleter.cityName.localizedStandardContains(searchText)
+                cityCompleter.cityName.localizedStandardContains(searchedTextCopy)
             })
         fetchRequest.fetchLimit = 150
         
