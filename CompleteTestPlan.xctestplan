@@ -11,7 +11,7 @@
   "defaultOptions" : {
     "diagnosticCollectionPolicy" : "Always",
     "maximumTestRepetitions" : 10,
-    "testRepetitionMode" : "fixedIterations",
+    "testRepetitionMode" : "retryOnFailure",
     "uiTestingScreenshotsLifetime" : "keepNever"
   },
   "testTargets" : [

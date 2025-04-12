@@ -213,8 +213,10 @@ final class UserPreferencesViewUITest: XCTestCase {
         let logoutButton = app.buttons["logoutButton"]
         
         // check UI elements present
-        XCTAssertTrue(userPreferencesTitle.exists, "userPreferencesTitle is not displayed")
+        XCTAssertTrue(userPreferencesTitle.waitForExistence(timeout: timer), "userPreferencesTitle is not displayed")
         XCTAssertTrue(logoutButton.exists, "logoutButton is not displayed")
+        
+        app.swipeUp()
         
         // tap logout button
         logoutButton.tap()

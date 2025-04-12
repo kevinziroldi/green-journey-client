@@ -108,7 +108,7 @@ final class AllReviewsViewUITest: XCTestCase {
         let secondPageReview = app.otherElements["reviewView_11"]
         
         // check first page and button present
-        XCTAssertTrue(firstPageReview.exists, "firstPageReview not displayed")
+        XCTAssertTrue(firstPageReview.waitForExistence(timeout: timer), "firstPageReview not displayed")
         XCTAssertTrue(buttonNext.exists, "buttonNext not displayed")
         
         // tap Next button
@@ -125,14 +125,14 @@ final class AllReviewsViewUITest: XCTestCase {
         let secondPageReview = app.otherElements["reviewView_11"]
         
         // check first page and button present
-        XCTAssertTrue(firstPageReview.exists, "firstPageReview not displayed")
+        XCTAssertTrue(firstPageReview.waitForExistence(timeout: timer), "firstPageReview not displayed")
         XCTAssertTrue(buttonLast.exists, "buttonLast not displayed")
         
         // tap Next button
         buttonLast.tap()
         
         // check second page
-        XCTAssertTrue(secondPageReview.exists, "secondPageReview not displayed")
+        XCTAssertTrue(secondPageReview.waitForExistence(timeout: timer), "secondPageReview not displayed")
     }
     
     func testMoveToPreviousPage() {
@@ -143,14 +143,14 @@ final class AllReviewsViewUITest: XCTestCase {
         let secondPageReview = app.otherElements["reviewView_11"]
         
         // check first page and button present
-        XCTAssertTrue(firstPageReview.exists, "firstPageReview not displayed")
+        XCTAssertTrue(firstPageReview.waitForExistence(timeout: timer), "firstPageReview not displayed")
         XCTAssertTrue(buttonLast.exists, "buttonLast not displayed")
         
         // tap Next button
         buttonLast.tap()
         
         // check second page
-        XCTAssertTrue(secondPageReview.exists, "secondPageReview not displayed")
+        XCTAssertTrue(secondPageReview.waitForExistence(timeout: timer), "secondPageReview not displayed")
         
         // check Previous button present
         XCTAssertTrue(buttonPrevious.exists, "buttonPrevious not displayed")
@@ -159,25 +159,25 @@ final class AllReviewsViewUITest: XCTestCase {
         buttonPrevious.tap()
         
         // check first page
-        XCTAssertTrue(firstPageReview.exists, "firstPageReview not displayed")
+        XCTAssertTrue(firstPageReview.waitForExistence(timeout: timer), "firstPageReview not displayed")
     }
     
     func testMoveToFirstPage() {
         // UI elements
         let buttonLast = app.buttons["buttonLast"]
         let buttonFirst = app.buttons["buttonFirst"]
-        let firstPageReview = app.otherElements["reviewView_20"]
+        let firstPageReview = app.otherElements["reviewView_21"]
         let secondPageReview = app.otherElements["reviewView_11"]
         
         // check first page and button present
-        XCTAssertTrue(firstPageReview.exists, "firstPageReview not displayed")
+        XCTAssertTrue(firstPageReview.waitForExistence(timeout: timer), "firstPageReview not displayed")
         XCTAssertTrue(buttonLast.exists, "buttonLast not displayed")
         
         // tap Next button
         buttonLast.tap()
         
         // check second page
-        XCTAssertTrue(secondPageReview.exists, "secondPageReview not displayed")
+        XCTAssertTrue(secondPageReview.waitForExistence(timeout: timer), "secondPageReview not displayed")
         
         // check Previous button present
         XCTAssertTrue(buttonFirst.exists, "buttonFirst not displayed")
@@ -186,6 +186,6 @@ final class AllReviewsViewUITest: XCTestCase {
         buttonFirst.tap()
         
         // check first page
-        XCTAssertTrue(firstPageReview.exists, "firstPageReview not displayed")
+        XCTAssertTrue(firstPageReview.waitForExistence(timeout: timer), "firstPageReview not displayed")
     }
 }
