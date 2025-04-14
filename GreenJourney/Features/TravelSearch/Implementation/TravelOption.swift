@@ -10,7 +10,7 @@ struct TravelOption: Decodable, Hashable {
         }
         return co2Emitted
     }
-
+    
     func getTotalPrice () -> Float64 {
         var price: Float64 = 0.0
         for segment in self.segments {
@@ -18,7 +18,7 @@ struct TravelOption: Decodable, Hashable {
         }
         return price
     }
-
+    
     func getGreenPrice () -> Float64 {
         var price: Float64 = 0.0
         for segment in self.segments {
@@ -27,7 +27,7 @@ struct TravelOption: Decodable, Hashable {
         let trees = getNumTrees()
         return price + Double((trees * 2))
     }
-
+    
     func getTotalDuration () -> String {
         var duration = 0
         for segment in self.segments {
@@ -35,7 +35,7 @@ struct TravelOption: Decodable, Hashable {
         }
         return DurationAsString.convertTotalDurationToString(totalDuration: duration)
     }
-
+    
     func getOptionDeparture () -> String {
         if let firstSegment = self.segments.first {
             return firstSegment.departureCity
@@ -44,7 +44,7 @@ struct TravelOption: Decodable, Hashable {
             return ""
         }
     }
-
+    
     func getOptionDestination () -> String {
         if let lastSegment = self.segments.last {
             return lastSegment.destinationCity
@@ -53,7 +53,7 @@ struct TravelOption: Decodable, Hashable {
             return ""
         }
     }
-
+    
     func findVehicle() -> String {
         var vehicle: String
         switch self.segments.first?.vehicle {
@@ -74,12 +74,12 @@ struct TravelOption: Decodable, Hashable {
         }
         return vehicle
     }
-
+    
     func getNumTrees() -> Int {
         let co2Emitted = getCo2Emitted()
         return Int(ceil(co2Emitted/75))
     }
-
+    
     func getTotalDistance() -> Float64 {
         var distance = 0.0
         for segment in self.segments {
@@ -87,7 +87,7 @@ struct TravelOption: Decodable, Hashable {
         }
         return distance
     }
-
+    
     func countChanges() -> Int {
         var changes = 0
         for segment in self.segments {
@@ -97,5 +97,5 @@ struct TravelOption: Decodable, Hashable {
         }
         return changes
     }
-
+    
 }

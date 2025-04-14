@@ -4,11 +4,11 @@ enum TabViewElement: Hashable, CaseIterable, Identifiable {
     case SearchTravel
     case MyTravels
     case Dashboard
-
+    
     case UserPreferences
     
     var id: Self { self }
-
+    
     var title: String {
         switch self {
         case .Ranking:      return "Ranking"

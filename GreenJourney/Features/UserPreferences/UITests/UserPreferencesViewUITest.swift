@@ -86,7 +86,7 @@ final class UserPreferencesViewUITest: XCTestCase {
         let emailSentMessage = app.staticTexts["emailSentMessage"]
         let errorMessage = app.staticTexts["errorMessage"]
         let logoutButton = app.buttons["logoutButton"]
- 
+        
         // check presence of UI elements
         XCTAssertTrue(editButton.exists, "editButton is not displayed")
         

@@ -304,7 +304,7 @@ final class OptionDetailsViewUITest: XCTestCase {
         XCTAssertTrue(segmentDestination.exists, "segmentDestination not displayed")
         XCTAssertTrue(departureDate.exists, "departureDate not displayed")
         XCTAssertTrue(arrivalDate.exists, "arrivalDate not displayed")
-    
+        
         XCTAssertFalse(detailsBox.exists, "detailsBox displayed")
         XCTAssertFalse(segmentInfo.exists, "segmentInfo displayed")
         
@@ -319,7 +319,7 @@ final class OptionDetailsViewUITest: XCTestCase {
         XCTAssertTrue(segmentDestination.exists, "segmentDestination not displayed")
         XCTAssertTrue(departureDate.exists, "departureDate not displayed")
         XCTAssertTrue(arrivalDate.exists, "arrivalDate not displayed")
-    
+        
         XCTAssertTrue(detailsBox.exists, "detailsBox not displayed")
         XCTAssertFalse(segmentInfo.exists, "segmentInfo displayed")
     }
@@ -346,7 +346,7 @@ final class OptionDetailsViewUITest: XCTestCase {
         XCTAssertTrue(segmentDestination.exists, "segmentDestination not displayed")
         XCTAssertTrue(departureDate.exists, "departureDate not displayed")
         XCTAssertTrue(arrivalDate.exists, "arrivalDate not displayed")
-    
+        
         XCTAssertFalse(detailsBox.exists, "detailsBox displayed")
         XCTAssertFalse(segmentInfo.exists, "segmentInfo displayed")
         
@@ -361,7 +361,7 @@ final class OptionDetailsViewUITest: XCTestCase {
         XCTAssertTrue(segmentDestination.exists, "segmentDestination not displayed")
         XCTAssertTrue(departureDate.exists, "departureDate not displayed")
         XCTAssertTrue(arrivalDate.exists, "arrivalDate not displayed")
-    
+        
         XCTAssertTrue(detailsBox.exists, "detailsBox not displayed")
         XCTAssertTrue(segmentInfo.exists, "segmentInfo not displayed")
     }

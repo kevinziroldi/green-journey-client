@@ -32,7 +32,7 @@ class CityCompleterDataset: Identifiable, Equatable {
         self.countryCode = existingCity.countryCode
         self.continent = existingCity.continent
     }
-        
+    
     static func == (lhs: CityCompleterDataset, rhs: CityCompleterDataset) -> Bool {
         return lhs.cityName == rhs.cityName &&
         lhs.countryName == rhs.countryName &&
@@ -41,4 +41,4 @@ class CityCompleterDataset: Identifiable, Equatable {
         lhs.continent == rhs.continent
     }
 }
-  
+

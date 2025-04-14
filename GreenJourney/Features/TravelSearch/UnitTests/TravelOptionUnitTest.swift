@@ -99,7 +99,7 @@ final class TravelOptionUnitTest {
         let price = travelOption.getTotalPrice()
         #expect(price == 0)
     }
-   
+    
     @Test
     func testComputeTotalPriceMultipleSegments() async throws {
         let jsonData = """
@@ -247,7 +247,7 @@ final class TravelOptionUnitTest {
         decoder.dateDecodingStrategy = .iso8601
         let travelOptionsRaw = try decoder.decode([Segment].self, from: jsonData)
         let travelOption = TravelOption(segments: travelOptionsRaw)
-
+        
         let price = travelOption.getTotalPrice()
         let expectedPrice = 8.3599999999999994 + 28.050000000000001 + 15.619999999999999 + 48.18
         #expect(price == expectedPrice)
@@ -487,7 +487,7 @@ final class TravelOptionUnitTest {
             travelID: 0
         )
         let travelOption = TravelOption(segments: [segment])
-       
+        
         let vehicle = travelOption.findVehicle()
         #expect(vehicle == "airplane")
     }
@@ -619,7 +619,7 @@ final class TravelOptionUnitTest {
             travelID: -1
         )
         let travelOption = TravelOption(segments: [segment1, segment2])
-     
+        
         #expect(travelOption.getTotalDistance() == 300)
     }
     
@@ -664,7 +664,7 @@ final class TravelOptionUnitTest {
             travelID: -1
         )
         let travelOption = TravelOption(segments: [segment1, segment2])
-     
+        
         #expect(travelOption.countChanges() == 2)
     }
 }

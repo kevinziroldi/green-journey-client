@@ -48,7 +48,7 @@ final class AuthenticationViewModelIntegrationTest {
         viewModel.repeatPassword = "test_password"
         viewModel.firstName = "test_name"
         viewModel.lastName = "test_name"
-
+        
         // firebase auth should succeed
         self.mockFirebaseAuthService.shouldSucceed = true
         
@@ -68,7 +68,7 @@ final class AuthenticationViewModelIntegrationTest {
         viewModel.repeatPassword = "test_password"
         viewModel.firstName = "test_name"
         viewModel.lastName = "test_name"
-
+        
         // firebase auth should succeed
         self.mockFirebaseAuthService.shouldSucceed = true
         
@@ -80,7 +80,7 @@ final class AuthenticationViewModelIntegrationTest {
         var users = try mockModelContext.fetch(FetchDescriptor<User>())
         #expect(users.count == 0)
         #expect(viewModel.isEmailVerificationActiveSignup == true)
-    
+        
         // verify email
         self.mockFirebaseAuthService.shouldSucceed = true
         self.mockFirebaseAuthService.emailVerified = true
@@ -104,7 +104,7 @@ final class AuthenticationViewModelIntegrationTest {
         viewModel.repeatPassword = "test_password"
         viewModel.firstName = "test_name"
         viewModel.lastName = "test_name"
-
+        
         // firebase auth should succeed
         self.mockFirebaseAuthService.shouldSucceed = true
         
@@ -116,7 +116,7 @@ final class AuthenticationViewModelIntegrationTest {
         var users = try mockModelContext.fetch(FetchDescriptor<User>())
         #expect(users.count == 0)
         #expect(viewModel.isEmailVerificationActiveSignup == true)
-    
+        
         // verify email
         self.mockFirebaseAuthService.shouldSucceed = true
         self.mockFirebaseAuthService.emailVerified = true
@@ -269,7 +269,7 @@ final class AuthenticationViewModelIntegrationTest {
         self.mockFirebaseAuthService.shouldSucceed = true
         // login - not new user
         self.mockFirebaseAuthService.isNewUser = false
-    
+        
         await viewModel.signInWithGoogle()
         #expect(viewModel.errorMessage == nil)
         #expect(viewModel.isLogged == true)

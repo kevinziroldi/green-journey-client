@@ -158,13 +158,13 @@ private struct CompensationButtonsView: View {
                     HStack {
                         VStack {
                             HStack {
-                                    Image(systemName: "carbon.dioxide.cloud")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 35, height: 35)
-                                        .foregroundColor(.red)
+                                Image(systemName: "carbon.dioxide.cloud")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 35, height: 35)
+                                    .foregroundColor(.red)
                                 
-                                                                
+                                
                                 Text("CO\u{2082} emitted: ")
                                     .font(.system(size: 20).bold())
                                     .foregroundColor(.red.opacity(0.8))
@@ -180,11 +180,11 @@ private struct CompensationButtonsView: View {
                             
                             HStack {
                                 
-                                    Image(systemName: "leaf")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 35, height: 35)
-                                        .foregroundColor(.green)
+                                Image(systemName: "leaf")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 35, height: 35)
+                                    .foregroundColor(.green)
                                 
                                 
                                 Text("CO\u{2082} compensated: ")
@@ -205,17 +205,17 @@ private struct CompensationButtonsView: View {
                         Spacer()
                         
                         VStack(spacing: 0) {
-                                HStack {
-                                    Text("\(plantedTrees) / \(totalTrees)")
-                                        .font(.system(size: 25))
-                                    Image(systemName: "tree")
-                                        .font(.system(size: 25))
-                                        .padding(.bottom, 5)
-                                }
-                                .scaledToFit()
-                                .minimumScaleFactor(0.6)
-                                
-                                Spacer()
+                            HStack {
+                                Text("\(plantedTrees) / \(totalTrees)")
+                                    .font(.system(size: 25))
+                                Image(systemName: "tree")
+                                    .font(.system(size: 25))
+                                    .padding(.bottom, 5)
+                            }
+                            .scaledToFit()
+                            .minimumScaleFactor(0.6)
+                            
+                            Spacer()
                             
                             
                             HStack {
@@ -321,7 +321,7 @@ private struct CompensationButtonsView: View {
                     .padding()
                 } else {
                     // iPadOS
-                
+                    
                     HStack {
                         Spacer()
                         VStack {

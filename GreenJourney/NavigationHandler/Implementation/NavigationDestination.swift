@@ -10,4 +10,3 @@ enum NavigationDestination: Hashable {
     case AllReviewsView(CitiesReviewsViewModel)
     case UserPreferencesView
 }
-

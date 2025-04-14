@@ -114,7 +114,7 @@ final class TravelDetailsViewUITest: XCTestCase {
         
         // check elements present
         XCTAssertTrue(headerView.exists, "headerView not displayed")
-    
+        
         XCTAssertTrue(infoCompensationButton.exists, "infoCompensationButton not displayed")
         XCTAssertTrue(plusTreesButton.exists, "plusTreesButton not displayed")
         XCTAssertTrue(minusTreesButton.exists, "minusTreesButton not displayed")
@@ -212,7 +212,7 @@ final class TravelDetailsViewUITest: XCTestCase {
         XCTAssertFalse(infoCompensationContent.exists, "infoText already displayed")
         XCTAssertFalse(infoCloseButton.exists, "infoCloseButton already displayed")
     }
-
+    
     func testIncrementAndDecrementTrees() {
         navigateToTravelDetailsViewTravelConfirmed()
         let plusTreesButton = app.buttons["plusButton"]
@@ -234,7 +234,7 @@ final class TravelDetailsViewUITest: XCTestCase {
     
     func testCompensateButtonTap() {
         navigateToTravelDetailsViewTravelConfirmed()
-     
+        
         let plusTreesButton = app.buttons["plusButton"]
         let minusTreesButton = app.buttons["minusButton"]
         let compensateButton = app.buttons["compensateButton"]
@@ -292,7 +292,7 @@ final class TravelDetailsViewUITest: XCTestCase {
     
     func testReviewButton() {
         navigateToTravelDetailsViewTravelConfirmed()
-     
+        
         let headerView = app.otherElements["headerView"]
         let reviewButton = app.buttons["reviewButton"]
         

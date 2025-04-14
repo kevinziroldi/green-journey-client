@@ -76,7 +76,7 @@ class CompleterViewModel: ObservableObject {
         if city.countryCode == self.country {
             score += 2
         }
-
+        
         let similarityScore = stringScore(city.cityName, query)
         score += (similarityScore * 100)
         
@@ -169,5 +169,4 @@ class CompleterViewModel: ObservableObject {
         }
         return history
     }
-    
 }

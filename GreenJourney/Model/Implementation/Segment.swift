@@ -22,7 +22,7 @@ class Segment: Codable, Identifiable {
     var travelID: Int
     
     var id: UUID = UUID()
-   
+    
     init(segmentID: Int, departureID: Int, destinationID: Int, departureCity: String, departureCountry: String,  destinationCity: String, destinationCountry: String, dateTime: Date, duration: Int, vehicle: Vehicle, segmentDescription: String, price: Float64, co2Emitted: Float64, distance: Float64, numSegment: Int, isOutward: Bool, travelID: Int) {
         self.segmentID = segmentID
         self.departureID = departureID
@@ -63,7 +63,7 @@ class Segment: Codable, Identifiable {
         case isOutward = "is_outward"
         case travelID = "travel_id"
     }
-
+    
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.segmentID = try container.decode(Int.self, forKey: .segmentID)

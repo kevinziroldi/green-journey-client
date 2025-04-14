@@ -132,7 +132,7 @@ final class MyTravelsUITests: XCTestCase {
         // check title present
         XCTAssertTrue(myTravelsTitle.exists, "The title of the page is not present")
     }
-     
+    
     func testSortByButtonShowsActionSheetTapSortButton() {
         // UI elements
         let myTravelsTitle = app.staticTexts["myTravelsTitle"]

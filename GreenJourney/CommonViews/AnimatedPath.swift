@@ -7,14 +7,14 @@ struct AnimatedRectangle: View {
     var cornerRadius: CGFloat
     @State var t: CGFloat = 0.0
     @State private var timerSubscription: Cancellable? = nil
-
+    
     var body: some View {
-        Path { path in            
+        Path { path in
             let width = size.width
             let height = size.height
             let radius = cornerRadius
             
-            // Define the initial points
+            // define the initial points
             let initialPoints = [
                 CGPoint(x: padding + radius, y: padding),
                 CGPoint(x: width * 0.25 + padding, y: padding),
@@ -34,7 +34,7 @@ struct AnimatedRectangle: View {
                 CGPoint(x: padding, y: padding + radius)
             ]
             
-            // Define the arc centers
+            // define the arc centers
             let initialArcCenters = [
                 CGPoint(x: padding + radius, y: padding + radius), // Top-left
                 CGPoint(x: width - padding - radius, y: padding + radius), // Top-right
@@ -42,7 +42,7 @@ struct AnimatedRectangle: View {
                 CGPoint(x: padding + radius, y: height - padding - radius) // Bottom-left
             ]
             
-            // Animate the points
+            // animate the points
             let points = initialPoints.map { point in
                 CGPoint(
                     x: point.x + 10 * sin(t + point.y * 0.1),
@@ -50,7 +50,7 @@ struct AnimatedRectangle: View {
                 )
             }
             
-            // Animate the arc centers
+            // animate the arc centers
             let arcCenters = initialArcCenters.map { center in
                 CGPoint(
                     x: center.x + 10 * sin(t + center.y * 0.3),
@@ -58,37 +58,37 @@ struct AnimatedRectangle: View {
                 )
             }
             
-            // Draw the path
+            // draw the path
             path.move(to: CGPoint(x: padding, y: padding + radius))
             
-            // Top-left corner
+            // top-left corner
             path.addArc(center: arcCenters[0], radius: radius, startAngle: .degrees(180), endAngle: .degrees(270), clockwise: false)
             
-            // Top edge
+            // top edge
             for point in points[0...2] {
                 path.addLine(to: point)
             }
             
-            // Top-right corner
+            // top-right corner
             path.addArc(center: arcCenters[1], radius: radius, startAngle: .degrees(270), endAngle: .degrees(0), clockwise: false)
             
-            // Right edge
+            // right edge
             for point in points[4...7] {
                 path.addLine(to: point)
             }
             
-            // Bottom-right corner
+            // bottom-right corner
             path.addArc(center: arcCenters[2], radius: radius, startAngle: .degrees(0), endAngle: .degrees(90), clockwise: false)
             
-            // Bottom edge
+            // bottom edge
             for point in points[8...10] {
                 path.addLine(to: point)
             }
             
-            // Bottom-left corner
+            // bottom-left corner
             path.addArc(center: arcCenters[3], radius: radius, startAngle: .degrees(90), endAngle: .degrees(180), clockwise: false)
             
-            // Left edge
+            // left edge
             for point in points[11...14] {
                 path.addLine(to: point)
             }

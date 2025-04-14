@@ -78,7 +78,7 @@ class CitiesReviewsViewModel: ObservableObject {
     func getLastReviewsForSearchedCity() async {
         do {
             let cityReviewElement = try await serverService.getLastReviewsForCity(iata: selectedCity.iata, countryCode: selectedCity.countryCode)
-           
+            
             self.currentReviews = cityReviewElement.reviews
             self.hasPrevious = cityReviewElement.hasPrevious
             self.hasNext = cityReviewElement.hasNext
@@ -219,7 +219,7 @@ class CitiesReviewsViewModel: ObservableObject {
                 .values
             
             // cityName + countryName uniquely identifies a city in the dataset
-            for segment in filteredSegments {                
+            for segment in filteredSegments {
                 if city.cityName == segment.destinationCity {
                     if city.countryName == segment.destinationCountry {
                         return true
@@ -268,7 +268,7 @@ class CitiesReviewsViewModel: ObservableObject {
             print("error retrieving user travels from SwiftData")
         }
     }
-        
+    
     func uploadReview() async {
         let users: [User]
         do {
@@ -323,7 +323,7 @@ class CitiesReviewsViewModel: ObservableObject {
             let travelsID = travels.map( \.travelID )
             let segments = try modelContext.fetch(FetchDescriptor<Segment>(
                 predicate: #Predicate { segment in
-                     segment.isOutward == true
+                    segment.isOutward == true
                 },
                 sortBy: [
                     SortDescriptor(\Segment.travelID),
@@ -392,7 +392,7 @@ class CitiesReviewsViewModel: ObservableObject {
             let travelsID = travels.map( \.travelID )
             let segments = try modelContext.fetch(FetchDescriptor<Segment>(
                 predicate: #Predicate { segment in
-                     segment.isOutward == true
+                    segment.isOutward == true
                 },
                 sortBy: [
                     SortDescriptor(\Segment.travelID),
@@ -442,7 +442,7 @@ class CitiesReviewsViewModel: ObservableObject {
             return
         }
     }
-     
+    
     func deleteReviewFromSwiftData(userReviewID: Int) {
         do {
             let travels = try modelContext.fetch(FetchDescriptor<Travel>(predicate: #Predicate { travel in
@@ -451,7 +451,7 @@ class CitiesReviewsViewModel: ObservableObject {
             let travelsID = travels.map( \.travelID )
             let segments = try modelContext.fetch(FetchDescriptor<Segment>(
                 predicate: #Predicate { segment in
-                     segment.isOutward == true
+                    segment.isOutward == true
                 },
                 sortBy: [
                     SortDescriptor(\Segment.travelID),
@@ -497,13 +497,13 @@ class CitiesReviewsViewModel: ObservableObject {
     }
     
     func flag(country:String) -> String {
-            let base : UInt32 = 127397
-            var s = ""
+        let base : UInt32 = 127397
+        var s = ""
         for v in country.uppercased().unicodeScalars {
-                s.unicodeScalars.append(UnicodeScalar(base + v.value)!)
-            }
-            return String(s)
+            s.unicodeScalars.append(UnicodeScalar(base + v.value)!)
         }
+        return String(s)
+    }
     
 }
 

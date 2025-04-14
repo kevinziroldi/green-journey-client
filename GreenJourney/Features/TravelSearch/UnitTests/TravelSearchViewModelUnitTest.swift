@@ -124,11 +124,11 @@ final class TravelSearchViewModelUnitTest {
         
         // server should succeed
         self.mockServerService.shouldSucceed = true
-    
+        
         // compute routes
         viewModel.oneWay = true
         await viewModel.computeRoutes()
-    
+        
         // select options
         viewModel.selectedOption = viewModel.outwardOptions[0].segments
         
@@ -149,11 +149,11 @@ final class TravelSearchViewModelUnitTest {
         
         // server should succeed
         self.mockServerService.shouldSucceed = true
-    
+        
         // compute routes
         viewModel.oneWay = true
         await viewModel.computeRoutes()
-    
+        
         // no select option
         await viewModel.saveTravel()
         
@@ -172,14 +172,14 @@ final class TravelSearchViewModelUnitTest {
         
         // server should succeed for compute routes
         self.mockServerService.shouldSucceed = true
-    
+        
         // compute routes
         viewModel.oneWay = true
         await viewModel.computeRoutes()
         
         // server should fail for save travel
         self.mockServerService.shouldSucceed = false
-
+        
         // select options
         viewModel.selectedOption = viewModel.outwardOptions[0].segments
         // save travel
@@ -200,7 +200,7 @@ final class TravelSearchViewModelUnitTest {
         
         // server should succeed
         self.mockServerService.shouldSucceed = true
-    
+        
         // compute routes
         viewModel.oneWay = true
         await viewModel.computeRoutes()

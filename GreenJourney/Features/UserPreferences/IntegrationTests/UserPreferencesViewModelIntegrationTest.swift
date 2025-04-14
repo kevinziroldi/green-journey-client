@@ -68,7 +68,7 @@ final class UserPreferencesViewModelIntegrationTest {
     func testGetUserData() async throws {
         // login
         try await loginUser()
-    
+        
         // call function
         viewModel.getUserData()
         

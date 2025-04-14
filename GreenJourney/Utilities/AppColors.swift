@@ -16,11 +16,10 @@ enum AppColors {
     static let backColorLight = Color(red: 245/255, green: 245/255, blue: 245/255)
     static let backColorDark = Color(red: 20/255, green: 20/255, blue: 20/255)
     
-    // custom colors 
+    // custom colors
     static let green = Color(red: 115/255, green: 186/255, blue: 114/255)
     static let orange = Color(red: 255/255, green: 162/255, blue: 13/255)
     static let blue = Color(red: 54/255, green: 117/255, blue: 158/255)
     static let red = Color(red: 227/255, green: 84/255, blue: 79/255)
     static let purple = Color(red: 222/255, green: 115/255, blue: 176/255)
 }
-

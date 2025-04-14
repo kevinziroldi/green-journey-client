@@ -22,4 +22,3 @@ class DestinationPredictionViewModel: ObservableObject {
         predictedCities = logic.getRecommendation(predictionSize: predictionSize)
     }
 }
-

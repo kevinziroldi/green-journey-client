@@ -18,7 +18,7 @@ class MockFirebaseAuthService: FirebaseAuthServiceProtocol {
             throw FirebaseAuthServiceError.createFirebaseUserFailed
         }
     }
-        
+    
     func sendEmailVerification() async throws {
         if !shouldSucceed {
             throw FirebaseAuthServiceError.sendEmailVerificationFailed

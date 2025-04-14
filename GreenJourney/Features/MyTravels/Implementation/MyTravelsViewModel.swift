@@ -38,7 +38,7 @@ class MyTravelsViewModel: ObservableObject {
     @Published var selectedTravel: TravelDetails?
     @Published var compensatedPrice: Int = 0
     @Published var travelReviews: [Review] = []
-        
+    
     init(modelContext: ModelContext, serverService: ServerServiceProtocol) {
         self.modelContext = modelContext
         self.serverService = serverService
@@ -377,7 +377,7 @@ class MyTravelsViewModel: ObservableObject {
             print("Error travel to delete has nil id")
         }
     }
-        
+    
     func getNumTrees(_ travel: TravelDetails) -> Int {
         if travel.computeCo2Emitted() == 0 {
             return 0
@@ -397,7 +397,7 @@ extension MyTravelsViewModel: Hashable {
     nonisolated static func == (lhs: MyTravelsViewModel, rhs: MyTravelsViewModel) -> Bool {
         return lhs.uuid == rhs.uuid
     }
-
+    
     nonisolated func hash(into hasher: inout Hasher) {
         hasher.combine(uuid)
     }

@@ -56,7 +56,7 @@ final class AuthenticationViewModelUnitTest {
         // set email and password
         viewModel.email = "test@test.com"
         viewModel.password = "test"
-    
+        
         self.mockFirebaseAuthService.shouldSucceed = true
         self.mockFirebaseAuthService.emailVerified = true
         self.mockServerService.shouldSucceed = true
@@ -130,7 +130,7 @@ final class AuthenticationViewModelUnitTest {
         // set email and password
         viewModel.email = "test@test.com"
         viewModel.password = "test"
-    
+        
         self.mockFirebaseAuthService.shouldSucceed = true
         self.mockFirebaseAuthService.emailVerified = true
         // no interaction with server
@@ -228,7 +228,7 @@ final class AuthenticationViewModelUnitTest {
         viewModel.repeatPassword = "test_password"
         viewModel.firstName = "test_name"
         viewModel.lastName = "test_name"
-
+        
         // firebase auth should fail
         self.mockFirebaseAuthService.shouldSucceed = false
         self.mockServerService.shouldSucceed = true
@@ -248,7 +248,7 @@ final class AuthenticationViewModelUnitTest {
         viewModel.repeatPassword = "test_password"
         viewModel.firstName = "test_name"
         viewModel.lastName = "test_name"
-
+        
         // firebase auth should fail
         self.mockFirebaseAuthService.shouldSucceed = true
         self.mockServerService.shouldSucceed = false
@@ -268,7 +268,7 @@ final class AuthenticationViewModelUnitTest {
         viewModel.repeatPassword = "test_password"
         viewModel.firstName = "test_name"
         viewModel.lastName = "test_name"
-
+        
         // firebase auth should fail
         self.mockFirebaseAuthService.shouldSucceed = true
         self.mockServerService.shouldSucceed = true

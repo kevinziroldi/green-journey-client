@@ -5,7 +5,7 @@ import SwiftData
 class DashboardViewModel: ObservableObject {
     private var modelContext: ModelContext
     private let serverService: ServerServiceProtocol
-
+    
     @Published var co2Emitted: Float64 = 0.0
     @Published var treesPlanted: Int = 0
     @Published var co2Compensated: Float64 = 0.0
@@ -127,8 +127,8 @@ class DashboardViewModel: ObservableObject {
             
             self.mostVisitedCountries = Dictionary (
                 uniqueKeysWithValues: visitedCountriesCount.sorted { $0.value > $1.value }
-                .prefix(5)
-                .map { ($0.key, Float64($0.value)) }
+                    .prefix(5)
+                    .map { ($0.key, Float64($0.value)) }
             )
             
             self.co2CompensatedPerYearNumTrees = co2CompensatedPerYearKg.reduce(into: [String: Int]()) { result, pair in

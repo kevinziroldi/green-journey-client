@@ -30,7 +30,7 @@ final class NavigationDestinationTest {
         #expect(destination1 == destination2)
         #expect(destination1.hashValue == destination2.hashValue)
     }
-
+    
     @Test
     func testNavigationDestinationInequalityAuthenticationViewModel() {
         let authenticationViewModel1 = AuthenticationViewModel(modelContext: mockModelContext, serverService: mockServerService, firebaseAuthService: mockFirebaseAuthService)
@@ -53,7 +53,7 @@ final class NavigationDestinationTest {
         #expect(destination1 == destination2)
         #expect(destination1.hashValue == destination2.hashValue)
     }
-
+    
     @Test
     func testNavigationDestinationInequalityTravelSearchViewModel() {
         let travelSearchViewModel1 = TravelSearchViewModel(modelContext: mockModelContext, serverService: mockServerService)
@@ -111,6 +111,4 @@ final class NavigationDestinationTest {
         #expect(destination1 != destination2)
         #expect(destination1.hashValue != destination2.hashValue)
     }
-    
-
 }

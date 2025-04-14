@@ -61,7 +61,7 @@ class FirebaseAuthService: FirebaseAuthServiceProtocol {
     
     func isEmailVerified() throws -> Bool {
         if let firebaseUser = Auth.auth().currentUser {
-                    return firebaseUser.isEmailVerified
+            return firebaseUser.isEmailVerified
         } else {
             throw FirebaseAuthServiceError.isEmailVerifiedFailed
         }

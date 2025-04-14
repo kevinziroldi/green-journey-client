@@ -144,7 +144,7 @@ final class CitiesReviewsViewUITest: XCTestCase {
         searchedCityTextField.typeText("M")
         
         XCTAssertTrue(listElementMilano.waitForExistence(timeout: timer), "listElementMilano is not displayed")
-
+        
         // select Milano
         listElementMilano.tap()
         

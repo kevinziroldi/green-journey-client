@@ -1249,7 +1249,7 @@ struct TravelDetailsUnitTest {
         #expect(returnSegments[0].segmentID == 2 || returnSegments[0].segmentID == 3)
         
         #expect(returnSegments[1].segmentID == 2 || returnSegments[1].segmentID == 3)
-    
+        
         #expect(returnSegments[0].segmentID != returnSegments[1].segmentID)
     }
     
@@ -1328,7 +1328,7 @@ struct TravelDetailsUnitTest {
         #expect(vehicleOutward == "car")
         #expect(vehicleReturn == "bicycle")
     }
- 
+    
     @Test
     func testFindVehicleFirstPresentTrain() {
         let travel = Travel(

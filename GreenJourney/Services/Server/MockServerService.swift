@@ -151,7 +151,7 @@ class MockServerService: ServerServiceProtocol {
     
     func uploadReview(review: Review) async throws -> Review {
         if shouldSucceed {
-            // set an id 
+            // set an id
             review.reviewID = 1
             return review
         } else {
@@ -172,7 +172,7 @@ class MockServerService: ServerServiceProtocol {
             throw ServerServiceError.deleteReviewFailed
         }
     }
-
+    
     func computeRoutes(departureIata: String, departureCountryCode: String,
                        destinationIata: String, destinationCountryCode: String,
                        date: String, time: String, isOutward: Bool) async throws -> [TravelOption] {

@@ -111,7 +111,7 @@ struct BarChartView: View {
         self.title = title
         self.value = value
         self.color = color
-
+        
         // sort data
         let sortedData = data.sorted { $0.key < $1.key }
         
@@ -182,12 +182,12 @@ struct HorizontalBarChart: View {
     let measureUnit: String
     
     var chartData: [ChartElement]
-
+    
     init(data: [String: Float64], title: String, measurementUnit: String, color: Color, sortByKey: Bool) {
         self.title = title
         self.measureUnit = measurementUnit
         self.color = color
-
+        
         // buil data structures
         self.chartData = []
         
@@ -287,7 +287,7 @@ struct DoubleBarChart: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal)
                 .padding(.top)
-                        
+            
             Chart {
                 ForEach(seriesData, id: \.0) { series in
                     ForEach(series.data.sorted(by: { $0.key < $1.key }), id: \.key) { item in

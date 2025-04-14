@@ -8,7 +8,7 @@ class Travel: Codable, @unchecked Sendable  {
     var confirmed: Bool
     var userID: Int
     @Relationship var userReview: Review?
- 
+    
     init(travelID: Int? = nil, userID: Int, confirmed: Bool? = false, userReview: Review? = nil) {
         self.travelID = travelID
         self.userID = userID

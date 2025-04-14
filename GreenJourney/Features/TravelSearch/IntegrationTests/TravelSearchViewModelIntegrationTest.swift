@@ -121,7 +121,7 @@ final class TravelSearchViewModelIntegrationTest {
         
         // no option selected
         #expect(viewModel.selectedOption.isEmpty)
-    
+        
         // no select option
         await viewModel.saveTravel()
         

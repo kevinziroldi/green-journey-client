@@ -175,7 +175,7 @@ struct DepartureDestinationInfoView: View {
                             .font(.subheadline)
                             .fontWeight(.semibold)
                     }
-                 }
+                }
             }
             Text(destination)
                 .font(.title3)

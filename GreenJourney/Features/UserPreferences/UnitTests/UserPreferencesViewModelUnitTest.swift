@@ -136,7 +136,7 @@ final class UserPreferencesViewModelUnitTest {
         #expect(viewModel.zipCode == 19)
         #expect(viewModel.errorMessage == nil)
     }
-        
+    
     @Test
     func testGetUserDataWithUser() async throws {
         // add a user

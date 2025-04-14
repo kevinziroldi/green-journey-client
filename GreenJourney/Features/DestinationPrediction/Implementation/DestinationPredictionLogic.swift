@@ -29,7 +29,7 @@ struct DestinationPredictionLogic {
                 }
                 return nil
             }
-
+            
             // get visited cities
             var visitedCities = Set<CityCountry>()
             for travelDetails in travelDetailsList {
@@ -190,7 +190,7 @@ struct DestinationPredictionLogic {
         if values.isEmpty {
             return 0
         }
-
+        
         // else, sort
         let sortedValues = values.sorted()
         if sortedValues.count % 2 == 0 {

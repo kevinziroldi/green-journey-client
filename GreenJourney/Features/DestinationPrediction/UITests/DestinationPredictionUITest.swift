@@ -21,7 +21,7 @@ final class DestinationPredictionUITest: XCTestCase {
         let emailTextField = app.textFields["emailTextField"]
         let passwordField = app.secureTextFields["passwordSecureField"]
         let loginButton = app.buttons["loginButton"]
-    
+        
         // check LoginView UI elements
         XCTAssertTrue(emailTextField.exists, "The email field is not displayed")
         XCTAssertTrue(passwordField.exists, "The password field is not displayed")

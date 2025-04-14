@@ -11,8 +11,8 @@ struct AllReviewsView: View {
         VStack {
             HStack {
                 Text(viewModel.flag(country: viewModel.selectedCity.countryCode))
-                                    .font(.system(size: 80))
-                                    .foregroundColor(.blue)
+                    .font(.system(size: 80))
+                    .foregroundColor(.blue)
                 Text(viewModel.selectedCity.cityName + ", " + viewModel.selectedCity.countryName)
                     .font(.system(size: 32).bold())
                     .padding()
@@ -144,7 +144,7 @@ private struct ReviewsListView: View {
             }
             .scrollDismissesKeyboard(.interactively)
             .onChange(of: reviews) {
-                // scroll to the top 
+                // scroll to the top
                 if let firstReview = reviews.first {
                     withAnimation {
                         proxy.scrollTo(firstReview.reviewID, anchor: .top)

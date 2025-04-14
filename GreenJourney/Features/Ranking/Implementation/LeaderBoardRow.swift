@@ -29,14 +29,14 @@ struct LeaderBoardRow: View {
                     Text(leaderboard[index].firstName)
                         .foregroundStyle(
                             leaderboard[index].userID == users.first?.userID ?? -1 ?
-                                LinearGradient(gradient: Gradient(colors: [.green, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing) :
+                            LinearGradient(gradient: Gradient(colors: [.green, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing) :
                                 (colorScheme == .dark ? LinearGradient(gradient: Gradient(colors: [.white]), startPoint: .topLeading, endPoint: .bottomTrailing) : LinearGradient(gradient: Gradient(colors: [.black]), startPoint: .topLeading, endPoint: .bottomTrailing))
                         )
                         .fontWeight(.semibold)
                     Text(leaderboard[index].lastName)
                         .foregroundStyle(
                             leaderboard[index].userID == users.first?.userID ?? -1 ?
-                                LinearGradient(gradient: Gradient(colors: [.green, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing) :
+                            LinearGradient(gradient: Gradient(colors: [.green, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing) :
                                 (colorScheme == .dark ? LinearGradient(gradient: Gradient(colors: [.white]), startPoint: .topLeading, endPoint: .bottomTrailing) : LinearGradient(gradient: Gradient(colors: [.black]), startPoint: .topLeading, endPoint: .bottomTrailing))
                         )
                         .fontWeight(.semibold)
@@ -52,7 +52,7 @@ struct LeaderBoardRow: View {
                     .lineLimit(1)
                     .foregroundStyle(
                         leaderboard[index].userID == users.first?.userID ?? -1 ?
-                            LinearGradient(gradient: Gradient(colors: [.green, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing) :
+                        LinearGradient(gradient: Gradient(colors: [.green, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing) :
                             (colorScheme == .dark ? LinearGradient(gradient: Gradient(colors: [.white]), startPoint: .topLeading, endPoint: .bottomTrailing) : LinearGradient(gradient: Gradient(colors: [.black]), startPoint: .topLeading, endPoint: .bottomTrailing))
                     )
                     .fontWeight(.bold)

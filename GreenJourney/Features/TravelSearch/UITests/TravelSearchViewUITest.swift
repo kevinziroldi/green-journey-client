@@ -99,10 +99,10 @@ final class TravelSearchViewUITest: XCTestCase {
     func testSwitchTravelDirection() {
         // UI elements
         let tripTypePicker = app.switches.firstMatch
-    
+        
         // check picker present
         XCTAssertTrue(tripTypePicker.exists, "tripTypePicker not displayed")
-    
+        
         // tap button
         tripTypePicker.tap()
     }
@@ -120,7 +120,7 @@ final class TravelSearchViewUITest: XCTestCase {
         
         XCTAssertTrue(datePickerTitle.exists, "datePickerTitle non displayed")
         XCTAssertTrue(datePickerDoneButton.exists, "datePickerDoneButton non displayed")
-       
+        
         // tap done button
         datePickerDoneButton.tap()
         

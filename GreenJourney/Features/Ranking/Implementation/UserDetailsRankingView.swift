@@ -44,7 +44,7 @@ struct UserDetailsRankingView: View {
                         
                         // badges
                         UserBadgesView(legendTapped: $legendTapped, badges: user.badges,inline: true)
-
+                        
                         // user aggregate data
                         HStack {
                             VStack {
@@ -281,7 +281,7 @@ private struct RecapViewRegularDevice: View {
         .overlay(Color.clear.accessibilityIdentifier("userTravelsRecap"))
     }
 }
- 
+
 private struct Co2EmissionView: View {
     var co2Emitted: Double
     var co2Compensated: Double
@@ -329,7 +329,7 @@ private struct Co2EmissionView: View {
                     .position(x: geometry.size.width/2 + 90, y: geometry.size.height/2 + 120)
                 }
                 .frame(height: 250)
-               Spacer()
+                Spacer()
             }
             .padding()
         }

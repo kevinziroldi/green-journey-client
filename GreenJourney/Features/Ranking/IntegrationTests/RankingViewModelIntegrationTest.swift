@@ -139,7 +139,7 @@ final class RankingViewModelIntegrationTest {
     func testFetchRankingSuccessful() async throws {
         // login
         try await loginUser()
-
+        
         // add a long distance travel
         try await addTravel()
         

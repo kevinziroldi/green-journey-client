@@ -35,7 +35,7 @@ struct MeshGradientView: View {
             timerSubscription?.cancel()
         }
     }
-
+    
     private func sinInRange(_ range: ClosedRange<Float>, offset: Float, timeScale: Float, t: Float) -> Float {
         let amplitude = (range.upperBound - range.lowerBound) / 2
         let midPoint = (range.upperBound + range.lowerBound) / 2

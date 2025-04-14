@@ -58,7 +58,7 @@ class RankingViewModel: ObservableObject {
             }
         }
     }
-
+    
     func fecthRanking() async {
         self.errorMessage = nil
         

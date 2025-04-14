@@ -105,7 +105,7 @@ private struct DistanceEntryView: View {
                 .frame(width: 140, alignment: .leading)
             Text(String(format: "%.1f", distance) + " Km")
                 .font(.system(size: 22, weight: .semibold))
-                
+            
             Spacer()
         }
         .padding(.horizontal)
@@ -117,28 +117,28 @@ private struct DurationEntryView: View {
     let duration: String
     
     var body: some View {
-    HStack {
-        
+        HStack {
+            
             Image(systemName: "clock")
                 .resizable()
                 .scaledToFit()
                 .frame(width: 25, height: 25)
                 .foregroundColor(AppColors.mainColor)
-        
-        Text("Duration")
-            .font(.system(size: 20, weight: .semibold))
-            .foregroundColor(.primary)
-            .padding(.leading, 10)
-            .frame(width: 140, alignment: .leading)
-        
-        Text(duration)
-            .font(.system(size: 22, weight: .semibold))
             
-        Spacer()
-    }
-    .padding(.horizontal)
-    .padding(.vertical, 5)
-    
+            Text("Duration")
+                .font(.system(size: 20, weight: .semibold))
+                .foregroundColor(.primary)
+                .padding(.leading, 10)
+                .frame(width: 140, alignment: .leading)
+            
+            Text(duration)
+                .font(.system(size: 22, weight: .semibold))
+            
+            Spacer()
+        }
+        .padding(.horizontal)
+        .padding(.vertical, 5)
+        
     }
 }
 
@@ -147,20 +147,20 @@ private struct PriceEntryView: View {
     
     var body: some View {
         HStack {
-                Image("price_red")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 25, height: 25)
-                    .foregroundColor(.red)
+            Image("price_red")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 25, height: 25)
+                .foregroundColor(.red)
             Text("Price")
                 .font(.system(size: 20, weight: .semibold))
                 .foregroundColor(.primary)
                 .padding(.leading, 10)
                 .frame(width: 140, alignment: .leading)
-
+            
             Text(String(format: "%.2f", price) + " €")
                 .font(.system(size: 22, weight: .semibold))
-                
+            
             Spacer()
         }
         .padding(.horizontal)
@@ -186,7 +186,7 @@ private struct GreenPriceEntryView: View {
             
             Text(String(format: "%.2f", greenPrice) + " €")
                 .font(.system(size: 22, weight: .semibold))
-                
+            
             Spacer()
         }
         .padding(EdgeInsets(top: 5, leading: 15, bottom: 15, trailing: 15))

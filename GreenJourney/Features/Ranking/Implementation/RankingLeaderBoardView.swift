@@ -172,12 +172,12 @@ private struct LeaderBoardUserView: View {
                                         gradient: Gradient(colors: [.green, .blue]),
                                         startPoint: .topLeading,
                                         endPoint: .bottomTrailing)
-                                    , lineWidth: 3)
+                                            , lineWidth: 3)
                                     .frame(width: 40, height: 40)
                                 Text("#")
                                     .foregroundStyle(.blue)
                                     .font(.system(size: 22))
-                                    .fontWeight(.semibold)                            }
+                                .fontWeight(.semibold)                            }
                             
                             VStack {
                                 Text(userRanking.firstName)

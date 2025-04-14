@@ -6,7 +6,7 @@ struct TravelCardView: View {
     let travelDetails: TravelDetails
     @EnvironmentObject var viewModel: MyTravelsViewModel
     @Environment(\.colorScheme) var colorScheme: ColorScheme
-
+    
     var body: some View {
         if horizontalSizeClass == .compact {
             // iOS

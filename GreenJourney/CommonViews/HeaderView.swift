@@ -10,67 +10,67 @@ struct HeaderView: View {
         
         if horizontalSizeClass == .compact {
             //IOS
-                VStack (spacing: 5){
-                    HStack {
-                        Text("From")
-                            .font(.system(size: 15, weight: .regular))
-                            .foregroundColor(.gray)
-                            .frame(width: UIScreen.main.bounds.width/2 - 30)
-                            .accessibilityIdentifier("fromTravelHeader")
-                        Text("To")
-                            .font(.system(size: 15, weight: .regular))
-                            .foregroundColor(.gray)
-                            .frame(width: UIScreen.main.bounds.width/2 - 30)
-                            .accessibilityIdentifier("toTravelHeader")
-                    }
-                    HStack {
-                        Text(from)
-                            .font(.system(size: 23, weight: .semibold))
-                            .frame(width: UIScreen.main.bounds.width/2 - 30)
-                        Text(to)
-                            .font(.system(size: 23, weight: .semibold))
-                            .frame(width: UIScreen.main.bounds.width/2 - 30)
-                    }
-                    ZStack {
-                        HStack{
-                            if dateArrival != nil{
-                                Divider()
-                                    .frame(height: 40)
-                            }
-                        }
-                        HStack {
-                            if let date = date {
-                                VStack(spacing: 5) {
-                                    Text("Departure")
-                                        .font(.system(size: 13, weight: .regular))
-                                        .foregroundColor(.gray)
-                                        .frame(width: UIScreen.main.bounds.width/2 - 30)
-                                    
-                                    Text(date.formatted(date: .abbreviated, time: .shortened))
-                                        .accessibilityIdentifier("departureDate")
-                                        .font(.system(size: 14, weight: .regular))
-                                        .frame(width: UIScreen.main.bounds.width/2 - 30)
-                                }
-                            }
-                            if let dateArrival = dateArrival {
-                                VStack(spacing: 5) {
-                                    Text("Arrival")
-                                        .font(.system(size: 13, weight: .regular))
-                                        .foregroundColor(.gray)
-                                        .frame(width: UIScreen.main.bounds.width/2 - 30)
-                                    
-                                    Text(dateArrival.formatted(date: .abbreviated, time: .shortened))
-                                        .font(.system(size: 14, weight: .regular))
-                                        .accessibilityIdentifier("arrivalDate")
-                                        .frame(width: UIScreen.main.bounds.width/2 - 30)
-                                }
-                            }
-                        }
-                    }
-                    .padding(.top, 5)
+            VStack (spacing: 5){
+                HStack {
+                    Text("From")
+                        .font(.system(size: 15, weight: .regular))
+                        .foregroundColor(.gray)
+                        .frame(width: UIScreen.main.bounds.width/2 - 30)
+                        .accessibilityIdentifier("fromTravelHeader")
+                    Text("To")
+                        .font(.system(size: 15, weight: .regular))
+                        .foregroundColor(.gray)
+                        .frame(width: UIScreen.main.bounds.width/2 - 30)
+                        .accessibilityIdentifier("toTravelHeader")
                 }
-                    
-
+                HStack {
+                    Text(from)
+                        .font(.system(size: 23, weight: .semibold))
+                        .frame(width: UIScreen.main.bounds.width/2 - 30)
+                    Text(to)
+                        .font(.system(size: 23, weight: .semibold))
+                        .frame(width: UIScreen.main.bounds.width/2 - 30)
+                }
+                ZStack {
+                    HStack{
+                        if dateArrival != nil{
+                            Divider()
+                                .frame(height: 40)
+                        }
+                    }
+                    HStack {
+                        if let date = date {
+                            VStack(spacing: 5) {
+                                Text("Departure")
+                                    .font(.system(size: 13, weight: .regular))
+                                    .foregroundColor(.gray)
+                                    .frame(width: UIScreen.main.bounds.width/2 - 30)
+                                
+                                Text(date.formatted(date: .abbreviated, time: .shortened))
+                                    .accessibilityIdentifier("departureDate")
+                                    .font(.system(size: 14, weight: .regular))
+                                    .frame(width: UIScreen.main.bounds.width/2 - 30)
+                            }
+                        }
+                        if let dateArrival = dateArrival {
+                            VStack(spacing: 5) {
+                                Text("Arrival")
+                                    .font(.system(size: 13, weight: .regular))
+                                    .foregroundColor(.gray)
+                                    .frame(width: UIScreen.main.bounds.width/2 - 30)
+                                
+                                Text(dateArrival.formatted(date: .abbreviated, time: .shortened))
+                                    .font(.system(size: 14, weight: .regular))
+                                    .accessibilityIdentifier("arrivalDate")
+                                    .frame(width: UIScreen.main.bounds.width/2 - 30)
+                            }
+                        }
+                    }
+                }
+                .padding(.top, 5)
+            }
+            
+            
         }
         else {
             //iPadOS

@@ -16,7 +16,7 @@ struct InfoCompensationView: View {
         }
         .padding(.horizontal)
         .padding(.top)
-                
+        
         ScrollView {
             VStack {
                 Text("Travel Sustainably")

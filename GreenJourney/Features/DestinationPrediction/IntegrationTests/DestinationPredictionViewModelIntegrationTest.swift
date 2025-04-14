@@ -18,7 +18,7 @@ final class DestinationPredictionViewModelIntegrationTest {
         self.viewModel = DestinationPredictionViewModel(modelContext: container.mainContext)
         self.mockModelContainer = container
         self.mockModelContext = container.mainContext
-     
+        
         self.serverService = ServerService()
         self.mockFirebaseAuthService = MockFirebaseAuthService()
         

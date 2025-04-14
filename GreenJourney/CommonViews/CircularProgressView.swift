@@ -2,7 +2,7 @@ import SwiftUI
 
 struct CircularProgressView: View {
     @State private var rotation: Double = 0
-
+    
     var body: some View {
         ZStack {
             // background circle

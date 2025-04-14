@@ -147,13 +147,11 @@ private struct ReviewStarRating: View {
     var body: some View {
         HStack (spacing: 15){
             Spacer()
-            
-            
-                Image(systemName: icon)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 30, height: 30)
-                    .foregroundColor(color)
+            Image(systemName: icon)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 30, height: 30)
+                .foregroundColor(color)
             
             Spacer()
             HStack {
@@ -163,7 +161,7 @@ private struct ReviewStarRating: View {
                         .font(.title2)
                         .onTapGesture {
                             if editTapped {
-                                    rating = index
+                                rating = index
                             }
                         }
                         .accessibilityIdentifier("star_\(index)")
@@ -172,7 +170,6 @@ private struct ReviewStarRating: View {
             Spacer()
             Spacer()
             Spacer()
-            
         }
         .padding(.vertical, 5)
     }

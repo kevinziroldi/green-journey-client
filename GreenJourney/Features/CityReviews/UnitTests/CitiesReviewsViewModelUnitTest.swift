@@ -842,63 +842,6 @@ final class CitiesReviewsViewModelUnitTest {
         #expect(viewModel.errorMessage == nil)
     }
     
-    /*
-    @Test
-    func testGetNumPagesWithRest() async {
-        self.mockServerService.shouldSucceed = true
-        self.mockServerService.twoReviews = true
-        self.mockServerService.tenReviews = false
-        
-        // retrieve reviews for Paris
-        viewModel.selectedCity = CityCompleterDataset(
-            cityName: "Paris",
-            countryName: "France",
-            iata: "PAR",
-            countryCode: "FR",
-            continent: "Europe"
-        )
-        await viewModel.getSelectedCityReviewElement(reload: true)
-        
-        #expect(viewModel.getNumPages() == 1)
-    }
-    
-    @Test
-    func testGetNumPagesInteger() async {
-        self.mockServerService.shouldSucceed = true
-        self.mockServerService.twoReviews = false
-        self.mockServerService.tenReviews = true
-        
-        // retrieve reviews for Paris
-        viewModel.selectedCity = CityCompleterDataset(
-            cityName: "Berlin",
-            countryName: "Germany",
-            iata: "BER",
-            countryCode: "DE",
-            continent: "Europe"
-        )
-        await viewModel.getSelectedCityReviewElement(reload: true)
-        
-        #expect(viewModel.getNumPages() == 1)
-    }
-    
-    @Test
-    func testGetNumPagesUnsuccessful() async {
-        self.mockServerService.shouldSucceed = false
-        
-        // retrieve reviews for Paris
-        viewModel.selectedCity = CityCompleterDataset(
-            cityName: "Paris",
-            countryName: "France",
-            iata: "PAR",
-            countryCode: "FR",
-            continent: "Europe"
-        )
-        await viewModel.getSelectedCityReviewElement(reload: true)
-        
-        #expect(viewModel.getNumPages() == 0)
-    }
-    */
-    
     @Test
     func testGetDestinationCityPresent() {
         // call method

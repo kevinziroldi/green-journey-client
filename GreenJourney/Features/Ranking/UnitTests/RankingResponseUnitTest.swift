@@ -41,9 +41,9 @@ struct RankingResponseUnitTest {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         let decodedResponse = try decoder.decode(RankingResponse.self, from: data)
-
+        
         #expect(decodedResponse.shortDistanceRanking.count == 1)
         #expect(decodedResponse.longDistanceRanking.isEmpty)
     }
-        
+    
 }

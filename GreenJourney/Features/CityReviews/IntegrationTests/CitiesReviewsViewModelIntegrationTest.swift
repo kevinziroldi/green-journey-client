@@ -27,7 +27,7 @@ final class CitiesReviewsViewModelIntegrationTest {
         // clean database
         try await serverService.resetTestDatabase()
     }
-        
+    
     private func loginUser() async throws {
         let authenticationViewModel = AuthenticationViewModel(modelContext: self.mockModelContext, serverService: self.serverService, firebaseAuthService: self.mockFirebaseAuthService)
         
@@ -302,7 +302,7 @@ final class CitiesReviewsViewModelIntegrationTest {
         #expect(review.cityIata == viewModel.selectedCity.iata)
         #expect(review.countryCode == viewModel.selectedCity.countryCode)
     }
- 
+    
     @Test
     func testGetBestReviewedCitiesSuccessful() async throws {
         // add review for Paris

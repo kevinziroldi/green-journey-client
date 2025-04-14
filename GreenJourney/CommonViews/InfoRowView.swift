@@ -13,25 +13,12 @@ struct InfoRowView: View {
         HStack {
             HStack {
                 if isSystemIcon {
-                    /*
-                    ZStack {
-                        Circle()
-                            .fill(color.opacity(0.2))
-                            .frame(width: 50, height: 50)
-                        
-                        Image(systemName: icon)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 30, height: 30)
-                            .foregroundColor(color)
-                    }
-                     */
                     Image(systemName: icon)
                         .resizable()
                         .scaledToFit()
                         .frame(width: 40, height: 40)
                         .foregroundColor(color)
-                        //.padding(.trailing, 20)
+                    //.padding(.trailing, 20)
                         .padding(.vertical, 2)
                 } else {
                     Image(icon)
@@ -39,7 +26,7 @@ struct InfoRowView: View {
                         .scaledToFit()
                         .frame(width: 40, height: 40)
                         .foregroundColor(color)
-                        //.padding(.trailing, 20)
+                    //.padding(.trailing, 20)
                 }
                 
                 Text(title)

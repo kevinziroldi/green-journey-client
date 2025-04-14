@@ -24,7 +24,7 @@ final class DashboardViewModelUnitTest {
         try addTravelsToSwiftData()
     }
     
-     private func addUserToSwiftData() throws {
+    private func addUserToSwiftData() throws {
         let mockUser = User(
             userID: 1,
             firstName: "John",

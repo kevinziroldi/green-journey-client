@@ -11,7 +11,6 @@ struct FiveStarView: View {
             BackgroundStars(backgroundColor)
             
             ForegroundStars(rating: rating, color: color)
-            
         }
         .frame(height: dim)
         .fixedSize()

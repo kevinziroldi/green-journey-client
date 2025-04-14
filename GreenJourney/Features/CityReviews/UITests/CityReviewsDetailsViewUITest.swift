@@ -58,7 +58,7 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
             right.tap()
         }
         
-        // UI elements 
+        // UI elements
         let citiesReviewsTitle = app.staticTexts["citiesReviewsTitle"]
         let bestCity_2 = app.otherElements["bestCityView_2"]
         let selecteCityTitle = app.staticTexts["selecteCityTitle"]
@@ -108,7 +108,7 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
         let star2LocalTransportCenter = star2LocalTransport.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
         let star4GreenSpacesCenter = star4GreenSpaces.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
         let star1WasteBinsCenter = star1WasteBins.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
-    
+        
         star2LocalTransportCenter.tap()
         star4GreenSpacesCenter.tap()
         star1WasteBinsCenter.tap()
@@ -164,7 +164,7 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
         
         // title last reviews
         XCTAssertTrue(latestReviewsTitle.exists, "latestReviewsTitle not displayed")
-    
+        
         // some reviews are present
         XCTAssertTrue(reviewElement_21.exists, "reviewElement_21 not displayed")
         reviewElement_21.swipeLeft()
@@ -221,13 +221,13 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
         
         // title last reviews
         XCTAssertTrue(latestReviewsTitle.exists, "latestReviewsTitle not displayed")
-    
+        
         // some reviews are present
         XCTAssertTrue(reviewElement_16.exists, "reviewElement_16 not displayed")
         XCTAssertTrue(reviewElement_17.exists, "reviewElement_17 not displayed")
         XCTAssertTrue(reviewElement_20.exists, "reviewElement_20 not displayed")
         XCTAssertTrue(reviewElement_21.exists, "reviewElement_21 not displayed")
-
+        
         XCTAssertFalse(wrongReviewElement.exists, "wrongReviewElement not displayed")
         
         // more than 10 reviews present
@@ -307,7 +307,7 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
         let star2LocalTransportCenter = star2LocalTransport.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
         let star4GreenSpacesCenter = star4GreenSpaces.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
         let star1WasteBinsCenter = star1WasteBins.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
-    
+        
         star2LocalTransportCenter.tap()
         star4GreenSpacesCenter.tap()
         star1WasteBinsCenter.tap()
@@ -426,7 +426,7 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
         // check view
         XCTAssertTrue(selecteCityTitle.waitForExistence(timeout: timer), "selecteCityTitle not displayed")
     }
-     
+    
     func testModifyAndCancelReview() {
         // both compact and regular devices
         

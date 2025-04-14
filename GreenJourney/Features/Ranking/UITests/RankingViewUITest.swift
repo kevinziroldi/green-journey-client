@@ -189,7 +189,7 @@ final class RankingViewUITest: XCTestCase {
         // UI elements
         let rankingTitle = app.staticTexts["rankingTitle"]
         let longDistanceNavigationView = app.otherElements["longDistanceNavigationView"]
-     
+        
         // check elements exist
         XCTAssertTrue(rankingTitle.exists, "Ranking page not displayed")
         XCTAssertTrue(longDistanceNavigationView.exists, "longDistanceNavigationView not displayed")
