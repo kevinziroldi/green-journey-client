@@ -14,8 +14,17 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             UITextInputMode.activeInputModes
                 .filter { $0.responds(to: setHardwareLayout) }
                 .forEach { $0.perform(setHardwareLayout, with: nil) }
-            UIApplication.shared.keyWindow?.layer.speed = 100;
         #endif
+        
+        // faster animations during tests
+        if ConfigReader.testMode == .test {
+            if let windowScene = UIApplication.shared.connectedScenes
+                .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene,
+               let window = windowScene.windows.first {
+                window.layer.speed = 1000
+            }
+        }
+        
         return true
     }
 }

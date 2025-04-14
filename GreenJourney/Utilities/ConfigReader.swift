@@ -38,7 +38,6 @@ struct ConfigReader {
             return .real
         }
         if let stringValue = config["TestMode"] as? String {
-            print(TestMode(rawValue: stringValue) ?? .real)
             return TestMode(rawValue: stringValue) ?? .real
         }
         return .real
