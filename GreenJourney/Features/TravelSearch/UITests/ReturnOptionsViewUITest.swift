@@ -131,7 +131,7 @@ final class ReturnOptionsViewUITest: XCTestCase {
         XCTAssertTrue(returnOption_6.exists, "returnOption_6 not displayed")
     }
     
-    func testTapReturnOpton() {
+    func testTapReturnOption() {
         // UI elements
         let returnOption_0 = app.buttons["returnOption_0"]
         
