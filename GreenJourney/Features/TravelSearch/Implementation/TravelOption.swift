@@ -1,6 +1,6 @@
 import Foundation
 
-struct TravelOption: Decodable {
+struct TravelOption: Decodable, Hashable {
     let segments: [Segment]
     
     func getCo2Emitted() -> Float64 {

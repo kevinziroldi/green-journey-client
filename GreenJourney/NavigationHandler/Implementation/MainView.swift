@@ -163,6 +163,8 @@ struct MainView: View {
             OutwardOptionsView(departure: departure, arrival: arrival, viewModel: viewModel, navigationPath: $navigationPath)
         case .ReturnOptionsView(let departure, let arrival, let viewModel):
             ReturnOptionsView(departure: departure, arrival: arrival, viewModel: viewModel, navigationPath: $navigationPath)
+        case .OptionDetailsView(let departure, let arrival, let option, let viewModel):
+            OptionDetailsView(departure: departure, arrival: arrival, option: option, viewModel: viewModel, navigationPath: $navigationPath)
         case .CityReviewsDetailsView(let viewModel):
             CityReviewsDetailsView(viewModel: viewModel, navigationPath: $navigationPath)
         case .TravelDetailsView(let viewModel):
