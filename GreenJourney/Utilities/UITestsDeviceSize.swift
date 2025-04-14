@@ -10,8 +10,7 @@ class UITestsDeviceSize {
     static var deviceSize: DeviceSize {
         if UIDevice.current.userInterfaceIdiom == .pad{
             return .regular
-        }
-        else {
+        } else {
             return .compact
         }
     }

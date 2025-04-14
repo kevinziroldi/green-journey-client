@@ -1,5 +1,10 @@
 import Foundation
 
+enum TestMode: String {
+    case real = "real"
+    case test = "test"
+}
+
 struct ConfigReader {
     static var serverIP: String? {
         guard let url = Bundle.main.url(forResource: "Config", withExtension: "plist"),
@@ -25,28 +30,16 @@ struct ConfigReader {
         return config["DBInstance"] as? String
     }
     
-    static var serverServicesType: ServiceType {
+    static var testMode: TestMode {
         guard let url = Bundle.main.url(forResource: "Config", withExtension: "plist"),
               let data = try? Data(contentsOf: url),
               let config = try? PropertyListSerialization.propertyList(from: data, options: [], format: nil) as? [String: Any]
         else {
             return .real
         }
-        if let stringValue = config["ServerServiceType"] as? String {
-            return ServiceType(rawValue: stringValue) ?? .real
-        }
-        return .real
-    }
-    
-    static var firebaseAuthServiceType: ServiceType {
-        guard let url = Bundle.main.url(forResource: "Config", withExtension: "plist"),
-              let data = try? Data(contentsOf: url),
-              let config = try? PropertyListSerialization.propertyList(from: data, options: [], format: nil) as? [String: Any]
-        else {
-            return .real
-        }
-        if let stringValue = config["FirebaseAuthServiceType"] as? String {
-            return ServiceType(rawValue: stringValue) ?? .real
+        if let stringValue = config["TestMode"] as? String {
+            print(TestMode(rawValue: stringValue) ?? .real)
+            return TestMode(rawValue: stringValue) ?? .real
         }
         return .real
     }

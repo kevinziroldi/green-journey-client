@@ -7,7 +7,7 @@ class PersistenceHandler {
     let container: ModelContainer
     
     init() {
-        switch ConfigReader.serverServicesType {
+        switch ConfigReader.testMode {
         case .real:
             if let dbInstance = ConfigReader.dbInstance {
                 do {
@@ -37,7 +37,7 @@ class PersistenceHandler {
             } else {
                 fatalError("Database instance name not found")
             }
-        case .mock:
+        case .test:
             let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
             self.container = try! ModelContainer(for: User.self, Travel.self, Segment.self, CityFeatures.self, CityCompleterDataset.self, Review.self, configurations: configuration)
             

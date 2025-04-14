@@ -3,20 +3,20 @@ class ServiceFactory {
     
     func getServerService() -> ServerServiceProtocol {
         // check the type of service in the Config
-        switch ConfigReader.serverServicesType {
+        switch ConfigReader.testMode {
         case .real:
             return ServerService()
-        case .mock:
+        case .test:
             return MockServerService()
         }
     }
     
     func getFirebaseAuthService() -> FirebaseAuthServiceProtocol {
         // check the type of service in the Config
-        switch ConfigReader.firebaseAuthServiceType {
+        switch ConfigReader.testMode {
         case .real:
             return FirebaseAuthService()
-        case .mock:
+        case .test:
             return MockFirebaseAuthService()
         }
     }
