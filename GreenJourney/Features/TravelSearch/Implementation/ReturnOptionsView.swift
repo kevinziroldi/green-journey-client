@@ -30,18 +30,20 @@ struct ReturnOptionsView: View {
                     VStack {
                         ForEach (viewModel.returnOptions.indices, id: \.self) { option in
                             HStack {
-                                NavigationLink (destination: OptionDetailsView(departure: departure, arrival: arrival, option: viewModel.returnOptions[option], viewModel: viewModel, navigationPath: $navigationPath)){
-                                    OptionCardView(option: viewModel.returnOptions[option], viewModel: viewModel)
+                                Button (action: {
+                                    navigationPath.append(NavigationDestination.OptionDetailsView(departure, arrival,viewModel.outwardOptions[option], viewModel))
+                                }) {
+                                    OptionCardView(option: viewModel.outwardOptions[option], viewModel: viewModel)
                                         .contentShape(Rectangle())
+                                        .accessibilityIdentifier("outwardOption_\(option)")
                                 }
-                                .accessibilityIdentifier("returnOption_\(option)")
+                                
                             }
                             .padding(.horizontal, 10)
                             .frame(maxWidth: 800)
-                            .buttonStyle(.plain)
                         }
+                        .frame(maxWidth: .infinity)
                     }
-                    .frame(maxWidth: .infinity)
                 }
             }
         }

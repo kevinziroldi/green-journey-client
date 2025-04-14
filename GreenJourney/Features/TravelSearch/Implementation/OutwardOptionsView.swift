@@ -32,19 +32,20 @@ struct OutwardOptionsView: View {
                     VStack {
                         ForEach (viewModel.outwardOptions.indices, id: \.self) { option in
                             HStack {
-                                NavigationLink (
-                                    destination: OptionDetailsView(departure: departure, arrival: arrival, option: viewModel.outwardOptions[option], viewModel: viewModel, navigationPath: $navigationPath)) {
-                                        OptionCardView(option: viewModel.outwardOptions[option], viewModel: viewModel)
-                                            .contentShape(Rectangle())
-                                    }
-                                    .accessibilityIdentifier("outwardOption_\(option)")
+                                Button (action: {
+                                    navigationPath.append(NavigationDestination.OptionDetailsView(departure, arrival,viewModel.outwardOptions[option], viewModel))
+                                }) {
+                                    OptionCardView(option: viewModel.outwardOptions[option], viewModel: viewModel)
+                                        .contentShape(Rectangle())
+                                        .accessibilityIdentifier("outwardOption_\(option)")
+                                }
                             }
                             .padding(.horizontal, 10)
                             .frame(maxWidth: 800)
-                            .buttonStyle(.plain)
+                            
                         }
+                        .frame(maxWidth: .infinity)
                     }
-                    .frame(maxWidth: .infinity)
                 }
             }
         }

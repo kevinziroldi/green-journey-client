@@ -116,6 +116,7 @@ struct OptionCardView: View {
                 .padding()
             }
         }
+        .foregroundStyle(colorScheme == .dark ? Color.white : Color.black)
         .padding(EdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10))
         
     }
