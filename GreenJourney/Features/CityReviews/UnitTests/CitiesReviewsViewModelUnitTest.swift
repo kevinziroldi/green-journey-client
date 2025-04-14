@@ -905,7 +905,6 @@ final class CitiesReviewsViewModelUnitTest {
         viewModel.getDestinationCity(city: "Paris", country: "France")
         
         // check city present
-        #expect(viewModel.selectedCity != nil)
         #expect(viewModel.selectedCity.cityName == "Paris")
         #expect(viewModel.selectedCity.countryName == "France")
     }

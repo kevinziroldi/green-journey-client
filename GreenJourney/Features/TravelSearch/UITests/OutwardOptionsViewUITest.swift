@@ -106,7 +106,7 @@ final class OutwardOptionsViewUITest: XCTestCase {
         XCTAssertTrue(outwardOption_6.exists, "outwardOption_6 not displayed")
     }
     
-    func testTapOutwardOpton() {
+    func testTapOutwardOption() {
         // UI elements
         let outwardOption_0 = app.buttons["outwardOption_0"]
         
