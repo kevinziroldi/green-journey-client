@@ -219,63 +219,52 @@ private struct RecapViewRegularDevice: View {
             VStack {
                 Text("Recap")
                     .font(.title)
-                    .foregroundStyle(AppColors.blue)
+                    .foregroundStyle(AppColors.mainColor)
                     .padding(EdgeInsets(top: 15, leading: 15, bottom: 10, trailing: 0))
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 HStack {
-                    ZStack {
-                        Circle()
-                            .fill(.indigo.opacity(0.2))
-                            .frame(width: 50, height: 50)
-                        
-                        Image(systemName: "road.lanes")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 35, height: 35)
-                            .foregroundColor(.indigo)
-                    }
-                    
+                    Image(systemName: "road.lanes")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 35, height: 35)
+                        .foregroundColor(AppColors.mainColor)
+                    Text("Distance")
+                        .font(.system(size: 20).bold())
+                        .frame(maxWidth: 250, alignment: .leading)
+                        .padding(.leading, 5)
                     Text(String(format: "%.1f", user.totalDistance) + " Km")
                         .font(.system(size: 22).bold())
-                        .foregroundColor(.indigo.opacity(0.8))
-                    //.frame(width: 180, alignment: .leading)
+                        .bold()
+                        .foregroundColor(AppColors.mainColor.opacity(0.8))
                     
-                    Text("traveled")
-                        .font(.system(size: 20).bold())
-                        .foregroundColor(.indigo.opacity(0.8))
-                        .padding(.leading, 5)
+                    
                     Spacer()
                 }
                 .padding(.horizontal)
                 .padding(.vertical, 5)
                 HStack {
-                    ZStack {
-                        Circle()
-                            .fill(.blue.opacity(0.2))
-                            .frame(width: 50, height: 50)
-                        
-                        Image(systemName: "clock")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 35, height: 35)
-                            .foregroundColor(.blue)
-                    }
+                    Image(systemName: "clock")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 35, height: 35)
+                        .foregroundColor(AppColors.mainColor)
+                    
+                    Text("Time")
+                        .font(.system(size: 20).bold())
+                        .padding(.leading, 5)
+                        .frame(maxWidth: 250, alignment: .leading)
                     
                     Text(viewModel.computeTotalDuration(duration: user.totalDuration))
                         .font(.system(size: 22).bold())
-                        .foregroundColor(.blue.opacity(0.8))
+                        .foregroundColor(AppColors.mainColor.opacity(0.8))
                     
-                    Text("in travel")
-                        .font(.system(size: 20).bold())
-                        .foregroundColor(.blue.opacity(0.8))
-                        .padding(.leading, 5)
                     Spacer()
                 }
                 .padding(.horizontal)
                 .padding(.vertical, 5)
             }
-            .padding(EdgeInsets(top: 5, leading: 15, bottom: 10, trailing: 15))
+            .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 15))
         }
         .padding(EdgeInsets(top: 5, leading: 15, bottom: 7, trailing: 15))
         .overlay(Color.clear.accessibilityIdentifier("userTravelsRecap"))
@@ -313,7 +302,7 @@ private struct Co2EmissionView: View {
                             .fontWeight(.semibold)
                     }
                     .position(x: geometry.size.width/2 - 90, y: geometry.size.height/2 + 120)
-                    .foregroundStyle(.green)
+                    .foregroundStyle(AppColors.green)
                     VStack {
                         Text("Emitted")
                             .font(.title2)
@@ -325,7 +314,7 @@ private struct Co2EmissionView: View {
                             .font(.title3)
                             .fontWeight(.semibold)
                     }
-                    .foregroundStyle(.red)
+                    .foregroundStyle(AppColors.red)
                     .position(x: geometry.size.width/2 + 90, y: geometry.size.height/2 + 120)
                 }
                 .frame(height: 250)

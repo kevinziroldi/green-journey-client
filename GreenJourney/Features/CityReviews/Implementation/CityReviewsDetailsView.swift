@@ -163,7 +163,7 @@ private struct ReviewsAverageView: View {
                         .font(.title)
                         .fontWeight(.semibold)
                     
-                    Spacer()
+                    
                     
                     Button(action: {
                         infoTapped = true
@@ -172,8 +172,37 @@ private struct ReviewsAverageView: View {
                             .font(.title3)
                     }
                     .accessibilityIdentifier("infoReviewButton")
+                    Spacer()
                 }
                 HStack (spacing: 30) {
+                    Spacer()
+                        Text(String(format: "%.1f", selectedCityReviewElement.getAverageRating()))
+                            .font(.system(size: 100).bold())
+                            .fontWeight(.semibold)
+                            .foregroundStyle(AppColors.mainColor)
+                        VStack{
+                            FiveStarView(rating: selectedCityReviewElement.getAverageRating(), dim: 35, color: Color.yellow)
+                            Button(action: {
+                                // reset reviews list
+                                viewModel.currentReviews = selectedCityReviewElement.reviews
+                                viewModel.hasPrevious = selectedCityReviewElement.hasPrevious
+                                viewModel.hasNext = selectedCityReviewElement.hasNext
+                                
+                                // navigate
+                                navigationPath.append(NavigationDestination.AllReviewsView(viewModel))
+                            }) {
+                                Text("\(selectedCityReviewElement.numReviews)")
+                                    .bold()
+                                    .foregroundStyle(AppColors.mainColor) +
+                                Text("\(selectedCityReviewElement.numReviews == 1 ? " review" : " reviews")")
+                                    .foregroundStyle(AppColors.mainColor)
+                                
+                            }
+                        }
+                        
+                    
+                    Spacer()
+                   
                     VStack {
                         HStack {
                             Image(systemName: "bus")

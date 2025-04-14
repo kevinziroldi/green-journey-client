@@ -9,29 +9,50 @@ struct Co2RecapView: View {
     var body: some View {
         ZStack {
             if halfWidth {
-                VStack {
-                    Co2RecapViewTitle(color:computeTravelColor(distance: distance, co2Emitted: co2Emitted))
-                    Co2RecapEmissionView(co2Emitted: co2Emitted, color: computeTravelColor(distance: distance, co2Emitted: co2Emitted))
-                    Co2RecapNumTreesView(numTrees: numTrees, color: computeTravelColor(distance: distance, co2Emitted: co2Emitted))
+                HStack(spacing: 0) {
+                    VStack {
+                        Co2RecapViewTitle(color:computeTravelColor(distance: distance, co2Emitted: co2Emitted))
+                        Co2RecapEmissionView(co2Emitted: co2Emitted, color: computeTravelColor(distance: distance, co2Emitted: co2Emitted))
+                        
+                    }
+                    .padding(.bottom)
+                    Spacer()
+                    HStack (spacing: 5){
+                        Text("\(numTrees)")
+                        Image(systemName: "tree")
+                    }
+                    .foregroundStyle(computeTravelColor(distance: distance, co2Emitted: co2Emitted))
+                    .font(.largeTitle)
+                    .fontWeight(.semibold)
+                    .padding(.bottom)
+                    .padding(.trailing)
+                    Spacer()
                 }
                 .background(
                     RoundedRectangle(cornerRadius: 15)
                         .fill(Color(uiColor: .systemBackground))
-                        .shadow(color: computeTravelColor(distance: distance, co2Emitted: co2Emitted).opacity(0.3), radius: 5, x: 0, y: 3)
+                        .shadow(radius: 3, x: 0, y: 3)
                 )
             } else {
                 RoundedRectangle(cornerRadius: 15)
                     .fill(Color(uiColor: .systemBackground))
-                    .shadow(color: computeTravelColor(distance: distance, co2Emitted: co2Emitted).opacity(0.3), radius: 5, x: 0, y: 3)
-                
+                    .shadow(radius: 3, x: 0, y: 3)
                 HStack (spacing:0){
                     VStack {
                         Co2RecapViewTitle(color:computeTravelColor(distance: distance, co2Emitted: co2Emitted))
                         Co2RecapEmissionView(co2Emitted: co2Emitted, color: computeTravelColor(distance: distance, co2Emitted: co2Emitted))
                     }
-                    .padding(.bottom, 15)
+                    .padding(.bottom)
                     Spacer()
-                    Co2RecapNumTreesView(numTrees: numTrees, color: computeTravelColor(distance: distance, co2Emitted: co2Emitted))
+                    HStack (spacing: 5){
+                        Text("\(numTrees)")
+                        Image(systemName: "tree")
+                    }
+                    .foregroundStyle(computeTravelColor(distance: distance, co2Emitted: co2Emitted))
+                    .font(.title)
+                    .fontWeight(.semibold)
+                    .padding(.bottom)
+                    .padding(.trailing)
                     Spacer()
                 }
             }
@@ -79,21 +100,5 @@ private struct Co2RecapEmissionView: View {
             .foregroundStyle(color)
             .padding(EdgeInsets(top: 5, leading: 15, bottom: 0, trailing: 15))
             .frame(maxWidth: .infinity, alignment: .leading)
-    }
-}
-
-private struct Co2RecapNumTreesView: View {
-    var numTrees: Int
-    var color: Color
-    var body: some View {
-        HStack (spacing: 5){
-            Text("\(numTrees)")
-            Image(systemName: "tree")
-        }
-        .foregroundStyle(color)
-        .font(.title)
-        .fontWeight(.semibold)
-        .padding(.bottom)
-        .padding(.trailing)
     }
 }

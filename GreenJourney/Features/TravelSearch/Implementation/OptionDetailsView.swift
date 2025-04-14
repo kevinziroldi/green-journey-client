@@ -40,28 +40,31 @@ struct OptionDetailsView: View {
                 // iPadOS
                 
                 ScrollView {
-                    HeaderView(from: departure, to: arrival, date: option.segments.first?.dateTime)
-                    
-                    Rectangle()
-                        .frame(height: 1)
-                        .foregroundColor(.gray)
-                    HStack(alignment: .top) {
-                        TravelRecapView(singleColumn: true, distance: option.getTotalDistance(), duration: option.getTotalDuration(), price: option.getTotalPrice(), greenPrice: option.getGreenPrice())
-                            .padding()
-                            .overlay(Color.clear.accessibilityIdentifier("travelRecap"))
+                        HeaderView(from: departure, to: arrival, date: option.segments.first?.dateTime)
                         
-                        VStack {
-                            Co2RecapView(halfWidth: true, co2Emitted: option.getCo2Emitted(), numTrees: option.getNumTrees(), distance: option.getTotalDistance())
+                        Rectangle()
+                            .frame(height: 1)
+                            .foregroundColor(.gray)
+                    VStack {
+                        HStack(alignment: .top) {
+                            TravelRecapView(singleColumn: true, distance: option.getTotalDistance(), duration: option.getTotalDuration(), price: option.getTotalPrice(), greenPrice: option.getGreenPrice())
                                 .padding()
-                                .overlay(Color.clear.accessibilityIdentifier("co2EmittedBox"))
+                                .overlay(Color.clear.accessibilityIdentifier("travelRecap"))
+                            
+                            VStack {
+                                Co2RecapView(halfWidth: true, co2Emitted: option.getCo2Emitted(), numTrees: option.getNumTrees(), distance: option.getTotalDistance())
+                                    .padding()
+                                    .overlay(Color.clear.accessibilityIdentifier("co2EmittedBox"))
+                            }
+                            .frame(maxHeight: .infinity, alignment: .top)
                         }
-                        .frame(maxHeight: .infinity, alignment: .top)
+                        
+                        SegmentsView(segments: option.segments)
+                            .padding(.top)
+                        
+                        Spacer()
                     }
-                    
-                    SegmentsView(segments: option.segments)
-                        .padding(.top)
-                    
-                    Spacer()
+                    .frame(maxWidth: 800)
                 }
             }
             VStack {
@@ -130,6 +133,7 @@ struct OptionDetailsView: View {
             }
             .padding(10)
         }
+        .ignoresSafeArea(edges: [.bottom, .horizontal])
         .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
     }
 }
