@@ -6,7 +6,7 @@ import SwiftData
 
 @MainActor
 class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegate {
-    let uuid: UUID = UUID()
+    private let uuid: UUID = UUID()
     
     private var modelContext: ModelContext
     private var serverService: ServerServiceProtocol

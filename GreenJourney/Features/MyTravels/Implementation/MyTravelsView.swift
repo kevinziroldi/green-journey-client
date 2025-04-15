@@ -4,7 +4,7 @@ import SwiftUI
 struct MyTravelsView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
-    @StateObject var viewModel: MyTravelsViewModel
+    @StateObject private var viewModel: MyTravelsViewModel
     @Environment(\.modelContext) private var modelContext
     private var serverService: ServerServiceProtocol
     private var firebaseAuthService: FirebaseAuthServiceProtocol

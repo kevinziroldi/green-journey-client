@@ -2,8 +2,8 @@ import SwiftData
 import SwiftUI
 
 struct DestinationPredictionView: View {
-    @StateObject var viewModel: DestinationPredictionViewModel
-    var confirm: ([CityCompleterDataset]) -> Void
+    @StateObject private var viewModel: DestinationPredictionViewModel
+    private var confirm: ([CityCompleterDataset]) -> Void
     
     
     init(modelContext: ModelContext, confirm: @escaping ([CityCompleterDataset]) -> Void) {

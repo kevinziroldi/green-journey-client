@@ -4,7 +4,7 @@ import SwiftData
 struct CitiesReviewsView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
-    @StateObject var viewModel: CitiesReviewsViewModel
+    @StateObject private var viewModel: CitiesReviewsViewModel
     @Environment(\.modelContext) private var modelContext
     private var serverService: ServerServiceProtocol
     private var firebaseAuthService: FirebaseAuthServiceProtocol

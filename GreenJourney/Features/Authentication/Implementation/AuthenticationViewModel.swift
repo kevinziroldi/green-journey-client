@@ -3,7 +3,7 @@ import SwiftUI
 
 @MainActor
 class AuthenticationViewModel: ObservableObject {
-    let uuid: UUID = UUID()
+    private let uuid: UUID = UUID()
     
     //swift data model context
     private var modelContext: ModelContext
@@ -18,7 +18,7 @@ class AuthenticationViewModel: ObservableObject {
     @Published var lastName: String = ""
     @Published var errorMessage: String?
     @Published var resendEmail: String?
-    @Published public var isLogged: Bool = false
+    @Published var isLogged: Bool = false
     @Published var emailVerified: Bool = false
     @Published var isEmailVerificationActiveLogin: Bool = false
     @Published var isEmailVerificationActiveSignup: Bool = false

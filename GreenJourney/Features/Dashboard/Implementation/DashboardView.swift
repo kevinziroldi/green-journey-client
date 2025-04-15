@@ -5,7 +5,7 @@ import Charts
 struct DashboardView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @Environment(\.colorScheme) var colorScheme: ColorScheme
-    @StateObject var viewModel: DashboardViewModel
+    @StateObject private var viewModel: DashboardViewModel
     @Binding var navigationPath: NavigationPath
     private var modelContext: ModelContext
     private var serverService: ServerServiceProtocol

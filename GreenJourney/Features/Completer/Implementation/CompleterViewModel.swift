@@ -5,9 +5,9 @@ import Combine
 
 @MainActor
 class CompleterViewModel: ObservableObject {
-    var modelContext: ModelContext
+    private var modelContext: ModelContext
     var departure: Bool
-    var logic: DestinationPredictionLogic
+    private var logic: DestinationPredictionLogic
     @Published var suggestions: [CityCompleterDataset] = []
     @Published var searchText: String {
         didSet {

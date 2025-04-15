@@ -5,7 +5,7 @@ import SwiftUI
 
 @MainActor
 class CitiesReviewsViewModel: ObservableObject {
-    let uuid: UUID = UUID()
+    private let uuid: UUID = UUID()
     private var modelContext: ModelContext
     private var serverService: ServerServiceProtocol
     

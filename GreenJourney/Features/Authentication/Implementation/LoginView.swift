@@ -4,9 +4,9 @@ import SwiftData
 struct LoginView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
-    @StateObject var viewModel: AuthenticationViewModel
+    @StateObject private var viewModel: AuthenticationViewModel
     private var modelContext: ModelContext
-    @Binding var navigationPath: NavigationPath
+    @Binding private var navigationPath: NavigationPath
     
     init(modelContext: ModelContext, navigationPath: Binding<NavigationPath>, serverService: ServerServiceProtocol, firebaseAuthService: FirebaseAuthServiceProtocol) {
         self.modelContext = modelContext

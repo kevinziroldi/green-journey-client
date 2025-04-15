@@ -10,7 +10,7 @@ let pricePerTree = 2.0
 
 @MainActor
 class MyTravelsViewModel: ObservableObject {
-    let uuid: UUID = UUID()
+    private let uuid: UUID = UUID()
     
     private var modelContext: ModelContext
     private var serverService: ServerServiceProtocol

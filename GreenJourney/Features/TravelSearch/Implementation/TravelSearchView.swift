@@ -8,7 +8,7 @@ struct TravelSearchView: View {
     private var serverService: ServerServiceProtocol
     private var firebaseAuthService: FirebaseAuthServiceProtocol
     @Environment(\.colorScheme) var colorScheme: ColorScheme
-    @StateObject var viewModel: TravelSearchViewModel
+    @StateObject private var viewModel: TravelSearchViewModel
     @State private var departureTapped: Bool = false
     @State private var destinationTapped: Bool = false
     @State private var dateTapped: Bool = false

@@ -5,7 +5,7 @@ struct RankingView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     @Binding var navigationPath: NavigationPath
-    @StateObject var viewModel: RankingViewModel
+    @StateObject private var viewModel: RankingViewModel
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @Environment(\.modelContext) private var modelContext
     @Query var users: [User]

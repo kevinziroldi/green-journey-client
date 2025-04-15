@@ -4,7 +4,7 @@ import Combine
 
 @MainActor
 class RankingViewModel: ObservableObject {
-    var modelContext: ModelContext
+    private var modelContext: ModelContext
     private var serverService: ServerServiceProtocol
     
     var users: [User] = []
