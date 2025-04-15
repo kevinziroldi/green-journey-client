@@ -5,7 +5,7 @@ import MapKit
 import SwiftData
 
 @MainActor
-class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegate {
+class TravelSearchViewModel: ObservableObject {
     private let uuid: UUID = UUID()
     
     private var modelContext: ModelContext
@@ -114,5 +114,15 @@ class TravelSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterD
         }
         self.departure = CityCompleterDataset()
         self.arrival = CityCompleterDataset()
+    }
+}
+
+extension TravelSearchViewModel: Hashable {
+    nonisolated static func == (lhs: TravelSearchViewModel, rhs: TravelSearchViewModel) -> Bool {
+        return lhs.uuid == rhs.uuid
+    }
+    
+    nonisolated func hash(into hasher: inout Hasher) {
+        hasher.combine(uuid)
     }
 }
