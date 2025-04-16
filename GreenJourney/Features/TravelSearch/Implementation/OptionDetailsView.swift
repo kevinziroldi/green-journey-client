@@ -12,8 +12,6 @@ struct OptionDetailsView: View {
     
     var body: some View {
         VStack {
-            
-            
             if horizontalSizeClass == .compact {
                 // iOS
                 

@@ -35,7 +35,7 @@ struct ReturnOptionsView: View {
                                 }) {
                                     OptionCardView(option: viewModel.outwardOptions[option], viewModel: viewModel)
                                         .contentShape(Rectangle())
-                                        .accessibilityIdentifier("outwardOption_\(option)")
+                                        .overlay(Color.clear.accessibilityIdentifier("returnOption_\(option)"))
                                 }
                                 
                             }

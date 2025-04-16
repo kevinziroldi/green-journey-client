@@ -45,10 +45,11 @@ final class ReturnOptionsViewUITest: XCTestCase {
         let searchButton = app.buttons["searchButton"]
         let tripTypePicker = app.switches.firstMatch
         
-        XCTAssertTrue(travelSearchViewTitle.exists, "travelSearchViewTitle not displayed")
+        XCTAssertTrue(travelSearchViewTitle.waitForExistence(timeout: timer), "travelSearchViewTitle not displayed")
         
         // check picker present
         XCTAssertTrue(tripTypePicker.exists, "tripTypePicker not displayed")
+        XCTAssertTrue(tripTypePicker.isHittable, "tripTypePicker not hittable")
         
         // tap button
         tripTypePicker.tap()
