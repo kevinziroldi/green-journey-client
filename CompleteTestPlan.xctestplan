@@ -16,11 +16,11 @@
   },
   "testTargets" : [
     {
-      "parallelizable" : true,
+      "parallelizable" : false,
       "target" : {
         "containerPath" : "container:GreenJourney.xcodeproj",
-        "identifier" : "0AB2AA7C2D63E08000FDF38D",
-        "name" : "GreenJourneyUITests"
+        "identifier" : "0ACDE0DC2D6F0A1300BF912B",
+        "name" : "GreenJourneyIntegrationTests"
       }
     },
     {
@@ -32,12 +32,11 @@
       }
     },
     {
-      "enabled" : false,
-      "parallelizable" : false,
+      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:GreenJourney.xcodeproj",
-        "identifier" : "0ACDE0DC2D6F0A1300BF912B",
-        "name" : "GreenJourneyIntegrationTests"
+        "identifier" : "0AB2AA7C2D63E08000FDF38D",
+        "name" : "GreenJourneyUITests"
       }
     }
   ],
