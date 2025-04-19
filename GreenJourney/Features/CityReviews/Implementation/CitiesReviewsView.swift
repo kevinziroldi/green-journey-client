@@ -315,14 +315,18 @@ private struct BestCityView: View {
                             Text(String(format: "%.1f", cityReview.getAverageRating()))
                                 .fontWeight(.bold)
                             FiveStarView(rating: cityReview.getAverageRating(), dim: 18, color: Color.yellow)
+                            
                             Spacer()
-                            Text("\(cityReview.numReviews)")
-                                .bold()
-                                .font(.caption)
-                                .foregroundStyle(AppColors.mainColor) +
-                            Text(" reviews")
-                                .font(.caption)
-                                .foregroundStyle(AppColors.mainColor)
+                            
+                            if UIScreen.main.bounds.size.height > 667  {
+                                Text("\(cityReview.numReviews)")
+                                    .bold()
+                                    .font(.caption)
+                                    .foregroundStyle(AppColors.mainColor) +
+                                Text("\(cityReview.numReviews == 1 ? " review" : " reviews")")
+                                    .font(.caption)
+                                    .foregroundStyle(AppColors.mainColor)
+                            }
                         }
                         .padding(.leading, 5)
                         Spacer()
@@ -368,7 +372,7 @@ private struct BestCityView: View {
                             Spacer()
                         }
                         
-                        Text("\(cityReview.numReviews) \(cityReview.numReviews == 1 ? "review" : "review")")
+                        Text("\(cityReview.numReviews) \(cityReview.numReviews == 1 ? "review" : "reviews")")
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     
