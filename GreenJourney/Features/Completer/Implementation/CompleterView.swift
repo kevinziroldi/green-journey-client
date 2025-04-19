@@ -76,7 +76,7 @@ struct CompleterView: View {
                 }
             }
             .scrollContentBackground(.hidden)
-            .scrollDismissesKeyboard(.interactively)
+            .scrollDismissesKeyboard(.immediately)
         }
         .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
         .onAppear(){

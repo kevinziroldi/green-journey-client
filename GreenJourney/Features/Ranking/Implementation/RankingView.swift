@@ -108,7 +108,6 @@ struct RankingView: View {
                 .clipShape(Rectangle())
             }
         }
-        .navigationTitle("Ranking")
         .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
         .sheet(isPresented: $legendTapped) {
             LegendBadgeView(isPresented: $legendTapped)
