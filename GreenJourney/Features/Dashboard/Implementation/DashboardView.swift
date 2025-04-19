@@ -41,7 +41,7 @@ struct DashboardView: View {
                 .padding(5)
                 
                 // expandible recaps
-                DashboardDetailsNavigationView(viewModel: viewModel)
+                DashboardDetailsNavigationView(viewModel: viewModel, navigationPath: $navigationPath, isPresenting: $isPresenting)
                     .frame(maxWidth: 800)
             }
             .padding(.horizontal)
@@ -60,9 +60,17 @@ struct DashboardView: View {
 
 private struct DashboardDetailsNavigationView: View {
     @ObservedObject var viewModel: DashboardViewModel
+    @Binding var navigationPath: NavigationPath
+    @Binding var isPresenting: Bool
     
     var body: some View {
-        NavigationLink(destination: Co2DetailsView(viewModel: viewModel)) {
+        Button(action: {
+            if !isPresenting {
+                isPresenting = true
+                navigationPath.append(NavigationDestination.Co2DetailsView(viewModel))
+            }
+        })
+        {
             ZStack {
                 RoundedRectangle(cornerRadius: 15)
                     .fill(Color(uiColor: .systemBackground))
@@ -96,7 +104,13 @@ private struct DashboardDetailsNavigationView: View {
             .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
             .overlay(Color.clear.accessibilityIdentifier("co2Tracker"))
         }
-        NavigationLink(destination: GeneralDetailsView(viewModel: viewModel)) {
+        Button(action: {
+            if !isPresenting {
+                isPresenting = true
+                navigationPath.append(NavigationDestination.GeneralDetailsView(viewModel))
+            }
+        })
+        {
             ZStack {
                 RoundedRectangle(cornerRadius: 15)
                     .fill(Color(uiColor: .systemBackground))
@@ -127,7 +141,13 @@ private struct DashboardDetailsNavigationView: View {
             .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
             .overlay(Color.clear.accessibilityIdentifier("travelsRecap"))
         }
-        NavigationLink(destination: WorldExplorationView(viewModel: viewModel)) {
+        Button(action: {
+            if !isPresenting {
+                isPresenting = true
+                navigationPath.append(NavigationDestination.WorldExplorationView(viewModel))
+            }
+        })
+        {
             ZStack {
                 RoundedRectangle(cornerRadius: 15)
                     .fill(Color(uiColor: .systemBackground))

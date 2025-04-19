@@ -42,14 +42,14 @@ struct CitiesReviewsView: View {
                         .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
                         
                         // city search
-                        CitySearchView(viewModel: viewModel, searchTapped: $searchTapped)
+                        CitySearchView(viewModel: viewModel, searchTapped: $searchTapped, isPresenting: $isPresenting)
                         
                         // cities the user has visited
-                        ReviewableCitiesView(viewModel: viewModel)
+                        ReviewableCitiesView(viewModel: viewModel, isPresenting: $isPresenting)
                         
                         // best cities
                         BestCitiesTitle()
-                        BestCitiesView(viewModel: viewModel, navigationPath: $navigationPath)
+                        BestCitiesView(viewModel: viewModel, navigationPath: $navigationPath, isPresenting: $isPresenting)
                     }
                     .padding(.bottom)
                 }
@@ -65,17 +65,17 @@ struct CitiesReviewsView: View {
                     
                     VStack {
                         // city search
-                        CitySearchView(viewModel: viewModel, searchTapped: $searchTapped)
+                        CitySearchView(viewModel: viewModel, searchTapped: $searchTapped, isPresenting: $isPresenting)
                         
                         Spacer()
                         
-                        ReviewableCitiesView(viewModel: viewModel)
+                        ReviewableCitiesView(viewModel: viewModel, isPresenting: $isPresenting)
                         
                         Spacer()
                         
                         // best cities
                         BestCitiesTitle()
-                        BestCitiesView(viewModel: viewModel, navigationPath: $navigationPath)
+                        BestCitiesView(viewModel: viewModel, navigationPath: $navigationPath, isPresenting: $isPresenting)
                     }
                     .frame(maxWidth: 800)
                     .padding(.horizontal)
@@ -118,6 +118,7 @@ private struct CitySearchView: View {
     @Binding var searchTapped: Bool
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @Environment(\.modelContext) private var modelContext
+    @Binding var isPresenting: Bool
     
     var body: some View {
         VStack {
@@ -128,7 +129,10 @@ private struct CitySearchView: View {
                     .frame(height: 50)
                 
                 Button(action: {
-                    searchTapped = true
+                    if !isPresenting {
+                        isPresenting = true
+                        searchTapped = true
+                    }
                 }) {
                     Text("Search reviews for a city")
                         .foregroundColor(.secondary)
@@ -145,6 +149,7 @@ private struct CitySearchView: View {
             CompleterView(modelContext: modelContext, searchText: "",
                           onBack: {
                 searchTapped = false
+                isPresenting = false
             },
                           onClick: { city in
                 Task {
@@ -154,6 +159,7 @@ private struct CitySearchView: View {
                     viewModel.selectedCity = viewModel.selectedCity
                     await viewModel.getSelectedCityReviewElement(reload: false)
                     searchTapped = false
+                    isPresenting = false
                 }
             },
                           departure: false
@@ -164,6 +170,8 @@ private struct CitySearchView: View {
 
 private struct ReviewableCitiesView: View {
     @ObservedObject var viewModel: CitiesReviewsViewModel
+    @Binding var isPresenting: Bool
+    
     var body: some View {
         if !viewModel.reviewableCities.isEmpty {
             VStack (spacing: 0) {
@@ -206,9 +214,12 @@ private struct ReviewableCitiesView: View {
                                 .padding()
                             }
                             .onTapGesture {
-                                Task {
-                                    viewModel.selectedCity = city
-                                    await viewModel.getSelectedCityReviewElement(reload: false)
+                                if !isPresenting {
+                                    isPresenting = true
+                                    Task {
+                                        viewModel.selectedCity = city
+                                        await viewModel.getSelectedCityReviewElement(reload: false)
+                                    }
                                 }
                             }
                             .padding(.top, 15)
@@ -249,6 +260,7 @@ private struct BestCitiesTitle: View {
 private struct BestCitiesView: View {
     @ObservedObject var viewModel: CitiesReviewsViewModel
     @Binding var navigationPath: NavigationPath
+    @Binding var isPresenting: Bool
     
     var body: some View {
         // list of cities
@@ -260,13 +272,16 @@ private struct BestCitiesView: View {
                 BestCityView(city: viewModel.bestCities[index], cityReview: viewModel.bestCitiesReviewElements[index], pos: index+1, viewModel: viewModel)
                     .padding(.horizontal)
                     .onTapGesture {
-                        viewModel.selectedCity = viewModel.bestCities[index]
-                        viewModel.selectedCityReviewElement = viewModel.bestCitiesReviewElements[index]
-                        viewModel.currentReviews = viewModel.bestCitiesReviewElements[index].reviews
-                        viewModel.hasPrevious = viewModel.bestCitiesReviewElements[index].hasPrevious
-                        viewModel.hasNext = viewModel.bestCitiesReviewElements[index].hasNext
-                        
-                        navigationPath.append(NavigationDestination.CityReviewsDetailsView(viewModel))
+                        if !isPresenting {
+                            isPresenting = true
+                            viewModel.selectedCity = viewModel.bestCities[index]
+                            viewModel.selectedCityReviewElement = viewModel.bestCitiesReviewElements[index]
+                            viewModel.currentReviews = viewModel.bestCitiesReviewElements[index].reviews
+                            viewModel.hasPrevious = viewModel.bestCitiesReviewElements[index].hasPrevious
+                            viewModel.hasNext = viewModel.bestCitiesReviewElements[index].hasNext
+                            
+                            navigationPath.append(NavigationDestination.CityReviewsDetailsView(viewModel))
+                        }
                     }
                     .overlay(Color.clear.accessibilityIdentifier("bestCityView_\(index)"))
             }

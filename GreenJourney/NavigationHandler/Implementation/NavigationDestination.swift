@@ -9,4 +9,8 @@ enum NavigationDestination: Hashable {
     case CityReviewsDetailsView(CitiesReviewsViewModel)
     case AllReviewsView(CitiesReviewsViewModel)
     case UserPreferencesView
+    case WorldExplorationView(DashboardViewModel)
+    case GeneralDetailsView(DashboardViewModel)
+    case Co2DetailsView(DashboardViewModel)
 }
+

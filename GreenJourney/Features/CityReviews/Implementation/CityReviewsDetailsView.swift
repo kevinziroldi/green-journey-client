@@ -9,6 +9,7 @@ struct CityReviewsDetailsView: View {
     @Binding var navigationPath: NavigationPath
     @State var infoTapped = false
     @State var reviewTapped = false
+    @State var isPresenting = false
     
     var body: some View {
         if let selectedCityReviewElement = viewModel.selectedCityReviewElement {
@@ -19,24 +20,24 @@ struct CityReviewsDetailsView: View {
                         .padding(.horizontal)
                     
                     // reviews average
-                    ReviewsAverageView(selectedCityReviewElement: selectedCityReviewElement, viewModel: viewModel,  infoTapped: $infoTapped, navigationPath: $navigationPath)
+                    ReviewsAverageView(selectedCityReviewElement: selectedCityReviewElement, viewModel: viewModel,  infoTapped: $infoTapped, navigationPath: $navigationPath, isPresenting: $isPresenting)
                         .padding(.horizontal)
                     
                     // button or user review
                     if viewModel.isReviewable() {
-                        InsertReviewButtonView(viewModel: viewModel, reviewTapped: $reviewTapped)
+                        InsertReviewButtonView(viewModel: viewModel, reviewTapped: $reviewTapped, isPresenting: $isPresenting)
                             .padding(.horizontal)
                             .padding(.vertical)
                     }
                     
                     // latest reviews, if present
-                    LatestReviewsView(viewModel: viewModel, selectedCityReviewElement: selectedCityReviewElement, navigationPath: $navigationPath)
+                    LatestReviewsView(viewModel: viewModel, selectedCityReviewElement: selectedCityReviewElement, navigationPath: $navigationPath, isPresenting: $isPresenting)
                 }
                 
             }
             .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
-            .sheet(isPresented: $reviewTapped) {
-                InsertReviewView(isPresented: $reviewTapped, viewModel: viewModel)
+            .sheet(isPresented: $reviewTapped, onDismiss: {isPresenting = false}) {
+                InsertReviewView(isPresented: $reviewTapped, viewModel: viewModel, isPresenting: $isPresenting)
                     .presentationDetents([.height(680)])
                     .presentationCornerRadius(15)
             }
@@ -47,6 +48,7 @@ struct CityReviewsDetailsView: View {
                     .overlay(Color.clear.accessibilityIdentifier("infoReviewView"))
             }
             .onAppear(){
+                isPresenting = false
                 Task {
                     viewModel.getUserReview(userID: users.first?.userID ?? -1)
                 }
@@ -81,6 +83,7 @@ private struct ReviewsAverageView: View {
     @ObservedObject var viewModel: CitiesReviewsViewModel
     @Binding var infoTapped: Bool
     @Binding var navigationPath: NavigationPath
+    @Binding var isPresenting: Bool
     
     var body: some View {
         if horizontalSizeClass == .compact {
@@ -120,13 +123,16 @@ private struct ReviewsAverageView: View {
                         
                         HStack {
                             Button(action: {
-                                // reset reviews list
-                                viewModel.currentReviews = selectedCityReviewElement.reviews
-                                viewModel.hasPrevious = selectedCityReviewElement.hasPrevious
-                                viewModel.hasNext = selectedCityReviewElement.hasNext
-                                
-                                // navigate
-                                navigationPath.append(NavigationDestination.AllReviewsView(viewModel))
+                                if !isPresenting {
+                                    isPresenting = true
+                                    // reset reviews list
+                                    viewModel.currentReviews = selectedCityReviewElement.reviews
+                                    viewModel.hasPrevious = selectedCityReviewElement.hasPrevious
+                                    viewModel.hasNext = selectedCityReviewElement.hasNext
+                                    
+                                    // navigate
+                                    navigationPath.append(NavigationDestination.AllReviewsView(viewModel))
+                                }
                             }) {
                                 HStack {
                                     Text("\(selectedCityReviewElement.numReviews)")
@@ -181,13 +187,16 @@ private struct ReviewsAverageView: View {
                     VStack{
                         FiveStarView(rating: selectedCityReviewElement.getAverageRating(), dim: 35, color: Color.yellow)
                         Button(action: {
-                            // reset reviews list
-                            viewModel.currentReviews = selectedCityReviewElement.reviews
-                            viewModel.hasPrevious = selectedCityReviewElement.hasPrevious
-                            viewModel.hasNext = selectedCityReviewElement.hasNext
-                            
-                            // navigate
-                            navigationPath.append(NavigationDestination.AllReviewsView(viewModel))
+                            if !isPresenting {
+                                isPresenting = true
+                                // reset reviews list
+                                viewModel.currentReviews = selectedCityReviewElement.reviews
+                                viewModel.hasPrevious = selectedCityReviewElement.hasPrevious
+                                viewModel.hasNext = selectedCityReviewElement.hasNext
+                                
+                                // navigate
+                                navigationPath.append(NavigationDestination.AllReviewsView(viewModel))
+                            }
                         }) {
                             Text("\(selectedCityReviewElement.numReviews)")
                                 .bold()
@@ -227,6 +236,7 @@ private struct LatestReviewsView: View {
     var viewModel: CitiesReviewsViewModel
     var selectedCityReviewElement: CityReviewElement
     @Binding var navigationPath: NavigationPath
+    @Binding var isPresenting: Bool
     
     var body: some View {
         VStack {
@@ -250,13 +260,16 @@ private struct LatestReviewsView: View {
                 
                 // button to see all reviews
                 Button(action: {
-                    // reset reviews list
-                    viewModel.currentReviews = selectedCityReviewElement.reviews
-                    viewModel.hasPrevious = selectedCityReviewElement.hasPrevious
-                    viewModel.hasNext = selectedCityReviewElement.hasNext
-                    
-                    // navigate
-                    navigationPath.append(NavigationDestination.AllReviewsView(viewModel))
+                    if !isPresenting {
+                        isPresenting = true
+                        // reset reviews list
+                        viewModel.currentReviews = selectedCityReviewElement.reviews
+                        viewModel.hasPrevious = selectedCityReviewElement.hasPrevious
+                        viewModel.hasNext = selectedCityReviewElement.hasNext
+                        
+                        // navigate
+                        navigationPath.append(NavigationDestination.AllReviewsView(viewModel))
+                    }
                 }){
                     Text("See all reviews")
                         .foregroundStyle(AppColors.mainColor)

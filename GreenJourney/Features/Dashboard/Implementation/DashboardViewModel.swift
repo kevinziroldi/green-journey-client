@@ -3,6 +3,7 @@ import SwiftData
 
 @MainActor
 class DashboardViewModel: ObservableObject {
+    private let uuid: UUID = UUID()
     private var modelContext: ModelContext
     private let serverService: ServerServiceProtocol
     
@@ -217,4 +218,13 @@ class DashboardViewModel: ObservableObject {
         return calendar.component(.year, from: Date())
     }
     
+}
+extension DashboardViewModel: Hashable {
+    nonisolated static func == (lhs: DashboardViewModel, rhs: DashboardViewModel) -> Bool {
+        return lhs.uuid == rhs.uuid
+    }
+    
+    nonisolated func hash(into hasher: inout Hasher) {
+        hasher.combine(uuid)
+    }
 }

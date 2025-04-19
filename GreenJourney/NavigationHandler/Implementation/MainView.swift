@@ -173,6 +173,12 @@ struct MainView: View {
             AllReviewsView(viewModel: viewModel, navigationPath: $navigationPath)
         case .UserPreferencesView:
             UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
+        case .Co2DetailsView(let viewModel):
+            Co2DetailsView(viewModel: viewModel)
+        case .WorldExplorationView(let viewModel):
+            WorldExplorationView(viewModel: viewModel)
+        case .GeneralDetailsView(let viewModel):
+            GeneralDetailsView(viewModel: viewModel)
         }
     }
 }

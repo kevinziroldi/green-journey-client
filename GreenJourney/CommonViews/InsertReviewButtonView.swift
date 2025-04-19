@@ -5,12 +5,16 @@ struct InsertReviewButtonView: View {
     @Binding var reviewTapped: Bool
     var city: String?
     var country: String?
+    @Binding var isPresenting: Bool
     
     var body: some View {
         VStack {
             if viewModel.userReview == nil {
                 Button(action: {
-                    reviewTapped = true
+                    if !isPresenting {
+                        isPresenting = true
+                        reviewTapped = true
+                    }
                 }) {
                     ZStack {
                         RoundedRectangle(cornerRadius: 15)
@@ -61,7 +65,10 @@ struct InsertReviewButtonView: View {
                         .padding()
                     }
                     .onTapGesture() {
-                        reviewTapped = true
+                        if !isPresenting {
+                            isPresenting = true
+                            reviewTapped = true
+                        }
                     }
                 }
             }

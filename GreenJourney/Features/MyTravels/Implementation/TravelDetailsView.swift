@@ -15,6 +15,7 @@ struct TravelDetailsView: View {
     @State var showAlertCompensation = false
     @State var plantedTrees = 0
     @State var totalTrees = 0
+    @State var isPresenting: Bool = false
     
     init(viewModel: MyTravelsViewModel ,modelContext: ModelContext, navigationPath: Binding<NavigationPath>, serverService: ServerServiceProtocol, firebaseAuthService: FirebaseAuthServiceProtocol) {
         self.viewModel = viewModel
@@ -99,7 +100,7 @@ struct TravelDetailsView: View {
                             // if the user hasn't left a review yet
                             let city = travelDetails.getDestinationSegment()?.destinationCity
                             let country = travelDetails.getDestinationSegment()?.destinationCountry
-                            InsertReviewButtonView(viewModel: reviewViewModel, reviewTapped: $reviewTapped, city: city, country: country)
+                            InsertReviewButtonView(viewModel: reviewViewModel, reviewTapped: $reviewTapped, city: city, country: country, isPresenting: $isPresenting)
                                 .accessibilityIdentifier("reviewButton")
                         }
                         
@@ -146,8 +147,8 @@ struct TravelDetailsView: View {
                     Spacer()
                 }
             }
-            .sheet(isPresented: $reviewTapped) {
-                InsertReviewView(isPresented: $reviewTapped, viewModel: reviewViewModel)
+            .sheet(isPresented: $reviewTapped, onDismiss: {isPresenting = false}) {
+                InsertReviewView(isPresented: $reviewTapped, viewModel: reviewViewModel, isPresenting: $isPresenting)
                     .presentationDetents([.height(680)])
                     .presentationCornerRadius(15)
             }
@@ -160,6 +161,7 @@ struct TravelDetailsView: View {
             .ignoresSafeArea(edges: [.bottom, .horizontal])
             .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
             .onAppear() {
+                isPresenting = false
                 reviewViewModel.userReview = travelDetails.travel.userReview
                 if travelDetails.computeCo2Emitted() >= 0.0 {
                     if travelDetails.travel.CO2Compensated >= travelDetails.computeCo2Emitted() {

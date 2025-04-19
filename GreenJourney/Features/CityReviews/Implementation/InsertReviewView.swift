@@ -6,6 +6,7 @@ struct InsertReviewView: View {
     @State var editTapped: Bool = false
     @FocusState private var isFocused: Bool
     @State var showAlert: Bool = false
+    @Binding var isPresenting: Bool
     
     var body: some View {
         ZStack {
@@ -29,6 +30,7 @@ struct InsertReviewView: View {
                         Spacer()
                         
                         Button(action: {
+                            isPresenting = false
                             isPresented = false
                         }) {
                             Text("Cancel")
