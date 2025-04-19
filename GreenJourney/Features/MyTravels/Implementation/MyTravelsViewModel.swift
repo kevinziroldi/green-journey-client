@@ -36,6 +36,7 @@ class MyTravelsViewModel: ObservableObject {
     
     // selected travel
     @Published var selectedTravel: TravelDetails?
+    
     @Published var compensatedPrice: Int = 0
     @Published var travelReviews: [Review] = []
     
@@ -317,6 +318,7 @@ class MyTravelsViewModel: ObservableObject {
                     travel.CO2Compensated = updatedTravel.CO2Compensated
                     travel.confirmed = updatedTravel.confirmed
                     try modelContext.save()
+                    self.selectedTravel?.travel = updatedTravel
                 }
             }
         }catch {
@@ -378,18 +380,43 @@ class MyTravelsViewModel: ObservableObject {
         }
     }
     
-    func getNumTrees(_ travel: TravelDetails) -> Int {
-        if travel.computeCo2Emitted() == 0 {
-            return 0
+    func getNumTrees() -> Int {
+        if let travel = self.selectedTravel {
+            if travel.computeCo2Emitted() == 0 {
+                return 0
+            }
+            return Int(ceil(travel.computeCo2Emitted() / (pricePerTree * co2CompensatedPerEuro)))
         }
-        return Int(ceil(travel.computeCo2Emitted() / (pricePerTree * co2CompensatedPerEuro)))
+        return 0
     }
     
-    func getPlantedTrees(_ travel: TravelDetails) -> Int {
-        if travel.travel.CO2Compensated == 0 {
+    func getPlantedTrees() -> Int {
+        guard let travel = self.selectedTravel else {return 0}
+        if  travel.travel.CO2Compensated == 0 {
             return 0
         }
         return Int(ceil(travel.travel.CO2Compensated / (pricePerTree * co2CompensatedPerEuro)))
+    }
+    
+    func getCo2CompensatedSelectedTravel() -> Float64 {
+        return selectedTravel?.travel.CO2Compensated ?? 0
+    }
+    
+    func getCo2EmittedSelectedTravel() -> Float64 {
+        return selectedTravel?.computeCo2Emitted() ?? 0
+    }
+    
+    func getProgressSelectedTravel() -> Float64 {
+        guard let selectedTravel = self.selectedTravel else {return 0}
+        if selectedTravel.travel.CO2Compensated >= selectedTravel.computeCo2Emitted() {
+            return 1
+        }
+        if selectedTravel.computeCo2Emitted() == 0 {
+            return 1
+        }
+        else {
+            return selectedTravel.travel.CO2Compensated / selectedTravel.computeCo2Emitted()
+        }
     }
     
 }

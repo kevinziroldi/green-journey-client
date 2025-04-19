@@ -4,14 +4,10 @@ struct CO2CompensationView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     @ObservedObject var viewModel: MyTravelsViewModel
-    var travelDetails: TravelDetails
     
     @Binding var infoTapped: Bool
     @Binding var showAlertCompensation: Bool
-    
     @Binding var plantedTrees: Int
-    @Binding var totalTrees: Int
-    @Binding var progress: Float64
     
     var body: some View {
         ZStack {
@@ -25,7 +21,7 @@ struct CO2CompensationView: View {
                 // title and info button
                 CompensationTitleView(infoTapped: $infoTapped)
                 
-                CompensationButtonsView(viewModel: viewModel, travelDetails: travelDetails, showAlertCompensation: $showAlertCompensation, plantedTrees: $plantedTrees, totalTrees: $totalTrees, progress: $progress)
+                CompensationButtonsView(viewModel: viewModel, showAlertCompensation: $showAlertCompensation, plantedTrees: $plantedTrees)
                     .padding(EdgeInsets(top: 15, leading: 0, bottom: 5, trailing: 20))
             }
         }
@@ -64,15 +60,12 @@ private struct CompensationButtonsView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     @ObservedObject var viewModel: MyTravelsViewModel
-    var travelDetails: TravelDetails
     @Binding var showAlertCompensation: Bool
     @Binding var plantedTrees: Int
-    @Binding var totalTrees: Int
-    @Binding var progress: Float64
     
     var body: some View {
         VStack {
-            if (travelDetails.computeCo2Emitted() > 0.0 && travelDetails.travel.CO2Compensated < travelDetails.computeCo2Emitted()) {
+            if (viewModel.getProgressSelectedTravel() < 1) {
                 if horizontalSizeClass == .compact {
                     // iOS
                     
@@ -85,9 +78,9 @@ private struct CompensationButtonsView: View {
                                         .font(.system(size: 20))
                                         .padding(.bottom, 5)
                                     
-                                    Text("\(plantedTrees) / \(totalTrees)")
+                                    Text("\(plantedTrees) / \(viewModel.getNumTrees())")
                                         .font(.system(size: 20))
-                                        .frame(width: totalTrees < 10 ? 40 : 65, alignment: .trailing)
+                                        .frame(width: viewModel.getNumTrees() < 10 ? 40 : 65, alignment: .trailing)
                                 }
                                 Spacer()
                             }
@@ -103,13 +96,13 @@ private struct CompensationButtonsView: View {
                                     Image(systemName: "minus.circle")
                                         .font(.system(size: 26))
                                         .fontWeight(.light)
-                                        .foregroundStyle(plantedTrees==viewModel.getPlantedTrees(travelDetails) ? .secondary : AppColors.mainColor)
+                                        .foregroundStyle(plantedTrees==viewModel.getPlantedTrees() ? .secondary : AppColors.mainColor)
                                 }
-                                .disabled(plantedTrees==viewModel.getPlantedTrees(travelDetails))
+                                .disabled(plantedTrees==viewModel.getPlantedTrees())
                                 .accessibilityIdentifier("minusButton")
                                 
                                 Button(action: {
-                                    if plantedTrees < totalTrees {
+                                    if plantedTrees < viewModel.getNumTrees() {
                                         plantedTrees += 1
                                         viewModel.compensatedPrice += 2
                                     }
@@ -117,10 +110,10 @@ private struct CompensationButtonsView: View {
                                     Image(systemName: "plus.circle")
                                         .font(.system(size: 26))
                                         .fontWeight(.light)
-                                        .foregroundStyle(plantedTrees == totalTrees ? .secondary : AppColors.mainColor)
+                                        .foregroundStyle(plantedTrees == viewModel.getNumTrees() ? .secondary : AppColors.mainColor)
                                     
                                 }
-                                .disabled(plantedTrees == totalTrees)
+                                .disabled(plantedTrees == viewModel.getNumTrees())
                                 .accessibilityIdentifier("plusButton")
                             }
                             
@@ -131,20 +124,20 @@ private struct CompensationButtonsView: View {
                             
                             Spacer()
                             
-                            CompensateButtonView(viewModel: viewModel, travelDetails: travelDetails, showAlertCompensation: $showAlertCompensation, plantedTrees: $plantedTrees, totalTrees: $totalTrees, progress: $progress)
+                            CompensateButtonView(viewModel: viewModel, showAlertCompensation: $showAlertCompensation, plantedTrees: $plantedTrees)
                         }
                         .padding(.trailing, 10)
                         
                         VStack {
                             GeometryReader { geometry in
-                                SemicircleCo2ChartView(progress: progress, height: geometry.size.height, width: geometry.size.width, lineWidth: 10)
+                                SemicircleCo2ChartView(progress: viewModel.getProgressSelectedTravel(), height: geometry.size.height, width: geometry.size.width, lineWidth: 10)
                                     .position(x: geometry.size.width/2, y: geometry.size.height/2 - 15)
                                 
-                                Text(String(format: "%.1f", travelDetails.travel.CO2Compensated) + " Kg")
+                                Text(String(format: "%.1f", viewModel.getCo2CompensatedSelectedTravel()) + " Kg")
                                     .font(.headline)
                                     .position(x: geometry.size.width/2 - 50, y: geometry.size.height/2 + 60)
                                 
-                                Text(String(format: "%.1f", travelDetails.computeCo2Emitted()) + " Kg")
+                                Text(String(format: "%.1f", viewModel.getCo2EmittedSelectedTravel()) + " Kg")
                                     .font(.headline)
                                     .position(x: geometry.size.width/2 + 50, y: geometry.size.height/2 + 60)
                             }
@@ -169,7 +162,7 @@ private struct CompensationButtonsView: View {
                                     .font(.system(size: 20).bold())
                                     .foregroundColor(.red.opacity(0.8))
                                     .padding(.leading, 5)
-                                Text(String(format: "%.0f", travelDetails.computeCo2Emitted()) + " Kg")
+                                Text(String(format: "%.0f", viewModel.getCo2EmittedSelectedTravel()) + " Kg")
                                     .font(.system(size: 22).bold())
                                     .bold()
                                     .foregroundColor(.red.opacity(0.8))
@@ -191,7 +184,7 @@ private struct CompensationButtonsView: View {
                                     .font(.system(size: 20).bold())
                                     .foregroundColor(.green.opacity(0.8))
                                     .padding(.leading, 5)
-                                Text(String(format: "%.0f", travelDetails.travel.CO2Compensated) + " Kg")
+                                Text(String(format: "%.0f", viewModel.getCo2CompensatedSelectedTravel()) + " Kg")
                                     .font(.system(size: 20).bold())
                                     .bold()
                                     .foregroundColor(.green.opacity(0.8))
@@ -206,7 +199,7 @@ private struct CompensationButtonsView: View {
                         
                         VStack(spacing: 0) {
                             HStack {
-                                Text("\(plantedTrees) / \(totalTrees)")
+                                Text("\(plantedTrees) / \(viewModel.getNumTrees())")
                                     .font(.system(size: 25))
                                 Image(systemName: "tree")
                                     .font(.system(size: 25))
@@ -228,13 +221,13 @@ private struct CompensationButtonsView: View {
                                     Image(systemName: "minus.circle")
                                         .font(.system(size: 26))
                                         .fontWeight(.light)
-                                        .foregroundStyle(plantedTrees==viewModel.getPlantedTrees(travelDetails) ? .secondary : AppColors.mainColor)
+                                        .foregroundStyle(plantedTrees==viewModel.getPlantedTrees() ? .secondary : AppColors.mainColor)
                                 }
-                                .disabled(plantedTrees==viewModel.getPlantedTrees(travelDetails))
+                                .disabled(plantedTrees==viewModel.getPlantedTrees())
                                 .accessibilityIdentifier("minusButton")
                                 
                                 Button(action: {
-                                    if plantedTrees < totalTrees {
+                                    if plantedTrees < viewModel.getNumTrees() {
                                         plantedTrees += 1
                                         viewModel.compensatedPrice += 2
                                     }
@@ -242,10 +235,10 @@ private struct CompensationButtonsView: View {
                                     Image(systemName: "plus.circle")
                                         .font(.system(size: 26))
                                         .fontWeight(.light)
-                                        .foregroundStyle(plantedTrees == totalTrees ? .secondary : AppColors.mainColor)
+                                        .foregroundStyle(plantedTrees == viewModel.getNumTrees() ? .secondary : AppColors.mainColor)
                                     
                                 }
-                                .disabled(plantedTrees == totalTrees)
+                                .disabled(plantedTrees == viewModel.getNumTrees())
                                 .accessibilityIdentifier("plusButton")
                             }
                             
@@ -253,7 +246,7 @@ private struct CompensationButtonsView: View {
                                 .padding()
                                 .font(.system(size: 20))
                             
-                            CompensateButtonView(viewModel: viewModel, travelDetails: travelDetails, showAlertCompensation: $showAlertCompensation, plantedTrees: $plantedTrees, totalTrees: $totalTrees, progress: $progress)
+                            CompensateButtonView(viewModel: viewModel, showAlertCompensation: $showAlertCompensation, plantedTrees: $plantedTrees)
                             
                         }
                         .padding(.leading, 15)
@@ -263,12 +256,12 @@ private struct CompensationButtonsView: View {
                         
                         VStack {
                             GeometryReader { geometry in
-                                SemicircleCo2ChartView(progress: progress, height: 120, width: 140, lineWidth: 10)
+                                SemicircleCo2ChartView(progress: viewModel.getProgressSelectedTravel(), height: 120, width: 140, lineWidth: 10)
                                     .position(x: geometry.size.width/2, y: geometry.size.height/2 - 15)
-                                Text(String(format: "%.1f", travelDetails.travel.CO2Compensated) + " Kg")
+                                Text(String(format: "%.1f", viewModel.getCo2CompensatedSelectedTravel()) + " Kg")
                                     .font(.headline)
                                     .position(x: geometry.size.width/2 - 50, y: geometry.size.height/2 + 60)
-                                Text(String(format: "%.1f", travelDetails.computeCo2Emitted()) + " Kg")
+                                Text(String(format: "%.1f", viewModel.getCo2EmittedSelectedTravel()) + " Kg")
                                     .font(.headline)
                                     .position(x: geometry.size.width/2 + 50, y: geometry.size.height/2 + 60)
                             }
@@ -303,14 +296,14 @@ private struct CompensationButtonsView: View {
                             
                             VStack {
                                 GeometryReader { geometry in
-                                    SemicircleCo2ChartView(progress: progress, height: geometry.size.height, width: geometry.size.width, lineWidth: 10)
+                                    SemicircleCo2ChartView(progress: viewModel.getProgressSelectedTravel(), height: geometry.size.height, width: geometry.size.width, lineWidth: 10)
                                         .position(x: geometry.size.width/2, y: geometry.size.height/2 - 15)
                                     
-                                    Text(String(format: "%.1f", travelDetails.travel.CO2Compensated) + " Kg")
+                                    Text(String(format: "%.1f", viewModel.getCo2CompensatedSelectedTravel()) + " Kg")
                                         .font(.headline)
                                         .position(x: geometry.size.width/2 - 50, y: geometry.size.height/2 + 60)
                                     
-                                    Text(String(format: "%.1f", travelDetails.computeCo2Emitted()) + " Kg")
+                                    Text(String(format: "%.1f", viewModel.getCo2EmittedSelectedTravel()) + " Kg")
                                         .font(.headline)
                                         .position(x: geometry.size.width/2 + 50, y: geometry.size.height/2 + 60)
                                 }
@@ -346,12 +339,12 @@ private struct CompensationButtonsView: View {
                         Spacer()
                         VStack {
                             GeometryReader { geometry in
-                                SemicircleCo2ChartView(progress: progress, height: 120, width: 140, lineWidth: 10)
+                                SemicircleCo2ChartView(progress: viewModel.getProgressSelectedTravel(), height: 120, width: 140, lineWidth: 10)
                                     .position(x: geometry.size.width/2, y: geometry.size.height/2 - 15)
-                                Text(String(format: "%.1f", travelDetails.travel.CO2Compensated) + " Kg")
+                                Text(String(format: "%.1f", viewModel.getCo2CompensatedSelectedTravel()) + " Kg")
                                     .font(.headline)
                                     .position(x: geometry.size.width/2 - 50, y: geometry.size.height/2 + 60)
-                                Text(String(format: "%.1f", travelDetails.computeCo2Emitted()) + " Kg")
+                                Text(String(format: "%.1f", viewModel.getCo2EmittedSelectedTravel()) + " Kg")
                                     .font(.headline)
                                     .position(x: geometry.size.width/2 + 50, y: geometry.size.height/2 + 60)
                             }
@@ -370,11 +363,8 @@ private struct CompensationButtonsView: View {
 
 private struct CompensateButtonView: View {
     @ObservedObject var viewModel: MyTravelsViewModel
-    var travelDetails: TravelDetails
     @Binding var showAlertCompensation: Bool
     @Binding var plantedTrees: Int
-    @Binding var totalTrees: Int
-    @Binding var progress: Float64
     
     var body: some View {
         Button(action: {
@@ -382,7 +372,7 @@ private struct CompensateButtonView: View {
         }) {
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
-                    .fill(plantedTrees==viewModel.getPlantedTrees(travelDetails) ? Color.secondary.opacity(0.6) : AppColors.mainColor)
+                    .fill(plantedTrees==viewModel.getPlantedTrees() ? Color.secondary.opacity(0.6) : AppColors.mainColor)
                 
                 Text("Compensate")
                     .foregroundStyle(.white)
@@ -393,7 +383,7 @@ private struct CompensateButtonView: View {
             }
             .fixedSize()
         }
-        .disabled(plantedTrees==viewModel.getPlantedTrees(travelDetails))
+        .disabled(plantedTrees==viewModel.getPlantedTrees())
         .alert(isPresented: $showAlertCompensation) {
             Alert(
                 title: Text("Compensate \(viewModel.compensatedPrice)€ for this travel?"),
@@ -402,17 +392,8 @@ private struct CompensateButtonView: View {
                 secondaryButton: .default(Text("Confirm")) {
                     //compensate travel
                     Task {
-                        viewModel.compensatedPrice = (plantedTrees-viewModel.getPlantedTrees(travelDetails)) * 2
+                        viewModel.compensatedPrice = (plantedTrees-viewModel.getPlantedTrees()) * 2
                         await viewModel.compensateCO2()
-                        if (travelDetails.travel.CO2Compensated >= travelDetails.computeCo2Emitted()) {
-                            progress = 1.0
-                        }
-                        else {
-                            progress = travelDetails.travel.CO2Compensated / travelDetails.computeCo2Emitted()
-                        }
-                        totalTrees = viewModel.getNumTrees(travelDetails)
-                        plantedTrees = viewModel.getPlantedTrees(travelDetails)
-                        
                     }
                 }
             )

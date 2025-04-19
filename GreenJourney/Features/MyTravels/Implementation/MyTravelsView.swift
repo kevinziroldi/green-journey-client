@@ -177,11 +177,22 @@ struct MyTravelsView: View {
             }
             .padding(.bottom)
         }
+        .refreshable {
+            Task{
+                await viewModel.getUserTravels()
+                viewModel.showRequestedTravels()
+                if viewModel.filteredTravelDetailsList.isEmpty {
+                    // retry
+                    viewModel.showRequestedTravels()
+                }
+            }
+        }
         .scrollClipDisabled(true)
         .clipShape(Rectangle())
         .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
         .onAppear {
             isPresenting = false
+            Task { await viewModel.getUserTravels() }
             viewModel.showRequestedTravels()
             if viewModel.filteredTravelDetailsList.isEmpty {
                 // retry

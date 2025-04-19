@@ -41,10 +41,10 @@ struct TravelDetailsView: View {
                             
                             if travelDetails.travel.confirmed {
                                 // travel compensation
-                                CO2CompensationView(viewModel: viewModel, travelDetails: travelDetails, infoTapped: $infoTapped, showAlertCompensation: $showAlertCompensation, plantedTrees: $plantedTrees, totalTrees: $totalTrees, progress: $progress)
+                                CO2CompensationView(viewModel: viewModel, infoTapped: $infoTapped, showAlertCompensation: $showAlertCompensation, plantedTrees: $plantedTrees)
                             } else {
                                 // recap full width
-                                Co2RecapView(halfWidth: false, co2Emitted: travelDetails.computeCo2Emitted(), numTrees: viewModel.getNumTrees(travelDetails), distance: travelDetails.computeTotalDistance())
+                                Co2RecapView(halfWidth: false, co2Emitted: travelDetails.computeCo2Emitted(), numTrees: viewModel.getNumTrees(), distance: travelDetails.computeTotalDistance())
                                     .padding()
                                     .accessibilityElement(children: .contain)
                                     .overlay(Color.clear.accessibilityIdentifier("emissionsRecapFutureTravel"))
@@ -63,7 +63,7 @@ struct TravelDetailsView: View {
                             VStack {
                                 if travelDetails.travel.confirmed {
                                     // travel compensation
-                                    CO2CompensationView(viewModel: viewModel, travelDetails: travelDetails, infoTapped: $infoTapped, showAlertCompensation: $showAlertCompensation, plantedTrees: $plantedTrees, totalTrees: $totalTrees, progress: $progress)
+                                    CO2CompensationView(viewModel: viewModel, infoTapped: $infoTapped, showAlertCompensation: $showAlertCompensation, plantedTrees: $plantedTrees)
                                     
                                     // travel recap two columns
                                     TravelRecapView(singleColumn: false, distance: travelDetails.computeTotalDistance(), duration: travelDetails.computeTotalDuration(), price: travelDetails.computeTotalPrice(), greenPrice: travelDetails.computeGreenPrice())
@@ -82,7 +82,7 @@ struct TravelDetailsView: View {
                                         
                                         // recap half width
                                         VStack {
-                                            Co2RecapView(halfWidth: true, co2Emitted: travelDetails.computeCo2Emitted(), numTrees: viewModel.getNumTrees(travelDetails), distance: travelDetails.computeTotalDistance())
+                                            Co2RecapView(halfWidth: true, co2Emitted: travelDetails.computeCo2Emitted(), numTrees: viewModel.getNumTrees(), distance: travelDetails.computeTotalDistance())
                                                 .padding()
                                                 .accessibilityElement(children: .contain)
                                                 .overlay(Color.clear.accessibilityIdentifier("emissionsRecapFutureTravel"))
@@ -167,8 +167,8 @@ struct TravelDetailsView: View {
                     } else {
                         progress = travelDetails.travel.CO2Compensated / travelDetails.computeCo2Emitted()
                     }
-                    totalTrees = viewModel.getNumTrees(travelDetails)
-                    plantedTrees = viewModel.getPlantedTrees(travelDetails)
+                    totalTrees = viewModel.getNumTrees()
+                    plantedTrees = viewModel.getPlantedTrees()
                     viewModel.compensatedPrice = 0
                 }
             }
