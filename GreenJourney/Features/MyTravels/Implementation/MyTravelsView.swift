@@ -2,6 +2,8 @@ import SwiftData
 import SwiftUI
 
 struct MyTravelsView: View {
+    
+    @State var isPresenting: Bool = false
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     @StateObject private var viewModel: MyTravelsViewModel
@@ -100,9 +102,12 @@ struct MyTravelsView: View {
                         ForEach(viewModel.filteredTravelDetailsList, id: \.id) { travelDetails in
                             HStack (spacing: 10) {
                                 Button(action: {
-                                    viewModel.selectedTravel = travelDetails
-                                    // selectedTravel is set synchronously
-                                    navigationPath.append(NavigationDestination.TravelDetailsView(viewModel))
+                                    if !isPresenting {
+                                        isPresenting = true
+                                        viewModel.selectedTravel = travelDetails
+                                        // selectedTravel is set synchronously
+                                        navigationPath.append(NavigationDestination.TravelDetailsView(viewModel))
+                                    }
                                 }) {
                                     TravelCardView(travelDetails: travelDetails)
                                 }
@@ -176,6 +181,7 @@ struct MyTravelsView: View {
         .clipShape(Rectangle())
         .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
         .onAppear {
+            isPresenting = false
             viewModel.showRequestedTravels()
             if viewModel.filteredTravelDetailsList.isEmpty {
                 // retry
