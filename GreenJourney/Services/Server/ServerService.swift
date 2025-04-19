@@ -293,6 +293,8 @@ class ServerService: ServerServiceProtocol {
         request.setValue("Bearer \(firebaseToken)", forHTTPHeaderField: "Authorization")
         request.httpBody = body
         
+        print(String(data: body, encoding: .utf8)!)
+        
         // perform request
         let session = URLHandler.shared.getURLSession()
         let (data, response) = try await session.data(for: request)
@@ -502,12 +504,16 @@ class ServerService: ServerServiceProtocol {
     func updateTravel(modifiedTravel: Travel) async throws -> Travel {
         let firebaseToken = try await firebaseAuthService.getFirebaseToken()
         
+        let encoder = JSONEncoder()
+        let decoder = JSONDecoder()
+        encoder.dateEncodingStrategy = .iso8601
+        decoder.dateDecodingStrategy = .iso8601
+        
         // JSON encoding and decoding
-        guard let body = try? JSONEncoder().encode(modifiedTravel) else {
+        guard let body = try? encoder.encode(modifiedTravel) else {
             print("Error encoding user data for PUT")
             throw ServerServiceError.modifyTravelFailed
         }
-        let decoder = JSONDecoder()
         
         // build request
         let baseURL = URLHandler.shared.getBaseURL()
@@ -520,6 +526,8 @@ class ServerService: ServerServiceProtocol {
         request.setValue("Bearer \(firebaseToken)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = body
+        
+        print(String(data: body, encoding: .utf8)!)
         
         // perform request
         let session = URLHandler.shared.getURLSession()
