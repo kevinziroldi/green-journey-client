@@ -12,6 +12,7 @@ struct DashboardView: View {
     private var firebaseAuthService: FirebaseAuthServiceProtocol
     
     @State private var legendTapped: Bool = false
+    @State var isPresenting: Bool = false
     
     init(modelContext: ModelContext, navigationPath: Binding<NavigationPath>, serverService: ServerServiceProtocol, firebaseAuthService: FirebaseAuthServiceProtocol) {
         _viewModel = StateObject(wrappedValue: DashboardViewModel(modelContext: modelContext, serverService: serverService))
@@ -34,7 +35,7 @@ struct DashboardView: View {
                     Spacer()
                     
                     if horizontalSizeClass == .compact {
-                        UserPreferencesButtonView(navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
+                        UserPreferencesButtonView(navigationPath: $navigationPath, isPresenting: $isPresenting)
                     }
                 }
                 .padding(5)
@@ -49,6 +50,7 @@ struct DashboardView: View {
         .clipShape(Rectangle())
         .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
         .onAppear() {
+            isPresenting = false
             Task {
                 viewModel.getUserTravels()
             }

@@ -10,6 +10,7 @@ struct RankingView: View {
     @Environment(\.modelContext) private var modelContext
     @Query var users: [User]
     @State var legendTapped: Bool = false
+    @State var isPresenting: Bool = false
     private var serverService: ServerServiceProtocol
     private var firebaseAuthService: FirebaseAuthServiceProtocol
     
@@ -51,7 +52,7 @@ struct RankingView: View {
                             Spacer()
                             
                             // user preferences button
-                            UserPreferencesButtonView(navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
+                            UserPreferencesButtonView(navigationPath: $navigationPath, isPresenting: $isPresenting)
                         }
                         .padding(5)
                         
@@ -116,6 +117,7 @@ struct RankingView: View {
                 .overlay(Color.clear.accessibilityIdentifier("infoBadgesView"))
         }
         .onAppear {
+            isPresenting = false
             if users.first != nil {
                 Task {
                     await viewModel.getUserFromServer()

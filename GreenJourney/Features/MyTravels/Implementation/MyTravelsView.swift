@@ -40,7 +40,7 @@ struct MyTravelsView: View {
                     Spacer()
                     
                     if horizontalSizeClass == .compact {
-                        UserPreferencesButtonView(navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
+                        UserPreferencesButtonView(navigationPath: $navigationPath, isPresenting: $isPresenting)
                     }
                 }
                 .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))

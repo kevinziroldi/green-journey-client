@@ -13,6 +13,7 @@ struct CitiesReviewsView: View {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     
     @State private var searchTapped: Bool = false
+    @State var isPresenting: Bool = false
     
     init(modelContext: ModelContext, navigationPath: Binding<NavigationPath>, serverService: ServerServiceProtocol, firebaseAuthService: FirebaseAuthServiceProtocol) {
         _viewModel = StateObject(wrappedValue: CitiesReviewsViewModel(modelContext: modelContext, serverService: serverService))
@@ -36,7 +37,7 @@ struct CitiesReviewsView: View {
                             Spacer()
                             
                             // user preferences button
-                            UserPreferencesButtonView(navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
+                            UserPreferencesButtonView(navigationPath: $navigationPath, isPresenting: $isPresenting)
                         }
                         .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
                         
@@ -92,6 +93,7 @@ struct CitiesReviewsView: View {
             }
         }
         .onAppear {
+            isPresenting = false
             Task {
                 await viewModel.getBestReviewedCities()
                 await viewModel.getReviewableCities()

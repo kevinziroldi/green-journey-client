@@ -16,6 +16,7 @@ struct TravelSearchView: View {
     @State private var triggerAI: Bool = false
     @State private var showAlertPrediction: Bool = false
     
+    @State var isPresenting: Bool = false
     @Binding var navigationPath: NavigationPath
     @Binding var navigationSplitViewVisibility: NavigationSplitViewVisibility
     
@@ -78,11 +79,11 @@ struct TravelSearchView: View {
                             }
                             
                             // header
-                            TravelSearchHeaderView(triggerAI: $triggerAI, serverService: serverService, firebaseAuthService: firebaseAuthService, navigationPath: $navigationPath)
+                            TravelSearchHeaderView(triggerAI: $triggerAI, serverService: serverService, firebaseAuthService: firebaseAuthService, navigationPath: $navigationPath, isPresenting: $isPresenting)
                         }
                         .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
                         
-                        TravelChoiceView(viewModel: viewModel, departureTapped: $departureTapped, destinationTapped: $destinationTapped, dateTapped: $dateTapped, dateReturnTapped: $dateReturnTapped, triggerAI: $triggerAI)
+                        TravelChoiceView(viewModel: viewModel, departureTapped: $departureTapped, destinationTapped: $destinationTapped, dateTapped: $dateTapped, dateReturnTapped: $dateReturnTapped, triggerAI: $triggerAI, isPresenting: $isPresenting)
                         
                         Spacer()
                         
@@ -123,13 +124,13 @@ struct TravelSearchView: View {
                 .clipShape(Rectangle())
             }
             .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
-            .sheet(isPresented: $dateTapped) {
-                DatePickerView(dateTapped: $dateTapped, title: "Select Outward Date", date: $viewModel.datePicked, limitDate: Date())
+            .sheet(isPresented: $dateTapped, onDismiss: {isPresenting = false}) {
+                DatePickerView(dateTapped: $dateTapped, title: "Select Outward Date", date: $viewModel.datePicked, limitDate: Date(), isPresenting: $isPresenting)
                     .presentationDetents([.height(530)])
                     .presentationCornerRadius(15)
             }
-            .sheet(isPresented: $dateReturnTapped) {
-                DatePickerView(dateTapped: $dateReturnTapped, title: "Select Return Date", date: $viewModel.dateReturnPicked, limitDate: viewModel.datePicked)
+            .sheet(isPresented: $dateReturnTapped, onDismiss: {isPresenting = false}) {
+                DatePickerView(dateTapped: $dateReturnTapped, title: "Select Return Date", date: $viewModel.dateReturnPicked, limitDate: viewModel.datePicked, isPresenting: $isPresenting)
                     .presentationDetents([.height(530)])
                     .presentationCornerRadius(15)
             }
@@ -137,6 +138,7 @@ struct TravelSearchView: View {
             .navigationBarBackButtonHidden(triggerAI)
             .onAppear() {
                 viewModel.resetParameters()
+                isPresenting = false
             }
             .onChange(of: viewModel.datePicked) {
                 if viewModel.datePicked > viewModel.dateReturnPicked {
@@ -161,6 +163,7 @@ private struct TravelSearchHeaderView: View {
     var serverService: ServerServiceProtocol
     var firebaseAuthService: FirebaseAuthServiceProtocol
     @Binding var navigationPath: NavigationPath
+    @Binding var isPresenting: Bool
     
     var body: some View {
         HStack {
@@ -174,7 +177,7 @@ private struct TravelSearchHeaderView: View {
             
             if horizontalSizeClass == .compact {
                 // iOS
-                UserPreferencesButtonView(navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
+                UserPreferencesButtonView(navigationPath: $navigationPath, isPresenting: $isPresenting)
                     .disabled(triggerAI)
                     .opacity(triggerAI ? 0 : 1)
             }
@@ -193,6 +196,7 @@ private struct TravelChoiceView: View {
     @Binding var dateTapped: Bool
     @Binding var dateReturnTapped: Bool
     @Binding var triggerAI: Bool
+    @Binding var isPresenting: Bool
     
     var body: some View {
         if horizontalSizeClass == .compact {
@@ -223,13 +227,13 @@ private struct TravelChoiceView: View {
                 VStack {
                     // departure
                     DepartureTitleView()
-                    DepartureCompleterView(viewModel: viewModel, departureTapped: $departureTapped, triggerAI: $triggerAI)
+                    DepartureCompleterView(viewModel: viewModel, departureTapped: $departureTapped, triggerAI: $triggerAI, isPresenting: $isPresenting)
                         .padding(EdgeInsets(top: 0, leading: 40, bottom: 20, trailing: 40))
                     
                     
                     // destination
                     DestinationTitleView()
-                    DestinationCompleterView(viewModel: viewModel, destinationTapped: $destinationTapped, triggerAI: $triggerAI)
+                    DestinationCompleterView(viewModel: viewModel, destinationTapped: $destinationTapped, triggerAI: $triggerAI, isPresenting: $isPresenting)
                         .padding(EdgeInsets(top: 0, leading: 40, bottom: 20, trailing: 40))
                     
                 }
@@ -255,11 +259,11 @@ private struct TravelChoiceView: View {
                         .fill(Color(uiColor: .systemBackground))
                         .shadow(radius: 2, x: 0, y: 2)
                     VStack (spacing: 0){
-                        OutwardDatePickerView(dateTapped: $dateTapped, viewModel: viewModel)
+                        OutwardDatePickerView(dateTapped: $dateTapped, viewModel: viewModel, isPresenting: $isPresenting)
                         
                         Divider()
                         
-                        ReturnDatePickerView(dateReturnTapped: $dateReturnTapped, viewModel: viewModel)
+                        ReturnDatePickerView(dateReturnTapped: $dateReturnTapped, viewModel: viewModel, isPresenting: $isPresenting)
                     }
                 }
             }
@@ -295,13 +299,13 @@ private struct TravelChoiceView: View {
                     VStack {
                         // tile
                         DepartureTitleView()
-                        DepartureCompleterView(viewModel: viewModel, departureTapped: $departureTapped, triggerAI: $triggerAI)
+                        DepartureCompleterView(viewModel: viewModel, departureTapped: $departureTapped, triggerAI: $triggerAI, isPresenting: $isPresenting)
                             .padding(EdgeInsets(top: 0, leading: 40, bottom: 20, trailing: 40))
                     }
                     VStack {
                         // title
                         DestinationTitleView()
-                        DestinationCompleterView(viewModel: viewModel, destinationTapped: $destinationTapped, triggerAI: $triggerAI)
+                        DestinationCompleterView(viewModel: viewModel, destinationTapped: $destinationTapped, triggerAI: $triggerAI, isPresenting: $isPresenting)
                             .padding(EdgeInsets(top: 0, leading: 40, bottom: 20, trailing: 40))
                     }
                     
@@ -321,11 +325,11 @@ private struct TravelChoiceView: View {
                                 .fill(Color(uiColor: .systemBackground))
                                 .shadow(radius: 2, x: 0, y: 2)
                             HStack {
-                                OutwardDatePickerView(dateTapped: $dateTapped, viewModel: viewModel)
+                                OutwardDatePickerView(dateTapped: $dateTapped, viewModel: viewModel, isPresenting: $isPresenting)
                                 
                                 Divider()
                                 
-                                ReturnDatePickerView(dateReturnTapped: $dateReturnTapped, viewModel: viewModel)
+                                ReturnDatePickerView(dateReturnTapped: $dateReturnTapped, viewModel: viewModel, isPresenting: $isPresenting)
                             }
                         }
                     }
@@ -356,6 +360,7 @@ private struct DepartureCompleterView: View {
     @ObservedObject var viewModel: TravelSearchViewModel
     @Binding var departureTapped: Bool
     @Binding var triggerAI: Bool
+    @Binding var isPresenting: Bool
     
     var body: some View {
         VStack {
@@ -365,7 +370,10 @@ private struct DepartureCompleterView: View {
                     .frame(height: 50)
                 
                 Button(action: {
-                    departureTapped = true
+                    if !isPresenting {
+                        isPresenting = true
+                        departureTapped = true
+                    }
                 }) {
                     Text(viewModel.departure.cityName == "" ? "Insert departure" : viewModel.departure.cityName)
                         .foregroundColor(viewModel.departure.cityName == "" ? .secondary : AppColors.mainColor)
@@ -383,9 +391,11 @@ private struct DepartureCompleterView: View {
             CompleterView(modelContext: modelContext, searchText: viewModel.departure.cityName,
                           onBack: {
                 departureTapped = false
+                isPresenting = false
             },
                           onClick: { city in
                 departureTapped = false
+                isPresenting = false
                 viewModel.departure = city
             },
                           departure: true)
@@ -411,6 +421,7 @@ private struct DestinationCompleterView: View {
     @ObservedObject var viewModel: TravelSearchViewModel
     @Binding var destinationTapped: Bool
     @Binding var triggerAI: Bool
+    @Binding var isPresenting: Bool
     
     var body: some View {
         VStack{
@@ -421,7 +432,10 @@ private struct DestinationCompleterView: View {
                 
                 Button(action: {
                     if !triggerAI {
-                        destinationTapped = true
+                        if !isPresenting {
+                            isPresenting = true
+                            destinationTapped = true
+                        }
                     }
                 }) {
                     Text(viewModel.arrival.cityName == "" ? "Insert destination" : viewModel.arrival.cityName)
@@ -440,9 +454,11 @@ private struct DestinationCompleterView: View {
             CompleterView(modelContext: modelContext, searchText: viewModel.arrival.cityName,
                           onBack: {
                 destinationTapped = false
+                isPresenting = false
             },
                           onClick: { city in
                 destinationTapped = false
+                isPresenting = false
                 triggerAI = false
                 viewModel.arrival = city
             },
@@ -456,11 +472,16 @@ private struct OutwardDatePickerView: View {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     
     @Binding var dateTapped: Bool
+    
     @ObservedObject var viewModel: TravelSearchViewModel
+    @Binding var isPresenting: Bool
     
     var body: some View {
         Button(action: {
-            dateTapped = true
+            if !isPresenting {
+                isPresenting = true
+                dateTapped = true
+            }
         }) {
             HStack{
                 Image(systemName: "calendar")
@@ -489,11 +510,15 @@ private struct ReturnDatePickerView: View {
     
     @Binding var dateReturnTapped: Bool
     @ObservedObject var viewModel: TravelSearchViewModel
+    @Binding var isPresenting: Bool
     
     var body: some View {
         
         Button(action:  {
-            dateReturnTapped = true
+            if !isPresenting {
+                isPresenting = true
+                dateReturnTapped = true
+            }
         }) {
             HStack {
                 Image(systemName: "calendar")
@@ -525,6 +550,7 @@ private struct DatePickerView: View {
     var title: String
     @Binding var date: Date
     let limitDate: Date
+    @Binding var isPresenting: Bool
     @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
@@ -538,6 +564,7 @@ private struct DatePickerView: View {
                     Spacer()
                     Button("Done") {
                         dateTapped = false
+                        isPresenting = false
                     }
                     .fontWeight(.bold)
                     .padding(.trailing, 20)
