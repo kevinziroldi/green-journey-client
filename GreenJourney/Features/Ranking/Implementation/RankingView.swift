@@ -56,17 +56,17 @@ struct RankingView: View {
                         }
                         .padding(5)
                         
-                        UserBadgesView(legendTapped: $legendTapped, badges: viewModel.badges, inline: true)
+                        UserBadgesView(legendTapped: $legendTapped, badges: viewModel.badges, inline: true, isPresenting: $isPresenting)
                         
-                        ScoresView(scoreLongDistance: viewModel.longDistanceScore, scoreShortDistance: viewModel.shortDistanceScore)
+                        ScoresView(scoreLongDistance: viewModel.longDistanceScore, scoreShortDistance: viewModel.shortDistanceScore, isPresenting: $isPresenting)
                         
                         Spacer()
                         
                         // LeaderBoards
-                        LeaderboardNavigationView(viewModel: viewModel, navigationPath: $navigationPath, title: "Long Distance", leaderboard: viewModel.longDistanceRanking, gridItems: gridItemsCompactDevice, leaderboardType: true)
+                        LeaderboardNavigationView(viewModel: viewModel, navigationPath: $navigationPath, title: "Long Distance", leaderboard: viewModel.longDistanceRanking, gridItems: gridItemsCompactDevice, leaderboardType: true, isPresenting: $isPresenting)
                             .overlay(Color.clear.accessibilityIdentifier("longDistanceNavigationView"))
                         
-                        LeaderboardNavigationView(viewModel: viewModel,navigationPath: $navigationPath, title: "Short Distance", leaderboard: viewModel.shortDistanceRanking, gridItems: gridItemsCompactDevice, leaderboardType: false)
+                        LeaderboardNavigationView(viewModel: viewModel,navigationPath: $navigationPath, title: "Short Distance", leaderboard: viewModel.shortDistanceRanking, gridItems: gridItemsCompactDevice, leaderboardType: false, isPresenting: $isPresenting)
                             .overlay(Color.clear.accessibilityIdentifier("shortDistanceNavigationView"))
                         
                         Spacer()
@@ -86,19 +86,19 @@ struct RankingView: View {
                         
                         HStack(alignment: .top) {
                             // badges
-                            UserBadgesView(legendTapped: $legendTapped, badges: viewModel.badges, inline: false)
+                            UserBadgesView(legendTapped: $legendTapped, badges: viewModel.badges, inline: false, isPresenting: $isPresenting)
                             
                             // scores
-                            ScoresView(scoreLongDistance: viewModel.longDistanceScore, scoreShortDistance: viewModel.shortDistanceScore)
+                            ScoresView(scoreLongDistance: viewModel.longDistanceScore, scoreShortDistance: viewModel.shortDistanceScore, isPresenting: $isPresenting)
                         }
                         
                         Spacer()
                         
                         // LeaderBoards
-                        LeaderboardNavigationView(viewModel: viewModel, navigationPath: $navigationPath, title: "Long Distance", leaderboard: viewModel.longDistanceRanking, gridItems: gridItemsRegularDevice, leaderboardType: true)
+                        LeaderboardNavigationView(viewModel: viewModel, navigationPath: $navigationPath, title: "Long Distance", leaderboard: viewModel.longDistanceRanking, gridItems: gridItemsRegularDevice, leaderboardType: true, isPresenting: $isPresenting)
                             .overlay(Color.clear.accessibilityIdentifier("longDistanceNavigationView"))
                         
-                        LeaderboardNavigationView(viewModel: viewModel,navigationPath: $navigationPath, title: "Short Distance", leaderboard: viewModel.shortDistanceRanking, gridItems: gridItemsRegularDevice, leaderboardType: false)
+                        LeaderboardNavigationView(viewModel: viewModel,navigationPath: $navigationPath, title: "Short Distance", leaderboard: viewModel.shortDistanceRanking, gridItems: gridItemsRegularDevice, leaderboardType: false, isPresenting: $isPresenting)
                             .overlay(Color.clear.accessibilityIdentifier("shortDistanceNavigationView"))
                         
                         Spacer()
@@ -110,8 +110,8 @@ struct RankingView: View {
             }
         }
         .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
-        .sheet(isPresented: $legendTapped) {
-            LegendBadgeView(isPresented: $legendTapped)
+        .sheet(isPresented: $legendTapped, onDismiss: {isPresenting = false}) {
+            LegendBadgeView(isPresented: $legendTapped, isPresenting: $isPresenting)
                 .presentationDetents([.fraction(0.95)])
                 .presentationCornerRadius(15)
                 .overlay(Color.clear.accessibilityIdentifier("infoBadgesView"))
@@ -147,9 +147,16 @@ private struct LeaderboardNavigationView: View {
     let leaderboard: [RankingElement]
     var gridItems: [GridItem]
     let leaderboardType: Bool
+    @Binding var isPresenting: Bool
     
     var body: some View {
-        NavigationLink(destination: RankingLeaderBoardView(viewModel: viewModel, navigationPath: $navigationPath, title: title, gridItems: gridItems, currentRanking: leaderboard, leaderboardType: leaderboardType)) {
+        Button(action: {
+            if !isPresenting {
+                isPresenting = true
+                navigationPath.append(NavigationDestination.RankingLeaderBoardView(viewModel, title, leaderboardType))
+            }
+        })
+        {
             ZStack {
                 RoundedRectangle(cornerRadius: 15)
                     .fill(Color(uiColor: .systemBackground))
@@ -205,7 +212,7 @@ private struct LeaderboardNavigationView: View {
                                 .overlay(Color.clear.accessibilityIdentifier("tableHeader"))
                                 
                                 ForEach(leaderboard.prefix(3).indices, id: \.self) { index in
-                                    LeaderBoardRow(gridItems: gridItems, leaderboard: Array(leaderboard.prefix(3)), leaderBoardSelected: leaderboardType, index: index)
+                                    LeaderBoardRow(leaderboard: Array(leaderboard.prefix(3)), leaderBoardSelected: leaderboardType, index: index)
                                         .accessibilityIdentifier("rankingRow_\(index)")
                                 }
                                 .padding(EdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 0))

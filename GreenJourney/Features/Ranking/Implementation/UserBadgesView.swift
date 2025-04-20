@@ -5,6 +5,7 @@ struct UserBadgesView: View {
     @Binding var legendTapped: Bool
     var badges: [Badge]
     var inline: Bool
+    @Binding var isPresenting: Bool
     
     var body: some View {
         ZStack {
@@ -19,7 +20,10 @@ struct UserBadgesView: View {
                         .fontWeight(.semibold)
                     Spacer()
                     Button(action: {
-                        legendTapped = true
+                        if !isPresenting {
+                            isPresenting = true
+                            legendTapped = true
+                        }
                     }) {
                         Image(systemName: "info.circle")
                             .font(.title3)

@@ -4,7 +4,23 @@ import SwiftUI
 struct LeaderBoardRow: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
-    var gridItems: [GridItem]
+    var gridItems: [GridItem] {
+        if horizontalSizeClass == .regular {
+            [
+                GridItem(.flexible(), alignment: .center),
+                GridItem(.flexible(), alignment: .center),
+                GridItem(.flexible(), alignment: .center),
+                GridItem(.flexible(), alignment: .center)
+            ]
+        }
+        else {
+            [
+                GridItem(.fixed(50), alignment: .center),
+                GridItem(.flexible(minimum: 80), alignment: .center),
+                GridItem(.fixed(60), alignment: .center)
+            ]
+        }
+    }
     @Query var users: [User]
     var leaderboard: [RankingElement]
     var leaderBoardSelected: Bool

@@ -4,6 +4,7 @@ struct ScoresView: View {
     @State var infoTapped: Bool = false
     var scoreLongDistance: Float64
     var scoreShortDistance: Float64
+    @Binding var isPresenting: Bool
     
     var body: some View {
         VStack(spacing: 0) {
@@ -16,7 +17,10 @@ struct ScoresView: View {
                 Spacer()
                 
                 Button(action: {
-                    infoTapped = true
+                    if !isPresenting {
+                        isPresenting = true
+                        infoTapped = true
+                    }
                 }) {
                     Image(systemName: "info.circle")
                         .font(.title3)
@@ -48,8 +52,8 @@ struct ScoresView: View {
                 .fill(Color(uiColor: .systemBackground))
                 .shadow(radius: 3, x: 0, y: 3)
         )
-        .sheet(isPresented: $infoTapped) {
-            InfoScoresView(isPresented: $infoTapped)
+        .sheet(isPresented: $infoTapped, onDismiss: {isPresenting = false}) {
+            InfoScoresView(isPresented: $infoTapped, isPresenting: $isPresenting)
                 .presentationDetents([.fraction(0.80)])
                 .presentationCornerRadius(15)
                 .overlay(Color.clear.accessibilityIdentifier("infoScoresView"))
@@ -60,10 +64,12 @@ struct ScoresView: View {
 
 struct InfoScoresView: View {
     @Binding var isPresented: Bool
+    @Binding var isPresenting: Bool
     var body: some View {
         HStack {
             Spacer()
             Button(action: {
+                isPresenting = false
                 isPresented = false
             }) {
                 Text("Done")

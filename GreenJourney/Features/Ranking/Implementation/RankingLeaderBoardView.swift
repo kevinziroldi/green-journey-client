@@ -2,12 +2,29 @@ import SwiftData
 import SwiftUI
 
 struct RankingLeaderBoardView: View {
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @ObservedObject var viewModel: RankingViewModel
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @Binding var navigationPath: NavigationPath
     let title: String
-    var gridItems: [GridItem]
-    var currentRanking: [RankingElement]
+    var gridItems: [GridItem] {
+        if horizontalSizeClass == .regular {
+            [
+                GridItem(.flexible(), alignment: .center),
+                GridItem(.flexible(), alignment: .center),
+                GridItem(.flexible(), alignment: .center),
+                GridItem(.flexible(), alignment: .center)
+            ]
+        }
+        else {
+            [
+                GridItem(.fixed(50), alignment: .center),
+                GridItem(.flexible(minimum: 80), alignment: .center),
+                GridItem(.fixed(60), alignment: .center)
+            ]
+        }
+    }
+        
     var leaderboardType: Bool
     var body: some View {
         VStack {
@@ -20,7 +37,7 @@ struct RankingLeaderBoardView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .accessibilityIdentifier("rankingName")
                     
-                    LeaderBoardsView(viewModel: viewModel, navigationPath: $navigationPath, gridItems: gridItems, currentRanking: currentRanking, leaderboardType: leaderboardType)
+                    LeaderBoardsView(viewModel: viewModel, navigationPath: $navigationPath, gridItems: gridItems, leaderboardType: leaderboardType)
                 }
                 .padding(.horizontal)
             }
@@ -33,7 +50,6 @@ private struct LeaderBoardsView: View {
     @ObservedObject var viewModel: RankingViewModel
     @Binding var navigationPath: NavigationPath
     var gridItems: [GridItem]
-    var currentRanking: [RankingElement]
     var leaderboardType: Bool
     var body: some View {
         VStack{
@@ -51,11 +67,11 @@ private struct LeaderBoardsView: View {
                         .stroke(AppColors.mainColor, lineWidth: 3)
                         .padding(.top, 5)
                     VStack {
-                        if currentRanking.isEmpty {
+                        if viewModel.getCurrentRanking(leaderboardType).isEmpty {
                             CircularProgressView()
                                 .padding(30)
                         } else {
-                            LeaderBoardView(viewModel: viewModel, navigationPath: $navigationPath, gridItems: gridItems, leaderboard: Array(currentRanking.prefix(10)), leaderBoardSelected: leaderboardType)
+                            LeaderBoardView(viewModel: viewModel, navigationPath: $navigationPath, gridItems: gridItems, leaderboard: Array(viewModel.getCurrentRanking(leaderboardType).prefix(10)), leaderBoardSelected: leaderboardType)
                         }
                     }
                     .accessibilityElement(children: .contain)
@@ -64,11 +80,11 @@ private struct LeaderBoardsView: View {
                 .padding(10)
             }
             
-            if currentRanking.count == 11 {
+            if viewModel.getCurrentRanking(leaderboardType).count == 11 {
                 if viewModel.longDistanceRanking.isEmpty {
                     CircularProgressView()
                 } else {
-                    LeaderBoardUserView(viewModel: viewModel, navigationPath: $navigationPath, userRanking: currentRanking[10], gridItems: gridItems, leaderBoardSelected: leaderboardType)
+                    LeaderBoardUserView(viewModel: viewModel, navigationPath: $navigationPath, userRanking: viewModel.getCurrentRanking(leaderboardType)[10], gridItems: gridItems, leaderBoardSelected: leaderboardType)
                         .accessibilityElement(children: .contain)
                         .accessibilityIdentifier("leaderboardUser")
                         .padding(.horizontal, 10)
@@ -122,7 +138,7 @@ private struct LeaderBoardView: View {
                         user: leaderboard[index]
                     )
                 ) {
-                    LeaderBoardRow(gridItems: gridItems, leaderboard: leaderboard, leaderBoardSelected: leaderBoardSelected, index: index)
+                    LeaderBoardRow(leaderboard: leaderboard, leaderBoardSelected: leaderBoardSelected, index: index)
                 }
                 .accessibilityIdentifier("rankingRow_\(index)")
             }
@@ -139,6 +155,7 @@ private struct LeaderBoardUserView: View {
     var userRanking: RankingElement
     
     var gridItems: [GridItem]
+    
     var leaderBoardSelected: Bool
     
     var body: some View {

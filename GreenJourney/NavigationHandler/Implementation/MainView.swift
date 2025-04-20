@@ -179,6 +179,8 @@ struct MainView: View {
             WorldExplorationView(viewModel: viewModel)
         case .GeneralDetailsView(let viewModel):
             GeneralDetailsView(viewModel: viewModel)
+        case .RankingLeaderBoardView(let viewModel, let title, let leaderboardType):
+            RankingLeaderBoardView(viewModel: viewModel, navigationPath: $navigationPath, title: title, leaderboardType: leaderboardType)
         }
     }
 }

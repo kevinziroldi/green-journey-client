@@ -6,6 +6,7 @@ struct UserDetailsRankingView: View {
     @ObservedObject var viewModel: RankingViewModel
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @Binding var navigationPath: NavigationPath
+    @State var isPresenting: Bool = false
     
     var user: RankingElement
     @State private var legendTapped: Bool = false
@@ -21,10 +22,10 @@ struct UserDetailsRankingView: View {
                         RankingElementDetailsTitle(user: user)
                         
                         //badges
-                        UserBadgesView(legendTapped: $legendTapped, badges: user.badges,inline: false)
+                        UserBadgesView(legendTapped: $legendTapped, badges: user.badges,inline: false, isPresenting: $isPresenting)
                         
                         // scores
-                        ScoresView(scoreLongDistance: user.scoreLongDistance, scoreShortDistance: user.scoreShortDistance)
+                        ScoresView(scoreLongDistance: user.scoreLongDistance, scoreShortDistance: user.scoreShortDistance, isPresenting: $isPresenting)
                             .overlay(Color.clear.accessibilityIdentifier("scoresView"))
                         
                         //user aggregate data
@@ -43,13 +44,13 @@ struct UserDetailsRankingView: View {
                         RankingElementDetailsTitle(user: user)
                         
                         // badges
-                        UserBadgesView(legendTapped: $legendTapped, badges: user.badges,inline: true)
+                        UserBadgesView(legendTapped: $legendTapped, badges: user.badges,inline: true, isPresenting: $isPresenting)
                         
                         // user aggregate data
                         HStack {
                             VStack {
                                 // scores
-                                ScoresView(scoreLongDistance: user.scoreLongDistance, scoreShortDistance: user.scoreShortDistance)
+                                ScoresView(scoreLongDistance: user.scoreLongDistance, scoreShortDistance: user.scoreShortDistance, isPresenting: $isPresenting)
                                 
                                 // user aggregate data
                                 RecapViewRegularDevice(viewModel: viewModel, user: user)
@@ -65,13 +66,14 @@ struct UserDetailsRankingView: View {
             }
         }
         .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
-        .sheet(isPresented: $legendTapped) {
-            LegendBadgeView(isPresented: $legendTapped)
+        .sheet(isPresented: $legendTapped, onDismiss: {isPresenting = false}) {
+            LegendBadgeView(isPresented: $legendTapped, isPresenting: $isPresenting)
                 .presentationDetents([.fraction(0.95)])
                 .presentationCornerRadius(15)
                 .overlay(Color.clear.accessibilityIdentifier("infoBadgesView"))
         }
         .onAppear() {
+            isPresenting = false
             if user.totalCo2Compensated >= 0.0 {
                 if user.totalCo2Compensated >= user.totalCo2Emitted {
                     progress = 1.0

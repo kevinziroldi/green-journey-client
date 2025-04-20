@@ -4,6 +4,7 @@ import Combine
 
 @MainActor
 class RankingViewModel: ObservableObject {
+    private let uuid: UUID = UUID()
     private var modelContext: ModelContext
     private var serverService: ServerServiceProtocol
     
@@ -89,5 +90,24 @@ class RankingViewModel: ObservableObject {
     
     func computeTotalDuration (duration: Int) -> String {
         return DurationAsString.convertTotalDurationToString(totalDuration: duration/1000000000)
+    }
+    
+    func getCurrentRanking(_ leaderboardType: Bool) -> [RankingElement] {
+        if leaderboardType {
+            return self.longDistanceRanking
+        }
+        else {
+            return self.shortDistanceRanking
+        }
+    }
+}
+
+extension RankingViewModel: Hashable {
+    nonisolated static func == (lhs: RankingViewModel, rhs: RankingViewModel) -> Bool {
+        return lhs.uuid == rhs.uuid
+    }
+    
+    nonisolated func hash(into hasher: inout Hasher) {
+        hasher.combine(uuid)
     }
 }

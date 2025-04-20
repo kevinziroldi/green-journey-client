@@ -12,5 +12,5 @@ enum NavigationDestination: Hashable {
     case WorldExplorationView(DashboardViewModel)
     case GeneralDetailsView(DashboardViewModel)
     case Co2DetailsView(DashboardViewModel)
+    case RankingLeaderBoardView(RankingViewModel, String, Bool)
 }
-

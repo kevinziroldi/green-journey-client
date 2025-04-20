@@ -2,11 +2,13 @@ import SwiftUI
 
 struct LegendBadgeView: View {
     @Binding var isPresented: Bool
+    @Binding var isPresenting: Bool
     var body: some View {
         HStack {
             Spacer()
             Button(action: {
                 isPresented = false
+                isPresenting = false
             }) {
                 Text("Done")
                     .fontWeight(.bold)
