@@ -307,6 +307,7 @@ private struct LogoutButtonView: View {
         // logout button
         Button(action: {
             authenticationViewModel.logout()
+            navigationPath = NavigationPath()
         }) {
             Text("Logout")
                 .font(.title3)
