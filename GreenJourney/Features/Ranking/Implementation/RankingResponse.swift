@@ -1,3 +1,4 @@
+import Foundation
 struct RankingResponse: Decodable {
     var shortDistanceRanking: [RankingElement]
     var longDistanceRanking: [RankingElement]
@@ -14,6 +15,7 @@ struct RankingResponse: Decodable {
 }
 
 struct RankingElement: Decodable {
+    private let uuid: UUID = UUID()
     var userID: Int
     var firstName: String
     var lastName: String
@@ -36,5 +38,15 @@ struct RankingElement: Decodable {
         case totalCo2Emitted = "total_co_2_emitted"
         case totalCo2Compensated = "total_co_2_compensated"
         case badges = "badges"
+    }
+}
+
+extension RankingElement: Hashable {
+    nonisolated static func == (lhs: RankingElement, rhs: RankingElement) -> Bool {
+        return lhs.uuid == rhs.uuid
+    }
+    
+    nonisolated func hash(into hasher: inout Hasher) {
+        hasher.combine(uuid)
     }
 }

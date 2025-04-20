@@ -5,7 +5,6 @@ struct UserDetailsRankingView: View {
     
     @ObservedObject var viewModel: RankingViewModel
     @Environment(\.colorScheme) var colorScheme: ColorScheme
-    @Binding var navigationPath: NavigationPath
     @State var isPresenting: Bool = false
     
     var user: RankingElement

@@ -24,7 +24,7 @@ struct RankingLeaderBoardView: View {
             ]
         }
     }
-        
+    
     var leaderboardType: Bool
     var body: some View {
         VStack {
@@ -51,6 +51,8 @@ private struct LeaderBoardsView: View {
     @Binding var navigationPath: NavigationPath
     var gridItems: [GridItem]
     var leaderboardType: Bool
+    @State var isPresenting: Bool = false
+    
     var body: some View {
         VStack{
             if let errorMessage = viewModel.errorMessage {
@@ -71,7 +73,7 @@ private struct LeaderBoardsView: View {
                             CircularProgressView()
                                 .padding(30)
                         } else {
-                            LeaderBoardView(viewModel: viewModel, navigationPath: $navigationPath, gridItems: gridItems, leaderboard: Array(viewModel.getCurrentRanking(leaderboardType).prefix(10)), leaderBoardSelected: leaderboardType)
+                            LeaderBoardView(viewModel: viewModel, navigationPath: $navigationPath, gridItems: gridItems, isPresenting: $isPresenting, leaderboard: Array(viewModel.getCurrentRanking(leaderboardType).prefix(10)), leaderBoardSelected: leaderboardType)
                         }
                     }
                     .accessibilityElement(children: .contain)
@@ -84,13 +86,17 @@ private struct LeaderBoardsView: View {
                 if viewModel.longDistanceRanking.isEmpty {
                     CircularProgressView()
                 } else {
-                    LeaderBoardUserView(viewModel: viewModel, navigationPath: $navigationPath, userRanking: viewModel.getCurrentRanking(leaderboardType)[10], gridItems: gridItems, leaderBoardSelected: leaderboardType)
+                    LeaderBoardUserView(viewModel: viewModel, navigationPath: $navigationPath, isPresenting: $isPresenting, userRanking: viewModel.getCurrentRanking(leaderboardType)[10], gridItems: gridItems, leaderBoardSelected: leaderboardType)
                         .accessibilityElement(children: .contain)
                         .accessibilityIdentifier("leaderboardUser")
                         .padding(.horizontal, 10)
                 }
             }
-        }.fixedSize(horizontal: false, vertical: true)
+        }
+        .fixedSize(horizontal: false, vertical: true)
+        .onAppear {
+            isPresenting = false
+        }
     }
 }
 
@@ -102,6 +108,7 @@ private struct LeaderBoardView: View {
     var gridItems: [GridItem]
     
     @Environment(\.colorScheme) var colorScheme: ColorScheme
+    @Binding var isPresenting: Bool
     
     var leaderboard: [RankingElement]
     var leaderBoardSelected: Bool
@@ -131,13 +138,13 @@ private struct LeaderBoardView: View {
             .overlay(Color.clear.accessibilityIdentifier("tableHeader"))
             
             ForEach(leaderboard.indices, id: \.self) { index in
-                NavigationLink(
-                    destination: UserDetailsRankingView(
-                        viewModel: viewModel,
-                        navigationPath: $navigationPath,
-                        user: leaderboard[index]
-                    )
-                ) {
+                Button(action: {
+                    if !isPresenting {
+                        isPresenting = true
+                        navigationPath.append(NavigationDestination.UserDetailsRankingView(viewModel, leaderboard[index]))
+                    }
+                })
+                {
                     LeaderBoardRow(leaderboard: leaderboard, leaderBoardSelected: leaderBoardSelected, index: index)
                 }
                 .accessibilityIdentifier("rankingRow_\(index)")
@@ -151,6 +158,7 @@ private struct LeaderBoardUserView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @ObservedObject var viewModel: RankingViewModel
     @Binding var navigationPath: NavigationPath
+    @Binding var isPresenting: Bool
     
     var userRanking: RankingElement
     
@@ -169,13 +177,12 @@ private struct LeaderBoardUserView: View {
                     .frame(width: 8, height: 8)
             }
             .padding(.bottom, 10)
-            NavigationLink(
-                destination: UserDetailsRankingView(
-                    viewModel: viewModel,
-                    navigationPath: $navigationPath,
-                    user: userRanking
-                )
-            ) {
+            Button(action: {
+                if !isPresenting {
+                    isPresenting = true
+                    navigationPath.append(NavigationDestination.UserDetailsRankingView(viewModel, userRanking))
+                }
+            }) {
                 ZStack {
                     RoundedRectangle(cornerRadius: 10)
                         .fill(Color(UIColor.systemBackground))
