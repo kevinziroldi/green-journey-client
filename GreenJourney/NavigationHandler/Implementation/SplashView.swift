@@ -1,0 +1,85 @@
+import FirebaseAuth
+import Foundation
+import SwiftData
+import SwiftUI
+
+struct SplashView: View {
+    var modelContext: ModelContext
+    var serverService: ServerServiceProtocol
+    var firebaseAuthService: FirebaseAuthServiceProtocol
+
+    @State private var isReady: Bool = false
+    
+    var body: some View {
+        if isReady {
+            MainView(modelContext: modelContext, serverService: serverService, firebaseAuthService: firebaseAuthService)
+        } else {
+            ZStack {
+                Color(.systemBackground)
+                
+                Image("app_logo_splash_view")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 150, height: 150)
+            }
+            .ignoresSafeArea()
+            .task {
+                let firebaseUser = await Auth.awaitCurrentUser()
+                
+                if firebaseUser == nil {
+                    do {
+                        let users = try modelContext.fetch(FetchDescriptor<User>())
+                        for user in users {
+                            modelContext.delete(user)
+                        }
+                        try modelContext.save()
+                        print("User successfully logged out and removed from SwiftData")
+                    } catch {
+                        print("Error while saving context after logout: \(error)")
+                    }
+                }
+                
+                await MainActor.run {
+                    self.isReady = true
+                }
+            }
+        }
+    }
+}
+
+extension Auth {
+    static func awaitCurrentUser() async -> FirebaseAuth.User? {
+        await withCheckedContinuation { cont in
+            let timeout: TimeInterval = 1
+            var isResumed = false
+            var handle: AuthStateDidChangeListenerHandle?
+            
+            // check authentication
+            handle = Auth.auth().addStateDidChangeListener { _, user in
+                if let u = user {
+                    if let handle = handle {
+                        Auth.auth().removeStateDidChangeListener(handle)
+                    }
+                    print("USER ", u)
+                    guard !isResumed else { return }
+                    isResumed = true
+                    cont.resume(returning: u)
+                }
+            }
+            
+            // set timeout
+            DispatchQueue.main.asyncAfter(deadline: .now() + timeout) {
+                guard !isResumed else {
+                    print("already resumed")
+                    return
+                }
+                isResumed = true
+                
+                print("NO FIREBASE USER - LOGOUT")
+                
+                //Auth.auth().removeStateDidChangeListener(handle!)
+                cont.resume(returning: nil)
+            }
+        }
+    }
+}

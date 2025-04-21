@@ -19,8 +19,6 @@ struct MainView: View {
     @State private var navigationSplitViewElement: TabViewElement? = TabViewElement.SearchTravel
     @State private var visibility: NavigationSplitViewVisibility = .detailOnly
     
-    @State private var isReady: Bool = false
-    
     init(modelContext: ModelContext, serverService: ServerServiceProtocol, firebaseAuthService: FirebaseAuthServiceProtocol) {
         self.modelContext = modelContext
         self.viewModel = MyTravelsViewModel(modelContext: modelContext, serverService: serverService)
@@ -29,140 +27,127 @@ struct MainView: View {
     }
     
     var body: some View {
-            if horizontalSizeClass == .compact {
-                // iOS
-                
-                if users.first != nil {
-                    VStack {
-                        if isReady {
-                            NavigationStack(path: $navigationPath) {
-                                TabView(selection: $selectedTab) {
-                                    RankingView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
-                                        .tabItem {TabItemView(tabElement: TabViewElement.Ranking)}
-                                        .tag(TabViewElement.Ranking)
-                                    
-                                    CitiesReviewsView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
-                                        .tabItem {TabItemView(tabElement: TabViewElement.Reviews)}
-                                        .tag(TabViewElement.Reviews)
-                                    
-                                    TravelSearchView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService, navigationSplitViewVisibility: $visibility)
-                                        .tabItem {TabItemView(tabElement: TabViewElement.SearchTravel)}
-                                        .tag(TabViewElement.SearchTravel)
-                                    
-                                    MyTravelsView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
-                                        .tabItem {TabItemView(tabElement: TabViewElement.MyTravels)}
-                                        .tag(TabViewElement.MyTravels)
-                                    
-                                    DashboardView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
-                                        .tabItem {TabItemView(tabElement: TabViewElement.Dashboard)}
-                                        .tag(TabViewElement.Dashboard)
-                                }
-                                .navigationDestination(for: NavigationDestination.self) { destination in
-                                    destinationView(for: destination)
-                                }
-                            }
-                        }
-                    }
-                    .onAppear {
-                        Task { @MainActor in
-                            let firebaseUser = await Auth.awaitCurrentUser()
-                            if firebaseUser == nil {
-                                print("LOGOUT")
-                            }
-                            
-                            self.isReady = true
-                        }
+        if horizontalSizeClass == .compact {
+            // iOS
+            
+            if users.first != nil {
+                NavigationStack(path: $navigationPath) {
+                    TabView(selection: $selectedTab) {
+                        RankingView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
+                            .tabItem {TabItemView(tabElement: TabViewElement.Ranking)}
+                            .tag(TabViewElement.Ranking)
                         
-                        if users.first != nil {
-                            Task { await viewModel.getUserTravels() }
-                        }
+                        CitiesReviewsView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
+                            .tabItem {TabItemView(tabElement: TabViewElement.Reviews)}
+                            .tag(TabViewElement.Reviews)
+                        
+                        TravelSearchView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService, navigationSplitViewVisibility: $visibility)
+                            .tabItem {TabItemView(tabElement: TabViewElement.SearchTravel)}
+                            .tag(TabViewElement.SearchTravel)
+                        
+                        MyTravelsView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
+                            .tabItem {TabItemView(tabElement: TabViewElement.MyTravels)}
+                            .tag(TabViewElement.MyTravels)
+                        
+                        DashboardView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
+                            .tabItem {TabItemView(tabElement: TabViewElement.Dashboard)}
+                            .tag(TabViewElement.Dashboard)
                     }
-                } else {
-                    NavigationStack(path: $navigationPath) {
-                        LoginView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
-                            .navigationDestination(for: NavigationDestination.self) { destination in
-                                destinationView(for: destination)
-                            }
-                            .onDisappear {
-                                // reset selected tab
-                                selectedTab = .SearchTravel
-                                
-                                // get travels from server
-                                Task {
-                                    await viewModel.getUserTravels()
-                                }
-                            }
+                    .navigationDestination(for: NavigationDestination.self) { destination in
+                        destinationView(for: destination)
+                    }
+                }
+                .onAppear {
+                    if users.first != nil {
+                        Task { await viewModel.getUserTravels() }
                     }
                 }
             } else {
-                // iPadOS
-                
-                if users.first != nil {
-                    NavigationSplitView(columnVisibility: $visibility) {
-                        List(selection: $navigationSplitViewElement) {
-                            Section {
-                                Label(TabViewElement.UserPreferences.title, systemImage: TabViewElement.UserPreferences.systemImage)
-                                    .overlay(Color.clear.accessibilityIdentifier(TabViewElement.UserPreferences.accessibilityIdentifier))
-                                    .tag(TabViewElement.UserPreferences)
-                            }
-                            Spacer()
-                            Section {
-                                ForEach(TabViewElement.allCases.filter { $0 != .UserPreferences }, id: \.self) { element in
-                                    Label(element.title, systemImage: element.systemImage)
-                                        .overlay(Color.clear.accessibilityIdentifier(element.accessibilityIdentifier))
-                                        .tag(element)
-                                }
+                NavigationStack(path: $navigationPath) {
+                    LoginView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
+                        .navigationDestination(for: NavigationDestination.self) { destination in
+                            destinationView(for: destination)
+                        }
+                        .onDisappear {
+                            // reset selected tab
+                            selectedTab = .SearchTravel
+                            
+                            // get travels from server
+                            Task {
+                                await viewModel.getUserTravels()
                             }
                         }
-                    } detail: {
-                        NavigationStack(path: $navigationPath) {
-                            Group {
-                                switch navigationSplitViewElement {
-                                case .Ranking:
-                                    RankingView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
-                                case .Reviews:
-                                    CitiesReviewsView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
-                                case .SearchTravel:
-                                    TravelSearchView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService, navigationSplitViewVisibility: $visibility)
-                                case .MyTravels:
-                                    MyTravelsView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
-                                case .Dashboard:
-                                    DashboardView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
-                                case .UserPreferences:
-                                    UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
-                                case nil:
-                                    // never happens, but optional needed for selection
-                                    EmptyView()
-                                }
-                            }
-                            .navigationDestination(for: NavigationDestination.self) { destination in
-                                destinationView(for: destination)
-                            }
-                        }
-                        .onAppear {
-                            Task { await viewModel.getUserTravels() }
-                        }
-                    }
-                } else {
-                    // show login view
-                    NavigationStack(path: $navigationPath) {
-                        LoginView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
-                            .navigationDestination(for: NavigationDestination.self) { destination in
-                                destinationView(for: destination)
-                            }
-                            .onAppear() {
-                                // reset tab after logout+login
-                                navigationSplitViewElement = .SearchTravel
-                            }
-                            .onDisappear() {
-                                // get travels from server
-                                Task {
-                                    await viewModel.getUserTravels()
-                                }
-                            }
-                    }
                 }
             }
+        } else {
+            // iPadOS
+            
+            if users.first != nil {
+                NavigationSplitView(columnVisibility: $visibility) {
+                    List(selection: $navigationSplitViewElement) {
+                        Section {
+                            Label(TabViewElement.UserPreferences.title, systemImage: TabViewElement.UserPreferences.systemImage)
+                                .overlay(Color.clear.accessibilityIdentifier(TabViewElement.UserPreferences.accessibilityIdentifier))
+                                .tag(TabViewElement.UserPreferences)
+                        }
+                        Spacer()
+                        Section {
+                            ForEach(TabViewElement.allCases.filter { $0 != .UserPreferences }, id: \.self) { element in
+                                Label(element.title, systemImage: element.systemImage)
+                                    .overlay(Color.clear.accessibilityIdentifier(element.accessibilityIdentifier))
+                                    .tag(element)
+                            }
+                        }
+                    }
+                } detail: {
+                    NavigationStack(path: $navigationPath) {
+                        Group {
+                            switch navigationSplitViewElement {
+                            case .Ranking:
+                                RankingView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
+                            case .Reviews:
+                                CitiesReviewsView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
+                            case .SearchTravel:
+                                TravelSearchView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService, navigationSplitViewVisibility: $visibility)
+                            case .MyTravels:
+                                MyTravelsView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
+                            case .Dashboard:
+                                DashboardView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
+                            case .UserPreferences:
+                                UserPreferencesView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
+                            case nil:
+                                // never happens, but optional needed for selection
+                                EmptyView()
+                            }
+                        }
+                        .navigationDestination(for: NavigationDestination.self) { destination in
+                            destinationView(for: destination)
+                        }
+                    }
+                    .onAppear {
+                        Task { await viewModel.getUserTravels() }
+                    }
+                }
+            } else {
+                // show login view
+                NavigationStack(path: $navigationPath) {
+                    LoginView(modelContext: modelContext, navigationPath: $navigationPath, serverService: serverService, firebaseAuthService: firebaseAuthService)
+                        .navigationDestination(for: NavigationDestination.self) { destination in
+                            destinationView(for: destination)
+                        }
+                        .onAppear() {
+                            // reset tab after logout+login
+                            navigationSplitViewElement = .SearchTravel
+                        }
+                        .onDisappear() {
+                            // get travels from server
+                            Task {
+                                await viewModel.getUserTravels()
+                            }
+                        }
+                }
+            }
+        }
     }
     
     @ViewBuilder
@@ -203,6 +188,7 @@ struct MainView: View {
     }
 }
 
+/*
 extension Auth {
     static func awaitCurrentUser(timeout: TimeInterval = 0.00001) async -> FirebaseAuth.User? {
         await withCheckedContinuation { cont in
@@ -236,6 +222,7 @@ extension Auth {
         }
     }
 }
+*/
 
 struct TabItemView: View {
     var tabElement: TabViewElement

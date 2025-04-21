@@ -45,7 +45,8 @@ struct GreenJourneyApp: App {
     
     var body: some Scene {
         WindowGroup {
-            MainView(modelContext: persistenceHandler.container.mainContext, serverService: serverService, firebaseAuthService: firebaseAuthService)
+            //MainView(modelContext: persistenceHandler.container.mainContext, serverService: serverService, firebaseAuthService: firebaseAuthService)
+            SplashView(modelContext: persistenceHandler.container.mainContext, serverService: serverService, firebaseAuthService: firebaseAuthService)
         }
         // make persistence controller available to all views
         .modelContainer(persistenceHandler.container)
