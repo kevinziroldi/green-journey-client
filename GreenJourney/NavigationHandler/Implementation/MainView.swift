@@ -188,42 +188,6 @@ struct MainView: View {
     }
 }
 
-/*
-extension Auth {
-    static func awaitCurrentUser(timeout: TimeInterval = 0.00001) async -> FirebaseAuth.User? {
-        await withCheckedContinuation { cont in
-            
-            var isResumed = false
- 
-            var handle: AuthStateDidChangeListenerHandle?
-            handle = Auth.auth().addStateDidChangeListener { _, user in
-                if let u = user {
-                    if let handle = handle {
-                        Auth.auth().removeStateDidChangeListener(handle)
-                    }
-                    print("USER ", u)
-                    guard !isResumed else { return }
-                    isResumed = true
-                    cont.resume(returning: u)
-                }
-            }
-            DispatchQueue.main.asyncAfter(deadline: .now() + timeout) {
-                guard !isResumed else {
-                    print("already resumed")
-                    return
-                }
-                isResumed = true
-                
-                print("NO FIREBASE USER")
-                
-                //Auth.auth().removeStateDidChangeListener(handle!)
-                cont.resume(returning: nil)
-            }
-        }
-    }
-}
-*/
-
 struct TabItemView: View {
     var tabElement: TabViewElement
     

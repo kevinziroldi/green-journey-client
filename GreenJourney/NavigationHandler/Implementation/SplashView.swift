@@ -47,6 +47,7 @@ struct SplashView: View {
     }
 }
 
+/*
 extension Auth {
     static func awaitCurrentUser() async -> FirebaseAuth.User? {
         await withCheckedContinuation { cont in
@@ -77,7 +78,45 @@ extension Auth {
                 
                 print("NO FIREBASE USER - LOGOUT")
                 
-                //Auth.auth().removeStateDidChangeListener(handle!)
+                if let handle = handle {
+                    Auth.auth().removeStateDidChangeListener(handle)
+                }
+                cont.resume(returning: nil)
+            }
+        }
+    }
+}
+ */
+
+@MainActor
+extension Auth {
+    static func awaitCurrentUser() async -> FirebaseAuth.User? {
+        return await withCheckedContinuation { cont in
+            let timeout: TimeInterval = 1
+            var isResumed = false
+            var handle: AuthStateDidChangeListenerHandle?
+            
+            // check authentication
+            handle = Auth.auth().addStateDidChangeListener { _, user in
+                if let user = user {
+                    if let handle = handle {
+                        Auth.auth().removeStateDidChangeListener(handle)
+                    }
+                    print("USER ", user)
+                    guard !isResumed else { return }
+                    isResumed = true
+                    cont.resume(returning: user)
+                }
+            }
+            
+            // set timeout
+            DispatchQueue.main.asyncAfter(deadline: .now() + timeout) {
+                if let handle = handle {
+                    Auth.auth().removeStateDidChangeListener(handle)
+                }
+                print("NO FIREBASE USER - LOGOUT")
+                guard !isResumed else { return }
+                isResumed = true
                 cont.resume(returning: nil)
             }
         }
