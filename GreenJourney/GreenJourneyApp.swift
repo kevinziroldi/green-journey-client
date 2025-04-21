@@ -6,8 +6,6 @@ import SwiftUI
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-        FirebaseApp.configure()
-        
         // make the simulator start with software keyboard
         #if targetEnvironment(simulator)
             let setHardwareLayout = NSSelectorFromString("setHardwareLayout:")
@@ -40,6 +38,10 @@ struct GreenJourneyApp: App {
     let serverService: ServerServiceProtocol = ServiceFactory.shared.getServerService()
     // firebase auth service
     let firebaseAuthService: FirebaseAuthServiceProtocol = ServiceFactory.shared.getFirebaseAuthService()
+    
+    init() {
+        FirebaseApp.configure()
+    }
     
     var body: some Scene {
         WindowGroup {
