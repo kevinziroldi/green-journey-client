@@ -24,69 +24,49 @@ struct SplashView: View {
             }
             .ignoresSafeArea()
             .task {
-                let firebaseUser = await Auth.awaitCurrentUser()
+                switch ConfigReader.testMode {
                 
-                if firebaseUser == nil {
+                case .real:
                     do {
                         let users = try modelContext.fetch(FetchDescriptor<User>())
-                        for user in users {
-                            modelContext.delete(user)
+                        if users.isEmpty {
+                            await MainActor.run {
+                                self.isReady = true
+                                return
+                            }
                         }
-                        try modelContext.save()
-                        print("User successfully logged out and removed from SwiftData")
                     } catch {
-                        print("Error while saving context after logout: \(error)")
+                        // check firebase current user
                     }
-                }
+                    
+                    let firebaseUser = await Auth.awaitCurrentUser()
+                    
+                    if firebaseUser == nil {
+                        do {
+                            let users = try modelContext.fetch(FetchDescriptor<User>())
+                            for user in users {
+                                modelContext.delete(user)
+                            }
+                            try modelContext.save()
+                            print("User successfully logged out and removed from SwiftData")
+                        } catch {
+                            print("Error while saving context after logout: \(error)")
+                        }
+                    }
+                    
+                    await MainActor.run {
+                        self.isReady = true
+                    }
                 
-                await MainActor.run {
-                    self.isReady = true
+                case .test:
+                    await MainActor.run {
+                        self.isReady = true
+                    }
                 }
             }
         }
     }
 }
-
-/*
-extension Auth {
-    static func awaitCurrentUser() async -> FirebaseAuth.User? {
-        await withCheckedContinuation { cont in
-            let timeout: TimeInterval = 1
-            var isResumed = false
-            var handle: AuthStateDidChangeListenerHandle?
-            
-            // check authentication
-            handle = Auth.auth().addStateDidChangeListener { _, user in
-                if let u = user {
-                    if let handle = handle {
-                        Auth.auth().removeStateDidChangeListener(handle)
-                    }
-                    print("USER ", u)
-                    guard !isResumed else { return }
-                    isResumed = true
-                    cont.resume(returning: u)
-                }
-            }
-            
-            // set timeout
-            DispatchQueue.main.asyncAfter(deadline: .now() + timeout) {
-                guard !isResumed else {
-                    print("already resumed")
-                    return
-                }
-                isResumed = true
-                
-                print("NO FIREBASE USER - LOGOUT")
-                
-                if let handle = handle {
-                    Auth.auth().removeStateDidChangeListener(handle)
-                }
-                cont.resume(returning: nil)
-            }
-        }
-    }
-}
- */
 
 @MainActor
 extension Auth {
@@ -102,7 +82,6 @@ extension Auth {
                     if let handle = handle {
                         Auth.auth().removeStateDidChangeListener(handle)
                     }
-                    print("USER ", user)
                     guard !isResumed else { return }
                     isResumed = true
                     cont.resume(returning: user)
@@ -114,7 +93,6 @@ extension Auth {
                 if let handle = handle {
                     Auth.auth().removeStateDidChangeListener(handle)
                 }
-                print("NO FIREBASE USER - LOGOUT")
                 guard !isResumed else { return }
                 isResumed = true
                 cont.resume(returning: nil)
