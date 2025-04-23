@@ -21,7 +21,7 @@ class Travel: Codable, @unchecked Sendable  {
         self.CO2Compensated = travelCopy.CO2Compensated
         self.confirmed = travelCopy.confirmed
         self.userID = travelCopy.userID
-        self.userReview = travelCopy.userReview
+        self.userReview = nil
     }
     
     enum CodingKeys: String, CodingKey {

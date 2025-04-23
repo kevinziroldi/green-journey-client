@@ -266,18 +266,16 @@ class MyTravelsViewModel: ObservableObject {
     }
     
     func compensateCO2() async {
-        let newCo2Compensated = co2CompensatedPerEuro * Double(self.compensatedPrice)
-        
-        if let selectedTravel = self.selectedTravel {
-            let modifiedTravel = Travel(travelCopy: selectedTravel.travel)
-            modifiedTravel.CO2Compensated += newCo2Compensated
+            let newCo2Compensated = co2CompensatedPerEuro * Double(self.compensatedPrice)
             
-            await updateTravelOnServer(modifiedTravel: modifiedTravel)
-            self.compensatedPrice = 0
-        } else {
-            print("Selected travel is nil")
-        }
-        
+            if let selectedTravel = self.selectedTravel {
+                let modifiedTravel = Travel(travelCopy: selectedTravel.travel)
+                modifiedTravel.CO2Compensated += newCo2Compensated
+                await updateTravelOnServer(modifiedTravel: modifiedTravel)
+                self.compensatedPrice = 0
+            } else {
+                print("Selected travel is nil")
+            }
     }
     
     func confirmTravel() async {
@@ -311,16 +309,15 @@ class MyTravelsViewModel: ObservableObject {
     private func updateTravelInSwiftData(updatedTravel: Travel) async {
         do {
             let travels = try modelContext.fetch(FetchDescriptor<Travel>())
-            
             for travel in travels {
                 if travel.travelID == updatedTravel.travelID {
                     // update values
                     travel.CO2Compensated = updatedTravel.CO2Compensated
                     travel.confirmed = updatedTravel.confirmed
-                    try modelContext.save()
-                    self.selectedTravel?.travel = updatedTravel
+                    self.selectedTravel?.travel = travel
                 }
             }
+            try modelContext.save()
         }catch {
             print("Error while updating travel in SwiftData")
             // refesh travels from server
