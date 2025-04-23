@@ -359,7 +359,8 @@ final class MyTravelsViewModelUnitTest {
             ]
         )
         
-        let numTrees = viewModel.getNumTrees(travelDetails)
+        viewModel.selectedTravel = travelDetails
+        let numTrees = viewModel.getNumTrees()
         
         #expect(numTrees == 0)
     }
@@ -394,7 +395,8 @@ final class MyTravelsViewModelUnitTest {
             ]
         )
         
-        let numTrees = viewModel.getNumTrees(travelDetails)
+        viewModel.selectedTravel = travelDetails
+        let numTrees = viewModel.getNumTrees()
         
         #expect(numTrees == 1)
     }
@@ -429,7 +431,8 @@ final class MyTravelsViewModelUnitTest {
             ]
         )
         
-        let numTrees = viewModel.getNumTrees(travelDetails)
+        viewModel.selectedTravel = travelDetails
+        let numTrees = viewModel.getNumTrees()
         
         #expect(numTrees == 2)
     }
@@ -465,7 +468,8 @@ final class MyTravelsViewModelUnitTest {
         )
         travelDetails.travel.CO2Compensated = 0
         
-        let plantedTrees = viewModel.getPlantedTrees(travelDetails)
+        viewModel.selectedTravel = travelDetails
+        let plantedTrees = viewModel.getPlantedTrees()
         
         #expect(plantedTrees == 0)
     }
@@ -501,7 +505,8 @@ final class MyTravelsViewModelUnitTest {
         )
         travelDetails.travel.CO2Compensated = 75
         
-        let plantedTrees = viewModel.getPlantedTrees(travelDetails)
+        viewModel.selectedTravel = travelDetails
+        let plantedTrees = viewModel.getPlantedTrees()
         
         #expect(plantedTrees == 1)
     }
