@@ -59,6 +59,7 @@ struct OptionDetailsView: View {
                         
                         SegmentsView(segments: option.segments)
                             .padding(.top)
+                            .padding(.leading, 10)
                         
                         Spacer()
                     }
