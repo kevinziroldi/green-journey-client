@@ -149,6 +149,7 @@ private struct CompensationButtonsView: View {
                     // iPadOS
                     
                     HStack {
+                        /*
                         VStack {
                             HStack {
                                 Image(systemName: "carbon.dioxide.cloud")
@@ -194,76 +195,82 @@ private struct CompensationButtonsView: View {
                             .padding(EdgeInsets(top: 5, leading: 15, bottom: 10, trailing: 15))
                         }
                         .fixedSize()
-                        
+                        */
                         Spacer()
-                        
-                        VStack(spacing: 0) {
+                        VStack {
                             HStack {
-                                Text("\(plantedTrees) / \(viewModel.getNumTrees())")
-                                    .font(.system(size: 25))
-                                Image(systemName: "tree")
-                                    .font(.system(size: 25))
-                                    .padding(.bottom, 5)
-                            }
-                            .scaledToFit()
-                            .minimumScaleFactor(0.6)
-                            
-                            Spacer()
-                            
-                            
-                            HStack {
-                                Button(action: {
-                                    if plantedTrees > 0 {
-                                        plantedTrees -= 1
-                                        viewModel.compensatedPrice -= 2
+                                VStack (spacing: 10){
+                                    Button(action: {
+                                        if plantedTrees < viewModel.getNumTrees() {
+                                            plantedTrees += 1
+                                            viewModel.compensatedPrice += 2
+                                        }
+                                    }) {
+                                        Image(systemName: "plus.circle")
+                                            .font(.system(size: 30))
+                                            .fontWeight(.light)
+                                            .foregroundStyle(plantedTrees == viewModel.getNumTrees() ? .secondary : AppColors.mainColor)
+                                        
                                     }
-                                }) {
-                                    Image(systemName: "minus.circle")
-                                        .font(.system(size: 26))
-                                        .fontWeight(.light)
-                                        .foregroundStyle(plantedTrees==viewModel.getPlantedTrees() ? .secondary : AppColors.mainColor)
-                                }
-                                .disabled(plantedTrees==viewModel.getPlantedTrees())
-                                .accessibilityIdentifier("minusButton")
-                                
-                                Button(action: {
-                                    if plantedTrees < viewModel.getNumTrees() {
-                                        plantedTrees += 1
-                                        viewModel.compensatedPrice += 2
-                                    }
-                                }) {
-                                    Image(systemName: "plus.circle")
-                                        .font(.system(size: 26))
-                                        .fontWeight(.light)
-                                        .foregroundStyle(plantedTrees == viewModel.getNumTrees() ? .secondary : AppColors.mainColor)
+                                    .disabled(plantedTrees == viewModel.getNumTrees())
+                                    .accessibilityIdentifier("plusButton")
                                     
+                                    Button(action: {
+                                        if plantedTrees > 0 {
+                                            plantedTrees -= 1
+                                            viewModel.compensatedPrice -= 2
+                                        }
+                                    }) {
+                                        Image(systemName: "minus.circle")
+                                            .font(.system(size: 30))
+                                            .fontWeight(.light)
+                                            .foregroundStyle(plantedTrees==viewModel.getPlantedTrees() ? .secondary : AppColors.mainColor)
+                                    }
+                                    .disabled(plantedTrees==viewModel.getPlantedTrees())
+                                    .accessibilityIdentifier("minusButton")
                                 }
-                                .disabled(plantedTrees == viewModel.getNumTrees())
-                                .accessibilityIdentifier("plusButton")
+                                
+                                VStack(spacing: 0) {
+                                    HStack(alignment:.center) {
+                                        Image(systemName: "tree")
+                                            .font(.system(size: 25))
+                                            .padding(.bottom, 5)
+                                        
+                                        Text("\(plantedTrees) / \(viewModel.getNumTrees())")
+                                            .font(.system(size: 25))
+                                            .frame(width: viewModel.getNumTrees() < 10 ? 60 : 80, alignment: .trailing)
+                                    }
+                                }
+                                .padding(.horizontal)
+                                
+                                Text("Price: \(viewModel.compensatedPrice) €")
+                                    .padding()
+                                    .font(.system(size: 25))
+                                    .frame(width: 150)
                             }
-                            
-                            Text("Price: \(viewModel.compensatedPrice) €")
-                                .padding()
-                                .font(.system(size: 20))
                             
                             CompensateButtonView(viewModel: viewModel, showAlertCompensation: $showAlertCompensation, plantedTrees: $plantedTrees)
+                                .padding(.top, 30)
                             
                         }
-                        .padding(.leading, 15)
+                        .frame(height: 190)
+                        .padding(.leading)
                         .padding(.vertical)
                         
                         Spacer()
                         
                         VStack {
                             GeometryReader { geometry in
-                                SemicircleCo2ChartView(progress: viewModel.getProgressSelectedTravel(), height: 120, width: 140, lineWidth: 10)
+                                SemicircleCo2ChartView(progress: viewModel.getProgressSelectedTravel(), height: 140, width: 180, lineWidth: 12)
                                     .position(x: geometry.size.width/2, y: geometry.size.height/2 - 15)
                                 Text(String(format: "%.1f", viewModel.getCo2CompensatedSelectedTravel()) + " Kg")
-                                    .font(.headline)
-                                    .position(x: geometry.size.width/2 - 50, y: geometry.size.height/2 + 60)
+                                    .font(.system(size: 20))
+                                    .fontWeight(.semibold)
+                                    .position(x: geometry.size.width/2 - 70, y: geometry.size.height/2 + 80)
                                 Text(String(format: "%.1f", viewModel.getCo2EmittedSelectedTravel()) + " Kg")
-                                    .font(.headline)
-                                    .position(x: geometry.size.width/2 + 50, y: geometry.size.height/2 + 60)
+                                    .font(.system(size: 20))
+                                    .fontWeight(.semibold)
+                                    .position(x: geometry.size.width/2 + 70, y: geometry.size.height/2 + 80)
                             }
                         }
                     }
@@ -320,9 +327,9 @@ private struct CompensationButtonsView: View {
                         VStack {
                             HStack (spacing: 5) {
                                 Text("You planted: \(plantedTrees)")
-                                    .font(.system(size: 20))
+                                    .font(.system(size: 30))
                                 Image(systemName: "tree")
-                                    .font(.system(size: 20))
+                                    .font(.system(size: 30))
                                     .padding(.bottom, 5)
                             }
                             .scaledToFit()
@@ -331,22 +338,25 @@ private struct CompensationButtonsView: View {
                             .padding()
                             
                             Text("Thank you 🌍")
-                                .font(.system(size: 18))
+                                .font(.system(size: 25))
                                 .fontWeight(.light)
                             
                                 .padding()
                         }
+                        .frame(height: 190)
                         Spacer()
                         VStack {
                             GeometryReader { geometry in
-                                SemicircleCo2ChartView(progress: viewModel.getProgressSelectedTravel(), height: 120, width: 140, lineWidth: 10)
+                                SemicircleCo2ChartView(progress: viewModel.getProgressSelectedTravel(), height: 140, width: 180, lineWidth: 12)
                                     .position(x: geometry.size.width/2, y: geometry.size.height/2 - 15)
                                 Text(String(format: "%.1f", viewModel.getCo2CompensatedSelectedTravel()) + " Kg")
-                                    .font(.headline)
-                                    .position(x: geometry.size.width/2 - 50, y: geometry.size.height/2 + 60)
+                                    .font(.system(size: 20))
+                                    .fontWeight(.semibold)
+                                    .position(x: geometry.size.width/2 - 70, y: geometry.size.height/2 + 80)
                                 Text(String(format: "%.1f", viewModel.getCo2EmittedSelectedTravel()) + " Kg")
-                                    .font(.headline)
-                                    .position(x: geometry.size.width/2 + 50, y: geometry.size.height/2 + 60)
+                                    .font(.system(size: 20))
+                                    .fontWeight(.semibold)
+                                    .position(x: geometry.size.width/2 + 70, y: geometry.size.height/2 + 80)
                             }
                         }
                         .padding(.bottom)
