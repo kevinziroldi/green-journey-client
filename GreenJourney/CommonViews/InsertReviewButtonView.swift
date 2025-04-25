@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct InsertReviewButtonView: View {
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @ObservedObject var viewModel: CitiesReviewsViewModel
     @Binding var reviewTapped: Bool
     var city: String?
@@ -39,31 +40,56 @@ struct InsertReviewButtonView: View {
                         RoundedRectangle(cornerRadius: 20)
                             .fill(Color(uiColor: .systemBackground))
                             .shadow(color: .blue.opacity(0.3), radius: 5, x: 0, y: 3)
-                        VStack {
-                            HStack {
-                                Text("Your review")
-                                    .font(.title3)
-                                    .fontWeight(.semibold)
-                                    .accessibilityIdentifier("yourReviewTitle")
+                        if horizontalSizeClass == .compact {
+                            //iOS
+                            VStack {
+                                HStack {
+                                    YourReviewTitle()
+                                    
+                                    Spacer()
+                                    
+                                    FiveStarView(rating: userReview.computeRating(), dim: 20, color: Color.yellow)
+                                        .overlay(Color.clear.accessibilityIdentifier("userReviewRating"))
+                                    
+                                    Spacer()
+                                    Spacer()
+                                    Spacer()
+                                }
                                 
-                                Spacer()
+                                Text(userReview.reviewText)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .accessibilityIdentifier("userReviewText")
                                 
-                                FiveStarView(rating: userReview.computeRating(), dim: 20, color: Color.yellow)
-                                    .overlay(Color.clear.accessibilityIdentifier("userReviewRating"))
-                                
-                                Spacer()
-                                Spacer()
                                 Spacer()
                             }
-                            
-                            Text(userReview.reviewText)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .accessibilityIdentifier("userReviewText")
-                            
-                            Spacer()
+                            .padding()
                         }
-                        .padding()
+                        else {
+                            //iPadOS
+                            VStack {
+                                HStack {
+                                    YourReviewTitle()
+                                    Spacer()
+                                }
+                                HStack {
+                                    HStack {
+                                        Text(String(format: "%.1f", userReview.computeRating()))
+                                            .font(.system(size: 45))
+                                            .fontWeight(.bold)
+                                        FiveStarView(rating: userReview.computeRating(), dim: 20, color: Color.yellow)
+                                            .overlay(Color.clear.accessibilityIdentifier("userReviewRating"))
+                                    }
+                                    .frame(maxWidth: 270)
+                                    
+                                    Text(userReview.reviewText)
+                                        .font(.system(size: 18))
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                }
+                            }
+                            .padding()
+                        }
                     }
+                    .frame(maxHeight: 200)
                     .onTapGesture() {
                         if !isPresenting {
                             isPresenting = true
@@ -82,5 +108,14 @@ struct InsertReviewButtonView: View {
                 }
             }
         }
+    }
+}
+
+private struct YourReviewTitle: View {
+    var body: some View {
+        Text("Your Review")
+            .font(.title3)
+            .fontWeight(.semibold)
+            .accessibilityIdentifier("yourReviewTitle")
     }
 }
