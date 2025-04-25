@@ -186,7 +186,7 @@ private struct DepartureDestinationAllDatesInfoView: View {
                     let changesOut = travelDetails.countChanges(outwardDirection: true)
                     if (changesOut > 1){
                         if (changesOut == 2){
-                            Text("\(changesOut) change")
+                            Text("1 change")
                                 .foregroundStyle(.blue)
                                 .font(.subheadline)
                                 .fontWeight(.semibold)
@@ -227,7 +227,7 @@ private struct DepartureDestinationAllDatesInfoView: View {
                         let changesRet = travelDetails.countChanges(outwardDirection: false)
                         if (changesRet > 1){
                             if (changesRet == 2){
-                                Text("\(changesRet) change")
+                                Text("1 change")
                                     .foregroundStyle(.blue)
                                     .font(.subheadline)
                                     .fontWeight(.semibold)

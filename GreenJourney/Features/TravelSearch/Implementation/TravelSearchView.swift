@@ -590,6 +590,7 @@ private struct DatePickerView: View {
 }
 
 private struct AIPredictionView: View {
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @Environment(\.modelContext) private var modelContext: ModelContext
     
     @ObservedObject var viewModel: TravelSearchViewModel
@@ -623,47 +624,91 @@ private struct AIPredictionView: View {
                         dismissButton: .default(Text("OK")) {}
                     )
                 }
-            }
-            else {
-                
+            } else {
                 //button for see another prediction
-                Button(action: {
-                    if viewModel.predictedCities.count == viewModel.predictionShown + 1 {
-                        viewModel.predictionShown = 0
-                    }
-                    else {
-                        viewModel.predictionShown += 1
-                    }
-                    withAnimation(.bouncy(duration: 0.5)) {
-                        viewModel.arrival = viewModel.predictedCities[viewModel.predictionShown]
-                    }
-                }) {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 20)
-                            .stroke(.linearGradient(Gradient(colors: [.green, .blue]), startPoint: .bottomLeading, endPoint: .topTrailing), lineWidth: 3)
-                            .fill(.linearGradient(Gradient(colors: [.green.opacity(0.2), .mint.opacity(0.2)]), startPoint: .bottomLeading, endPoint: .topTrailing))
-                        HStack {
-                            Text("Generate a new prediction")
-                                .foregroundStyle(.gray)
-                            Spacer()
-                            ZStack {
-                                Image(systemName: "arrow.trianglehead.2.clockwise")
-                                    .font(.largeTitle)
-                                    .fontWeight(.light)
-                                    .scaleEffect(1.3)
-                                    .foregroundStyle(.linearGradient(Gradient(colors: [.blue, .green]), startPoint: .bottomLeading, endPoint: .topTrailing))
-                                Image(systemName: "apple.intelligence")
-                                    .font(.title)
-                                    .foregroundStyle(.linearGradient(Gradient(colors: [.blue, .green]), startPoint: .bottomLeading, endPoint: .topTrailing))
-                            }
+                if horizontalSizeClass == .compact {
+                    // iOS
+                    Button(action: {
+                        if viewModel.predictedCities.count == viewModel.predictionShown + 1 {
+                            viewModel.predictionShown = 0
                         }
-                        .padding(5)
-                        .padding(.horizontal, 5)
+                        else {
+                            viewModel.predictionShown += 1
+                        }
+                        withAnimation(.bouncy(duration: 0.5)) {
+                            viewModel.arrival = viewModel.predictedCities[viewModel.predictionShown]
+                        }
+                    }) {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 20)
+                                .stroke(.linearGradient(Gradient(colors: [.green, .blue]), startPoint: .bottomLeading, endPoint: .topTrailing), lineWidth: 3)
+                                .fill(.linearGradient(Gradient(colors: [.green.opacity(0.2), .mint.opacity(0.2)]), startPoint: .bottomLeading, endPoint: .topTrailing))
+                            HStack {
+                                Text("Generate a new prediction")
+                                    .foregroundStyle(.gray)
+                                Spacer()
+                                ZStack {
+                                    Image(systemName: "arrow.trianglehead.2.clockwise")
+                                        .font(.largeTitle)
+                                        .fontWeight(.light)
+                                        .scaleEffect(1.3)
+                                        .foregroundStyle(.linearGradient(Gradient(colors: [.blue, .green]), startPoint: .bottomLeading, endPoint: .topTrailing))
+                                    Image(systemName: "apple.intelligence")
+                                        .font(.title)
+                                        .foregroundStyle(.linearGradient(Gradient(colors: [.blue, .green]), startPoint: .bottomLeading, endPoint: .topTrailing))
+                                }
+                            }
+                            .padding(5)
+                            .padding(.horizontal, 5)
+                        }
+                        .frame(height: 60)
                     }
-                    .frame(height: 60)
+                    .accessibilityIdentifier("newGenerationButton")
+                } else {
+                    // iPadOS
+                    
+                    Button(action: {
+                        if viewModel.predictedCities.count == viewModel.predictionShown + 1 {
+                            viewModel.predictionShown = 0
+                        }
+                        else {
+                            viewModel.predictionShown += 1
+                        }
+                        withAnimation(.bouncy(duration: 0.5)) {
+                            viewModel.arrival = viewModel.predictedCities[viewModel.predictionShown]
+                        }
+                    }) {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 20)
+                                .stroke(.linearGradient(Gradient(colors: [.green, .blue]), startPoint: .bottomLeading, endPoint: .topTrailing), lineWidth: 3)
+                                .fill(.linearGradient(Gradient(colors: [.green.opacity(0.2), .blue.opacity(0.2)]), startPoint: .bottomLeading, endPoint: .topTrailing))
+                            
+                            Text("Generate a new prediction")
+                                .foregroundColor(.gray)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .multilineTextAlignment(.center)
+                                .padding(5)
+
+                            HStack {
+                                Spacer()
+                                ZStack {
+                                    Image(systemName: "arrow.trianglehead.2.clockwise")
+                                        .font(.largeTitle)
+                                        .fontWeight(.light)
+                                        .scaleEffect(1.3)
+                                        .foregroundStyle(.linearGradient(Gradient(colors: [.blue, .green]), startPoint: .bottomLeading, endPoint: .topTrailing))
+                                    Image(systemName: "apple.intelligence")
+                                        .font(.title)
+                                        .foregroundStyle(.linearGradient(Gradient(colors: [.blue, .green]), startPoint: .bottomLeading, endPoint: .topTrailing))
+                                }
+                            }
+                            .padding(5)
+                            .padding(.horizontal, 5)
+                        }
+                        .frame(height: 60)
+                    }
+                    .accessibilityIdentifier("getRecommendationButton")
                 }
-                .accessibilityIdentifier("newGenerationButton")
-                
             }
         }
         .padding(.horizontal, 45)
