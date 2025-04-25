@@ -83,6 +83,7 @@ struct OptionDetailsView: View {
                             }
                             .fixedSize()
                         }
+                        .padding(.bottom)
                         .accessibilityIdentifier("proceedButton")
                     }
                     else {
@@ -104,6 +105,7 @@ struct OptionDetailsView: View {
                             }
                             .fixedSize()
                         }
+                        .padding(.bottom)
                         .accessibilityIdentifier("saveTravelButtonTwoWays")
                     }
                 }
@@ -126,6 +128,7 @@ struct OptionDetailsView: View {
                         }
                         .fixedSize()
                     }
+                    .padding(.bottom)
                     .accessibilityIdentifier("saveTravelButtonOneWay")
                 }
             }

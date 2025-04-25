@@ -375,10 +375,16 @@ private struct BestCityView: View {
                     }
                     
                     VStack {
-                        Text(city.cityName + ", " + city.countryName)
-                            .font(.system(size: 18))
-                            .fontWeight(.semibold)
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                        HStack {
+                            Text(viewModel.flag(country: city.countryCode))
+                                .font(.system(size: 35))
+                                .foregroundColor(.blue)
+                            
+                            Text(city.cityName + ", " + city.countryName)
+                                .font(.system(size: 18))
+                                .fontWeight(.semibold)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
                     }
                     .padding(.leading, 30)
                     
@@ -395,7 +401,10 @@ private struct BestCityView: View {
                     }
                     
                     Spacer()
-                    
+                }
+                .padding()
+                HStack {
+                    Spacer()
                     VStack {
                         if viewModel.hasVisited(city: city) {
                             Image(systemName: "mappin.and.ellipse.circle")
@@ -403,7 +412,6 @@ private struct BestCityView: View {
                                 .font(.system(size: 25))
                         }
                     }
-                    
                 }
                 .padding()
             }
