@@ -50,7 +50,7 @@ struct SplashView: View {
                             try modelContext.save()
                             print("User successfully logged out and removed from SwiftData")
                         } catch {
-                            print("Error while saving context after logout: \(error)")
+                            print("Error while saving context after logout")
                         }
                     }
                     

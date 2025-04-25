@@ -98,7 +98,7 @@ struct MyTravelsView: View {
                     .accessibilityIdentifier("noTravelsAlert")
                 }
                 else {
-                    VStack{
+                    VStack {
                         ForEach(viewModel.filteredTravelDetailsList, id: \.id) { travelDetails in
                             HStack (spacing: 10) {
                                 Button(action: {

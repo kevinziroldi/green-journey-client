@@ -70,7 +70,7 @@ class MyTravelsViewModel: ObservableObject {
             }
             try modelContext.save()
         }catch {
-            print("Error deleting old travels from SwiftData: \(error.localizedDescription)")
+            print("Error deleting old travels from SwiftData")
         }
     }
     
@@ -84,7 +84,7 @@ class MyTravelsViewModel: ObservableObject {
         do {
             try modelContext.save()
         } catch {
-            print("Error saving new travels: \(error.localizedDescription)")
+            print("Error saving new travels")
         }
     }
     
@@ -301,7 +301,7 @@ class MyTravelsViewModel: ObservableObject {
             // refresh travels
             self.showRequestedTravels()
         }catch {
-            print("Error updating travel data: \(error.localizedDescription)")
+            print("Error updating travel data")
             return
         }
     }

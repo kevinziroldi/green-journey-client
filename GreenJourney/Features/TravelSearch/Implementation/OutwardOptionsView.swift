@@ -27,8 +27,7 @@ struct OutwardOptionsView: View {
                         .font(.system(size: 20))
                         .padding(.top, 50)
                         .padding(.horizontal)
-                }
-                else{
+                } else {
                     VStack {
                         ForEach (viewModel.outwardOptions.indices, id: \.self) { option in
                             HStack {

@@ -66,7 +66,7 @@ class ServerService: ServerServiceProtocol {
             let user = try decoder.decode(User.self, from: data)
             return user
         } catch {
-            print("Failed to decode user: \(error.localizedDescription)")
+            print("Failed to decode user")
             throw ServerServiceError.getUserFailed
         }
     }
@@ -107,7 +107,7 @@ class ServerService: ServerServiceProtocol {
             let user = try decoder.decode(User.self, from: data)
             return user
         } catch {
-            print("Failed to decode user: \(error.localizedDescription)")
+            print("Failed to decode user")
             throw ServerServiceError.modifyUserFailed
         }
     }
@@ -138,7 +138,7 @@ class ServerService: ServerServiceProtocol {
             let ranking = try decoder.decode(RankingResponse.self, from: data)
             return ranking
         } catch {
-            print("Failed to decode ranking: \(error.localizedDescription)")
+            print("Failed to decode ranking")
             throw ServerServiceError.getRankingFailed
         }
     }
@@ -147,7 +147,7 @@ class ServerService: ServerServiceProtocol {
         // build request
         let baseURL = URLHandler.shared.getBaseURL()
         guard let url = URL(string:"\(baseURL)/reviews/first?city_iata=\(iata)&country_code=\(countryCode)") else {
-            print("Invalid URL.")
+            print("Invalid URL")
             throw URLError(.badURL)
         }
         var request = URLRequest(url: url)
@@ -169,7 +169,7 @@ class ServerService: ServerServiceProtocol {
             let reviews = try decoder.decode(CityReviewElement.self, from: data)
             return reviews
         } catch {
-            print("Failed to decode city review elements: \(error.localizedDescription)")
+            print("Failed to decode city review elements")
             throw ServerServiceError.getBestReviewsFailed
         }
     }
@@ -178,7 +178,7 @@ class ServerService: ServerServiceProtocol {
         // build request
         let baseURL = URLHandler.shared.getBaseURL()
         guard let url = URL(string:"\(baseURL)/reviews/last?city_iata=\(iata)&country_code=\(countryCode)") else {
-            print("Invalid URL.")
+            print("Invalid URL")
             throw URLError(.badURL)
         }
         var request = URLRequest(url: url)
@@ -200,7 +200,7 @@ class ServerService: ServerServiceProtocol {
             let reviews = try decoder.decode(CityReviewElement.self, from: data)
             return reviews
         } catch {
-            print("Failed to decode city review elements: \(error.localizedDescription)")
+            print("Failed to decode city review elements")
             throw ServerServiceError.getBestReviewsFailed
         }
     }
@@ -209,7 +209,7 @@ class ServerService: ServerServiceProtocol {
         // build request
         let baseURL = URLHandler.shared.getBaseURL()
         guard let url = URL(string:"\(baseURL)/reviews?city_iata=\(iata)&country_code=\(countryCode)&review_id=\(reviewID)&direction=\(direction)") else {
-            print("Invalid URL.")
+            print("Invalid URL")
             throw URLError(.badURL)
         }
         var request = URLRequest(url: url)
@@ -231,7 +231,7 @@ class ServerService: ServerServiceProtocol {
             let reviews = try decoder.decode(CityReviewElement.self, from: data)
             return reviews
         } catch {
-            print("Failed to decode reviews: \(error.localizedDescription)")
+            print("Failed to decode reviews")
             throw ServerServiceError.getReviewsCityFailed
         }
     }
@@ -263,7 +263,7 @@ class ServerService: ServerServiceProtocol {
             let reviews = try decoder.decode([CityReviewElement].self, from: data)
             return reviews
         } catch {
-            print("Failed to decode city review elements: \(error.localizedDescription)")
+            print("Failed to decode city review elements")
             throw ServerServiceError.getBestReviewsFailed
         }
     }
@@ -308,7 +308,7 @@ class ServerService: ServerServiceProtocol {
             let review = try decoder.decode(Review.self, from: data)
             return review
         } catch {
-            print("Failed to decode review: \(error.localizedDescription)")
+            print("Failed to decode review")
             throw ServerServiceError.uploadReviewFailed
         }
     }
@@ -357,7 +357,7 @@ class ServerService: ServerServiceProtocol {
             let review = try decoder.decode(Review.self, from: data)
             return review
         } catch {
-            print("Failed to decode review: \(error.localizedDescription)")
+            print("Failed to decode review")
             throw ServerServiceError.modifyReviewFailed
         }
     }
@@ -418,7 +418,7 @@ class ServerService: ServerServiceProtocol {
             }
             return travelOptions
         } catch {
-            print("Failed to decode review: \(error.localizedDescription)")
+            print("Failed to decode review")
             throw ServerServiceError.computeRoutesFailed
         }
     }
@@ -461,7 +461,7 @@ class ServerService: ServerServiceProtocol {
             let travelDetails = try decoder.decode(TravelDetails.self, from: data)
             return travelDetails
         } catch {
-            print("Failed to decode review: \(error.localizedDescription)")
+            print("Failed to decode review")
             throw ServerServiceError.saveTravelFailed
         }
     }
@@ -472,7 +472,7 @@ class ServerService: ServerServiceProtocol {
         // build request
         let baseURL = URLHandler.shared.getBaseURL()
         guard let url = URL(string:"\(baseURL)/travels/user") else {
-            print("Invalid URL.")
+            print("Invalid URL")
             throw URLError(.badURL)
         }
         var request = URLRequest(url: url)
@@ -496,7 +496,7 @@ class ServerService: ServerServiceProtocol {
             let travelDetailsList = try decoder.decode([TravelDetails].self, from: data)
             return travelDetailsList
         } catch {
-            print("Failed to decode travels: \(error.localizedDescription)")
+            print("Failed to decode travels")
             throw ServerServiceError.getTravelsFailed
         }
     }
@@ -526,9 +526,7 @@ class ServerService: ServerServiceProtocol {
         request.setValue("Bearer \(firebaseToken)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = body
-        
-        print(String(data: body, encoding: .utf8)!)
-        
+                
         // perform request
         let session = URLHandler.shared.getURLSession()
         let (data, response) = try await session.data(for: request)
@@ -542,7 +540,7 @@ class ServerService: ServerServiceProtocol {
             let travel = try decoder.decode(Travel.self, from: data)
             return travel
         } catch {
-            print("Failed to decode trave: \(error.localizedDescription)")
+            print("Failed to decode travel")
             throw ServerServiceError.modifyTravelFailed
         }
     }

@@ -121,7 +121,7 @@ class UserPreferencesViewModel: ObservableObject {
             self.getUserData()
         }catch {
             self.errorMessage = "Error saving modifications"
-            print("Error saving modifications on server: \(error.localizedDescription)")
+            print("Error saving modifications on server")
             return
         }
     }

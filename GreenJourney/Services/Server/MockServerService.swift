@@ -24,7 +24,6 @@ class MockServerService: ServerServiceProtocol {
                 let user = try decoder.decode(User.self, from: data)
                 return user
             } catch {
-                print(error)
                 return User()
             }
         } else {
@@ -55,7 +54,6 @@ class MockServerService: ServerServiceProtocol {
                 let ranking = try decoder.decode(RankingResponse.self, from: data)
                 return ranking
             } catch {
-                print(error)
                 return RankingResponse()
             }
         } else {
@@ -141,7 +139,6 @@ class MockServerService: ServerServiceProtocol {
                 }
                 return bestCitiesPrefix
             } catch {
-                print(error)
                 return []
             }
         } else {
@@ -196,7 +193,6 @@ class MockServerService: ServerServiceProtocol {
                 
                 return travelOptions
             } catch {
-                print(error)
                 return [TravelOption(segments: [])]
             }
         } else {
@@ -228,7 +224,6 @@ class MockServerService: ServerServiceProtocol {
                 let travels = try decoder.decode([TravelDetails].self, from: data)
                 return travels
             } catch {
-                print(error)
                 return []
             }
         } else {

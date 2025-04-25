@@ -50,7 +50,7 @@ struct CompleterView: View {
                 Button(action: {
                     onClick(city)
                 }) {
-                    HStack{
+                    HStack {
                         VStack(alignment: .leading) {
                             Text(city.cityName).font(.headline)
                                 .foregroundStyle(colorScheme == .dark ? .white: .black)

@@ -173,7 +173,7 @@ class DashboardViewModel: ObservableObject {
             let continent = try modelContext.fetch(fetchDescriptor).first?.continent ?? "Europe"
             return continent
         } catch {
-            print("Error while finding continent: \(error.localizedDescription)")
+            print("Error while finding continent")
             return ""
         }
     }

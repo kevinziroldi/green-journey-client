@@ -64,7 +64,7 @@ class AuthenticationViewModel: ObservableObject {
             try modelContext.save()
             print("User successfully logged out and removed from SwiftData")
         } catch {
-            print("Error while saving context after logout: \(error)")
+            print("Error while saving context after logout")
         }
         
         self.isLogged = false
@@ -82,7 +82,7 @@ class AuthenticationViewModel: ObservableObject {
             print("Email for password reset sent")
             self.resendEmail = "Email sent, check your inbox"
         } catch {
-            print("Error in sending email for password recovery: \(error.localizedDescription)")
+            print("Error in sending email for password recovery")
             self.errorMessage = "Error in sending email for password recovery"
             self.resendEmail = nil
         }
@@ -108,14 +108,14 @@ class AuthenticationViewModel: ObservableObject {
             do {
                 try await serverService.saveUser(firstName: self.firstName, lastName: self.lastName, firebaseUID: firebaseUID)
                 
-                print("User data posted successfully.")
+                print("User data posted successfully")
                 
                 self.errorMessage = nil
                 await self.sendEmailVerification()
                 self.isEmailVerificationActiveSignup = true
             } catch {
                 self.errorMessage = "Error creating account"
-                print("Error posting user data: \(error.localizedDescription)")
+                print("Error posting user data")
                 
                 // delete user
                 do {
@@ -124,7 +124,7 @@ class AuthenticationViewModel: ObservableObject {
                     print("User deleted from firebase")
                 }catch {
                     // error happened
-                    print("Error deleting user from Firebase: \(error.localizedDescription)")
+                    print("Error deleting user from Firebase")
                 }
             }
         } catch {
@@ -137,7 +137,7 @@ class AuthenticationViewModel: ObservableObject {
         do {
             try await firebaseAuthService.sendEmailVerification()
         }catch {
-            print("Error sending email verification: \(error.localizedDescription)")
+            print("Error sending email verification")
             self.errorMessage = "Error sending email verification"
         }
     }
@@ -163,7 +163,7 @@ class AuthenticationViewModel: ObservableObject {
                 print("Email not verified")
             }
         }catch {
-            print("Error reloading user: \(error.localizedDescription)")
+            print("Error reloading user")
             self.errorMessage = "Error verifying email"
         }
     }
@@ -187,7 +187,7 @@ class AuthenticationViewModel: ObservableObject {
                 }
             } catch {
                 self.errorMessage = "Error logging in"
-                print("Error while checking number of users: \(error)")
+                print("Error while checking number of users")
                 return
             }
             
@@ -201,9 +201,9 @@ class AuthenticationViewModel: ObservableObject {
                 // user logged
                 self.isLogged = true
                 
-                print("Saved user (firebaseUID " + user.firebaseUID + ") in SwiftData")
+                print("Saved user in SwiftData")
             } catch {
-                print("Error while saving user to SwiftData: \(error)")
+                print("Error while saving user to SwiftData")
                 self.errorMessage = "Error logging in"
             }
         }
@@ -223,11 +223,11 @@ class AuthenticationViewModel: ObservableObject {
                 do {
                     let firebaseUID = try await firebaseAuthService.getFirebaseUID()
                     try await serverService.saveUser(firstName: self.firstName, lastName: self.lastName, firebaseUID: firebaseUID)
-                    print("User data posted successfully.")
+                    print("User data posted successfully")
                     try await self.getUserFromServer()
                 } catch {
                     self.errorMessage = "Error signing in with Google"
-                    print("Error posting user data: \(error.localizedDescription)")
+                    print("Error posting user data")
                     
                     // delete Firebase user
                     do {
@@ -237,7 +237,7 @@ class AuthenticationViewModel: ObservableObject {
                     }catch {
                         // an error happened
                         self.errorMessage = "Error signing in with Google"
-                        print("Error deleting user from Firebase: \(error.localizedDescription)")
+                        print("Error deleting user from Firebase")
                         return
                     }
                     return
@@ -248,7 +248,7 @@ class AuthenticationViewModel: ObservableObject {
             }
         } catch {
             self.errorMessage = "Error signing in with Google"
-            print("Error signing in with Google: \(error.localizedDescription)")
+            print("Error signing in with Google")
             return
         }
     }

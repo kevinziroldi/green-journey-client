@@ -32,7 +32,7 @@ struct HeaderView: View {
                         .frame(width: UIScreen.main.bounds.width/2 - 30)
                 }
                 ZStack {
-                    HStack{
+                    HStack {
                         if dateArrival != nil{
                             Divider()
                                 .frame(height: 40)

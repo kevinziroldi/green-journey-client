@@ -191,7 +191,7 @@ private struct SignupButtonsView: View {
                     }
                 }) {
                     ZStack {
-                        HStack{
+                        HStack {
                             Image("googleLogo")
                                 .resizable()
                                 .scaledToFit()

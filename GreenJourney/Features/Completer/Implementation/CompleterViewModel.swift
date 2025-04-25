@@ -62,7 +62,7 @@ class CompleterViewModel: ObservableObject {
             }
             suggestions = Array(sortedResults.prefix(10))
         } catch {
-            print("Error during fetch: \(error)")
+            print("Error during fetch")
         }
     }
     
@@ -96,7 +96,7 @@ class CompleterViewModel: ObservableObject {
             let continent = try modelContext.fetch(fetchDescriptor).first?.continent ?? "Europe"
             return continent
         } catch {
-            print("Error while finding continent: \(error.localizedDescription)")
+            print("Error while finding continent")
             return ""
         }
     }

@@ -92,8 +92,6 @@ final class DashboardViewModelIntegrationTest {
         #expect(!travelSearchViewModel.outwardOptions.isEmpty)
         #expect(travelSearchViewModel.returnOptions.isEmpty)
         
-        print(travelSearchViewModel.outwardOptions)
-        
         // select an option
         travelSearchViewModel.selectedOption = travelSearchViewModel.outwardOptions[0].segments
         // save travel

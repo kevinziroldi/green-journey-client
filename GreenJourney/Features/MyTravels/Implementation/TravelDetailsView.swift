@@ -186,7 +186,7 @@ private struct SegmentsDetailsView: View {
         if horizontalSizeClass == .compact {
             // iOS
             
-            VStack{
+            VStack {
                 HStack {
                     Text(travelDetails.isOneway() ? "Segments" : "Outward")
                         .font(.title)

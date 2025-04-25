@@ -25,8 +25,7 @@ struct ReturnOptionsView: View {
                         .font(.system(size: 20))
                         .padding(.top, 50)
                         .padding(.horizontal)
-                }
-                else{
+                } else {
                     VStack {
                         ForEach (viewModel.returnOptions.indices, id: \.self) { option in
                             HStack {

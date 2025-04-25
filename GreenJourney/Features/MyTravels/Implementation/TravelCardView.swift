@@ -17,7 +17,7 @@ struct TravelCardView: View {
                     .shadow(radius: 2, x: 0, y: 2)
                 
                 VStack {
-                    HStack{
+                    HStack {
                         // vehicles
                         VehiclesView(oneWay: travelDetails.isOneway(), outwardVehicle: travelDetails.findVehicle(outwardDirection: true), returnVehicle: travelDetails.findVehicle(outwardDirection: false))
                             .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0))
@@ -136,7 +136,7 @@ private struct VehiclesView: View {
     
     var body: some View {
         VStack {
-            ZStack{
+            ZStack {
                 Circle()
                     .stroke(lineWidth: 2)
                     .frame(width: 45, height: 45)
@@ -144,7 +144,7 @@ private struct VehiclesView: View {
                     .font(.title2)
             }
             if !oneWay {
-                ZStack{
+                ZStack {
                     Circle()
                         .stroke(lineWidth: 2)
                         .frame(width: 45, height: 45)
@@ -174,7 +174,7 @@ private struct DepartureDestinationAllDatesInfoView: View {
             }
             .frame(width: min(UIScreen.main.bounds.width/2 - 15, 400))
             
-            HStack{
+            HStack {
                 Text(travelDetails.getOutwardSegments().first?.dateTime.formatted(date: .numeric, time: .omitted) ?? "")
                     .font(.subheadline)
                     .fontWeight(.light)
@@ -214,7 +214,7 @@ private struct DepartureDestinationAllDatesInfoView: View {
                 .frame(width: min(UIScreen.main.bounds.width/2 - 15, 400))
                 .scaledToFit()
                 .minimumScaleFactor(0.7)
-                HStack{
+                HStack {
                     Text(travelDetails.getReturnSegments().first?.dateTime.formatted(date: .numeric, time: .omitted) ?? "")
                         .font(.subheadline)
                         .fontWeight(.light)

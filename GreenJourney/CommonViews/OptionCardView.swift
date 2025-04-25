@@ -8,7 +8,7 @@ struct OptionCardView: View {
     @ObservedObject var viewModel: TravelSearchViewModel
     
     var body: some View {
-        ZStack{
+        ZStack {
             RoundedRectangle(cornerRadius: 15)
                 .fill(Color(uiColor: .systemBackground))
                 .shadow(radius: 2, x: 0, y: 2)
@@ -19,7 +19,7 @@ struct OptionCardView: View {
                     // top part
                     HStack {
                         // vehicle
-                        ZStack{
+                        ZStack {
                             Circle()
                                 .stroke(lineWidth: 2)
                                 .frame(width: 45, height: 45)
@@ -51,7 +51,7 @@ struct OptionCardView: View {
                         .foregroundColor(.gray)
                     
                     // bottom part
-                    HStack{
+                    HStack {
                         Spacer()
                         
                         Image(systemName: "clock")
@@ -73,7 +73,7 @@ struct OptionCardView: View {
                 
                 HStack {
                     // vehicle
-                    ZStack{
+                    ZStack {
                         Circle()
                             .stroke(lineWidth: 2)
                             .frame(width: 45, height: 45)
@@ -149,7 +149,7 @@ struct DepartureDestinationInfoView: View {
     var changes: Int
     
     var body: some View {
-        VStack{
+        VStack {
             Text(departureDate?.formatted(date: .numeric, time: .shortened) ?? "")
                 .font(.subheadline)
                 .fontWeight(.light)
@@ -164,7 +164,7 @@ struct DepartureDestinationInfoView: View {
             ZStack {
                 if (changes > 1){
                     if (changes == 2){
-                        Text("\(changes) change")
+                        Text("1 change")
                             .foregroundStyle(.blue)
                             .font(.subheadline)
                             .fontWeight(.semibold)

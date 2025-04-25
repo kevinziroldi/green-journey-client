@@ -424,8 +424,8 @@ private struct DestinationCompleterView: View {
     @Binding var isPresenting: Bool
     
     var body: some View {
-        VStack{
-            ZStack{
+        VStack {
+            ZStack {
                 RoundedRectangle(cornerRadius: 10)
                     .stroke(triggerAI ? .clear : AppColors.mainColor, lineWidth: 6)
                     .frame(height: 50)
@@ -483,7 +483,7 @@ private struct OutwardDatePickerView: View {
                 dateTapped = true
             }
         }) {
-            HStack{
+            HStack {
                 Image(systemName: "calendar")
                     .font(.title2)
                 Text("Outward")

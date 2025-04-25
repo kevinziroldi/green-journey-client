@@ -35,7 +35,7 @@ struct InsertReviewButtonView: View {
                 
             } else {
                 if let userReview = viewModel.userReview {
-                    ZStack{
+                    ZStack {
                         RoundedRectangle(cornerRadius: 20)
                             .fill(Color(uiColor: .systemBackground))
                             .shadow(color: .blue.opacity(0.3), radius: 5, x: 0, y: 3)

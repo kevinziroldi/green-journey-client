@@ -21,7 +21,7 @@ struct DestinationPredictionView: View {
                 RoundedRectangle(cornerRadius: 20)
                     .stroke(.linearGradient(Gradient(colors: [.green, .blue]), startPoint: .bottomLeading, endPoint: .topTrailing), lineWidth: 3)
                     .fill(.linearGradient(Gradient(colors: [.green.opacity(0.2), .blue.opacity(0.2)]), startPoint: .bottomLeading, endPoint: .topTrailing))
-                HStack{
+                HStack {
                     Text("Don't know where to go? Ask AI.")
                         .foregroundColor(.gray)
                     Spacer()

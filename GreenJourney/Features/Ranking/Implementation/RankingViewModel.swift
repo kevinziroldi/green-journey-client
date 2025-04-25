@@ -54,7 +54,7 @@ class RankingViewModel: ObservableObject {
                 // save user in SwiftData
                 try modelContext.save()
             } catch {
-                print("Error while interacting with SwiftData: \(error)")
+                print("Error while interacting with SwiftData")
                 return
             }
         }
@@ -83,7 +83,7 @@ class RankingViewModel: ObservableObject {
             self.shortDistanceRanking = rankingResponse.shortDistanceRanking
             self.longDistanceRanking = rankingResponse.longDistanceRanking
         }catch {
-            print("Error fetching rankings: \(error.localizedDescription)")
+            print("Error fetching rankings")
             self.errorMessage = "An error occurred retrieving rankings from server"
         }
     }

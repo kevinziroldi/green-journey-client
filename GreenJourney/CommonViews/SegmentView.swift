@@ -53,7 +53,7 @@ struct SegmentDetailView: View {
             .frame(width: 20)
             .accessibilityIdentifier("segmentLine")
             
-            HStack{
+            HStack {
                 VStack {
                     HStack {
                         HStack {
@@ -76,7 +76,7 @@ struct SegmentDetailView: View {
                     }
                     
                     HStack {
-                        ZStack{
+                        ZStack {
                             Circle()
                                 .stroke(lineWidth: 2.5)
                                 .frame(width: 40, height: 40)
@@ -109,7 +109,7 @@ struct SegmentDetailView: View {
                             HStack {
                                 VStack {
                                     HStack (spacing: 5) {
-                                        VStack{
+                                        VStack {
                                             Text("Info:")
                                                 .font(.subheadline)
                                                 .fontWeight(.bold)

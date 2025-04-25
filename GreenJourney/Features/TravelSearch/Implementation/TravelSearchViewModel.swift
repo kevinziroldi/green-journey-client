@@ -71,7 +71,7 @@ class TravelSearchViewModel: ObservableObject {
             }
             optionsAvailable = true
         }catch {
-            print("Error fetching options: \(error.localizedDescription)")
+            print("Error fetching options")
             optionsAvailable = true
             return
         }
@@ -104,12 +104,12 @@ class TravelSearchViewModel: ObservableObject {
             do {
                 try self.modelContext.save()
             } catch {
-                print("Error saving new travel: \(error.localizedDescription)")
+                print("Error saving new travel")
                 return
             }
             print("Travel added to SwiftData")
         }catch{
-            print("Error saving travel: \(error.localizedDescription)")
+            print("Error saving travel")
             return
         }
         self.departure = CityCompleterDataset()

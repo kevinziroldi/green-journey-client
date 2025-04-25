@@ -184,7 +184,7 @@ private struct ReviewsAverageView: View {
                         .font(.system(size: 100).bold())
                         .fontWeight(.semibold)
                         .foregroundStyle(AppColors.mainColor)
-                    VStack{
+                    VStack {
                         FiveStarView(rating: selectedCityReviewElement.getAverageRating(), dim: 35, color: Color.yellow)
                         Button(action: {
                             if !isPresenting {

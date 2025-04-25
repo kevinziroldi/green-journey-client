@@ -97,5 +97,4 @@ struct TravelOption: Decodable, Hashable {
         }
         return changes
     }
-    
 }

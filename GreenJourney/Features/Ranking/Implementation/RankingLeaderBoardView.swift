@@ -54,7 +54,7 @@ private struct LeaderBoardsView: View {
     @State var isPresenting: Bool = false
     
     var body: some View {
-        VStack{
+        VStack {
             if let errorMessage = viewModel.errorMessage {
                 Text(errorMessage)
                     .font(.headline)

@@ -32,7 +32,7 @@ struct UserBadgesView: View {
                 }
                 .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 15))
                 
-                HStack{
+                HStack {
                     if horizontalSizeClass == .compact {
                         if inline {
                             BadgeView(badges: badges, dim: (UIScreen.main.bounds.width - 120)/4, inline: inline)
