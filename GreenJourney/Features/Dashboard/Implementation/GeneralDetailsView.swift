@@ -32,6 +32,8 @@ struct GeneralDetailsView: View {
                         
                         DistanceTimeRecapView(viewModel: viewModel)
                             .padding(.horizontal)
+                        
+                        Spacer()
                     }
                     .frame(maxWidth: 800)
                 } else {
@@ -54,7 +56,6 @@ struct GeneralDetailsView: View {
                             .overlay(Color.clear.accessibilityIdentifier("distancePerVehicle"))
                         
                         HStack(alignment: .top, spacing: 0) {
-                            
                             PieChartView(data: viewModel.travelsPerTransport, title: "Most chosen Vehicle", color: AppColors.blue, icon: viewModel.mostChosenVehicle, colors: [AppColors.blue, AppColors.orange, AppColors.green, AppColors.red, AppColors.purple])
                                 .padding()
                                 .overlay(Color.clear.accessibilityIdentifier("mostChosenVehicle"))
@@ -63,6 +64,8 @@ struct GeneralDetailsView: View {
                                 .padding()
                                 .fixedSize(horizontal: false, vertical: true)
                         }
+                        
+                        Spacer()
                     }
                     .frame(maxWidth: 800)
                 }

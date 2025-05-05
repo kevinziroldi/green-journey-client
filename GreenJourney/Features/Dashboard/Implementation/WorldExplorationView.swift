@@ -27,6 +27,8 @@ struct WorldExplorationView: View {
                             .frame(height: 250)
                             .padding(.horizontal)
                             .overlay(Color.clear.accessibilityIdentifier("mostVisitedCountries"))
+                        
+                        Spacer()
                     }
                 } else {
                     // iPadOS
@@ -50,6 +52,8 @@ struct WorldExplorationView: View {
                                 .fixedSize(horizontal: false, vertical: true)
                                 .padding()
                         }
+                        
+                        Spacer()
                     }
                     .frame(maxWidth: 800)
                 }

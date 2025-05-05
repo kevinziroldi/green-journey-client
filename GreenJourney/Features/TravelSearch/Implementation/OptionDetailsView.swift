@@ -57,13 +57,25 @@ struct OptionDetailsView: View {
                             .frame(maxHeight: .infinity, alignment: .top)
                         }
                         
-                        HStack {
-                            SegmentsView(segments: option.segments)
+                        HStack(alignment: .top) {
+                            VStack(alignment: .leading) {
+                                HStack {
+                                    Text("Segments")
+                                        .font(.title)
+                                        .fontWeight(.semibold)
+                                        .accessibilityIdentifier("segmentsTitle")
+                                    Spacer()
+                                }
+                                .fixedSize()
                                 .padding(.top)
-                                .frame(maxWidth: 370)
-                            
+                                
+                                SegmentsView(segments: option.segments)
+                                    .fixedSize(horizontal: false, vertical: true)
+                            }
+                            .frame(maxWidth: 370)
                             Spacer()
                         }
+                        .padding(.top)
                         .padding(.leading, 10)
                         
                         Spacer()

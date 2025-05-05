@@ -28,6 +28,8 @@ struct Co2DetailsView: View {
                         BarChartView(data: viewModel.co2CompensatedPerYearNumTrees, title: "Planted Trees", value: "\(viewModel.treesPlanted)", color: AppColors.green)
                             .padding(.horizontal)
                             .overlay(Color.clear.accessibilityIdentifier("plantedTreesPerYear"))
+                        
+                        Spacer()
                     }
                     .frame(maxWidth: 800)
                 } else {
@@ -51,6 +53,8 @@ struct Co2DetailsView: View {
                         DoubleBarChart(element1: "CO\u{2082} Emitted", keys: viewModel.keysToString(keys: viewModel.co2CompensatedPerYearKg.keys.sorted()), data1: viewModel.co2EmittedPerYear.keys.sorted().map{viewModel.co2EmittedPerYear[$0]!}, color1: AppColors.orange, element2: "CO\u{2082} Compensated", data2: viewModel.co2CompensatedPerYearKg.keys.sorted().map{viewModel.co2CompensatedPerYearKg[$0]!}, color2: AppColors.blue, title: "CO\u{2082} per Year", measureunit: "Kg of CO\u{2082}")
                             .padding()
                             .overlay(Color.clear.accessibilityIdentifier("co2EmittedPerYear"))
+                        
+                        Spacer()
                     }
                     .frame(maxWidth: 800)
                 }
