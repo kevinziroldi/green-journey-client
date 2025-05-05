@@ -68,11 +68,15 @@ struct MyTravelsView: View {
                     .padding(.trailing, 20)
                     .actionSheet(isPresented: $showSortOptions) {
                         ActionSheet(title: Text("Sort by"), buttons: [
-                            .default(Text("Departure date")) {viewModel.sortOption = .departureDate},
-                            .default(Text("CO\u{2082} emitted")) {viewModel.sortOption = .co2Emitted},
-                            .default(Text("CO\u{2082} compensation rate")) {viewModel.sortOption = .co2CompensationRate},
-                            .default(Text("Price")) {viewModel.sortOption = .price},
-                            .cancel()
+                            .default(Text("Departure date")) {viewModel.sortOption = .departureDate
+                                isPresenting = false},
+                            .default(Text("CO\u{2082} emitted")) {viewModel.sortOption = .co2Emitted
+                                isPresenting = false},
+                            .default(Text("CO\u{2082} compensation rate")) {viewModel.sortOption = .co2CompensationRate
+                                isPresenting = false},
+                            .default(Text("Price")) {viewModel.sortOption = .price
+                                isPresenting = false},
+                            .cancel({isPresenting = false})
                         ])
                     }
                     .accessibilityIdentifier("sortByButton")
