@@ -22,7 +22,7 @@ struct CO2CompensationView: View {
                 CompensationTitleView(infoTapped: $infoTapped)
                 
                 CompensationButtonsView(viewModel: viewModel, showAlertCompensation: $showAlertCompensation, plantedTrees: $plantedTrees)
-                    .padding(EdgeInsets(top: 15, leading: 0, bottom: 5, trailing: 20))
+                    .padding(EdgeInsets(top: 15, leading: 0, bottom: 5, trailing: 0))
             }
         }
         .padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
@@ -149,53 +149,6 @@ private struct CompensationButtonsView: View {
                     // iPadOS
                     
                     HStack {
-                        /*
-                        VStack {
-                            HStack {
-                                Image(systemName: "carbon.dioxide.cloud")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 35, height: 35)
-                                    .foregroundColor(.red)
-                                
-                                
-                                Text("CO\u{2082} emitted: ")
-                                    .font(.system(size: 20).bold())
-                                    .foregroundColor(.red.opacity(0.8))
-                                    .padding(.leading, 5)
-                                Text(String(format: "%.0f", viewModel.getCo2EmittedSelectedTravel()) + " Kg")
-                                    .font(.system(size: 22).bold())
-                                    .bold()
-                                    .foregroundColor(.red.opacity(0.8))
-                                Spacer()
-                            }
-                            .padding(.horizontal)
-                            .padding(.vertical, 5)
-                            
-                            HStack {
-                                
-                                Image(systemName: "leaf")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 35, height: 35)
-                                    .foregroundColor(.green)
-                                
-                                
-                                Text("CO\u{2082} compensated: ")
-                                    .font(.system(size: 20).bold())
-                                    .foregroundColor(.green.opacity(0.8))
-                                    .padding(.leading, 5)
-                                Text(String(format: "%.0f", viewModel.getCo2CompensatedSelectedTravel()) + " Kg")
-                                    .font(.system(size: 20).bold())
-                                    .bold()
-                                    .foregroundColor(.green.opacity(0.8))
-                                
-                                Spacer()
-                            }
-                            .padding(EdgeInsets(top: 5, leading: 15, bottom: 10, trailing: 15))
-                        }
-                        .fixedSize()
-                        */
                         Spacer()
                         VStack {
                             HStack {
@@ -246,7 +199,7 @@ private struct CompensationButtonsView: View {
                                 Text("Price: \(viewModel.compensatedPrice) €")
                                     .padding()
                                     .font(.system(size: 25))
-                                    .frame(width: 150)
+                                    .frame(width: 150, alignment: .leading)
                             }
                             
                             CompensateButtonView(viewModel: viewModel, showAlertCompensation: $showAlertCompensation, plantedTrees: $plantedTrees)
@@ -254,7 +207,7 @@ private struct CompensationButtonsView: View {
                             
                         }
                         .frame(height: 190)
-                        .padding(.leading)
+                        //.padding(.leading)
                         .padding(.vertical)
                         
                         Spacer()
@@ -273,6 +226,8 @@ private struct CompensationButtonsView: View {
                                     .position(x: geometry.size.width/2 + 70, y: geometry.size.height/2 + 80)
                             }
                         }
+                        .frame(width: 200, height: 220)
+                        Spacer()
                     }
                     .padding(.horizontal, 20)
                 }
@@ -360,7 +315,7 @@ private struct CompensationButtonsView: View {
                             }
                         }
                         .padding(.bottom)
-                        .frame(width: 120,height: 140)
+                        .frame(width: 150,height: 160)
                         Spacer()
                     }
                 }
