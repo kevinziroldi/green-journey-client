@@ -265,8 +265,8 @@ private struct BestCitiesView: View {
     var body: some View {
         // list of cities
         if !viewModel.bestCitiesLoaded {
-            CircularProgressView()
-                .padding(.top)
+            //CircularProgressView()
+                //.padding(.top)
         }
         else {
             ForEach(viewModel.bestCities.indices, id: \.self) { index in

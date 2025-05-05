@@ -53,11 +53,15 @@ struct MyTravelsView: View {
                 .padding(.horizontal)
                 .frame(maxWidth: 400) // set a max width to control the size
                 .accessibilityIdentifier("travelCompletedControl")
+                .disabled(isPresenting)
                 
                 HStack {
                     Spacer()
                     Button(action: {
-                        showSortOptions.toggle()
+                        if !isPresenting {
+                            isPresenting = true
+                            showSortOptions.toggle()
+                        }
                     }) {
                         Text("Order by")
                     }
