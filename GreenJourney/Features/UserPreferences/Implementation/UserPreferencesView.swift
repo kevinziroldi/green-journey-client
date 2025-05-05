@@ -117,8 +117,7 @@ private struct UserPreferencesTitleView: View {
                 .font(.system(size: 32).bold())
                 .fontWeight(.semibold)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.leading)
-                .padding(.bottom, 15)
+                .padding(.vertical)
                 .accessibilityIdentifier("userPreferencesTitle")
             
             Spacer()

@@ -23,38 +23,70 @@ struct DashboardView: View {
     }
     
     var body: some View {
-        ScrollView {
-            VStack {
-                HStack {
-                    Text("Dashboard")
-                        .font(.system(size: 32).bold())
-                        .padding(.vertical)
-                        .fontWeight(.semibold)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .accessibilityIdentifier("dashboardTitle")
-                    Spacer()
-                    
-                    if horizontalSizeClass == .compact {
+        if horizontalSizeClass == .compact {
+            // iOS
+            
+            ScrollView {
+                VStack {
+                    HStack {
+                        DashboardTitleView()
+                        
+                        Spacer()
+                        
                         UserPreferencesButtonView(navigationPath: $navigationPath, isPresenting: $isPresenting)
                     }
+                    .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
+
+                    // expandible recaps
+                    DashboardDetailsNavigationView(viewModel: viewModel, navigationPath: $navigationPath, isPresenting: $isPresenting)
                 }
-                .padding(5)
-                
-                // expandible recaps
-                DashboardDetailsNavigationView(viewModel: viewModel, navigationPath: $navigationPath, isPresenting: $isPresenting)
+            }
+            .scrollClipDisabled(true)
+            .clipShape(Rectangle())
+            .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
+            .onAppear() {
+                isPresenting = false
+                Task {
+                    viewModel.getUserTravels()
+                }
+            }
+        } else {
+            // iPadOS
+            
+            ScrollView {
+                HStack {
+                    Spacer()
+                    VStack {
+                        DashboardTitleView()
+            
+                        // expandible recaps
+                        DashboardDetailsNavigationView(viewModel: viewModel, navigationPath: $navigationPath, isPresenting: $isPresenting)
+                    }
                     .frame(maxWidth: 800)
+                    Spacer()
+                }
             }
-            .padding(.horizontal)
-        }
-        .scrollClipDisabled(true)
-        .clipShape(Rectangle())
-        .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
-        .onAppear() {
-            isPresenting = false
-            Task {
-                viewModel.getUserTravels()
+            .scrollClipDisabled(true)
+            .clipShape(Rectangle())
+            .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
+            .onAppear() {
+                isPresenting = false
+                Task {
+                    viewModel.getUserTravels()
+                }
             }
         }
+    }
+}
+
+private struct DashboardTitleView: View {
+    var body: some View {
+        Text("Dashboard")
+            .font(.system(size: 32).bold())
+            .padding(.vertical)
+            .fontWeight(.semibold)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .accessibilityIdentifier("dashboardTitle")
     }
 }
 

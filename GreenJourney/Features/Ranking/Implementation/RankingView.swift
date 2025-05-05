@@ -54,24 +54,26 @@ struct RankingView: View {
                             // user preferences button
                             UserPreferencesButtonView(navigationPath: $navigationPath, isPresenting: $isPresenting)
                         }
-                        .padding(5)
+                        .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
                         
-                        UserBadgesView(legendTapped: $legendTapped, badges: viewModel.badges, inline: true, isPresenting: $isPresenting)
-                        
-                        ScoresView(scoreLongDistance: viewModel.longDistanceScore, scoreShortDistance: viewModel.shortDistanceScore, isPresenting: $isPresenting)
-                        
-                        Spacer()
-                        
-                        // LeaderBoards
-                        LeaderboardNavigationView(viewModel: viewModel, navigationPath: $navigationPath, title: "Long Distance", leaderboard: viewModel.longDistanceRanking, gridItems: gridItemsCompactDevice, leaderboardType: true, isPresenting: $isPresenting)
-                            .overlay(Color.clear.accessibilityIdentifier("longDistanceNavigationView"))
-                        
-                        LeaderboardNavigationView(viewModel: viewModel,navigationPath: $navigationPath, title: "Short Distance", leaderboard: viewModel.shortDistanceRanking, gridItems: gridItemsCompactDevice, leaderboardType: false, isPresenting: $isPresenting)
-                            .overlay(Color.clear.accessibilityIdentifier("shortDistanceNavigationView"))
-                        
-                        Spacer()
+                        VStack {
+                            UserBadgesView(legendTapped: $legendTapped, badges: viewModel.badges, inline: true, isPresenting: $isPresenting)
+                            
+                            ScoresView(scoreLongDistance: viewModel.longDistanceScore, scoreShortDistance: viewModel.shortDistanceScore, isPresenting: $isPresenting)
+                            
+                            Spacer()
+                            
+                            // LeaderBoards
+                            LeaderboardNavigationView(viewModel: viewModel, navigationPath: $navigationPath, title: "Long Distance", leaderboard: viewModel.longDistanceRanking, gridItems: gridItemsCompactDevice, leaderboardType: true, isPresenting: $isPresenting)
+                                .overlay(Color.clear.accessibilityIdentifier("longDistanceNavigationView"))
+                            
+                            LeaderboardNavigationView(viewModel: viewModel,navigationPath: $navigationPath, title: "Short Distance", leaderboard: viewModel.shortDistanceRanking, gridItems: gridItemsCompactDevice, leaderboardType: false, isPresenting: $isPresenting)
+                                .overlay(Color.clear.accessibilityIdentifier("shortDistanceNavigationView"))
+                            
+                            Spacer()
+                        }
+                        .padding(.horizontal)
                     }
-                    .padding(.horizontal)
                 }
                 .scrollClipDisabled(true)
                 .clipShape(Rectangle())
@@ -84,7 +86,6 @@ struct RankingView: View {
                         VStack {
                             // title
                             RankingTitleView()
-                                .padding(5)
                             
                             HStack(alignment: .top) {
                                 // badges
@@ -165,7 +166,7 @@ private struct LeaderboardNavigationView: View {
                 RoundedRectangle(cornerRadius: 15)
                     .fill(Color(uiColor: .systemBackground))
                     .shadow(radius: 3, x: 0, y: 3)
-                VStack (spacing:0){
+                VStack(spacing:0) {
                     HStack {
                         Text(title)
                             .font(.title)

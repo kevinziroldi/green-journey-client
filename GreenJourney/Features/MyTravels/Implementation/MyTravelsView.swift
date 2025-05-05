@@ -29,21 +29,37 @@ struct MyTravelsView: View {
     var body: some View {
         ScrollView {
             VStack {
-                HStack {
-                    Text("My Travels")
-                        .font(.system(size: 32).bold())
-                        .padding(.vertical)
-                        .fontWeight(.semibold)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .accessibilityIdentifier("myTravelsTitle")
+                if horizontalSizeClass == .compact {
+                    // iOS
                     
-                    Spacer()
-                    
-                    if horizontalSizeClass == .compact {
+                    HStack {
+                        Text("My Travels")
+                            .font(.system(size: 32).bold())
+                            .padding(.vertical)
+                            .fontWeight(.semibold)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .accessibilityIdentifier("myTravelsTitle")
+                        
+                        Spacer()
+
                         UserPreferencesButtonView(navigationPath: $navigationPath, isPresenting: $isPresenting)
                     }
+                    .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
+                } else {
+                    // iPadOS
+                    
+                    HStack {
+                        Spacer()
+                        Text("My Travels")
+                            .font(.system(size: 32).bold())
+                            .padding(.vertical)
+                            .fontWeight(.semibold)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .accessibilityIdentifier("myTravelsTitle")
+                            .frame(maxWidth: 800)
+                        Spacer()
+                    }
                 }
-                .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
                 
                 Picker("", selection: $viewModel.showCompleted) {
                     Text("Completed").tag(true)
