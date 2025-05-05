@@ -228,7 +228,6 @@ private struct CompensationButtonsView: View {
                         .frame(width: 200, height: 220)
                         Spacer()
                     }
-                    .padding(.horizontal, 20)
                 }
             } else {
                 if horizontalSizeClass == .compact {
@@ -294,7 +293,6 @@ private struct CompensationButtonsView: View {
                             Text("Thank you 🌍")
                                 .font(.system(size: 25))
                                 .fontWeight(.light)
-                            
                                 .padding()
                         }
                         .frame(height: 190)
@@ -313,8 +311,7 @@ private struct CompensationButtonsView: View {
                                     .position(x: geometry.size.width/2 + 70, y: geometry.size.height/2 + 80)
                             }
                         }
-                        .padding(.bottom)
-                        .frame(width: 150,height: 160)
+                        .frame(width: 200 ,height: 220)
                         Spacer()
                     }
                 }
