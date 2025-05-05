@@ -132,7 +132,7 @@ private struct RankingTitleView: View {
     var body: some View {
         Text("Ranking")
             .font(.system(size: 32).bold())
-            .padding()
+            .padding(.vertical)
             .fontWeight(.semibold)
             .frame(maxWidth: .infinity, alignment: .leading)
             .accessibilityIdentifier("rankingTitle")
