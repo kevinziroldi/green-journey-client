@@ -56,24 +56,27 @@ struct UserPreferencesView : View {
                 } else {
                     // iPadOS
                     ScrollView {
-                        VStack {
-                            // view title
-                            UserPreferencesTitleView()
-                            
-                            // user data TextFields
-                            UserPreferencesTextFieldsView(userPreferencesViewModel: userPreferencesViewModel, editTapped: editTapped, user: user)
-                                .padding(.horizontal, 50)
-                            
-                            // password modification
-                            PasswordModificationView(authenticationViewModel: authenticationViewModel, showResendMessage: showResendMessage)
-                            
-                            // error message
-                            ErrorMessageView(userPreferencesViewModel: userPreferencesViewModel)
-                            
-                            // logout button
-                            LogoutButtonView(authenticationViewModel: authenticationViewModel, navigationPath: $navigationPath)
+                        HStack {
+                            Spacer()
+                            VStack {
+                                // view title
+                                UserPreferencesTitleView()
+                                
+                                // user data TextFields
+                                UserPreferencesTextFieldsView(userPreferencesViewModel: userPreferencesViewModel, editTapped: editTapped, user: user)
+                                
+                                // password modification
+                                PasswordModificationView(authenticationViewModel: authenticationViewModel, showResendMessage: showResendMessage)
+                                
+                                // error message
+                                ErrorMessageView(userPreferencesViewModel: userPreferencesViewModel)
+                                
+                                // logout button
+                                LogoutButtonView(authenticationViewModel: authenticationViewModel, navigationPath: $navigationPath)
+                            }
+                            .frame(maxWidth: 800)
+                            Spacer()
                         }
-                        .padding()
                     }
                     .scrollDismissesKeyboard(.immediately)
                     .frame(maxWidth: .infinity)
@@ -82,7 +85,6 @@ struct UserPreferencesView : View {
             .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
             .onAppear(){
                 userPreferencesViewModel.getUserData()
-                
             }
         }
     }

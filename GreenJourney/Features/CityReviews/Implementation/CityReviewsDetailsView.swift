@@ -14,26 +14,32 @@ struct CityReviewsDetailsView: View {
     var body: some View {
         if let selectedCityReviewElement = viewModel.selectedCityReviewElement {
             ScrollView {
-                VStack (spacing: 0){
-                    // title
-                    CityReviewsTitleView(viewModel: viewModel)
-                        .padding(.horizontal)
-                    
-                    // reviews average
-                    ReviewsAverageView(selectedCityReviewElement: selectedCityReviewElement, viewModel: viewModel,  infoTapped: $infoTapped, navigationPath: $navigationPath, isPresenting: $isPresenting)
-                        .padding(.horizontal)
-                    
-                    // button or user review
-                    if viewModel.isReviewable() {
-                        InsertReviewButtonView(viewModel: viewModel, reviewTapped: $reviewTapped, isPresenting: $isPresenting)
-                            .padding(.horizontal)
-                            .padding(.vertical)
+                HStack {
+                    Spacer()
+                    VStack {
+                        VStack(spacing: 0) {
+                            // title
+                            CityReviewsTitleView(viewModel: viewModel)
+                                .padding(.horizontal)
+                            
+                            // reviews average
+                            ReviewsAverageView(selectedCityReviewElement: selectedCityReviewElement, viewModel: viewModel,  infoTapped: $infoTapped, navigationPath: $navigationPath, isPresenting: $isPresenting)
+                                .padding(.horizontal)
+                            
+                            // button or user review
+                            if viewModel.isReviewable() {
+                                InsertReviewButtonView(viewModel: viewModel, reviewTapped: $reviewTapped, isPresenting: $isPresenting)
+                                    .padding(.horizontal)
+                                    .padding(.vertical)
+                            }
+                            
+                            // latest reviews, if present
+                            LatestReviewsView(viewModel: viewModel, selectedCityReviewElement: selectedCityReviewElement, navigationPath: $navigationPath, isPresenting: $isPresenting)
+                        }
                     }
-                    
-                    // latest reviews, if present
-                    LatestReviewsView(viewModel: viewModel, selectedCityReviewElement: selectedCityReviewElement, navigationPath: $navigationPath, isPresenting: $isPresenting)
+                    .frame(maxWidth: 800)
+                    Spacer()
                 }
-                
             }
             .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
             .sheet(isPresented: $reviewTapped, onDismiss: {isPresenting = false}) {
@@ -207,7 +213,6 @@ private struct ReviewsAverageView: View {
                         }
                     }
                     
-                    
                     Spacer()
                     
                     VStack {
@@ -366,13 +371,13 @@ private struct ReviewsBlocksView: View {
         LazyVGrid(
             columns: Array(
                 repeating: GridItem(.flexible(), spacing: 10),
-                count: availableWidth > 800 ? 3 : 2
+                count: availableWidth > 750 ? 3 : 2
             ),
             spacing: 10
         ) {
             ForEach(reviews.prefix(6), id: \.id) { review in
                 let spacing: CGFloat = 10
-                let columnsCount = availableWidth > 800 ? 3 : 2
+                let columnsCount = availableWidth > 750 ? 3 : 2
                 let cardWidth = (availableWidth - 40 - spacing * CGFloat(columnsCount)) / CGFloat(columnsCount)
                 // ternary operator needed because at start width is 0
                 CardView(review: review, width: cardWidth > 0 ? cardWidth : 1)

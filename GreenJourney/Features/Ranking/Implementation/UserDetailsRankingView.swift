@@ -38,29 +38,35 @@ struct UserDetailsRankingView: View {
             } else {
                 // iPadOS
                 ScrollView {
-                    VStack {
-                        // title
-                        RankingElementDetailsTitle(user: user)
-                        
-                        // badges
-                        UserBadgesView(legendTapped: $legendTapped, badges: user.badges,inline: true, isPresenting: $isPresenting)
-                        
-                        // user aggregate data
-                        HStack {
-                            VStack {
-                                // scores
-                                ScoresView(scoreLongDistance: user.scoreLongDistance, scoreShortDistance: user.scoreShortDistance, isPresenting: $isPresenting)
-                                
-                                // user aggregate data
-                                RecapViewRegularDevice(viewModel: viewModel, user: user)
-                            }
+                    HStack {
+                        Spacer()
+                        VStack {
+                            // title
+                            RankingElementDetailsTitle(user: user)
                             
-                            // co2 emission
-                            Co2EmissionView(co2Emitted: user.totalCo2Emitted, co2Compensated: user.totalCo2Compensated, progress: progress)
+                            // badges
+                            UserBadgesView(legendTapped: $legendTapped, badges: user.badges,inline: true, isPresenting: $isPresenting)
+                            
+                            // user aggregate data
+                            HStack (alignment: .top) {
+                                VStack {
+                                    // scores
+                                    ScoresView(scoreLongDistance: user.scoreLongDistance, scoreShortDistance: user.scoreShortDistance, isPresenting: $isPresenting)
+                                    
+                                    // user aggregate data
+                                    RecapViewRegularDevice(viewModel: viewModel, user: user)
+                                }
+                                
+                                // co2 emission
+                                Co2EmissionView(co2Emitted: user.totalCo2Emitted, co2Compensated: user.totalCo2Compensated, progress: progress)
+                            }
+                            .fixedSize(horizontal: false, vertical: true)
+                            
+                            Spacer()
                         }
+                        .frame(maxWidth: 800)
                         Spacer()
                     }
-                    .padding()
                 }
             }
         }

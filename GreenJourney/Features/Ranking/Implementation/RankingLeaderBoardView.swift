@@ -27,22 +27,49 @@ struct RankingLeaderBoardView: View {
     
     var leaderboardType: Bool
     var body: some View {
-        VStack {
-            ScrollView {
-                VStack {
-                    Text(title)
-                        .font(.system(size: 32).bold())
-                        .padding()
-                        .fontWeight(.semibold)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .accessibilityIdentifier("rankingName")
-                    
-                    LeaderBoardsView(viewModel: viewModel, navigationPath: $navigationPath, gridItems: gridItems, leaderboardType: leaderboardType)
+        if horizontalSizeClass == .compact {
+            // iOS
+            VStack {
+                ScrollView {
+                    VStack {
+                        Text(title)
+                            .font(.system(size: 32).bold())
+                            .padding()
+                            .fontWeight(.semibold)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .accessibilityIdentifier("rankingName")
+                        
+                        LeaderBoardsView(viewModel: viewModel, navigationPath: $navigationPath, gridItems: gridItems, leaderboardType: leaderboardType)
+                    }
+                    .padding(.horizontal)
                 }
-                .padding(.horizontal)
             }
+            .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
+        } else {
+            // iPadOS
+            
+            VStack {
+                ScrollView {
+                    HStack {
+                        Spacer()
+                        VStack {
+                            Text(title)
+                                .font(.system(size: 32).bold())
+                                .padding()
+                                .fontWeight(.semibold)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .accessibilityIdentifier("rankingName")
+                            
+                            LeaderBoardsView(viewModel: viewModel, navigationPath: $navigationPath, gridItems: gridItems, leaderboardType: leaderboardType)
+                        }
+                        .frame(maxWidth: 800)
+                        Spacer()
+                    }
+                }
+            }
+            .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
         }
-        .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
+        
     }
 }
 

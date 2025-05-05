@@ -59,26 +59,32 @@ struct CitiesReviewsView: View {
                 // iPadOS
                 
                 ScrollView {
-                    // header
-                    CitiesReviewsTitleView()
-                        .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
-                    
-                    VStack {
-                        // city search
-                        CitySearchView(viewModel: viewModel, searchTapped: $searchTapped, isPresenting: $isPresenting)
-                        
+                    HStack {
                         Spacer()
                         
-                        ReviewableCitiesView(viewModel: viewModel, isPresenting: $isPresenting)
+                        VStack {
+                            // header
+                            CitiesReviewsTitleView()
+                                .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
+                            
+                            // city search
+                            CitySearchView(viewModel: viewModel, searchTapped: $searchTapped, isPresenting: $isPresenting)
+                            
+                            Spacer()
+                            
+                            ReviewableCitiesView(viewModel: viewModel, isPresenting: $isPresenting)
+                            
+                            Spacer()
+                            
+                            // best cities
+                            BestCitiesTitle()
+                            BestCitiesView(viewModel: viewModel, navigationPath: $navigationPath, isPresenting: $isPresenting)
+                        }
+                        .frame(maxWidth: 800)
+                        .padding(.horizontal)
                         
                         Spacer()
-                        
-                        // best cities
-                        BestCitiesTitle()
-                        BestCitiesView(viewModel: viewModel, navigationPath: $navigationPath, isPresenting: $isPresenting)
                     }
-                    .frame(maxWidth: 800)
-                    .padding(.horizontal)
                 }
                 .scrollClipDisabled(true)
                 .clipShape(Rectangle())

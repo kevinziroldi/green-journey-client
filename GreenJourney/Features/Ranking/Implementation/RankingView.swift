@@ -79,31 +79,35 @@ struct RankingView: View {
                 // iPadOS
                 
                 ScrollView {
-                    VStack {
-                        // title
-                        RankingTitleView()
-                            .padding(5)
-                        
-                        HStack(alignment: .top) {
-                            // badges
-                            UserBadgesView(legendTapped: $legendTapped, badges: viewModel.badges, inline: false, isPresenting: $isPresenting)
-                            
-                            // scores
-                            ScoresView(scoreLongDistance: viewModel.longDistanceScore, scoreShortDistance: viewModel.shortDistanceScore, isPresenting: $isPresenting)
-                        }
-                        
+                    HStack {
                         Spacer()
-                        
-                        // LeaderBoards
-                        LeaderboardNavigationView(viewModel: viewModel, navigationPath: $navigationPath, title: "Long Distance", leaderboard: viewModel.longDistanceRanking, gridItems: gridItemsRegularDevice, leaderboardType: true, isPresenting: $isPresenting)
-                            .overlay(Color.clear.accessibilityIdentifier("longDistanceNavigationView"))
-                        
-                        LeaderboardNavigationView(viewModel: viewModel,navigationPath: $navigationPath, title: "Short Distance", leaderboard: viewModel.shortDistanceRanking, gridItems: gridItemsRegularDevice, leaderboardType: false, isPresenting: $isPresenting)
-                            .overlay(Color.clear.accessibilityIdentifier("shortDistanceNavigationView"))
-                        
+                        VStack {
+                            // title
+                            RankingTitleView()
+                                .padding(5)
+                            
+                            HStack(alignment: .top) {
+                                // badges
+                                UserBadgesView(legendTapped: $legendTapped, badges: viewModel.badges, inline: false, isPresenting: $isPresenting)
+                                
+                                // scores
+                                ScoresView(scoreLongDistance: viewModel.longDistanceScore, scoreShortDistance: viewModel.shortDistanceScore, isPresenting: $isPresenting)
+                            }
+                            
+                            Spacer()
+                            
+                            // LeaderBoards
+                            LeaderboardNavigationView(viewModel: viewModel, navigationPath: $navigationPath, title: "Long Distance", leaderboard: viewModel.longDistanceRanking, gridItems: gridItemsRegularDevice, leaderboardType: true, isPresenting: $isPresenting)
+                                .overlay(Color.clear.accessibilityIdentifier("longDistanceNavigationView"))
+                            
+                            LeaderboardNavigationView(viewModel: viewModel,navigationPath: $navigationPath, title: "Short Distance", leaderboard: viewModel.shortDistanceRanking, gridItems: gridItemsRegularDevice, leaderboardType: false, isPresenting: $isPresenting)
+                                .overlay(Color.clear.accessibilityIdentifier("shortDistanceNavigationView"))
+                            
+                            Spacer()
+                        }
+                        .frame(maxWidth: 800)
                         Spacer()
                     }
-                    .padding(.horizontal)
                 }
                 .scrollClipDisabled(true)
                 .clipShape(Rectangle())
