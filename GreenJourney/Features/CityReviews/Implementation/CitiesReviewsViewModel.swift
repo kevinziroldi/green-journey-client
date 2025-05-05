@@ -106,7 +106,6 @@ class CitiesReviewsViewModel: ObservableObject {
             // previous, direction = false
             let cityReviewElement = try await serverService.getReviewsForCity(iata: selectedCity.iata, countryCode: selectedCity.countryCode, reviewID: newestReviewID, direction: false)
             
-            //self.selectedCityReviewElement = cityReviewElement
             self.currentReviews = cityReviewElement.reviews
             self.hasPrevious = cityReviewElement.hasPrevious
             self.hasNext = cityReviewElement.hasNext
@@ -134,7 +133,6 @@ class CitiesReviewsViewModel: ObservableObject {
             // previous, direction = false
             let cityReviewElement = try await serverService.getReviewsForCity(iata: selectedCity.iata, countryCode: selectedCity.countryCode, reviewID: oldestReviewID, direction: true)
             
-            //self.selectedCityReviewElement = cityReviewElement
             self.currentReviews = cityReviewElement.reviews
             self.hasPrevious = cityReviewElement.hasPrevious
             self.hasNext = cityReviewElement.hasNext

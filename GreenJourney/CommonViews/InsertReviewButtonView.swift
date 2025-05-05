@@ -41,7 +41,7 @@ struct InsertReviewButtonView: View {
                             .fill(Color(uiColor: .systemBackground))
                             .shadow(color: .blue.opacity(0.3), radius: 5, x: 0, y: 3)
                         if horizontalSizeClass == .compact {
-                            //iOS
+                            // iOS
                             VStack {
                                 HStack {
                                     YourReviewTitle()
@@ -65,7 +65,7 @@ struct InsertReviewButtonView: View {
                             .padding()
                         }
                         else {
-                            //iPadOS
+                            // iPadOS
                             VStack {
                                 HStack {
                                     YourReviewTitle()

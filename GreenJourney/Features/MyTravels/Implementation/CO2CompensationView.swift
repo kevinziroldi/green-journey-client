@@ -207,7 +207,6 @@ private struct CompensationButtonsView: View {
                             
                         }
                         .frame(height: 190)
-                        //.padding(.leading)
                         .padding(.vertical)
                         
                         Spacer()

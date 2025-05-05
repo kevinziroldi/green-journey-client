@@ -33,7 +33,7 @@ struct BadgeView: View {
             // display on 2 rows
             
             VStack(spacing: 5) {
-                HStack(spacing: 5) { //first line
+                HStack(spacing: 5) { // first line
                     Image(allBadges[0].rawValue)
                         .resizable()
                         .scaledToFit()

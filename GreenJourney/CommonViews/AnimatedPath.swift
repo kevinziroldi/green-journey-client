@@ -36,10 +36,10 @@ struct AnimatedRectangle: View {
             
             // define the arc centers
             let initialArcCenters = [
-                CGPoint(x: padding + radius, y: padding + radius), // Top-left
-                CGPoint(x: width - padding - radius, y: padding + radius), // Top-right
-                CGPoint(x: width - padding - radius, y: height - padding - radius), // Bottom-right
-                CGPoint(x: padding + radius, y: height - padding - radius) // Bottom-left
+                CGPoint(x: padding + radius, y: padding + radius), // top-left
+                CGPoint(x: width - padding - radius, y: padding + radius), // top-right
+                CGPoint(x: width - padding - radius, y: height - padding - radius), // bottom-right
+                CGPoint(x: padding + radius, y: height - padding - radius) // bottom-left
             ]
             
             // animate the points

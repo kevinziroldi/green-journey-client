@@ -48,7 +48,6 @@ struct CitiesReviewsView: View {
                         ReviewableCitiesView(viewModel: viewModel, isPresenting: $isPresenting)
                         
                         // best cities
-                        BestCitiesTitle()
                         BestCitiesView(viewModel: viewModel, navigationPath: $navigationPath, isPresenting: $isPresenting)
                     }
                     .padding(.bottom)
@@ -76,7 +75,6 @@ struct CitiesReviewsView: View {
                             Spacer()
                             
                             // best cities
-                            BestCitiesTitle()
                             BestCitiesView(viewModel: viewModel, navigationPath: $navigationPath, isPresenting: $isPresenting)
                         }
                         .frame(maxWidth: 800)
@@ -189,14 +187,14 @@ private struct ReviewableCitiesView: View {
                 Text("Add a review for the cities you visited!")
                     .font(.system(size: 16))
                     .padding(.horizontal, 30)
-                    .padding(.top, 5)
+                    .padding(.vertical, 5)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .foregroundColor(.secondary)
                 
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack {
                         Spacer()
-                            .frame(width: 30)
+                            .frame(width: 25)
                             .layoutPriority(-1)
                         ForEach(viewModel.reviewableCities) { city in
                             ZStack {
@@ -242,25 +240,6 @@ private struct ReviewableCitiesView: View {
     }
 }
 
-private struct BestCitiesTitle: View {
-    var body: some View {
-        VStack (spacing: 0) {
-            Text("Top Cities")
-                .font(.title)
-                .fontWeight(.semibold)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, 30)
-                .accessibilityIdentifier("topCitiesTitle")
-            Text("Check out the cities reviewed best by users")
-                .font(.system(size: 16))
-                .padding(.horizontal, 30)
-                .padding(.vertical, 5)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .foregroundColor(.secondary)
-        }
-    }
-}
-
 private struct BestCitiesView: View {
     @ObservedObject var viewModel: CitiesReviewsViewModel
     @Binding var navigationPath: NavigationPath
@@ -273,6 +252,21 @@ private struct BestCitiesView: View {
                 //.padding(.top)
         }
         else {
+            VStack (spacing: 0) {
+                Text("Top Cities")
+                    .font(.title)
+                    .fontWeight(.semibold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 30)
+                    .accessibilityIdentifier("topCitiesTitle")
+                Text("Check out the cities reviewed best by users")
+                    .font(.system(size: 16))
+                    .padding(.horizontal, 30)
+                    .padding(.vertical, 5)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .foregroundColor(.secondary)
+            }
+            
             ForEach(viewModel.bestCities.indices, id: \.self) { index in
                 BestCityView(city: viewModel.bestCities[index], cityReview: viewModel.bestCitiesReviewElements[index], pos: index+1, viewModel: viewModel)
                     .padding(.horizontal)
@@ -358,7 +352,7 @@ private struct BestCityView: View {
                 .padding()
             }
             .fixedSize(horizontal: false, vertical: true)
-            .padding(.horizontal)
+            .padding(.horizontal, 15)
         } else {
             // iPadOS
             

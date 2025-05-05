@@ -157,7 +157,6 @@ private struct SignupButtonsView: View {
                     .foregroundColor(.white)
                     .padding()
                     .frame(maxWidth: .infinity)
-                //.background(Color.blue)
                     .background(AppColors.mainColor)
                     .cornerRadius(30)
             }

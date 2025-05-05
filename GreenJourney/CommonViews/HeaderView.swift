@@ -9,7 +9,7 @@ struct HeaderView: View {
     var body: some View {
         
         if horizontalSizeClass == .compact {
-            //IOS
+            // iOS
             VStack (spacing: 5){
                 HStack {
                     Text("From")
@@ -73,7 +73,7 @@ struct HeaderView: View {
             
         }
         else {
-            //iPadOS
+            // iPadOS
             VStack (spacing: 0){
                 HStack {
                     Text(from)

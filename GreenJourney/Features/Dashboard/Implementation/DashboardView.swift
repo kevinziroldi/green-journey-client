@@ -39,6 +39,7 @@ struct DashboardView: View {
 
                     // expandible recaps
                     DashboardDetailsNavigationView(viewModel: viewModel, navigationPath: $navigationPath, isPresenting: $isPresenting)
+                        .padding(.horizontal)
                 }
             }
             .scrollClipDisabled(true)
@@ -107,7 +108,7 @@ private struct DashboardDetailsNavigationView: View {
                 RoundedRectangle(cornerRadius: 15)
                     .fill(Color(uiColor: .systemBackground))
                     .shadow(radius: 3, x: 0, y: 3)
-                VStack (spacing:0){
+                VStack(spacing:0) {
                     HStack {
                         Text("CO\u{2082} Tracker")
                             .font(.title)
@@ -136,6 +137,7 @@ private struct DashboardDetailsNavigationView: View {
             .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
             .overlay(Color.clear.accessibilityIdentifier("co2Tracker"))
         }
+        
         Button(action: {
             if !isPresenting {
                 isPresenting = true
@@ -173,6 +175,7 @@ private struct DashboardDetailsNavigationView: View {
             .padding(EdgeInsets(top: 7, leading: 15, bottom: 7, trailing: 15))
             .overlay(Color.clear.accessibilityIdentifier("travelsRecap"))
         }
+        
         Button(action: {
             if !isPresenting {
                 isPresenting = true

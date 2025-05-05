@@ -72,7 +72,7 @@ class User: Codable, @unchecked Sendable {
         self.lastName = try container.decode(String.self, forKey: .lastName)
         self.firebaseUID = try container.decode(String.self, forKey: .firebaseUID)
         if let dateString = try container.decodeIfPresent(String.self, forKey: .birthDate) {
-            //ISO8601DateFormatter
+            // ISO8601DateFormatter
             let isoFormatter = ISO8601DateFormatter()
             if let date = isoFormatter.date(from: dateString) {
                 self.birthDate = date

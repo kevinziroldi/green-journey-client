@@ -58,7 +58,6 @@ struct SegmentDetailView: View {
                     HStack {
                         HStack {
                             Text(segment.departureCity)
-                            //.frame(width: 130, alignment: .leading)
                                 .font(.headline)
                                 .accessibilityIdentifier("segmentDeparture")
                             
@@ -72,7 +71,6 @@ struct SegmentDetailView: View {
                                 .minimumScaleFactor(0.6)
                                 .lineLimit(1)
                         }
-                        //.fixedSize(horizontal: true, vertical: false)
                     }
                     
                     HStack {
@@ -192,7 +190,6 @@ struct SegmentDetailView: View {
                     HStack {
                         HStack {
                             Text(segment.destinationCity)
-                            //.frame(width: 130, alignment: .leading)
                                 .font(.headline)
                                 .accessibilityIdentifier("segmentDestination")
                             
