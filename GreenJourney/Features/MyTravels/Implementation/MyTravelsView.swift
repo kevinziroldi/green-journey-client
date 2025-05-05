@@ -32,7 +32,7 @@ struct MyTravelsView: View {
                 HStack {
                     Text("My Travels")
                         .font(.system(size: 32).bold())
-                        .padding()
+                        .padding(.vertical)
                         .fontWeight(.semibold)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .accessibilityIdentifier("myTravelsTitle")

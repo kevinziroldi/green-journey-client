@@ -57,9 +57,14 @@ struct OptionDetailsView: View {
                             .frame(maxHeight: .infinity, alignment: .top)
                         }
                         
-                        SegmentsView(segments: option.segments)
-                            .padding(.top)
-                            .padding(.leading, 10)
+                        HStack {
+                            SegmentsView(segments: option.segments)
+                                .padding(.top)
+                                .frame(maxWidth: 370)
+                            
+                            Spacer()
+                        }
+                        .padding(.leading, 10)
                         
                         Spacer()
                     }

@@ -106,7 +106,7 @@ private struct CitiesReviewsTitleView: View {
     var body: some View {
         Text("Reviews")
             .font(.system(size: 32).bold())
-            .padding()
+            .padding(.vertical)
             .fontWeight(.semibold)
             .frame(maxWidth: .infinity, alignment: .leading)
             .accessibilityIdentifier("citiesReviewsTitle")

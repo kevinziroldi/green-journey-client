@@ -28,7 +28,7 @@ struct DashboardView: View {
                 HStack {
                     Text("Dashboard")
                         .font(.system(size: 32).bold())
-                        .padding()
+                        .padding(.vertical)
                         .fontWeight(.semibold)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .accessibilityIdentifier("dashboardTitle")

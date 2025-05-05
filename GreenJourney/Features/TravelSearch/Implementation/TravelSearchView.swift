@@ -68,12 +68,20 @@ struct TravelSearchView: View {
                                     HStack {
                                         Spacer()
                                         
-                                        Image(systemName: "xmark")
-                                            .resizable()
-                                            .foregroundStyle(.red)
-                                            .frame(width: 25, height: 25)
+                                        ZStack {
+                                            Circle()
+                                               .fill(Color.white)
+                                               .opacity(0.5)
+                                               .frame(width: 35, height: 35)
+                                    
+                                            
+                                            Image(systemName: "xmark.circle")
+                                                .resizable()
+                                                .foregroundStyle(.red)
+                                                .frame(width: 35, height: 35)
+                                        }
+                                        
                                     }
-                                    .padding(.horizontal, 30)
                                     .accessibilityIdentifier("dismissAIButton")
                                 }
                             }
@@ -169,7 +177,7 @@ private struct TravelSearchHeaderView: View {
         HStack {
             Text("Search Travel")
                 .font(.system(size: 32).bold())
-                .padding()
+                .padding(.vertical)
                 .fontWeight(.semibold)
                 .accessibilityIdentifier("travelSearchViewTitle")
             
