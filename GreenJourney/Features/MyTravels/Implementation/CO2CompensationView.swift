@@ -209,7 +209,7 @@ private struct CompensationButtonsView: View {
                                 .padding(.top, 30)
                             
                         }
-                        .frame(height: 190)
+                        .frame(maxWidth: 300)
                         .padding(.vertical)
                         
                         Spacer()
@@ -301,7 +301,8 @@ private struct CompensationButtonsView: View {
                                 .fontWeight(.light)
                                 .padding()
                         }
-                        .frame(height: 190)
+                        .frame(maxWidth: 300)
+                        
                         Spacer()
                         VStack {
                             GeometryReader { geometry in
