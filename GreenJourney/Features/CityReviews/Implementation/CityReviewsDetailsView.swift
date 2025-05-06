@@ -167,13 +167,11 @@ private struct ReviewsAverageView: View {
         } else {
             // iPadOS
             
-            VStack (spacing: 0) {
+            VStack(spacing: 0) {
                 HStack {
                     Text("Average Rating")
                         .font(.title)
                         .fontWeight(.semibold)
-                    
-                    
                     
                     Button(action: {
                         infoTapped = true
@@ -186,10 +184,14 @@ private struct ReviewsAverageView: View {
                 }
                 HStack (spacing: 30) {
                     Spacer()
+                    
                     Text(String(format: "%.1f", selectedCityReviewElement.getAverageRating()))
                         .font(.system(size: 100).bold())
                         .fontWeight(.semibold)
                         .foregroundStyle(AppColors.mainColor)
+                        .scaledToFit()
+                        .minimumScaleFactor(0.7)
+                    
                     VStack {
                         FiveStarView(rating: selectedCityReviewElement.getAverageRating(), dim: 35, color: Color.yellow)
                         Button(action: {

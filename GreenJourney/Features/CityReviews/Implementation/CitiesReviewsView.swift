@@ -76,6 +76,8 @@ struct CitiesReviewsView: View {
                             
                             // best cities
                             BestCitiesView(viewModel: viewModel, navigationPath: $navigationPath, isPresenting: $isPresenting)
+                            
+                            Spacer()
                         }
                         .frame(maxWidth: 800)
                         
