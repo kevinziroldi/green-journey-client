@@ -22,7 +22,7 @@ struct CO2CompensationView: View {
                 CompensationTitleView(infoTapped: $infoTapped)
                 
                 CompensationButtonsView(viewModel: viewModel, showAlertCompensation: $showAlertCompensation, plantedTrees: $plantedTrees)
-                    .padding(EdgeInsets(top: 15, leading: 0, bottom: 5, trailing: 0))
+                    .padding(.top)
             }
         }
         .padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
@@ -70,6 +70,7 @@ private struct CompensationButtonsView: View {
                     // iOS
                     
                     HStack {
+                        Spacer()
                         VStack(spacing: 0) {
                             HStack {
                                 Spacer()
@@ -126,8 +127,9 @@ private struct CompensationButtonsView: View {
                             
                             CompensateButtonView(viewModel: viewModel, showAlertCompensation: $showAlertCompensation, plantedTrees: $plantedTrees)
                         }
-                        .padding(.trailing, 10)
-                        
+                        .frame(width: UIScreen.main.bounds.size.height <= 667 ? 120 : 150)
+
+                        Spacer()
                         VStack {
                             GeometryReader { geometry in
                                 SemicircleCo2ChartView(progress: viewModel.getProgressSelectedTravel(), height: geometry.size.height, width: geometry.size.width, lineWidth: 10)
@@ -143,6 +145,7 @@ private struct CompensationButtonsView: View {
                             }
                         }
                         .frame(width: UIScreen.main.bounds.size.height <= 667 ? 120 : 150, height: 160)
+                        Spacer()
                     }
                     .padding()
                 } else {
@@ -235,6 +238,7 @@ private struct CompensationButtonsView: View {
                     
                     VStack {
                         HStack {
+                            Spacer()
                             VStack {
                                 Text("You planted")
                                     .font(.system(size: 20))
@@ -251,6 +255,7 @@ private struct CompensationButtonsView: View {
                                     .font(.system(size: 18))
                                     .fontWeight(.light)
                             }
+                            .frame(width: UIScreen.main.bounds.size.height <= 667 ? 120 : 150)
                             
                             Spacer()
                             
@@ -269,6 +274,7 @@ private struct CompensationButtonsView: View {
                                 }
                             }
                             .frame(width: UIScreen.main.bounds.size.height <= 667 ? 120 : 150, height: 160)
+                            Spacer()
                         }
                     }
                     .padding()
