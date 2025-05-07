@@ -82,13 +82,13 @@ private struct CompensationRecapView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 GeometryReader { geometry in
                     SemicircleCo2ChartView(progress: viewModel.computeProgress(), height: 170, width: 200, lineWidth: 16)
-                        .position(x: geometry.size.width/2, y: geometry.size.height/2 - 20)
+                        .position(x: geometry.size.width/2, y: geometry.size.height/2 )
                     VStack {
                         Text(String(format: "%.0f", viewModel.co2Compensated) + " Kg")
                             .font(.title2)
                             .fontWeight(.semibold)
                     }
-                    .position(x: geometry.size.width/2 - 80, y: geometry.size.height/2 + 90)
+                    .position(x: geometry.size.width/2 - 80, y: geometry.size.height/2 + 110)
                     .foregroundStyle(AppColors.green)
                     VStack {
                         Text(String(format: "%.0f", viewModel.co2Emitted) + " Kg")
@@ -96,7 +96,7 @@ private struct CompensationRecapView: View {
                             .fontWeight(.semibold)
                     }
                     .foregroundStyle(.red.opacity(0.8))
-                    .position(x: geometry.size.width/2 + 80, y: geometry.size.height/2 + 90)
+                    .position(x: geometry.size.width/2 + 80, y: geometry.size.height/2 + 110)
                 }
                 .frame(height: 250)
             }
