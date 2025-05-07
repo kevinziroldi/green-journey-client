@@ -71,7 +71,6 @@ private struct CompensationButtonsView: View {
                     // iOS
                     
                     HStack {
-                        Spacer()
                         VStack(spacing: 0) {
                             HStack {
                                 Spacer()
@@ -131,6 +130,7 @@ private struct CompensationButtonsView: View {
                         .frame(width: UIScreen.main.bounds.size.height <= 667 ? 120 : 150)
                         
                         Spacer()
+                        
                         VStack {
                             GeometryReader { geometry in
                                 SemicircleCo2ChartView(progress: viewModel.getProgressSelectedTravel(), height: geometry.size.height, width: geometry.size.width, lineWidth: 10)
@@ -146,7 +146,6 @@ private struct CompensationButtonsView: View {
                             }
                         }
                         .frame(width: UIScreen.main.bounds.size.height <= 667 ? 120 : 150, height: 160)
-                        Spacer()
                     }
                     .padding()
                 } else {
@@ -239,7 +238,6 @@ private struct CompensationButtonsView: View {
                     
                     VStack {
                         HStack {
-                            Spacer()
                             VStack {
                                 Text("You planted")
                                     .font(.system(size: 20))
@@ -275,7 +273,6 @@ private struct CompensationButtonsView: View {
                                 }
                             }
                             .frame(width: UIScreen.main.bounds.size.height <= 667 ? 120 : 150, height: 160)
-                            Spacer()
                         }
                     }
                     .padding()
@@ -370,3 +367,5 @@ private struct CompensateButtonView: View {
         .accessibilityIdentifier("compensateButton")
     }
 }
+
+
