@@ -126,7 +126,6 @@ struct TravelDetailsView: View {
                             .fixedSize()
                         }
                         .padding(.vertical, 20)
-                        
                         .confirmationDialog("Delete this travel?", isPresented: $showAlertDelete, titleVisibility: .visible) {
                             Button("Delete", role: .destructive) {
                                 Task {
@@ -136,8 +135,10 @@ struct TravelDetailsView: View {
                                     }
                                 }
                             }
+                            .accessibilityIdentifier("confirmDeleteButton")
                             
                             Button("Cancel", role: .cancel) {}
+                                .accessibilityIdentifier("cancelDeleteButton")
                             
                         } message: {
                             Text("You cannot undo this action")
