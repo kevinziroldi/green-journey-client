@@ -14,8 +14,8 @@ struct MyTravelsView: View {
     @State private var selectedSortOption: SortOption = .departureDate
     @State private var showSortOptions = false
     
-    @State private var showAlert: Bool = false
-    @State private var showConfirm: Bool = false
+    @State private var showAlertTravelID: Int?
+    @State private var showConfirmTravelID: Int?
     
     @Binding var navigationPath: NavigationPath
     @Environment(\.colorScheme) var colorScheme: ColorScheme
@@ -123,7 +123,7 @@ struct MyTravelsView: View {
                 }
                 else {
                     VStack {
-                        ForEach(viewModel.filteredTravelDetailsList, id: \.id) { travelDetails in
+                        ForEach(viewModel.filteredTravelDetailsList, id: \.travel.travelID) { travelDetails in
                             HStack (spacing: 10) {
                                 Button(action: {
                                     if !isPresenting {
@@ -141,7 +141,7 @@ struct MyTravelsView: View {
                                     VStack {
                                         
                                         Button(action: {
-                                            showConfirm = true
+                                            showConfirmTravelID = travelDetails.travel.travelID
                                             viewModel.selectedTravel = travelDetails
                                         }) {
                                             Image(systemName: "checkmark.circle")
@@ -151,16 +151,18 @@ struct MyTravelsView: View {
                                                 .foregroundStyle(.green)
                                         }
                                         .padding(.vertical, 5)
-                                        .confirmationDialog("Have you done this travel?", isPresented: $showConfirm, titleVisibility: .visible) {
+                                        .confirmationDialog("Have you done this travel?", isPresented: Binding<Bool>(
+                                            get: { showConfirmTravelID == travelDetails.travel.travelID },
+                                            set: { newValue in
+                                                if !newValue { showConfirmTravelID = nil }
+                                            }), titleVisibility: .visible) {
                                             Button("Confirm") { Task {await viewModel.confirmTravel()} }
                                             Button("Cancel", role: .cancel) {}
                                         }
                                         .accessibilityIdentifier("confirmTravelButton_\(travelDetails.travel.travelID ?? 1)")
                                         
-                                        
-                                        
                                         Button(action: {
-                                            showAlert = true
+                                            showAlertTravelID = travelDetails.travel.travelID
                                             viewModel.selectedTravel = travelDetails
                                         }) {
                                             Image(systemName: "trash.circle")
@@ -170,9 +172,13 @@ struct MyTravelsView: View {
                                                 .foregroundStyle(.red)
                                         }
                                         .padding(.vertical, 5)
-                                        .confirmationDialog("Delete this travel?", isPresented: $showAlert, titleVisibility: .visible) {
+                                        .confirmationDialog("Delete this travel?", isPresented: Binding<Bool>(
+                                            get: { showAlertTravelID == travelDetails.travel.travelID },
+                                            set: { newValue in
+                                                if !newValue { showAlertTravelID = nil }
+                                            }), titleVisibility: .visible) {
                                             Button("Delete", role: .destructive) { Task {await viewModel.deleteTravel()}}
-                                            Button("Cancel", role: .cancel) { }
+                                            Button("Cancel", role: .cancel) {}
                                         } message: {
                                             Text("You cannot undo this action")
                                         }
