@@ -27,6 +27,8 @@ class TravelSearchViewModel: ObservableObject {
     @Published var predictionShown: Int = 0
     @Published var optionsAvailable: Bool = false
     
+    @Published var errorOccurred: Bool = false
+    
     init(modelContext: ModelContext, serverService: ServerServiceProtocol) {
         self.modelContext = modelContext
         self.serverService = serverService
@@ -105,11 +107,13 @@ class TravelSearchViewModel: ObservableObject {
                 try self.modelContext.save()
             } catch {
                 print("Error saving new travel")
+                errorOccurred = true
                 return
             }
             print("Travel added to SwiftData")
         }catch{
             print("Error saving travel")
+            errorOccurred = true
             return
         }
         self.departure = CityCompleterDataset()

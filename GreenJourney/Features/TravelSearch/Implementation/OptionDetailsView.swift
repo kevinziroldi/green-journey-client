@@ -109,7 +109,9 @@ struct OptionDetailsView: View {
                             Task {
                                 viewModel.selectedOption.append(contentsOf: option.segments)
                                 await viewModel.saveTravel()
-                                navigationPath = NavigationPath()
+                                if !viewModel.errorOccurred {
+                                    navigationPath = NavigationPath()
+                                }
                             }
                         }) {
                             ZStack {
@@ -132,7 +134,9 @@ struct OptionDetailsView: View {
                         Task {
                             viewModel.selectedOption.append(contentsOf: option.segments)
                             await viewModel.saveTravel()
-                            navigationPath = NavigationPath()
+                            if !viewModel.errorOccurred {
+                                navigationPath = NavigationPath()
+                            }
                         }
                     }) {
                         ZStack {
@@ -151,6 +155,15 @@ struct OptionDetailsView: View {
                 }
             }
             .padding(10)
+        }
+        .alert(isPresented: $viewModel.errorOccurred) {
+            Alert(
+                title: Text("Something went wrong 😞"),
+                message: Text("Try again later"),
+                dismissButton: .default(Text("Continue")) {
+                    viewModel.errorOccurred = false
+                }
+            )
         }
         .ignoresSafeArea(edges: [.bottom, .horizontal])
         .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)

@@ -356,6 +356,10 @@ private struct CompensateButtonView: View {
                 Task {
                     viewModel.compensatedPrice = (plantedTrees-viewModel.getPlantedTrees()) * 2
                     await viewModel.compensateCO2()
+                    if viewModel.errorOccurred {
+                        viewModel.compensatedPrice = 0
+                        plantedTrees = viewModel.getPlantedTrees()
+                    }
                 }
             }
             Button("Cancel", role: .cancel) { }
