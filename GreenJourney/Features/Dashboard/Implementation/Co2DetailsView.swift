@@ -84,31 +84,19 @@ private struct CompensationRecapView: View {
                     SemicircleCo2ChartView(progress: viewModel.computeProgress(), height: 170, width: 200, lineWidth: 16)
                         .position(x: geometry.size.width/2, y: geometry.size.height/2 - 20)
                     VStack {
-                        Text("Compensated")
-                            .font(.title2)
-                            .fontWeight(.semibold)
-                            .scaledToFit()
-                            .minimumScaleFactor(0.6)
-                            .lineLimit(1)
                         Text(String(format: "%.0f", viewModel.co2Compensated) + " Kg")
-                            .font(.title3)
+                            .font(.title2)
                             .fontWeight(.semibold)
                     }
-                    .position(x: geometry.size.width/2 - 90, y: geometry.size.height/2 + 100)
+                    .position(x: geometry.size.width/2 - 80, y: geometry.size.height/2 + 90)
                     .foregroundStyle(AppColors.green)
                     VStack {
-                        Text("Emitted")
-                            .font(.title2)
-                            .fontWeight(.semibold)
-                            .scaledToFit()
-                            .minimumScaleFactor(0.6)
-                            .lineLimit(1)
                         Text(String(format: "%.0f", viewModel.co2Emitted) + " Kg")
-                            .font(.title3)
+                            .font(.title2)
                             .fontWeight(.semibold)
                     }
                     .foregroundStyle(.red.opacity(0.8))
-                    .position(x: geometry.size.width/2 + 90, y: geometry.size.height/2 + 100)
+                    .position(x: geometry.size.width/2 + 80, y: geometry.size.height/2 + 90)
                 }
                 .frame(height: 250)
             }
