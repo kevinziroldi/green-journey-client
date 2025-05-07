@@ -126,19 +126,21 @@ struct TravelDetailsView: View {
                             .fixedSize()
                         }
                         .padding(.vertical, 20)
-                        .alert(isPresented: $showAlertDelete) {
-                            Alert(
-                                title: Text("Delete this travel?"),
-                                message: Text("You cannot undo this action"),
-                                primaryButton: .cancel(Text("Cancel")) {},
-                                secondaryButton: .destructive(Text("Delete")) {
-                                    //delete travel
-                                    Task {
-                                        await viewModel.deleteTravel()
+                        
+                        .confirmationDialog("Delete this travel?", isPresented: $showAlertDelete, titleVisibility: .visible) {
+                            Button("Delete", role: .destructive) {
+                                Task {
+                                    await viewModel.deleteTravel()
+                                    if !viewModel.errorOccurred {
                                         navigationPath.removeLast()
                                     }
                                 }
-                            )
+                            }
+                            
+                            Button("Cancel", role: .cancel) {}
+                            
+                        } message: {
+                            Text("You cannot undo this action")
                         }
                         .accessibilityIdentifier("trashButton")
                     }
@@ -146,6 +148,13 @@ struct TravelDetailsView: View {
                     
                     Spacer()
                 }
+            }
+            .alert(isPresented: $viewModel.errorOccurred) {
+                Alert(
+                    title: Text("Something went wrong 😞"),
+                    message: Text("Try again later"),
+                    dismissButton: .default(Text("Continue")) {viewModel.errorOccurred = false}
+                )
             }
             .sheet(isPresented: $reviewTapped, onDismiss: {isPresenting = false}) {
                 InsertReviewView(isPresented: $reviewTapped, viewModel: reviewViewModel, isPresenting: $isPresenting)

@@ -40,6 +40,8 @@ class MyTravelsViewModel: ObservableObject {
     @Published var compensatedPrice: Int = 0
     @Published var travelReviews: [Review] = []
     
+    @Published var errorOccurred: Bool = false
+    
     init(modelContext: ModelContext, serverService: ServerServiceProtocol) {
         self.modelContext = modelContext
         self.serverService = serverService
@@ -302,6 +304,7 @@ class MyTravelsViewModel: ObservableObject {
             self.showRequestedTravels()
         }catch {
             print("Error updating travel data")
+            errorOccurred = true
             return
         }
     }
@@ -320,6 +323,7 @@ class MyTravelsViewModel: ObservableObject {
             try modelContext.save()
         }catch {
             print("Error while updating travel in SwiftData")
+            errorOccurred = true
             // refesh travels from server
             await self.getUserTravels()
         }
@@ -333,13 +337,16 @@ class MyTravelsViewModel: ObservableObject {
                 print("Travel id for deletion is nil")
                 return
             }
+            
             try await serverService.deleteTravel(travelID: travelID)
             // remove from SwiftData
             await self.deleteTravelFromSwiftData(travelToDelete: travelToDelete)
             // refresh travels
             self.showRequestedTravels()
+            
         }catch {
             print("Error while deletitng")
+            errorOccurred = true
         }
     }
     
@@ -369,6 +376,7 @@ class MyTravelsViewModel: ObservableObject {
                 }
             }catch {
                 print("Error interacting with SwiftData")
+                errorOccurred = true
                 // refresh data from server
                 await self.getUserTravels()
             }

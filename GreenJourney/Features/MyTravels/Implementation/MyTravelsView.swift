@@ -151,19 +151,13 @@ struct MyTravelsView: View {
                                                 .foregroundStyle(.green)
                                         }
                                         .padding(.vertical, 5)
-                                        .alert(isPresented: $showConfirm) {
-                                            Alert(
-                                                title: Text("Have you done this travel?"),
-                                                primaryButton: .cancel(Text("Cancel")) {},
-                                                secondaryButton: .default(Text("Confirm")) {
-                                                    //confirm travel
-                                                    Task {
-                                                        await viewModel.confirmTravel()
-                                                    }
-                                                }
-                                            )
+                                        .confirmationDialog("Have you done this travel?", isPresented: $showConfirm, titleVisibility: .visible) {
+                                            Button("Confirm") { Task {await viewModel.confirmTravel()} }
+                                            Button("Cancel", role: .cancel) {}
                                         }
                                         .accessibilityIdentifier("confirmTravelButton_\(travelDetails.travel.travelID ?? 1)")
+                                        
+                                        
                                         
                                         Button(action: {
                                             showAlert = true
@@ -176,18 +170,11 @@ struct MyTravelsView: View {
                                                 .foregroundStyle(.red)
                                         }
                                         .padding(.vertical, 5)
-                                        .alert(isPresented: $showAlert) {
-                                            Alert(
-                                                title: Text("Delete this travel?"),
-                                                message: Text("You cannot undo this action"),
-                                                primaryButton: .cancel(Text("Cancel")) {},
-                                                secondaryButton: .destructive(Text("Delete")) {
-                                                    //delete travel
-                                                    Task {
-                                                        await viewModel.deleteTravel()
-                                                    }
-                                                }
-                                            )
+                                        .confirmationDialog("Delete this travel?", isPresented: $showAlert, titleVisibility: .visible) {
+                                            Button("Delete", role: .destructive) { Task {await viewModel.deleteTravel()}}
+                                            Button("Cancel", role: .cancel) { }
+                                        } message: {
+                                            Text("You cannot undo this action")
                                         }
                                         .accessibilityIdentifier("deleteTravelButton_\(travelDetails.travel.travelID ?? 1)")
                                     }
@@ -200,6 +187,13 @@ struct MyTravelsView: View {
                 }
             }
             .padding(.bottom)
+        }
+        .alert(isPresented: $viewModel.errorOccurred) {
+            Alert(
+                title: Text("Something went wrong 😞"),
+                message: Text("Try again later"),
+                dismissButton: .default(Text("Continue")) {viewModel.errorOccurred = false}
+            )
         }
         .refreshable {
             Task{

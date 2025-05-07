@@ -350,19 +350,17 @@ private struct CompensateButtonView: View {
             .fixedSize()
         }
         .disabled(plantedTrees==viewModel.getPlantedTrees())
-        .alert(isPresented: $showAlertCompensation) {
-            Alert(
-                title: Text("Compensate \(viewModel.compensatedPrice)€ for this travel?"),
-                message: Text("You cannot undo this action"),
-                primaryButton: .cancel(Text("Cancel")) {},
-                secondaryButton: .default(Text("Confirm")) {
-                    //compensate travel
-                    Task {
-                        viewModel.compensatedPrice = (plantedTrees-viewModel.getPlantedTrees()) * 2
-                        await viewModel.compensateCO2()
-                    }
+        
+        .confirmationDialog("Compensate \(viewModel.compensatedPrice)€ for this travel?", isPresented: $showAlertCompensation, titleVisibility: .visible) {
+            Button("Confirm") {
+                Task {
+                    viewModel.compensatedPrice = (plantedTrees-viewModel.getPlantedTrees()) * 2
+                    await viewModel.compensateCO2()
                 }
-            )
+            }
+            Button("Cancel", role: .cancel) { }
+        } message: {
+            Text("You cannot undo this action")
         }
         .accessibilityIdentifier("compensateButton")
     }
