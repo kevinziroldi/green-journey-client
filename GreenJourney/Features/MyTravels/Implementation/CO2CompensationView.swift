@@ -22,6 +22,7 @@ struct CO2CompensationView: View {
                 CompensationTitleView(infoTapped: $infoTapped)
                 
                 CompensationButtonsView(viewModel: viewModel, showAlertCompensation: $showAlertCompensation, plantedTrees: $plantedTrees)
+                    .padding(.trailing, 20)
                     .padding(.top)
             }
         }
@@ -128,7 +129,7 @@ private struct CompensationButtonsView: View {
                             CompensateButtonView(viewModel: viewModel, showAlertCompensation: $showAlertCompensation, plantedTrees: $plantedTrees)
                         }
                         .frame(width: UIScreen.main.bounds.size.height <= 667 ? 120 : 150)
-
+                        
                         Spacer()
                         VStack {
                             GeometryReader { geometry in
