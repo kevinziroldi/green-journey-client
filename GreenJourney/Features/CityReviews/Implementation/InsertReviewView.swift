@@ -108,20 +108,16 @@ struct InsertReviewView: View {
                             .font(.headline)
                             .padding(.bottom, 20)
                     }
-                    .alert(isPresented: $showAlert) {
-                        Alert(
-                            title: Text("Delete this review?"),
-                            message: Text("You cannot undo this action"),
-                            primaryButton: .cancel(Text("Cancel")) {},
-                            secondaryButton: .destructive(Text("Delete")) {
-                                //delete review
-                                isPresented = false
-                                Task {
-                                    await viewModel.deleteReview()
-                                }
-                            }
-                        )
+                    .confirmationDialog("Delete this review?", isPresented: $showAlert, titleVisibility: .visible) {
+                        Button("Delete", role: .destructive) {
+                            isPresented = false
+                            Task {await viewModel.deleteReview()}
+                        }
+                        Button("Cancel", role: .cancel) {}
+                    } message: {
+                        Text("You cannot undo this action")
                     }
+                    
                     .accessibilityIdentifier("deleteButton")
                 }
             }

@@ -39,6 +39,8 @@ class CitiesReviewsViewModel: ObservableObject {
     
     @Published var errorMessage: String? = nil
     
+    @Published var errorOccurred: Bool = false
+    
     init(modelContext: ModelContext, serverService: ServerServiceProtocol) {
         self.modelContext = modelContext
         self.serverService = serverService
@@ -57,6 +59,7 @@ class CitiesReviewsViewModel: ObservableObject {
                 print("Searched city reviews available")
             }
         }catch {
+            errorOccurred = true
             print("Error getting reviews for searched city")
             return
         }
@@ -173,6 +176,7 @@ class CitiesReviewsViewModel: ObservableObject {
                 }
             }
         }catch {
+            errorOccurred = true
             print("Error getting best reviewed cities")
             return
         }
@@ -308,6 +312,7 @@ class CitiesReviewsViewModel: ObservableObject {
             await getSelectedCityReviewElement(reload: true)
             uploadReviewToSwiftData(userReview: userReview)
         } catch {
+            errorOccurred = true
             self.errorMessage = "An error occurred while saving the review"
             return
         }
@@ -352,6 +357,7 @@ class CitiesReviewsViewModel: ObservableObject {
     
     func modifyReview() async {
         guard let userReview = self.userReview else {
+            errorOccurred = true
             self.errorMessage = "Error while modifying the review"
             return
         }
@@ -377,6 +383,7 @@ class CitiesReviewsViewModel: ObservableObject {
             await getSelectedCityReviewElement(reload: true)
             modifyReviewInSwiftData(userReview: modifiedReview)
         } catch {
+            errorOccurred = true
             self.errorMessage = "Error while modifying the review"
             return
         }
@@ -436,6 +443,7 @@ class CitiesReviewsViewModel: ObservableObject {
             deleteReviewFromSwiftData(userReviewID: reviewID)
             self.userReview = nil
         } catch {
+            errorOccurred = true
             self.errorMessage = "Error while deleting the review"
             return
         }

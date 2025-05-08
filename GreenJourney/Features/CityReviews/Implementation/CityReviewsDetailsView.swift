@@ -41,6 +41,13 @@ struct CityReviewsDetailsView: View {
                     Spacer()
                 }
             }
+            .alert(isPresented: $viewModel.errorOccurred) {
+                        Alert(
+                            title: Text("Something went wrong 😞"),
+                            message: Text("Try again later"),
+                            dismissButton: .default(Text("Continue")) {viewModel.errorOccurred = false}
+                        )
+                    }
             .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
             .sheet(isPresented: $reviewTapped, onDismiss: {isPresenting = false}) {
                 InsertReviewView(isPresented: $reviewTapped, viewModel: viewModel, isPresenting: $isPresenting)

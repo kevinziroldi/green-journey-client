@@ -150,7 +150,17 @@ struct TravelDetailsView: View {
                     Spacer()
                 }
             }
-            .alert(isPresented: $viewModel.errorOccurred) {
+            .alert(isPresented: Binding<Bool>(
+                get: {
+                    viewModel.errorOccurred || reviewViewModel.errorOccurred
+                },
+                set: { newValue in
+                    if !newValue {
+                        viewModel.errorOccurred = false
+                        reviewViewModel.errorOccurred = false
+                    }
+                }
+            )) {
                 Alert(
                     title: Text("Something went wrong 😞"),
                     message: Text("Try again later"),
