@@ -805,7 +805,7 @@ private struct AIPredictionView: View {
                         }
                         .frame(height: 60)
                     }
-                    .accessibilityIdentifier("getRecommendationButton")
+                    .accessibilityIdentifier("newGenerationButton")
                 }
             }
         }

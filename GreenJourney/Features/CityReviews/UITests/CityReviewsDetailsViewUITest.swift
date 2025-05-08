@@ -332,7 +332,7 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
         // check new review present
         XCTAssertTrue(yourReviewTitle.exists, "yourReviewTitle not displayed")
         XCTAssertTrue(userReviewRating.exists, "userReviewRating not displayed")
-        XCTAssertTrue(userReviewText.exists, "userReviewText not displayed")
+        XCTAssertTrue(userReviewText.waitForExistence(timeout: timer), "userReviewText not displayed")
     }
     
     func testInfoReview() {
@@ -510,18 +510,27 @@ final class CityReviewsDetailsViewUITest: XCTestCase {
         // tap delete button
         deleteButton.tap()
         
-        let deleteAlert = app.alerts.firstMatch
-        XCTAssertTrue(deleteAlert.waitForExistence(timeout: timer), "The alert was not shown")
-        
-        let cancelButtonAlert = deleteAlert.buttons["Cancel"]
-        let deleteButtonAlert = deleteAlert.buttons["Delete"]
-        XCTAssertTrue(cancelButtonAlert.exists, "The cancel button is not present")
-        XCTAssertTrue(deleteButtonAlert.exists, "The delete button is not present")
-        
-        deleteButtonAlert.tap()
+        if deviceSize == .compact {
+            let confirmDeleteButton = app.buttons["confirmDeleteButton"]
+            let cancelDeleteButton = app.buttons["cancelDeleteButton"]
+            
+            XCTAssertTrue(confirmDeleteButton.waitForExistence(timeout: timer), "confirmDeleteButton was not shown")
+            XCTAssertTrue(cancelDeleteButton.waitForExistence(timeout: timer), "cancelDeleteButton was not shown")
+            
+            confirmDeleteButton.tap()
+            
+            XCTAssertFalse(confirmDeleteButton.exists, "The alert is displayed and should not")
+        } else {
+            let confirmDeleteButton = app.buttons["confirmDeleteButton"]
+    
+            XCTAssertTrue(confirmDeleteButton.waitForExistence(timeout: timer), "confirmDeleteButton was not shown")
+            
+            confirmDeleteButton.tap()
+            
+            XCTAssertFalse(confirmDeleteButton.exists, "The alert is displayed and should not")
+        }
         
         // check view update
-        XCTAssertFalse(deleteAlert.exists, "The alert is displayed and should not")
         XCTAssertTrue(selecteCityTitle.waitForExistence(timeout: timer), "selecteCityTitle not displayed")
     }
     

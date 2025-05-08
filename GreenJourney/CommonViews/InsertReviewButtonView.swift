@@ -32,8 +32,6 @@ struct InsertReviewButtonView: View {
                 }
                 .padding(.horizontal)
                 .accessibilityIdentifier("addReviewButton")
-                
-                
             } else {
                 if let userReview = viewModel.userReview {
                     ZStack {
@@ -84,6 +82,7 @@ struct InsertReviewButtonView: View {
                                     Text(userReview.reviewText)
                                         .font(.system(size: 18))
                                         .frame(maxWidth: .infinity, alignment: .leading)
+                                        .accessibilityIdentifier("userReviewText")
                                 }
                             }
                             .padding()

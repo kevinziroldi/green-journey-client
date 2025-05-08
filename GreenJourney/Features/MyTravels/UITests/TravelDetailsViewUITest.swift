@@ -315,14 +315,24 @@ final class TravelDetailsViewUITest: XCTestCase {
         
         trashButton.tap()
         
-        let confirmDeleteButton = app.buttons["confirmDeleteButton"]
-        let cancelDeleteButton = app.buttons["cancelDeleteButton"]
-        
-        XCTAssertTrue(confirmDeleteButton.waitForExistence(timeout: timer), "confirmDeleteButton was not shown")
-        XCTAssertTrue(cancelDeleteButton.waitForExistence(timeout: timer), "cancelDeleteButton was not shown")
-        
-        cancelDeleteButton.tap()
-        
-        XCTAssertFalse(confirmDeleteButton.exists, "The alert is displayed and should not")
+        if deviceSize == .compact {
+            let confirmDeleteButton = app.buttons["confirmDeleteButton"]
+            let cancelDeleteButton = app.buttons["cancelDeleteButton"]
+            
+            XCTAssertTrue(confirmDeleteButton.waitForExistence(timeout: timer), "confirmDeleteButton was not shown")
+            XCTAssertTrue(cancelDeleteButton.waitForExistence(timeout: timer), "cancelDeleteButton was not shown")
+            
+            cancelDeleteButton.tap()
+            
+            XCTAssertFalse(confirmDeleteButton.exists, "The alert is displayed and should not")
+        } else {
+            let confirmDeleteButton = app.buttons["confirmDeleteButton"]
+    
+            XCTAssertTrue(confirmDeleteButton.waitForExistence(timeout: timer), "confirmDeleteButton was not shown")
+            
+            confirmDeleteButton.tap()
+            
+            XCTAssertFalse(confirmDeleteButton.exists, "The alert is displayed and should not")
+        }
     }
 }

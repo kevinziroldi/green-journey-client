@@ -113,11 +113,13 @@ struct InsertReviewView: View {
                             isPresented = false
                             Task {await viewModel.deleteReview()}
                         }
+                        .accessibilityIdentifier("confirmDeleteButton")
+                        
                         Button("Cancel", role: .cancel) {}
+                            .accessibilityIdentifier("cancelDeleteButton")
                     } message: {
                         Text("You cannot undo this action")
                     }
-                    
                     .accessibilityIdentifier("deleteButton")
                 }
             }
