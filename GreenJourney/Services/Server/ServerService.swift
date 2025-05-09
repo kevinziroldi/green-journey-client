@@ -8,7 +8,15 @@ class ServerService: ServerServiceProtocol {
         self.firebaseAuthService = ServiceFactory.shared.getFirebaseAuthService()
     }
     
+    private func isConnectionAvailable() -> Bool {
+        return NetworkMonitor.shared.getNetworkState()
+    }
+    
     func saveUser(firstName: String, lastName: String, firebaseUID: String) async throws {
+        if !isConnectionAvailable() {
+            throw URLError(.notConnectedToInternet)
+        }
+        
         let firebaseToken = try await firebaseAuthService.getFirebaseToken()
         
         let user = User(firstName: firstName, lastName: lastName, firebaseUID: firebaseUID, scoreShortDistance: 0, scoreLongDistance: 0)
@@ -37,6 +45,10 @@ class ServerService: ServerServiceProtocol {
     }
     
     func getUser() async throws -> User {
+        if !isConnectionAvailable() {
+            throw URLError(.notConnectedToInternet)
+        }
+        
         let firebaseToken = try await firebaseAuthService.getFirebaseToken()
         
         // build request
@@ -72,6 +84,10 @@ class ServerService: ServerServiceProtocol {
     }
     
     func modifyUser(modifiedUser: User) async throws -> User {
+        if !isConnectionAvailable() {
+            throw URLError(.notConnectedToInternet)
+        }
+        
         let firebaseToken = try await firebaseAuthService.getFirebaseToken()
         
         // JSON encoding
@@ -113,6 +129,10 @@ class ServerService: ServerServiceProtocol {
     }
     
     func getRanking(userID: Int) async throws -> RankingResponse {
+        if !isConnectionAvailable() {
+            throw URLError(.notConnectedToInternet)
+        }
+        
         // create request
         let baseURL = URLHandler.shared.getBaseURL()
         guard let url = URL(string:"\(baseURL)/ranking?id=\(userID)") else {
@@ -144,6 +164,10 @@ class ServerService: ServerServiceProtocol {
     }
     
     func getFirstReviewsForCity(iata: String, countryCode: String) async throws -> CityReviewElement {
+        if !isConnectionAvailable() {
+            throw URLError(.notConnectedToInternet)
+        }
+        
         // build request
         let baseURL = URLHandler.shared.getBaseURL()
         guard let url = URL(string:"\(baseURL)/reviews/first?city_iata=\(iata)&country_code=\(countryCode)") else {
@@ -175,6 +199,10 @@ class ServerService: ServerServiceProtocol {
     }
     
     func getLastReviewsForCity(iata: String, countryCode: String) async throws -> CityReviewElement {
+        if !isConnectionAvailable() {
+            throw URLError(.notConnectedToInternet)
+        }
+        
         // build request
         let baseURL = URLHandler.shared.getBaseURL()
         guard let url = URL(string:"\(baseURL)/reviews/last?city_iata=\(iata)&country_code=\(countryCode)") else {
@@ -205,7 +233,12 @@ class ServerService: ServerServiceProtocol {
         }
     }
     
-    func getReviewsForCity(iata: String, countryCode: String, reviewID: Int, direction: Bool) async throws -> CityReviewElement {
+    func getReviewsForCity(iata: String, countryCode: String, reviewID: Int, direction: Bool) async throws ->
+    CityReviewElement {
+        if !isConnectionAvailable() {
+            throw URLError(.notConnectedToInternet)
+        }
+        
         // build request
         let baseURL = URLHandler.shared.getBaseURL()
         guard let url = URL(string:"\(baseURL)/reviews?city_iata=\(iata)&country_code=\(countryCode)&review_id=\(reviewID)&direction=\(direction)") else {
@@ -237,6 +270,10 @@ class ServerService: ServerServiceProtocol {
     }
     
     func getBestReviewedCities() async throws -> [CityReviewElement] {
+        if !isConnectionAvailable() {
+            throw URLError(.notConnectedToInternet)
+        }
+        
         // build request
         let baseURL = URLHandler.shared.getBaseURL()
         guard let url = URL(string:"\(baseURL)/reviews/best") else {
@@ -269,6 +306,10 @@ class ServerService: ServerServiceProtocol {
     }
     
     func uploadReview(review: Review) async throws -> Review {
+        if !isConnectionAvailable() {
+            throw URLError(.notConnectedToInternet)
+        }
+        
         let firebaseToken = try await firebaseAuthService.getFirebaseToken()
         
         // JSON encoding
@@ -314,6 +355,10 @@ class ServerService: ServerServiceProtocol {
     }
     
     func modifyReview(modifiedReview: Review) async throws -> Review {
+        if !isConnectionAvailable() {
+            throw URLError(.notConnectedToInternet)
+        }
+        
         let firebaseToken = try await firebaseAuthService.getFirebaseToken()
         
         // JSON encoding
@@ -363,6 +408,10 @@ class ServerService: ServerServiceProtocol {
     }
     
     func deleteReview(reviewID: Int) async throws {
+        if !isConnectionAvailable() {
+            throw URLError(.notConnectedToInternet)
+        }
+        
         let firebaseToken = try await firebaseAuthService.getFirebaseToken()
         
         // build request
@@ -387,6 +436,10 @@ class ServerService: ServerServiceProtocol {
     func computeRoutes(departureIata: String, departureCountryCode: String,
                        destinationIata: String, destinationCountryCode: String,
                        date: String, time: String, isOutward: Bool) async throws -> [TravelOption] {
+        if !isConnectionAvailable() {
+            throw URLError(.notConnectedToInternet)
+        }
+        
         // build request
         let baseURL = URLHandler.shared.getBaseURL()
         guard let url = URL(string:"\(baseURL)/travels/search?iata_departure=\(departureIata)&country_code_departure=\(departureCountryCode)&iata_destination=\(destinationIata)&country_code_destination=\(destinationCountryCode)&date=\(date)&time=\(time)&is_outward=\(isOutward)") else {
@@ -424,6 +477,10 @@ class ServerService: ServerServiceProtocol {
     }
     
     func saveTravel(travelDetails: TravelDetails) async throws -> TravelDetails {
+        if !isConnectionAvailable() {
+            throw URLError(.notConnectedToInternet)
+        }
+        
         let firebaseToken = try await firebaseAuthService.getFirebaseToken()
         
         // JSON encoding
@@ -467,6 +524,10 @@ class ServerService: ServerServiceProtocol {
     }
     
     func getTravels() async throws -> [TravelDetails] {
+        if !isConnectionAvailable() {
+            throw URLError(.notConnectedToInternet)
+        }
+        
         let firebaseToken = try await firebaseAuthService.getFirebaseToken()
         
         // build request
@@ -502,6 +563,10 @@ class ServerService: ServerServiceProtocol {
     }
     
     func updateTravel(modifiedTravel: Travel) async throws -> Travel {
+        if !isConnectionAvailable() {
+            throw URLError(.notConnectedToInternet)
+        }
+        
         let firebaseToken = try await firebaseAuthService.getFirebaseToken()
         
         let encoder = JSONEncoder()
@@ -546,6 +611,10 @@ class ServerService: ServerServiceProtocol {
     }
     
     func deleteTravel(travelID: Int) async throws {
+        if !isConnectionAvailable() {
+            throw URLError(.notConnectedToInternet)
+        }
+        
         let firebaseToken = try await firebaseAuthService.getFirebaseToken()
         
         // build request
@@ -568,6 +637,10 @@ class ServerService: ServerServiceProtocol {
     }
     
     func resetTestDatabase() async throws {
+        if !isConnectionAvailable() {
+            throw URLError(.notConnectedToInternet)
+        }
+        
         // build request
         let baseURL = URLHandler.shared.getBaseURL()
         guard let url = URL(string:"\(baseURL)/resetTestDatabase") else {
