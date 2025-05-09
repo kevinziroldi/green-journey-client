@@ -147,6 +147,7 @@ class CitiesReviewsViewModel: ObservableObject {
     
     func getBestReviewedCities() async {
         do {
+            self.errorMessage = nil
             // remove old elements
             self.bestCitiesReviewElements = []
             self.bestCities = []
@@ -177,6 +178,7 @@ class CitiesReviewsViewModel: ObservableObject {
             }
         }catch {
             errorOccurred = true
+            self.errorMessage = ""
             print("Error getting best reviewed cities")
             return
         }

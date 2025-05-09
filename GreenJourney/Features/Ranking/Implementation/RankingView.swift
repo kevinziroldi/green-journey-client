@@ -66,12 +66,14 @@ struct RankingView: View {
                             if viewModel.resetRanking && viewModel.errorMessage == nil {
                                 ProgressView()
                                     .controlSize(.large)
-                                    .padding(.top, 45)
+                                    .padding(.top, 60)
                             }
                             else if viewModel.errorMessage != nil {
                                 Text(viewModel.errorMessage ?? "")
                                     .foregroundStyle(.red)
-                                    .padding(.top, 45)
+                                    .padding(.horizontal)
+                                    .multilineTextAlignment(.center)
+                                    .padding(.top, 60)
                             }
                             else {
                                 // LeaderBoards
@@ -116,6 +118,8 @@ struct RankingView: View {
                             else if viewModel.errorMessage != nil {
                                 Text(viewModel.errorMessage ?? "")
                                     .foregroundStyle(.red)
+                                    .padding(.horizontal)
+                                    .multilineTextAlignment(.center)
                                     .padding(.top, 45)
                             }
                             else {

@@ -258,11 +258,6 @@ private struct BestCitiesView: View {
     
     var body: some View {
         // list of cities
-        if !viewModel.bestCitiesLoaded {
-            //CircularProgressView()
-                //.padding(.top)
-        }
-        else {
             VStack (spacing: 0) {
                 Text("Top Cities")
                     .font(.title)
@@ -277,7 +272,12 @@ private struct BestCitiesView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .foregroundColor(.secondary)
             }
-            
+        if !viewModel.bestCitiesLoaded {
+            ProgressView()
+                .controlSize(.regular)
+                .padding(.top, 30)
+        }
+        else {
             ForEach(viewModel.bestCities.indices, id: \.self) { index in
                 BestCityView(city: viewModel.bestCities[index], cityReview: viewModel.bestCitiesReviewElements[index], pos: index+1, viewModel: viewModel)
                     .padding(.horizontal)
