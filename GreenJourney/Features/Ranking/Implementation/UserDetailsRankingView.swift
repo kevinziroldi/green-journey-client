@@ -114,11 +114,12 @@ private struct RankingElementDetailsTitle: View {
 private struct RecapViewCompactDevice: View {
     @ObservedObject var viewModel: RankingViewModel
     var user: RankingElement
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 15)
-                .fill(Color(uiColor: .systemBackground))
+                .fill(colorScheme == .dark ? AppColors.blockColorDark: Color(uiColor: .systemBackground))
                 .shadow(radius: 3, x: 0, y: 3)
             VStack {
                 Text("Recap")

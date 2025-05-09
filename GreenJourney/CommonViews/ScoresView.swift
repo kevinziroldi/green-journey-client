@@ -5,6 +5,7 @@ struct ScoresView: View {
     var scoreLongDistance: Float64
     var scoreShortDistance: Float64
     @Binding var isPresenting: Bool
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     
     var body: some View {
         VStack(spacing: 0) {
@@ -49,7 +50,7 @@ struct ScoresView: View {
         .padding(.bottom, 7)
         .background(
             RoundedRectangle(cornerRadius: 15)
-                .fill(Color(uiColor: .systemBackground))
+                .fill(colorScheme == .dark ? AppColors.blockColorDark: Color(uiColor: .systemBackground))
                 .shadow(radius: 3, x: 0, y: 3)
         )
         .sheet(isPresented: $infoTapped, onDismiss: {isPresenting = false}) {

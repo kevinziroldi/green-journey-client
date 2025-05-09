@@ -14,7 +14,12 @@ enum AppColors {
     static let bronze = Color(red: 205/255, green: 127/255, blue: 50/255)
     
     static let backColorLight = Color(red: 245/255, green: 245/255, blue: 245/255)
-    static let backColorDark = Color(red: 20/255, green: 20/255, blue: 20/255)
+    //static let backColorDark = Color(red: 20/255, green: 20/255, blue: 20/255)
+    //static let backColorDark = Color(UIColor.secondarySystemBackground)
+    static let backColorDark = Color(red: 25/255, green: 25/255, blue: 25/255)
+    //static let blockColorDark =  Color(UIColor.secondarySystemFill)
+    static let blockColorDark =  Color(red: 37/255, green: 37/255, blue: 37/255)
+    
     
     // custom colors
     static let green = Color(red: 115/255, green: 186/255, blue: 114/255)

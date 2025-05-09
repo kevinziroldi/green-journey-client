@@ -180,6 +180,8 @@ private struct CitySearchView: View {
 }
 
 private struct ReviewableCitiesView: View {
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
+
     @ObservedObject var viewModel: CitiesReviewsViewModel
     @Binding var isPresenting: Bool
     
@@ -208,7 +210,7 @@ private struct ReviewableCitiesView: View {
                         ForEach(viewModel.reviewableCities) { city in
                             ZStack {
                                 RoundedRectangle(cornerRadius: 15)
-                                    .fill(Color(uiColor: .systemBackground))
+                                    .fill(colorScheme == .dark ? AppColors.blockColorDark: Color(uiColor: .systemBackground))
                                     .shadow(radius: 2, x: 0, y: 2)
                                 VStack {
                                     Text(city.cityName)

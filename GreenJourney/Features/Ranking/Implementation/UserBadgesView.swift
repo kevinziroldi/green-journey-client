@@ -2,6 +2,7 @@ import SwiftUI
 
 struct UserBadgesView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     @Binding var legendTapped: Bool
     var badges: [Badge]
     var inline: Bool
@@ -10,7 +11,7 @@ struct UserBadgesView: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 15)
-                .fill(Color(uiColor: .systemBackground))
+                .fill(colorScheme == .dark ? AppColors.blockColorDark: Color(uiColor: .systemBackground))
                 .shadow(radius: 3, x: 0, y: 3)
             VStack(spacing:0) {
                 HStack {

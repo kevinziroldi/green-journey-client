@@ -74,6 +74,8 @@ struct RankingLeaderBoardView: View {
 }
 
 private struct LeaderBoardsView: View {
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
+
     @ObservedObject var viewModel: RankingViewModel
     @Binding var navigationPath: NavigationPath
     var gridItems: [GridItem]
@@ -92,7 +94,7 @@ private struct LeaderBoardsView: View {
             else {
                 ZStack {
                     RoundedRectangle(cornerRadius: 10)
-                        .fill(Color(UIColor.systemBackground))
+                        .fill(colorScheme == .dark ? AppColors.blockColorDark: Color(uiColor: .systemBackground))
                         .stroke(AppColors.mainColor, lineWidth: 3)
                         .padding(.top, 5)
                     VStack {
@@ -183,14 +185,13 @@ private struct LeaderBoardView: View {
 
 private struct LeaderBoardUserView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
+
     @ObservedObject var viewModel: RankingViewModel
     @Binding var navigationPath: NavigationPath
     @Binding var isPresenting: Bool
-    
     var userRanking: RankingElement
-    
     var gridItems: [GridItem]
-    
     var leaderBoardSelected: Bool
     
     var body: some View {
@@ -212,7 +213,7 @@ private struct LeaderBoardUserView: View {
             }) {
                 ZStack {
                     RoundedRectangle(cornerRadius: 10)
-                        .fill(Color(UIColor.systemBackground))
+                        .fill(colorScheme == .dark ? AppColors.blockColorDark: Color(uiColor: .systemBackground))
                         .stroke(AppColors.mainColor, lineWidth: 3)
                     
                     VStack(spacing: 0) {
