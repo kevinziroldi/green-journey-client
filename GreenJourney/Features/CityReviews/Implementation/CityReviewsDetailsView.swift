@@ -329,12 +329,14 @@ private struct CarouselView: View {
 }
 
 private struct CardView: View {
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
+
     let review: Review
     let width: CGFloat
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 15)
-                .fill(Color(uiColor: .systemBackground))
+                .fill(colorScheme == .dark ? AppColors.blockColorDark: Color(uiColor: .systemBackground))
                 .shadow(radius: 3, x: 0, y: 3)
             
             VStack (spacing: 0){

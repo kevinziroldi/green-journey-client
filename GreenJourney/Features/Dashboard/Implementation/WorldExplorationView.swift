@@ -66,12 +66,14 @@ struct WorldExplorationView: View {
 }
 
 private struct VisitedContinentsView: View {
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
+
     @ObservedObject var viewModel: DashboardViewModel
     var body: some View {
         VStack {
             ZStack {
                 RoundedRectangle(cornerRadius: 15)
-                    .fill(Color(uiColor: .systemBackground))
+                    .fill(colorScheme == .dark ? AppColors.blockColorDark: Color(uiColor: .systemBackground))
                     .shadow(radius: 3, x: 0, y: 3)
                 VStack(spacing:0) {
                     Text("Continents")
@@ -125,12 +127,14 @@ private struct ContinentImage: View {
 }
 
 private struct VisitedCountriesView: View {
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
+
     @ObservedObject var viewModel: DashboardViewModel
     
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 15)
-                .fill(Color(uiColor: .systemBackground))
+                .fill(colorScheme == .dark ? AppColors.blockColorDark: Color(uiColor: .systemBackground))
                 .shadow(radius: 3, x: 0, y: 3)
             VStack (spacing:0){
                 Text("Visited Countries")

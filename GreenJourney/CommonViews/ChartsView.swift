@@ -9,6 +9,8 @@ struct ChartElement: Identifiable {
 }
 
 struct PieChartView: View {
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
+
     var title: String
     let color: Color
     let icon: String
@@ -94,13 +96,15 @@ struct PieChartView: View {
             .padding(.bottom)
         }
         .frame(height: 350)
-        .background(Color(UIColor.systemBackground))
+        .background(colorScheme == .dark ? AppColors.blockColorDark: Color(uiColor: .systemBackground))
         .cornerRadius(15)
         .shadow(radius: 3, x: 0, y: 3)
     }
 }
 
 struct BarChartView: View {
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
+
     let title: String
     let value: String
     let color: Color
@@ -170,13 +174,15 @@ struct BarChartView: View {
             .frame(height: 250)
             .padding()
         }
-        .background(Color(UIColor.systemBackground))
+        .background(colorScheme == .dark ? AppColors.blockColorDark: Color(uiColor: .systemBackground))
         .cornerRadius(15)
         .shadow(radius: 3, x: 0, y: 3)
     }
 }
 
 struct HorizontalBarChart: View {
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
+
     var title: String
     let color: Color
     let measureUnit: String
@@ -244,13 +250,15 @@ struct HorizontalBarChart: View {
             }
             .padding()
         }
-        .background(Color(UIColor.systemBackground))
+        .background(colorScheme == .dark ? AppColors.blockColorDark: Color(uiColor: .systemBackground))
         .cornerRadius(15)
         .shadow(radius: 3, x: 0, y: 3)
     }
 }
 
 struct DoubleBarChart: View {
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
+
     let element1: String
     let data1: [String : Double]
     let color1: Color
@@ -332,7 +340,7 @@ struct DoubleBarChart: View {
                 .padding(.top)
             }
         }
-        .background(Color(UIColor.systemBackground))
+        .background(colorScheme == .dark ? AppColors.blockColorDark: Color(uiColor: .systemBackground))
         .cornerRadius(15)
         .shadow(radius: 3, x: 0, y: 3)
     }

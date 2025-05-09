@@ -2,10 +2,9 @@ import SwiftUI
 
 struct TravelCardView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     
     let travelDetails: TravelDetails
-    @EnvironmentObject var viewModel: MyTravelsViewModel
-    @Environment(\.colorScheme) var colorScheme: ColorScheme
     
     var body: some View {
         if horizontalSizeClass == .compact {
@@ -124,7 +123,11 @@ struct TravelCardView: View {
             return LinearGradient(colors: [Color(red: 153/255, green: 204/255, blue: 153/255), Color(red: 143/255, green: 234/255, blue: 255/255)], startPoint: .bottomLeading, endPoint: .topTrailing)
         }
         else {
-            return LinearGradient(colors: [Color(uiColor: .systemBackground)], startPoint: .bottom, endPoint: .top)
+            if colorScheme == .dark {
+                return LinearGradient(colors: [AppColors.blockColorDark], startPoint: .bottom, endPoint: .top)
+            } else {
+                return LinearGradient(colors: [Color(uiColor: .systemBackground)], startPoint: .bottom, endPoint: .top)
+            }            
         }
     }
 }

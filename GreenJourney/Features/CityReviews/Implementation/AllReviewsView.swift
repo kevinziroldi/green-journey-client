@@ -156,11 +156,13 @@ private struct ReviewsListView: View {
 }
 
 private struct SingleReviewView: View {
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
+
     let review: Review
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 15)
-                .fill(Color(uiColor: .systemBackground))
+                .fill(colorScheme == .dark ? AppColors.blockColorDark: Color(uiColor: .systemBackground))
                 .shadow(radius: 3, x: 0, y: 3)
             
             VStack {

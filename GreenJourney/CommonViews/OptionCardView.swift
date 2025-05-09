@@ -2,15 +2,15 @@ import SwiftUI
 
 struct OptionCardView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @Environment(\.colorScheme) var colorScheme
     
     var option: TravelOption
-    @Environment(\.colorScheme) var colorScheme
     @ObservedObject var viewModel: TravelSearchViewModel
     
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 15)
-                .fill(Color(uiColor: .systemBackground))
+                .fill(colorScheme == .dark ? AppColors.blockColorDark: Color(uiColor: .systemBackground))
                 .shadow(radius: 2, x: 0, y: 2)
             
             if horizontalSizeClass == .compact {

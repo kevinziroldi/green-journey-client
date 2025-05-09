@@ -4,6 +4,8 @@ import SwiftData
 import SwiftUI
 
 struct SplashView: View {
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
+
     var modelContext: ModelContext
     var serverService: ServerServiceProtocol
     var firebaseAuthService: FirebaseAuthServiceProtocol
@@ -15,7 +17,11 @@ struct SplashView: View {
             MainView(modelContext: modelContext, serverService: serverService, firebaseAuthService: firebaseAuthService)
         } else {
             ZStack {
-                Color(.systemBackground)
+                if colorScheme == .dark {
+                    AppColors.backColorDark
+                } else {
+                    Color(.systemBackground)
+                }
                 
                 Image("app_logo_splash_view")
                     .resizable()

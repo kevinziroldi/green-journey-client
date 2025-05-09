@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct SignUpView: View {
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     @ObservedObject var viewModel: AuthenticationViewModel
@@ -41,7 +42,7 @@ struct SignUpView: View {
             })
             .toolbar(.hidden, for: .tabBar)
             .navigationBarBackButtonHidden(true)
-            
+            .background(colorScheme == .dark ? AppColors.backColorDark: Color(uiColor: .systemBackground))
         } else {
             // iPadOS
             
@@ -78,6 +79,7 @@ struct SignUpView: View {
             })
             .toolbar(.hidden, for: .tabBar)
             .navigationBarBackButtonHidden(true)
+            .background(colorScheme == .dark ? AppColors.backColorDark: Color(uiColor: .systemBackground))
         }
     }
 }

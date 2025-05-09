@@ -2,6 +2,8 @@ import SwiftUI
 
 struct InsertReviewButtonView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
+
     @ObservedObject var viewModel: CitiesReviewsViewModel
     @Binding var reviewTapped: Bool
     var city: String?
@@ -36,7 +38,7 @@ struct InsertReviewButtonView: View {
                 if let userReview = viewModel.userReview {
                     ZStack {
                         RoundedRectangle(cornerRadius: 20)
-                            .fill(Color(uiColor: .systemBackground))
+                            .fill(colorScheme == .dark ? AppColors.blockColorDark: Color(uiColor: .systemBackground))
                             .shadow(color: .blue.opacity(0.3), radius: 5, x: 0, y: 3)
                         if horizontalSizeClass == .compact {
                             // iOS

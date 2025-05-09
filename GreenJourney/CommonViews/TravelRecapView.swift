@@ -1,8 +1,9 @@
 import SwiftUI
 
 struct TravelRecapView: View {
-    let singleColumn: Bool
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     
+    let singleColumn: Bool
     let distance: Float64
     let duration: String
     let price: Float64
@@ -13,7 +14,7 @@ struct TravelRecapView: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 15)
-                .fill(Color(uiColor: .systemBackground))
+                .fill(colorScheme == .dark ? AppColors.blockColorDark: Color(uiColor: .systemBackground))
                 .shadow(radius: 3, x: 0, y: 3)
             
             if singleColumn {

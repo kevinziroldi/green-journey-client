@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct EmailVerificationView: View {
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     @ObservedObject var viewModel: AuthenticationViewModel
@@ -121,5 +122,6 @@ struct EmailVerificationView: View {
                 resendAvailable = true
             }
         }
+        .background(colorScheme == .dark ? AppColors.backColorDark: Color(uiColor: .systemBackground))
     }
 }

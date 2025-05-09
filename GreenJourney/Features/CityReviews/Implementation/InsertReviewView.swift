@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct InsertReviewView: View {
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
+
     @Binding var isPresented: Bool
     @ObservedObject var viewModel: CitiesReviewsViewModel
     @State var editTapped: Bool = false
@@ -47,10 +49,11 @@ struct InsertReviewView: View {
                         .font(.system(size: 25).bold())
                         .accessibilityIdentifier("personalReviewTitle")
                     
+                    
                     VStack {
-                        ReviewStarRating(icon: "bus", color: Color.black, rating: $viewModel.localTransportRating, editTapped: (editTapped || (viewModel.userReview == nil )))
-                        ReviewStarRating(icon: "tree",color:  Color.black, rating: $viewModel.greenSpacesRating, editTapped: (editTapped || (viewModel.userReview == nil )))
-                        ReviewStarRating(icon: "trash", color:  Color.black, rating: $viewModel.wasteBinsRating, editTapped: (editTapped || (viewModel.userReview == nil )))
+                        ReviewStarRating(icon: "bus", color: colorScheme == .dark ? Color.white : Color.black, rating: $viewModel.localTransportRating, editTapped: (editTapped || (viewModel.userReview == nil )))
+                        ReviewStarRating(icon: "tree",color:  colorScheme == .dark ? Color.white : Color.black, rating: $viewModel.greenSpacesRating, editTapped: (editTapped || (viewModel.userReview == nil )))
+                        ReviewStarRating(icon: "trash", color:  colorScheme == .dark ? Color.white : Color.black, rating: $viewModel.wasteBinsRating, editTapped: (editTapped || (viewModel.userReview == nil )))
                     }
                     .overlay(Color.clear.accessibilityIdentifier("userRatings"))
                 }
@@ -61,7 +64,7 @@ struct InsertReviewView: View {
                         .padding()
                         .lineLimit(8, reservesSpace: true)
                         .focused($isFocused)
-                        .background(Color(.systemGray6))
+                        .background(colorScheme == .dark ? AppColors.blockColorDark: Color(.systemGray6))
                         .cornerRadius(10)
                         .disabled(!editTapped && viewModel.userReview != nil)
                         .accessibilityIdentifier("userText")

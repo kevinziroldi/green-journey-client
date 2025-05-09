@@ -2,6 +2,7 @@ import SwiftUI
 
 struct CO2CompensationView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     
     @ObservedObject var viewModel: MyTravelsViewModel
     
@@ -12,7 +13,7 @@ struct CO2CompensationView: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 15)
-                .fill(Color(uiColor: .systemBackground))
+                .fill(colorScheme == .dark ? AppColors.blockColorDark: Color(uiColor: .systemBackground))
                 .strokeBorder(
                     LinearGradient(gradient: Gradient(colors: [.blue, .cyan, .mint, .green]),
                                    startPoint: .topTrailing, endPoint: .bottomLeading), lineWidth: 6)

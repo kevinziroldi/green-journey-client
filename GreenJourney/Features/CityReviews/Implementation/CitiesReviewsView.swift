@@ -301,6 +301,7 @@ private struct BestCitiesView: View {
 
 private struct BestCityView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     
     var city: CityCompleterDataset
     var cityReview: CityReviewElement
@@ -314,7 +315,7 @@ private struct BestCityView: View {
             
             ZStack {
                 RoundedRectangle(cornerRadius: 15)
-                    .fill(Color(uiColor: .systemBackground))
+                    .fill(colorScheme == .dark ? AppColors.blockColorDark: Color(uiColor: .systemBackground))
                     .shadow(radius: 2, x: 0, y: 2)
                 
                 HStack {

@@ -357,7 +357,7 @@ private struct TravelChoiceView: View {
                 // date pickers
                 ZStack {
                     RoundedRectangle(cornerRadius: 10)
-                        .fill(Color(uiColor: .systemBackground))
+                        .fill(colorScheme == .dark ? AppColors.blockColorDark: Color(uiColor: .systemBackground))
                         .shadow(radius: 2, x: 0, y: 2)
                     VStack (spacing: 0){
                         OutwardDatePickerView(dateTapped: $dateTapped, viewModel: viewModel, isPresenting: $isPresenting)
@@ -598,6 +598,7 @@ private struct OutwardDatePickerView: View {
             .minimumScaleFactor(0.6)
             .lineLimit(1)
             .foregroundStyle(colorScheme == .dark ? .white : .black)
+            //.background(colorScheme == .dark ? AppColors.blockColorDark: Color(uiColor: .systemBackground))
         }
         .padding(.vertical, 10)
         .accessibilityIdentifier("outwardDateButton")
@@ -655,7 +656,7 @@ private struct DatePickerView: View {
     @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
-        VStack (spacing: 0){
+        VStack(spacing: 0) {
             Capsule()
                 .frame(width: 40, height: 5)
                 .foregroundColor(.gray)

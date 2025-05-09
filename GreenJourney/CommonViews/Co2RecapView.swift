@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct Co2RecapView: View {
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
+    
     var halfWidth: Bool
     var co2Emitted: Float64
     var numTrees: Int
@@ -30,12 +32,12 @@ struct Co2RecapView: View {
                 }
                 .background(
                     RoundedRectangle(cornerRadius: 15)
-                        .fill(Color(uiColor: .systemBackground))
+                        .fill(colorScheme == .dark ? AppColors.blockColorDark: Color(uiColor: .systemBackground))
                         .shadow(radius: 3, x: 0, y: 3)
                 )
             } else {
                 RoundedRectangle(cornerRadius: 15)
-                    .fill(Color(uiColor: .systemBackground))
+                    .fill(colorScheme == .dark ? AppColors.blockColorDark: Color(uiColor: .systemBackground))
                     .shadow(radius: 3, x: 0, y: 3)
                 HStack (spacing:0){
                     VStack {
