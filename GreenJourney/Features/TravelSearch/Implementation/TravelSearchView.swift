@@ -247,7 +247,10 @@ struct TravelSearchView: View {
             .onChange(of: navigationSplitViewVisibility) {
                 // disable AI if the user opens the navigation split view
                 if triggerAI && navigationSplitViewVisibility != .detailOnly {
-                    triggerAI = false
+                    viewModel.arrival = CityCompleterDataset()
+                    withAnimation(.bouncy(duration: 0.5)) {
+                        triggerAI = false
+                    }
                 }
             }
         }
