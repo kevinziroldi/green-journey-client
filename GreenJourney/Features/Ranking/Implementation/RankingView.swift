@@ -114,6 +114,15 @@ struct RankingView: View {
                 .clipShape(Rectangle())
             }
         }
+        .refreshable {
+            isPresenting = false
+            if users.first != nil {
+                Task {
+                    await viewModel.getUserFromServer()
+                    await viewModel.fecthRanking()
+                }
+            }
+        }
         .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
         .sheet(isPresented: $legendTapped, onDismiss: {isPresenting = false}) {
             LegendBadgeView(isPresented: $legendTapped, isPresenting: $isPresenting)

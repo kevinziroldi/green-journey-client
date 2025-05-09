@@ -88,6 +88,13 @@ struct CitiesReviewsView: View {
                 .clipShape(Rectangle())
             }
         }
+        .refreshable {
+            isPresenting = false
+            Task {
+                await viewModel.getBestReviewedCities()
+                await viewModel.getReviewableCities()
+            }
+        }
         .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
         .onChange(of: viewModel.searchedCityAvailable) {
             if viewModel.searchedCityAvailable {
