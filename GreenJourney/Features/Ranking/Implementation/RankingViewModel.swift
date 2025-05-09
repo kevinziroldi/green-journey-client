@@ -17,6 +17,7 @@ class RankingViewModel: ObservableObject {
     @Published var leaderboardSelected: Bool = true
     
     @Published var errorMessage: String? = nil
+    @Published var resetRanking: Bool = false
     
     init(modelContext: ModelContext, serverService: ServerServiceProtocol) {
         self.modelContext = modelContext
@@ -82,7 +83,11 @@ class RankingViewModel: ObservableObject {
             let rankingResponse = try await serverService.getRanking(userID: userID)
             self.shortDistanceRanking = rankingResponse.shortDistanceRanking
             self.longDistanceRanking = rankingResponse.longDistanceRanking
+            self.resetRanking = false
         }catch {
+            self.resetRanking = false
+            self.longDistanceRanking = []
+            self.shortDistanceRanking = []
             print("Error fetching rankings")
             self.errorMessage = "An error occurred retrieving rankings from server"
         }
