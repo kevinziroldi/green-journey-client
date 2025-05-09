@@ -733,9 +733,7 @@ private struct AIPredictionView: View {
                         else {
                             viewModel.predictionShown += 1
                         }
-                        withAnimation(.bouncy(duration: 0.5)) {
-                            viewModel.arrival = viewModel.predictedCities[viewModel.predictionShown]
-                        }
+                        viewModel.arrival = viewModel.predictedCities[viewModel.predictionShown]
                     }) {
                         ZStack {
                             RoundedRectangle(cornerRadius: 20)
