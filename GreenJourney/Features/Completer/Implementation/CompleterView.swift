@@ -74,6 +74,11 @@ struct CompleterView: View {
                         }
                     }
                 }
+                .listRowBackground(
+                    colorScheme == .dark
+                    ? AppColors.blockColorDark
+                    : Color(UIColor.systemBackground)
+                )
             }
             .scrollContentBackground(.hidden)
             .scrollDismissesKeyboard(.immediately)

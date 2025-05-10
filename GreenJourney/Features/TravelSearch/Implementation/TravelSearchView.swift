@@ -74,10 +74,9 @@ struct TravelSearchView: View {
                                             
                                             ZStack {
                                                 Circle()
-                                                    .fill(Color.white)
+                                                    .fill(colorScheme == .light ? Color.white : AppColors.backColorDark)
                                                     .opacity(0.5)
                                                     .frame(width: 35, height: 35)
-                                                
                                                 
                                                 Image(systemName: "xmark.circle")
                                                     .resizable()
@@ -157,10 +156,9 @@ struct TravelSearchView: View {
                                                 
                                                 ZStack {
                                                     Circle()
-                                                        .fill(Color.white)
+                                                        .fill(colorScheme == .light ? Color.white : AppColors.backColorDark)
                                                         .opacity(0.5)
                                                         .frame(width: 35, height: 35)
-                                                    
                                                     
                                                     Image(systemName: "xmark.circle")
                                                         .resizable()
