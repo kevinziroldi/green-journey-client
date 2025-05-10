@@ -136,7 +136,6 @@ private struct CitySearchView: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
                     .stroke(AppColors.mainColor, lineWidth: 6)
-                    .fill(Color(uiColor: .systemBackground))
                     .frame(height: 50)
                 
                 Button(action: {
@@ -154,6 +153,8 @@ private struct CitySearchView: View {
                 }
                 .accessibilityIdentifier("searchCityReviews")
             }
+            .background(colorScheme == .dark ? Color(red: 48/255, green: 48/255, blue: 48/255) : Color(uiColor: .systemBackground))
+            .cornerRadius(10)
             .padding(EdgeInsets(top: 0, leading: 30, bottom: 15, trailing: 30))
         }
         .fullScreenCover(isPresented: $searchTapped ) {
@@ -370,7 +371,7 @@ private struct BestCityView: View {
             
             ZStack {
                 RoundedRectangle(cornerRadius: 15)
-                    .fill(Color(uiColor: .systemBackground))
+                    .fill(colorScheme == .dark ? AppColors.blockColorDark: Color(uiColor: .systemBackground))
                     .shadow(radius: 2, x: 0, y: 2)
                 
                 HStack {

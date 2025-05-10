@@ -423,7 +423,7 @@ private struct TravelChoiceView: View {
                         // date pickers
                         ZStack {
                             RoundedRectangle(cornerRadius: 10)
-                                .fill(Color(uiColor: .systemBackground))
+                                .fill(colorScheme == .dark ? AppColors.blockColorDark: Color(uiColor: .systemBackground))
                                 .shadow(radius: 2, x: 0, y: 2)
                             HStack {
                                 OutwardDatePickerView(dateTapped: $dateTapped, viewModel: viewModel, isPresenting: $isPresenting)
@@ -485,7 +485,7 @@ private struct DepartureCompleterView: View {
                 }
                 .accessibilityIdentifier("departureButton")
             }
-            .background(colorScheme == .dark ? Color(red: 48/255, green: 48/255, blue: 48/255) : Color.white)
+            .background(colorScheme == .dark ? Color(red: 48/255, green: 48/255, blue: 48/255) : Color(uiColor: .systemBackground))
             .cornerRadius(10)
         }
         .fullScreenCover(isPresented: $departureTapped ) {
@@ -598,7 +598,6 @@ private struct OutwardDatePickerView: View {
             .minimumScaleFactor(0.6)
             .lineLimit(1)
             .foregroundStyle(colorScheme == .dark ? .white : .black)
-            //.background(colorScheme == .dark ? AppColors.blockColorDark: Color(uiColor: .systemBackground))
         }
         .padding(.vertical, 10)
         .accessibilityIdentifier("outwardDateButton")

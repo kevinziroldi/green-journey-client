@@ -216,13 +216,15 @@ private struct RecapViewCompactDevice: View {
 }
 
 private struct RecapViewRegularDevice: View {
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
+    
     @ObservedObject var viewModel: RankingViewModel
     var user: RankingElement
     
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 15)
-                .fill(Color(uiColor: .systemBackground))
+                .fill(colorScheme == .dark ? AppColors.blockColorDark: Color(uiColor: .systemBackground))
                 .shadow(radius: 3, x: 0, y: 3)
             VStack {
                 Text("Recap")
@@ -280,6 +282,8 @@ private struct RecapViewRegularDevice: View {
 }
 
 private struct Co2EmissionView: View {
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
+    
     var co2Emitted: Double
     var co2Compensated: Double
     var progress: Double
@@ -287,10 +291,10 @@ private struct Co2EmissionView: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 15)
-                .fill(Color(uiColor: .systemBackground))
+                .fill(colorScheme == .dark ? AppColors.blockColorDark: Color(uiColor: .systemBackground))
                 .shadow(radius: 3, x: 0, y: 3)
             VStack {
-                Text("Compensation recap")
+                Text("Compensation Recap")
                     .font(.title)
                     .foregroundStyle(.mint)
                     .fontWeight(.semibold)

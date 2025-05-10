@@ -351,7 +351,6 @@ private struct CompensateButtonView: View {
             .fixedSize()
         }
         .disabled(plantedTrees==viewModel.getPlantedTrees())
-        
         .confirmationDialog("Compensate \(viewModel.compensatedPrice)€ for this travel?", isPresented: $showAlertCompensation, titleVisibility: .visible) {
             Button("Confirm") {
                 Task {

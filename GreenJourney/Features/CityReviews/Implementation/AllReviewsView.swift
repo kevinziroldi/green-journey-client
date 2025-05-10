@@ -37,7 +37,7 @@ struct AllReviewsView: View {
                     ZStack {
                         RoundedRectangle(cornerRadius: 10)
                             .frame(width: 50, height: 40)
-                            .foregroundStyle(viewModel.hasPrevious ? AppColors.mainColor : Color.black.opacity(0.3))
+                            .foregroundStyle(viewModel.hasPrevious ? AppColors.mainColor : Color.secondary.opacity(0.6))
                         Image(systemName: "arrow.left.to.line")
                             .foregroundStyle(.white)
                             .font(.title2)
@@ -56,7 +56,7 @@ struct AllReviewsView: View {
                     ZStack {
                         RoundedRectangle(cornerRadius: 10)
                             .frame(width: 115 ,height: 40)
-                            .foregroundStyle(viewModel.hasPrevious ? AppColors.mainColor : Color.black.opacity(0.3))
+                            .foregroundStyle(viewModel.hasPrevious ? AppColors.mainColor : Color.secondary.opacity(0.6))
                         
                         HStack {
                             Image(systemName: "arrow.left")
@@ -83,7 +83,7 @@ struct AllReviewsView: View {
                     ZStack {
                         RoundedRectangle(cornerRadius: 10)
                             .frame(width: 115 ,height: 40)
-                            .foregroundStyle(viewModel.hasNext ? AppColors.mainColor : Color.black.opacity(0.3))
+                            .foregroundStyle(viewModel.hasNext ? AppColors.mainColor : Color.secondary.opacity(0.6))
                         HStack {
                             Text("Next")
                                 .foregroundStyle(.white)
@@ -108,7 +108,7 @@ struct AllReviewsView: View {
                     ZStack {
                         RoundedRectangle(cornerRadius: 10)
                             .frame(width: 50, height: 40)
-                            .foregroundStyle(viewModel.hasNext ? AppColors.mainColor : Color.black.opacity(0.3))
+                            .foregroundStyle(viewModel.hasNext ? AppColors.mainColor : Color.secondary.opacity(0.6))
                         Image(systemName: "arrow.right.to.line")
                             .foregroundStyle(.white)
                             .font(.title2)
