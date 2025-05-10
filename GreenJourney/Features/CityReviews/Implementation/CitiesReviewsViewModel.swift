@@ -178,8 +178,9 @@ class CitiesReviewsViewModel: ObservableObject {
             }
         }catch {
             errorOccurred = true
-            self.errorMessage = ""
+            self.errorMessage = "An error occurred retrieving best cities from server"
             print("Error getting best reviewed cities")
+            self.bestCitiesLoaded = true
             return
         }
     }
