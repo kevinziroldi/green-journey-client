@@ -276,7 +276,15 @@ private struct BestCitiesView: View {
         if !viewModel.bestCitiesLoaded {
             ProgressView()
                 .controlSize(.regular)
-                .padding(.top, 30)
+                .padding(.top, 60)
+        }
+        else if viewModel.bestCitiesLoaded && viewModel.errorMessage != nil {
+            Text(viewModel.errorMessage ?? "")
+                .foregroundStyle(.red)
+                .padding(.horizontal, 30)
+                .multilineTextAlignment(.center)
+                .padding(.top, 60)
+                
         }
         else {
             ForEach(viewModel.bestCities.indices, id: \.self) { index in

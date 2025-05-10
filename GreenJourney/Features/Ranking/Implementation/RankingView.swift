@@ -65,23 +65,23 @@ struct RankingView: View {
                             
                             if viewModel.resetRanking && viewModel.errorMessage == nil {
                                 ProgressView()
-                                    .controlSize(.large)
                                     .padding(.top, 60)
                             }
-                            else if viewModel.errorMessage != nil {
-                                Text(viewModel.errorMessage ?? "")
-                                    .foregroundStyle(.red)
-                                    .padding(.horizontal)
-                                    .multilineTextAlignment(.center)
-                                    .padding(.top, 60)
-                            }
-                            else {
+                            else if !viewModel.longDistanceRanking.isEmpty {
                                 // LeaderBoards
                                 LeaderboardNavigationView(viewModel: viewModel, navigationPath: $navigationPath, title: "Long Distance", leaderboard: viewModel.longDistanceRanking, gridItems: gridItemsCompactDevice, leaderboardType: true, isPresenting: $isPresenting)
                                     .overlay(Color.clear.accessibilityIdentifier("longDistanceNavigationView"))
                                 
                                 LeaderboardNavigationView(viewModel: viewModel,navigationPath: $navigationPath, title: "Short Distance", leaderboard: viewModel.shortDistanceRanking, gridItems: gridItemsCompactDevice, leaderboardType: false, isPresenting: $isPresenting)
                                     .overlay(Color.clear.accessibilityIdentifier("shortDistanceNavigationView"))
+                            }
+                            
+                            if viewModel.errorMessage != nil {
+                                Text(viewModel.errorMessage ?? "")
+                                    .foregroundStyle(.red)
+                                    .padding(.horizontal)
+                                    .multilineTextAlignment(.center)
+                                    .padding(.top, 60)
                             }
                             Spacer()
                         }
@@ -112,23 +112,24 @@ struct RankingView: View {
                             
                             if viewModel.resetRanking && viewModel.errorMessage == nil {
                                 ProgressView()
-                                    .controlSize(.large)
-                                    .padding(.top, 45)
+                                    .padding(.top, 60)
                             }
-                            else if viewModel.errorMessage != nil {
-                                Text(viewModel.errorMessage ?? "")
-                                    .foregroundStyle(.red)
-                                    .padding(.horizontal)
-                                    .multilineTextAlignment(.center)
-                                    .padding(.top, 45)
-                            }
-                            else {
+                            
+                            else if !viewModel.longDistanceRanking.isEmpty {
                                 // LeaderBoards
                                 LeaderboardNavigationView(viewModel: viewModel, navigationPath: $navigationPath, title: "Long Distance", leaderboard: viewModel.longDistanceRanking, gridItems: gridItemsRegularDevice, leaderboardType: true, isPresenting: $isPresenting)
                                     .overlay(Color.clear.accessibilityIdentifier("longDistanceNavigationView"))
                                 
                                 LeaderboardNavigationView(viewModel: viewModel,navigationPath: $navigationPath, title: "Short Distance", leaderboard: viewModel.shortDistanceRanking, gridItems: gridItemsRegularDevice, leaderboardType: false, isPresenting: $isPresenting)
                                     .overlay(Color.clear.accessibilityIdentifier("shortDistanceNavigationView"))
+                            }
+                            
+                            if viewModel.errorMessage != nil {
+                                Text(viewModel.errorMessage ?? "")
+                                    .foregroundStyle(.red)
+                                    .padding(.horizontal)
+                                    .multilineTextAlignment(.center)
+                                    .padding(.top, 60)
                             }
                             Spacer()
                         }
@@ -142,6 +143,7 @@ struct RankingView: View {
         }
         .refreshable {
             isPresenting = false
+            viewModel.resetRanking = true
             if users.first != nil {
                 Task {
                     await viewModel.getUserFromServer()
