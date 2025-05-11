@@ -182,7 +182,7 @@ private struct CitySearchView: View {
 
 private struct ReviewableCitiesView: View {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
-
+    
     @ObservedObject var viewModel: CitiesReviewsViewModel
     @Binding var isPresenting: Bool
     
@@ -253,40 +253,52 @@ private struct ReviewableCitiesView: View {
 }
 
 private struct BestCitiesView: View {
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
+    
     @ObservedObject var viewModel: CitiesReviewsViewModel
     @Binding var navigationPath: NavigationPath
     @Binding var isPresenting: Bool
     
     var body: some View {
         // list of cities
-            VStack (spacing: 0) {
-                Text("Top Cities")
-                    .font(.title)
-                    .fontWeight(.semibold)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal, 30)
-                    .accessibilityIdentifier("topCitiesTitle")
-                Text("Check out the cities reviewed best by users")
-                    .font(.system(size: 16))
-                    .padding(.horizontal, 30)
-                    .padding(.vertical, 5)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .foregroundColor(.secondary)
-            }
+        VStack (spacing: 0) {
+            Text("Top Cities")
+                .font(.title)
+                .fontWeight(.semibold)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 30)
+                .accessibilityIdentifier("topCitiesTitle")
+            Text("Check out the cities reviewed best by users")
+                .font(.system(size: 16))
+                .padding(.horizontal, 30)
+                .padding(.vertical, 5)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .foregroundColor(.secondary)
+        }
         if !viewModel.bestCitiesLoaded {
             ProgressView()
                 .controlSize(.regular)
                 .padding(.top, 60)
-        }
-        else if viewModel.bestCitiesLoaded && viewModel.errorMessage != nil {
+        } else if viewModel.bestCitiesLoaded && viewModel.errorMessage != nil {
             Text(viewModel.errorMessage ?? "")
                 .foregroundStyle(.red)
                 .padding(.horizontal, 30)
                 .multilineTextAlignment(.center)
                 .padding(.top, 60)
-                
-        }
-        else {
+            
+            if colorScheme == .dark {
+                Image("no_connection_dark")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 150, height: 150)
+            }
+            else {
+                Image("no_connection_light")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 150, height: 150)
+            }
+        } else {
             ForEach(viewModel.bestCities.indices, id: \.self) { index in
                 BestCityView(city: viewModel.bestCities[index], cityReview: viewModel.bestCitiesReviewElements[index], pos: index+1, viewModel: viewModel)
                     .padding(.horizontal)
