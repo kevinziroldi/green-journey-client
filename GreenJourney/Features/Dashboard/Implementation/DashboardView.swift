@@ -59,6 +59,7 @@ struct DashboardView: View {
                     Spacer()
                     VStack {
                         DashboardTitleView()
+                            .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
             
                         // expandible recaps
                         DashboardDetailsNavigationView(viewModel: viewModel, navigationPath: $navigationPath, isPresenting: $isPresenting)

@@ -74,6 +74,7 @@ struct UserPreferencesView : View {
                                 // logout button
                                 LogoutButtonView(authenticationViewModel: authenticationViewModel, navigationPath: $navigationPath)
                             }
+                            .padding()
                             .frame(maxWidth: 800)
                             Spacer()
                         }

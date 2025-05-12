@@ -140,7 +140,8 @@ private struct ReviewsListView: View {
                     }
                 }
                 .frame(maxWidth: .infinity)
-                .padding()
+                .padding(.horizontal, 20)
+                .padding(.vertical)
             }
             .scrollDismissesKeyboard(.interactively)
             .onChange(of: reviews) {

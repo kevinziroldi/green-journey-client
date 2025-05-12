@@ -57,6 +57,7 @@ struct MyTravelsView: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .accessibilityIdentifier("myTravelsTitle")
                             .frame(maxWidth: 800)
+                            .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
                         Spacer()
                     }
                 }
