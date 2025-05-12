@@ -1,15 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "noTravelsLight@1x.svg",
+      "filename" : "noTravelsLight@1x.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "noTravelsLight@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "noTravelsLight@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
