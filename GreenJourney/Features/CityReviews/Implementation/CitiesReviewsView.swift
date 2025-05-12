@@ -64,6 +64,7 @@ struct CitiesReviewsView: View {
                         VStack {
                             // header
                             CitiesReviewsTitleView()
+                                .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
                             
                             // city search
                             CitySearchView(viewModel: viewModel, searchTapped: $searchTapped, isPresenting: $isPresenting)

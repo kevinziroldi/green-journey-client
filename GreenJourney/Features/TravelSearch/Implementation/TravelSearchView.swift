@@ -174,6 +174,7 @@ struct TravelSearchView: View {
                                     // header
                                     TravelSearchHeaderView(triggerAI: $triggerAI, serverService: serverService, firebaseAuthService: firebaseAuthService, navigationPath: $navigationPath, isPresenting: $isPresenting)
                                 }
+                                .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
                                 
                                 TravelChoiceView(viewModel: viewModel, departureTapped: $departureTapped, destinationTapped: $destinationTapped, dateTapped: $dateTapped, dateReturnTapped: $dateReturnTapped, triggerAI: $triggerAI, isPresenting: $isPresenting)
                                 

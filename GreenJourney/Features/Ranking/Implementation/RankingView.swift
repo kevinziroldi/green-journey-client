@@ -112,6 +112,7 @@ struct RankingView: View {
                         VStack {
                             // title
                             RankingTitleView()
+                                .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
                             
                             HStack(alignment: .top) {
                                 // badges

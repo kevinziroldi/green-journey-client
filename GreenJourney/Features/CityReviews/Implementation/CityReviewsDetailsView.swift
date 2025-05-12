@@ -3,8 +3,10 @@ import SwiftData
 import Charts
 
 struct CityReviewsDetailsView: View {
-    @Query var users: [User]
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @Environment(\.colorScheme) var colorScheme: ColorScheme
+    
+    @Query var users: [User]
     @ObservedObject var viewModel: CitiesReviewsViewModel
     @Binding var navigationPath: NavigationPath
     @State var infoTapped = false
@@ -13,41 +15,75 @@ struct CityReviewsDetailsView: View {
     
     var body: some View {
         if let selectedCityReviewElement = viewModel.selectedCityReviewElement {
-            ScrollView {
-                HStack {
-                    Spacer()
-                    VStack {
-                        VStack(spacing: 0) {
-                            // title
-                            CityReviewsTitleView(viewModel: viewModel)
-                                .padding(.horizontal)
-                            
-                            // reviews average
-                            ReviewsAverageView(selectedCityReviewElement: selectedCityReviewElement, viewModel: viewModel,  infoTapped: $infoTapped, navigationPath: $navigationPath, isPresenting: $isPresenting)
-                                .padding(.horizontal)
-                            
-                            // button or user review
-                            if viewModel.isReviewable() {
-                                InsertReviewButtonView(viewModel: viewModel, reviewTapped: $reviewTapped, isPresenting: $isPresenting)
-                                    .padding(.horizontal)
+            VStack {
+                if horizontalSizeClass == .compact {
+                    // iOS
+                    
+                    ScrollView {
+                        VStack {
+                            VStack(spacing: 0) {
+                                // title
+                                CityReviewsTitleView(viewModel: viewModel)
+                                    .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
+                                
+                                // reviews average
+                                ReviewsAverageView(selectedCityReviewElement: selectedCityReviewElement, viewModel: viewModel,  infoTapped: $infoTapped, navigationPath: $navigationPath, isPresenting: $isPresenting)
+                                    .padding(.horizontal, 20)
                                     .padding(.vertical)
+                                
+                                // button or user review
+                                if viewModel.isReviewable() {
+                                    InsertReviewButtonView(viewModel: viewModel, reviewTapped: $reviewTapped, isPresenting: $isPresenting)
+                                        .padding(.horizontal)
+                                        .padding(.vertical)
+                                }
+                                
+                                // latest reviews, if present
+                                LatestReviewsView(viewModel: viewModel, selectedCityReviewElement: selectedCityReviewElement, navigationPath: $navigationPath, isPresenting: $isPresenting)
                             }
-                            
-                            // latest reviews, if present
-                            LatestReviewsView(viewModel: viewModel, selectedCityReviewElement: selectedCityReviewElement, navigationPath: $navigationPath, isPresenting: $isPresenting)
                         }
                     }
-                    .frame(maxWidth: 800)
-                    Spacer()
+                } else {
+                    // iPadOS
+                    
+                    ScrollView {
+                        HStack {
+                            Spacer()
+                            VStack {
+                                VStack(spacing: 0) {
+                                    // title
+                                    CityReviewsTitleView(viewModel: viewModel)
+                                        .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
+                                    
+                                    // reviews average
+                                    ReviewsAverageView(selectedCityReviewElement: selectedCityReviewElement, viewModel: viewModel,  infoTapped: $infoTapped, navigationPath: $navigationPath, isPresenting: $isPresenting)
+                                        .padding(.horizontal, 20)
+                                        .padding(.vertical)
+                                    
+                                    // button or user review
+                                    if viewModel.isReviewable() {
+                                        InsertReviewButtonView(viewModel: viewModel, reviewTapped: $reviewTapped, isPresenting: $isPresenting)
+                                            .padding(.horizontal)
+                                            .padding(.vertical)
+                                    }
+                                    
+                                    // latest reviews, if present
+                                    LatestReviewsView(viewModel: viewModel, selectedCityReviewElement: selectedCityReviewElement, navigationPath: $navigationPath, isPresenting: $isPresenting)
+                                }
+                            }
+                            .frame(maxWidth: 800)
+                            Spacer()
+                        }
+                    }
                 }
             }
             .alert(isPresented: $viewModel.errorOccurred) {
-                        Alert(
-                            title: Text("Something went wrong 😞"),
-                            message: Text("Try again later"),
-                            dismissButton: .default(Text("Continue")) {viewModel.errorOccurred = false}
-                        )
-                    }
+                Alert(
+                    title: Text("Something went wrong 😞"),
+                    message: Text("Try again later"),
+                    dismissButton: .default(Text("Continue")) {viewModel.errorOccurred = false}
+                )
+            }
             .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
             .sheet(isPresented: $reviewTapped, onDismiss: {isPresenting = false}) {
                 InsertReviewView(isPresented: $reviewTapped, viewModel: viewModel, isPresenting: $isPresenting)
@@ -85,7 +121,6 @@ private struct CityReviewsTitleView: View {
                 .accessibilityIdentifier("selecteCityTitle")
             Spacer()
         }
-        .padding(.horizontal)
     }
 }
 
@@ -168,7 +203,6 @@ private struct ReviewsAverageView: View {
                     .padding(.leading, 30)
                 }
             }
-            .padding()
             .overlay(Color.clear.accessibilityIdentifier("averageRatingSection"))
             
         } else {
@@ -238,7 +272,6 @@ private struct ReviewsAverageView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 
             }
-            .padding()
             .overlay(Color.clear.accessibilityIdentifier("averageRatingSection"))
         }
     }
@@ -258,7 +291,7 @@ private struct LatestReviewsView: View {
                 Text("Latest Reviews")
                     .font(.title)
                     .fontWeight(.semibold)
-                    .padding(.horizontal, 30)
+                    .padding(.horizontal, 20)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityIdentifier("latestReviewsTitle")
                 
@@ -330,7 +363,7 @@ private struct CarouselView: View {
 
 private struct CardView: View {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
-
+    
     let review: Review
     let width: CGFloat
     var body: some View {
