@@ -49,6 +49,30 @@ struct CitiesReviewsView: View {
                         
                         // best cities
                         BestCitiesView(viewModel: viewModel, navigationPath: $navigationPath, isPresenting: $isPresenting)
+                        
+                        if !viewModel.bestCitiesLoaded {
+                            ProgressView()
+                                .controlSize(.regular)
+                                .padding(.top, 120)
+                        } else if viewModel.bestCitiesLoaded && viewModel.errorMessage != nil {
+                            if colorScheme == .dark {
+                                Image("no_connection_dark")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 150, height: 150)
+                                    .padding(.top, 120)
+                            }
+                            else {
+                                Image("no_connection_light")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 150, height: 150)
+                                    .padding(.top, 120)
+                            }
+                            Text(viewModel.errorMessage ?? "")
+                                .padding(.horizontal, 30)
+                                .multilineTextAlignment(.center)
+                        }
                     }
                     .padding(.bottom)
                 }
@@ -65,6 +89,30 @@ struct CitiesReviewsView: View {
                             // header
                             CitiesReviewsTitleView()
                                 .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
+                            
+                            if !viewModel.bestCitiesLoaded {
+                                ProgressView()
+                                    .controlSize(.regular)
+                                    .padding(.top, 120)
+                            } else if viewModel.bestCitiesLoaded && viewModel.errorMessage != nil {
+                                if colorScheme == .dark {
+                                    Image("no_connection_dark")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 150, height: 150)
+                                        .padding(.top, 120)
+                                }
+                                else {
+                                    Image("no_connection_light")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 150, height: 150)
+                                        .padding(.top, 120)
+                                }
+                                Text(viewModel.errorMessage ?? "")
+                                    .padding(.horizontal, 30)
+                                    .multilineTextAlignment(.center)
+                            }
                             
                             // city search
                             CitySearchView(viewModel: viewModel, searchTapped: $searchTapped, isPresenting: $isPresenting)
@@ -92,8 +140,8 @@ struct CitiesReviewsView: View {
         .refreshable {
             isPresenting = false
             Task {
+                viewModel.getReviewableCities()
                 await viewModel.getBestReviewedCities()
-                await viewModel.getReviewableCities()
             }
         }
         .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
@@ -107,8 +155,8 @@ struct CitiesReviewsView: View {
         .onAppear {
             isPresenting = false
             Task {
+                viewModel.getReviewableCities()
                 await viewModel.getBestReviewedCities()
-                await viewModel.getReviewableCities()
             }
         }
     }
@@ -133,50 +181,52 @@ private struct CitySearchView: View {
     @Binding var isPresenting: Bool
     
     var body: some View {
-        VStack {
-            ZStack {
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(AppColors.mainColor, lineWidth: 6)
-                    .frame(height: 50)
-                
-                Button(action: {
-                    if !isPresenting {
-                        isPresenting = true
-                        searchTapped = true
+        if viewModel.errorMessage == nil && viewModel.bestCitiesLoaded {
+            VStack {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(AppColors.mainColor, lineWidth: 6)
+                        .frame(height: 50)
+                    
+                    Button(action: {
+                        if !isPresenting {
+                            isPresenting = true
+                            searchTapped = true
+                        }
+                    }) {
+                        Text("Search reviews for a city")
+                            .foregroundColor(.secondary)
+                            .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 0))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .font(.title2)
+                            .fontWeight(.light)
                     }
-                }) {
-                    Text("Search reviews for a city")
-                        .foregroundColor(.secondary)
-                        .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 0))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .font(.title2)
-                        .fontWeight(.light)
+                    .accessibilityIdentifier("searchCityReviews")
                 }
-                .accessibilityIdentifier("searchCityReviews")
+                .background(colorScheme == .dark ? Color(red: 48/255, green: 48/255, blue: 48/255) : Color(uiColor: .systemBackground))
+                .cornerRadius(10)
+                .padding(EdgeInsets(top: 0, leading: 30, bottom: 15, trailing: 30))
             }
-            .background(colorScheme == .dark ? Color(red: 48/255, green: 48/255, blue: 48/255) : Color(uiColor: .systemBackground))
-            .cornerRadius(10)
-            .padding(EdgeInsets(top: 0, leading: 30, bottom: 15, trailing: 30))
-        }
-        .fullScreenCover(isPresented: $searchTapped ) {
-            CompleterView(modelContext: modelContext, searchText: "",
-                          onBack: {
-                searchTapped = false
-                isPresenting = false
-            },
-                          onClick: { city in
-                Task {
-                    // for server call
-                    viewModel.selectedCity = city
-                    // for details view
-                    viewModel.selectedCity = viewModel.selectedCity
-                    await viewModel.getSelectedCityReviewElement(reload: false)
+            .fullScreenCover(isPresented: $searchTapped ) {
+                CompleterView(modelContext: modelContext, searchText: "",
+                              onBack: {
                     searchTapped = false
                     isPresenting = false
-                }
-            },
-                          departure: false
-            )
+                },
+                              onClick: { city in
+                    Task {
+                        // for server call
+                        viewModel.selectedCity = city
+                        // for details view
+                        viewModel.selectedCity = viewModel.selectedCity
+                        await viewModel.getSelectedCityReviewElement(reload: false)
+                        searchTapped = false
+                        isPresenting = false
+                    }
+                },
+                              departure: false
+                )
+            }
         }
     }
 }
@@ -188,64 +238,66 @@ private struct ReviewableCitiesView: View {
     @Binding var isPresenting: Bool
     
     var body: some View {
-        if !viewModel.reviewableCities.isEmpty {
-            VStack (spacing: 0) {
-                Text ("Reviewable Cities")
-                    .font(.title)
-                    .fontWeight(.semibold)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal, 30)
-                    .accessibilityIdentifier("reviewableCitiesTitle")
-                
-                Text("Add a review for the cities you visited!")
-                    .font(.system(size: 16))
-                    .padding(.horizontal, 30)
-                    .padding(.vertical, 5)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .foregroundColor(.secondary)
-                
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack {
-                        Spacer()
-                            .frame(width: 25)
-                            .layoutPriority(-1)
-                        ForEach(viewModel.reviewableCities) { city in
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 15)
-                                    .fill(colorScheme == .dark ? AppColors.blockColorDark: Color(uiColor: .systemBackground))
-                                    .shadow(radius: 2, x: 0, y: 2)
-                                VStack {
-                                    Text(city.cityName)
-                                        .font(.system(size: 20).bold())
-                                        .foregroundStyle(AppColors.mainColor)
-                                        .lineLimit(1)
-                                    Text(city.countryName)
-                                        .fontWeight(.light)
-                                        .foregroundStyle(AppColors.mainColor.opacity(0.7))
-                                        .scaledToFit()
-                                        .minimumScaleFactor(0.6)
-                                        .lineLimit(1)
+        if viewModel.errorMessage == nil && viewModel.bestCitiesLoaded {
+            if !viewModel.reviewableCities.isEmpty {
+                VStack (spacing: 0) {
+                    Text ("Reviewable Cities")
+                        .font(.title)
+                        .fontWeight(.semibold)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 30)
+                        .accessibilityIdentifier("reviewableCitiesTitle")
+                    
+                    Text("Add a review for the cities you visited!")
+                        .font(.system(size: 16))
+                        .padding(.horizontal, 30)
+                        .padding(.vertical, 5)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .foregroundColor(.secondary)
+                    
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack {
+                            Spacer()
+                                .frame(width: 25)
+                                .layoutPriority(-1)
+                            ForEach(viewModel.reviewableCities) { city in
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 15)
+                                        .fill(colorScheme == .dark ? AppColors.blockColorDark: Color(uiColor: .systemBackground))
+                                        .shadow(radius: 2, x: 0, y: 2)
+                                    VStack {
+                                        Text(city.cityName)
+                                            .font(.system(size: 20).bold())
+                                            .foregroundStyle(AppColors.mainColor)
+                                            .lineLimit(1)
+                                        Text(city.countryName)
+                                            .fontWeight(.light)
+                                            .foregroundStyle(AppColors.mainColor.opacity(0.7))
+                                            .scaledToFit()
+                                            .minimumScaleFactor(0.6)
+                                            .lineLimit(1)
+                                    }
+                                    .padding()
                                 }
-                                .padding()
-                            }
-                            .onTapGesture {
-                                if !isPresenting {
-                                    isPresenting = true
-                                    Task {
-                                        viewModel.selectedCity = city
-                                        await viewModel.getSelectedCityReviewElement(reload: false)
+                                .onTapGesture {
+                                    if !isPresenting {
+                                        isPresenting = true
+                                        Task {
+                                            viewModel.selectedCity = city
+                                            await viewModel.getSelectedCityReviewElement(reload: false)
+                                        }
                                     }
                                 }
+                                .padding(.top, 15)
+                                .padding(.horizontal, 5)
+                                .padding(.bottom, 15)
+                                .frame(minWidth: 150, idealHeight: 110)
+                                .overlay(Color.clear.accessibilityIdentifier("reviewableCityView_\(city.iata)_\(city.countryCode)"))
                             }
-                            .padding(.top, 15)
-                            .padding(.horizontal, 5)
-                            .padding(.bottom, 15)
-                            .frame(minWidth: 150, idealHeight: 110)
-                            .overlay(Color.clear.accessibilityIdentifier("reviewableCityView_\(city.iata)_\(city.countryCode)"))
+                            Spacer()
+                                .frame(width: 30)
+                                .layoutPriority(-1)
                         }
-                        Spacer()
-                            .frame(width: 30)
-                            .layoutPriority(-1)
                     }
                 }
             }
@@ -262,44 +314,22 @@ private struct BestCitiesView: View {
     
     var body: some View {
         // list of cities
-        VStack (spacing: 0) {
-            Text("Top Cities")
-                .font(.title)
-                .fontWeight(.semibold)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, 30)
-                .accessibilityIdentifier("topCitiesTitle")
-            Text("Check out the cities reviewed best by users")
-                .font(.system(size: 16))
-                .padding(.horizontal, 30)
-                .padding(.vertical, 5)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .foregroundColor(.secondary)
-        }
-        if !viewModel.bestCitiesLoaded {
-            ProgressView()
-                .controlSize(.regular)
-                .padding(.top, 60)
-        } else if viewModel.bestCitiesLoaded && viewModel.errorMessage != nil {
-            Text(viewModel.errorMessage ?? "")
-                .foregroundStyle(.red)
-                .padding(.horizontal, 30)
-                .multilineTextAlignment(.center)
-                .padding(.top, 60)
+        if viewModel.errorMessage == nil && viewModel.bestCitiesLoaded {
+            VStack (spacing: 0) {
+                Text("Top Cities")
+                    .font(.title)
+                    .fontWeight(.semibold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 30)
+                    .accessibilityIdentifier("topCitiesTitle")
+                Text("Check out the cities reviewed best by users")
+                    .font(.system(size: 16))
+                    .padding(.horizontal, 30)
+                    .padding(.vertical, 5)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .foregroundColor(.secondary)
+            }
             
-            if colorScheme == .dark {
-                Image("no_connection_dark")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 150, height: 150)
-            }
-            else {
-                Image("no_connection_light")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 150, height: 150)
-            }
-        } else {
             ForEach(viewModel.bestCities.indices, id: \.self) { index in
                 BestCityView(city: viewModel.bestCities[index], cityReview: viewModel.bestCitiesReviewElements[index], pos: index+1, viewModel: viewModel)
                     .padding(.horizontal)

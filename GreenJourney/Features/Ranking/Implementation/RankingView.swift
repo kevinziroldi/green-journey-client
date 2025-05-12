@@ -77,24 +77,23 @@ struct RankingView: View {
                             }
                             
                             if viewModel.errorMessage != nil {
-                                Text(viewModel.errorMessage ?? "")
-                                    .foregroundStyle(.red)
-                                    .padding(.horizontal)
-                                    .multilineTextAlignment(.center)
-                                    .padding(.top, 60)
-                                
                                 if colorScheme == .dark {
                                     Image("no_connection_dark")
                                         .resizable()
                                         .scaledToFit()
                                         .frame(width: 150, height: 150)
+                                        .padding(.top, 60)
                                 }
                                 else {
                                     Image("no_connection_light")
                                         .resizable()
                                         .scaledToFit()
                                         .frame(width: 150, height: 150)
+                                        .padding(.top, 60)
                                 }
+                                Text(viewModel.errorMessage ?? "")
+                                    .padding(.horizontal)
+                                    .multilineTextAlignment(.center)
                             }
                             Spacer()
                         }
@@ -139,11 +138,23 @@ struct RankingView: View {
                             }
                             
                             if viewModel.errorMessage != nil {
+                                if colorScheme == .dark {
+                                    Image("no_connection_dark")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 150, height: 150)
+                                        .padding(.top, 60)
+                                }
+                                else {
+                                    Image("no_connection_light")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 150, height: 150)
+                                        .padding(.top, 60)
+                                }
                                 Text(viewModel.errorMessage ?? "")
-                                    .foregroundStyle(.red)
                                     .padding(.horizontal)
                                     .multilineTextAlignment(.center)
-                                    .padding(.top, 60)
                             }
                             Spacer()
                         }
