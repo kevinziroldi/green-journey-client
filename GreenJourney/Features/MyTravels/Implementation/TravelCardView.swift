@@ -120,7 +120,12 @@ struct TravelCardView: View {
     
     func computeTravelBackColor() -> LinearGradient{
         if travelDetails.travel.CO2Compensated >= travelDetails.computeCo2Emitted() {
-            return LinearGradient(colors: [Color(red: 153/255, green: 204/255, blue: 153/255), Color(red: 143/255, green: 234/255, blue: 255/255)], startPoint: .bottomLeading, endPoint: .topTrailing)
+            if colorScheme == .dark {
+                return LinearGradient(colors: [Color(red: 39/255, green: 117/255, blue: 39/255), Color(red: 15/255, green: 119/255, blue: 153/255)], startPoint: .bottomLeading, endPoint: .topTrailing)
+            }
+            else {
+                return LinearGradient(colors: [Color(red: 153/255, green: 204/255, blue: 153/255), Color(red: 143/255, green: 234/255, blue: 255/255)], startPoint: .bottomLeading, endPoint: .topTrailing)
+            }
         }
         else {
             if colorScheme == .dark {

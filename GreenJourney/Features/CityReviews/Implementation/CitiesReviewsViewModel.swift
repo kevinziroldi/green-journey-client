@@ -238,7 +238,7 @@ class CitiesReviewsViewModel: ObservableObject {
         return false
     }
     
-    func getReviewableCities() async {
+    func getReviewableCities() {
         do{
             var citiesToReview: [CityCompleterDataset] = []
             let travels = try modelContext.fetch(FetchDescriptor<Travel>(predicate: #Predicate { travel in
