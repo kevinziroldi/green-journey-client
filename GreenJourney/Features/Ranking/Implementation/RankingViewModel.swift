@@ -69,12 +69,12 @@ class RankingViewModel: ObservableObject {
             users = try modelContext.fetch(FetchDescriptor<User>())
         }catch {
             print("Error getting user from SwiftData")
-            self.errorMessage = "An error occurred retrieving rankings from server"
+            self.errorMessage = "An error occurred retrieving rankings from server, please try again later."
             return
         }
         guard let userID = users.first?.userID else {
             print("No user found")
-            self.errorMessage = "An error occurred retrieving rankings from server"
+            self.errorMessage = "An error occurred retrieving rankings from server, please try again later."
             return
         }
         
@@ -89,7 +89,7 @@ class RankingViewModel: ObservableObject {
             self.longDistanceRanking = []
             self.shortDistanceRanking = []
             print("Error fetching rankings")
-            self.errorMessage = "An error occurred retrieving rankings from server"
+            self.errorMessage = "An error occurred retrieving rankings from server, please try again later."
         }
     }
     

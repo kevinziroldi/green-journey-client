@@ -29,6 +29,8 @@ class TravelSearchViewModel: ObservableObject {
     
     @Published var errorOccurred: Bool = false
     
+    @Published var errorMessage: String?
+    
     init(modelContext: ModelContext, serverService: ServerServiceProtocol) {
         self.modelContext = modelContext
         self.serverService = serverService
@@ -45,6 +47,7 @@ class TravelSearchViewModel: ObservableObject {
     
     func computeRoutes () async {
         optionsAvailable = false
+        errorMessage = nil
         self.outwardOptions = []
         self.returnOptions = []
         self.selectedOption = []
@@ -75,6 +78,7 @@ class TravelSearchViewModel: ObservableObject {
         }catch {
             print("Error fetching options")
             optionsAvailable = true
+            errorMessage = "An error occurred retireving travel options from server, please try again later."
             return
         }
     }

@@ -22,7 +22,26 @@ struct OutwardOptionsView: View {
                     CircularProgressView()
                         .padding(.top, 50)
                 }
-                else if (viewModel.outwardOptions.isEmpty){
+                else if viewModel.errorMessage != nil {
+                    if colorScheme == .dark {
+                        Image("no_connection_dark")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 150, height: 150)
+                            .padding(.top, 60)
+                    }
+                    else {
+                        Image("no_connection_light")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 150, height: 150)
+                            .padding(.top, 60)
+                    }
+                    Text(viewModel.errorMessage ?? "")
+                        .padding(.horizontal)
+                        .multilineTextAlignment(.center)
+                }
+                else if (viewModel.outwardOptions.isEmpty) && viewModel.errorMessage == nil{
                     Text("We didn't find any travel option for this route. Please try again later. 😞")
                         .font(.system(size: 20))
                         .padding(.top, 50)

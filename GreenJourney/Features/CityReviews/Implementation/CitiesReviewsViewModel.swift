@@ -178,7 +178,7 @@ class CitiesReviewsViewModel: ObservableObject {
             }
         }catch {
             errorOccurred = true
-            self.errorMessage = "An error occurred retrieving best cities from server"
+            self.errorMessage = "An error occurred retrieving reviews from server, please try again later."
             print("Error getting best reviewed cities")
             self.bestCitiesLoaded = true
             return
@@ -280,17 +280,17 @@ class CitiesReviewsViewModel: ObservableObject {
             users = try modelContext.fetch(FetchDescriptor<User>())
         } catch {
             print("No user found")
-            self.errorMessage = "An error occurred while saving the review"
+            self.errorMessage = "An error occurred while saving the review, please try again later."
             return
         }
         guard let user = users.first else {
             print("No user found")
-            self.errorMessage = "An error occurred while saving the review"
+            self.errorMessage = "An error occurred while saving the review, please try again later."
             return
         }
         guard let userID = users.first?.userID else {
             print("No user found")
-            self.errorMessage = "An error occurred while saving the review"
+            self.errorMessage = "An error occurred while saving the review, please try again later."
             return
         }
         
@@ -316,7 +316,7 @@ class CitiesReviewsViewModel: ObservableObject {
             uploadReviewToSwiftData(userReview: userReview)
         } catch {
             errorOccurred = true
-            self.errorMessage = "An error occurred while saving the review"
+            self.errorMessage = "An error occurred while saving the review, please try again later."
             return
         }
     }
@@ -361,7 +361,7 @@ class CitiesReviewsViewModel: ObservableObject {
     func modifyReview() async {
         guard let userReview = self.userReview else {
             errorOccurred = true
-            self.errorMessage = "Error while modifying the review"
+            self.errorMessage = "Error while modifying the review, please try again later."
             return
         }
         
@@ -387,7 +387,7 @@ class CitiesReviewsViewModel: ObservableObject {
             modifyReviewInSwiftData(userReview: modifiedReview)
         } catch {
             errorOccurred = true
-            self.errorMessage = "Error while modifying the review"
+            self.errorMessage = "Error while modifying the review, please try again later."
             return
         }
     }
@@ -431,12 +431,12 @@ class CitiesReviewsViewModel: ObservableObject {
     
     func deleteReview() async {
         guard let userReview = self.userReview else {
-            self.errorMessage = "Error while deleting the review"
+            self.errorMessage = "Error while deleting the review, please try again later."
             return
         }
         
         guard let reviewID = userReview.reviewID else {
-            self.errorMessage = "Error while deleting the review"
+            self.errorMessage = "Error while deleting the review, please try again later."
             return
         }
         
@@ -447,7 +447,7 @@ class CitiesReviewsViewModel: ObservableObject {
             self.userReview = nil
         } catch {
             errorOccurred = true
-            self.errorMessage = "Error while deleting the review"
+            self.errorMessage = "Error while deleting the review, please try again later."
             return
         }
     }
