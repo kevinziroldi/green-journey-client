@@ -20,6 +20,8 @@ struct LegendBadgeView: View {
         
         ScrollView {
             VStack {
+                let badgeSize = min(200, (UIScreen.main.bounds.width - 60)/4, (UIScreen.main.bounds.height - 60)/4)
+                
                 Text("CO\u{2082} Compensator")
                     .font(.title)
                     .fontWeight(.semibold)
@@ -27,7 +29,7 @@ struct LegendBadgeView: View {
                     .scaledToFit()
                     .lineLimit(1)
                 HStack {
-                    BadgeView(badges: [Badge.badgeCompensationBase, Badge.badgeCompensationLow, Badge.badgeCompensationMid, Badge.badgeCompensationHigh], dim: min(200, (UIScreen.main.bounds.width - 60)/4), inline: true)
+                    BadgeView(badges: [Badge.badgeCompensationBase, Badge.badgeCompensationLow, Badge.badgeCompensationMid, Badge.badgeCompensationHigh], dim: badgeSize, inline: true)
                         .scaledToFit()
                 }
                 Text("This badge reflects your efforts to compensate for your carbon footprint. The more you offset, the bigger your impact!")
@@ -41,7 +43,7 @@ struct LegendBadgeView: View {
                     .scaledToFit()
                     .lineLimit(1)
                 HStack {
-                    BadgeView(badges: [Badge.badgeDistanceBase, Badge.badgeDistanceLow, Badge.badgeDistanceMid, Badge.badgeDistanceHigh], dim: min(200, (UIScreen.main.bounds.width - 60)/4), inline: true)
+                    BadgeView(badges: [Badge.badgeDistanceBase, Badge.badgeDistanceLow, Badge.badgeDistanceMid, Badge.badgeDistanceHigh], dim: badgeSize, inline: true)
                         .scaledToFit()
                 }
                 Text("See how far you’ve gone! This badge records the total distance you’ve traveled in kilometers.")
@@ -55,7 +57,7 @@ struct LegendBadgeView: View {
                     .scaledToFit()
                     .lineLimit(1)
                 HStack {
-                    BadgeView(badges: [Badge.badgeEcologicalChoiceBase, Badge.badgeEcologicalChoiceLow, Badge.badgeEcologicalChoiceMid, Badge.badgeEcologicalChoiceHigh], dim: min(200, (UIScreen.main.bounds.width - 60)/4), inline: true)
+                    BadgeView(badges: [Badge.badgeEcologicalChoiceBase, Badge.badgeEcologicalChoiceLow, Badge.badgeEcologicalChoiceMid, Badge.badgeEcologicalChoiceHigh], dim: badgeSize, inline: true)
                         .scaledToFit()
                 }
                 Text("Earn this badge by making sustainable travel choices. The greener your trips, the higher your score!")
@@ -69,7 +71,7 @@ struct LegendBadgeView: View {
                     .scaledToFit()
                     .lineLimit(1)
                 HStack {
-                    BadgeView(badges: [Badge.badgeTravelsNumberBase, Badge.badgeTravelsNumberLow, Badge.badgeTravelsNumberMid, Badge.badgeTravelsNumberHigh], dim: min(200, (UIScreen.main.bounds.width - 60)/4), inline: true)
+                    BadgeView(badges: [Badge.badgeTravelsNumberBase, Badge.badgeTravelsNumberLow, Badge.badgeTravelsNumberMid, Badge.badgeTravelsNumberHigh], dim: badgeSize, inline: true)
                         .scaledToFit()
                 }
                 Text("This badge tracks the total number of trips you have taken. Keep exploring and watch your count grow!")
