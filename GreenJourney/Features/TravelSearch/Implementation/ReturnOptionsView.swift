@@ -6,6 +6,7 @@ struct ReturnOptionsView: View {
     @ObservedObject var viewModel: TravelSearchViewModel
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @Binding var navigationPath: NavigationPath
+    @State var isPresenting: Bool = false
     var body: some View {
         ScrollView {
             VStack {
@@ -30,7 +31,10 @@ struct ReturnOptionsView: View {
                         ForEach (viewModel.returnOptions.indices, id: \.self) { option in
                             HStack {
                                 Button (action: {
-                                    navigationPath.append(NavigationDestination.OptionDetailsView(departure, arrival,viewModel.returnOptions[option], viewModel))
+                                    if !isPresenting {
+                                        isPresenting = true
+                                        navigationPath.append(NavigationDestination.OptionDetailsView(arrival, departure,viewModel.returnOptions[option], viewModel, true))
+                                    }
                                 }) {
                                     OptionCardView(option: viewModel.returnOptions[option], viewModel: viewModel)
                                         .contentShape(Rectangle())
@@ -45,6 +49,9 @@ struct ReturnOptionsView: View {
                     }
                 }
             }
+        }
+        .onAppear {
+            isPresenting = false
         }
         .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
     }

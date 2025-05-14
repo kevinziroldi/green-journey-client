@@ -7,6 +7,7 @@ struct OutwardOptionsView: View {
     @ObservedObject var viewModel: TravelSearchViewModel
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @Binding var navigationPath: NavigationPath
+    @State var isPresenting: Bool = false
     
     var body: some View {
         ScrollView {
@@ -51,7 +52,10 @@ struct OutwardOptionsView: View {
                         ForEach (viewModel.outwardOptions.indices, id: \.self) { option in
                             HStack {
                                 Button (action: {
-                                    navigationPath.append(NavigationDestination.OptionDetailsView(departure, arrival,viewModel.outwardOptions[option], viewModel))
+                                    if !isPresenting {
+                                        isPresenting = true
+                                        navigationPath.append(NavigationDestination.OptionDetailsView(departure, arrival,viewModel.outwardOptions[option], viewModel, false))
+                                    }
                                 }) {
                                     OptionCardView(option: viewModel.outwardOptions[option], viewModel: viewModel)
                                         .contentShape(Rectangle())
@@ -69,6 +73,7 @@ struct OutwardOptionsView: View {
         }
         .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
         .onAppear() {
+            isPresenting = false
             if !viewModel.selectedOption.isEmpty {
                 viewModel.selectedOption = []
             }

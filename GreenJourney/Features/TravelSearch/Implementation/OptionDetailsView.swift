@@ -7,6 +7,7 @@ struct OptionDetailsView: View {
     let arrival: String
     
     var option: TravelOption
+    var isReturn: Bool
     @ObservedObject var viewModel: TravelSearchViewModel
     @Binding var navigationPath: NavigationPath
     
@@ -87,10 +88,11 @@ struct OptionDetailsView: View {
             }
             VStack {
                 if (!viewModel.oneWay) {
-                    if (viewModel.selectedOption.isEmpty) {
+                    if (!isReturn) {
                         Button(action: {
                             if !buttonTapped {
                                 buttonTapped = true
+                                viewModel.selectedOption = []
                                 viewModel.selectedOption.append(contentsOf: option.segments)
                                 navigationPath.append(NavigationDestination.ReturnOptionsView(departure, arrival, viewModel))
                             }
@@ -186,4 +188,3 @@ struct OptionDetailsView: View {
         .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
     }
 }
-
