@@ -87,6 +87,10 @@ struct OptionDetailsView: View {
                 if (!viewModel.oneWay) {
                     if (viewModel.selectedOption.isEmpty) {
                         Button(action: {
+                            print("TWO WAYS - PROCEED")
+                            for segment in option.segments {
+                                print(segment.departureCity, segment.destinationCity)
+                            }
                             viewModel.selectedOption.append(contentsOf: option.segments)
                             navigationPath.append(NavigationDestination.ReturnOptionsView(departure, arrival, viewModel))
                         }) {
@@ -107,6 +111,10 @@ struct OptionDetailsView: View {
                     else {
                         Button(action:  {
                             Task {
+                                print("TWO WAYS - SAVE")
+                                for segment in option.segments {
+                                    print(segment.departureCity, segment.destinationCity)
+                                }
                                 viewModel.selectedOption.append(contentsOf: option.segments)
                                 await viewModel.saveTravel()
                                 if !viewModel.errorOccurred {
@@ -132,6 +140,10 @@ struct OptionDetailsView: View {
                 else {
                     Button(action: {
                         Task {
+                            print("ONE WAY - SAVE")
+                            for segment in option.segments {
+                                print(segment.departureCity, segment.destinationCity)
+                            }
                             viewModel.selectedOption.append(contentsOf: option.segments)
                             await viewModel.saveTravel()
                             if !viewModel.errorOccurred {
