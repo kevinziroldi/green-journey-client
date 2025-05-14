@@ -141,15 +141,18 @@ struct OptionDetailsView: View {
                 }
                 else {
                     Button(action: {
-                        Task {
-                            print("ONE WAY - SAVE")
-                            for segment in option.segments {
-                                print(segment.departureCity, segment.destinationCity)
-                            }
-                            viewModel.selectedOption.append(contentsOf: option.segments)
-                            await viewModel.saveTravel()
-                            if !viewModel.errorOccurred {
-                                navigationPath = NavigationPath()
+                        if !buttonTapped {
+                            buttonTapped = true
+                            Task {
+                                print("ONE WAY - SAVE")
+                                for segment in option.segments {
+                                    print(segment.departureCity, segment.destinationCity)
+                                }
+                                viewModel.selectedOption.append(contentsOf: option.segments)
+                                await viewModel.saveTravel()
+                                if !viewModel.errorOccurred {
+                                    navigationPath = NavigationPath()
+                                }
                             }
                         }
                     }) {
@@ -187,4 +190,3 @@ struct OptionDetailsView: View {
         .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
     }
 }
-
