@@ -10,6 +10,8 @@ struct OptionDetailsView: View {
     @ObservedObject var viewModel: TravelSearchViewModel
     @Binding var navigationPath: NavigationPath
     
+    @State var buttonTapped: Bool = false
+    
     var body: some View {
         VStack {
             if horizontalSizeClass == .compact {
@@ -87,12 +89,11 @@ struct OptionDetailsView: View {
                 if (!viewModel.oneWay) {
                     if (viewModel.selectedOption.isEmpty) {
                         Button(action: {
-                            print("TWO WAYS - PROCEED")
-                            for segment in option.segments {
-                                print(segment.departureCity, segment.destinationCity)
+                            if !buttonTapped {
+                                buttonTapped = true
+                                viewModel.selectedOption.append(contentsOf: option.segments)
+                                navigationPath.append(NavigationDestination.ReturnOptionsView(departure, arrival, viewModel))
                             }
-                            viewModel.selectedOption.append(contentsOf: option.segments)
-                            navigationPath.append(NavigationDestination.ReturnOptionsView(departure, arrival, viewModel))
                         }) {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 10)
@@ -105,20 +106,20 @@ struct OptionDetailsView: View {
                             }
                             .fixedSize()
                         }
+                        .disabled(buttonTapped)
                         .padding(.bottom)
                         .accessibilityIdentifier("proceedButton")
                     }
                     else {
                         Button(action:  {
-                            Task {
-                                print("TWO WAYS - SAVE")
-                                for segment in option.segments {
-                                    print(segment.departureCity, segment.destinationCity)
-                                }
-                                viewModel.selectedOption.append(contentsOf: option.segments)
-                                await viewModel.saveTravel()
-                                if !viewModel.errorOccurred {
-                                    navigationPath = NavigationPath()
+                            if !buttonTapped {
+                                buttonTapped = true
+                                Task {
+                                    viewModel.selectedOption.append(contentsOf: option.segments)
+                                    await viewModel.saveTravel()
+                                    if !viewModel.errorOccurred {
+                                        navigationPath = NavigationPath()
+                                    }
                                 }
                             }
                         }) {
@@ -133,6 +134,7 @@ struct OptionDetailsView: View {
                             }
                             .fixedSize()
                         }
+                        .disabled(buttonTapped)
                         .padding(.bottom)
                         .accessibilityIdentifier("saveTravelButtonTwoWays")
                     }
@@ -162,11 +164,15 @@ struct OptionDetailsView: View {
                         }
                         .fixedSize()
                     }
+                    .disabled(buttonTapped)
                     .padding(.bottom)
                     .accessibilityIdentifier("saveTravelButtonOneWay")
                 }
             }
             .padding(10)
+        }
+        .onAppear {
+            buttonTapped = false
         }
         .alert(isPresented: $viewModel.errorOccurred) {
             Alert(

@@ -29,6 +29,7 @@ struct SignUpView: View {
             .scrollDismissesKeyboard(.interactively)
             .onAppear() {
                 viewModel.isEmailVerificationActiveSignup = false
+                viewModel.isLoading = false
             }
             .onChange(of: viewModel.isLogged, {
                 if viewModel.isLogged {
@@ -162,6 +163,7 @@ private struct SignupButtonsView: View {
                     .background(AppColors.mainColor)
                     .cornerRadius(30)
             }
+            .disabled(viewModel.isLoading)
             .accessibilityIdentifier("createAccountButton")
             
             HStack {

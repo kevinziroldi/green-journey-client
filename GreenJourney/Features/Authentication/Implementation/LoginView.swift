@@ -191,6 +191,7 @@ private struct LoginButtonsView: View {
                     .background(AppColors.mainColor)
                     .cornerRadius(30)
             }
+            .disabled(viewModel.isLoading)
             .accessibilityIdentifier("loginButton")
             
             

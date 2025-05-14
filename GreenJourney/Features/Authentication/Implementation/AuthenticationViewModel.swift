@@ -23,6 +23,7 @@ class AuthenticationViewModel: ObservableObject {
     @Published var isEmailVerificationActiveLogin: Bool = false
     @Published var isEmailVerificationActiveSignup: Bool = false
     
+    @Published var isLoading: Bool = false
     init(modelContext: ModelContext, serverService: ServerServiceProtocol, firebaseAuthService: FirebaseAuthServiceProtocol) {
         self.modelContext = modelContext
         self.isLogged = false
@@ -32,8 +33,10 @@ class AuthenticationViewModel: ObservableObject {
     
     func login() async {
         // input check and validation
+        isLoading = true
         guard !email.isEmpty, !password.isEmpty else {
             errorMessage = "Insert email and password."
+            isLoading = false
             return
         }
         
@@ -47,8 +50,10 @@ class AuthenticationViewModel: ObservableObject {
             } else {
                 self.isEmailVerificationActiveLogin = true
             }
+            isLoading = false
         } catch {
             self.errorMessage = "Error during authentication"
+            isLoading = false
             return
         }
     }
@@ -89,16 +94,20 @@ class AuthenticationViewModel: ObservableObject {
     }
     
     func signUp() async {
+        isLoading = true
         guard !email.isEmpty, !password.isEmpty, !repeatPassword.isEmpty else {
             errorMessage = "Insert email and password"
+            isLoading = false
             return
         }
         guard !firstName.isEmpty, !lastName.isEmpty else {
             errorMessage = "Insert first name and last name"
+            isLoading = false
             return
         }
         if (password != repeatPassword) {
             errorMessage = "Passwords do not match"
+            isLoading = false
             return
         }
         
@@ -113,22 +122,29 @@ class AuthenticationViewModel: ObservableObject {
                 self.errorMessage = nil
                 await self.sendEmailVerification()
                 self.isEmailVerificationActiveSignup = true
+                isLoading = false
             } catch {
                 self.errorMessage = "Error creating account"
                 print("Error posting user data")
-                
+                isLoading = false
                 // delete user
                 do {
                     try await firebaseAuthService.deleteFirebaseUser()
                     // account deleted
                     print("User deleted from firebase")
+                    isLoading = false
                 }catch {
                     // error happened
                     print("Error deleting user from Firebase")
+                    //2nd attempt
+                    print("Second attempt")
+                    try await firebaseAuthService.deleteFirebaseUser()
+                    isLoading = false
                 }
             }
         } catch {
             self.errorMessage = "\(error.localizedDescription)"
+            isLoading = false
             return
         }
     }
