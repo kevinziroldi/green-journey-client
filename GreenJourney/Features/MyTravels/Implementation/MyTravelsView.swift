@@ -216,13 +216,15 @@ struct MyTravelsView: View {
         .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
         .onAppear {
             isPresenting = false
-            Task { await viewModel.getUserTravels() }
-            viewModel.showRequestedTravels()
-            if viewModel.filteredTravelDetailsList.isEmpty {
-                // retry
+            Task {
+                await viewModel.getUserTravels()
                 viewModel.showRequestedTravels()
+                if viewModel.filteredTravelDetailsList.isEmpty {
+                    // retry
+                    viewModel.showRequestedTravels()
+                    // else empty page
+                }
             }
-            // else empty page
         }
     }
 }
