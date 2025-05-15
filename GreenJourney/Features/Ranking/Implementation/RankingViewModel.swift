@@ -63,7 +63,7 @@ class RankingViewModel: ObservableObject {
     
     func fecthRanking() async {
         self.errorMessage = nil
-        
+        self.resetRanking = true
         // get user id
         do {
             users = try modelContext.fetch(FetchDescriptor<User>())
