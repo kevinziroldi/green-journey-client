@@ -116,6 +116,8 @@ struct RankingView: View {
                             HStack(alignment: .top) {
                                 // badges
                                 UserBadgesView(legendTapped: $legendTapped, badges: viewModel.badges, inline: false, isPresenting: $isPresenting)
+                                    .fixedSize(horizontal: false, vertical: true)
+
                                 
                                 // scores
                                 ScoresView(scoreLongDistance: viewModel.longDistanceScore, scoreShortDistance: viewModel.shortDistanceScore, isPresenting: $isPresenting)
