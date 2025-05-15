@@ -90,7 +90,7 @@ struct CityReviewsDetailsView: View {
                     .presentationDetents([.height(680)])
                     .presentationCornerRadius(15)
             }
-            .sheet(isPresented: $infoTapped) {
+            .sheet(isPresented: $infoTapped, onDismiss: {isPresenting = false}) {
                 InfoReviewView(isPresented: $infoTapped)
                     .presentationDetents([.fraction(0.75)])
                     .presentationCornerRadius(15)
@@ -146,7 +146,10 @@ private struct ReviewsAverageView: View {
                     Spacer()
                     
                     Button(action: {
-                        infoTapped = true
+                        if !isPresenting{
+                            isPresenting = true
+                            infoTapped = true
+                        }
                     }){
                         Image(systemName: "info.circle")
                             .font(.title3)
