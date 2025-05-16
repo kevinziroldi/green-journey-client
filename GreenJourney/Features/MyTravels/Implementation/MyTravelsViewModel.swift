@@ -41,6 +41,7 @@ class MyTravelsViewModel: ObservableObject {
     @Published var travelReviews: [Review] = []
     
     @Published var errorOccurred: Bool = false
+    @Published var travelsLoaded: Bool = false
     
     init(modelContext: ModelContext, serverService: ServerServiceProtocol) {
         self.modelContext = modelContext
@@ -49,12 +50,17 @@ class MyTravelsViewModel: ObservableObject {
     
     func getUserTravels() async {
         do {
+            if filteredTravelDetailsList.isEmpty {
+                self.travelsLoaded = false
+            }
             let travelDetailsList = try await serverService.getTravels()
             self.travelDetailsList = travelDetailsList
             removeExistingTravels()
             addNewTravels(travelDetailsList: travelDetailsList)
+            self.travelsLoaded = true
         }catch {
             print("Error fetching travels from server")
+            self.travelsLoaded = true
             return
         }
     }

@@ -101,8 +101,11 @@ struct MyTravelsView: View {
                 .padding(.vertical, 10)
                 .frame(maxWidth: 800)
                 
-                
-                if viewModel.filteredTravelDetailsList.count == 0 {
+                if !viewModel.travelsLoaded {
+                    ProgressView()
+                        .controlSize(.regular)
+                        .padding(.top, 120)
+                } else if viewModel.filteredTravelDetailsList.count == 0 && viewModel.travelsLoaded {
                     VStack {
                         if colorScheme == .dark {
                             Image("noTravelsDark")
@@ -120,8 +123,7 @@ struct MyTravelsView: View {
                             .fontWeight(.light)
                     }
                     .accessibilityIdentifier("noTravelsAlert")
-                }
-                else {
+                } else {
                     VStack {
                         ForEach(viewModel.filteredTravelDetailsList, id: \.travel.travelID) { travelDetails in
                             HStack (spacing: 10) {
