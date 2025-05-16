@@ -32,7 +32,7 @@ struct CityReviewsDetailsView: View {
                                     .padding(.vertical)
                                 
                                 // button or user review
-                                if viewModel.isReviewable() {
+                                if viewModel.isReviewable() || viewModel.userReview != nil {
                                     InsertReviewButtonView(viewModel: viewModel, reviewTapped: $reviewTapped, isPresenting: $isPresenting)
                                         .padding(.horizontal)
                                         .padding(.vertical)
@@ -61,7 +61,7 @@ struct CityReviewsDetailsView: View {
                                         .padding(.vertical)
                                     
                                     // button or user review
-                                    if viewModel.isReviewable() {
+                                    if viewModel.isReviewable() || viewModel.userReview != nil {
                                         InsertReviewButtonView(viewModel: viewModel, reviewTapped: $reviewTapped, isPresenting: $isPresenting)
                                             .padding(.horizontal)
                                             .padding(.vertical)
