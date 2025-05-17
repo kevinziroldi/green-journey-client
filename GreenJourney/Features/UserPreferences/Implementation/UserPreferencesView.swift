@@ -255,34 +255,61 @@ private struct UserPreferencesTextFieldsView: View {
 private struct PasswordModificationView: View {
     @ObservedObject var authenticationViewModel: AuthenticationViewModel
     @State var showResendMessage: Bool
+    @State var remainingSeconds: Int = 60
+    @State var resendAvailable: Bool = false
+    @State var modifyTapped: Bool = false
+    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    
     let email: String = Auth.auth().currentUser?.email ?? ""
     
     var body: some View {
         VStack {
             Button("Modify password") {
-                withAnimation() {
-                    showResendMessage = true
-                }
+                modifyTapped = true
+                
                 Task {
                     await authenticationViewModel.resetPassword(email: email)
                 }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-                    withAnimation() {
-                        showResendMessage = false
-                    }
-                }
             }
+            .disabled(modifyTapped)
             .accessibilityIdentifier("modifyPasswordButton")
             
-            if showResendMessage {
-                Text("Email sent, check your inbox")
-                    .font(.subheadline)
-                    .fontWeight(.light)
-                    .accessibilityIdentifier("emailSentMessage")
-            }
             
+            if modifyTapped {
+                HStack {
+                    Text("Haven't received any email?")
+                        .fontWeight(.thin)
+                    Button(action: {
+                        Task {
+                            await authenticationViewModel.resetPassword(email: email)
+                            resendAvailable = false
+                            remainingSeconds = 60
+                        }
+                    }) {
+                        Text("Resend email")
+                            .font(.headline)
+                            .underline()
+                    }
+                    .disabled(!resendAvailable)
+                    .accessibilityIdentifier("resendEmailButton")
+                }
+                if !resendAvailable {
+                    Text("Wait \(remainingSeconds) seconds to resend the email")
+                        .fontWeight(.thin)
+                        .padding(.top, 5)
+                }
+            }
         }
         .padding(.bottom, 20)
+        .onReceive(timer) { _ in
+            if modifyTapped {
+                if remainingSeconds > 1 {
+                    remainingSeconds -= 1
+                } else {
+                    resendAvailable = true
+                }
+            }
+        }
     }
 }
 
