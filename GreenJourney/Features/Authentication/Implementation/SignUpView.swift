@@ -28,6 +28,10 @@ struct SignUpView: View {
             }
             .scrollDismissesKeyboard(.interactively)
             .onAppear() {
+                Task {
+                    try await Task.sleep(for: .seconds(1))
+                    viewModel.isPresenting = false
+                }
                 viewModel.isEmailVerificationActiveSignup = false
                 viewModel.isLoading = false
             }
@@ -67,6 +71,10 @@ struct SignUpView: View {
             .scrollDismissesKeyboard(.interactively)
             .onAppear() {
                 viewModel.isEmailVerificationActiveSignup = false
+                Task {
+                    try await Task.sleep(for: .seconds(1))
+                    viewModel.isPresenting = false
+                }
             }
             .onChange(of: viewModel.isLogged, {
                 if viewModel.isLogged {
@@ -152,8 +160,12 @@ private struct SignupButtonsView: View {
     var body: some View {
         VStack {
             Button(action: {
-                Task {
-                    await viewModel.signUp()
+                if !viewModel.isPresenting {
+                    viewModel.isPresenting = true
+                    Task {
+                        await viewModel.signUp()
+                        viewModel.isPresenting = false
+                    }
                 }
             }) {
                 Text("Create account")
@@ -189,8 +201,12 @@ private struct SignupButtonsView: View {
                     .shadow(radius: 1)
                 
                 Button(action: {
-                    Task {
-                        await viewModel.signInWithGoogle()
+                    if !viewModel.isPresenting {
+                        viewModel.isPresenting = true
+                        Task {
+                            await viewModel.signInWithGoogle()
+                            viewModel.isPresenting = false
+                        }
                     }
                 }) {
                     ZStack {
@@ -213,14 +229,19 @@ private struct SignupButtonsView: View {
                 Text("Already have an account?")
                     .fontWeight(.light)
                 Button("Login") {
-                    if !navigationPath.isEmpty {
-                        viewModel.errorMessage = nil
-                        viewModel.email = ""
-                        viewModel.password = ""
-                        viewModel.repeatPassword = ""
-                        viewModel.firstName = ""
-                        viewModel.lastName = ""
-                        navigationPath.removeLast()
+                    if !viewModel.isPresenting {
+                        viewModel.isPresenting = true
+                        
+                        if !navigationPath.isEmpty {
+                            viewModel.errorMessage = nil
+                            viewModel.email = ""
+                            viewModel.password = ""
+                            viewModel.repeatPassword = ""
+                            viewModel.firstName = ""
+                            viewModel.lastName = ""
+                            navigationPath.removeLast()
+                        }
+                        viewModel.isPresenting = false
                     }
                 }
                 .accessibilityIdentifier("moveToLoginButton")

@@ -22,7 +22,7 @@ class AuthenticationViewModel: ObservableObject {
     @Published var emailVerified: Bool = false
     @Published var isEmailVerificationActiveLogin: Bool = false
     @Published var isEmailVerificationActiveSignup: Bool = false
-    
+    @Published var isPresenting: Bool = false
     @Published var isLoading: Bool = false
     init(modelContext: ModelContext, serverService: ServerServiceProtocol, firebaseAuthService: FirebaseAuthServiceProtocol) {
         self.modelContext = modelContext

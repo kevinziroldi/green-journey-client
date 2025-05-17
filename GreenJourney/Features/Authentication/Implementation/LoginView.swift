@@ -87,6 +87,7 @@ struct LoginView: View {
             .scrollDismissesKeyboard(.interactively)
             .onAppear() {
                 viewModel.isEmailVerificationActiveLogin = false
+                viewModel.isPresenting = false
             }
             .onChange(of: viewModel.isLogged, {
                 if viewModel.isLogged {
@@ -145,8 +146,13 @@ private struct ResetPasswordButtonView: View {
     
     var body: some View {
         Button("Reset password") {
-            Task {
-                await viewModel.resetPassword(email: viewModel.email)
+            if !viewModel.isPresenting {
+                viewModel.isPresenting = true
+                Task {
+                    await viewModel.resetPassword(email: viewModel.email)
+                    try await Task.sleep(for: .seconds(0.5))
+                    viewModel.isPresenting = false
+                }
             }
         }
         .accessibilityIdentifier("resetPasswordButton")
@@ -178,10 +184,15 @@ private struct LoginButtonsView: View {
     var body: some View {
         VStack {
             Button(action: {
-                Task {
-                    viewModel.errorMessage = nil
-                    viewModel.resendEmail = nil
-                    await viewModel.login()
+                if !viewModel.isPresenting {
+                    viewModel.isPresenting = true
+                    Task {
+                        viewModel.errorMessage = nil
+                        viewModel.resendEmail = nil
+                        await viewModel.login()
+                        try await Task.sleep(for: .seconds(0.5))
+                        viewModel.isPresenting = false
+                    }
                 }
             }) {
                 Text("Login")
@@ -219,8 +230,13 @@ private struct LoginButtonsView: View {
                 
                 
                 Button(action: {
-                    Task {
-                        await viewModel.signInWithGoogle()
+                    if !viewModel.isPresenting {
+                        viewModel.isPresenting = true
+                        Task {
+                            await viewModel.signInWithGoogle()
+                            try await Task.sleep(for: .seconds(0.5))
+                            viewModel.isPresenting = false
+                        }
                     }
                 }) {
                     ZStack {
@@ -253,10 +269,13 @@ private struct MoveToSignupView: View {
             Text("Haven't signed up yet?")
                 .fontWeight(.light)
             Button("Sign up") {
-                viewModel.errorMessage = nil
-                viewModel.email = ""
-                viewModel.password = ""
-                navigationPath.append(NavigationDestination.SignupView(viewModel))
+                if !viewModel.isPresenting {
+                    viewModel.isPresenting = true
+                    viewModel.errorMessage = nil
+                    viewModel.email = ""
+                    viewModel.password = ""
+                    navigationPath.append(NavigationDestination.SignupView(viewModel))
+                }
             }
             .accessibilityIdentifier("moveToSignUpButton")
         }

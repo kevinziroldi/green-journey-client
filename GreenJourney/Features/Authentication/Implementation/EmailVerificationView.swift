@@ -8,6 +8,7 @@ struct EmailVerificationView: View {
     @Binding var navigationPath: NavigationPath
     @State var remainingSeconds: Int = 60
     @State var resendAvailable: Bool = false
+    @State var proceedTapped: Bool = false
     
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
@@ -89,12 +90,17 @@ struct EmailVerificationView: View {
                     }
                     
                     Button(action: {
-                        Task {
-                            await viewModel.verifyEmail()
-                        }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-                            withAnimation() {
-                                viewModel.errorMessage = nil
+                        if !proceedTapped {
+                            proceedTapped = true
+                            Task {
+                                await viewModel.verifyEmail()
+                                try await Task.sleep(for: .seconds(3))
+                                proceedTapped = false
+                            }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                                withAnimation() {
+                                    viewModel.errorMessage = nil
+                                }
                             }
                         }
                     }) {
@@ -117,6 +123,9 @@ struct EmailVerificationView: View {
                 .frame(maxWidth: 800)
                 Spacer()
             }
+        }
+        .onAppear {
+            proceedTapped = false
         }
         .onChange(of: viewModel.emailVerified, {
             if viewModel.emailVerified {
