@@ -619,7 +619,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"GreenJourney/Preview Content\"";
-				DEVELOPMENT_TEAM = 84G86C8P4S;
+				DEVELOPMENT_TEAM = XJ5P7VB699;
 				EAGER_LINKING = NO;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -637,7 +637,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = it.polimi.dima.GreenJourney1.app;
+				PRODUCT_BUNDLE_IDENTIFIER = it.polimi.dima.GreenJourney.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -658,7 +658,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"GreenJourney/Preview Content\"";
-				DEVELOPMENT_TEAM = 84G86C8P4S;
+				DEVELOPMENT_TEAM = XJ5P7VB699;
 				EAGER_LINKING = NO;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_TESTABILITY = NO;
@@ -677,7 +677,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = it.polimi.dima.GreenJourney1.app;
+				PRODUCT_BUNDLE_IDENTIFIER = it.polimi.dima.GreenJourney.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

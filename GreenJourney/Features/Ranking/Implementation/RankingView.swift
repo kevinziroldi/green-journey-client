@@ -173,8 +173,14 @@ struct RankingView: View {
             viewModel.resetRanking = true
             if users.first != nil {
                 Task {
-                    await viewModel.getUserFromServer()
-                    await viewModel.fecthRanking()
+                    await withTaskGroup(of: Void.self) { group in
+                        group.addTask {
+                            await viewModel.getUserFromServer()
+                        }
+                        group.addTask {
+                            await viewModel.fecthRanking()
+                        }
+                    }
                 }
             }
         }
@@ -189,8 +195,14 @@ struct RankingView: View {
             isPresenting = false
             if users.first != nil {
                 Task {
-                    await viewModel.getUserFromServer()
-                    await viewModel.fecthRanking()
+                    await withTaskGroup(of: Void.self) { group in
+                        group.addTask {
+                            await viewModel.getUserFromServer()
+                        }
+                        group.addTask {
+                            await viewModel.fecthRanking()
+                        }
+                    }
                 }
             }
         }

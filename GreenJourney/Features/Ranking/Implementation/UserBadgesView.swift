@@ -36,15 +36,14 @@ struct UserBadgesView: View {
                 HStack {
                     if horizontalSizeClass == .compact {
                         if inline {
-                            BadgeView(badges: badges, dim: (UIScreen.main.bounds.width - 120)/4, inline: inline)
+                            BadgeView(badges: badges, dim: (UIScreen.main.bounds.width - 120)/4, inline: inline, allBadgeTypes: true)
                                 .padding()
-                        }
-                        else {
-                            BadgeView(badges: badges, dim: (UIScreen.main.bounds.width - 120)/2, inline: inline)
+                        } else {
+                            BadgeView(badges: badges, dim: (UIScreen.main.bounds.width - 120)/2, inline: inline, allBadgeTypes: true)
                                 .padding()
                         }
                     } else {
-                        BadgeView(badges: badges, dim: (UIScreen.main.bounds.width/2)/4, inline: inline)
+                        BadgeView(badges: badges, dim: (UIScreen.main.bounds.width/2)/4, inline: inline, allBadgeTypes: true)
                             .padding()
                     }
                 }

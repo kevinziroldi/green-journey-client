@@ -139,8 +139,8 @@ struct CitiesReviewsView: View {
         }
         .refreshable {
             isPresenting = false
+            viewModel.getReviewableCities()
             Task {
-                viewModel.getReviewableCities()
                 await viewModel.getBestReviewedCities()
             }
         }
@@ -154,8 +154,8 @@ struct CitiesReviewsView: View {
         }
         .onAppear {
             isPresenting = false
+            viewModel.getReviewableCities()
             Task {
-                viewModel.getReviewableCities()
                 await viewModel.getBestReviewedCities()
             }
         }

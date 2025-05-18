@@ -4,9 +4,10 @@ struct BadgeView: View {
     var badges: [Badge]
     var dim: CGFloat
     var inline: Bool
+    var allBadgeTypes: Bool
     
     var body: some View {
-        let allBadges = getBestBadges(badges: badges)
+        let allBadges = allBadgeTypes ? getBestBadges(badges: badges) : badges
         
         if inline {
             // display on 1 row
@@ -58,13 +59,16 @@ struct BadgeView: View {
     }
     
     private func getBestBadges(badges: [Badge]) -> [Badge] {
-        var completedBadges: [Badge] = badges
+        var completedBadges: [Badge] = []
+        
         for group in Badge.allTypes {
-            // checks if the badge is already represented
-            if !completedBadges.contains(where: { group.contains($0) }) {
-                // add base badge to the list
-                if let baseBadge = group.first?.baseBadge {
-                    completedBadges.append(baseBadge)
+            // if badge present, add, else add base badge
+            if let existing = badges.first(where: { group.contains($0) }) {
+                completedBadges.append(existing)
+            } else {
+                if let base = group.first?.baseBadge {
+                    // add base badge to the list
+                    completedBadges.append(base)
                 }
             }
         }

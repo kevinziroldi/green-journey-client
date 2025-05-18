@@ -243,7 +243,7 @@ private struct LeaderBoardUserView: View {
                             }
                             
                             if horizontalSizeClass != .compact {
-                                BadgeView(badges: userRanking.badges, dim: 40, inline: false)
+                                BadgeView(badges: userRanking.badges, dim: 40, inline: false, allBadgeTypes: true)
                             }
                             
                             Text(String(format: "%.1f", leaderBoardSelected ? userRanking.scoreLongDistance : userRanking.scoreShortDistance))
