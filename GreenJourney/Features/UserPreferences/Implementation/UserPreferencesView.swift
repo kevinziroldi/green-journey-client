@@ -85,12 +85,16 @@ struct UserPreferencesView : View {
             }
             .refreshable {
                 Task {
-                    
+                    await authenticationViewModel.updateUserFromServer()
+                    userPreferencesViewModel.getUserData()
                 }
             }
             .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
             .onAppear(){
-                userPreferencesViewModel.getUserData()
+                Task {
+                    await authenticationViewModel.updateUserFromServer()
+                    userPreferencesViewModel.getUserData()
+                }
             }
         }
     }

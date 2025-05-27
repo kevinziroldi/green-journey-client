@@ -225,10 +225,10 @@ class AuthenticationViewModel: ObservableObject {
         }
     }
     
-    func updateUserFromServer() async throws {
-        let newUser = try await serverService.getUser()
-        
+    func updateUserFromServer() async {
         do {
+            let newUser = try await serverService.getUser()
+            
             let users = try modelContext.fetch(FetchDescriptor<User>())
             if users.count != 1 {
                 for user in users {
