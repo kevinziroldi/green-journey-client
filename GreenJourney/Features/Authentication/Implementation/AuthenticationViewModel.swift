@@ -225,6 +225,36 @@ class AuthenticationViewModel: ObservableObject {
         }
     }
     
+    func updateUserFromServer() async throws {
+        let newUser = try await serverService.getUser()
+        
+        do {
+            let users = try modelContext.fetch(FetchDescriptor<User>())
+            if users.count != 1 {
+                for user in users {
+                    modelContext.delete(user)
+                }
+                try modelContext.save()
+            }
+            if let user = users.first {
+                user.firstName = newUser.firstName
+                user.lastName = newUser.lastName
+                user.birthDate = newUser.birthDate
+                user.gender = newUser.gender
+                user.streetName = newUser.streetName
+                user.houseNumber = newUser.houseNumber
+                user.zipCode = newUser.zipCode
+                user.city = newUser.city
+            }
+            
+            try modelContext.save()
+        } catch {
+            self.errorMessage = "Error updating user"
+            print("Error while checking number of users")
+            return
+        }
+    }
+        
     func signInWithGoogle() async {
         do {
             let isNewUser = try await firebaseAuthService.signInWithGoogle()
