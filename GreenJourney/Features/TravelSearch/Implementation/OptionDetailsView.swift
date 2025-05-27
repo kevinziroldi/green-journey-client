@@ -146,10 +146,6 @@ struct OptionDetailsView: View {
                         if !buttonTapped {
                             buttonTapped = true
                             Task {
-                                print("ONE WAY - SAVE")
-                                for segment in option.segments {
-                                    print(segment.departureCity, segment.destinationCity)
-                                }
                                 viewModel.selectedOption.append(contentsOf: option.segments)
                                 await viewModel.saveTravel()
                                 if !viewModel.errorOccurred {
