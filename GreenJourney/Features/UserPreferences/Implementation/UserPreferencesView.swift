@@ -83,6 +83,11 @@ struct UserPreferencesView : View {
                     .frame(maxWidth: .infinity)
                 }
             }
+            .refreshable {
+                Task {
+                    
+                }
+            }
             .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
             .onAppear(){
                 userPreferencesViewModel.getUserData()
