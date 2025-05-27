@@ -475,7 +475,7 @@ private struct DepartureCompleterView: View {
                         departureTapped = true
                     }
                 }) {
-                    Text(viewModel.departure.cityName == "" ? "Insert departure" : viewModel.departure.cityName)
+                    Text(viewModel.departure.cityName == "" ? "Insert departure" : viewModel.departure.cityName + ", " + viewModel.departure.countryCode)
                         .foregroundColor(viewModel.departure.cityName == "" ? .secondary : AppColors.mainColor)
                         .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 0))
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -538,7 +538,7 @@ private struct DestinationCompleterView: View {
                         }
                     }
                 }) {
-                    Text(viewModel.arrival.cityName == "" ? "Insert destination" : viewModel.arrival.cityName)
+                    Text(viewModel.arrival.cityName == "" ? "Insert destination" : viewModel.arrival.cityName + ", " + viewModel.arrival.countryCode)
                         .foregroundColor (viewModel.arrival.cityName == "" ? Color.secondary : triggerAI ? Color.white : AppColors.mainColor)
                         .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 0))
                         .frame(maxWidth: .infinity, alignment: .leading)

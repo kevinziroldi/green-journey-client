@@ -15,7 +15,7 @@ struct WorldExplorationView: View {
                         VisitedContinentsView(viewModel: viewModel)
                             .padding(.horizontal)
                         
-                        HorizontalBarChart(data: viewModel.countriesPerContinent, title: "Countries", measurementUnit: "", color: AppColors.orange, sortByKey: true)
+                        HorizontalBarChart(data: viewModel.countriesPerContinent, title: "Continents", measurementUnit: "", color: AppColors.orange, sortByKey: true)
                             .frame(height: 250)
                             .padding(.horizontal)
                             .overlay(Color.clear.accessibilityIdentifier("countriesPerContinent"))
@@ -76,7 +76,7 @@ private struct VisitedContinentsView: View {
                     .fill(colorScheme == .dark ? AppColors.blockColorDark: Color(uiColor: .systemBackground))
                     .shadow(radius: 3, x: 0, y: 3)
                 VStack(spacing:0) {
-                    Text("Continents")
+                    Text("World Exploration")
                         .font(.title)
                         .foregroundStyle(AppColors.orange)
                         .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 0))
