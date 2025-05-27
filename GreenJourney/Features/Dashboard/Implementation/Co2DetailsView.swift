@@ -16,7 +16,11 @@ struct Co2DetailsView: View {
                         CompensationRecapView(viewModel: viewModel)
                             .padding(.horizontal)
                         
-                        HorizontalBarChart(data: viewModel.co2PerTransport, title: "CO\u{2082} Emitted per Vehicle", measurementUnit: "Kg", color: AppColors.green, sortByKey: true)
+                        let co2PerTransportList = viewModel.co2PerTransport
+                            .map{ (key, value) in
+                                (key, value)
+                            }
+                        HorizontalBarChart(data: co2PerTransportList, title: "CO\u{2082} Emitted per Vehicle", measurementUnit: "Kg", color: AppColors.green, sortByKey: true)
                             .padding(.horizontal)
                             .frame(height: 250)
                             .overlay(Color.clear.accessibilityIdentifier("co2EmittedPerVehicle"))
@@ -45,7 +49,11 @@ struct Co2DetailsView: View {
                                 .overlay(Color.clear.accessibilityIdentifier("plantedTreesPerYear"))
                         }
                         
-                        HorizontalBarChart(data: viewModel.co2PerTransport, title: "CO\u{2082} Emitted per Vehicle", measurementUnit: "Kg", color: AppColors.green, sortByKey: true)
+                        let co2PerTransportList = viewModel.co2PerTransport
+                            .map{ (key, value) in
+                                (key, value)
+                            }
+                        HorizontalBarChart(data: co2PerTransportList, title: "CO\u{2082} Emitted per Vehicle", measurementUnit: "Kg", color: AppColors.green, sortByKey: true)
                             .padding()
                             .frame(height: 250)
                             .overlay(Color.clear.accessibilityIdentifier("co2EmittedPerVehicle"))

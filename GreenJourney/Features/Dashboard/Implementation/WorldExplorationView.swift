@@ -15,7 +15,11 @@ struct WorldExplorationView: View {
                         VisitedContinentsView(viewModel: viewModel)
                             .padding(.horizontal)
                         
-                        HorizontalBarChart(data: viewModel.countriesPerContinent, title: "Continents", measurementUnit: "", color: AppColors.orange, sortByKey: true)
+                        let countriesPerContinentList = viewModel.countriesPerContinent
+                            .map{ (key, value) in
+                                (key, value)
+                            }
+                        HorizontalBarChart(data: countriesPerContinentList, title: "Continents", measurementUnit: "", color: AppColors.orange, sortByKey: true)
                             .frame(height: 250)
                             .padding(.horizontal)
                             .overlay(Color.clear.accessibilityIdentifier("countriesPerContinent"))
@@ -37,7 +41,11 @@ struct WorldExplorationView: View {
                         VisitedContinentsView(viewModel: viewModel)
                             .padding()
                         
-                        HorizontalBarChart(data: viewModel.countriesPerContinent, title: "Countries", measurementUnit: "", color: AppColors.orange, sortByKey: true)
+                        let countriesPerContinentList = viewModel.countriesPerContinent
+                            .map{ (key, value) in
+                                (key, value)
+                            }
+                        HorizontalBarChart(data: countriesPerContinentList, title: "Countries", measurementUnit: "", color: AppColors.orange, sortByKey: true)
                             .frame(height: 250)
                             .padding()
                             .overlay(Color.clear.accessibilityIdentifier("countriesPerContinent"))

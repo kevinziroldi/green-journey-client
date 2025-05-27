@@ -27,7 +27,7 @@ class DashboardViewModel: ObservableObject {
     @Published var travelsPerTransport: [String: Int] = ["car": 0, "bike": 0, "plane": 0, "bus": 0, "train": 0]
     @Published var visitedCountries: Int = 0
     @Published var totalTripsMade: Int = 0
-    @Published var mostVisitedCountries: [String: Float64] = [:]
+    @Published var mostVisitedCountries: [(String, Float64)] = []
     
     var totalDuration: Int = 0
     var travelDetailsList: [TravelDetails] = []
@@ -126,11 +126,15 @@ class DashboardViewModel: ObservableObject {
             travelsPerTransport["plane"] = vehicles["airplane"]
             travelsPerTransport["bus"] = vehicles["bus"]
             
-            self.mostVisitedCountries = Dictionary (
-                uniqueKeysWithValues: visitedCountriesCount.sorted { $0.value > $1.value }
-                    .prefix(5)
-                    .map { ($0.key, Float64($0.value)) }
-            )
+            let sortedVisitedCountries : [(String, Int)] = visitedCountriesCount.sorted { lhs, rhs in
+                if lhs.value != rhs.value {
+                    return lhs.value > rhs.value
+                } else {
+                    return lhs.key < rhs.key
+                }
+            }
+            let top5VisitedCountries = sortedVisitedCountries.prefix(5)
+            self.mostVisitedCountries = top5VisitedCountries.map {(key, value) in (key, Float64(value))}
             
             self.co2CompensatedPerYearNumTrees = co2CompensatedPerYearKg.reduce(into: [String: Int]()) { result, pair in
                 result[String(pair.key)] = Int(pair.value / 75)
