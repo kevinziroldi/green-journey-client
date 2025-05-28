@@ -91,10 +91,7 @@ struct UserPreferencesView : View {
             }
             .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
             .onAppear(){
-                Task {
-                    await authenticationViewModel.updateUserFromServer()
-                    userPreferencesViewModel.getUserData()
-                }
+                userPreferencesViewModel.getUserData()
             }
         }
     }
@@ -137,6 +134,7 @@ private struct UserPreferencesTitleView: View {
 
 private struct UserPreferencesTextFieldsView: View {
     @ObservedObject var userPreferencesViewModel: UserPreferencesViewModel
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     @State var editTapped: Bool = false
     var user: User
     let email: String = Auth.auth().currentUser?.email ?? ""
@@ -187,47 +185,51 @@ private struct UserPreferencesTextFieldsView: View {
         }
         .padding(EdgeInsets(top: 0, leading: 25, bottom: 10, trailing: 25))
         
-        Form {
-            Section {
+        VStack(spacing: 30) {
+            VStack {
                 HStack {
                     Text("First Name")
                     TextField("Not set", text: $userPreferencesViewModel.firstName)
                         .multilineTextAlignment(.trailing)
                         .accessibilityIdentifier("firstNameTextField")
                 }
-                
+                Divider()
                 HStack {
                     Text("Last Name")
                     TextField("Not set", text: $userPreferencesViewModel.lastName)
                         .multilineTextAlignment(.trailing)
                         .accessibilityIdentifier("lastNameTextField")
                 }
-                
+                Divider()
                 DatePicker("Birth date", selection: $userPreferencesViewModel.birthDate.toNonOptional(), in: Date.distantPast...Date(), displayedComponents: .date)
                     .accessibilityIdentifier("birthDatePicker")
-                
-                Picker("Gender", selection: $userPreferencesViewModel.gender) {
-                    ForEach(Gender.allCases, id: \.self) { gender in
-                        Text(gender.rawValue).tag(gender)
+                Divider()
+                HStack {
+                    Text("Gender")
+                    Spacer()
+                    Picker("Gender", selection: $userPreferencesViewModel.gender) {
+                        ForEach(Gender.allCases, id: \.self) { gender in
+                            Text(gender.rawValue).tag(gender)
+                        }
                     }
+                    .pickerStyle(.automatic)
+                    .accessibilityIdentifier("genderPicker")
                 }
-                .pickerStyle(.automatic)
-                .accessibilityIdentifier("genderPicker")
-                
+                Divider()
                 HStack {
                     Text("City")
                     TextField("Not set", text: $userPreferencesViewModel.city.toNonOptional())
                         .multilineTextAlignment(.trailing)
                         .accessibilityIdentifier("cityTextField")
                 }
-                
+                Divider()
                 HStack {
                     Text("Street Name")
                     TextField("Not set", text: $userPreferencesViewModel.streetName.toNonOptional())
                         .multilineTextAlignment(.trailing)
                         .accessibilityIdentifier("streetNameTextField")
                 }
-                
+                Divider()
                 HStack {
                     Text("House number")
                     TextField("Not set", text: userPreferencesViewModel.binding(for: $userPreferencesViewModel.houseNumber))
@@ -235,7 +237,7 @@ private struct UserPreferencesTextFieldsView: View {
                         .keyboardType(.numberPad)
                         .accessibilityIdentifier("houseNumberTextField")
                 }
-                
+                Divider()
                 HStack {
                     Text("Zip code")
                     TextField("Not set", text: userPreferencesViewModel.binding(for: $userPreferencesViewModel.zipCode))
@@ -244,9 +246,14 @@ private struct UserPreferencesTextFieldsView: View {
                         .accessibilityIdentifier("zipCodeTextField")
                 }
             }
+            .padding()
+            .background {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(colorScheme == .dark ? AppColors.blockColorDark : .white)
+            }
             .disabled(!editTapped)
             
-            Section {
+            VStack {
                 HStack {
                     Text("Email")
                     Spacer()
@@ -254,10 +261,14 @@ private struct UserPreferencesTextFieldsView: View {
                         .accessibilityIdentifier("email")
                 }
             }
+            .padding()
+            .background {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(colorScheme == .dark ? AppColors.blockColorDark : .white)
+            }
         }
         .frame(height: 440)
         .contentMargins(.vertical, 0, for: .scrollContent)
-        .scrollContentBackground(.hidden)
     }
 }
 
