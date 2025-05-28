@@ -188,13 +188,13 @@ final class UserPreferencesViewUITest: XCTestCase {
         // UI elements
         let userPreferencesTitle = app.staticTexts["userPreferencesTitle"]
         let modifyPasswordButton = app.buttons["modifyPasswordButton"]
-        let emailSentMessage = app.staticTexts["emailSentMessage"]
+        let resendEmail = app.otherElements["resendEmail"]
         let errorMessage = app.staticTexts["errorMessage"]
         
         // check UI elements present
         XCTAssertTrue(userPreferencesTitle.exists, "userPreferencesTitle is not displayed")
         XCTAssertTrue(modifyPasswordButton.exists, "modifyPasswordButton is not displayed")
-        XCTAssertFalse(emailSentMessage.exists, "emailSentMessage is displayed")
+        XCTAssertFalse(resendEmail.exists, "emailSentMessage is displayed")
         XCTAssertFalse(errorMessage.exists, "errorMessage is displayed")
         
         // tap modify password button
@@ -203,7 +203,7 @@ final class UserPreferencesViewUITest: XCTestCase {
         // check UI elements
         XCTAssertTrue(userPreferencesTitle.exists, "userPreferencesTitle is not displayed")
         XCTAssertTrue(modifyPasswordButton.exists, "modifyPasswordButton is not displayed")
-        XCTAssertTrue(emailSentMessage.exists, "emailSentMessage is displayed")
+        XCTAssertTrue(resendEmail.waitForExistence(timeout: timer), "resendEmail is not displayed")
         XCTAssertFalse(errorMessage.exists, "errorMessage is displayed")
     }
     

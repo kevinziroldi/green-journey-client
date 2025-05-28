@@ -129,8 +129,10 @@ final class SignUpViewUITest: XCTestCase {
         let googleButton = app.buttons["googleSignInButton"]
         let travelSearchViewTitle = app.staticTexts["travelSearchViewTitle"]
         
+        app.swipeUp()
+        
         // check Google sign in button exists
-        XCTAssertTrue(googleButton.exists, "The google sign in button is not displayed")
+        XCTAssertTrue(googleButton.waitForExistence(timeout: timer), "The google sign in button is not displayed")
         
         googleButton.tap()
         
@@ -144,7 +146,10 @@ final class SignUpViewUITest: XCTestCase {
         let loginLogoImage = app.images["loginLogoImage"]
         
         XCTAssertTrue(moveToLoginButton.exists, "The login button is not displayed")
-        moveToLoginButton.tap()
+        
+        let moveToLoginButtonCenter = moveToLoginButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        app.swipeUp()
+        moveToLoginButtonCenter.tap()
         
         XCTAssertTrue(loginLogoImage.waitForExistence(timeout: timer), "Login view did not appear after clicking login button")
     }

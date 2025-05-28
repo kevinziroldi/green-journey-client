@@ -313,6 +313,8 @@ private struct PasswordModificationView: View {
                     .disabled(!resendAvailable)
                     .accessibilityIdentifier("resendEmailButton")
                 }
+                .overlay(Color.clear.accessibilityIdentifier("resendEmail"))
+                
                 if !resendAvailable {
                     Text("Wait \(remainingSeconds) seconds to resend the email")
                         .fontWeight(.thin)
