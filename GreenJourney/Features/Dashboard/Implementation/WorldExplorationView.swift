@@ -45,7 +45,7 @@ struct WorldExplorationView: View {
                             .map{ (key, value) in
                                 (key, value)
                             }
-                        HorizontalBarChart(data: countriesPerContinentList, title: "Countries", measurementUnit: "", color: AppColors.orange, sortByKey: true)
+                        HorizontalBarChart(data: countriesPerContinentList, title: "Continents", measurementUnit: "", color: AppColors.orange, sortByKey: true)
                             .frame(height: 250)
                             .padding()
                             .overlay(Color.clear.accessibilityIdentifier("countriesPerContinent"))
