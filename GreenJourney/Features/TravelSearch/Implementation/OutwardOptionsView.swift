@@ -19,7 +19,7 @@ struct OutwardOptionsView: View {
                     .frame(height: 1)
                     .foregroundColor(.gray)
                 
-                if (!viewModel.optionsAvailable){
+                if (!viewModel.outwardOptionsAvailable){
                     CircularProgressView()
                         .padding(.top, 50)
                 }

@@ -17,7 +17,7 @@ struct ReturnOptionsView: View {
                     .frame(height: 1)
                     .foregroundColor(.gray)
                 
-                if (!viewModel.optionsAvailable){
+                if (!viewModel.returnOptionsAvailable){
                     CircularProgressView()
                         .padding(.top, 50)
                 }

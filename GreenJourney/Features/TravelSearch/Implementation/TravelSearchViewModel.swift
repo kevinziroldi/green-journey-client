@@ -25,7 +25,9 @@ class TravelSearchViewModel: ObservableObject {
     
     @Published var predictedCities: [CityCompleterDataset] = []
     @Published var predictionShown: Int = 0
-    @Published var optionsAvailable: Bool = false
+    
+    @Published var outwardOptionsAvailable: Bool = false
+    @Published var returnOptionsAvailable: Bool = false
     
     @Published var errorOccurred: Bool = false
     
@@ -46,7 +48,9 @@ class TravelSearchViewModel: ObservableObject {
     }
     
     func computeRoutes () async {
-        optionsAvailable = false
+        outwardOptionsAvailable = false
+        returnOptionsAvailable = false
+        
         errorMessage = nil
         self.outwardOptions = []
         self.returnOptions = []
@@ -68,16 +72,20 @@ class TravelSearchViewModel: ObservableObject {
         do {
             let outwardOptions = try await serverService.computeRoutes(departureIata: departure.iata, departureCountryCode: departure.countryCode, destinationIata: arrival.iata, destinationCountryCode: arrival.countryCode, date: formattedDate, time: formattedTime, isOutward: isOutward)
             self.outwardOptions = outwardOptions
+            outwardOptionsAvailable = true
             
             // get return options
             if (!oneWay) {
                 let returnOptions = try await serverService.computeRoutes(departureIata: arrival.iata, departureCountryCode: arrival.countryCode, destinationIata: departure.iata, destinationCountryCode: departure.countryCode, date: formattedDateReturn, time: formattedTimeReturn, isOutward: !isOutward)
                 self.returnOptions = returnOptions
             }
-            optionsAvailable = true
+            returnOptionsAvailable = true
         }catch {
             print("Error fetching options")
-            optionsAvailable = true
+            
+            outwardOptionsAvailable = true
+            returnOptionsAvailable = true
+            
             errorMessage = "An error occurred retireving travel options from server, please try again later."
             return
         }
