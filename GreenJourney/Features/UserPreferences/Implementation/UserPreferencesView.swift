@@ -91,7 +91,11 @@ struct UserPreferencesView : View {
             }
             .background(colorScheme == .dark ? AppColors.backColorDark : AppColors.backColorLight)
             .onAppear(){
-                userPreferencesViewModel.getUserData()
+                Task {
+                    userPreferencesViewModel.getUserData()
+                    await authenticationViewModel.updateUserFromServer()
+                    userPreferencesViewModel.getUserData()
+                }
             }
         }
     }

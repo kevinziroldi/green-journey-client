@@ -245,6 +245,8 @@ class AuthenticationViewModel: ObservableObject {
                 user.houseNumber = newUser.houseNumber
                 user.zipCode = newUser.zipCode
                 user.city = newUser.city
+                user.scoreShortDistance = newUser.scoreShortDistance
+                user.scoreLongDistance = newUser.scoreLongDistance
             }
             
             try modelContext.save()
