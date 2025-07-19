@@ -12,10 +12,10 @@ It was developed for the course Design and Implementation of Mobile Application,
 ## iPhone and iPad UI
 GreenJourney has both an iOS and an iPadOS version, and is available in light and dark versions.
 
-<div>
+<div align="center">
  <img src="https://github.com/kevinziroldi/green-journey-client/blob/main/UI_preview/iphone_ui.png" align="center" width="60%">
 </div>
 
-<div>
+<div align="center">
  <img src="https://github.com/kevinziroldi/green-journey-client/blob/main/UI_preview/ipad_ui.png" align="center" width="60%">
 </div>
