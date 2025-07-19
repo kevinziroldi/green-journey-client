@@ -1,7 +1,7 @@
 # GreenJourney iOS/iPadOS app
 
 ## Description
-GreenJourney is a mobile application designed to raise awareness about the importance of sustainability in our daily lives. It specifically focuses on promoting eco-friendly choices in travel and commuting, encouraging users to consider more sustainable alternatives when planning their journeys.  
+GreenJourney is a mobile application designed to raise awareness about the importance of sustainability in our daily lives. It specifically focuses on promoting eco-friendly choices in travel and commuting, encouraging users to consider more sustainable alternatives when planning their journeys.
 
 <div align="center">
   <img src="https://github.com/kevinziroldi/green-journey-client/blob/main/GreenJourney/Assets.xcassets/AppIcon.appiconset/AppIcon%401x.png" width="15%">
