@@ -25,15 +25,15 @@ GreenJourney has both an iOS and an iPadOS version, and is available in light an
 
 ### iPhone version
 <div align="center">
- <img src="https://github.com/kevinziroldi/green-journey-client/blob/main/UI_preview/iphone_ui.png" align="center" width="60%">
+ <img src="https://github.com/kevinziroldi/green-journey-client/blob/main/UI_preview/iphone_ui.png" align="center" width="80%">
 </div>
 
 ### iPad version
 <div align="center">
- <img src="https://github.com/kevinziroldi/green-journey-client/blob/main/UI_preview/ipad_ui.png" align="center" width="60%">
+ <img src="https://github.com/kevinziroldi/green-journey-client/blob/main/UI_preview/ipad_ui.png" align="center" width="80%">
 </div>
 
 <div align="center">
- <img src="https://github.com/kevinziroldi/green-journey-client/blob/main/UI_preview/ipad_ui_horizontal.png" align="center" width="60%">
+ <img src="https://github.com/kevinziroldi/green-journey-client/blob/main/UI_preview/ipad_ui_horizontal.png" align="center" width="80%">
 </div>
 
